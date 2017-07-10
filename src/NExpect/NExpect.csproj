@@ -44,26 +44,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assertion.cs" />
-    <Compile Include="Be.cs" />
-    <Compile Include="IExpectation.cs" />
-    <Compile Include="Expectation.cs" />
-    <Compile Include="Expectations.cs" />
-    <Compile Include="IBe.cs" />
-    <Compile Include="IExpectationContinuation.cs" />
-    <Compile Include="INegated.cs" />
-    <Compile Include="INegatedBe.cs" />
-    <Compile Include="INegatedExpectationTo.cs" />
-    <Compile Include="INonNegatingTo.cs" />
-    <Compile Include="INot.cs" />
-    <Compile Include="ITo.cs" />
-    <Compile Include="NegatedBe.cs" />
-    <Compile Include="NegatedExpectationTo.cs" />
-    <Compile Include="Not.cs" />
-    <Compile Include="NotNegatingTo.cs" />
+    <Compile Include="Implementations\Be.cs" />
+    <Compile Include="Implementations\ExpectationContext.cs" />
+    <Compile Include="Implementations\Factory.cs" />
+    <Compile Include="Interfaces\IExpectation.cs" />
+    <Compile Include="Implementations\Expectation.cs" />
+    <Compile Include="Extensions\Expectations.cs" />
+    <Compile Include="Interfaces\IBe.cs" />
+    <Compile Include="Interfaces\IContinuation.cs" />
+    <Compile Include="Interfaces\INegated.cs" />
+    <Compile Include="Interfaces\IBeAfterNot.cs" />
+    <Compile Include="Interfaces\INotAfterTo.cs" />
+    <Compile Include="Interfaces\IToAfterNot.cs" />
+    <Compile Include="Interfaces\INot.cs" />
+    <Compile Include="Interfaces\ITo.cs" />
+    <Compile Include="Implementations\BeAfterNot.cs" />
+    <Compile Include="Implementations\NotAfterTo.cs" />
+    <Compile Include="Implementations\Not.cs" />
+    <Compile Include="Implementations\ToAfterNot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="To.cs" />
-    <Compile Include="TruthExtensions.cs" />
-    <Compile Include="UnmetExpectation.cs" />
+    <Compile Include="Implementations\To.cs" />
+    <Compile Include="Extensions\TruthExtensions.cs" />
+    <Compile Include="Exceptions\UnmetExpectation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
