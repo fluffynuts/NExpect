@@ -53,12 +53,12 @@
     <Compile Include="Interfaces\IBe.cs" />
     <Compile Include="Interfaces\IContinuation.cs" />
     <Compile Include="Interfaces\INegated.cs" />
-    <Compile Include="Interfaces\IBeAfterNot.cs" />
+    <Compile Include="Interfaces\INotAfterBe.cs" />
     <Compile Include="Interfaces\INotAfterTo.cs" />
     <Compile Include="Interfaces\IToAfterNot.cs" />
     <Compile Include="Interfaces\INot.cs" />
     <Compile Include="Interfaces\ITo.cs" />
-    <Compile Include="Implementations\BeAfterNot.cs" />
+    <Compile Include="Implementations\NotAfterBe.cs" />
     <Compile Include="Implementations\NotAfterTo.cs" />
     <Compile Include="Implementations\Not.cs" />
     <Compile Include="Implementations\ToAfterNot.cs" />

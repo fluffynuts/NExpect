@@ -29,7 +29,7 @@ namespace NExpect
 
         public static void False(this IContinuation<bool> expectation, string message)
         {
-            expectation.Equal(true, message);
+            expectation.Equal(false, message);
         }
 
         public static void False(this IContinuation<bool?> expectation)
@@ -39,7 +39,7 @@ namespace NExpect
 
         public static void False(this IContinuation<bool?> expectation, string message)
         {
-            expectation.Equal(true, message);
+            expectation.Equal(false, message);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace NExpect
     internal interface IExpectationParentContext<T>
     {
         void Negate();
-        void Expect(Func<T, string> expectation);
+        void Expect(Func<T, IMatcherResult> expectation);
     }
 
     internal interface IExpectationContext<T> : IExpectationParentContext<T>

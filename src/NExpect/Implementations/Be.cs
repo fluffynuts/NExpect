@@ -3,7 +3,7 @@
     public class Be<T>: ExpectationContext<T>, IBe<T>
     {
         public T Actual { get; }
-        public IBeAfterNot<T> Not => new BeAfterNot<T>(Actual);
+        public INotAfterBe<T> Not => Factory.Create<T, NotAfterBe<T>>(Actual, this);
 
         public Be(T actual)
         {

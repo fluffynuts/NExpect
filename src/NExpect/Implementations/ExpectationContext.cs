@@ -19,7 +19,7 @@ namespace NExpect
         }
 
         private int _storedNegations;
-        private List<Func<T, string>> _storedExpectations = new List<Func<T, string>>();
+        private List<Func<T, IMatcherResult>> _storedExpectations = new List<Func<T, IMatcherResult>>();
 
         public void Negate()
         {
@@ -27,7 +27,7 @@ namespace NExpect
             RunNegations();
         }
 
-        public void Expect(Func<T, string> expectation)
+        public void Expect(Func<T, IMatcherResult> expectation)
         {
             _storedExpectations.Add(expectation);
             RunExpectations();

@@ -2,6 +2,6 @@
 {
     public interface IBe<T>: IContinuation<T>
     {
-        IBeAfterNot<T> Not { get; }
+        INotAfterBe<T> Not { get; }
     }
 }

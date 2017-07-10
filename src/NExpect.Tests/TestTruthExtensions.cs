@@ -159,7 +159,7 @@ namespace NExpect.Tests
             public void ToBeFalse_WhenValueIsFalse_ShouldNotThrow()
             {
                 // Arrange
-                var value = true;
+                var value = false;
 
                 // Pre-Assert
 
@@ -173,7 +173,7 @@ namespace NExpect.Tests
             }
 
             [Test]
-            public void ToBeFalse_WhenValueIsFalse_ShouldThrow()
+            public void ToBeFalse_WhenValueIsTrue_ShouldThrow()
             {
                 // Arrange
                 var value = true;
@@ -191,7 +191,7 @@ namespace NExpect.Tests
             }
 
             [Test]
-            public void ToBeFalse_WhenValueIsFalse_GivenCustomMessage_ShouldThrow()
+            public void ToBeFalse_WhenValueIsTrue_GivenCustomMessage_ShouldThrow()
             {
                 // Arrange
                 var value = true;
@@ -216,10 +216,10 @@ namespace NExpect.Tests
             }
 
             [Test]
-            public void NotToBeFalse_WhenValueIsFalse_ShouldNotThrow()
+            public void NotToBeFalse_WhenValueIsTrue_ShouldNotThrow()
             {
                 // Arrange
-                var value = false;
+                var value = true;
 
                 // Pre-Assert
 
@@ -253,7 +253,7 @@ namespace NExpect.Tests
             public void NotToBeFalse_WhenValueIsFalse_ShouldThrow()
             {
                 // Arrange
-                var value = true;
+                var value = false;
 
                 // Pre-Assert
 
@@ -270,7 +270,7 @@ namespace NExpect.Tests
             public void ToBeNotFalse_WhenValueIsFalse_ShouldThrow()
             {
                 // Arrange
-                var value = true;
+                var value = false;
 
                 // Pre-Assert
 
@@ -287,7 +287,7 @@ namespace NExpect.Tests
             public void ShouldWorkOnNullableBooleans()
             {
                 // Arrange
-                var value = true as bool?;
+                var value = false as bool?;
 
                 // Pre-Assert
 
