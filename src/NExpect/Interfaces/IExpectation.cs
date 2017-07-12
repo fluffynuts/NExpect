@@ -1,4 +1,4 @@
-﻿namespace NExpect
+﻿namespace NExpect.Interfaces
 {
     public interface IExpectation<T>
     {
@@ -7,4 +7,5 @@
         ITo<T> To { get; }
         INot<T> Not { get; }
     }
+
 }

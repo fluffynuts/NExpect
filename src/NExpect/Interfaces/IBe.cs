@@ -1,4 +1,4 @@
-﻿namespace NExpect
+﻿namespace NExpect.Interfaces
 {
     public interface IBe<T>: IContinuation<T>
     {

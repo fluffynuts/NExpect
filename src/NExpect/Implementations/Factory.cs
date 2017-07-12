@@ -1,6 +1,7 @@
 using System;
+using NExpect.Interfaces;
 
-namespace NExpect
+namespace NExpect.Implementations
 {
     internal static class Factory
     {

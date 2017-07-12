@@ -1,4 +1,6 @@
-﻿namespace NExpect
+﻿using NExpect.Interfaces;
+
+namespace NExpect.Implementations
 {
     public class NotAfterTo<T>: ExpectationContext<T>, INotAfterTo<T>
     {

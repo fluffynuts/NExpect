@@ -1,4 +1,6 @@
-namespace NExpect
+using NExpect.Interfaces;
+
+namespace NExpect.Extensions
 {
     public static class TruthExtensions
     {

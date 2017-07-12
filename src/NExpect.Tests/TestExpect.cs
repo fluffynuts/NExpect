@@ -1,5 +1,6 @@
-﻿using NUnit.Framework;
-using static NExpect.Expectations;
+﻿using NExpect.Extensions;
+using NUnit.Framework;
+using static NExpect.Extensions.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Tests

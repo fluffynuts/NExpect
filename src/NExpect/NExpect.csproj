@@ -44,6 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assertion.cs" />
+    <Compile Include="MatcherLogic\IMatcherResult.cs" />
+    <Compile Include="MatcherLogic\MatcherResult.cs" />
+    <Compile Include="MatcherLogic\AddExpectationsExtensions.cs" />
+    <Compile Include="Extensions\EqualityExtensions.cs" />
+    <Compile Include="Extensions\ExceptionExtensions.cs" />
     <Compile Include="Implementations\Be.cs" />
     <Compile Include="Implementations\ExpectationContext.cs" />
     <Compile Include="Implementations\Factory.cs" />

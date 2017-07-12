@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using NExpect.Interfaces;
+using NExpect.MatcherLogic;
 
-namespace NExpect
+namespace NExpect.Implementations
 {
     public abstract class ExpectationContext<T> : IExpectationContext<T>
     {
@@ -27,9 +29,9 @@ namespace NExpect
             RunNegations();
         }
 
-        public void Expect(Func<T, IMatcherResult> expectation)
+        public void RunMatcher(Func<T, IMatcherResult> matcher)
         {
-            _storedExpectations.Add(expectation);
+            _storedExpectations.Add(matcher);
             RunExpectations();
         }
 
@@ -49,7 +51,7 @@ namespace NExpect
                 return;
             foreach (var e in _storedExpectations)
             {
-                _parent.Expect(e);
+                _parent.RunMatcher(e);
             }
             _storedExpectations.Clear();
         }

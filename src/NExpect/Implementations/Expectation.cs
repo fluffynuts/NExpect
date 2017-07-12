@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using NExpect.Interfaces;
+using NExpect.MatcherLogic;
 
-namespace NExpect
+namespace NExpect.Implementations
 {
     public class Expectation<T> : IExpectation<T>, IExpectationContext<T>
     {
@@ -24,12 +25,12 @@ namespace NExpect
             _negated = !_negated;
         }
 
-        public void Expect(Func<T, IMatcherResult> expectation)
+        public void RunMatcher(Func<T, IMatcherResult> matcher)
         {
             IMatcherResult result = null;
             try
             {
-                result = expectation(Actual);
+                result = matcher(Actual);
                 var isPass = _negated ? !result.Passed : result.Passed;
                 if (isPass)
                     return;
@@ -42,5 +43,6 @@ namespace NExpect
             }
             Assertion.Throw(result.Message);
         }
+
     }
 }

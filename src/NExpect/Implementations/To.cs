@@ -1,4 +1,6 @@
-namespace NExpect
+using NExpect.Interfaces;
+
+namespace NExpect.Implementations
 {
     public class To<T>: ExpectationContext<T>, ITo<T>
     {

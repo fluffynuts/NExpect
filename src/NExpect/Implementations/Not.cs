@@ -1,6 +1,6 @@
-﻿using System;
+﻿using NExpect.Interfaces;
 
-namespace NExpect
+namespace NExpect.Implementations
 {
     public class Not<T>: ExpectationContext<T>, INot<T>
     {

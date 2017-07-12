@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestExceptionExtensions.cs" />
     <Compile Include="TestExpect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestTruthExtensions.cs" />

@@ -1,6 +1,6 @@
 using System;
 
-namespace NExpect
+namespace NExpect.Exceptions
 {
     /// <summary>
     /// Mimicks the NUnit AssertionException if it cannot be dynamically located

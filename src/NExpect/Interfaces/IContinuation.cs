@@ -1,11 +1,12 @@
 ﻿using System;
+using NExpect.MatcherLogic;
 
-namespace NExpect
+namespace NExpect.Interfaces
 {
     internal interface IExpectationParentContext<T>
     {
         void Negate();
-        void Expect(Func<T, IMatcherResult> expectation);
+        void RunMatcher(Func<T, IMatcherResult> matcher);
     }
 
     internal interface IExpectationContext<T> : IExpectationParentContext<T>
