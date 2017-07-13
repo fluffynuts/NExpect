@@ -44,6 +44,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assertion.cs" />
+    <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Extensions\StringExpectationMethods.cs" />
+    <Compile Include="Interfaces\IExceptionMessageContinuation.cs" />
+    <Compile Include="Interfaces\IThrowContinuation.cs" />
+    <Compile Include="Interfaces\IWithAfterThrowContinuation.cs" />
+    <Compile Include="Implementations\StringValueContinuation.cs" />
+    <Compile Include="Implementations\ThrowContinuation.cs" />
+    <Compile Include="Implementations\WithAfterThrowContinuation.cs" />
+    <Compile Include="Implementations\WrappingContinuation.cs" />
     <Compile Include="MatcherLogic\IMatcherResult.cs" />
     <Compile Include="MatcherLogic\MatcherResult.cs" />
     <Compile Include="MatcherLogic\AddExpectationsExtensions.cs" />

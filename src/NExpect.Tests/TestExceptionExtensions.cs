@@ -41,7 +41,6 @@ namespace NExpect.Tests
         }
 
         [Test]
-        [Ignore("WIP")]
         public void Throw_WithNoGenericType_WhenThrows_ShouldBeAbleToContinueWith_WithMessage()
         {
             // Arrange
@@ -53,7 +52,8 @@ namespace NExpect.Tests
                 Expect(() =>
                 {
                     throw new Exception(expected);
-                }).To.Throw().With.Message.Containing(expected);
+                }).To.Throw()
+                .With.Message.Containing(expected);
             });
             // Assert
         }
