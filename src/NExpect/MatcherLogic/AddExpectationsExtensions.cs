@@ -5,7 +5,9 @@ namespace NExpect.MatcherLogic
 {
     public static class AddExpectationsExtensions
     {
-        public static void AddMatcher<T>(this IContinuation<T> continuation, Func<T, IMatcherResult> expectation)
+        public static void AddMatcher<T>(
+            this IContinuation<T> continuation, 
+            Func<T, IMatcherResult> expectation)
         {
             var asContext = continuation as IExpectationContext<T>;
             if (asContext == null)

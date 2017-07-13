@@ -39,5 +39,23 @@ namespace NExpect.Tests
             });
             // Assert
         }
+
+        [Test]
+        [Ignore("WIP")]
+        public void Throw_WithNoGenericType_WhenThrows_ShouldBeAbleToContinueWith_WithMessage()
+        {
+            // Arrange
+            var expected = GetRandomString();
+            // Pre-Assert
+            // Act
+            Assert.DoesNotThrow(() =>
+            {
+                Expect(() =>
+                {
+                    throw new Exception(expected);
+                }).To.Throw().With.Message.Containing(expected);
+            });
+            // Assert
+        }
     }
 }
