@@ -18,7 +18,7 @@ namespace NExpect.Extensions
                     return new MatcherResult(true, $"Did not expect {expected}, but got exactly that");
                 return new MatcherResult(false,
                     FinalMessageFor(
-                        $"Expected {expected} but got {continuation.Actual}",
+                        $"Expected {expected} but got {actual}",
                         customMessage
                     ));
             });

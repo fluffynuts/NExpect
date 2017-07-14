@@ -1,21 +1,6 @@
-﻿using System;
-using NExpect.MatcherLogic;
-
-namespace NExpect.Interfaces
+﻿namespace NExpect.Interfaces
 {
-    internal interface IExpectationParentContext<T>
+    public interface IContinuation<TActual>
     {
-        void Negate();
-        void RunMatcher(Func<T, IMatcherResult> matcher);
-    }
-
-    internal interface IExpectationContext<T> : IExpectationParentContext<T>
-    {
-        IExpectationContext<T> Parent { get; set; }
-    }
-
-    public interface IContinuation<T>
-    {
-        T Actual { get; }
     }
 }

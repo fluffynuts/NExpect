@@ -1,10 +1,13 @@
 ﻿using System;
+using NExpect.Extensions;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations
 {
-    public class Expectation<T> : IExpectation<T>, IExpectationContext<T>
+    public class Expectation<T> : 
+        IExpectation<T>, 
+        IExpectationContext<T>
     {
         public T Actual { get; }
         public ITo<T> To => Factory.Create<T, To<T>>(Actual, this);

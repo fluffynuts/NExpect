@@ -8,12 +8,12 @@ namespace NExpect.Implementations
     {
         public To Actual => _unwrap(_wrapped);
 
-        private readonly IContinuation<TFrom> _wrapped;
-        private readonly Func<IContinuation<TFrom>, To> _unwrap;
+        private readonly IHasActual<TFrom> _wrapped;
+        private readonly Func<IHasActual<TFrom>, To> _unwrap;
 
         internal WrappingContinuation(
-            IContinuation<TFrom> toWrap, 
-            Func<IContinuation<TFrom>, To> unwrap
+            IHasActual<TFrom> toWrap, 
+            Func<IHasActual<TFrom>, To> unwrap
         )
         {
             _wrapped = toWrap;

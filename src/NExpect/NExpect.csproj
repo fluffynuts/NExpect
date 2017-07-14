@@ -45,8 +45,14 @@
   <ItemGroup>
     <Compile Include="Assertion.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
-    <Compile Include="Extensions\StringExpectationMethods.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\MessageHelpers.cs" />
+    <Compile Include="Interfaces\IContain.cs" />
     <Compile Include="Interfaces\IExceptionMessageContinuation.cs" />
+    <Compile Include="Interfaces\IExpectationContext.cs" />
+    <Compile Include="Interfaces\IExpectationParentContext.cs" />
+    <Compile Include="Interfaces\IGrammarContinuation.cs" />
+    <Compile Include="Interfaces\IHasActual.cs" />
     <Compile Include="Interfaces\IThrowContinuation.cs" />
     <Compile Include="Interfaces\IWithAfterThrowContinuation.cs" />
     <Compile Include="Implementations\StringValueContinuation.cs" />

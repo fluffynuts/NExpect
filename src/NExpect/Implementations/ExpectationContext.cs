@@ -55,5 +55,10 @@ namespace NExpect.Implementations
             }
             _storedExpectations.Clear();
         }
+
+        internal void SetParent(IExpectationContext<T> parent)
+        {
+            (this as IExpectationContext<T>).Parent = parent;
+        }
     }
 }

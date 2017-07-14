@@ -34,7 +34,7 @@ namespace NExpect.Extensions
                 var passed = s?.Contains(search) ?? false;
                 return new MatcherResult(
                     passed,
-                    StringExpectationMethods.MessageForContainsResult(
+                    MessageHelpers.MessageForContainsResult(
                         passed, s, search
                     )
                 );
