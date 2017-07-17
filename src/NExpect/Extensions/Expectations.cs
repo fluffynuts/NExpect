@@ -27,12 +27,11 @@ namespace NExpect.Extensions
 
     public interface ICollectionExpectation<T>
     {
-        IEnumerable<T> Actual { get; }
-
         ICollectionTo<T> To { get; }
+        ICollectionNot<T> Not { get; }
     }
 
-    public class CollectionExpectation<T> :
+    internal class CollectionExpectation<T> :
         Expectation<IEnumerable<T>>,
         ICollectionExpectation<T>
     {
@@ -41,12 +40,14 @@ namespace NExpect.Extensions
         {
         }
 
-        public ICollectionTo<T> To => 
+        public ICollectionTo<T> To =>
             Factory.Create<IEnumerable<T>, CollectionTo<T>>(Actual, this);
-        public ICollectionNot<T> Not { get; }
+
+        public ICollectionNot<T> Not =>
+            Factory.Create<IEnumerable<T>, CollectionNot<T>>(Actual, this);
     }
 
-    public class CollectionNot<T> :
+    internal class CollectionNot<T> :
         ExpectationContext<IEnumerable<T>>,
         ICollectionNot<T>
     {
@@ -55,32 +56,59 @@ namespace NExpect.Extensions
         public CollectionNot(IEnumerable<T> actual)
         {
             Actual = actual;
+            Negate();
         }
 
-        public IContain<IEnumerable<T>> Contain =>
-            Factory.Create<IEnumerable<T>, CollectionContain<T>>(Actual, this);
-
-        public ICollectionToAfterNot<T> To { get; }
+        public ICollectionToAfterNot<T> To =>
+            Factory.Create<IEnumerable<T>, CollectionToAfterNot<T>>(Actual, this);
     }
 
-    public class CollectionContain<T> :
+    internal class CollectionToAfterNot<T> :
         ExpectationContext<IEnumerable<T>>,
-        IContain<IEnumerable<T>>
+        ICollectionToAfterNot<T>
     {
+        public IEnumerable<T> Actual { get; }
+
+        public IContain<IEnumerable<T>> Contain =>
+            Factory.Create<IEnumerable<T>, Contain<IEnumerable<T>>>(Actual, this);
+
+        public CollectionToAfterNot(IEnumerable<T> actual)
+        {
+            Actual = actual;
+        }
     }
 
-    public class CollectionTo<T> :
+    internal class CollectionTo<T> :
         ExpectationContext<IEnumerable<T>>,
         ICollectionTo<T>
     {
         public IEnumerable<T> Actual { get; }
 
-        public IContain<IEnumerable<T>> Contain 
+        public IContain<IEnumerable<T>> Contain
             => Factory.Create<IEnumerable<T>, Contain<IEnumerable<T>>>(Actual, this);
+
+        public ICollectionNotAfterTo<T> Not =>
+            Factory.Create<IEnumerable<T>, CollectionNotAfterTo<T>>(Actual, this);
 
         public CollectionTo(IEnumerable<T> actual)
         {
             Actual = actual;
+        }
+    }
+
+    internal class CollectionNotAfterTo<T>
+        : ExpectationContext<IEnumerable<T>>,
+            ICollectionNotAfterTo<T>
+    {
+        public IEnumerable<T> Actual { get; }
+
+        public IContain<IEnumerable<T>> Contain =>
+            Factory.Create<IEnumerable<T>, Contain<IEnumerable<T>>>(Actual, this);
+
+        public CollectionNotAfterTo(IEnumerable<T> actual)
+        {
+            Actual = actual;
+            Negate();
         }
     }
 }
