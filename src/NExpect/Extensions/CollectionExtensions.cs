@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NExpect.Implementations;
@@ -13,6 +14,8 @@ namespace NExpect.Extensions
             T search
         )
         {
+            if (continuation == null)
+                throw new ArgumentNullException(nameof(continuation), $"EqualTo<T> cannot extend null IContinuation<IEnumerable<{typeof(T)}>>");
             continuation.AddMatcher(collection =>
             {
                 var passed = collection.Contains(search);
@@ -28,12 +31,14 @@ namespace NExpect.Extensions
             int howMany
         )
         {
+            if (contain == null)
+                throw new ArgumentNullException(nameof(contain), $"Exactly<T>() cannot extend null IContain<IEnumerable<{typeof(T).Name}>>");
             return new EnumerableContinuation<T>(contain, howMany, null, null);
         }
     }
 
     internal class EnumerableContinuation<T> :
-        ExpectationContext<T>,
+        ExpectationContext<IEnumerable<T>>,
         IContinuation<IEnumerable<T>>
     {
         public int? Exactly { get; }
@@ -48,7 +53,7 @@ namespace NExpect.Extensions
         )
         {
             // ReSharper disable once SuspiciousTypeConversion.Global
-            SetParent(parent as IExpectationContext<T>);
+            SetParent(parent as IExpectationContext<IEnumerable<T>>);
             Exactly = exactly;
             AtLeast = atLeast;
             AtMost = atMost;

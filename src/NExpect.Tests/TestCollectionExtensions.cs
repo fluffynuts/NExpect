@@ -1,5 +1,4 @@
 ﻿using NExpect.Extensions;
-using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
 using static PeanutButter.RandomGenerators.RandomValueGen;
@@ -11,7 +10,6 @@ namespace NExpect.Tests
     public class TestCollectionExtensions
     {
         [Test]
-        [Ignore("WIP")]
         public void Contain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldNotThrow()
         {
             // Arrange
@@ -50,7 +48,7 @@ namespace NExpect.Tests
 //            // Act
 //            Assert.That(() =>
 //            {
-//                Expect(collection).Not.To.EqualTo(search);
+//                Expect(collection).Not.To.Contain.Exactly(1).EqualTo(search);
 //            }, Throws.Exception.InstanceOf<AssertionException>()
 //                .With.Message.Contains("\nnot to contain\n"));
 //

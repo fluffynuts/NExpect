@@ -29,20 +29,58 @@ namespace NExpect.Extensions
     {
         IEnumerable<T> Actual { get; }
 
-        ICollectionTo<IEnumerable<T>> To { get; }
-        ICollectionNot<IEnumerable<T>> Not { get; }
+        ICollectionTo<T> To { get; }
     }
 
-    public class CollectionExpectation<T>:
-        Expectation<IEnumerable<T>>, 
+    public class CollectionExpectation<T> :
+        Expectation<IEnumerable<T>>,
         ICollectionExpectation<T>
     {
         public CollectionExpectation(IEnumerable<T> actual)
-            :base(actual)
+            : base(actual)
         {
         }
 
-        public ICollectionTo<IEnumerable<T>> To { get; }
-        public ICollectionNot<IEnumerable<T>> Not { get; }
+        public ICollectionTo<T> To => 
+            Factory.Create<IEnumerable<T>, CollectionTo<T>>(Actual, this);
+        public ICollectionNot<T> Not { get; }
+    }
+
+    public class CollectionNot<T> :
+        ExpectationContext<IEnumerable<T>>,
+        ICollectionNot<T>
+    {
+        public IEnumerable<T> Actual { get; }
+
+        public CollectionNot(IEnumerable<T> actual)
+        {
+            Actual = actual;
+        }
+
+        public IContain<IEnumerable<T>> Contain =>
+            Factory.Create<IEnumerable<T>, CollectionContain<T>>(Actual, this);
+
+        public ICollectionToAfterNot<T> To { get; }
+    }
+
+    public class CollectionContain<T> :
+        ExpectationContext<IEnumerable<T>>,
+        IContain<IEnumerable<T>>
+    {
+    }
+
+    public class CollectionTo<T> :
+        ExpectationContext<IEnumerable<T>>,
+        ICollectionTo<T>
+    {
+        public IEnumerable<T> Actual { get; }
+
+        public IContain<IEnumerable<T>> Contain 
+            => Factory.Create<IEnumerable<T>, Contain<IEnumerable<T>>>(Actual, this);
+
+        public CollectionTo(IEnumerable<T> actual)
+        {
+            Actual = actual;
+        }
     }
 }

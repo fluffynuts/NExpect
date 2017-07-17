@@ -10,10 +10,16 @@ namespace NExpect.Interfaces
 
     public interface ICollectionTo<T> : IContinuation<IEnumerable<T>>
     {
-        IContain<T> Contain { get; }
+        IContain<IEnumerable<T>> Contain { get; }
     }
 
     public interface ICollectionNot<T> : IContinuation<IEnumerable<T>>
+    {
+        IContain<IEnumerable<T>> Contain { get; }
+        ICollectionToAfterNot<T> To { get; }
+    }
+
+    public interface ICollectionToAfterNot<T> : IContinuation<IEnumerable<T>>
     {
         IContain<T> Contain { get; }
     }
