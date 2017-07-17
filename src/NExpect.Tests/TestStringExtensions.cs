@@ -35,5 +35,54 @@ namespace NExpect.Tests
 
             // Assert
         }
+
+        [Test]
+        public void Contain_And_WhenActualContainsBothBits_ShouldNotThrow()
+        {
+            // Arrange
+            var actual = "a-b-c";
+            var first = "a";
+            var second = "b";
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(actual).To.Contain(first).And(second);
+            }, Throws.Nothing);
+            // Assert
+        }
+
+        [Test]
+        public void Contain_And_WhenActualMissingFirstBit_ShouldThrow()
+        {
+            // Arrange
+            var actual = "a-b-c";
+            var first = "d";
+            var second = "b";
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(actual).To.Contain(first).And(second);
+            }, Throws.Exception.InstanceOf<AssertionException>()
+                    .With.Message.Contains("\"a-b-c\" to contain \"d\""));
+            // Assert
+        }
+        [Test]
+        public void Contain_And_WhenActualMissingSecondBit_ShouldThrow()
+        {
+            // Arrange
+            var actual = "a-b-c";
+            var first = "b";
+            var second = "f";
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(actual).To.Contain(first).And(second);
+            }, Throws.Exception.InstanceOf<AssertionException>()
+                    .With.Message.Contains("\"a-b-c\" to contain \"f\""));
+            // Assert
+        }
     }
 }
