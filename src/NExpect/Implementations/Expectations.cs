@@ -11,6 +11,11 @@ namespace NExpect.Implementations
             return new Expectation<T>(value);
         }
 
+        public static IExpectation<int> Expect(int value)
+        {
+            return new Expectation<int>(value);
+        }
+
         public static IExpectation<Action> Expect(Action action)
         {
             return new Expectation<Action>(action);

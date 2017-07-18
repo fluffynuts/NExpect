@@ -58,7 +58,7 @@
     <Compile Include="TestCollectionExtensions.cs" />
     <Compile Include="TestStringExtensions.cs" />
     <Compile Include="TestExceptionExtensions.cs" />
-    <Compile Include="TestExpect.cs" />
+    <Compile Include="TestEqualityExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestTruthExtensions.cs" />
   </ItemGroup>

@@ -1,6 +1,11 @@
 namespace NExpect.Interfaces
 {
-    public interface IExceptionMessageContinuation {
-        string Actual { get; }
+    public interface IExceptionMessageContinuation
+    {
+        IEqualityContinuation<string> Equal { get; }
+    }
+
+    public interface IEqualityContinuation<T>
+    {
     }
 }

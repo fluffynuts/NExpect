@@ -1,5 +1,6 @@
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+using static NExpect.Implementations.MessageHelpers;
 
 namespace NExpect.Extensions
 {
@@ -24,12 +25,35 @@ namespace NExpect.Extensions
             });
         }
 
-        private static string FinalMessageFor(
-            string standardMessage,
-            string customMessage
+        public static void To<T>(
+            this IEqualityContinuation<T> continuation,
+            T expected
         )
         {
-            return string.IsNullOrWhiteSpace(customMessage) ? standardMessage : $"{customMessage}\n\n{standardMessage}";
+            continuation.AddMatcher(actual =>
+            {
+                var passed = actual.Equals(expected);
+                var message = passed
+                    ? $"Expected {Quote(actual)} not to equal {Quote(expected)}"
+                    : $"Expected {Quote(actual)} to equal {Quote(expected)}";
+                return new MatcherResult(passed, message);
+            });
+        }
+
+        // TODO: extend for other numeric types (float, double, long)
+        public static void Than(
+            this IGreaterContinuation<int> continuation,
+            int expected
+        )
+        {
+            continuation.AddMatcher(actual =>
+            {
+                var passed = actual > expected;
+                var message = passed
+                    ? $"Expected {actual} not to be greater than {expected}"
+                    : $"Expected {actual} to be greater than {expected}";
+                return new MatcherResult(passed, message);
+            });
         }
     }
 }

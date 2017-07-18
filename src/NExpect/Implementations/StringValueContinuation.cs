@@ -2,13 +2,17 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations
 {
-    public class StringValueContinuation<T>
+    internal class StringValueContinuation<T>
         : ExpectationContext<string>, IExceptionMessageContinuation
     {
         public StringValueContinuation(string value)
         {
             Actual = value;
         }
+
         public string Actual { get; }
+
+        public IEqualityContinuation<string> Equal =>
+            Factory.Create<string, EqualityContinuation<string>>(Actual, this);
     }
 }

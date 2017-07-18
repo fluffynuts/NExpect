@@ -7,6 +7,13 @@ namespace NExpect.Implementations
 {
     internal static class MessageHelpers
     {
+        internal static string FinalMessageFor(
+            string standardMessage,
+            string customMessage
+        )
+        {
+            return string.IsNullOrWhiteSpace(customMessage) ? standardMessage : $"{customMessage}\n\n{standardMessage}";
+        }
         internal static string MessageForContainsResult(
             bool passed,
             string src,

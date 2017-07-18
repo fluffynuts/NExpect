@@ -47,6 +47,7 @@
     <Compile Include="Implementations\Contain.cs" />
     <Compile Include="Implementations\CountMatchContinuation.cs" />
     <Compile Include="Implementations\CountMatchEquals.cs" />
+    <Compile Include="Implementations\EqualityContinuation.cs" />
     <Compile Include="Interfaces\CountMatchMethods.cs" />
     <Compile Include="Interfaces\ICountMatchContinuation.cs" />
     <Compile Include="Interfaces\ICountMatchEquals.cs" />

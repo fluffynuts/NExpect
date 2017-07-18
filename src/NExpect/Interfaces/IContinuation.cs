@@ -1,6 +1,6 @@
 ﻿namespace NExpect.Interfaces
 {
-    public interface IContinuation<TActual>
+    public interface IContinuation<T>
     {
     }
 }

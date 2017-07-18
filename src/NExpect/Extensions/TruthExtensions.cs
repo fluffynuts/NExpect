@@ -1,47 +1,76 @@
+using System;
 using NExpect.Interfaces;
+using NExpect.MatcherLogic;
+using static NExpect.Implementations.MessageHelpers;
 
 namespace NExpect.Extensions
 {
     public static class TruthExtensions
     {
-        public static void True(this IContinuation<bool> expectation)
+        public static void True(this IBe<bool> expectation)
         {
             expectation.True(null);
         }
 
-        public static void True(this IContinuation<bool> expectation, string message)
+        public static void True(this IBe<bool> expectation, string message)
         {
-            expectation.Equal(true, message);
+            TestBoolean(expectation, true, message);
         }
 
-        public static void True(this IContinuation<bool?> expectation)
+        private static void TestBoolean(
+            IBe<bool> expectation,
+            bool expected,
+            string message
+        )
         {
-            expectation.True(null);
+            expectation.AddMatcher(TruthTestFor(expected, message));
         }
 
-        public static void True(this IContinuation<bool?> expectation, string message)
+        private static Func<T, MatcherResult> TruthTestFor<T>(
+            T expected, string message
+        )
         {
-            expectation.Equal(true, message);
+            return actual =>
+            {
+                if (actual.Equals(expected))
+                    return new MatcherResult(true, $"Did not expect {true}");
+                return new MatcherResult(
+                    false,
+                    FinalMessageFor(
+                        $"Expected {expected} but got {actual}",
+                        message
+                    ));
+            };
         }
 
-        public static void False(this IContinuation<bool> expectation)
+        public static void True(this IBe<bool?> expectation)
         {
-            expectation.False(null);
+            expectation.AddMatcher(TruthTestFor(true as bool?, null));
         }
 
-        public static void False(this IContinuation<bool> expectation, string message)
+        public static void True(this IBe<bool?> expectation, string message)
         {
-            expectation.Equal(false, message);
+            expectation.AddMatcher(TruthTestFor(true as bool?, message));
         }
 
-        public static void False(this IContinuation<bool?> expectation)
+        public static void False(this IBe<bool> expectation)
         {
-            expectation.False(null);
+            expectation.AddMatcher(TruthTestFor(false, null));
         }
 
-        public static void False(this IContinuation<bool?> expectation, string message)
+        public static void False(this IBe<bool> expectation, string message)
         {
-            expectation.Equal(false, message);
+            expectation.AddMatcher(TruthTestFor(false, message));
+        }
+
+        public static void False(this IBe<bool?> expectation)
+        {
+            expectation.AddMatcher(TruthTestFor(false as bool?, null));
+        }
+
+        public static void False(this IBe<bool?> expectation, string message)
+        {
+            expectation.AddMatcher(TruthTestFor(false as bool?, message));
         }
     }
 }

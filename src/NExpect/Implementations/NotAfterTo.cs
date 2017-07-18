@@ -10,5 +10,8 @@ namespace NExpect.Implementations
             Actual = actual;
             Negate();
         }
+
+        public IBe<T> Be =>
+            Factory.Create<T, Be<T>>(Actual, this);     
     }
-}
+}   

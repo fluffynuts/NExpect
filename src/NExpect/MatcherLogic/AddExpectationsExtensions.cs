@@ -6,7 +6,7 @@ namespace NExpect.MatcherLogic
     public static class AddExpectationsExtensions
     {
         public static void AddMatcher<T>(
-            this IContinuation<T> continuation, 
+            this IContinuation<T> continuation,
             Func<T, IMatcherResult> matcher)
         {
             AddMatcherPrivate(continuation, matcher);
@@ -15,6 +15,30 @@ namespace NExpect.MatcherLogic
         public static void AddMatcher(
             this IExceptionMessageContinuation continuation,
             Func<string, IMatcherResult> matcher
+        )
+        {
+            AddMatcherPrivate(continuation, matcher);
+        }
+
+        public static void AddMatcher<T>(
+            this IEqualityContinuation<T> continuation,
+            Func<T, IMatcherResult> matcher
+        )
+        {
+            AddMatcherPrivate(continuation, matcher);
+        }
+
+        public static void AddMatcher<T>(
+            this IBe<T> continuation,
+            Func<T, IMatcherResult> matcher
+        )
+        {
+            AddMatcherPrivate(continuation, matcher);
+        }
+
+        public static void AddMatcher<T>(
+            this IGreaterContinuation<T> continuation,
+            Func<T, IMatcherResult> matcher
         )
         {
             AddMatcherPrivate(continuation, matcher);
