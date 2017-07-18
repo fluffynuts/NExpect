@@ -7,7 +7,7 @@ namespace NExpect.Implementations
     {
         public Exception Exception { get; set; }
 
-        public IWithAfterThrowContinuation With => Factory.Create<Exception, WithAfterThrowContinuation>(Exception,
-            this);
+        public IWithAfterThrowContinuation With => 
+            Factory.Create<Exception, WithAfterThrowContinuation>(Exception, this);
     }
 }

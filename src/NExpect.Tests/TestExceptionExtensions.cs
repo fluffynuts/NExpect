@@ -41,7 +41,7 @@ namespace NExpect.Tests
         }
 
         [Test]
-        public void Throw_WithNoGenericType_WhenThrows_ShouldBeAbleToContinueWith_WithMessage()
+        public void Throw_WithNoGenericType_WhenThrows_ShouldBeAbleToContinueWith_WithMessage_HappyPath()
         {
             // Arrange
             var expected = GetRandomString();
@@ -57,5 +57,35 @@ namespace NExpect.Tests
             });
             // Assert
         }
+
+        [Test]
+        public void Throw_WithNoGenericType_WhenThrows_ShouldBeAbleToContinueWith_WithMessage_SadPath()
+        {
+            // Arrange
+            var expected = GetRandomString();
+            var other = GetAnother(expected);
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(() =>
+                {
+                    throw new Exception(other);
+                }).To.Throw()
+                .With.Message.Containing(expected);
+            }, Throws.Exception.InstanceOf<AssertionException>()
+                    .With.Message.Contains($"to contain \"{expected}\""));
+            // Assert
+        }
+
+//        [Test]
+//        public void Throw_WithGenericType_WhenThrowsThatType_ShouldContinueWithMessage_HappyPath()
+//        {
+//            // Arrange
+//            // Pre-Assert
+//            // Act
+//            // Assert
+//            throw new Exception("Test not yet implemented");
+//        }
     }
 }

@@ -12,7 +12,9 @@ namespace NExpect.Implementations
         public IExceptionMessageContinuation Message => 
             Factory.Create<string, StringValueContinuation<string>>(
                 Actual.Message, 
-                new WrappingContinuation<Exception,string>(this, c => c.Actual?.Message)
+                new WrappingContinuation<Exception,string>(
+                    this, c => c.Actual?.Message
+                )
             );
         public Exception Actual { get; }
 
