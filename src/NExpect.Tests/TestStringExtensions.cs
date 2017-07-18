@@ -1,6 +1,6 @@
 ﻿using NExpect.Extensions;
 using NUnit.Framework;
-using static NExpect.Extensions.Expectations;
+using static NExpect.Implementations.Expectations;
 
 namespace NExpect.Tests
 {
@@ -82,6 +82,35 @@ namespace NExpect.Tests
                 Expect(actual).To.Contain(first).And(second);
             }, Throws.Exception.InstanceOf<AssertionException>()
                     .With.Message.Contains("\"a-b-c\" to contain \"f\""));
+            // Assert
+        }
+
+        [Test]
+        public void Contain_And_And_ShouldKeepOnChecking_HappyPath()
+        {
+            // Arrange
+            var actual = "a-b-c";
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(actual).To.Contain("a").And("b").And("c");
+            }, Throws.Nothing);
+            // Assert
+        }
+
+        [Test]
+        public void Contain_And_And_ShouldKeepOnChecking_SadPath()
+        {
+            // Arrange
+            var actual = "a-b-c";
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(actual).To.Contain("a").And("b").And("d");
+            }, Throws.Exception.InstanceOf<AssertionException>()
+                    .With.Message.Contains("\"d\""));
             // Assert
         }
     }

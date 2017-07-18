@@ -1,6 +1,4 @@
-using System;
 using NExpect.Interfaces;
-using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations
 {
@@ -12,16 +10,6 @@ namespace NExpect.Implementations
         public INotAfterTo<T> Not => Factory.Create<T, NotAfterTo<T>>(Actual, this);
 
         public To(T actual)
-        {
-            Actual = actual;
-        }
-    }
-
-    public class Contain<T> : ExpectationContext<T>, IContain<T>
-    {
-        public T Actual { get; }
-
-        public Contain(T actual)
         {
             Actual = actual;
         }

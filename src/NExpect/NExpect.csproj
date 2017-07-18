@@ -44,9 +44,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assertion.cs" />
+    <Compile Include="Implementations\Contain.cs" />
+    <Compile Include="Implementations\CountMatchContinuation.cs" />
+    <Compile Include="Implementations\CountMatchEquals.cs" />
+    <Compile Include="Interfaces\CountMatchMethods.cs" />
+    <Compile Include="Interfaces\ICountMatchContinuation.cs" />
+    <Compile Include="Interfaces\ICountMatchEquals.cs" />
+    <Compile Include="Interfaces\IStringContainContinuation.cs" />
+    <Compile Include="Implementations\StringContainContinuation.cs" />
+    <Compile Include="Implementations\CollectionExpectation.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="Implementations\CollectionNot.cs" />
+    <Compile Include="Implementations\CollectionNotAfterTo.cs" />
+    <Compile Include="Implementations\CollectionTo.cs" />
+    <Compile Include="Implementations\CollectionToAfterNot.cs" />
+    <Compile Include="Interfaces\ICollectionExpectation.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Extensions\MessageHelpers.cs" />
+    <Compile Include="Implementations\MessageHelpers.cs" />
     <Compile Include="Interfaces\IContain.cs" />
     <Compile Include="Interfaces\IExceptionMessageContinuation.cs" />
     <Compile Include="Interfaces\IExpectationContext.cs" />
@@ -69,7 +83,7 @@
     <Compile Include="Implementations\Factory.cs" />
     <Compile Include="Interfaces\IExpectation.cs" />
     <Compile Include="Implementations\Expectation.cs" />
-    <Compile Include="Extensions\Expectations.cs" />
+    <Compile Include="Implementations\Expectations.cs" />
     <Compile Include="Interfaces\IBe.cs" />
     <Compile Include="Interfaces\IContinuation.cs" />
     <Compile Include="Interfaces\INegated.cs" />

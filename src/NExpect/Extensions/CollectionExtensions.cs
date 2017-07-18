@@ -14,11 +14,31 @@ namespace NExpect.Extensions
             int howMany
         )
         {
-            if (contain == null)
-                throw new ArgumentNullException(nameof(contain),
-                    $"Exactly<T>() cannot extend null IContain<IEnumerable<{typeof(T).Name}>>");
+            CheckContain(contain);
             return new CountMatchContinuation<IEnumerable<T>>(
                 contain, CountMatchMethods.Exactly, howMany
+            );
+        }
+
+        public static ICountMatchContinuation<IEnumerable<T>> Least<T>(
+            this IContain<IEnumerable<T>> contain,
+            int howMany
+        )
+        {
+            CheckContain(contain);
+            return new CountMatchContinuation<IEnumerable<T>>(
+                contain, CountMatchMethods.Minimum, howMany
+            );
+        }
+
+        public static ICountMatchContinuation<IEnumerable<T>> Most<T>(
+            this IContain<IEnumerable<T>> contain,
+            int howMany
+        )
+        {
+            CheckContain(contain);
+            return new CountMatchContinuation<IEnumerable<T>>(
+                contain, CountMatchMethods.Maximum, howMany
             );
         }
 
@@ -43,13 +63,20 @@ namespace NExpect.Extensions
             });
         }
 
+        private static void CheckContain<T>(IContain<IEnumerable<T>> contain)
+        {
+            if (contain == null)
+                throw new ArgumentNullException(nameof(contain),
+                    $"Exactly<T>() cannot extend null IContain<IEnumerable<{typeof(T).Name}>>");
+        }
+
         private static readonly Dictionary<CountMatchMethods,
             Func<bool, object, int, int, string>> CollectionCountMessageStrategies =
             new Dictionary<CountMatchMethods, Func<bool, object, int, int, string>>()
             {
                 [CountMatchMethods.Exactly] = CreateMessageFor("exactly"),
-                [CountMatchMethods.AtLeast] = CreateMessageFor("at least"),
-                [CountMatchMethods.AtMost] = CreateMessageFor("at most")
+                [CountMatchMethods.Minimum] = CreateMessageFor("at least"),
+                [CountMatchMethods.Maximum] = CreateMessageFor("at most")
             };
 
         private static readonly Dictionary<CountMatchMethods,
@@ -57,8 +84,8 @@ namespace NExpect.Extensions
             new Dictionary<CountMatchMethods, Func<int, int, bool>>()
             {
                 [CountMatchMethods.Exactly] = (have, want) => have == want,
-                [CountMatchMethods.AtLeast] = (have, want) => have >= want,
-                [CountMatchMethods.AtMost] = (have, want) => have <= want
+                [CountMatchMethods.Minimum] = (have, want) => have >= want,
+                [CountMatchMethods.Maximum] = (have, want) => have <= want
             };
 
         private static Func<bool, object, int, int, string> CreateMessageFor(
@@ -95,93 +122,5 @@ namespace NExpect.Extensions
             return $"Expected not to find {comparison} {want} occurrence{s} of {search} but found {have}";
         }
 
-    }
-
-    public interface ICountMatchContinuation<T>
-    {
-        ICountMatchEquals<T> Equal { get; }
-    }
-
-    public interface ICountMatchEquals<T>
-    {
-        IContinuation<T> Continuation { get; }
-        CountMatchMethods Method { get; }
-        int Compare { get; }
-    }
-
-    public enum CountMatchMethods
-    {
-        Exactly,
-        AtLeast,
-        AtMost
-    }
-
-    internal class CountMatchContinuation<T>
-        : ExpectationContext<IEnumerable<T>>, ICountMatchContinuation<T>
-    {
-        private int _compare;
-        private CountMatchMethods _method;
-        private IContinuation<T> _wrapped;
-
-        public ICountMatchEquals<T> Equal =>
-            new CountMatchEquals<T>(
-                _wrapped,
-                _method,
-                _compare
-            );
-
-
-        public CountMatchContinuation(
-            IContinuation<T> wrapped,
-            CountMatchMethods method,
-            int compare
-        )
-        {
-            _wrapped = wrapped;
-            _method = method;
-            _compare = compare;
-        }
-    }
-
-    internal class CountMatchEquals<T>
-        : ICountMatchEquals<T>
-    {
-        public IContinuation<T> Continuation { get; }
-        public CountMatchMethods Method { get; }
-        public int Compare { get; }
-
-        public CountMatchEquals(
-            IContinuation<T> continuation,
-            CountMatchMethods method,
-            int compare)
-        {
-            Continuation = continuation;
-            Method = method;
-            Compare = compare;
-        }
-    }
-
-
-    internal class EnumerableContinuation<T> :
-        ExpectationContext<IEnumerable<T>>,
-        IContinuation<IEnumerable<T>>
-    {
-        public int? Exactly { get; }
-        public int? AtLeast { get; }
-        public int? AtMost { get; }
-
-        public EnumerableContinuation(
-            IContain<IEnumerable<T>> parent,
-            int? exactly,
-            int? atLeast,
-            int? atMost
-        )
-        {
-            // ReSharper disable once SuspiciousTypeConversion.Global
-            SetParent(parent as IExpectationContext<IEnumerable<T>>);
-            Exactly = exactly;
-            AtLeast = atLeast;
-            AtMost = atMost;
-        }
     }
 }

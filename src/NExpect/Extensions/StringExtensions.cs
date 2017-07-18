@@ -1,4 +1,4 @@
-﻿using System;
+﻿using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
@@ -40,38 +40,5 @@ namespace NExpect.Extensions
             AddContainsMatcherTo(continuation, search);
             return new StringContainContinuation(continuation);
         }
-    }
-
-    public class StringContainContinuation : IStringContainContinuation,
-        IExpectationContext<string>
-    {
-        private IContinuation<string> _continuation;
-        private IExpectationContext<string> _expectationContext;
-
-        public StringContainContinuation(IContinuation<string> continuation)
-        {
-            _continuation = continuation;
-            _expectationContext = continuation as IExpectationContext<string>;
-        }
-
-        public void Negate()
-        {
-            _expectationContext.Negate();
-        }
-
-        public void RunMatcher(Func<string, IMatcherResult> matcher)
-        {
-            _expectationContext.RunMatcher(matcher);
-        }
-
-        IExpectationContext<string> IExpectationContext<string>.Parent
-        {
-            get => _expectationContext.Parent;
-            set => _expectationContext.Parent = value;
-        }
-    }
-
-    public interface IStringContainContinuation : IContinuation<string>
-    {
     }
 }

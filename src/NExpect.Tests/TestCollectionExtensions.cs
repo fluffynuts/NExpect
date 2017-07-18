@@ -1,198 +1,292 @@
 ﻿using NExpect.Extensions;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using PeanutButter.RandomGenerators;
 using static PeanutButter.RandomGenerators.RandomValueGen;
-using static NExpect.Extensions.Expectations;
+using static NExpect.Implementations.Expectations;
 
 namespace NExpect.Tests
 {
     [TestFixture]
     public class TestCollectionExtensions
     {
-        [Test]
-        public void Contain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldNotThrow()
+        public class Exactly
         {
-            // Arrange
-            var search = GetRandomString(3);
-            var other1 = GetAnother(search);
-            var other2 = GetAnother<string>(new[] { search, other1 });
-            var collection = new[]
+            [Test]
+            public void Contain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldNotThrow()
             {
-                search, other1, other2
-            }.Randomize();
+                // Arrange
+                var search = GetRandomString(3);
+                var other1 = GetAnother(search);
+                var other2 = GetAnother<string>(new[] {search, other1});
+                var collection = new[]
+                {
+                    search, other1, other2
+                }.Randomize();
 
-            // Pre-Assert
-            // Act
-            Assert.That(() =>
+                // Pre-Assert
+                // Act
+                Assert.That(() => { Expect(collection).To.Contain.Exactly(1).Equal.To(search); }, Throws.Nothing);
+
+                // Assert
+            }
+
+            [Test]
+            public void Contain_OperatingOnCollectionOfStrings_WhenSeeking2AndDoesContain2_ShouldNotThrow()
             {
-                Expect(collection).To.Contain.Exactly(1).Equal.To(search);
-            }, Throws.Nothing);
+                // Arrange
+                var search = GetRandomString(3);
+                var other1 = GetAnother(search);
+                var other2 = GetAnother<string>(new[] {search, other1});
+                var collection = new[]
+                {
+                    search, other1, other2, search
+                }.Randomize();
 
-            // Assert
-        }
+                // Pre-Assert
+                // Act
+                Assert.That(() => { Expect(collection).To.Contain.Exactly(2).Equal.To(search); }, Throws.Nothing);
 
-        [Test]
-        public void Contain_OperatingOnCollectionOfStrings_WhenSeeking2AndDoesContain2_ShouldNotThrow()
-        {
-            // Arrange
-            var search = GetRandomString(3);
-            var other1 = GetAnother(search);
-            var other2 = GetAnother<string>(new[] { search, other1 });
-            var collection = new[]
+                // Assert
+            }
+
+            [Test]
+            public void Contain_OperatingOnCollectionOfStrings_WhenSeeking1AndDoesContain2_ShouldThrow()
             {
-                search, other1, other2, search
-            }.Randomize();
+                // Arrange
+                var search = GetRandomString(3);
+                var other1 = GetAnother(search);
+                var other2 = GetAnother<string>(new[] {search, other1});
+                var collection = new[]
+                {
+                    search, other1, other2, search
+                }.Randomize();
 
-            // Pre-Assert
-            // Act
-            Assert.That(() =>
-            {
-                Expect(collection).To.Contain.Exactly(2).Equal.To(search);
-            }, Throws.Nothing);
-
-            // Assert
-        }
-
-        [Test]
-        public void Contain_OperatingOnCollectionOfStrings_WhenSeeking1AndDoesContain2_ShouldThrow()
-        {
-            // Arrange
-            var search = GetRandomString(3);
-            var other1 = GetAnother(search);
-            var other2 = GetAnother<string>(new[] { search, other1 });
-            var collection = new[]
-            {
-                search, other1, other2, search
-            }.Randomize();
-
-            // Pre-Assert
-            // Act
-            Assert.That(() =>
-            {
-                Expect(collection).To.Contain.Exactly(1).Equal.To(search);
-            }, Throws.Exception.InstanceOf<AssertionException>()
+                // Pre-Assert
+                // Act
+                Assert.That(() => { Expect(collection).To.Contain.Exactly(1).Equal.To(search); }, Throws.Exception
+                    .InstanceOf<AssertionException>()
                     .With.Message.Contains($"to find exactly 1 occurrence of {search} but found 2"));
 
-            // Assert
+                // Assert
+            }
+
+            [Test]
+            public void Contain_OperatingOnCollectionOfStrings_WhenDoesNoContain_ShouldThrow()
+            {
+                // Arrange
+                var search = GetRandomString(3);
+                var other1 = GetAnother(search);
+                var other2 = GetAnother<string>(new[] {search, other1});
+                var collection = new[]
+                {
+                    other1, other2
+                }.Randomize();
+
+                // Pre-Assert
+                // Act
+                Assert.That(() => { Expect(collection).To.Contain.Exactly(1).Equal.To(search); }, Throws.Exception
+                    .InstanceOf<AssertionException>()
+                    .With.Message.Contains("find exactly 1 occurrence of"));
+
+                // Assert
+            }
+
+            [Test]
+            public void Negated_Contain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldThrow()
+            {
+                // Arrange
+                var search = GetRandomString(3);
+                var other1 = GetAnother(search);
+                var other2 = GetAnother<string>(new[] {search, other1});
+                var collection = new[]
+                {
+                    search, other1, other2
+                }.Randomize();
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(() => { Expect(collection).Not.To.Contain.Exactly(1).Equal.To(search); }, Throws.Exception
+                    .InstanceOf<AssertionException>()
+                    .With.Message.Contains($"not to find exactly 1 occurrence of {search} but found 1"));
+
+                // Assert
+            }
+
+            [Test]
+            public void Negated_Contain_OperatingOnCollectionOfStrings_WhenDoesNotContain_ShouldNotThrow()
+            {
+                // Arrange
+                var search = GetRandomString(3);
+                var other1 = GetAnother(search);
+                var other2 = GetAnother<string>(new[] {search, other1});
+                var collection = new[]
+                {
+                    other1, other2
+                }.Randomize();
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(() => { Expect(collection).Not.To.Contain.Exactly(1).Equal.To(search); }, Throws.Nothing);
+
+                // Assert
+            }
+
+            [Test]
+            public void Negated_Alt_Contain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldThrow()
+            {
+                // Arrange
+                var search = GetRandomString(3);
+                var other1 = GetAnother(search);
+                var other2 = GetAnother<string>(new[] {search, other1});
+                var collection = new[]
+                {
+                    search, other1, other2
+                }.Randomize();
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(() => { Expect(collection).To.Not.Contain.Exactly(1).Equal.To(search); }, Throws.Exception
+                    .InstanceOf<AssertionException>()
+                    .With.Message.Contains($"not to find exactly 1 occurrence of {search} but found 1"));
+
+                // Assert
+            }
+
+            [Test]
+            public void Negated_Alt_Contain_OperatingOnCollectionOfStrings_WhenDoesNotContain_ShouldNotThrow()
+            {
+                // Arrange
+                var search = GetRandomString(3);
+                var other1 = GetAnother(search);
+                var other2 = GetAnother<string>(new[] {search, other1});
+                var collection = new[]
+                {
+                    other1, other2
+                }.Randomize();
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(() => 
+                { 
+                    Expect(collection).To.Not.Contain.Exactly(1).Equal.To(search); 
+                }, Throws.Nothing);
+
+                // Assert
+            }
         }
 
-        [Test]
-        public void Contain_OperatingOnCollectionOfStrings_WhenDoesNoContain_ShouldThrow()
+        public class AtLeast
         {
-            // Arrange
-            var search = GetRandomString(3);
-            var other1 = GetAnother(search);
-            var other2 = GetAnother<string>(new[] { search, other1 });
-            var collection = new[]
+            [Test]
+            public void Contain_GivenAtLeast1_WhenCollectionHasNone_ShouldThrow()
             {
-                other1, other2
-            }.Randomize();
+                // Arrange
+                var search = GetRandomString();
+                var item1 = GetAnother(search);
+                var item2 = GetAnother<string>(new[] { item1, search } );
+                var collection = new[] { item1, item2 }.Randomize();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection).To.Contain.At.Least(1).Equal.To(search);
+                }, Throws.Exception.InstanceOf<AssertionException>()
+                    .With.Message.Contains("at least 1"));
+                // Assert
+            }
 
-            // Pre-Assert
-            // Act
-            Assert.That(() =>
+            [Test]
+            public void Contain_GivenAtLeast1_WhenCollectionHas1_ShouldNotThrow()
             {
-                Expect(collection).To.Contain.Exactly(1).Equal.To(search);
-            }, Throws.Exception.InstanceOf<AssertionException>()
-                .With.Message.Contains("find exactly 1 occurrence of"));
+                // Arrange
+                var search = GetRandomString();
+                var item1 = GetAnother(search);
+                var item2 = GetAnother<string>(new[] { item1, search } );
+                var collection = new[] { search, item1, item2 }.Randomize();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection).To.Contain.At.Least(1).Equal.To(search);
+                }, Throws.Nothing);
+                // Assert
+            }
 
-            // Assert
+            [Test]
+            public void Contain_GivenAtLeast1_WhenCollectionHas2_ShouldNotThrow()
+            {
+                // Arrange
+                var search = GetRandomString();
+                var item1 = GetAnother(search);
+                var item2 = GetAnother<string>(new[] { item1, search } );
+                var collection = new[] { search, item1, search, item2 }.Randomize();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection).To.Contain.At.Least(1).Equal.To(search);
+                }, Throws.Nothing);
+                // Assert
+            }
         }
 
-        [Test]
-        public void Negated_Contain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldThrow()
+        public class AtMost
         {
-            // Arrange
-            var search = GetRandomString(3);
-            var other1 = GetAnother(search);
-            var other2 = GetAnother<string>(new[] { search, other1 });
-            var collection = new[]
+            [Test]
+            public void Contain_GivenAtMost1_WhenCollectionHasNone_ShouldNotThrow()
             {
-                search, other1, other2
-            }.Randomize();
+                // Arrange
+                var search = GetRandomString();
+                var item1 = GetAnother(search);
+                var item2 = GetAnother<string>(new[] { item1, search } );
+                var collection = new[] { item1, item2 }.Randomize();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection).To.Contain.At.Most(1).Equal.To(search);
+                }, Throws.Nothing);
+                // Assert
+            }
 
-            // Pre-Assert
-
-            // Act
-            Assert.That(() =>
+            [Test]
+            public void Contain_GivenAtMost1_WhenCollectionHas1_ShouldNotThrow()
             {
-                Expect(collection).Not.To.Contain.Exactly(1).Equal.To(search);
-            }, Throws.Exception.InstanceOf<AssertionException>()
-                .With.Message.Contains($"not to find exactly 1 occurrence of {search} but found 1"));
+                // Arrange
+                var search = GetRandomString();
+                var item1 = GetAnother(search);
+                var item2 = GetAnother<string>(new[] { item1, search } );
+                var collection = new[] { search, item1, item2 }.Randomize();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection).To.Contain.At.Most(1).Equal.To(search);
+                }, Throws.Nothing);
+                // Assert
+            }
 
-            // Assert
+            [Test]
+            public void Contain_GivenAtMost1_WhenCollectionHas2_ShouldThrow()
+            {
+                // Arrange
+                var search = GetRandomString();
+                var item1 = GetAnother(search);
+                var item2 = GetAnother<string>(new[] { item1, search } );
+                var collection = new[] { search, item1, search, item2 }.Randomize();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection).To.Contain.At.Most(1).Equal.To(search);
+                }, Throws.Exception.InstanceOf<AssertionException>()
+                    .With.Message.Contains("at most 1"));
+                // Assert
+            }
         }
-
-        [Test]
-        public void Negated_Contain_OperatingOnCollectionOfStrings_WhenDoesNotContain_ShouldNotThrow()
-        {
-            // Arrange
-            var search = GetRandomString(3);
-            var other1 = GetAnother(search);
-            var other2 = GetAnother<string>(new[] { search, other1 });
-            var collection = new[]
-            {
-                other1, other2
-            }.Randomize();
-
-            // Pre-Assert
-
-            // Act
-            Assert.That(() =>
-            {
-                Expect(collection).Not.To.Contain.Exactly(1).Equal.To(search);
-            }, Throws.Nothing);
-
-            // Assert
-        }
-
-        [Test]
-        public void Negated_Alt_Contain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldThrow()
-        {
-            // Arrange
-            var search = GetRandomString(3);
-            var other1 = GetAnother(search);
-            var other2 = GetAnother<string>(new[] { search, other1 });
-            var collection = new[]
-            {
-                search, other1, other2
-            }.Randomize();
-
-            // Pre-Assert
-
-            // Act
-            Assert.That(() =>
-            {
-                Expect(collection).To.Not.Contain.Exactly(1).Equal.To(search);
-            }, Throws.Exception.InstanceOf<AssertionException>()
-                .With.Message.Contains($"not to find exactly 1 occurrence of {search} but found 1"));
-
-            // Assert
-        }
-
-        [Test]
-        public void Negated_Alt_Contain_OperatingOnCollectionOfStrings_WhenDoesNotContain_ShouldNotThrow()
-        {
-            // Arrange
-            var search = GetRandomString(3);
-            var other1 = GetAnother(search);
-            var other2 = GetAnother<string>(new[] { search, other1 });
-            var collection = new[]
-            {
-                other1, other2
-            }.Randomize();
-
-            // Pre-Assert
-
-            // Act
-            Assert.That(() =>
-            {
-                Expect(collection).To.Not.Contain.Exactly(1).Equal.To(search);
-            }, Throws.Nothing);
-
-            // Assert
-        }
-
     }
 }

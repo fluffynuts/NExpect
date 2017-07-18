@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace NExpect.Extensions
+namespace NExpect.Implementations
 {
     internal static class MessageHelpers
     {

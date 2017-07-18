@@ -1,4 +1,5 @@
 using NExpect.Extensions;
+using NExpect.Implementations;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
 
