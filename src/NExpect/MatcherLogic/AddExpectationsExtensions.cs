@@ -37,7 +37,7 @@ namespace NExpect.MatcherLogic
         }
 
         public static void AddMatcher<T>(
-            this IGreaterContinuation<T> continuation,
+            this IGreaterOrLessContinuation<T> continuation,
             Func<T, IMatcherResult> matcher
         )
         {

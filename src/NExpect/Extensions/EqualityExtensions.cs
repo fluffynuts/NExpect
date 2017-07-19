@@ -1,3 +1,4 @@
+using System;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
@@ -42,18 +43,33 @@ namespace NExpect.Extensions
 
         // TODO: extend for other numeric types (float, double, long)
         public static void Than(
-            this IGreaterContinuation<int> continuation,
+            this IGreaterOrLessContinuation<int> continuation,
             int expected
+        )
+        {
+            var test = 
+                continuation is IGreaterContinuation<int>
+                ? (Func<int, int, bool>)((a, e) => a > e)
+                : (a, e) => a < e;
+            AddMatcher(continuation, expected, test);
+        }
+
+
+        private static void AddMatcher<T>(
+            IGreaterOrLessContinuation<T> continuation,
+            T expected,
+            Func<T, T, bool> test
         )
         {
             continuation.AddMatcher(actual =>
             {
-                var passed = actual > expected;
+                var passed = test(actual, expected);
                 var message = passed
-                    ? $"Expected {actual} not to be greater than {expected}"
-                    : $"Expected {actual} to be greater than {expected}";
+                    ? $"Expected {actual} not to be less than {expected}"
+                    : $"Expected {actual} to be less than {expected}";
                 return new MatcherResult(passed, message);
             });
         }
+
     }
 }

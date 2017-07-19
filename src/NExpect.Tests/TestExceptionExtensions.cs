@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.NetworkInformation;
 using NUnit.Framework;
 using NExpect.Extensions;
 using static NExpect.Implementations.Expectations;
