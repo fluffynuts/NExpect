@@ -189,10 +189,10 @@ namespace NExpect.Tests
             }
         }
 
-        [TestFixture]
-        public class GreaterThan
+        public class ActingOnInts
         {
-            public class ActingOnInts
+            [TestFixture]
+            public class GreaterThan
             {
                 [Test]
                 public void GreaterThan_WhenActualIsGreaterThanExpected_ShouldNotThrow()
@@ -204,10 +204,7 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => 
-                    { 
-                        Expect(actual).To.Be.Greater.Than(expected); 
-                    }, Throws.Nothing);
+                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); }, Throws.Nothing);
 
                     // Assert
                 }
@@ -221,10 +218,8 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => 
-                    { 
-                        Expect(actual).To.Be.Greater.Than(actual); 
-                    }, Throws.Exception.InstanceOf<AssertionException>());
+                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(actual); },
+                        Throws.Exception.InstanceOf<AssertionException>());
 
                     // Assert
                 }
@@ -239,64 +234,488 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => 
-                    { 
-                        Expect(actual).To.Be.Greater.Than(expected); 
-                    }, Throws.Exception.InstanceOf<AssertionException>());
+                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); },
+                        Throws.Exception.InstanceOf<AssertionException>());
 
+                    // Assert
+                }
+
+                [Test]
+                public void GreaterThan_Negated_WhenActualIsGreaterThanExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomInt(5, 10);
+                    var expected = GetRandomInt(1, 4);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(actual).Not.To.Be.Greater.Than(expected);
+                    }, Throws.Exception.InstanceOf<AssertionException>());
+                    // Assert
+                }
+                [Test]
+                public void GreaterThan_AltNegated_WhenActualIsGreaterThanExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomInt(5, 10);
+                    var expected = GetRandomInt(1, 4);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(actual).To.Not.Be.Greater.Than(expected);
+                    }, Throws.Exception.InstanceOf<AssertionException>());
+                    // Assert
+                }
+            }
+
+            [TestFixture]
+            public class LessThan
+            {
+                [Test]
+                public void LessThan_WhenActualIsLessThanExpected_ShouldNotThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomInt(1, 5);
+                    var expected = GetRandomInt(6, 12);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void LessThan_WhenActualIsEqualToExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomInt(1, 5);
+                    var expected = actual;
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
+                        .InstanceOf<AssertionException>()
+                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    // Assert
+                }
+
+                [Test]
+                public void LessThan_WhenActualIsGreaterThanExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomInt(1, 5);
+                    var expected = GetRandomInt(-5, 0);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
+                        .InstanceOf<AssertionException>()
+                        .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
             }
         }
 
-        [TestFixture]
-        public class LessThan
+        public class ActingOnDecimals
         {
-            [Test]
-            public void LessThan_WhenActualIsLessThanExpected_ShouldNotThrow()
+            [TestFixture]
+            public class GreaterThan
             {
-                // Arrange
-                var actual = GetRandomInt(1, 5);
-                var expected = GetRandomInt(6, 12);
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
+                [Test]
+                public void GreaterThan_WhenActualIsGreaterThanExpected_ShouldNotThrow()
                 {
-                    Expect(actual).To.Be.Less.Than(expected);
-                }, Throws.Nothing);
-                // Assert
+                    // Arrange
+                    var actual = GetRandomDecimal(5, 10);
+                    var expected = GetRandomDecimal(0, 4);
+
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() => { 
+                        Expect(actual).To.Be.Greater.Than(expected); 
+                     }, Throws.Nothing);
+
+                    // Assert
+                }
+
+                [Test]
+                public void GreaterThan_WhenActualIsEqualToExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomDecimal(5, 10);
+
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(actual); },
+                        Throws.Exception.InstanceOf<AssertionException>());
+
+                    // Assert
+                }
+
+                [Test]
+                public void GreaterThan_WhenActualIsLessThanExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomDecimal(5, 10);
+                    var expected = GetRandomDecimal(11, 20);
+
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); },
+                        Throws.Exception.InstanceOf<AssertionException>());
+
+                    // Assert
+                }
             }
 
-            [Test]
-            public void LessThan_WhenActualIsEqualToExpected_ShouldThrow()
+            [TestFixture]
+            public class LessThan
             {
-                // Arrange
-                var actual = GetRandomInt(1, 5);
-                var expected = actual;
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
+                [Test]
+                public void LessThan_WhenActualIsLessThanExpected_ShouldNotThrow()
                 {
-                    Expect(actual).To.Be.Less.Than(expected);
-                }, Throws.Exception.InstanceOf<AssertionException>()
-                    .With.Message.Contains($"{actual} to be less than {expected}"));
-                // Assert
+                    // Arrange
+                    var actual = GetRandomDecimal(1, 5);
+                    var expected = GetRandomDecimal(6, 12);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void LessThan_WhenActualIsEqualToExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomDecimal(1, 5);
+                    var expected = actual;
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
+                        .InstanceOf<AssertionException>()
+                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    // Assert
+                }
+
+                [Test]
+                public void LessThan_WhenActualIsGreaterThanExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomDecimal(1, 5);
+                    var expected = GetRandomDecimal(-5, 0);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
+                        .InstanceOf<AssertionException>()
+                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    // Assert
+                }
+            }
+        }        
+        
+        public class ActingOnDoubles
+        {
+            [TestFixture]
+            public class GreaterThan
+            {
+                [Test]
+                public void GreaterThan_WhenActualIsGreaterThanExpected_ShouldNotThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomDouble(5, 10);
+                    var expected = GetRandomDouble(0, 4);
+
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() => { 
+                        Expect(actual).To.Be.Greater.Than(expected); 
+                     }, Throws.Nothing);
+
+                    // Assert
+                }
+
+                [Test]
+                public void GreaterThan_WhenActualIsEqualToExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomDouble(5, 10);
+
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(actual); },
+                        Throws.Exception.InstanceOf<AssertionException>());
+
+                    // Assert
+                }
+
+                [Test]
+                public void GreaterThan_WhenActualIsLessThanExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomDouble(5, 10);
+                    var expected = GetRandomDouble(11, 20);
+
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); },
+                        Throws.Exception.InstanceOf<AssertionException>());
+
+                    // Assert
+                }
             }
 
-            [Test]
-            public void LessThan_WhenActualIsGreaterThanExpected_ShouldThrow()
+            [TestFixture]
+            public class LessThan
             {
-                // Arrange
-                var actual = GetRandomInt(1, 5);
-                var expected = GetRandomInt(-5, 0);
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
+                [Test]
+                public void LessThan_WhenActualIsLessThanExpected_ShouldNotThrow()
                 {
-                    Expect(actual).To.Be.Less.Than(expected);
-                }, Throws.Exception.InstanceOf<AssertionException>()
-                    .With.Message.Contains($"{actual} to be less than {expected}"));
-                // Assert
+                    // Arrange
+                    var actual = GetRandomDouble(1, 5);
+                    var expected = GetRandomDouble(6, 12);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void LessThan_WhenActualIsEqualToExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomDouble(1, 5);
+                    var expected = actual;
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
+                        .InstanceOf<AssertionException>()
+                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    // Assert
+                }
+
+                [Test]
+                public void LessThan_WhenActualIsGreaterThanExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomDouble(1, 5);
+                    var expected = GetRandomDouble(-5, 0);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
+                        .InstanceOf<AssertionException>()
+                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    // Assert
+                }
+            }
+        }
+
+        public class ActingOnFloats
+        {
+            [TestFixture]
+            public class GreaterThan
+            {
+                [Test]
+                public void GreaterThan_WhenActualIsGreaterThanExpected_ShouldNotThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomFloat(5, 10);
+                    var expected = GetRandomFloat(0, 4);
+
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() => { 
+                        Expect(actual).To.Be.Greater.Than(expected); 
+                     }, Throws.Nothing);
+
+                    // Assert
+                }
+
+                [Test]
+                public void GreaterThan_WhenActualIsEqualToExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomFloat(5, 10);
+
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(actual); },
+                        Throws.Exception.InstanceOf<AssertionException>());
+
+                    // Assert
+                }
+
+                [Test]
+                public void GreaterThan_WhenActualIsLessThanExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomFloat(5, 10);
+                    var expected = GetRandomFloat(11, 20);
+
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); },
+                        Throws.Exception.InstanceOf<AssertionException>());
+
+                    // Assert
+                }
+            }
+
+            [TestFixture]
+            public class LessThan
+            {
+                [Test]
+                public void LessThan_WhenActualIsLessThanExpected_ShouldNotThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomFloat(1, 5);
+                    var expected = GetRandomFloat(6, 12);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void LessThan_WhenActualIsEqualToExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomFloat(1, 5);
+                    var expected = actual;
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
+                        .InstanceOf<AssertionException>()
+                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    // Assert
+                }
+
+                [Test]
+                public void LessThan_WhenActualIsGreaterThanExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomFloat(1, 5);
+                    var expected = GetRandomFloat(-5, 0);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
+                        .InstanceOf<AssertionException>()
+                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    // Assert
+                }
+            }
+        }
+
+        private static float GetRandomFloat(float min, float max) {
+            return (float)GetRandomDouble(min, max);
+        }
+
+        private static long GetRandomLong(long min, long max) {
+            return GetRandomInt((int)min, (int)max);
+        }
+
+        public class ActingOnLongs
+        {
+            [TestFixture]
+            public class GreaterThan
+            {
+                [Test]
+                public void GreaterThan_WhenActualIsGreaterThanExpected_ShouldNotThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomLong(5, 10);
+                    var expected = GetRandomLong(0, 4);
+
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() => { 
+                        Expect(actual).To.Be.Greater.Than(expected); 
+                     }, Throws.Nothing);
+
+                    // Assert
+                }
+
+                [Test]
+                public void GreaterThan_WhenActualIsEqualToExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomLong(5, 10);
+
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(actual); },
+                        Throws.Exception.InstanceOf<AssertionException>());
+
+                    // Assert
+                }
+
+                [Test]
+                public void GreaterThan_WhenActualIsLessThanExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomLong(5, 10);
+                    var expected = GetRandomLong(11, 20);
+
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); },
+                        Throws.Exception.InstanceOf<AssertionException>());
+
+                    // Assert
+                }
+            }
+
+            [TestFixture]
+            public class LessThan
+            {
+                [Test]
+                public void LessThan_WhenActualIsLessThanExpected_ShouldNotThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomInt(1, 5);
+                    var expected = GetRandomInt(6, 12);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void LessThan_WhenActualIsEqualToExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomInt(1, 5);
+                    var expected = actual;
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
+                        .InstanceOf<AssertionException>()
+                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    // Assert
+                }
+
+                [Test]
+                public void LessThan_WhenActualIsGreaterThanExpected_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomInt(1, 5);
+                    var expected = GetRandomInt(-5, 0);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
+                        .InstanceOf<AssertionException>()
+                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    // Assert
+                }
             }
         }
     }

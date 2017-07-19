@@ -54,6 +54,54 @@ namespace NExpect.Extensions
             AddMatcher(continuation, expected, test);
         }
 
+        public static void Than(
+            this IGreaterOrLessContinuation<decimal> continuation,
+            decimal expected
+        )
+        {
+            var test = 
+                continuation is IGreaterContinuation<decimal>
+                ? (Func<decimal, decimal, bool>)((a, e) => a > e)
+                : (a, e) => a < e;
+            AddMatcher(continuation, expected, test);
+        }
+
+        public static void Than(
+            this IGreaterOrLessContinuation<double> continuation,
+            double expected
+        )
+        {
+            var test = 
+                continuation is IGreaterContinuation<double>
+                ? (Func<double, double, bool>)((a, e) => a > e)
+                : (a, e) => a < e;
+            AddMatcher(continuation, expected, test);
+        }
+
+        public static void Than(
+            this IGreaterOrLessContinuation<float> continuation,
+            float expected
+        )
+        {
+            var test = 
+                continuation is IGreaterContinuation<float>
+                ? (Func<float, float, bool>)((a, e) => a > e)
+                : (a, e) => a < e;
+            AddMatcher(continuation, expected, test);
+        }
+
+        public static void Than(
+            this IGreaterOrLessContinuation<long> continuation,
+            long expected
+        )
+        {
+            var test = 
+                continuation is IGreaterContinuation<long>
+                ? (Func<long, long, bool>)((a, e) => a > e)
+                : (a, e) => a < e;
+            AddMatcher(continuation, expected, test);
+        }
+
 
         private static void AddMatcher<T>(
             IGreaterOrLessContinuation<T> continuation,
