@@ -1,0 +1,34 @@
+<package>
+  <metadata>
+    <id>NExpect</id>
+    <version>1.0.0</version>
+    <title>NExpect</title>
+    <authors>Davyd McColl</authors>
+    <owners>Davyd McColl</owners>
+    <description>
+    Unit-test Framework-agnostic Expect-style assertions for .NET
+    </description>
+    <releaseNotes>
+    </releaseNotes>
+    <summary>
+    Provides Expect() syntax for doing assertions in .NET. Framework-agnostic, but will throw
+    NUnit AssertionExceptions for failures if available at runtime, otherwise UnmetExpectationExceptions.
+    NExpect has grammar inspired by Chai and extensibility inspired by Jasmine.
+    </summary>
+    <language>en-US</language>
+    <projectUrl>https://github.com/fluffynuts/NExpect</projectUrl>
+    <iconUrl>https://nuget.org/Content/Images/packageDefaultIcon-50x50.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/fluffynuts/NExpect/blob/master/LICENSE</licenseUrl>
+    <copyright>Copyright 2017</copyright>
+    <dependencies>
+      <group targetFramework="net40"></group>
+    </dependencies>
+    <references></references>
+    <tags></tags>
+  </metadata>
+  <files>
+    <file src="src\NExpect\bin\Debug\NExpect.dll" target="lib\net45" />
+    <file src="src\NExpect\bin\Debug\NExpect.xml" target="lib\net45" />
+  </files>
+</package>
