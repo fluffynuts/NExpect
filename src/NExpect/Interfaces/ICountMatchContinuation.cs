@@ -9,6 +9,10 @@ namespace NExpect.Interfaces
         /// <summary>
         /// Continuation to attempt to match the collection items exactly
         /// </summary>
-        ICountMatchEquals<T> Equal { get; }
+        ICountMatchEqual<T> Equal { get; }
+
+        ICountMatchMatched<T> Matched { get; }
     }
+
+
 }

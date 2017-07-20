@@ -48,11 +48,13 @@
     <Compile Include="Extensions\GreaterOrLessContinuationExtensions.cs" />
     <Compile Include="Implementations\Contain.cs" />
     <Compile Include="Implementations\CountMatchContinuation.cs" />
-    <Compile Include="Implementations\CountMatchEquals.cs" />
+    <Compile Include="Implementations\CountMatchEqual.cs" />
+    <Compile Include="Implementations\CountMatchMatched.cs" />
     <Compile Include="Implementations\EqualityContinuation.cs" />
     <Compile Include="Interfaces\CountMatchMethods.cs" />
     <Compile Include="Interfaces\ICountMatchContinuation.cs" />
-    <Compile Include="Interfaces\ICountMatchEquals.cs" />
+    <Compile Include="Interfaces\ICountMatchEqual.cs" />
+    <Compile Include="Interfaces\ICountMatchMatched.cs" />
     <Compile Include="Interfaces\IStringContainContinuation.cs" />
     <Compile Include="Implementations\StringContainContinuation.cs" />
     <Compile Include="Implementations\CollectionExpectation.cs" />

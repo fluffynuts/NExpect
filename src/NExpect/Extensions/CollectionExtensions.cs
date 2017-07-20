@@ -75,7 +75,7 @@ namespace NExpect.Extensions
         /// <typeparam name="T">Type of underlying continuation</typeparam>
         /// <exception cref="ArgumentNullException">Thrown if the countMatch is null -- mainly to keep the library sane and testable</exception>
         public static void To<T>(
-            this ICountMatchEquals<IEnumerable<T>> countMatch,
+            this ICountMatchEqual<IEnumerable<T>> countMatch,
             T search)
         {
             if (countMatch == null)
@@ -84,14 +84,28 @@ namespace NExpect.Extensions
             countMatch.Continuation.AddMatcher(collection =>
             {
                 var have = collection.Count(o => o.Equals(search));
-                var passed = CollectionCountMatchStrategies[countMatch.Method](have, countMatch.Compare);
+                var passed = _collectionCountMatchStrategies[countMatch.Method](have, countMatch.Compare);
                 var message =
-                    CollectionCountMessageStrategies[countMatch.Method](passed, search, have, countMatch.Compare);
+                    _collectionCountMessageStrategies[countMatch.Method](passed, search, have, countMatch.Compare);
 
                 return new MatcherResult(
                     passed,
                     message
                 );
+            });
+        }
+
+        public static void By<T>(
+            this ICountMatchMatched<IEnumerable<T>> countMatch,
+            Func<T, bool> test
+        )
+        {
+            countMatch.Continuation.AddMatcher(collection =>
+            {
+                var have = collection.Where(test).Count();
+                var passed = _collectionCountMatchStrategies[countMatch.Method](have, countMatch.Compare);
+                var message = _collectionCountMatchMessageStrategies[countMatch.Method](passed, have, countMatch.Compare);
+                return new MatcherResult(passed, message);
             });
         }
 
@@ -103,7 +117,7 @@ namespace NExpect.Extensions
         }
 
         private static readonly Dictionary<CountMatchMethods,
-            Func<bool, object, int, int, string>> CollectionCountMessageStrategies =
+            Func<bool, object, int, int, string>> _collectionCountMessageStrategies =
             new Dictionary<CountMatchMethods, Func<bool, object, int, int, string>>()
             {
                 [CountMatchMethods.Exactly] = CreateMessageFor("exactly"),
@@ -112,7 +126,16 @@ namespace NExpect.Extensions
             };
 
         private static readonly Dictionary<CountMatchMethods,
-            Func<int, int, bool>> CollectionCountMatchStrategies =
+            Func<bool, int, int, string>> _collectionCountMatchMessageStrategies =
+            new Dictionary<CountMatchMethods, Func<bool, int, int, string>>()
+            {
+                [CountMatchMethods.Exactly] = CreateMatchMessageFor("exactly"),
+                [CountMatchMethods.Minimum] = CreateMatchMessageFor("at least"),
+                [CountMatchMethods.Maximum] = CreateMatchMessageFor("at most")
+            };
+
+        private static readonly Dictionary<CountMatchMethods,
+            Func<int, int, bool>> _collectionCountMatchStrategies =
             new Dictionary<CountMatchMethods, Func<int, int, bool>>()
             {
                 [CountMatchMethods.Exactly] = (have, want) => have == want,
@@ -124,11 +147,23 @@ namespace NExpect.Extensions
             string context
         )
         {
-            Func<bool, object, int, int, string> result = 
+            Func<bool, object, int, int, string> result =
                 (passed, search, have, want) =>
                     passed
-                    ? CreatePassMessageFor(context, search, have, want)
-                    : CreateFailedMessageFor(context, search, have, want);
+                        ? CreatePassMessageFor(context, search, have, want)
+                        : CreateFailedMessageFor(context, search, have, want);
+            return result;
+        }
+
+        private static Func<bool, int, int, string> CreateMatchMessageFor(
+            string context
+        )
+        {
+            Func<bool, int, int, string> result =
+                (passed, have, want) =>
+                    passed
+                        ? CreatePassMatchMessageFor(context, have, want)
+                        : CreateFailedMatchMessageFor(context, have, want);
             return result;
         }
 
@@ -154,5 +189,24 @@ namespace NExpect.Extensions
             return $"Expected not to find {comparison} {want} occurrence{s} of {search} but found {have}";
         }
 
+        private static string CreateFailedMatchMessageFor(
+            string comparison,
+            int have,
+            int want
+        )
+        {
+            var s = want == 1 ? "" : "es";
+            return $"Expected to find {comparison} {want} match{s} but found {have}";
+        }
+
+        private static string CreatePassMatchMessageFor(
+            string comparison,
+            int have,
+            int want
+        )
+        {
+            var s = want == 1 ? "" : "es";
+            return $"Expected not to find {comparison} {want} match{s} but found {have}";
+        }
     }
 }

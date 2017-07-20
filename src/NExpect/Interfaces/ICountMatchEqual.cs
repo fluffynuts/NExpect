@@ -1,6 +1,6 @@
 namespace NExpect.Interfaces
 {
-    public interface ICountMatchEquals<T>
+    public interface ICountMatchEqual<T>
     {
         IContinuation<T> Continuation { get; }
         CountMatchMethods Method { get; }

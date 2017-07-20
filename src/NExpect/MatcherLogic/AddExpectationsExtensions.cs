@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NExpect.Interfaces;
 
 namespace NExpect.MatcherLogic
@@ -46,6 +47,14 @@ namespace NExpect.MatcherLogic
 
         public static void AddMatcher<T>(
             this IGreaterOrLessContinuation<T> continuation,
+            Func<T, IMatcherResult> matcher
+        )
+        {
+            AddMatcherPrivate(continuation, matcher);
+        }
+
+        public static void AddMatcher<T>(
+            this ICountMatchMatched<T> continuation,
             Func<T, IMatcherResult> matcher
         )
         {

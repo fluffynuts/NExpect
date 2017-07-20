@@ -4,19 +4,26 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations
 {
     internal class CountMatchContinuation<T>
-        : ExpectationContext<IEnumerable<T>>, ICountMatchContinuation<T>
+        : ExpectationContext<IEnumerable<T>>, 
+        ICountMatchContinuation<T>
     {
         private readonly int _compare;
         private readonly CountMatchMethods _method;
         private readonly IContinuation<T> _wrapped;
 
-        public ICountMatchEquals<T> Equal =>
-            new CountMatchEquals<T>(
+        public ICountMatchEqual<T> Equal =>
+            new CountMatchEqual<T>(
                 _wrapped,
                 _method,
                 _compare
             );
 
+        public ICountMatchMatched<T> Matched =>
+            new CountMatchMatched<T>(
+                _wrapped,
+                _method,
+                _compare
+            );
 
         public CountMatchContinuation(
             IContinuation<T> wrapped,

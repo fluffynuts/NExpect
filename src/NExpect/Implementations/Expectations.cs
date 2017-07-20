@@ -27,5 +27,12 @@ namespace NExpect.Implementations
         {
             return new CollectionExpectation<T>(collection);
         }
+
+        public static ICollectionExpectation<T> Expect<T>(
+            T[] collection
+        )
+        {
+            return new CollectionExpectation<T>(collection);
+        }
     }
 }
