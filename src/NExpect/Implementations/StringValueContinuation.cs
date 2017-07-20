@@ -3,7 +3,8 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations
 {
     internal class StringValueContinuation<T>
-        : ExpectationContext<string>, IExceptionMessageContinuation
+        : ExpectationContext<string>, 
+        IExceptionMessageContinuation
     {
         public StringValueContinuation(string value)
         {

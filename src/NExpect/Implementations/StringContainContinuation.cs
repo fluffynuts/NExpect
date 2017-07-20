@@ -14,6 +14,7 @@ namespace NExpect.Implementations
             _expectationContext = continuation as IExpectationContext<string>;
         }
 
+
         public void Negate()
         {
             _expectationContext.Negate();

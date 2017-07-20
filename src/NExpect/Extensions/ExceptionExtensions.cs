@@ -59,10 +59,16 @@ namespace NExpect.Extensions
             return continuation;
         }
 
-        public static void Containing(this IExceptionMessageContinuation src, string search)
+        public static IStringContainContinuation Containing(
+            this IExceptionMessageContinuation src,
+            string search)
         {
+            var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
+                null, src as IExpectationContext<string>
+            );
             src.AddMatcher(s =>
             {
+                result.Actual = s;
                 var passed = s?.Contains(search) ?? false;
                 return new MatcherResult(
                     passed,
@@ -71,6 +77,18 @@ namespace NExpect.Extensions
                     )
                 );
             });
+            return result;
+        }
+    }
+
+    public class ExceptionMessageContainuationToStringContainContinuation
+        : ExpectationContext<string>, IStringContainContinuation
+    {
+        public string Actual { get; set; }
+
+        public ExceptionMessageContainuationToStringContainContinuation(string actual)
+        {
+            Actual = actual;
         }
     }
 }

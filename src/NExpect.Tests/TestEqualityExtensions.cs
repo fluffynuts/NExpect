@@ -312,6 +312,19 @@ namespace NExpect.Tests
                         .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
+
+                [Test]
+                public void LessThan_Negated_WhenActualIsGreaterThanExpected_ShouldNotThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomInt(1, 5);
+                    var expected = GetRandomInt(-5, 0);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).Not.To.Be.Less.Than(expected); }, Throws.Nothing);
+                    // Assert
+                }
+
             }
         }
 
@@ -367,6 +380,19 @@ namespace NExpect.Tests
 
                     // Assert
                 }
+
+                [Test]
+                public void LessThan_Negated_WhenActualIsGreaterThanExpected_ShouldNotThrow()
+                {
+                    // Arrange
+                    var actual = GetRandomDecimal(1, 5);
+                    var expected = GetRandomDecimal(-5, 0);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(actual).Not.To.Be.Less.Than(expected); }, Throws.Nothing);
+                    // Assert
+                }
+
             }
 
             [TestFixture]

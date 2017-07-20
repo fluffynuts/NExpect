@@ -1,6 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
 using NExpect.Extensions;
+using PeanutButter.RandomGenerators;
+using PeanutButter.Utils;
 using static NExpect.Implementations.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 
@@ -55,6 +57,46 @@ namespace NExpect.Tests
                 }).To.Throw()
                 .With.Message.Containing(expected);
             });
+            // Assert
+        }
+
+        [Test]
+        public void Throw_WithNoGenericType_AllowsMultipleSubStringContainingOnMessage_HappyPath()
+        {
+            // Arrange
+            var e1 = GetRandomString();
+            var e2 = GetRandomString();
+            var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(() => 
+                {
+                    throw new Exception(message);
+                }).To.Throw().With.Message.Containing(e1).And(e2);
+            }, Throws.Nothing);
+            // Assert
+        }
+
+        [Test]
+        public void Throw_WithNoGenericType_AllowsMultipleSubStringContainingOnMessage_SadPath()
+        {
+            // Arrange
+            var e1 = GetRandomString();
+            var e2 = GetRandomString();
+            var e3 = GetRandomString();
+            var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(() => 
+                {
+                    throw new Exception(message);
+                }).To.Throw().With.Message.Containing(e1).And(e3);
+            }, Throws.Exception.InstanceOf<AssertionException>()
+                .With.Message.Contains(e3));
             // Assert
         }
 
