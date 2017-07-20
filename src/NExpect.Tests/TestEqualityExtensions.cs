@@ -112,7 +112,11 @@ namespace NExpect.Tests
                 // Pre-Assert
 
                 // Act
-                Assert.That(() => { Expect(value).To.Be.Equal.To(value); }, Throws.Nothing);
+                Assert.That(() =>
+                    {
+                        Expect(value).To.Be.Equal.To(value);
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -126,7 +130,10 @@ namespace NExpect.Tests
                 // Pre-Assert
 
                 // Act
-                Assert.That(() => { Expect(value).To.Be.Equal.To(expected); },
+                Assert.That(() =>
+                    {
+                        Expect(value).To.Be.Equal.To(expected);
+                    },
                     Throws.Exception.InstanceOf<AssertionException>());
 
                 // Assert
@@ -141,7 +148,11 @@ namespace NExpect.Tests
                 // Pre-Assert
 
                 // Act
-                Assert.That(() => { Expect(value).Not.To.Be.Equal.To(unexpected); }, Throws.Nothing);
+                Assert.That(() =>
+                    {
+                        Expect(value).Not.To.Be.Equal.To(unexpected);
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -154,7 +165,10 @@ namespace NExpect.Tests
                 // Pre-Assert
 
                 // Act
-                Assert.That(() => { Expect(value).Not.To.Be.Equal.To(value); },
+                Assert.That(() =>
+                    {
+                        Expect(value).Not.To.Be.Equal.To(value);
+                    },
                     Throws.Exception.InstanceOf<AssertionException>());
 
                 // Assert
@@ -169,7 +183,11 @@ namespace NExpect.Tests
                 // Pre-Assert
 
                 // Act
-                Assert.That(() => { Expect(value).To.Not.Be.Equal.To(unexpected); }, Throws.Nothing);
+                Assert.That(() =>
+                    {
+                        Expect(value).To.Not.Be.Equal.To(unexpected);
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -182,8 +200,78 @@ namespace NExpect.Tests
                 // Pre-Assert
 
                 // Act
-                Assert.That(() => { Expect(value).To.Not.Be.Equal.To(value); },
+                Assert.That(() =>
+                    {
+                        Expect(value).To.Not.Be.Equal.To(value);
+                    },
                     Throws.Exception.InstanceOf<AssertionException>());
+
+                // Assert
+            }
+        }
+
+        public class ToMatch
+        {
+            [Test]
+            public void WhenMatches_WithSimpleBooleanReturn_ShouldNotThrow()
+            {
+                // Arrange
+                var str = GetRandomString();
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(str).To.Match(s => s == str, "looking for: " + str);
+                }, Throws.Nothing);
+
+                // Assert
+            }
+
+            [Test]
+            public void WhenDoesntMatch_WithSimpleBooleanReturn_ShouldThrow()
+            {
+                // Arrange
+                var str = GetRandomString();
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(str).To.Match(s => s != str, "looking for: !" + str);
+                }, Throws.Exception.InstanceOf<AssertionException>());
+
+                // Assert
+            }
+
+            [Test]
+            public void WhenDoesntMatch_Negated_WithSimpleBooleanReturn_ShouldNotThrow()
+            {
+                // Arrange
+                var str = GetRandomString();
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(str).Not.To.Match(s => s != str, "looking for: !" + str);
+                }, Throws.Nothing);
+
+                // Assert
+            }
+
+            [Test]
+            public void WhenDoesntMatch_NegatedAlt_WithSimpleBooleanReturn_ShouldNotThrow()
+            {
+                // Arrange
+                var str = GetRandomString();
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(str).To.Not.Match(s => s != str, "looking for: !" + str);
+                }, Throws.Nothing);
 
                 // Assert
             }
@@ -199,9 +287,10 @@ namespace NExpect.Tests
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(input).To.Be.Null();
-                }, Throws.Nothing);
+                    {
+                        Expect(input).To.Be.Null();
+                    },
+                    Throws.Nothing);
                 // Assert
             }
 
@@ -213,10 +302,11 @@ namespace NExpect.Tests
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(input).Not.To.Be.Null();
-                }, Throws.Exception.InstanceOf<AssertionException>()
-                    .With.Message.Contains("Expected not to get null"));
+                    {
+                        Expect(input).Not.To.Be.Null();
+                    },
+                    Throws.Exception.InstanceOf<AssertionException>()
+                        .With.Message.Contains("Expected not to get null"));
                 // Assert
             }
 
@@ -228,10 +318,11 @@ namespace NExpect.Tests
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(input).To.Not.Be.Null();
-                }, Throws.Exception.InstanceOf<AssertionException>()
-                    .With.Message.Contains("Expected not to get null"));
+                    {
+                        Expect(input).To.Not.Be.Null();
+                    },
+                    Throws.Exception.InstanceOf<AssertionException>()
+                        .With.Message.Contains("Expected not to get null"));
                 // Assert
             }
 
@@ -244,10 +335,11 @@ namespace NExpect.Tests
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(input).To.Be.Null();
-                }, Throws.Exception.InstanceOf<AssertionException>()
-                    .With.Message.Contains($"Expected null but got \"{input}\""));
+                    {
+                        Expect(input).To.Be.Null();
+                    },
+                    Throws.Exception.InstanceOf<AssertionException>()
+                        .With.Message.Contains($"Expected null but got \"{input}\""));
                 // Assert
             }
 
@@ -260,9 +352,10 @@ namespace NExpect.Tests
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(input).Not.To.Be.Null();
-                }, Throws.Nothing);
+                    {
+                        Expect(input).Not.To.Be.Null();
+                    },
+                    Throws.Nothing);
                 // Assert
             }
 
@@ -275,9 +368,10 @@ namespace NExpect.Tests
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(input).To.Not.Be.Null();
-                }, Throws.Nothing);
+                    {
+                        Expect(input).To.Not.Be.Null();
+                    },
+                    Throws.Nothing);
                 // Assert
             }
         }
@@ -297,7 +391,11 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); }, Throws.Nothing);
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Greater.Than(expected);
+                        },
+                        Throws.Nothing);
 
                     // Assert
                 }
@@ -311,7 +409,10 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(actual); },
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Greater.Than(actual);
+                        },
                         Throws.Exception.InstanceOf<AssertionException>());
 
                     // Assert
@@ -327,7 +428,10 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); },
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Greater.Than(expected);
+                        },
                         Throws.Exception.InstanceOf<AssertionException>());
 
                     // Assert
@@ -341,7 +445,10 @@ namespace NExpect.Tests
                     var expected = GetRandomInt(1, 4);
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).Not.To.Be.Greater.Than(expected); },
+                    Assert.That(() =>
+                        {
+                            Expect(actual).Not.To.Be.Greater.Than(expected);
+                        },
                         Throws.Exception.InstanceOf<AssertionException>());
                     // Assert
                 }
@@ -354,7 +461,10 @@ namespace NExpect.Tests
                     var expected = GetRandomInt(1, 4);
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).To.Not.Be.Greater.Than(expected); },
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Not.Be.Greater.Than(expected);
+                        },
                         Throws.Exception.InstanceOf<AssertionException>());
                     // Assert
                 }
@@ -371,7 +481,11 @@ namespace NExpect.Tests
                     var expected = GetRandomInt(6, 12);
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Nothing);
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Less.Than(expected);
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
 
@@ -383,9 +497,13 @@ namespace NExpect.Tests
                     var expected = actual;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
-                        .InstanceOf<AssertionException>()
-                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Less.Than(expected);
+                        },
+                        Throws.Exception
+                            .InstanceOf<AssertionException>()
+                            .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
 
@@ -397,9 +515,13 @@ namespace NExpect.Tests
                     var expected = GetRandomInt(-5, 0);
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
-                        .InstanceOf<AssertionException>()
-                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Less.Than(expected);
+                        },
+                        Throws.Exception
+                            .InstanceOf<AssertionException>()
+                            .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
 
@@ -411,7 +533,11 @@ namespace NExpect.Tests
                     var expected = GetRandomInt(-5, 0);
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).Not.To.Be.Less.Than(expected); }, Throws.Nothing);
+                    Assert.That(() =>
+                        {
+                            Expect(actual).Not.To.Be.Less.Than(expected);
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
             }
@@ -432,7 +558,11 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); }, Throws.Nothing);
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Greater.Than(expected);
+                        },
+                        Throws.Nothing);
 
                     // Assert
                 }
@@ -446,7 +576,10 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(actual); },
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Greater.Than(actual);
+                        },
                         Throws.Exception.InstanceOf<AssertionException>());
 
                     // Assert
@@ -462,7 +595,10 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); },
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Greater.Than(expected);
+                        },
                         Throws.Exception.InstanceOf<AssertionException>());
 
                     // Assert
@@ -476,7 +612,11 @@ namespace NExpect.Tests
                     var expected = GetRandomDecimal(-5, 0);
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).Not.To.Be.Less.Than(expected); }, Throws.Nothing);
+                    Assert.That(() =>
+                        {
+                            Expect(actual).Not.To.Be.Less.Than(expected);
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
             }
@@ -492,7 +632,11 @@ namespace NExpect.Tests
                     var expected = GetRandomDecimal(6, 12);
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Nothing);
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Less.Than(expected);
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
 
@@ -504,9 +648,13 @@ namespace NExpect.Tests
                     var expected = actual;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
-                        .InstanceOf<AssertionException>()
-                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Less.Than(expected);
+                        },
+                        Throws.Exception
+                            .InstanceOf<AssertionException>()
+                            .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
 
@@ -518,9 +666,13 @@ namespace NExpect.Tests
                     var expected = GetRandomDecimal(-5, 0);
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
-                        .InstanceOf<AssertionException>()
-                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Less.Than(expected);
+                        },
+                        Throws.Exception
+                            .InstanceOf<AssertionException>()
+                            .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
             }
@@ -541,7 +693,11 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); }, Throws.Nothing);
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Greater.Than(expected);
+                        },
+                        Throws.Nothing);
 
                     // Assert
                 }
@@ -555,7 +711,10 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(actual); },
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Greater.Than(actual);
+                        },
                         Throws.Exception.InstanceOf<AssertionException>());
 
                     // Assert
@@ -571,7 +730,10 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); },
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Greater.Than(expected);
+                        },
                         Throws.Exception.InstanceOf<AssertionException>());
 
                     // Assert
@@ -589,7 +751,11 @@ namespace NExpect.Tests
                     var expected = GetRandomDouble(6, 12);
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Nothing);
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Less.Than(expected);
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
 
@@ -601,9 +767,13 @@ namespace NExpect.Tests
                     var expected = actual;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
-                        .InstanceOf<AssertionException>()
-                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Less.Than(expected);
+                        },
+                        Throws.Exception
+                            .InstanceOf<AssertionException>()
+                            .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
 
@@ -615,9 +785,13 @@ namespace NExpect.Tests
                     var expected = GetRandomDouble(-5, 0);
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
-                        .InstanceOf<AssertionException>()
-                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Less.Than(expected);
+                        },
+                        Throws.Exception
+                            .InstanceOf<AssertionException>()
+                            .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
             }
@@ -638,7 +812,11 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); }, Throws.Nothing);
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Greater.Than(expected);
+                        },
+                        Throws.Nothing);
 
                     // Assert
                 }
@@ -652,7 +830,10 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(actual); },
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Greater.Than(actual);
+                        },
                         Throws.Exception.InstanceOf<AssertionException>());
 
                     // Assert
@@ -668,7 +849,10 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); },
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Greater.Than(expected);
+                        },
                         Throws.Exception.InstanceOf<AssertionException>());
 
                     // Assert
@@ -686,7 +870,11 @@ namespace NExpect.Tests
                     var expected = GetRandomFloat(6, 12);
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Nothing);
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Less.Than(expected);
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
 
@@ -698,9 +886,13 @@ namespace NExpect.Tests
                     var expected = actual;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
-                        .InstanceOf<AssertionException>()
-                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Less.Than(expected);
+                        },
+                        Throws.Exception
+                            .InstanceOf<AssertionException>()
+                            .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
 
@@ -712,9 +904,13 @@ namespace NExpect.Tests
                     var expected = GetRandomFloat(-5, 0);
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
-                        .InstanceOf<AssertionException>()
-                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Less.Than(expected);
+                        },
+                        Throws.Exception
+                            .InstanceOf<AssertionException>()
+                            .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
             }
@@ -745,7 +941,11 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); }, Throws.Nothing);
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Greater.Than(expected);
+                        },
+                        Throws.Nothing);
 
                     // Assert
                 }
@@ -759,7 +959,10 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(actual); },
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Greater.Than(actual);
+                        },
                         Throws.Exception.InstanceOf<AssertionException>());
 
                     // Assert
@@ -775,7 +978,10 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); },
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Greater.Than(expected);
+                        },
                         Throws.Exception.InstanceOf<AssertionException>());
 
                     // Assert
@@ -793,7 +999,11 @@ namespace NExpect.Tests
                     var expected = GetRandomInt(6, 12);
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Nothing);
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Less.Than(expected);
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
 
@@ -805,9 +1015,13 @@ namespace NExpect.Tests
                     var expected = actual;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
-                        .InstanceOf<AssertionException>()
-                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Less.Than(expected);
+                        },
+                        Throws.Exception
+                            .InstanceOf<AssertionException>()
+                            .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
 
@@ -819,9 +1033,13 @@ namespace NExpect.Tests
                     var expected = GetRandomInt(-5, 0);
                     // Pre-Assert
                     // Act
-                    Assert.That(() => { Expect(actual).To.Be.Less.Than(expected); }, Throws.Exception
-                        .InstanceOf<AssertionException>()
-                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Be.Less.Than(expected);
+                        },
+                        Throws.Exception
+                            .InstanceOf<AssertionException>()
+                            .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
             }

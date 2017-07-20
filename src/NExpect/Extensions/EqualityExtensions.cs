@@ -1,3 +1,4 @@
+using System;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
@@ -25,6 +26,25 @@ namespace NExpect.Extensions
             });
         }
 
+        public static void Match<T>(
+            this IContinuation<T> continuation,
+            Func<T, bool> test,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(actual =>
+            {
+                var passed = test(actual);
+                var message = passed
+                    ? $"Expected {actual} not to be matched"
+                    : $"Expected {actual} to be matched";
+                return new MatcherResult(
+                    passed, 
+                    FinalMessageFor(message, customMessage)
+                );
+            });
+        }
+
         public static void Null<T>(this IBe<T> continuation)
         {
             continuation.AddMatcher(actual =>
@@ -33,8 +53,8 @@ namespace NExpect.Extensions
                 return new MatcherResult(
                     passed,
                     passed
-                    ? $"Expected not to get null"
-                    : $"Expected null but got {Quote(actual)}"
+                        ? $"Expected not to get null"
+                        : $"Expected null but got {Quote(actual)}"
                 );
             });
         }
