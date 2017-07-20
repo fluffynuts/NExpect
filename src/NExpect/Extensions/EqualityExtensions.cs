@@ -26,6 +26,7 @@ namespace NExpect.Extensions
             });
         }
 
+        // TODO: similarly, allow Func<T, IMatcherResult>
         public static void Match<T>(
             this IContinuation<T> continuation,
             Func<T, bool> test,

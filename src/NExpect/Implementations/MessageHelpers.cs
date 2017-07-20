@@ -14,6 +14,7 @@ namespace NExpect.Implementations
         {
             return string.IsNullOrWhiteSpace(customMessage) ? standardMessage : $"{customMessage}\n\n{standardMessage}";
         }
+
         internal static string MessageForContainsResult(
             bool passed,
             string src,
@@ -23,6 +24,26 @@ namespace NExpect.Implementations
             return passed
                 ? $"Expected {Quote(src)} not to contain {Quote(search)}"
                 : $"Expected {Quote(src)} to contain {Quote(search)}";
+        }
+
+        internal static string MessageForMatchResult(
+            bool passed,
+            string src
+        )
+        {
+            return passed
+                ? $"Expected {Quote(src)} not to be matched"
+                : $"Expected {Quote(src)} to be matched";
+        }
+
+        internal static string MessageForNotMatchResult(
+            bool passed,
+            string src
+        )
+        {
+            return passed
+                ? $"Expected {Quote(src)} to be matched"
+                : $"Expected {Quote(src)} not to be matched";
         }
 
         internal static string MessageForNotContainsResult(
