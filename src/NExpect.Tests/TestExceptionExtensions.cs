@@ -80,6 +80,26 @@ namespace NExpect.Tests
         }
 
         [Test]
+        public void Throw_WithNoGenericType_WhenThrows_ShouldBeAbleToContinueWith_WithMessage_SadPath()
+        {
+            // Arrange
+            var expected = GetRandomString();
+            var other = GetAnother(expected);
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(() =>
+                {
+                    throw new Exception(other);
+                }).To.Throw()
+                .With.Message.Containing(expected);
+            }, Throws.Exception.InstanceOf<AssertionException>()
+                    .With.Message.Contains($"to contain \"{expected}\""));
+            // Assert
+        }
+
+        [Test]
         public void Throw_WithNoGenericType_AllowsMultipleSubStringContainingOnMessage_SadPath()
         {
             // Arrange
@@ -140,26 +160,6 @@ namespace NExpect.Tests
         }
 
         [Test]
-        public void Throw_WithNoGenericType_WhenThrows_ShouldBeAbleToContinueWith_WithMessage_SadPath()
-        {
-            // Arrange
-            var expected = GetRandomString();
-            var other = GetAnother(expected);
-            // Pre-Assert
-            // Act
-            Assert.That(() =>
-            {
-                Expect(() =>
-                {
-                    throw new Exception(other);
-                }).To.Throw()
-                .With.Message.Containing(expected);
-            }, Throws.Exception.InstanceOf<AssertionException>()
-                    .With.Message.Contains($"to contain \"{expected}\""));
-            // Assert
-        }
-
-        [Test]
         public void Throw_WithGenericType_WhenThrowsThatType_ShouldNotThrow()
         {
             // Arrange
@@ -170,6 +170,66 @@ namespace NExpect.Tests
                 Expect(() => throw new InvalidOperationException("moo"))
                     .To.Throw<InvalidOperationException>();
             }, Throws.Nothing);
+            // Assert
+        }
+
+        [Test]
+        public void Throw_WithGenericType_AllowsMultipleSubStringContainingOnMessage_SadPath()
+        {
+            // Arrange
+            var e1 = GetRandomString();
+            var e2 = GetRandomString();
+            var e3 = GetRandomString();
+            var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(() => 
+                {
+                    throw new InvalidOperationException(message);
+                }).To.Throw<InvalidOperationException>().With.Message.Containing(e1).And(e3);
+            }, Throws.Exception.InstanceOf<AssertionException>()
+                .With.Message.Contains(e3));
+            // Assert
+        }
+
+        [Test]
+        public void Throw_WithGenericType_AllowsMultipleSubStringContainingOnMessage_SadPathNegated()
+        {
+            // Arrange
+            var e1 = GetRandomString();
+            var e2 = GetRandomString();
+            var e3 = GetRandomString();
+            var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(() => 
+                {
+                    throw new ArgumentNullException(message);
+                }).To.Throw<ArgumentNullException>().With.Message.Not.Containing(e1).And(e3);
+            }, Throws.Nothing);
+            // Assert
+        }
+
+        [Test]
+        public void Throw_WithGenericType_AllowsMultipleSubStringContainingOnMessage_HappyPathNegated()
+        {
+            // Arrange
+            var e1 = GetRandomString();
+            var e2 = GetRandomString();
+            var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(() => 
+                {
+                    throw new ArgumentOutOfRangeException(message);
+                }).To.Throw<ArgumentOutOfRangeException>().With.Message.Not.Containing(e1).And(e2);
+            }, Throws.Exception.InstanceOf<AssertionException>());
             // Assert
         }
 
