@@ -12,10 +12,10 @@ namespace NExpect.Implementations
         {
         }
 
-        public ICollectionTo<T> To =>
+        public new ICollectionTo<T> To =>
             Factory.Create<IEnumerable<T>, CollectionTo<T>>(Actual, this);
 
-        public ICollectionNot<T> Not =>
+        public new ICollectionNot<T> Not =>
             Factory.Create<IEnumerable<T>, CollectionNot<T>>(Actual, this);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace NExpect.Implementations
 {
-    public class Not<T>: ExpectationContext<T>, INot<T>
+    internal class Not<T>: ExpectationContext<T>, INot<T>
     {
         public T Actual { get; }
         public IToAfterNot<T> To => Factory.Create<T, ToAfterNot<T>>(Actual, this);

@@ -2,6 +2,7 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     internal class StringValueContinuation<T>
         : ExpectationContext<string>, 
         IExceptionMessageContinuation

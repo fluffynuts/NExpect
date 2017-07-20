@@ -7,8 +7,18 @@ using NExpect.MatcherLogic;
 
 namespace NExpect.Extensions
 {
+    /// <summary>
+    /// Provides extensions for collection expectations
+    /// </summary>
     public static class CollectionExtensions
     {
+        /// <summary>
+        /// Match exactly N elements with following matchers
+        /// </summary>
+        /// <param name="contain">contain continuation</param>
+        /// <param name="howMany">how many items to match</param>
+        /// <typeparam name="T">Type of item to match</typeparam>
+        /// <returns>continuation be used: .Equal.To()</returns>
         public static ICountMatchContinuation<IEnumerable<T>> Exactly<T>(
             this IContain<IEnumerable<T>> contain,
             int howMany
@@ -20,6 +30,13 @@ namespace NExpect.Extensions
             );
         }
 
+        /// <summary>
+        /// Match at least N elements with following matchers
+        /// </summary>
+        /// <param name="contain">contain continuation</param>
+        /// <param name="howMany">how many items to match at least</param>
+        /// <typeparam name="T">Type of item to match</typeparam>
+        /// <returns>continuation be used: .Equal.To()</returns>
         public static ICountMatchContinuation<IEnumerable<T>> Least<T>(
             this IContain<IEnumerable<T>> contain,
             int howMany
@@ -31,6 +48,13 @@ namespace NExpect.Extensions
             );
         }
 
+        /// <summary>
+        /// Match at most N elements with following matchers
+        /// </summary>
+        /// <param name="contain">contain continuation</param>
+        /// <param name="howMany">how many items to match at most</param>
+        /// <typeparam name="T">Type of item to match</typeparam>
+        /// <returns>continuation be used: .Equal.To()</returns>
         public static ICountMatchContinuation<IEnumerable<T>> Most<T>(
             this IContain<IEnumerable<T>> contain,
             int howMany
@@ -42,6 +66,14 @@ namespace NExpect.Extensions
             );
         }
 
+        /// <summary>
+        /// Performs the equality match with the provided limit (exactly, min, max)
+        /// on the collection, using {T}.Equals()
+        /// </summary>
+        /// <param name="countMatch">Count matcher continuation</param>
+        /// <param name="search">Thing to search for</param>
+        /// <typeparam name="T">Type of underlying continuation</typeparam>
+        /// <exception cref="ArgumentNullException">Thrown if the countMatch is null -- mainly to keep the library sane and testable</exception>
         public static void To<T>(
             this ICountMatchEquals<IEnumerable<T>> countMatch,
             T search)

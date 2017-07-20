@@ -7,6 +7,10 @@ namespace NExpect.Exceptions
     /// </summary>
     public class UnmetExpectation : Exception
     {
+        /// <summary>
+        /// Constructs the exception
+        /// </summary>
+        /// <param name="message">Message to display</param>
         public UnmetExpectation(string message) : base(message)
         {
         }

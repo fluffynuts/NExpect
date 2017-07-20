@@ -2,7 +2,7 @@
 
 namespace NExpect.Implementations
 {
-    public class NotAfterBe<T>: Be<T>, INotAfterBe<T>
+    internal class NotAfterBe<T>: Be<T>, INotAfterBe<T>
     {
         public NotAfterBe(T actual): base(actual)
         {

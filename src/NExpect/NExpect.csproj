@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\NExpect.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -44,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assertion.cs" />
+    <Compile Include="Extensions\GreaterOrLessContinuationExtensions.cs" />
     <Compile Include="Implementations\Contain.cs" />
     <Compile Include="Implementations\CountMatchContinuation.cs" />
     <Compile Include="Implementations\CountMatchEquals.cs" />
@@ -87,7 +89,6 @@
     <Compile Include="Implementations\Expectations.cs" />
     <Compile Include="Interfaces\IBe.cs" />
     <Compile Include="Interfaces\IContinuation.cs" />
-    <Compile Include="Interfaces\INegated.cs" />
     <Compile Include="Interfaces\INotAfterBe.cs" />
     <Compile Include="Interfaces\INotAfterTo.cs" />
     <Compile Include="Interfaces\IToAfterNot.cs" />

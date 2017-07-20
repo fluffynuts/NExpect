@@ -189,6 +189,99 @@ namespace NExpect.Tests
             }
         }
 
+        public class Null
+        {
+            [Test]
+            public void OperatingOnString_WhenIsNull_ShouldNotThrow()
+            {
+                // Arrange
+                var input = null as string;
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(input).To.Be.Null();
+                }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnStringNegated_WhenIsNull_ShouldThrow()
+            {
+                // Arrange
+                var input = null as string;
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(input).Not.To.Be.Null();
+                }, Throws.Exception.InstanceOf<AssertionException>()
+                    .With.Message.Contains("Expected not to get null"));
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnObjectAltNegated_WhenIsNull_ShouldThrow()
+            {
+                // Arrange
+                var input = null as object;
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(input).To.Not.Be.Null();
+                }, Throws.Exception.InstanceOf<AssertionException>()
+                    .With.Message.Contains("Expected not to get null"));
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnString_WhenIsNotNull_ShouldThrow()
+            {
+                // Arrange
+                var input = GetRandomString();
+                Assert.That(input, Is.Not.Null);
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(input).To.Be.Null();
+                }, Throws.Exception.InstanceOf<AssertionException>()
+                    .With.Message.Contains($"Expected null but got \"{input}\""));
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnString_Negated_WhenIsNotNull_ShouldNotThrow()
+            {
+                // Arrange
+                var input = GetRandomString();
+                Assert.That(input, Is.Not.Null);
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(input).Not.To.Be.Null();
+                }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnString_AltNegated_WhenIsNotNull_ShouldNotThrow()
+            {
+                // Arrange
+                var input = GetRandomString();
+                Assert.That(input, Is.Not.Null);
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(input).To.Not.Be.Null();
+                }, Throws.Nothing);
+                // Assert
+            }
+        }
+
         public class ActingOnInts
         {
             [TestFixture]
@@ -248,12 +341,11 @@ namespace NExpect.Tests
                     var expected = GetRandomInt(1, 4);
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
-                    {
-                        Expect(actual).Not.To.Be.Greater.Than(expected);
-                    }, Throws.Exception.InstanceOf<AssertionException>());
+                    Assert.That(() => { Expect(actual).Not.To.Be.Greater.Than(expected); },
+                        Throws.Exception.InstanceOf<AssertionException>());
                     // Assert
                 }
+
                 [Test]
                 public void GreaterThan_AltNegated_WhenActualIsGreaterThanExpected_ShouldThrow()
                 {
@@ -262,10 +354,8 @@ namespace NExpect.Tests
                     var expected = GetRandomInt(1, 4);
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
-                    {
-                        Expect(actual).To.Not.Be.Greater.Than(expected);
-                    }, Throws.Exception.InstanceOf<AssertionException>());
+                    Assert.That(() => { Expect(actual).To.Not.Be.Greater.Than(expected); },
+                        Throws.Exception.InstanceOf<AssertionException>());
                     // Assert
                 }
             }
@@ -324,7 +414,6 @@ namespace NExpect.Tests
                     Assert.That(() => { Expect(actual).Not.To.Be.Less.Than(expected); }, Throws.Nothing);
                     // Assert
                 }
-
             }
         }
 
@@ -343,9 +432,7 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { 
-                        Expect(actual).To.Be.Greater.Than(expected); 
-                     }, Throws.Nothing);
+                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); }, Throws.Nothing);
 
                     // Assert
                 }
@@ -392,7 +479,6 @@ namespace NExpect.Tests
                     Assert.That(() => { Expect(actual).Not.To.Be.Less.Than(expected); }, Throws.Nothing);
                     // Assert
                 }
-
             }
 
             [TestFixture]
@@ -438,8 +524,8 @@ namespace NExpect.Tests
                     // Assert
                 }
             }
-        }        
-        
+        }
+
         public class ActingOnDoubles
         {
             [TestFixture]
@@ -455,9 +541,7 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { 
-                        Expect(actual).To.Be.Greater.Than(expected); 
-                     }, Throws.Nothing);
+                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); }, Throws.Nothing);
 
                     // Assert
                 }
@@ -554,9 +638,7 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { 
-                        Expect(actual).To.Be.Greater.Than(expected); 
-                     }, Throws.Nothing);
+                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); }, Throws.Nothing);
 
                     // Assert
                 }
@@ -638,12 +720,14 @@ namespace NExpect.Tests
             }
         }
 
-        private static float GetRandomFloat(float min, float max) {
-            return (float)GetRandomDouble(min, max);
+        private static float GetRandomFloat(float min, float max)
+        {
+            return (float) GetRandomDouble(min, max);
         }
 
-        private static long GetRandomLong(long min, long max) {
-            return GetRandomInt((int)min, (int)max);
+        private static long GetRandomLong(long min, long max)
+        {
+            return GetRandomInt((int) min, (int) max);
         }
 
         public class ActingOnLongs
@@ -661,9 +745,7 @@ namespace NExpect.Tests
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() => { 
-                        Expect(actual).To.Be.Greater.Than(expected); 
-                     }, Throws.Nothing);
+                    Assert.That(() => { Expect(actual).To.Be.Greater.Than(expected); }, Throws.Nothing);
 
                     // Assert
                 }
