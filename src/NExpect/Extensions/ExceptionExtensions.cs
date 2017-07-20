@@ -79,6 +79,28 @@ namespace NExpect.Extensions
             });
             return result;
         }
+
+        public static IStringContainContinuation Containing(
+            this INot<string> continuation,
+            string search
+        )
+        {
+            var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
+                null, continuation as IExpectationContext<string>
+            );
+            continuation.AddMatcher(s =>
+            {
+                result.Actual = s;
+                var passed = !s?.Contains(search) ?? true;
+                return new MatcherResult(
+                    passed,
+                    MessageHelpers.MessageForNotContainsResult(
+                        passed, s, search
+                    )
+                );
+            });
+            return result;
+        }
     }
 
     public class ExceptionMessageContainuationToStringContainContinuation

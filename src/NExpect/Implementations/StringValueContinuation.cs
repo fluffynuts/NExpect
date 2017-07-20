@@ -15,5 +15,8 @@ namespace NExpect.Implementations
 
         public IEqualityContinuation<string> Equal =>
             Factory.Create<string, EqualityContinuation<string>>(Actual, this);
+
+        public INot<string> Not =>
+            Factory.Create<string, Not<string>>(Actual, this);
     }
 }

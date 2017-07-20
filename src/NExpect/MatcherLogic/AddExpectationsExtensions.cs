@@ -21,6 +21,14 @@ namespace NExpect.MatcherLogic
         }
 
         public static void AddMatcher<T>(
+            this INot<T> continuation,
+            Func<T, IMatcherResult> matcher
+        )
+        {
+            AddMatcherPrivate(continuation, matcher);
+        }
+
+        public static void AddMatcher<T>(
             this IEqualityContinuation<T> continuation,
             Func<T, IMatcherResult> matcher
         )

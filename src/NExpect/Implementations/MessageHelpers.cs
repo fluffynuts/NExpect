@@ -25,6 +25,17 @@ namespace NExpect.Implementations
                 : $"Expected {Quote(src)} to contain {Quote(search)}";
         }
 
+        internal static string MessageForNotContainsResult(
+            bool passed,
+            string src,
+            string search
+        )
+        {
+            return passed
+                ? $"Expected {Quote(src)} to contain {Quote(search)}"
+                : $"Expected {Quote(src)} not to contain {Quote(search)}";
+        }
+
         internal static string Quote(string str)
         {
             return str == null ? str : $"\"{str}\"";

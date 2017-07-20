@@ -101,6 +101,45 @@ namespace NExpect.Tests
         }
 
         [Test]
+        public void Throw_WithNoGenericType_AllowsMultipleSubStringContainingOnMessage_SadPathNegated()
+        {
+            // Arrange
+            var e1 = GetRandomString();
+            var e2 = GetRandomString();
+            var e3 = GetRandomString();
+            var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(() => 
+                {
+                    throw new Exception(message);
+                }).To.Throw().With.Message.Not.Containing(e1).And(e3);
+            }, Throws.Nothing);
+            // Assert
+        }
+
+        [Test]
+        public void Throw_WithNoGenericType_AllowsMultipleSubStringContainingOnMessage_HappyPathNegated()
+        {
+            // Arrange
+            var e1 = GetRandomString();
+            var e2 = GetRandomString();
+            var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(() => 
+                {
+                    throw new Exception(message);
+                }).To.Throw().With.Message.Not.Containing(e1).And(e2);
+            }, Throws.Exception.InstanceOf<AssertionException>());
+            // Assert
+        }
+
+        [Test]
         public void Throw_WithNoGenericType_WhenThrows_ShouldBeAbleToContinueWith_WithMessage_SadPath()
         {
             // Arrange
