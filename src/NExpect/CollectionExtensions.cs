@@ -129,6 +129,12 @@ namespace NExpect
             });
         }
 
+        /// <summary>
+        /// Continuation for Matched, allowing testing the artifact with a simple func
+        /// </summary>
+        /// <param name="countMatch">Matched continuation</param>
+        /// <param name="test">Func to test Actual value with; return true for match, false for non-match</param>
+        /// <typeparam name="T">Type of artifact being tested</typeparam>
         public static void By<T>(
             this ICountMatchMatched<IEnumerable<T>> countMatch,
             Func<T, bool> test
@@ -200,24 +206,18 @@ namespace NExpect
             string context
         )
         {
-            Func<bool, object, int, int, string> result =
-                (passed, search, have, want) =>
-                    passed
-                        ? CreatePassMessageFor(context, search, have, want)
-                        : CreateFailedMessageFor(context, search, have, want);
-            return result;
+            return (passed, search, have, want) => passed
+                ? CreatePassMessageFor(context, search, have, want)
+                : CreateFailedMessageFor(context, search, have, want);
         }
 
         private static Func<bool, int, int, string> CreateMatchMessageFor(
             string context
         )
         {
-            Func<bool, int, int, string> result =
-                (passed, have, want) =>
-                    passed
-                        ? CreatePassMatchMessageFor(context, have, want)
-                        : CreateFailedMatchMessageFor(context, have, want);
-            return result;
+            return (passed, have, want) => passed
+                ? CreatePassMatchMessageFor(context, have, want)
+                : CreateFailedMatchMessageFor(context, have, want);
         }
 
         private static string CreateFailedMessageFor(
