@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="Assertion.cs" />
     <Compile Include="Expectations.cs" />
-    <Compile Include="Extensions\GreaterOrLessContinuationExtensions.cs" />
+    <Compile Include="GreaterOrLessContinuationExtensions.cs" />
     <Compile Include="Implementations\A.cs" />
     <Compile Include="Implementations\Contain.cs" />
     <Compile Include="Implementations\CountMatchContinuation.cs" />
@@ -63,13 +63,13 @@
     <Compile Include="Interfaces\IStringContainContinuation.cs" />
     <Compile Include="Implementations\StringContainContinuation.cs" />
     <Compile Include="Implementations\CollectionExpectation.cs" />
-    <Compile Include="Extensions\CollectionExtensions.cs" />
+    <Compile Include="CollectionExtensions.cs" />
     <Compile Include="Implementations\CollectionNot.cs" />
     <Compile Include="Implementations\CollectionNotAfterTo.cs" />
     <Compile Include="Implementations\CollectionTo.cs" />
     <Compile Include="Implementations\CollectionToAfterNot.cs" />
     <Compile Include="Interfaces\ICollectionExpectation.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="StringExtensions.cs" />
     <Compile Include="Implementations\MessageHelpers.cs" />
     <Compile Include="Interfaces\IContain.cs" />
     <Compile Include="Interfaces\IExceptionMessageContinuation.cs" />
@@ -86,8 +86,8 @@
     <Compile Include="MatcherLogic\IMatcherResult.cs" />
     <Compile Include="MatcherLogic\MatcherResult.cs" />
     <Compile Include="MatcherLogic\AddExpectationsExtensions.cs" />
-    <Compile Include="Extensions\EqualityExtensions.cs" />
-    <Compile Include="Extensions\ExceptionExtensions.cs" />
+    <Compile Include="EqualityExtensions.cs" />
+    <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="Implementations\Be.cs" />
     <Compile Include="Implementations\ExpectationContext.cs" />
     <Compile Include="Implementations\Factory.cs" />
@@ -106,11 +106,14 @@
     <Compile Include="Implementations\ToAfterNot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implementations\To.cs" />
-    <Compile Include="Extensions\TruthExtensions.cs" />
+    <Compile Include="TruthExtensions.cs" />
     <Compile Include="Exceptions\UnmetExpectation.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

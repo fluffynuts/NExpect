@@ -2,7 +2,7 @@ using System;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
-namespace NExpect.Extensions
+namespace NExpect
 {
     /// <summary>
     /// Adds extension methods for Greater and Less

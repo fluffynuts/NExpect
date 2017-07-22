@@ -5,7 +5,7 @@ using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
-namespace NExpect.Extensions
+namespace NExpect
 {
     /// <summary>
     /// Provides extensions for collection expectations

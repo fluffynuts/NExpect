@@ -1,9 +1,9 @@
 using System;
+using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
-using static NExpect.Implementations.MessageHelpers;
 
-namespace NExpect.Extensions
+namespace NExpect
 {
     public static class EqualityExtensions
     {
@@ -19,7 +19,7 @@ namespace NExpect.Extensions
                 if (actual.Equals(expected))
                     return new MatcherResult(true, $"Did not expect {expected}, but got exactly that");
                 return new MatcherResult(false,
-                    FinalMessageFor(
+                    MessageHelpers.FinalMessageFor(
                         $"Expected {expected} but got {actual}",
                         customMessage
                     ));
@@ -41,7 +41,7 @@ namespace NExpect.Extensions
                     : $"Expected {actual} to be matched";
                 return new MatcherResult(
                     passed, 
-                    FinalMessageFor(message, customMessage)
+                    MessageHelpers.FinalMessageFor(message, customMessage)
                 );
             });
         }
@@ -55,7 +55,7 @@ namespace NExpect.Extensions
                     passed,
                     passed
                         ? $"Expected not to get null"
-                        : $"Expected null but got {Quote(actual)}"
+                        : $"Expected null but got {MessageHelpers.Quote(actual)}"
                 );
             });
         }
@@ -69,8 +69,8 @@ namespace NExpect.Extensions
             {
                 var passed = actual.Equals(expected);
                 var message = passed
-                    ? $"Expected {Quote(actual)} not to equal {Quote(expected)}"
-                    : $"Expected {Quote(actual)} to equal {Quote(expected)}";
+                    ? $"Expected {MessageHelpers.Quote(actual)} not to equal {MessageHelpers.Quote(expected)}"
+                    : $"Expected {MessageHelpers.Quote(actual)} to equal {MessageHelpers.Quote(expected)}";
                 return new MatcherResult(passed, message);
             });
         }

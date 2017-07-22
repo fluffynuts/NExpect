@@ -3,7 +3,7 @@ using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
-namespace NExpect.Extensions
+namespace NExpect
 {
     public static class ExceptionExtensions
     {

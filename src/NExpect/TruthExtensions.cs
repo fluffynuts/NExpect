@@ -1,9 +1,9 @@
 using System;
+using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
-using static NExpect.Implementations.MessageHelpers;
 
-namespace NExpect.Extensions
+namespace NExpect
 {
     public static class TruthExtensions
     {
@@ -36,7 +36,7 @@ namespace NExpect.Extensions
                     return new MatcherResult(true, $"Did not expect {true}");
                 return new MatcherResult(
                     false,
-                    FinalMessageFor(
+                    MessageHelpers.FinalMessageFor(
                         $"Expected {expected} but got {actual}",
                         message
                     ));
