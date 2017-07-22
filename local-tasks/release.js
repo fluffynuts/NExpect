@@ -3,9 +3,19 @@ const
   packageDir = require("./config").packageDir,
   path = require("path"),
   fs = require("fs"),
+  runSequence = require("run-sequence"),
   spawn = requireModule("spawn");
 
-gulp.task("release", [ "test-dotnet", "increment-package-version" ], () => {
+gulp.task("release", [ "test-dotnet" ], (done) => {
+  runSequence(
+    "increment-package-version",
+    "pack",
+    "push",
+    done
+  );
+});
+
+gulp.task("push", () => {
   const package = fs.readdirSync(packageDir)
                     .filter(p => p.endsWith("nupkg"))
                     .map(p => path.join(packageDir, p))

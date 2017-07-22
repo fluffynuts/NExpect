@@ -1,5 +1,6 @@
 const
   gulp = requireModule("gulp-with-help"),
+  gutil = require("gulp-util"),
   editXml = require("gulp-edit-xml");
 
 gulp.task("increment-package-version", () => {
@@ -13,7 +14,9 @@ gulp.task("increment-package-version", () => {
         minor = parseInt(parts[1]),
         patch = parseInt(parts[2]);
       testNaN({ major, minor, patch});
-      node[0] = `${major}.${minor}.${patch + 1}`;
+      const newVersion = `${major}.${minor}.${patch + 1}`;
+      node[0] = newVersion;
+      gutil.log(gutil.colors.yellow(`Package version incremented to: ${newVersion}`));
       return xml;
     }, { builderOptions: { renderOpts: { pretty: true } } }))
     .pipe(gulp.dest("."));

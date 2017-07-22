@@ -3,12 +3,8 @@ const
   packageDir = require("./config").packageDir,
   spawn = requireModule("spawn");
 
-gulp.task("pack-only", () => {
+gulp.task("pack", () => {
   return doPack();
-});
-
-gulp.task("pack", [ "test-dotnet" ], () => {
-  doPack();
 });
 
 function doPack() {
