@@ -61,6 +61,14 @@ namespace NExpect.MatcherLogic
             AddMatcherPrivate(continuation, matcher);
         }
 
+        public static void AddMatcher<T>(
+            this IA<T> continuation,
+            Func<T, IMatcherResult> matcher
+        )
+        {
+            AddMatcherPrivate(continuation, matcher);
+        }
+
         private static void AddMatcherPrivate<T>(
             object continuation,
             Func<T, IMatcherResult> matcher)

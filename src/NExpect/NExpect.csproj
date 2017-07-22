@@ -43,15 +43,22 @@
   <ItemGroup>
     <Compile Include="Assertion.cs" />
     <Compile Include="Extensions\GreaterOrLessContinuationExtensions.cs" />
+    <Compile Include="Implementations\A.cs" />
     <Compile Include="Implementations\Contain.cs" />
     <Compile Include="Implementations\CountMatchContinuation.cs" />
     <Compile Include="Implementations\CountMatchEqual.cs" />
     <Compile Include="Implementations\CountMatchMatched.cs" />
     <Compile Include="Implementations\EqualityContinuation.cs" />
+    <Compile Include="Implementations\GreaterContinuation.cs" />
+    <Compile Include="Implementations\LessContinuation.cs" />
     <Compile Include="Interfaces\CountMatchMethods.cs" />
+    <Compile Include="Interfaces\IA.cs" />
     <Compile Include="Interfaces\ICountMatchContinuation.cs" />
     <Compile Include="Interfaces\ICountMatchEqual.cs" />
     <Compile Include="Interfaces\ICountMatchMatched.cs" />
+    <Compile Include="Interfaces\IGreaterContinuation.cs" />
+    <Compile Include="Interfaces\IGreaterOrLessContinuation.cs" />
+    <Compile Include="Interfaces\ILessContinuation.cs" />
     <Compile Include="Interfaces\IStringContainContinuation.cs" />
     <Compile Include="Implementations\StringContainContinuation.cs" />
     <Compile Include="Implementations\CollectionExpectation.cs" />

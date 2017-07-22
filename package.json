@@ -2,8 +2,9 @@
   "name": "nexpect",
   "scripts": {
     "test": "gulp test-dotnet",
-    "build-and-test": "gulp",
-    "cover": "gulp cover-dotnet"
+    "gulp": "gulp",
+    "cover": "gulp cover-dotnet",
+    "release": "gulp release"
   },
   "devDependencies": {
     "chai": "^4.0.2",
@@ -12,6 +13,7 @@
     "event-stream": "^3.3.4",
     "gulp": "^3.9.1",
     "gulp-debug": "^3.1.0",
+    "gulp-edit-xml": "^2.0.0",
     "gulp-help": "^1.6.1",
     "gulp-msbuild": "^0.4.7",
     "gulp-npm-run": "0.0.3",

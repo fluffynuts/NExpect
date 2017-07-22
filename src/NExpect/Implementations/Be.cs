@@ -12,35 +12,17 @@ namespace NExpect.Implementations
 
         public IGreaterContinuation<T> Greater =>
             Factory.Create<T, GreaterContinuation<T>>(
-                Actual, this);
+                Actual,
+                this);
 
         public ILessContinuation<T> Less =>
             Factory.Create<T, LessContinuation<T>>(
-                Actual, this);
+                Actual,
+                this);
+
+        public IA<T> A => Factory.Create<T, A<T>>(Actual, this);
 
         public Be(T actual)
-        {
-            Actual = actual;
-        }
-    }
-
-    public class GreaterContinuation<T> :
-        ExpectationContext<T>, IGreaterContinuation<T>
-    {
-        public T Actual { get; }
-
-        public GreaterContinuation(T actual)
-        {
-            Actual = actual;
-        }
-    }
-
-    public class LessContinuation<T> :
-        ExpectationContext<T>, ILessContinuation<T>
-    {
-        public T Actual { get; }
-
-        public LessContinuation(T actual)
         {
             Actual = actual;
         }
