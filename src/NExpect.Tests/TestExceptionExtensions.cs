@@ -3,7 +3,7 @@ using NUnit.Framework;
 using NExpect.Extensions;
 using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
-using static NExpect.Implementations.Expectations;
+using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Tests

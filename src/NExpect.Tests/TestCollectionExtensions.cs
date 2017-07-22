@@ -4,7 +4,7 @@ using NUnit.Framework;
 using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
 using static PeanutButter.RandomGenerators.RandomValueGen;
-using static NExpect.Implementations.Expectations;
+using static NExpect.Expectations;
 
 namespace NExpect.Tests
 {

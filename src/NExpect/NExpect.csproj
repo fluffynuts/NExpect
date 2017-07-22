@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assertion.cs" />
+    <Compile Include="Expectations.cs" />
     <Compile Include="Extensions\GreaterOrLessContinuationExtensions.cs" />
     <Compile Include="Implementations\A.cs" />
     <Compile Include="Implementations\Contain.cs" />
@@ -92,7 +93,6 @@
     <Compile Include="Implementations\Factory.cs" />
     <Compile Include="Interfaces\IExpectation.cs" />
     <Compile Include="Implementations\Expectation.cs" />
-    <Compile Include="Implementations\Expectations.cs" />
     <Compile Include="Interfaces\IBe.cs" />
     <Compile Include="Interfaces\IContinuation.cs" />
     <Compile Include="Interfaces\INotAfterBe.cs" />

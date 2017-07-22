@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
-using static NExpect.Implementations.Expectations;
+using static NExpect.Expectations;
 
 namespace NExpect.Tests
 {
