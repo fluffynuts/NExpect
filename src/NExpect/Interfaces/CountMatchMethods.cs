@@ -14,8 +14,16 @@ namespace NExpect.Interfaces
         /// </summary>
         Minimum,
         /// <summary>
-        /// Maximum matc (At.Most())
+        /// Maximum match (At.Most())
         /// </summary>
-        Maximum
+        Maximum,
+        /// <summary>
+        /// Match any
+        /// </summary>
+        Any,
+        /// <summary>
+        /// Match all
+        /// </summary>
+        All
     }
 }

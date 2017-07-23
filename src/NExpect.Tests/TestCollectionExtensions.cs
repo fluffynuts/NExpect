@@ -260,6 +260,80 @@ namespace NExpect.Tests
                 }
 
                 [Test]
+                public void Contain_Any_WhenCollectionHasNone_ShouldThrow()
+                {
+                    // Arrange
+                    var search = GetRandomString();
+                    var item1 = GetAnother(search);
+                    var item2 = GetAnother<string>(new[] {item1, search});
+                    var collection = new[] {item1, item2}.Randomize();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(collection).To.Contain.Any().Equal.To(search);
+                        },
+                        Throws.Exception
+                            .InstanceOf<AssertionException>()
+                            .With.Message.Contains("Expected to find any match"));
+                    // Assert
+                }
+
+                [Test]
+                public void Contain_Any_WhenCollectionHas1_ShouldNotThrow()
+                {
+                    // Arrange
+                    var search = GetRandomString();
+                    var item1 = GetAnother(search);
+                    var item2 = GetAnother<string>(new[] {item1, search});
+                    var collection = new[] {item1, item2, search}.Randomize();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(collection).To.Contain.Any().Equal.To(search);
+                        },
+                        Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void Contain_All_WhenCollectionHasMismatches_ShouldThrow()
+                {
+                    // Arrange
+                    var search = GetRandomString();
+                    var item1 = GetAnother(search);
+                    var item2 = GetAnother<string>(new[] {item1, search});
+                    var collection = new[] {item1, item2, search}.Randomize();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(collection).To.Contain.All().Equal.To(search);
+                        },
+                        Throws.Exception
+                            .InstanceOf<AssertionException>()
+                            .With.Message.Contains("Expected to find all matching"));
+                    // Assert
+                }
+
+                [Test]
+                public void Contain_All_WhenCollectionHasNoMismatches_ShouldNotThrow()
+                {
+                    // Arrange
+                    var search = GetRandomString();
+                    var collection = Range(2, 4).Select(i => search);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(collection).To.Contain.All().Equal.To(search);
+                        },
+                        Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
                 public void Contain_GivenAtLeast1_WhenCollectionHas1_ShouldNotThrow()
                 {
                     // Arrange

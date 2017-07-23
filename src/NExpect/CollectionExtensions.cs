@@ -52,6 +52,29 @@ namespace NExpect
             );
         }
 
+        public static ICountMatchContinuation<IEnumerable<T>> Any<T>(
+            this IContain<IEnumerable<T>> contain
+        )
+        {
+            return new CountMatchContinuation<IEnumerable<T>>(
+                contain,
+                CountMatchMethods.Any, 
+                0
+            );
+        }
+
+        public static ICountMatchContinuation<IEnumerable<T>> All<T>(
+            this IContain<IEnumerable<T>> contain
+        )
+        {
+            return new CountMatchContinuation<IEnumerable<T>>(
+                contain,
+                CountMatchMethods.All, 
+                0
+            );
+        }
+
+
         /// <summary>
         /// Match at most N elements with following matchers
         /// </summary>
@@ -89,8 +112,13 @@ namespace NExpect
                     $"EqualTo<T> cannot extend null ICanAddMatcher<IEnumerable<{typeof(T)}>>");
             countMatch.Continuation.AddMatcher(collection =>
             {
-                var have = collection.Count(o => o.Equals(search));
-                var passed = _collectionCountMatchStrategies[countMatch.Method](have, countMatch.Compare);
+                var asArray = collection.ToArray();
+                var have = countMatch.Method == CountMatchMethods.Any 
+                            ? (asArray.Any(o => o.Equals(search)) ? 1 : 0 )
+                            :  asArray.Count(o => o.Equals(search));
+                var passed = _collectionCountMatchStrategies[countMatch.Method](have, 
+                    countMatch.Method == CountMatchMethods.All ? asArray.Length :  countMatch.Compare
+                );
                 var message =
                     _collectionCountMessageStrategies[countMatch.Method](passed, search, have, countMatch.Compare);
 
@@ -110,8 +138,8 @@ namespace NExpect
             {
                 var passed = collection.All(o => o.Equals(search));
                 var message = passed
-                                ? $"Expected not to have all equal to {search}"
-                                : $"Expected to have all equal to {search}";
+                    ? $"Expected not to have all equal to {search}"
+                    : $"Expected to have all equal to {search}";
                 return new MatcherResult(passed, message);
             });
         }
@@ -125,8 +153,8 @@ namespace NExpect
             {
                 var passed = collection.Any(o => o.Equals(search));
                 var message = passed
-                                ? $"Expected not to have any equal to {search}"
-                                : $"Expected to have any equal to {search}";
+                    ? $"Expected not to have any equal to {search}"
+                    : $"Expected to have any equal to {search}";
                 return new MatcherResult(passed, message);
             });
         }
@@ -159,8 +187,24 @@ namespace NExpect
             {
                 [CountMatchMethods.Exactly] = CreateMessageFor("exactly"),
                 [CountMatchMethods.Minimum] = CreateMessageFor("at least"),
-                [CountMatchMethods.Maximum] = CreateMessageFor("at most")
+                [CountMatchMethods.Maximum] = CreateMessageFor("at most"),
+                [CountMatchMethods.Any] = CreateAnyMessage,
+                [CountMatchMethods.All] = CreateAllMessage
             };
+
+        private static string CreateAllMessage(bool passed, object search, int have, int want)
+        {
+            return passed 
+                ? $"Expected not to find all matching {search}" 
+                : $"Expected to find all matching {search}";
+        }
+
+        private static string CreateAnyMessage(bool passed, object search, int have, int want)
+        {
+            return passed 
+                ? $"Expected not to find any matches for {search}" 
+                : $"Expected to find any match for {search}";
+        }
 
         private static readonly Dictionary<CountMatchMethods,
             Func<bool, int, int, string>> _collectionCountMatchMessageStrategies =
@@ -177,7 +221,9 @@ namespace NExpect
             {
                 [CountMatchMethods.Exactly] = (have, want) => have == want,
                 [CountMatchMethods.Minimum] = (have, want) => have >= want,
-                [CountMatchMethods.Maximum] = (have, want) => have <= want
+                [CountMatchMethods.Maximum] = (have, want) => have <= want,
+                [CountMatchMethods.Any] = (have, want) => have > 0,
+                [CountMatchMethods.All] = (have, collectionTotal) => have == collectionTotal
             };
 
         private static Func<bool, object, int, int, string> CreateMessageFor(

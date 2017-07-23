@@ -45,6 +45,7 @@
     <Compile Include="Expectations.cs" />
     <Compile Include="GreaterOrLessContinuationExtensions.cs" />
     <Compile Include="Implementations\A.cs" />
+    <Compile Include="Implementations\CollectionHave.cs" />
     <Compile Include="Implementations\CollectionHaveAll.cs" />
     <Compile Include="Implementations\CollectionHaveAllEqual.cs" />
     <Compile Include="Implementations\CollectionHaveAny.cs" />
