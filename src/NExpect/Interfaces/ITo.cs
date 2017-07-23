@@ -4,5 +4,6 @@
     {
         INotAfterTo<T> Not { get; }
         IBe<T> Be { get; }
+        IHave<T> Have { get; }
     }
 }

@@ -21,6 +21,7 @@ namespace NExpect.Implementations
                 this);
 
         public IA<T> A => Factory.Create<T, A<T>>(Actual, this);
+        public IAn<T> An => Factory.Create<T, An<T>>(Actual, this);
 
         public Be(T actual)
         {

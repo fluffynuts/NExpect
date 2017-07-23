@@ -4,5 +4,6 @@
     {
         IBe<T> Be { get; }
         IContain<T> Contain { get; }
+        IHave<T> Have { get; }
     }
 }
