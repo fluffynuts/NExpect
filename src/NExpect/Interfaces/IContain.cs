@@ -1,8 +1,7 @@
 ﻿namespace NExpect.Interfaces
 {
-    public interface IContain<T> : IContinuation<T>
+    public interface IContain<T> : ICanAddMatcher<T>
     {
-        IContain<T> At { get; }
+        IContainAt<T> At { get; }
     }
-
 }

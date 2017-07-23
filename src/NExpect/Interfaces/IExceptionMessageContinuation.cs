@@ -5,8 +5,4 @@ namespace NExpect.Interfaces
         IEqualityContinuation<string> Equal { get; }
         INot<string> Not { get; }
     }
-
-    public interface IEqualityContinuation<T>
-    {
-    }
 }

@@ -1,6 +1,6 @@
 ﻿namespace NExpect.Interfaces
 {
-    public interface IStringContainContinuation : IContinuation<string>
+    public interface IStringContainContinuation : ICanAddMatcher<string>
     {
     }
 }

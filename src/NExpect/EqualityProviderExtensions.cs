@@ -1,18 +1,17 @@
-using System;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
 namespace NExpect
 {
-    public static class EqualityExtensions
+    public static class EqualityProviderExtensions
     {
-        public static void Equal<T>(this IContinuation<T> expectation, T expected)
+        public static void Equal<T>(this ICanAddMatcher<T> expectation, T expected)
         {
             expectation.Equal(expected, null);
         }
 
-        public static void Equal<T>(this IContinuation<T> continuation, T expected, string customMessage)
+        public static void Equal<T>(this ICanAddMatcher<T> continuation, T expected, string customMessage)
         {
             continuation.AddMatcher(actual =>
             {
@@ -23,26 +22,6 @@ namespace NExpect
                         $"Expected {expected} but got {actual}",
                         customMessage
                     ));
-            });
-        }
-
-        // TODO: similarly, allow Func<T, IMatcherResult>
-        public static void Match<T>(
-            this IContinuation<T> continuation,
-            Func<T, bool> test,
-            string customMessage
-        )
-        {
-            continuation.AddMatcher(actual =>
-            {
-                var passed = test(actual);
-                var message = passed
-                    ? $"Expected {actual} not to be matched"
-                    : $"Expected {actual} to be matched";
-                return new MatcherResult(
-                    passed, 
-                    MessageHelpers.FinalMessageFor(message, customMessage)
-                );
             });
         }
 

@@ -6,7 +6,7 @@ namespace NExpect.Implementations
 {
     internal class WrappingContinuation<TFrom, To> : 
         ExpectationBase<To>, 
-        IContinuation<To>,
+        ICanAddMatcher<To>,
         IExpectationContext<To>
     {
         public To Actual => _unwrap(_wrapped);

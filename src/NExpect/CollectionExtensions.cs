@@ -40,7 +40,7 @@ namespace NExpect
         /// <typeparam name="T">Type of item to match</typeparam>
         /// <returns>continuation be used: .Equal.To()</returns>
         public static ICountMatchContinuation<IEnumerable<T>> Least<T>(
-            this IContain<IEnumerable<T>> contain,
+            this IContainAt<IEnumerable<T>> contain,
             int howMany
         )
         {
@@ -60,7 +60,7 @@ namespace NExpect
         /// <typeparam name="T">Type of item to match</typeparam>
         /// <returns>continuation be used: .Equal.To()</returns>
         public static ICountMatchContinuation<IEnumerable<T>> Most<T>(
-            this IContain<IEnumerable<T>> contain,
+            this IContainAt<IEnumerable<T>> contain,
             int howMany
         )
         {
@@ -86,7 +86,7 @@ namespace NExpect
         {
             if (countMatch == null)
                 throw new ArgumentNullException(nameof(countMatch),
-                    $"EqualTo<T> cannot extend null IContinuation<IEnumerable<{typeof(T)}>>");
+                    $"EqualTo<T> cannot extend null ICanAddMatcher<IEnumerable<{typeof(T)}>>");
             countMatch.Continuation.AddMatcher(collection =>
             {
                 var have = collection.Count(o => o.Equals(search));
@@ -146,7 +146,7 @@ namespace NExpect
             });
         }
 
-        private static void CheckContain<T>(IContain<IEnumerable<T>> contain)
+        private static void CheckContain<T>(ICanAddMatcher<IEnumerable<T>> contain)
         {
             if (contain == null)
                 throw new ArgumentNullException(nameof(contain),

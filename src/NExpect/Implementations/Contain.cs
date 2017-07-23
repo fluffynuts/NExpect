@@ -6,9 +6,20 @@ namespace NExpect.Implementations
     {
         public T Actual { get; }
 
-        public IContain<T> At => this;
+        public IContainAt<T> At =>
+            Factory.Create<T, ContainAt<T>>(Actual, this);
 
         public Contain(T actual)
+        {
+            Actual = actual;
+        }
+    }
+
+    public class ContainAt<T>
+        : ExpectationContext<T>, IContainAt<T>
+    {
+        T Actual { get; }
+        public ContainAt(T actual)
         {
             Actual = actual;
         }

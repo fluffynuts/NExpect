@@ -7,7 +7,7 @@ namespace NExpect
     public static class StringExtensions
     {
         public static IStringContainContinuation Contain(
-            this IContinuation<string> continuation,
+            this ICanAddMatcher<string> continuation,
             string search
         )
         {
@@ -16,7 +16,7 @@ namespace NExpect
         }
 
         private static void AddContainsMatcherTo(
-            IContinuation<string> continuation,
+            ICanAddMatcher<string> continuation,
             string search
         )
         {

@@ -2,7 +2,7 @@ using System;
 
 namespace NExpect.Interfaces
 {
-    public interface IWithAfterThrowContinuation : IContinuation<Exception>
+    public interface IWithAfterThrowContinuation : ICanAddMatcher<Exception>
     {
         IExceptionMessageContinuation Message { get; }
     }

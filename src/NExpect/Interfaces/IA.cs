@@ -1,6 +1,6 @@
 namespace NExpect.Interfaces
 {
-    public interface IA<T>: IContinuation<T>
+    public interface IA<T>: ICanAddMatcher<T>
     {
     }
 }

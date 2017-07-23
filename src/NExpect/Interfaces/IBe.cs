@@ -1,6 +1,6 @@
 ﻿namespace NExpect.Interfaces
 {
-    public interface IBe<T>
+    public interface IBe<T>: ICanAddMatcher<T>
     {
         INotAfterBe<T> Not { get; }
         IEqualityContinuation<T> Equal { get; }

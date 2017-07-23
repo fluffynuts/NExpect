@@ -1,6 +1,6 @@
 ﻿namespace NExpect.Interfaces
 {
-    public interface INot<T>: IGrammarContinuation<T>
+    public interface INot<T>: ICanAddMatcher<T>
     {
         IToAfterNot<T> To { get; }
     }

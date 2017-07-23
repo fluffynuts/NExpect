@@ -2,7 +2,7 @@
 
 namespace NExpect.Interfaces
 {
-    public interface ICollectionNotAfterTo<T> : IContinuation<IEnumerable<T>>
+    public interface ICollectionNotAfterTo<T> : ICanAddMatcher<IEnumerable<T>>
     {
         IContain<IEnumerable<T>> Contain { get; }
         ICollectionHave<T> Have { get; }

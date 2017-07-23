@@ -9,7 +9,7 @@ namespace NExpect.Implementations
     {
         private readonly int _compare;
         private readonly CountMatchMethods _method;
-        private readonly IContinuation<T> _wrapped;
+        private readonly ICanAddMatcher<T> _wrapped;
 
         public ICountMatchEqual<T> Equal =>
             new CountMatchEqual<T>(
@@ -26,7 +26,7 @@ namespace NExpect.Implementations
             );
 
         public CountMatchContinuation(
-            IContinuation<T> wrapped,
+            ICanAddMatcher<T> wrapped,
             CountMatchMethods method,
             int compare
         )

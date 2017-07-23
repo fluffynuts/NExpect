@@ -8,7 +8,7 @@ namespace NExpect
     public static class ExceptionExtensions
     {
         public static IThrowContinuation Throw(
-            this IContinuation<Action> src
+            this ICanAddMatcher<Action> src
         )
         {
             var continuation = new ThrowContinuation();
@@ -31,7 +31,7 @@ namespace NExpect
         }
 
         public static IThrowContinuation Throw<T>(
-            this IContinuation<Action> src
+            this ICanAddMatcher<Action> src
         ) where T : Exception
         {
             var continuation = new ThrowContinuation();

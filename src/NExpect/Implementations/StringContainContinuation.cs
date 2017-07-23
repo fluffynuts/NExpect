@@ -9,7 +9,7 @@ namespace NExpect.Implementations
     {
         private readonly IExpectationContext<string> _expectationContext;
 
-        public StringContainContinuation(IContinuation<string> continuation)
+        public StringContainContinuation(ICanAddMatcher<string> continuation)
         {
             _expectationContext = continuation as IExpectationContext<string>;
         }
