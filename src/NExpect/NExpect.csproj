@@ -45,6 +45,10 @@
     <Compile Include="Expectations.cs" />
     <Compile Include="GreaterOrLessContinuationExtensions.cs" />
     <Compile Include="Implementations\A.cs" />
+    <Compile Include="Implementations\CollectionHaveAll.cs" />
+    <Compile Include="Implementations\CollectionHaveAllEqual.cs" />
+    <Compile Include="Implementations\CollectionHaveAny.cs" />
+    <Compile Include="Implementations\CollectionHaveAnyEqual.cs" />
     <Compile Include="Implementations\Contain.cs" />
     <Compile Include="Implementations\CountMatchContinuation.cs" />
     <Compile Include="Implementations\CountMatchEqual.cs" />
@@ -54,6 +58,15 @@
     <Compile Include="Implementations\LessContinuation.cs" />
     <Compile Include="Interfaces\CountMatchMethods.cs" />
     <Compile Include="Interfaces\IA.cs" />
+    <Compile Include="Interfaces\ICollectionHave.cs" />
+    <Compile Include="Interfaces\ICollectionHaveAll.cs" />
+    <Compile Include="Interfaces\ICollectionHaveAllEqual.cs" />
+    <Compile Include="Interfaces\ICollectionHaveAny.cs" />
+    <Compile Include="Interfaces\ICollectionHaveAnyEqual.cs" />
+    <Compile Include="Interfaces\ICollectionNot.cs" />
+    <Compile Include="Interfaces\ICollectionNotAfterTo.cs" />
+    <Compile Include="Interfaces\ICollectionTo.cs" />
+    <Compile Include="Interfaces\ICollectionToAfterNot.cs" />
     <Compile Include="Interfaces\ICountMatchContinuation.cs" />
     <Compile Include="Interfaces\ICountMatchEqual.cs" />
     <Compile Include="Interfaces\ICountMatchMatched.cs" />

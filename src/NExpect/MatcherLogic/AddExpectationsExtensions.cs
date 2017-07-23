@@ -62,6 +62,22 @@ namespace NExpect.MatcherLogic
         }
 
         public static void AddMatcher<T>(
+            this ICollectionHaveAllEqual<T> continuation,
+            Func<IEnumerable<T>, IMatcherResult> matcher
+        )
+        {
+            AddMatcherPrivate(continuation, matcher);
+        }
+
+        public static void AddMatcher<T>(
+            this ICollectionHaveAnyEqual<T> continuation,
+            Func<IEnumerable<T>, IMatcherResult> matcher
+        )
+        {
+            AddMatcherPrivate(continuation, matcher);
+        }
+
+        public static void AddMatcher<T>(
             this IA<T> continuation,
             Func<T, IMatcherResult> matcher
         )

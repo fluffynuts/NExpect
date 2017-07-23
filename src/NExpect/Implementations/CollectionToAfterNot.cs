@@ -12,6 +12,9 @@ namespace NExpect.Implementations
         public IContain<IEnumerable<T>> Contain =>
             Factory.Create<IEnumerable<T>, Contain<IEnumerable<T>>>(Actual, this);
 
+        public ICollectionHave<T> Have =>
+            Factory.Create<IEnumerable<T>, CollectionHave<T>>(Actual, this);
+
         public CollectionToAfterNot(IEnumerable<T> actual)
         {
             Actual = actual;

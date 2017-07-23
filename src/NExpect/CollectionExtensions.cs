@@ -26,7 +26,9 @@ namespace NExpect
         {
             CheckContain(contain);
             return new CountMatchContinuation<IEnumerable<T>>(
-                contain, CountMatchMethods.Exactly, howMany
+                contain,
+                CountMatchMethods.Exactly,
+                howMany
             );
         }
 
@@ -44,7 +46,9 @@ namespace NExpect
         {
             CheckContain(contain);
             return new CountMatchContinuation<IEnumerable<T>>(
-                contain, CountMatchMethods.Minimum, howMany
+                contain,
+                CountMatchMethods.Minimum,
+                howMany
             );
         }
 
@@ -62,7 +66,9 @@ namespace NExpect
         {
             CheckContain(contain);
             return new CountMatchContinuation<IEnumerable<T>>(
-                contain, CountMatchMethods.Maximum, howMany
+                contain,
+                CountMatchMethods.Maximum,
+                howMany
             );
         }
 
@@ -95,6 +101,36 @@ namespace NExpect
             });
         }
 
+        public static void To<T>(
+            this ICollectionHaveAllEqual<T> continuation,
+            T search
+        )
+        {
+            continuation.AddMatcher(collection =>
+            {
+                var passed = collection.All(o => o.Equals(search));
+                var message = passed
+                                ? $"Expected not to have all equal to {search}"
+                                : $"Expected to have all equal to {search}";
+                return new MatcherResult(passed, message);
+            });
+        }
+
+        public static void To<T>(
+            this ICollectionHaveAnyEqual<T> continuation,
+            T search
+        )
+        {
+            continuation.AddMatcher(collection =>
+            {
+                var passed = collection.Any(o => o.Equals(search));
+                var message = passed
+                                ? $"Expected not to have any equal to {search}"
+                                : $"Expected to have any equal to {search}";
+                return new MatcherResult(passed, message);
+            });
+        }
+
         public static void By<T>(
             this ICountMatchMatched<IEnumerable<T>> countMatch,
             Func<T, bool> test
@@ -104,7 +140,8 @@ namespace NExpect
             {
                 var have = collection.Where(test).Count();
                 var passed = _collectionCountMatchStrategies[countMatch.Method](have, countMatch.Compare);
-                var message = _collectionCountMatchMessageStrategies[countMatch.Method](passed, have, countMatch.Compare);
+                var message =
+                    _collectionCountMatchMessageStrategies[countMatch.Method](passed, have, countMatch.Compare);
                 return new MatcherResult(passed, message);
             });
         }
@@ -174,7 +211,9 @@ namespace NExpect
             int want
         )
         {
-            var s = want == 1 ? "" : "s";
+            var s = want == 1
+                ? ""
+                : "s";
             return $"Expected to find {comparison} {want} occurrence{s} of {search} but found {have}";
         }
 
@@ -185,7 +224,9 @@ namespace NExpect
             int want
         )
         {
-            var s = want == 1 ? "" : "s";
+            var s = want == 1
+                ? ""
+                : "s";
             return $"Expected not to find {comparison} {want} occurrence{s} of {search} but found {have}";
         }
 
@@ -195,7 +236,9 @@ namespace NExpect
             int want
         )
         {
-            var s = want == 1 ? "" : "es";
+            var s = want == 1
+                ? ""
+                : "es";
             return $"Expected to find {comparison} {want} match{s} but found {have}";
         }
 
@@ -205,7 +248,9 @@ namespace NExpect
             int want
         )
         {
-            var s = want == 1 ? "" : "es";
+            var s = want == 1
+                ? ""
+                : "es";
             return $"Expected not to find {comparison} {want} match{s} but found {have}";
         }
     }
