@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
@@ -383,6 +384,47 @@ namespace NExpect.Tests
                     .With.Message.Contains("at most 1"));
                 // Assert
             }
+        }
+
+        [Test]
+        public void ShouldBeAbleToOperateOnOtherCollections()
+        {
+            // Arrange
+            var collection = new List<string>(new[] { "a", "b", "c" });
+            // Pre-Assert
+
+            // Act
+            Assert.That(() =>
+            {
+                Expect(collection).To.Contain.Exactly(1).Equal.To("a");
+            }, Throws.Nothing);
+
+            Assert.That(() =>
+            {
+                Expect(new Queue<string>(collection)).To.Contain.Exactly(1).Equal.To("a");
+            }, Throws.Nothing);
+
+            Assert.That(() =>
+            {
+                Expect(collection as IList<string>).To.Contain.Exactly(1).Equal.To("a");
+            }, Throws.Nothing);
+
+            Assert.That(() =>
+            {
+                Expect(collection as ICollection<string>).To.Contain.Exactly(1).Equal.To("a");
+            }, Throws.Nothing);
+
+            Assert.That(() =>
+            {
+                Expect(new Stack<string>(collection)).To.Contain.Exactly(1).Equal.To("a");
+            }, Throws.Nothing);
+
+            Assert.That(() =>
+            {
+                Expect(new HashSet<string>(collection)).To.Contain.Exactly(1).Equal.To("a");
+            }, Throws.Nothing);
+
+            // Assert
         }
     }
 }

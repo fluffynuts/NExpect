@@ -29,11 +29,57 @@ namespace NExpect
             return new CollectionExpectation<T>(collection);
         }
 
+        // Have to provide collection-specific overloads because
+        //  the Expect<T> above will be selected in preference
+        //  to any non-explicitly supported collection type
         public static ICollectionExpectation<T> Expect<T>(
             T[] collection
         )
         {
             return new CollectionExpectation<T>(collection);
         }
+
+        public static ICollectionExpectation<T> Expect<T>(
+            List<T> collection
+        )
+        {
+            return new CollectionExpectation<T>(collection);
+        }
+
+        public static ICollectionExpectation<T> Expect<T>(
+            IList<T> collection
+        )
+        {
+            return new CollectionExpectation<T>(collection);
+        }
+
+        public static ICollectionExpectation<T> Expect<T>(
+            ICollection<T> collection
+        )
+        {
+            return new CollectionExpectation<T>(collection);
+        }
+
+        public static ICollectionExpectation<T> Expect<T>(
+            Queue<T> collection
+        )
+        {
+            return new CollectionExpectation<T>(collection);
+        }
+
+        public static ICollectionExpectation<T> Expect<T>(
+            Stack<T> collection
+        )
+        {
+            return new CollectionExpectation<T>(collection);
+        }
+
+        public static ICollectionExpectation<T> Expect<T>(
+            HashSet<T> collection
+        )
+        {
+            return new CollectionExpectation<T>(collection);
+        }
+
     }
 }
