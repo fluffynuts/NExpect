@@ -129,36 +129,6 @@ namespace NExpect
             });
         }
 
-        public static void To<T>(
-            this ICollectionHaveAllEqual<T> continuation,
-            T search
-        )
-        {
-            continuation.AddMatcher(collection =>
-            {
-                var passed = collection.All(o => o.Equals(search));
-                var message = passed
-                    ? $"Expected not to have all equal to {search}"
-                    : $"Expected to have all equal to {search}";
-                return new MatcherResult(passed, message);
-            });
-        }
-
-        public static void To<T>(
-            this ICollectionHaveAnyEqual<T> continuation,
-            T search
-        )
-        {
-            continuation.AddMatcher(collection =>
-            {
-                var passed = collection.Any(o => o.Equals(search));
-                var message = passed
-                    ? $"Expected not to have any equal to {search}"
-                    : $"Expected to have any equal to {search}";
-                return new MatcherResult(passed, message);
-            });
-        }
-
         public static void By<T>(
             this ICountMatchMatched<IEnumerable<T>> countMatch,
             Func<T, bool> test

@@ -554,7 +554,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                     {
-                        Expect(collection).To.Have.All.Equal.To(search);
+                        Expect(collection).To.Contain.All().Equal.To(search);
                     },
                     Throws.Nothing);
                 // Assert
@@ -572,7 +572,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                     {
-                        Expect(collection).To.Have.All.Equal.To(search);
+                        Expect(collection).To.Contain.All().Equal.To(search);
                     },
                     Throws.Exception.InstanceOf<AssertionException>());
                 // Assert
@@ -590,7 +590,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                     {
-                        Expect(collection).Not.To.Have.All.Equal.To(search);
+                        Expect(collection).Not.To.Contain.All().Equal.To(search);
                     },
                     Throws.Exception.InstanceOf<AssertionException>());
 
@@ -609,7 +609,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                     {
-                        Expect(collection).To.Not.Have.All.Equal.To(search);
+                        Expect(collection).To.Not.Contain.All().Equal.To(search);
                     },
                     Throws.Exception.InstanceOf<AssertionException>());
 
@@ -632,7 +632,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                 {
-                    Expect(actual).To.Have.Any.Equal.To(search);
+                    Expect(actual).To.Contain.Any().Equal.To(search);
                 }, Throws.Nothing);
 
                 // Assert
@@ -651,7 +651,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                 {
-                    Expect(actual).To.Have.Any.Equal.To(search);
+                    Expect(actual).To.Contain.Any().Equal.To(search);
                 }, Throws.Exception.InstanceOf<AssertionException>());
 
                 // Assert
@@ -669,7 +669,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                 {
-                    Expect(actual).To.Have.Any.Equal.To(search);
+                    Expect(actual).To.Contain.Any().Equal.To(search);
                 }, Throws.Nothing);
 
                 // Assert
