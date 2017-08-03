@@ -8,7 +8,7 @@ namespace NExpect
 {
     internal static class Assertion
     {
-        private static readonly Type _assertionExceptionWithMessageOnlyType =
+        private static Type _assertionExceptionWithMessageOnlyType =
             FindType("NUnit.Framework.AssertionException", new[] {typeof(string)})
             ?? typeof(UnmetExpectation);
 
@@ -56,7 +56,23 @@ namespace NExpect
 
         internal static void Throw(string message)
         {
-            throw (Exception) Activator.CreateInstance(_assertionExceptionWithMessageOnlyType, message);
+            throw CreateExceptionFor(message);
+        }
+
+        internal static Exception CreateExceptionFor(string message)
+        {
+            try
+            {
+                return (Exception)Activator.CreateInstance(_assertionExceptionWithMessageOnlyType, message ?? "(failed)");
+            }
+            catch
+            {
+                // cover the case where construction didnt' happen properly -- though I need
+                //  to track down *why* it's not happening properly sometimes
+                //  -> the AssertionException constructor is throwing an ArgumentNullException?!
+                _assertionExceptionWithMessageOnlyType = typeof(UnmetExpectation);
+                return new UnmetExpectation(message);
+            }
         }
     }
 }
