@@ -1,6 +1,7 @@
-using NExpect.Implementations;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
+using static PeanutButter.RandomGenerators.RandomValueGen;
+// ReSharper disable ConditionIsAlwaysTrueOrFalse
 
 namespace NExpect.Tests
 {

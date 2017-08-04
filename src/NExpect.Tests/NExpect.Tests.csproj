@@ -30,20 +30,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NSubstitute, Version=1.10.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <HintPath>..\packages\NSubstitute.1.10.0.0\lib\net45\NSubstitute.dll</HintPath>
+    <Reference Include="NSubstitute, Version=2.0.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\packages\NSubstitute.2.0.2\lib\net45\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=3.7.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.7.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="PeanutButter.RandomGenerators, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PeanutButter.RandomGenerators.1.2.156\lib\net45\PeanutButter.RandomGenerators.dll</HintPath>
+      <HintPath>..\packages\PeanutButter.RandomGenerators.1.2.170\lib\net45\PeanutButter.RandomGenerators.dll</HintPath>
     </Reference>
     <Reference Include="PeanutButter.TestUtils.Generic, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PeanutButter.TestUtils.Generic.1.2.156\lib\net45\PeanutButter.TestUtils.Generic.dll</HintPath>
+      <HintPath>..\packages\PeanutButter.TestUtils.Generic.1.2.170\lib\net45\PeanutButter.TestUtils.Generic.dll</HintPath>
     </Reference>
     <Reference Include="PeanutButter.Utils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PeanutButter.Utils.1.2.162\lib\net45\PeanutButter.Utils.dll</HintPath>
+      <HintPath>..\packages\PeanutButter.Utils.1.2.170\lib\net45\PeanutButter.Utils.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

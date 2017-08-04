@@ -1,6 +1,7 @@
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+using static NExpect.Implementations.MessageHelpers;
 
 namespace NExpect
 {
@@ -18,25 +19,32 @@ namespace NExpect
                 if (actual.Equals(expected))
                     return new MatcherResult(true, $"Did not expect {expected}, but got exactly that");
                 return new MatcherResult(false,
-                    MessageHelpers.FinalMessageFor(
+                    FinalMessageFor(
                         $"Expected {expected} but got {actual}",
                         customMessage
                     ));
             });
         }
 
-        public static void Null<T>(this IBe<T> continuation)
+        public static void Null<T>(this IBe<T> continuation, string customMessage)
         {
             continuation.AddMatcher(actual =>
             {
                 var passed = actual == null;
                 return new MatcherResult(
                     passed,
-                    passed
-                        ? $"Expected not to get null"
-                        : $"Expected null but got {MessageHelpers.Quote(actual)}"
+                    FinalMessageFor(
+                        passed
+                            ? "Expected not to get null"
+                            : $"Expected null but got {Quote(actual)}",
+                        customMessage)
                 );
             });
+        }
+
+        public static void Null<T>(this IBe<T> continuation)
+        {
+            continuation.Null(null);
         }
 
         public static void To<T>(
@@ -48,8 +56,8 @@ namespace NExpect
             {
                 var passed = actual.Equals(expected);
                 var message = passed
-                    ? $"Expected {MessageHelpers.Quote(actual)} not to equal {MessageHelpers.Quote(expected)}"
-                    : $"Expected {MessageHelpers.Quote(actual)} to equal {MessageHelpers.Quote(expected)}";
+                    ? $"Expected {Quote(actual)} not to equal {Quote(expected)}"
+                    : $"Expected {Quote(actual)} to equal {Quote(expected)}";
                 return new MatcherResult(passed, message);
             });
         }

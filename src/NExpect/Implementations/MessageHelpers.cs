@@ -12,7 +12,9 @@ namespace NExpect.Implementations
             string customMessage
         )
         {
-            return string.IsNullOrWhiteSpace(customMessage) ? standardMessage : $"{customMessage}\n\n{standardMessage}";
+            return string.IsNullOrWhiteSpace(customMessage) 
+                ? standardMessage 
+                : $"{customMessage}\n\n{standardMessage}";
         }
 
         internal static string MessageForContainsResult(

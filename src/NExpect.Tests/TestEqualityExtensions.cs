@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Tests
 {
@@ -306,6 +307,36 @@ namespace NExpect.Tests
                     },
                     Throws.Exception.InstanceOf<AssertionException>()
                         .With.Message.Contains("Expected not to get null"));
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnStringNegated_GivenCustomMessage_WhenIsNull_ShouldThrowIncludingCustomMessage()
+            {
+                // Arrange
+                var input = null as string;
+                var expected = GetRandomString(); 
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(input).Not.To.Be.Null(expected);
+                    },
+                    Throws.Exception.InstanceOf<AssertionException>()
+                        .With.Message.EqualTo($"{expected}\n\nExpected not to get null"));
+                // Assert
+            }
+
+            [Test]
+            public void ExpectOnPureNull()
+            {
+                // Arrange
+                // Pre-Assert
+                // Act
+                Assert.That(() => 
+                {
+                    Expect(null).To.Be.Null();
+                }, Throws.Nothing);
                 // Assert
             }
 
