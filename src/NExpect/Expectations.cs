@@ -22,6 +22,13 @@ namespace NExpect
             return new Expectation<Action>(action);
         }
 
+        public static IExpectation<Action> Expect<T>(Func<T> func)
+        {
+            return new Expectation<Action>(() => { 
+                func();
+            });
+        }
+
         public static ICollectionExpectation<T> Expect<T>(
             IEnumerable<T> collection
         )
@@ -80,6 +87,5 @@ namespace NExpect
         {
             return new CollectionExpectation<T>(collection);
         }
-
     }
 }

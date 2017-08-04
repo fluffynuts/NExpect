@@ -5,8 +5,16 @@ using NExpect.MatcherLogic;
 
 namespace NExpect
 {
+    /// <summary>
+    /// Provides extensions for exception testing
+    /// </summary>
     public static class ExceptionExtensions
     {
+        /// <summary>
+        /// Expects the Action to throw any kind of exception
+        /// </summary>
+        /// <param name="src">Action to run</param>
+        /// <returns>Continuation which can be used to test exception messages</returns>
         public static IThrowContinuation Throw(
             this ICanAddMatcher<Action> src
         )
@@ -30,6 +38,12 @@ namespace NExpect
             return continuation;
         }
 
+        /// <summary>
+        /// Expects the action to throw an exception of type T
+        /// </summary>
+        /// <param name="src">Action to test</param>
+        /// <typeparam name="T">Type of exception which is expected</typeparam>
+        /// <returns>Continuaiotn which can be used to test exception messages</returns>
         public static IThrowContinuation Throw<T>(
             this ICanAddMatcher<Action> src
         ) where T : Exception
@@ -59,6 +73,12 @@ namespace NExpect
             return continuation;
         }
 
+        /// <summary>
+        /// Used to test exception messages
+        /// </summary>
+        /// <param name="src">Continuation carrying an exception message</param>
+        /// <param name="search">String to look for in the message</param>
+        /// <returns>Another continuation so you can do .And() on it</returns>
         public static IStringContainContinuation Containing(
             this IExceptionMessageContinuation src,
             string search)
@@ -80,6 +100,12 @@ namespace NExpect
             return result;
         }
 
+        /// <summary>
+        /// Used to test exception messages
+        /// </summary>
+        /// <param name="src">Continuation containing exception message to test</param>
+        /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
+        /// <returns>Another continuation so you can do .And()</returns>
         public static IStringContainContinuation Matching(
             this IExceptionMessageContinuation src,
             Func<string, bool> test)
@@ -101,6 +127,12 @@ namespace NExpect
             return result;
         }
 
+        /// <summary>
+        /// Used to test exception messages in the negative
+        /// </summary>
+        /// <param name="continuation">Continuation containing the exception message</param>
+        /// <param name="search">String to search for</param>
+        /// <returns>Continuation so you can perform more tests on the message</returns>
         public static IStringContainContinuation Containing(
             this INot<string> continuation,
             string search
@@ -123,6 +155,12 @@ namespace NExpect
             return result;
         }
 
+        /// <summary>
+        /// Used to test exception messages in the negative
+        /// </summary>
+        /// <param name="continuation">Continuation containing exception message to test</param>
+        /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
+        /// <returns>Another continuation so you can do .And()</returns>
         public static IStringContainContinuation Matching(
             this INot<string> continuation,
             Func<string, bool> test
@@ -143,17 +181,6 @@ namespace NExpect
                 );
             });
             return result;
-        }
-    }
-
-    public class ExceptionMessageContainuationToStringContainContinuation
-        : ExpectationContext<string>, IStringContainContinuation
-    {
-        public string Actual { get; set; }
-
-        public ExceptionMessageContainuationToStringContainContinuation(string actual)
-        {
-            Actual = actual;
         }
     }
 }

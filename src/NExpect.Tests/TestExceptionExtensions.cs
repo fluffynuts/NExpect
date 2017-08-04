@@ -4,6 +4,7 @@ using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+// ReSharper disable ConvertToLambdaExpression
 
 namespace NExpect.Tests
 {
@@ -11,7 +12,7 @@ namespace NExpect.Tests
     public class TestExceptionExtensions
     {
         [Test]
-        public void Throw_WithNoGenericType_WhenSUTThrows_ShouldNotThrow()
+        public void Throw_ForAction_WithNoGenericType_WhenSUTThrows_ShouldNotThrow()
         {
             // Arrange
             // Pre-Assert
@@ -30,7 +31,7 @@ namespace NExpect.Tests
         }
 
         [Test]
-        public void Throw_WithNoGenericType_WhenSUTDoesNotThrow_ShouldThrow()
+        public void Throw_ForAction_WithNoGenericType_WhenSUTDoesNotThrow_ShouldThrow()
         {
             // Arrange
             // Pre-Assert
@@ -39,6 +40,44 @@ namespace NExpect.Tests
             {
                 Expect(() =>
                     {
+                    })
+                    .To.Throw();
+            });
+            // Assert
+        }
+
+        [Test]
+        public void Throw_ForFunc_WithNoGenericType_WhenSUTThrows_ShouldNotThrow()
+        {
+            // Arrange
+            // Pre-Assert
+            // Act
+            Assert.DoesNotThrow(
+                () =>
+                {
+                    Expect(() =>
+                        {
+                            if (false)
+                                return 1;
+                            throw new Exception(GetRandomString());
+                        })
+                        .To.Throw();
+                }
+            );
+            // Assert
+        }
+
+        [Test]
+        public void Throw_ForFunc_ForAction_WithNoGenericType_WhenSUTDoesNotThrow_ShouldThrow()
+        {
+            // Arrange
+            // Pre-Assert
+            // Act
+            Assert.Throws<AssertionException>(() =>
+            {
+                Expect(() =>
+                    {
+                        return "moo";
                     })
                     .To.Throw();
             });
