@@ -8,7 +8,6 @@ namespace NExpect.Implementations
     {
         protected bool IsNegated;
         public void Negate() {
-            Console.WriteLine("-> negated!");
             IsNegated = !IsNegated;
         }
 
