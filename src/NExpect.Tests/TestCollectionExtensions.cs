@@ -41,6 +41,28 @@ namespace NExpect.Tests
                 }
 
                 [Test]
+                public void ShortContain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldNotThrow()
+                {
+                    // Arrange
+                    var search = GetRandomString(3);
+                    var other1 = GetAnother(search);
+                    var other2 = GetAnother<string>(new[] {search, other1});
+                    var collection = new[]
+                    {
+                        search,
+                        other1,
+                        other2
+                    }.Randomize();
+
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() => { Expect(collection).To.Contain(search); },
+                        Throws.Nothing);
+
+                    // Assert
+                }
+
+                [Test]
                 public void Contain_OperatingOnCollectionOfStrings_WhenSeeking2AndDoesContain2_ShouldNotThrow()
                 {
                     // Arrange

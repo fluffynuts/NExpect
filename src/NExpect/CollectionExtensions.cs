@@ -12,6 +12,28 @@ namespace NExpect
     /// </summary>
     public static class CollectionExtensions
     {
+
+        /// <summary>
+        /// Short contain, equivalent to .Contain.At.Least.One.Equal.To(x)
+        /// -> less expressive, but shorter to type (:
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Contain<T>(
+            this ICollectionTo<T> continuation,
+            T search)
+        {
+            continuation.AddMatcher(collection => 
+            {
+                var passed = collection.Contains(search);
+                var notPart = passed ? "" : "not ";
+                return new MatcherResult(
+                    passed,
+                    $"Expected {collection} {notPart}to contain {search}"
+                );
+            });
+        }
         /// <summary>
         /// Match exactly N elements with following matchers
         /// </summary>
