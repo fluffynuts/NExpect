@@ -27,10 +27,10 @@ namespace NExpect.Implementations
             catch (Exception ex)
             {
                 // TODO: make this better, ie, include the exception as an inner
-                Assertion.Throw(ex.Message);
+                Assertions.Throw(ex.Message);
                 return;
             }
-            Assertion.Throw(result.Message);
+            Assertions.Throw(result.Message);
         }
     }
 

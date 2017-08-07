@@ -41,7 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assertion.cs" />
+    <Compile Include="Assertions.cs" />
     <Compile Include="ExceptionMessageContainuationToStringContainContinuation.cs" />
     <Compile Include="Expectations.cs" />
     <Compile Include="GreaterOrLessContinuationExtensions.cs" />
