@@ -56,14 +56,18 @@ namespace NExpect
 
         internal static void Throw(string message)
         {
-            throw CreateExceptionFor(message);
+//            throw CreateExceptionFor(message);
+            throw new UnmetExpectation(message);
         }
 
         internal static Exception CreateExceptionFor(string message)
         {
             try
             {
-                return (Exception)Activator.CreateInstance(_assertionExceptionWithMessageOnlyType, message ?? "(failed)");
+                return (Exception) Activator.CreateInstance(
+                    _assertionExceptionWithMessageOnlyType,
+                    message ?? "(failed)"
+                );
             }
             catch
             {
