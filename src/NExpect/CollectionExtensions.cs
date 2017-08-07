@@ -52,6 +52,12 @@ namespace NExpect
             );
         }
 
+        /// <summary>
+        /// Starts continuation to match any items in the source collection
+        /// </summary>
+        /// <param name="contain">Continuation to continue from</param>
+        /// <typeparam name="T">Type of items in collection</typeparam>
+        /// <returns></returns>
         public static ICountMatchContinuation<IEnumerable<T>> Any<T>(
             this IContain<IEnumerable<T>> contain
         )
@@ -63,6 +69,12 @@ namespace NExpect
             );
         }
 
+        /// <summary>
+        /// Starts continuation to match all items in the source collection
+        /// </summary>
+        /// <param name="contain">Continuation to continue from</param>
+        /// <typeparam name="T">Type of items in collection</typeparam>
+        /// <returns></returns>
         public static ICountMatchContinuation<IEnumerable<T>> All<T>(
             this IContain<IEnumerable<T>> contain
         )
