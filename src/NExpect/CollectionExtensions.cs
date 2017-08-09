@@ -86,7 +86,7 @@ namespace NExpect
         {
             return new CountMatchContinuation<IEnumerable<T>>(
                 contain,
-                CountMatchMethods.Any, 
+                CountMatchMethods.Any,
                 0
             );
         }
@@ -103,7 +103,7 @@ namespace NExpect
         {
             return new CountMatchContinuation<IEnumerable<T>>(
                 contain,
-                CountMatchMethods.All, 
+                CountMatchMethods.All,
                 0
             );
         }
@@ -147,11 +147,15 @@ namespace NExpect
             countMatch.Continuation.AddMatcher(collection =>
             {
                 var asArray = collection.ToArray();
-                var have = countMatch.Method == CountMatchMethods.Any 
-                            ? (asArray.Any(o => o.Equals(search)) ? 1 : 0 )
-                            :  asArray.Count(o => o.Equals(search));
-                var passed = _collectionCountMatchStrategies[countMatch.Method](have, 
-                    countMatch.Method == CountMatchMethods.All ? asArray.Length :  countMatch.Compare
+                var have = countMatch.Method == CountMatchMethods.Any
+                    ? (asArray.Any(o => o.Equals(search))
+                        ? 1
+                        : 0)
+                    : asArray.Count(o => o.Equals(search));
+                var passed = _collectionCountMatchStrategies[countMatch.Method](have,
+                    countMatch.Method == CountMatchMethods.All
+                        ? asArray.Length
+                        : countMatch.Compare
                 );
                 var message =
                     _collectionCountMessageStrategies[countMatch.Method](passed, search, have, countMatch.Compare);
@@ -184,6 +188,26 @@ namespace NExpect
             });
         }
 
+        /// <summary>
+        /// Tests if a collection is empty from the continuation
+        /// </summary>
+        /// <param name="be">ICollectionBe&lt;T&gt; continuation</param>
+        /// <typeparam name="T">Item type of the collection being tested</typeparam>
+        public static void Empty<T>(
+            this ICollectionBe<T> be
+        )
+        {
+            be.AddMatcher(collection =>
+            {
+                var passed = collection != null && !collection.Any();
+                var not = passed ? "not " : "";
+                return new MatcherResult(
+                    passed,
+                    $"Expected {collection} {not}to be an empty collection"
+                );
+            });
+        }
+
         private static void CheckContain<T>(ICanAddMatcher<IEnumerable<T>> contain)
         {
             if (contain == null)
@@ -204,15 +228,15 @@ namespace NExpect
 
         private static string CreateAllMessage(bool passed, object search, int have, int want)
         {
-            return passed 
-                ? $"Expected not to find all matching {search}" 
+            return passed
+                ? $"Expected not to find all matching {search}"
                 : $"Expected to find all matching {search}";
         }
 
         private static string CreateAnyMessage(bool passed, object search, int have, int want)
         {
-            return passed 
-                ? $"Expected not to find any matches for {search}" 
+            return passed
+                ? $"Expected not to find any matches for {search}"
                 : $"Expected to find any match for {search}";
         }
 

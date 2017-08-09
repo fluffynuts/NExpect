@@ -15,6 +15,9 @@ namespace NExpect.Implementations
         public ICollectionNotAfterTo<T> Not =>
             Factory.Create<IEnumerable<T>, CollectionNotAfterTo<T>>(Actual, this);
 
+        public ICollectionBe<T> Be =>
+            Factory.Create<IEnumerable<T>, CollectionBe<T>>(Actual, this);
+
         public CollectionTo(IEnumerable<T> actual)
         {
             Actual = actual;

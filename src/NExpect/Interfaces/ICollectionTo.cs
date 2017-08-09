@@ -6,5 +6,6 @@ namespace NExpect.Interfaces
     {
         IContain<IEnumerable<T>> Contain { get; }
         ICollectionNotAfterTo<T> Not { get; }
+        ICollectionBe<T> Be { get; }
     }
 }
