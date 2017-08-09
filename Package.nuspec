@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>NExpect</id>
-    <version>1.0.21</version>
+    <version>1.0.22</version>
     <title>NExpect</title>
     <authors>Davyd McColl</authors>
     <owners>Davyd McColl</owners>
@@ -23,13 +23,13 @@
     <licenseUrl>https://github.com/fluffynuts/NExpect/blob/master/LICENSE</licenseUrl>
     <copyright>Copyright 2017</copyright>
     <dependencies>
-      <group targetFramework="net40"/>
+      <group targetFramework="net452"/>
     </dependencies>
     <references/>
     <tags/>
   </metadata>
   <files>
-    <file src="src\NExpect\bin\Debug\NExpect.dll" target="lib\net45"/>
-    <file src="src\NExpect\bin\Debug\NExpect.xml" target="lib\net45"/>
+    <file src="src\NExpect\bin\Debug\NExpect.dll" target="lib\net452"/>
+    <file src="src\NExpect\bin\Debug\NExpect.xml" target="lib\net452"/>
   </files>
 </package>
