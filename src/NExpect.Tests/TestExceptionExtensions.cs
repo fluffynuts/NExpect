@@ -4,6 +4,7 @@ using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+
 // ReSharper disable ConvertToLambdaExpression
 
 namespace NExpect.Tests
@@ -57,7 +58,7 @@ namespace NExpect.Tests
                 {
                     Expect(() =>
                         {
-                            if (false)
+                            if (MakeFalse())
                                 return 1;
                             throw new Exception(GetRandomString());
                         })
@@ -65,6 +66,11 @@ namespace NExpect.Tests
                 }
             );
             // Assert
+        }
+
+        private bool MakeFalse()
+        {
+            return false;
         }
 
         [Test]
@@ -234,10 +240,15 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(() => { throw new Exception(msg); })
-                        .To.Throw().With.Message.Matching(s => s == msg);
-                }, Throws.Nothing);
+                    {
+                        Expect(() =>
+                            {
+                                throw new Exception(msg);
+                            })
+                            .To.Throw()
+                            .With.Message.Matching(s => s == msg);
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -251,10 +262,15 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(() => { throw new Exception(GetAnother(msg)); })
-                        .To.Throw().With.Message.Matching(s => s == msg);
-                }, Throws.Exception.InstanceOf<AssertionException>());
+                    {
+                        Expect(() =>
+                            {
+                                throw new Exception(GetAnother(msg));
+                            })
+                            .To.Throw()
+                            .With.Message.Matching(s => s == msg);
+                    },
+                    Throws.Exception.InstanceOf<AssertionException>());
 
                 // Assert
             }
@@ -268,10 +284,15 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(() => { throw new Exception(GetAnother(msg)); })
-                        .To.Throw().With.Message.Not.Matching(s => s == msg);
-                }, Throws.Exception.InstanceOf<AssertionException>());
+                    {
+                        Expect(() =>
+                            {
+                                throw new Exception(GetAnother(msg));
+                            })
+                            .To.Throw()
+                            .With.Message.Not.Matching(s => s == msg);
+                    },
+                    Throws.Exception.InstanceOf<AssertionException>());
 
                 // Assert
             }
@@ -465,4 +486,5 @@ namespace NExpect.Tests
             // Assert
         }
     }
+
 }
