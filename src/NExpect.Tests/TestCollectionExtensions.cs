@@ -780,7 +780,7 @@ namespace NExpect.Tests
                 {
                     Expect(collection).Not.To.Be.Empty();
                 }, Throws.Exception.InstanceOf<AssertionException>()
-                    .With.Message.EqualTo($"Expected {collection} not to be an empty collection"));
+                    .With.Message.EqualTo($"Expected [  ] not to be an empty collection"));
 
                 // Assert
             }
@@ -798,7 +798,7 @@ namespace NExpect.Tests
                 {
                     Expect(collection).To.Be.Empty();
                 }, Throws.Exception.InstanceOf<AssertionException>()
-                    .With.Message.EqualTo($"Expected {collection} to be an empty collection"));
+                    .With.Message.Contains("] to be an empty collection"));
 
                 // Assert
             }
