@@ -5,6 +5,8 @@ using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
+// ReSharper disable PossibleMultipleEnumeration
+
 namespace NExpect
 {
     /// <summary>
@@ -200,12 +202,82 @@ namespace NExpect
             be.AddMatcher(collection =>
             {
                 var passed = collection != null && !collection.Any();
-                var not = passed ? "not " : "";
+                var not = passed
+                    ? "not "
+                    : "";
                 return new MatcherResult(
                     passed,
-                    $"Expected {collection} {not}to be an empty collection"
+                    $"Expected {CollectionPrint(collection)} {not}to be an empty collection"
                 );
             });
+        }
+
+        public static void To<T>(
+            this ICollectionEquivalent<T> equivalent,
+            IEnumerable<T> other
+        )
+        {
+            equivalent.AddMatcher(collection =>
+            {
+                var passed = TestEquivalenceOf(collection, other);
+                var not = passed
+                    ? "not "
+                    : "";
+                return new MatcherResult(
+                    passed,
+                    $"Expected {CollectionPrint(collection)} {not}to be equivalent to {CollectionPrint(other)}"
+                );
+            });
+        }
+
+        private static string CollectionPrint<T>(IEnumerable<T> collection)
+        {
+            var asArray = collection.ToArray();
+            var ellipsis = asArray.Length > 10
+                ? " ..."
+                : "";
+            return $"[ {MessageHelpers.Stringify(asArray.Take(10))}{ellipsis} ]";
+        }
+
+        private static bool TestEquivalenceOf<T>(
+            IEnumerable<T> collectionA,
+            IEnumerable<T> collectionB)
+        {
+            if (collectionA == null &&
+                collectionB == null)
+                return true;
+            if (collectionA == null ||
+                collectionB == null)
+                return false;
+            var distinctA = collectionA.Distinct().ToArray();
+            var distinctB = collectionB.Distinct().ToArray();
+            if (distinctA.Length != distinctB.Length)
+                return false;
+            var countsA = GetCounts(distinctA, collectionA.ToArray());
+            var countsB = GetCounts(distinctB, collectionB.ToArray());
+            return countsA.Aggregate(true, (acc, cur) =>
+            {
+                if (!acc)
+                    return false;
+                var match = countsB.FirstOrDefault(o => AreEqual(o.Item1, cur.Item1));
+                return match?.Item2 == cur.Item2;
+            });
+        }
+
+        private static Tuple<T, int>[] GetCounts<T>(T[] distinctA, T[] collectionA)
+        {
+            return distinctA
+                    .Select(o => Tuple.Create(o, collectionA.Count(o2 => AreEqual(o2, o))))
+                    .ToArray();
+        }
+
+        private static bool AreEqual<T>(T left, T right)
+        {
+            if (left == null && right == null)
+                return true;
+            if (left == null || right == null)
+                return false;
+            return left.Equals(right);
         }
 
         private static void CheckContain<T>(ICanAddMatcher<IEnumerable<T>> contain)

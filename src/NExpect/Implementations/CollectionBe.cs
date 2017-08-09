@@ -7,7 +7,11 @@ namespace NExpect.Implementations
         ExpectationContext<IEnumerable<T>>,
         ICollectionBe<T>
     {
+        public ICollectionEquivalent<T> Equivalent =>
+            Factory.Create<IEnumerable<T>, CollectionEquivalent<T>>(Actual, this);
+
         public IEnumerable<T> Actual { get; }
+
         public CollectionBe(IEnumerable<T> actual)
         {
             Actual = actual;

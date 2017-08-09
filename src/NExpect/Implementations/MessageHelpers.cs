@@ -64,21 +64,12 @@ namespace NExpect.Implementations
             return str == null ? str : $"\"{str}\"";
         }
 
-        internal static string Quote(object o)
+        internal static string Quote<T>(T o)
         {
             if (o == null)
                 return null;
             var asString = o as string;
             return asString == null ? o.ToString() : Quote(asString);
-        }
-
-        internal static string CollectionContainsItemMessageFor<T>(
-            bool passed, T search, IEnumerable<T> collection
-        )
-        {
-            return passed
-                ? $"Expected\n{Stringify(collection)}\nnot to contain\n{search}"
-                : $"Expected\n{Stringify(collection)}\nto contain\n{search}";
         }
 
         internal static string Stringify<T>(IEnumerable<T> collection)

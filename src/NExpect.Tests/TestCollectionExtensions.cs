@@ -837,5 +837,169 @@ namespace NExpect.Tests
                 // Assert
             }
         }
+
+        [TestFixture]
+        public class EquivalentTo
+        {
+            [Test]
+            public void OperatingOnEmptyCollection_ComparingWithEmptyCollection_ShouldNotThrow()
+            {
+                // Arrange
+                var collection = new List<int>();
+                var compare = new int[0];
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection).To.Be.Equivalent.To(compare);
+                }, Throws.Nothing);
+
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnTwoIdenticalCollections_ShouldNotThrow()
+            {
+                // Arrange
+                var start = GetRandomCollection<int>(4, 6).ToArray();
+                var other = start.Select(i => i).ToArray();
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(start).To.Be.Equivalent.To(other);
+                }, Throws.Nothing);
+
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnTwoEquivalentCollections_ShouldNotThrow()
+            {
+                // Arrange
+                var start = GetRandomCollection<string>(4, 6).ToArray();
+                var other = start.Randomize();
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(start).To.Be.Equivalent.To(other);
+                }, Throws.Nothing);
+
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnTwoInequivalentCollectionsOfSameSize_ShouldThrow()
+            {
+                // Arrange
+                var test = GetRandomArray<decimal>(4, 6);
+                var other = GetRandomCollection<decimal>(test.Length, test.Length);
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(test).To.Be.Equivalent.To(other);
+                }, Throws.Exception.InstanceOf<AssertionException>()
+                    .With.Message.Contains("] to be equivalent to ["));
+
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnTwoInequivalentCollectionsOfSameSize_Negated_ShouldNotThrow()
+            {
+                // Arrange
+                var test = GetRandomArray<string>(4, 6);
+                var other = GetRandomCollection<string>(test.Length, test.Length);
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(test).Not.To.Be.Equivalent.To(other);
+                }, Throws.Nothing);
+
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnTwoInequivalentCollectionsOfSameSize_NegatedAlt_ShouldNotThrow()
+            {
+                // Arrange
+                var test = GetRandomArray<string>(4, 6);
+                var other = GetRandomCollection<string>(test.Length, test.Length);
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(test).To.Not.Be.Equivalent.To(other);
+                }, Throws.Nothing);
+
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnTwoEquivalentCollectionsOfSameSizeWithSameRepeatedElements_ShouldNotThrow()
+            {
+                // Arrange
+                var test = new[] { 1, 1, 2, 3 };
+                var other = new[] { 1, 2, 3, 1 };
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(test).To.Be.Equivalent.To(other);
+                }, Throws.Nothing);
+
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnTwoEquivalentCollectionsOfSameSizeWithDifferentRepeatedElements_ShouldThrow()
+            {
+                // Arrange
+                var test = new[] { 1, 1, 2, 3 };
+                var other = new[] { 1, 2, 3, 2 };
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(test).To.Be.Equivalent.To(other);
+                }, Throws.Exception.InstanceOf<AssertionException>()
+                    .With.Message.Contains("] to be equivalent to ["));
+
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnTwoEquivalentCollectionsOfSameSizeWithSameRepeatedElements_WhenNegated_ShouldThrow()
+            {
+                // Arrange
+                var test = new[] { 1, 1, 2, 3 };
+                var other = new[] { 1, 2, 3, 1 };
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(test).Not.To.Be.Equivalent.To(other);
+                }, Throws.Exception.InstanceOf<AssertionException>()
+                    .With.Message.Contains("] not to be equivalent to ["));
+
+                // Assert
+            }
+        }
     }
 }
