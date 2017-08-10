@@ -18,9 +18,9 @@ Expect(null).To.Be.Null();
 ```
 
 ## Extending
-Mostly, you can extend by adding extension methods for IContinuatin<T> where T is the 
+Mostly, you can extend by adding extension methods for ICanAddMatcher<T> where T is the 
 type you want. You can also extend at any point in the grammar -- some of the "better"
-points are ITo<T> and IBe<T>. You will need another namespace import:
+points are ITo<T>, IBe<T> and IHave<T>. You will need another namespace import:
 ```
 using NExpect.MatcherLogic
 ```
