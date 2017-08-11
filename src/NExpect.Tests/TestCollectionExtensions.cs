@@ -9,6 +9,7 @@ using PeanutButter.Utils;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
 using static PeanutButter.Utils.PyLike;
+using System;
 
 namespace NExpect.Tests
 {
@@ -885,6 +886,19 @@ namespace NExpect.Tests
                 Assert.That(() => { Expect(evens).Not.To.Contain.Any().Odds(); }, Throws.Nothing);
                 // Assert
             }
+            [Test]
+            public void Extending_CountMatchContinuationNegated()
+            {
+                // Arrange
+                var evens = new[] {2, 4, 6};
+                // Pre-Assert
+                // Act
+                Assert.That(() => 
+                { 
+                    Expect(evens).To.Contain.Any().Odds(); 
+                }, Throws.Exception.InstanceOf<AssertionException>());
+                // Assert
+            }
         }
     }
 
@@ -894,7 +908,12 @@ namespace NExpect.Tests
         {
             continuation.AddMatcher(collection =>
             {
-                var passed = collection.All(i => i % 2 == 1);
+                var expectedCount = continuation.GetExpectedCount();
+                var method = continuation.GetCountMatchMethod();
+                // TODO: use count and method
+                var count = collection.Count(i => i % 2 == 1);
+                var total = collection.Count();
+                var passed = _strategies[method](total, count, expectedCount);
                 var not = passed ? "" : "not ";
                 return new MatcherResult(
                     passed,
@@ -902,5 +921,15 @@ namespace NExpect.Tests
                 );
             });
         }
+
+        private static Dictionary<CountMatchMethods, Func<int, int, int, bool>> _strategies =
+            new Dictionary<CountMatchMethods, Func<int, int, int, bool>>()
+            {
+                [CountMatchMethods.All] = (total, matched, expected) => total == matched,
+                [CountMatchMethods.Any] = (total, matched, expected) => matched > 0,
+                [CountMatchMethods.Exactly] = (total, matched, expected) => matched == expected,
+                [CountMatchMethods.Maximum] = (total, matched, expected) => matched <= expected,
+                [CountMatchMethods.Minimum] = (total, matched, expected) => matched >= expected
+            };
     }
 }

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using NExpect.Interfaces;
 
 namespace NExpect.Implementations
@@ -7,33 +6,37 @@ namespace NExpect.Implementations
         : ExpectationContext<T>,
             ICountMatchContinuation<T>
     {
-        private readonly int _compare;
-        private readonly CountMatchMethods _method;
+        public int ExpectedCount => _expectedCount;
+        public CountMatchMethods CountMatchMethod => _countMatchMethod;
+
+        private readonly int _expectedCount;
+        private readonly CountMatchMethods _countMatchMethod;
         private readonly ICanAddMatcher<T> _wrapped;
 
         public ICountMatchEqual<T> Equal =>
             new CountMatchEqual<T>(
                 _wrapped,
-                _method,
-                _compare
+                _countMatchMethod,
+                _expectedCount
             );
 
         public ICountMatchMatched<T> Matched =>
             new CountMatchMatched<T>(
                 _wrapped,
-                _method,
-                _compare
+                _countMatchMethod,
+                _expectedCount
             );
 
         public CountMatchContinuation(
             ICanAddMatcher<T> wrapped,
-            CountMatchMethods method,
-            int compare
+            CountMatchMethods countMatchMethod,
+            int expectedCount
         )
         {
             _wrapped = wrapped;
-            _method = method;
-            _compare = compare;
+            _countMatchMethod = countMatchMethod;
+            _expectedCount = expectedCount;
+            SetParent(wrapped as IExpectationContext<T>);
         }
     }
 }

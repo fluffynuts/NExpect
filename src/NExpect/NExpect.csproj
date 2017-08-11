@@ -82,6 +82,7 @@
     <Compile Include="Implementations\CollectionTo.cs" />
     <Compile Include="Implementations\CollectionToAfterNot.cs" />
     <Compile Include="Interfaces\ICollectionExpectation.cs" />
+    <Compile Include="MatcherLogic\CountMatchExtensionMethods.cs" />
     <Compile Include="MatchProviderExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Implementations\MessageHelpers.cs" />
