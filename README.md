@@ -1,6 +1,11 @@
 # NExpect
 An assertions framework for .NET with a BDD-like feel, inspired by Chai and Jasmine, designed to be user-extensible
 
+## Goals
+- Expect(NExpect).To.Be.Readable();
+- Expect(NExpect).To.Be.Expressive();
+- Expect(NExpect).To.Be.Extensible();
+
 ## Usage
 1. Download from [nuget.org](https://nuget.org): `install-package nexpect`
 2. Import Expectations statically:
