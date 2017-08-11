@@ -2,8 +2,9 @@
 
 namespace NExpect.Implementations
 {
-    public class Be<T> : ExpectationContext<T>, IBe<T>
+    internal class Be<T> : ExpectationContext<T>, IBe<T>
     {
+        // ReSharper disable once MemberCanBePrivate.Global
         public T Actual { get; }
         public INotAfterBe<T> Not => Factory.Create<T, NotAfterBe<T>>(Actual, this);
 

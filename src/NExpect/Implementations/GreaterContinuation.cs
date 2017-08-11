@@ -2,7 +2,7 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations
 {
-    public class GreaterContinuation<T> :
+    internal class GreaterContinuation<T> :
         ExpectationContext<T>,
         IGreaterContinuation<T>
     {

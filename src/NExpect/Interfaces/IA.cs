@@ -1,16 +1,10 @@
 namespace NExpect.Interfaces
 {
+    /// <summary>
+    /// Continuation to provide the ".A" grammar
+    /// </summary>
+    /// <typeparam name="T">Type of the continuation</typeparam>
     public interface IA<T> : ICanAddMatcher<T>
     {
-    }
-
-    public interface IAn<T> : ICanAddMatcher<T>
-    {
-    }
-
-    public interface IHave<T>: ICanAddMatcher<T>
-    {
-        IA<T> A { get; }
-        IAn<T> An { get; }
     }
 }

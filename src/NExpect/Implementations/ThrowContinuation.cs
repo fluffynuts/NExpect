@@ -3,7 +3,7 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations
 {
-    public class ThrowContinuation : ExpectationContext<Exception>, IThrowContinuation
+    internal class ThrowContinuation : ExpectationContext<Exception>, IThrowContinuation
     {
         public Exception Exception { get; set; }
 

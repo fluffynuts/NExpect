@@ -2,7 +2,7 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations
 {
-    public class To<T> : ExpectationContext<T>, ITo<T>
+    internal class To<T> : ExpectationContext<T>, ITo<T>
     {
         public T Actual { get; }
         public IBe<T> Be => Factory.Create<T, Be<T>>(Actual, this);

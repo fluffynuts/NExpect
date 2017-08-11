@@ -2,7 +2,7 @@
 
 namespace NExpect.Implementations
 {
-    public class LessContinuation<T> :
+    internal class LessContinuation<T> :
         ExpectationContext<T>,
         ILessContinuation<T>
     {

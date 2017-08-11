@@ -4,7 +4,7 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class WithAfterThrowContinuation :
+    internal class WithAfterThrowContinuation :
         ExpectationContext<Exception>, 
         IWithAfterThrowContinuation, 
         IHasActual<Exception>

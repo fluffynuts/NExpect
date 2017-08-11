@@ -4,7 +4,7 @@ using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations
 {
-    public class StringContainContinuation : IStringContainContinuation,
+    internal class StringContainContinuation : IStringContainContinuation,
         IExpectationContext<string>
     {
         private readonly IExpectationContext<string> _expectationContext;

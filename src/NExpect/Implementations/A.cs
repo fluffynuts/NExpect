@@ -2,7 +2,8 @@
 
 namespace NExpect.Implementations
 {
-    public class A<T> : ExpectationContext<T>, IA<T>
+    // ReSharper disable once ClassNeverInstantiated.Global
+    internal class A<T> : ExpectationContext<T>, IA<T>
     {
         public object Actual { get; }
 

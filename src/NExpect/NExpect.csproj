@@ -59,6 +59,7 @@
     <Compile Include="Implementations\LessContinuation.cs" />
     <Compile Include="Interfaces\CountMatchMethods.cs" />
     <Compile Include="Interfaces\IA.cs" />
+    <Compile Include="Interfaces\IAn.cs" />
     <Compile Include="Interfaces\ICollectionBe.cs" />
     <Compile Include="Interfaces\ICollectionEquivalent.cs" />
     <Compile Include="Interfaces\ICollectionNot.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Interfaces\IEqualityContinuation.cs" />
     <Compile Include="Interfaces\IGreaterContinuation.cs" />
     <Compile Include="Interfaces\IGreaterOrLessContinuation.cs" />
+    <Compile Include="Interfaces\IHave.cs" />
     <Compile Include="Interfaces\ILessContinuation.cs" />
     <Compile Include="Interfaces\IStringContainContinuation.cs" />
     <Compile Include="Implementations\StringContainContinuation.cs" />
@@ -82,7 +84,7 @@
     <Compile Include="Implementations\CollectionTo.cs" />
     <Compile Include="Implementations\CollectionToAfterNot.cs" />
     <Compile Include="Interfaces\ICollectionExpectation.cs" />
-    <Compile Include="MatcherLogic\CountMatchExtensionMethods.cs" />
+    <Compile Include="MatcherLogic\MatcherHelperExtensionMethods.cs" />
     <Compile Include="MatchProviderExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Implementations\MessageHelpers.cs" />

@@ -5,11 +5,103 @@ using NExpect.MatcherLogic;
 
 namespace NExpect
 {
+    /// <summary>
+    /// Provides Match() continuations which allow providing a simple
+    /// lambda to do your matching, for when writing an entire extension method
+    /// seems like an overkill.
+    /// </summary>
     public static class MatchProviderExtensions
     {
         // TODO: similarly, allow Func<T, IMatcherResult>
+        /// <summary>
+        /// Match the value under test with a simple Func which takes in your value
+        /// and returns true if the test should pass.
+        /// </summary>
+        /// <param name="continuation">Continuation to act on</param>
+        /// <param name="test">Func to test the original value with</param>
+        /// <typeparam name="T"></typeparam>
         public static void Match<T>(
             this ITo<T> continuation,
+            Func<T, bool> test
+        )
+        {
+            continuation.Match(test, null);
+        }
+
+        /// <summary>
+        /// Match the value under test with a simple Func which takes in your value
+        /// and returns true if the test should pass.
+        /// </summary>
+        /// <param name="continuation">Continuation to act on</param>
+        /// <param name="test">Func to test the original value with</param>
+        /// <typeparam name="T"></typeparam>
+        public static void Match<T>(
+            this IToAfterNot<T> continuation,
+            Func<T, bool> test
+        )
+        {
+            continuation.Match(test, null);
+        }
+
+        /// <summary>
+        /// Match the value under test with a simple Func which takes in your value
+        /// and returns true if the test should pass.
+        /// </summary>
+        /// <param name="continuation">Continuation to act on</param>
+        /// <param name="test">Func to test the original value with</param>
+        /// <typeparam name="T"></typeparam>
+        public static void Match<T>(
+            this INotAfterTo<T> continuation,
+            Func<T, bool> test
+        )
+        {
+            continuation.Match(test, null);
+        }
+
+        /// <summary>
+        /// Match the value under test with a simple Func which takes in your value
+        /// and returns true if the test should pass.
+        /// </summary>
+        /// <param name="continuation">Continuation to act on</param>
+        /// <param name="test">Func to test the original value with</param>
+        /// <param name="customMessage">Message to include in the result upon failure</param>
+        /// <typeparam name="T"></typeparam>
+        public static void Match<T>(
+            this ITo<T> continuation,
+            Func<T, bool> test,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(MatchMatcherFor(test, customMessage));
+        }
+
+        /// <summary>
+        /// Match the value under test with a simple Func which takes in your value
+        /// and returns true if the test should pass.
+        /// </summary>
+        /// <param name="continuation">Continuation to act on</param>
+        /// <param name="test">Func to test the original value with</param>
+        /// <param name="customMessage">Message to include in the result upon failure</param>
+        /// <typeparam name="T"></typeparam>
+        public static void Match<T>(
+            this IToAfterNot<T> continuation,
+            Func<T, bool> test,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(MatchMatcherFor(test, customMessage));
+        }
+
+        /// <summary>
+        /// Match the value under test with a simple Func which takes in your value
+        /// and returns true if the test should pass.
+        /// </summary>
+        /// <param name="continuation">Continuation to act on</param>
+        /// <param name="test">Func to test the original value with</param>
+        /// <param name="customMessage">Message to include in the result upon failure</param>
+        /// <typeparam name="T"></typeparam>
+        public static void Match<T>(
+            this INotAfterTo<T> continuation,
             Func<T, bool> test,
             string customMessage
         )
@@ -33,48 +125,6 @@ namespace NExpect
                     MessageHelpers.FinalMessageFor(message, customMessage)
                 );
             };
-        }
-
-        public static void Match<T>(
-            this ITo<T> continuation,
-            Func<T, bool> test
-        )
-        {
-            continuation.Match(test, null);
-        }
-
-        public static void Match<T>(
-            this IToAfterNot<T> continuation,
-            Func<T, bool> test,
-            string customMessage
-        )
-        {
-            continuation.AddMatcher(MatchMatcherFor(test, customMessage));
-        }
-
-        public static void Match<T>(
-            this IToAfterNot<T> continuation,
-            Func<T, bool> test
-        )
-        {
-            continuation.Match(test, null);
-        }
-
-        public static void Match<T>(
-            this INotAfterTo<T> continuation,
-            Func<T, bool> test,
-            string customMessage
-        )
-        {
-            continuation.AddMatcher(MatchMatcherFor(test, customMessage));
-        }
-
-        public static void Match<T>(
-            this INotAfterTo<T> continuation,
-            Func<T, bool> test
-        )
-        {
-            continuation.Match(test, null);
         }
     }
 }
