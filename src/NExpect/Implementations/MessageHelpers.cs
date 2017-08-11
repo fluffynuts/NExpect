@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace NExpect.Implementations
 {
-    internal static class MessageHelpers
+    public static class MessageHelpers
     {
-        internal static string FinalMessageFor(
+        public static string FinalMessageFor(
             string standardMessage,
             string customMessage
         )
@@ -59,12 +59,12 @@ namespace NExpect.Implementations
                 : $"Expected {Quote(src)} not to contain {Quote(search)}";
         }
 
-        internal static string Quote(string str)
+        public static string Quote(string str)
         {
             return str == null ? str : $"\"{str}\"";
         }
 
-        internal static string Quote<T>(T o)
+        public static string Quote<T>(T o)
         {
             if (o == null)
                 return null;
@@ -72,9 +72,19 @@ namespace NExpect.Implementations
             return asString == null ? o.ToString() : Quote(asString);
         }
 
-        internal static string Stringify<T>(IEnumerable<T> collection)
+        public static string Stringify<T>(IEnumerable<T> collection)
         {
             return string.Join(", ", collection.Select(o => Quote(o)));
         }
+
+        public static string CollectionPrint<T>(IEnumerable<T> collection)
+        {
+            var asArray = collection.ToArray();
+            var ellipsis = asArray.Length > 10
+                ? " ..."
+                : "";
+            return $"[ {MessageHelpers.Stringify(asArray.Take(10))}{ellipsis} ]";
+        }
+
     }
 }

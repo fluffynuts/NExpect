@@ -3,8 +3,11 @@ An assertions framework for .NET with a BDD-like feel, inspired by Chai and Jasm
 
 ## Goals
 - Expect(NExpect).To.Be.Readable();
+  - Because code is for co-workers, not compilers. And your tests are part of your documentation.
 - Expect(NExpect).To.Be.Expressive();
+  - Because the intent of a test should be easy to understand. The reader can delve into the details when she cares to.
 - Expect(NExpect).To.Be.Extensible();
+  - Because I can't predict every use-case. I believe that your assertions framework should enable expressive, readable tests through extension.
 
 ## Usage
 1. Download from [nuget.org](https://nuget.org): `install-package nexpect`
@@ -20,6 +23,9 @@ Expect(() => { throw new ArgumentException("moo", "moo cow"); })
 Expect(true).Not.To.Be.False();
 Expect(true).To.Not.Be.False(); // alt. grammar
 Expect(null).To.Be.Null();
+Expect(someString).To.Contain("moo").And("cow");
+Expect(someCollection).To.Contain.Exactly(2).Matched.By(item => item.IsWhatWeWant());
+Expect(someFlags).To.Contain.At.Least(3).Equal.To(true);
 ```
 
 ## Extending
@@ -46,6 +52,17 @@ public static class MyMatchers
     });
   }
 }
+```
+
+```
+// somewhere else...
+[Test]
+public void FifteenDividedByThree_ShouldEqual_Five()
+{
+  var result = 15 / 3;
+  Expect(result).To.Be.Five();
+}
+// Yes, yes, simple example is simple.
 ```
 
 If you've ever written a Jasmine matcher, this should feel familiar.

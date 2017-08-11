@@ -4,6 +4,7 @@ using System.Linq;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+using static NExpect.Implementations.MessageHelpers;
 
 // ReSharper disable PossibleMultipleEnumeration
 
@@ -228,15 +229,6 @@ namespace NExpect
                     $"Expected {CollectionPrint(collection)} {not}to be equivalent to {CollectionPrint(other)}"
                 );
             });
-        }
-
-        private static string CollectionPrint<T>(IEnumerable<T> collection)
-        {
-            var asArray = collection.ToArray();
-            var ellipsis = asArray.Length > 10
-                ? " ..."
-                : "";
-            return $"[ {MessageHelpers.Stringify(asArray.Take(10))}{ellipsis} ]";
         }
 
         private static bool TestEquivalenceOf<T>(
