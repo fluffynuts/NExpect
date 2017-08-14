@@ -50,14 +50,24 @@ namespace NExpect
         public static void To<T>(
             this IEqualityContinuation<T> continuation,
             T expected
+        ) {
+            continuation.To(expected, null);
+        }
+
+        public static void To<T>(
+            this IEqualityContinuation<T> continuation,
+            T expected,
+            string customMessage
         )
         {
             continuation.AddMatcher(actual =>
             {
                 var passed = actual.Equals(expected);
-                var message = passed
-                    ? $"Expected {Quote(actual)} not to equal {Quote(expected)}"
-                    : $"Expected {Quote(actual)} to equal {Quote(expected)}";
+                var not = passed ? "not " : "";
+                var message = FinalMessageFor(
+                    $"Expected {Quote(actual)} {not}to equal {Quote(expected)}", 
+                    customMessage
+                );
                 return new MatcherResult(passed, message);
             });
         }
