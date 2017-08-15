@@ -89,14 +89,14 @@
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Implementations\MessageHelpers.cs" />
     <Compile Include="Interfaces\IContain.cs" />
-    <Compile Include="Interfaces\IExceptionMessageContinuation.cs" />
+    <Compile Include="Interfaces\IExceptionPropertyContinuation.cs" />
     <Compile Include="Interfaces\IExpectationContext.cs" />
     <Compile Include="Interfaces\IExpectationParentContext.cs" />
     <Compile Include="Interfaces\IGrammarContinuation.cs" />
     <Compile Include="Interfaces\IHasActual.cs" />
     <Compile Include="Interfaces\IThrowContinuation.cs" />
     <Compile Include="Interfaces\IWithAfterThrowContinuation.cs" />
-    <Compile Include="Implementations\StringValueContinuation.cs" />
+    <Compile Include="Implementations\ValueContinuation.cs" />
     <Compile Include="Implementations\ThrowContinuation.cs" />
     <Compile Include="Implementations\WithAfterThrowContinuation.cs" />
     <Compile Include="Implementations\WrappingContinuation.cs" />
@@ -129,8 +129,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

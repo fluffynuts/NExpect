@@ -1,25 +1,39 @@
 using System;
+using System.Collections.Generic;
 using NExpect.Interfaces;
 
 namespace NExpect.Implementations
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    internal class WithAfterThrowContinuation :
-        ExpectationContext<Exception>, 
-        IWithAfterThrowContinuation, 
-        IHasActual<Exception>
+    internal class WithAfterThrowContinuation<T> :
+        ExpectationContext<T>,
+        IWithAfterThrowContinuation<T>,
+        IHasActual<T>
+        where T : Exception
     {
-        public IExceptionMessageContinuation Message => 
-            Factory.Create<string, StringValueContinuation<string>>(
-                Actual.Message, 
-                new WrappingContinuation<Exception,string>(
+        public IExceptionPropertyContinuation<string> Message =>
+            Factory.Create<string, ValueContinuation<string>>(
+                Actual.Message,
+                new WrappingContinuation<Exception, string>(
                     this, c => c.Actual?.Message
                 )
             );
-        public Exception Actual { get; }
+        public IExceptionPropertyContinuation<TValue> Property<TValue>(Func<T, TValue> propertyValueFetcher)
+        {
+            var exceptionPropertyValue = propertyValueFetcher(Actual);
+
+            return Factory.Create<TValue, ValueContinuation<TValue>>(
+                exceptionPropertyValue,
+                new WrappingContinuation<Exception, TValue>(
+                    this, c => exceptionPropertyValue
+                )
+            );
+        }
+
+        public T Actual { get; }
 
 
-        public WithAfterThrowContinuation(Exception ex)
+        public WithAfterThrowContinuation(T ex)
         {
             Actual = ex;
         }
