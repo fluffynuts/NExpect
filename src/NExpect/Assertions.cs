@@ -6,9 +6,23 @@ using NExpect.Exceptions;
 
 namespace NExpect
 {
+    /// <summary>
+    /// Used by NExpect to throw assertion errors
+    /// </summary>
     public static class Assertions
     {
+        /// <summary>
+        /// Register your own factory for generating assertion exceptions
+        /// </summary>
+        /// <param name="generator">Func to invoke when NExpect needs an assertion exception</param>
+        /// <typeparam name="T">Type of exception</typeparam>
+        public static void RegisterAssertionsFactory<T>(Func<string, T> generator) where T : Exception
+        {
+            _assertionsGenerator = generator ?? throw new ArgumentNullException(nameof(generator));
+        }
+
         private static Type _assertionExceptionWithMessageOnlyTypeField;
+
         private static Type AssertionExceptionWithMessageOnlyType
             { get => 
                 _assertionExceptionWithMessageOnlyTypeField ?? 
@@ -74,24 +88,14 @@ namespace NExpect
 
         static Func<string, Exception> _assertionsGenerator;
 
-        /// <summary>
-        /// Register your own factory for generating assertion exceptions
-        /// </summary>
-        /// <param name="generator">Func to invoke when NExpect needs an assertion exception</param>
-        /// <typeparam name="T">Type of exception</typeparam>
-        public static void RegisterAssertionsFactory<T>(Func<string, T> generator) where T : Exception
-        {
-            _assertionsGenerator = generator ?? throw new ArgumentNullException(nameof(generator));
-        }
-
-        internal static Exception CreateExceptionFor(string message)
+        private static Exception CreateExceptionFor(string message)
         {
             return _assertionsGenerator?.Invoke(message) 
                         ?? TryCreateExceptionFor(message)
                         ?? new UnmetExpectation(message);
         }
 
-        internal static Exception TryCreateExceptionFor(string message)
+        private static Exception TryCreateExceptionFor(string message)
         {
             try
             {

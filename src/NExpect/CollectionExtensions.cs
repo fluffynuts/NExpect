@@ -184,7 +184,8 @@ namespace NExpect
             countMatch.Continuation.AddMatcher(collection =>
             {
                 var have = collection.Where(test).Count();
-                var passed = _collectionCountMatchStrategies[countMatch.Method](have, countMatch.Compare);
+                var compare = countMatch.Method == CountMatchMethods.All ? collection.Count() : countMatch.Compare;
+                var passed = _collectionCountMatchStrategies[countMatch.Method](have, compare);
                 var message =
                     _collectionCountMatchMessageStrategies[countMatch.Method](passed, have, countMatch.Compare);
                 return new MatcherResult(passed, message);
@@ -310,8 +311,19 @@ namespace NExpect
             {
                 [CountMatchMethods.Exactly] = CreateMatchMessageFor("exactly"),
                 [CountMatchMethods.Minimum] = CreateMatchMessageFor("at least"),
-                [CountMatchMethods.Maximum] = CreateMatchMessageFor("at most")
+                [CountMatchMethods.Maximum] = CreateMatchMessageFor("at most"),
+                [CountMatchMethods.Any] = CreateMatchAnyAllMessageFor("any"),
+                [CountMatchMethods.All] = CreateMatchAnyAllMessageFor("all")
             };
+
+        private static Func<bool, int, int, string> CreateMatchAnyAllMessageFor(string comparison)
+        {
+            return (passed, have, want) => {
+                var not = passed ? "not " : "";
+                var haveWord = have > 0 ? have.ToString() : "none";
+               return $"Expected {not}to find {comparison} matching but found {haveWord}";
+            };
+        }
 
         private static readonly Dictionary<CountMatchMethods,
             Func<int, int, bool>> _collectionCountMatchStrategies =
