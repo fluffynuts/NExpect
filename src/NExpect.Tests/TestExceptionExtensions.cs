@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
@@ -117,7 +118,7 @@ namespace NExpect.Tests
                 // Arrange
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
-                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
+                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -163,7 +164,7 @@ namespace NExpect.Tests
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
                 var e3 = GetRandomString();
-                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
+                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -188,7 +189,7 @@ namespace NExpect.Tests
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
                 var e3 = GetRandomString();
-                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
+                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -211,7 +212,7 @@ namespace NExpect.Tests
                 // Arrange
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
-                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
+                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -322,7 +323,7 @@ namespace NExpect.Tests
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
                 var e3 = GetRandomString();
-                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
+                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -347,7 +348,7 @@ namespace NExpect.Tests
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
                 var e3 = GetRandomString();
-                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
+                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -370,7 +371,7 @@ namespace NExpect.Tests
                 // Arrange
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
-                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
+                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -484,6 +485,149 @@ namespace NExpect.Tests
                     .With.Message.Contains($"Expected \"{unexpected}\" to equal \"{expected}\""));
 
             // Assert
+        }
+
+        public class GenericProperty
+        {
+            [Test]
+            public void Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_HappyPath_TestingEqualTo()
+            {
+                // Arrange
+                var expected = GetRandomString();
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(() => throw new ArgumentNullException(expected))
+                            .To.Throw<ArgumentNullException>()
+                            .With.Property(ex => ex.ParamName).Equal.To(expected);
+                    },
+                    Throws.Nothing);
+
+                // Assert
+            }
+
+            [Test]
+            public void Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_SadPath_TestingEqualTo()
+            {
+                // Arrange
+                var expected = GetRandomString();
+                var unexpected = GetAnother(expected);
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(() => throw new ArgumentNullException(unexpected))
+                            .To.Throw<ArgumentNullException>()
+                            .With.Property(ex => ex.ParamName).Equal.To(expected);
+                    },
+                    Throws.Exception.InstanceOf<AssertionException>()
+                        .With.Message.Contains($"Expected \"{unexpected}\" to equal \"{expected}\""));
+
+                // Assert
+            }
+
+            [Test]
+            public void Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_HappyPath_TestingContains()
+            {
+                // Arrange
+                var expected = GetRandomString(8, 8);
+                var expectedSubstring = expected.Substring(2, 4);
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(() => throw new ArgumentNullException(expected))
+                            .To.Throw<ArgumentNullException>()
+                            .With.Property(ex => ex.ParamName).Containing(expectedSubstring);
+                    },
+                    Throws.Nothing);
+
+                // Assert
+            }
+
+            [Test]
+            public void Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_SadPath_TestingContains()
+            {
+                // Arrange
+                var expected = GetRandomString();
+                var unexpected = GetAnother(expected);
+                var unexpectedSubstring = GetRandomString(4, 4);
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(() => throw new ArgumentNullException(unexpected))
+                            .To.Throw<ArgumentNullException>()
+                            .With.Property(ex => ex.ParamName).Containing(unexpectedSubstring);
+                    },
+                    Throws.Exception.InstanceOf<AssertionException>()
+                        .With.Message.Contains($"Expected \"{unexpected}\" to contain \"{unexpectedSubstring}\""));
+
+                // Assert
+            }
+        }
+
+        [TestFixture]
+        public class WithGenericPropertyFetcher
+        {
+            [TestFixture]
+            public class WithArgumentNullType
+            {
+                [TestFixture]
+                public class GivenParamNameProperty
+                {
+                    [Test]
+                    public void Throw_ShouldContinueOnToPropertyTest_HappyPath_TestingEqualTo()
+                    {
+                        // Arrange
+                        var expected = GetRandomString();
+
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(() => throw new ArgumentNullException(expected))
+                                    .To.Throw<ArgumentNullException>()
+                                    .With(ex => ex.ParamName).Equal.To(expected);
+                            },
+                            Throws.Nothing);
+
+                        // Assert
+                    }
+
+                    [Test]
+                    public void Throw_ShouldContinueOnToPropertyTest_SadPath_TestingEqualTo()
+                    {
+                        // Arrange
+                        var expected = GetRandomString();
+                        var unexpected = GetAnother(expected);
+
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(() => throw new ArgumentNullException(unexpected))
+                                    .To.Throw<ArgumentNullException>()
+                                    .With(ex => ex.ParamName).Equal.To(expected);
+                            },
+                            Throws.Exception.InstanceOf<AssertionException>()
+                                .With.Message.Contains($"Expected \"{unexpected}\" to equal \"{expected}\""));
+
+                        // Assert
+                    }
+                }
+            }
         }
     }
 

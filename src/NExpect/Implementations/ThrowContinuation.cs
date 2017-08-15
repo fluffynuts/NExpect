@@ -3,11 +3,16 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations
 {
-    internal class ThrowContinuation : ExpectationContext<Exception>, IThrowContinuation
+    internal class ThrowContinuation<T> : 
+        ExpectationContext<T>,
+        IHasActual<T>,
+        IThrowContinuation<T> where T : Exception
     {
-        public Exception Exception { get; set; }
+        public T Actual => Exception;
+        public T Exception { get; set; }
 
-        public IWithAfterThrowContinuation With => 
-            Factory.Create<Exception, WithAfterThrowContinuation>(Exception, this);
+        public IWithAfterThrowContinuation<T> With => 
+            Factory.Create<T, WithAfterThrowContinuation<T>>(Exception, this);
+
     }
 }

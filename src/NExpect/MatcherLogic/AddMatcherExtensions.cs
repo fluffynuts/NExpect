@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using NExpect.Interfaces;
 
 namespace NExpect.MatcherLogic
@@ -13,8 +14,8 @@ namespace NExpect.MatcherLogic
             AddMatcherPrivate(continuation, matcher);
         }
 
-        public static void AddMatcher(
-            this IExceptionMessageContinuation continuation,
+        public static void AddMatcher<T>(
+            this IExceptionPropertyContinuation<T> continuation,
             Func<string, IMatcherResult> matcher
         )
         {
