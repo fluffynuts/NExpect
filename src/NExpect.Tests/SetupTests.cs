@@ -8,7 +8,8 @@ namespace NExpect.Tests
         [OneTimeSetUp]
         public void GlobalSetup()
         {
-            Assertions.RegisterAssertionsFactory(s => new AssertionException(s));
+//            example of how to register an assertions factory
+//            Assertions.RegisterAssertionsFactory(s => new AssertionException(s));
         }
     }
 }

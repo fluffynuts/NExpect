@@ -1,6 +1,9 @@
-﻿using NUnit.Framework;
+﻿using NExpect.Exceptions;
+using NUnit.Framework;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+// ReSharper disable RedundantArgumentDefaultValue
+// ReSharper disable ExpressionIsAlwaysNull
 
 namespace NExpect.Tests
 {
@@ -36,7 +39,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(
                     () => Expect(actual).To.Equal(expected),
-                    Throws.Exception.InstanceOf<AssertionException>()
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains($"Expected {expected} but got {actual}")
                 );
                 // Assert
@@ -55,12 +58,12 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(
                     () => Expect(actual).To.Equal(expected, custom),
-                    Throws.Exception.InstanceOf<AssertionException>()
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains($"Expected {expected} but got {actual}")
                 );
                 Assert.That(
                     () => Expect(actual).To.Equal(expected, custom),
-                    Throws.Exception.InstanceOf<AssertionException>()
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains(custom)
                 );
                 // Assert
@@ -133,7 +136,7 @@ namespace NExpect.Tests
                     {
                         Expect(value).To.Be.Equal.To(expected);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -168,7 +171,7 @@ namespace NExpect.Tests
                     {
                         Expect(value).Not.To.Be.Equal.To(value);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -203,7 +206,7 @@ namespace NExpect.Tests
                     {
                         Expect(value).To.Not.Be.Equal.To(value);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -238,7 +241,7 @@ namespace NExpect.Tests
                 Assert.That(() =>
                 {
                     Expect(str).To.Match(s => s != str, "looking for: !" + str);
-                }, Throws.Exception.InstanceOf<AssertionException>());
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -304,7 +307,7 @@ namespace NExpect.Tests
                     {
                         Expect(input).Not.To.Be.Null();
                     },
-                    Throws.Exception.InstanceOf<AssertionException>()
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains("Expected not to get null"));
                 // Assert
             }
@@ -321,7 +324,7 @@ namespace NExpect.Tests
                     {
                         Expect(input).Not.To.Be.Null(expected);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>()
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.EqualTo($"{expected}\n\nExpected not to get null"));
                 // Assert
             }
@@ -350,7 +353,7 @@ namespace NExpect.Tests
                     {
                         Expect(input).To.Not.Be.Null();
                     },
-                    Throws.Exception.InstanceOf<AssertionException>()
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains("Expected not to get null"));
                 // Assert
             }
@@ -367,7 +370,7 @@ namespace NExpect.Tests
                     {
                         Expect(input).To.Be.Null();
                     },
-                    Throws.Exception.InstanceOf<AssertionException>()
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains($"Expected null but got \"{input}\""));
                 // Assert
             }
@@ -405,6 +408,7 @@ namespace NExpect.Tests
             }
         }
 
+        [TestFixture]
         public class ActingOnInts
         {
             [TestFixture]
@@ -442,7 +446,7 @@ namespace NExpect.Tests
                         {
                             Expect(actual).To.Be.Greater.Than(actual);
                         },
-                        Throws.Exception.InstanceOf<AssertionException>());
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                     // Assert
                 }
@@ -461,7 +465,7 @@ namespace NExpect.Tests
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
                         },
-                        Throws.Exception.InstanceOf<AssertionException>());
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                     // Assert
                 }
@@ -478,7 +482,7 @@ namespace NExpect.Tests
                         {
                             Expect(actual).Not.To.Be.Greater.Than(expected);
                         },
-                        Throws.Exception.InstanceOf<AssertionException>());
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
                 }
 
@@ -494,7 +498,7 @@ namespace NExpect.Tests
                         {
                             Expect(actual).To.Not.Be.Greater.Than(expected);
                         },
-                        Throws.Exception.InstanceOf<AssertionException>());
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
                 }
             }
@@ -531,7 +535,7 @@ namespace NExpect.Tests
                             Expect(actual).To.Be.Less.Than(expected);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
@@ -549,7 +553,7 @@ namespace NExpect.Tests
                             Expect(actual).To.Be.Less.Than(expected);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
@@ -572,6 +576,7 @@ namespace NExpect.Tests
             }
         }
 
+        [TestFixture]
         public class ActingOnDecimals
         {
             [TestFixture]
@@ -609,7 +614,7 @@ namespace NExpect.Tests
                         {
                             Expect(actual).To.Be.Greater.Than(actual);
                         },
-                        Throws.Exception.InstanceOf<AssertionException>());
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                     // Assert
                 }
@@ -628,7 +633,7 @@ namespace NExpect.Tests
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
                         },
-                        Throws.Exception.InstanceOf<AssertionException>());
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                     // Assert
                 }
@@ -682,7 +687,7 @@ namespace NExpect.Tests
                             Expect(actual).To.Be.Less.Than(expected);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
@@ -700,13 +705,14 @@ namespace NExpect.Tests
                             Expect(actual).To.Be.Less.Than(expected);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
             }
         }
 
+        [TestFixture]
         public class ActingOnDoubles
         {
             [TestFixture]
@@ -744,7 +750,7 @@ namespace NExpect.Tests
                         {
                             Expect(actual).To.Be.Greater.Than(actual);
                         },
-                        Throws.Exception.InstanceOf<AssertionException>());
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                     // Assert
                 }
@@ -763,7 +769,7 @@ namespace NExpect.Tests
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
                         },
-                        Throws.Exception.InstanceOf<AssertionException>());
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                     // Assert
                 }
@@ -801,7 +807,7 @@ namespace NExpect.Tests
                             Expect(actual).To.Be.Less.Than(expected);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
@@ -819,13 +825,14 @@ namespace NExpect.Tests
                             Expect(actual).To.Be.Less.Than(expected);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
             }
         }
 
+        [TestFixture]
         public class ActingOnFloats
         {
             [TestFixture]
@@ -863,7 +870,7 @@ namespace NExpect.Tests
                         {
                             Expect(actual).To.Be.Greater.Than(actual);
                         },
-                        Throws.Exception.InstanceOf<AssertionException>());
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                     // Assert
                 }
@@ -882,7 +889,7 @@ namespace NExpect.Tests
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
                         },
-                        Throws.Exception.InstanceOf<AssertionException>());
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                     // Assert
                 }
@@ -920,7 +927,7 @@ namespace NExpect.Tests
                             Expect(actual).To.Be.Less.Than(expected);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
@@ -938,7 +945,7 @@ namespace NExpect.Tests
                             Expect(actual).To.Be.Less.Than(expected);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
@@ -955,6 +962,7 @@ namespace NExpect.Tests
             return GetRandomInt((int) min, (int) max);
         }
 
+        [TestFixture]
         public class ActingOnLongs
         {
             [TestFixture]
@@ -992,7 +1000,7 @@ namespace NExpect.Tests
                         {
                             Expect(actual).To.Be.Greater.Than(actual);
                         },
-                        Throws.Exception.InstanceOf<AssertionException>());
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                     // Assert
                 }
@@ -1011,7 +1019,7 @@ namespace NExpect.Tests
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
                         },
-                        Throws.Exception.InstanceOf<AssertionException>());
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                     // Assert
                 }
@@ -1049,7 +1057,7 @@ namespace NExpect.Tests
                             Expect(actual).To.Be.Less.Than(expected);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
@@ -1067,7 +1075,7 @@ namespace NExpect.Tests
                             Expect(actual).To.Be.Less.Than(expected);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }

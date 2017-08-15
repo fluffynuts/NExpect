@@ -1,15 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NExpect.Implementations;
-using NExpect.Interfaces;
-using NExpect.MatcherLogic;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
 using static PeanutButter.Utils.PyLike;
-using System;
+using NExpect.Exceptions;
 
 namespace NExpect.Tests
 {
@@ -120,7 +117,7 @@ namespace NExpect.Tests
                             Expect(collection).To.Contain.Exactly(1).Equal.To(search);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains($"to find exactly 1 occurrence of {search} but found 2"));
 
                     // Assert
@@ -146,7 +143,7 @@ namespace NExpect.Tests
                             Expect(collection).To.Contain.Exactly(1).Equal.To(search);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains("find exactly 1 occurrence of"));
 
                     // Assert
@@ -175,7 +172,7 @@ namespace NExpect.Tests
                         },
                         Throws
                             .Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains($"not to find exactly 1 occurrence of {search} but found 1"));
 
                     // Assert
@@ -229,7 +226,7 @@ namespace NExpect.Tests
                         },
                         Throws
                             .Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains($"not to find exactly 1 occurrence of {search} but found 1"));
 
                     // Assert
@@ -283,7 +280,7 @@ namespace NExpect.Tests
                             Expect(collection).To.Contain.At.Least(1).Equal.To(search);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains("at least 1"));
                     // Assert
                 }
@@ -303,7 +300,7 @@ namespace NExpect.Tests
                             Expect(collection).To.Contain.Any().Equal.To(search);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains("Expected to find any match"));
                     // Assert
                 }
@@ -341,7 +338,7 @@ namespace NExpect.Tests
                             Expect(collection).To.Contain.All().Equal.To(search);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains("Expected to find all matching"));
                     // Assert
                 }
@@ -353,7 +350,7 @@ namespace NExpect.Tests
                     var search = GetRandomString();
                     var item1 = GetAnother(search);
                     var item2 = GetAnother<string>(new[] {item1, search});
-                    var collection = new[] {item1, item2, search, null as string}.Randomize();
+                    var collection = new[] {item1, item2, search, null}.Randomize();
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
@@ -361,7 +358,7 @@ namespace NExpect.Tests
                             Expect(collection).To.Contain.All().Matched.By(s => s == null);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains("Expected to find all matching but found 1"));
                     // Assert
                 }
@@ -381,7 +378,7 @@ namespace NExpect.Tests
                             Expect(collection).To.Contain.Any().Matched.By(s => s == null);
                         },
                         Throws.Exception
-                            .InstanceOf<AssertionException>()
+                            .InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains("Expected to find any matching but found none"));
                     // Assert
                 }
@@ -501,7 +498,7 @@ namespace NExpect.Tests
                                 .At.Least(2)
                                 .Matched.By(s => s == search);
                         },
-                        Throws.Exception.InstanceOf<AssertionException>());
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                     // Assert
                 }
@@ -522,7 +519,7 @@ namespace NExpect.Tests
                                 .At.Least(1)
                                 .Matched.By(s => s == search);
                         },
-                        Throws.Exception.InstanceOf<AssertionException>());
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                     // Assert
                 }
@@ -543,7 +540,7 @@ namespace NExpect.Tests
                                 .At.Least(1)
                                 .Matched.By(s => s == search);
                         },
-                        Throws.Exception.InstanceOf<AssertionException>());
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                     // Assert
                 }
@@ -603,7 +600,7 @@ namespace NExpect.Tests
                         Expect(collection).To.Contain.At.Most(1).Equal.To(search);
                     },
                     Throws.Exception
-                        .InstanceOf<AssertionException>()
+                        .InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains("at most 1"));
                 // Assert
             }
@@ -644,7 +641,7 @@ namespace NExpect.Tests
                     {
                         Expect(collection).To.Contain.All().Equal.To(search);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
             }
 
@@ -662,7 +659,7 @@ namespace NExpect.Tests
                     {
                         Expect(collection).Not.To.Contain.All().Equal.To(search);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -681,7 +678,7 @@ namespace NExpect.Tests
                     {
                         Expect(collection).To.Not.Contain.All().Equal.To(search);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -724,7 +721,7 @@ namespace NExpect.Tests
                     {
                         Expect(actual).To.Contain.Any().Equal.To(search);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -829,8 +826,8 @@ namespace NExpect.Tests
                 {
                     Expect(collection).Not.To.Be.Empty();
                 }, Throws.Exception
-                    .InstanceOf<AssertionException>()
-                    .With.Message.EqualTo($"Expected [  ] not to be an empty collection"));
+                    .InstanceOf<UnmetExpectationException>()
+                    .With.Message.EqualTo("Expected [  ] not to be an empty collection"));
 
                 // Assert
             }
@@ -848,7 +845,7 @@ namespace NExpect.Tests
                 {
                     Expect(collection).To.Be.Empty();
                 }, Throws.Exception
-                    .InstanceOf<AssertionException>()
+                    .InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains("] to be an empty collection"));
 
                 // Assert
@@ -957,7 +954,7 @@ namespace NExpect.Tests
                 {
                     Expect(test).To.Be.Equivalent.To(other);
                 }, Throws.Exception
-                    .InstanceOf<AssertionException>()
+                    .InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains("] to be equivalent to ["));
 
                 // Assert
@@ -1029,7 +1026,7 @@ namespace NExpect.Tests
                 {
                     Expect(test).To.Be.Equivalent.To(other);
                 }, Throws.Exception
-                    .InstanceOf<AssertionException>()
+                    .InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains("] to be equivalent to ["));
 
                 // Assert
@@ -1049,7 +1046,7 @@ namespace NExpect.Tests
                 {
                     Expect(test).Not.To.Be.Equivalent.To(other);
                 }, Throws.Exception
-                    .InstanceOf<AssertionException>()
+                    .InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains("] not to be equivalent to ["));
 
                 // Assert
@@ -1080,40 +1077,9 @@ namespace NExpect.Tests
                     {
                         Expect(evens).To.Contain.Any().Odds();
                     },
-                    Throws.Exception.InstanceOf<AssertionException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
             }
         }
-    }
-
-    public static class CountMatchContinuaionExtensions
-    {
-        public static void Odds(this ICountMatchContinuation<IEnumerable<int>> continuation)
-        {
-            continuation.AddMatcher(collection =>
-            {
-                var expectedCount = continuation.GetExpectedCount();
-                var method = continuation.GetCountMatchMethod();
-                // TODO: use count and method
-                var count = collection.Count(i => i % 2 == 1);
-                var total = collection.Count();
-                var passed = _strategies[method](total, count, expectedCount);
-                var not = passed ? "" : "not ";
-                return new MatcherResult(
-                    passed,
-                    $"Expected {MessageHelpers.CollectionPrint(collection)} {not}to be only odd numbers"
-                );
-            });
-        }
-
-        private static Dictionary<CountMatchMethods, Func<int, int, int, bool>> _strategies =
-            new Dictionary<CountMatchMethods, Func<int, int, int, bool>>()
-            {
-                [CountMatchMethods.All] = (total, matched, expected) => total == matched,
-                [CountMatchMethods.Any] = (total, matched, expected) => matched > 0,
-                [CountMatchMethods.Exactly] = (total, matched, expected) => matched == expected,
-                [CountMatchMethods.Maximum] = (total, matched, expected) => matched <= expected,
-                [CountMatchMethods.Minimum] = (total, matched, expected) => matched >= expected
-            };
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
@@ -7,13 +8,15 @@ namespace NExpect.Implementations
     public abstract class ExpectationBase<T>
     {
         protected bool IsNegated;
-        public void Negate() {
+
+        public void Negate()
+        {
             IsNegated = !IsNegated;
         }
 
         protected void RunMatcher(
-            T actual, 
-            bool negated, 
+            T actual,
+            bool negated,
             Func<T, IMatcherResult> matcher)
         {
             IMatcherResult result = null;

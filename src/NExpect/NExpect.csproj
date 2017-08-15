@@ -124,7 +124,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implementations\To.cs" />
     <Compile Include="TruthExtensions.cs" />
-    <Compile Include="Exceptions\UnmetExpectation.cs" />
+    <Compile Include="Exceptions\UnmetExpectationException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CountMatchContinuaionExtensions.cs" />
     <Compile Include="SetupTests.cs" />
     <Compile Include="TestA.cs" />
     <Compile Include="TestCollectionExtensions.cs" />

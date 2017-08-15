@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using NExpect.Exceptions;
+using NUnit.Framework;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 
@@ -16,7 +17,10 @@ namespace NExpect.Tests
             // Pre-Assert
 
             // Act
-            Assert.That(() => { Expect(actual).To.Contain(search); }, Throws.Nothing);
+            Assert.That(() =>
+            {
+                Expect(actual).To.Contain(search);
+            }, Throws.Nothing);
 
             // Assert
         }
@@ -30,7 +34,10 @@ namespace NExpect.Tests
             // Pre-Assert
 
             // Act
-            Assert.That(() => { Expect(actual).To.Contain(search); }, Throws.Exception.InstanceOf<AssertionException>()
+            Assert.That(() =>
+            {
+                Expect(actual).To.Contain(search);
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                 .With.Message.Contains("Expected \"cow-moo-cow\" to contain \"foo\""));
 
             // Assert
@@ -64,10 +71,11 @@ namespace NExpect.Tests
             Assert.That(() =>
             {
                 Expect(actual).To.Contain(first).And(second);
-            }, Throws.Exception.InstanceOf<AssertionException>()
-                    .With.Message.Contains("\"a-b-c\" to contain \"d\""));
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                .With.Message.Contains("\"a-b-c\" to contain \"d\""));
             // Assert
         }
+
         [Test]
         public void Contain_And_WhenActualMissingSecondBit_ShouldThrow()
         {
@@ -80,8 +88,8 @@ namespace NExpect.Tests
             Assert.That(() =>
             {
                 Expect(actual).To.Contain(first).And(second);
-            }, Throws.Exception.InstanceOf<AssertionException>()
-                    .With.Message.Contains("\"a-b-c\" to contain \"f\""));
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                .With.Message.Contains("\"a-b-c\" to contain \"f\""));
             // Assert
         }
 
@@ -109,8 +117,8 @@ namespace NExpect.Tests
             Assert.That(() =>
             {
                 Expect(actual).To.Contain("a").And("b").And("d");
-            }, Throws.Exception.InstanceOf<AssertionException>()
-                    .With.Message.Contains("\"d\""));
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                .With.Message.Contains("\"d\""));
             // Assert
         }
 
@@ -126,7 +134,7 @@ namespace NExpect.Tests
             Assert.That(() =>
             {
                 Expect(test).To.Be.Equal.To(nonMatch, expected);
-            }, Throws.Exception.InstanceOf<AssertionException>()
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                 .With.Message.Contains(expected));
             // Assert
         }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NExpect.Exceptions;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
@@ -28,7 +24,7 @@ namespace NExpect.Tests
             Assert.That(() =>
             {
                 Expect(new Frog() as object).Not.To.Be.A.Frog();
-            }, Throws.Exception.InstanceOf<AssertionException>()
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                 .With.Message.Contains("Expected not to get a frog"));
 
             // Assert

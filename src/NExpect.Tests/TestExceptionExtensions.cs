@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using NExpect.Exceptions;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
@@ -38,13 +38,13 @@ namespace NExpect.Tests
             // Arrange
             // Pre-Assert
             // Act
-            Assert.Throws<AssertionException>(() =>
+            Assert.That(() =>
             {
                 Expect(() =>
                     {
                     })
                     .To.Throw();
-            });
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
         }
 
@@ -80,14 +80,14 @@ namespace NExpect.Tests
             // Arrange
             // Pre-Assert
             // Act
-            Assert.Throws<AssertionException>(() =>
+            Assert.That(() =>
             {
                 Expect(() =>
                     {
                         return "moo";
                     })
                     .To.Throw();
-            });
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
         }
 
@@ -152,7 +152,7 @@ namespace NExpect.Tests
                             .To.Throw()
                             .With.Message.Containing(expected);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>()
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains($"to contain \"{expected}\""));
                 // Assert
             }
@@ -177,7 +177,7 @@ namespace NExpect.Tests
                             .With.Message.Containing(e1)
                             .And(e3);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>()
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains(e3));
                 // Assert
             }
@@ -225,7 +225,7 @@ namespace NExpect.Tests
                             .With.Message.Not.Containing(e1)
                             .And(e2);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
             }
         }
@@ -271,7 +271,7 @@ namespace NExpect.Tests
                             .To.Throw()
                             .With.Message.Matching(s => s == msg);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -293,7 +293,7 @@ namespace NExpect.Tests
                             .To.Throw()
                             .With.Message.Not.Matching(s => s == msg);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -336,7 +336,7 @@ namespace NExpect.Tests
                             .With.Message.Containing(e1)
                             .And(e3);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>()
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains(e3));
                 // Assert
             }
@@ -384,7 +384,7 @@ namespace NExpect.Tests
                             .With.Message.Not.Containing(e1)
                             .And(e2);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
             }
 
@@ -399,7 +399,7 @@ namespace NExpect.Tests
                         Expect(() => throw new InvalidOperationException("moo"))
                             .Not.To.Throw<InvalidOperationException>();
                     },
-                    Throws.Exception.InstanceOf<AssertionException>()
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Matches(
                             $"Expected not to throw an exception of type (System.|){typeof(InvalidOperationException).Name}"
                         )
@@ -418,7 +418,7 @@ namespace NExpect.Tests
                         Expect(() => throw new InvalidOperationException("moo"))
                             .To.Throw<NotImplementedException>();
                     },
-                    Throws.Exception.InstanceOf<AssertionException>()
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Matches(
                             $"Expected to throw an exception of type (System.|){typeof(NotImplementedException).Name} but {typeof(InvalidOperationException).Name} was thrown instead"
                         ));
@@ -481,7 +481,7 @@ namespace NExpect.Tests
                         .To.Throw<AccessViolationException>()
                         .With.Message.Equal.To(expected);
                 },
-                Throws.Exception.InstanceOf<AssertionException>()
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains($"Expected \"{unexpected}\" to equal \"{expected}\""));
 
             // Assert
@@ -525,7 +525,7 @@ namespace NExpect.Tests
                             .To.Throw<ArgumentNullException>()
                             .With.Property(ex => ex.ParamName).Equal.To(expected);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>()
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains($"Expected \"{unexpected}\" to equal \"{expected}\""));
 
                 // Assert
@@ -569,7 +569,7 @@ namespace NExpect.Tests
                             .To.Throw<ArgumentNullException>()
                             .With.Property(ex => ex.ParamName).Containing(unexpectedSubstring);
                     },
-                    Throws.Exception.InstanceOf<AssertionException>()
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains($"Expected \"{unexpected}\" to contain \"{unexpectedSubstring}\""));
 
                 // Assert
@@ -621,7 +621,7 @@ namespace NExpect.Tests
                                     .To.Throw<ArgumentNullException>()
                                     .With(ex => ex.ParamName).Equal.To(expected);
                             },
-                            Throws.Exception.InstanceOf<AssertionException>()
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
                                 .With.Message.Contains($"Expected \"{unexpected}\" to equal \"{expected}\""));
 
                         // Assert
