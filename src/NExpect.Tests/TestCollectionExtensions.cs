@@ -1081,5 +1081,67 @@ namespace NExpect.Tests
                 // Assert
             }
         }
+
+        [TestFixture]
+        public class Null
+        {
+            [Test]
+            public void OperatingOnNull_ShouldNotThrow()
+            {
+                // Arrange
+                List<string> collection = null;
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection).To.Be.Null();
+                }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnNull_Negated_ShouldThrow()
+            {
+                // Arrange
+                List<string> collection = null;
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection).Not.To.Be.Null();
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    .With.Message.Contains("not to be null"));
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnNotNull_Negated_ShouldNotThrow()
+            {
+                // Arrange
+                var collection = new List<string>();;
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection).Not.To.Be.Null();
+                }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void OperatingOnNotNull_ShouldThrow()
+            {
+                // Arrange
+                var collection = new List<string>();;
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection).To.Be.Null();
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    .With.Message.Contains("] to be null"));
+                // Assert
+            }
+        }
     }
 }

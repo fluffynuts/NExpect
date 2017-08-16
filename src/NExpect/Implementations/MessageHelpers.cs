@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -74,16 +75,20 @@ namespace NExpect.Implementations
 
         public static string Stringify<T>(IEnumerable<T> collection)
         {
-            return string.Join(", ", collection.Select(o => Quote(o)));
+            return collection == null ? NULL : string.Join(", ", collection.Select(o => Quote(o)));
         }
+
+        private const string NULL = "(null)";
 
         public static string CollectionPrint<T>(IEnumerable<T> collection)
         {
+            if (collection == null)
+                return NULL;
             var asArray = collection.ToArray();
             var ellipsis = asArray.Length > 10
                 ? " ..."
                 : "";
-            return $"[ {MessageHelpers.Stringify(asArray.Take(10))}{ellipsis} ]";
+            return $"[ {Stringify(asArray.Take(10))}{ellipsis} ]";
         }
 
     }

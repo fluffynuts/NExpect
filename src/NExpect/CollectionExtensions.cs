@@ -15,7 +15,6 @@ namespace NExpect
     /// </summary>
     public static class CollectionExtensions
     {
-
         /// <summary>
         /// Short contain, equivalent to .Contain.At.Least.One.Equal.To(x)
         /// -> less expressive, but shorter to type (:
@@ -27,7 +26,7 @@ namespace NExpect
             this ICollectionTo<T> continuation,
             T search)
         {
-            continuation.AddMatcher(collection => 
+            continuation.AddMatcher(collection =>
             {
                 var passed = collection.Contains(search);
                 var notPart = passed ? "" : "not ";
@@ -37,6 +36,7 @@ namespace NExpect
                 );
             });
         }
+
         /// <summary>
         /// Match exactly N elements with following matchers
         /// </summary>
@@ -214,6 +214,12 @@ namespace NExpect
             });
         }
 
+        /// <summary>
+        /// Tests equivalence with another collection
+        /// </summary>
+        /// <param name="equivalent">continuation for test</param>
+        /// <param name="other">collection to test against</param>
+        /// <typeparam name="T"></typeparam>
         public static void To<T>(
             this ICollectionEquivalent<T> equivalent,
             IEnumerable<T> other
@@ -228,6 +234,21 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     $"Expected {CollectionPrint(collection)} {not}to be equivalent to {CollectionPrint(other)}"
+                );
+            });
+        }
+
+        public static void Null<T>(
+            this ICollectionBe<T> be
+        )
+        {
+            be.AddMatcher(collection => 
+            {
+                var passed = collection == null;
+                var not = passed ? "not " : "";
+                return new MatcherResult(
+                    passed,
+                    $"Expected {CollectionPrint(collection)} {not}to be null"
                 );
             });
         }
@@ -260,8 +281,8 @@ namespace NExpect
         private static Tuple<T, int>[] GetCounts<T>(T[] distinctA, T[] collectionA)
         {
             return distinctA
-                    .Select(o => Tuple.Create(o, collectionA.Count(o2 => AreEqual(o2, o))))
-                    .ToArray();
+                .Select(o => Tuple.Create(o, collectionA.Count(o2 => AreEqual(o2, o))))
+                .ToArray();
         }
 
         private static bool AreEqual<T>(T left, T right)
@@ -318,10 +339,11 @@ namespace NExpect
 
         private static Func<bool, int, int, string> CreateMatchAnyAllMessageFor(string comparison)
         {
-            return (passed, have, want) => {
+            return (passed, have, want) =>
+            {
                 var not = passed ? "not " : "";
                 var haveWord = have > 0 ? have.ToString() : "none";
-               return $"Expected {not}to find {comparison} matching but found {haveWord}";
+                return $"Expected {not}to find {comparison} matching but found {haveWord}";
             };
         }
 
