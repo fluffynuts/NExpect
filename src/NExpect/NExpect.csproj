@@ -74,6 +74,7 @@
     <Compile Include="Interfaces\IGreaterContinuation.cs" />
     <Compile Include="Interfaces\IGreaterOrLessContinuation.cs" />
     <Compile Include="Interfaces\IHave.cs" />
+    <Compile Include="Interfaces\IInstance.cs" />
     <Compile Include="Interfaces\ILessContinuation.cs" />
     <Compile Include="Interfaces\IStringContainContinuation.cs" />
     <Compile Include="Implementations\StringContainContinuation.cs" />

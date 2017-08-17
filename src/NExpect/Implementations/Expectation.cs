@@ -1,23 +1,16 @@
 ﻿using System;
-using System.Diagnostics;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations
 {
-    public abstract class ExpectationBase<T>
+    internal static class MatcherRunner
     {
-        protected bool IsNegated;
-
-        public void Negate()
-        {
-            IsNegated = !IsNegated;
-        }
-
-        protected void RunMatcher(
+        public static void RunMatcher<T>(
             T actual,
             bool negated,
-            Func<T, IMatcherResult> matcher)
+            Func<T, IMatcherResult> matcher
+        )
         {
             IMatcherResult result = null;
             try
@@ -34,6 +27,24 @@ namespace NExpect.Implementations
                 return;
             }
             Assertions.Throw(result.Message);
+        }
+    }
+
+    public abstract class ExpectationBase<T>
+    {
+        public bool IsNegated { get; private set ; }
+
+        public void Negate()
+        {
+            IsNegated = !IsNegated;
+        }
+
+        public void RunMatcher(
+            T actual,
+            bool negated,
+            Func<T, IMatcherResult> matcher)
+        {
+            MatcherRunner.RunMatcher(actual, negated, matcher);
         }
     }
 

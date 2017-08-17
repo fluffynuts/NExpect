@@ -1,4 +1,5 @@
-using NExpect.Implementations;
+using System;
+using System.Collections.Generic;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
@@ -7,6 +8,42 @@ namespace NExpect
 {
     public static class EqualityProviderExtensions
     {
+        public static void Be<T>(this ITo<T> be, object other)
+        {
+            be.AddMatcher(CreateRefEqualMatcherFor<T>(other));
+        }
+
+        public static void Be<T>(this IToAfterNot<T> be, object other)
+        {
+            be.AddMatcher(CreateRefEqualMatcherFor<T>(other));
+        }
+
+        public static void Be<T>(this ICollectionTo<T> be, object other)
+        {
+            be.AddMatcher(CreateCollectionRefEqualMatcherFor<T>(other));
+        }
+
+        private static Func<T, IMatcherResult> CreateRefEqualMatcherFor<T>(object other)
+        {
+            return actual => RefCompare(actual, other);
+        }
+
+        private static Func<IEnumerable<T>, IMatcherResult> CreateCollectionRefEqualMatcherFor<T>(object other)
+        {
+            return actual => RefCompare(actual, other);
+        }
+
+        private static IMatcherResult RefCompare(object actual, object other)
+        {
+            var passed = ReferenceEquals(actual, other);
+            var not = passed ? "not " : "";
+            return new MatcherResult(
+                passed,
+                $"Expected {actual} {not}to be the same reference as {other}"
+            );
+        }
+
+        // TODO: lock down .Equal to act on ITo<T> and IToAfterNot<T>, as above
         public static void Equal<T>(this ICanAddMatcher<T> expectation, T expected)
         {
             expectation.Equal(expected, null);
@@ -50,7 +87,8 @@ namespace NExpect
         public static void To<T>(
             this IEqualityContinuation<T> continuation,
             T expected
-        ) {
+        )
+        {
             continuation.To(expected, null);
         }
 
@@ -65,7 +103,7 @@ namespace NExpect
                 var passed = actual.Equals(expected);
                 var not = passed ? "not " : "";
                 var message = FinalMessageFor(
-                    $"Expected {Quote(actual)} {not}to equal {Quote(expected)}", 
+                    $"Expected {Quote(actual)} {not}to equal {Quote(expected)}",
                     customMessage
                 );
                 return new MatcherResult(passed, message);

@@ -1118,7 +1118,8 @@ namespace NExpect.Tests
             public void OperatingOnNotNull_Negated_ShouldNotThrow()
             {
                 // Arrange
-                var collection = new List<string>();;
+                var collection = new List<string>();
+                ;
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -1132,7 +1133,8 @@ namespace NExpect.Tests
             public void OperatingOnNotNull_ShouldThrow()
             {
                 // Arrange
-                var collection = new List<string>();;
+                var collection = new List<string>();
+                ;
                 // Pre-Assert
                 // Act
                 Assert.That(() =>

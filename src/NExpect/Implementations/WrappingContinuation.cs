@@ -4,29 +4,29 @@ using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations
 {
-    internal class WrappingContinuation<TFrom, To> : 
-        ExpectationBase<To>, 
-        ICanAddMatcher<To>,
-        IExpectationContext<To>
+    internal class WrappingContinuation<TFrom, TTo> : 
+        ExpectationBase<TTo>, 
+        ICanAddMatcher<TTo>,
+        IExpectationContext<TTo>
     {
-        public To Actual => _unwrap(_wrapped);
-        public void RunMatcher(Func<To, IMatcherResult> matcher)
+        public TTo Actual => _unwrap(_wrapped);
+        public void RunMatcher(Func<TTo, IMatcherResult> matcher)
         {
             RunMatcher(Actual, IsNegated, matcher);
         }
 
         private readonly IHasActual<TFrom> _wrapped;
-        private readonly Func<IHasActual<TFrom>, To> _unwrap;
+        private readonly Func<IHasActual<TFrom>, TTo> _unwrap;
 
         internal WrappingContinuation(
             IHasActual<TFrom> toWrap, 
-            Func<IHasActual<TFrom>, To> unwrap
+            Func<IHasActual<TFrom>, TTo> unwrap
         )
         {
             _wrapped = toWrap;
             _unwrap = unwrap;
         }
 
-        public IExpectationContext<To> Parent { get; set; }
+        public IExpectationContext<TTo> Parent { get; set; }
     }
 }

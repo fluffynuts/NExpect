@@ -242,7 +242,7 @@ namespace NExpect
             this ICollectionBe<T> be
         )
         {
-            be.AddMatcher(collection => 
+            be.AddMatcher(collection =>
             {
                 var passed = collection == null;
                 var not = passed ? "not " : "";
@@ -426,4 +426,11 @@ namespace NExpect
             return $"Expected not to find {comparison} {want} match{s} but found {have}";
         }
     }
+
+//    public static class TypeExtensions
+//    {
+//        public static void A<T2>(this IBe<T> be)
+//        {
+//        }
+//    }
 }

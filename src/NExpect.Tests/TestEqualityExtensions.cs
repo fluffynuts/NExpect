@@ -1,7 +1,10 @@
-﻿using NExpect.Exceptions;
+﻿using System;
+using System.Collections.Generic;
+using NExpect.Exceptions;
 using NUnit.Framework;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+
 // ReSharper disable RedundantArgumentDefaultValue
 // ReSharper disable ExpressionIsAlwaysNull
 
@@ -317,7 +320,7 @@ namespace NExpect.Tests
             {
                 // Arrange
                 var input = null as string;
-                var expected = GetRandomString(); 
+                var expected = GetRandomString();
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -335,7 +338,7 @@ namespace NExpect.Tests
                 // Arrange
                 // Pre-Assert
                 // Act
-                Assert.That(() => 
+                Assert.That(() =>
                 {
                     Expect(null).To.Be.Null();
                 }, Throws.Nothing);
@@ -441,7 +444,7 @@ namespace NExpect.Tests
                     decimal test = 0.5M;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => 
+                    Assert.That(() =>
                     {
                         Expect(start).To.Be.Greater.Than(test);
                     }, Throws.Nothing);
@@ -456,7 +459,7 @@ namespace NExpect.Tests
                     double test = 0.5;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => 
+                    Assert.That(() =>
                     {
                         Expect(start).To.Be.Greater.Than(test);
                     }, Throws.Nothing);
@@ -471,7 +474,7 @@ namespace NExpect.Tests
                     decimal test = 0.5M;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => 
+                    Assert.That(() =>
                     {
                         Expect(start).To.Be.Greater.Than(test);
                     }, Throws.Nothing);
@@ -486,7 +489,7 @@ namespace NExpect.Tests
                     float test = 0.5F;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => 
+                    Assert.That(() =>
                     {
                         Expect(start).To.Be.Greater.Than(test);
                     }, Throws.Nothing);
@@ -501,7 +504,7 @@ namespace NExpect.Tests
                     long test = -1;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => 
+                    Assert.That(() =>
                     {
                         Expect(start).To.Be.Greater.Than(test);
                     }, Throws.Nothing);
@@ -516,7 +519,7 @@ namespace NExpect.Tests
                     decimal test = 0.5M;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => 
+                    Assert.That(() =>
                     {
                         Expect(start).To.Be.Greater.Than(test);
                     }, Throws.Nothing);
@@ -531,7 +534,7 @@ namespace NExpect.Tests
                     long test = 0;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => 
+                    Assert.That(() =>
                     {
                         Expect(start).To.Be.Greater.Than(test);
                     }, Throws.Nothing);
@@ -546,7 +549,7 @@ namespace NExpect.Tests
                     decimal test = 0;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => 
+                    Assert.That(() =>
                     {
                         Expect(start).To.Be.Greater.Than(test);
                     }, Throws.Nothing);
@@ -561,7 +564,7 @@ namespace NExpect.Tests
                     double test = 0;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => 
+                    Assert.That(() =>
                     {
                         Expect(start).To.Be.Greater.Than(test);
                     }, Throws.Nothing);
@@ -576,7 +579,7 @@ namespace NExpect.Tests
                     float test = 0.5F;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => 
+                    Assert.That(() =>
                     {
                         Expect(start).To.Be.Greater.Than(test);
                     }, Throws.Nothing);
@@ -591,7 +594,7 @@ namespace NExpect.Tests
                     int test = 0;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => 
+                    Assert.That(() =>
                     {
                         Expect(start).To.Be.Greater.Than(test);
                     }, Throws.Nothing);
@@ -606,7 +609,7 @@ namespace NExpect.Tests
                     long test = 0;
                     // Pre-Assert
                     // Act
-                    Assert.That(() => 
+                    Assert.That(() =>
                     {
                         Expect(start).To.Be.Greater.Than(test);
                     }, Throws.Nothing);
@@ -1259,6 +1262,120 @@ namespace NExpect.Tests
                             .With.Message.Contains($"{actual} to be less than {expected}"));
                     // Assert
                 }
+            }
+        }
+
+        [TestFixture]
+        public class ReferenceEqualityTesting
+        {
+            public class Coordinate
+            {
+                int X { get; }
+                int Y { get; }
+
+                public Coordinate(int x, int y)
+                {
+                    X = x;
+                    Y = y;
+                }
+
+                public override bool Equals(object obj)
+                {
+                    var other = obj as Coordinate;
+                    if (other == null)
+                        return false;
+                    return other.X == X && other.Y == Y;
+                }
+            }
+
+            [Test]
+            public void Be_WhenHaveSameRef_ShouldNotThrow()
+            {
+                // Arrange
+                var instance = new Coordinate(2, 3);
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(instance).To.Be(instance);
+                }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void Be_WhenHaveDifferentRefButAreEqual_ShouldThrow()
+            {
+                // Arrange
+                var instance = new Coordinate(2, 3);
+                var other = new Coordinate(2, 3);
+                // Pre-Assert
+                Assert.That(instance, Is.EqualTo(other));
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(instance).To.Be(other);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                .With.Message.EqualTo($"Expected {instance} to be the same reference as {other}"));
+                // Assert
+            }
+
+            [Test]
+            public void Be_Negated_WhenHaveSameRef_ShouldThrow()
+            {
+                // Arrange
+                var instance = new Coordinate(2, 3);
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(instance).Not.To.Be(instance);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                .With.Message.EqualTo($"Expected {instance} not to be the same reference as {instance}"));
+                // Assert
+            }
+
+            [Test]
+            public void Be_Negated_WhenHaveDifferentRefButAreEqual_ShouldNotThrow()
+            {
+                // Arrange
+                var instance = new Coordinate(2, 3);
+                var other = new Coordinate(2, 3);
+                // Pre-Assert
+                Assert.That(instance, Is.EqualTo(other));
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(instance).Not.To.Be(other);
+                }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void Be_ActingOnCollection_WhenRefEqual_ShouldNotThrow()
+            {
+                // Arrange
+                var collection = new List<int>();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection).To.Be(collection);
+                }, Throws.Nothing);
+                // Assert
+            }
+            [Test]
+            public void Be_ActingOnCollection_WhenNotRefEqual_ShouldThrow()
+            {
+                // Arrange
+                var collection = new List<int>();
+                var other = new List<int>();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection).To.Be(other);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
             }
         }
     }

@@ -24,13 +24,13 @@ namespace NExpect.Implementations
         private int _storedNegations;
         private List<Func<T, IMatcherResult>> _storedExpectations = new List<Func<T, IMatcherResult>>();
 
-        public void Negate()
+        public virtual void Negate()
         {
             _storedNegations++;
             RunNegations();
         }
 
-        public void RunMatcher(Func<T, IMatcherResult> matcher)
+        public virtual void RunMatcher(Func<T, IMatcherResult> matcher)
         {
             _storedExpectations.Add(matcher);
             RunExpectations();
