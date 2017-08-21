@@ -76,6 +76,8 @@
     <Compile Include="Interfaces\IHave.cs" />
     <Compile Include="Interfaces\IInstance.cs" />
     <Compile Include="Interfaces\ILessContinuation.cs" />
+    <Compile Include="Interfaces\INull.cs" />
+    <Compile Include="Interfaces\INullOr.cs" />
     <Compile Include="Interfaces\IStringContainContinuation.cs" />
     <Compile Include="Implementations\StringContainContinuation.cs" />
     <Compile Include="Implementations\CollectionExpectation.cs" />

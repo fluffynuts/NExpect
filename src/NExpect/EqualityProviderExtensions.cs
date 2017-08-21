@@ -109,5 +109,70 @@ namespace NExpect
                 return new MatcherResult(passed, message);
             });
         }
+        
+        public static void Empty(this IBe<string> continuation, string customMessage)
+        {
+            continuation.AddMatcher(actual =>
+            {
+                var passed = actual == "";
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        passed
+                            ? "Expected not to be empty"
+                            : $"Expected empty string but got {Quote(actual)}",
+                        customMessage)
+                );
+            });
+        }
+
+        /// <summary>
+        /// Tests if a string is empty
+        /// </summary>
+        /// <param name="continuation"></param>
+        public static void Empty(this IBe<string> continuation)
+        {
+            continuation.Empty(null);
+        }
+
+        /// <summary>
+        /// Tests if a string is null or empty
+        /// </summary>
+        /// <param name="nullOr"></param>
+        public static void Empty(
+            this INullOr<string> nullOr
+        )
+        {
+            nullOr.AddMatcher(actual => 
+            {
+                var passed = string.IsNullOrEmpty(actual);
+                var not = passed ? "not " : "";
+                return new MatcherResult(
+                    passed,
+                    $"Expected {actual} {not}to be null or empty"
+                );
+            });
+        }
+
+        /// <summary>
+        /// Test if string is null or whitespace
+        /// </summary>
+        /// <param name="nullOr"></param>
+        public static void Whitespace(
+            this INullOr<string> nullOr
+        )
+        {
+            nullOr.AddMatcher(actual => 
+            {
+                var passed = string.IsNullOrWhiteSpace(actual);
+                var not = passed ? "not " : "";
+                return new MatcherResult(
+                    passed,
+                    $"Expected {actual} {not}to be null or whitespace"
+                );
+            });
+        }
+
+
     }
 }

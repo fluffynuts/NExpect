@@ -6,6 +6,6 @@ namespace NExpect.Interfaces
     /// <typeparam name="T">Type of the continuation</typeparam>
     public interface IAn<T> : ICanAddMatcher<T>
     {
-        IInstance<T> Instance { get; }
+//        IInstance<T> Instance { get; }
     }
 }

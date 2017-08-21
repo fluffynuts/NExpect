@@ -1,9 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using System.Reflection;
-using NExpect.Implementations;
 using NExpect.Interfaces;
 
 namespace NExpect.MatcherLogic
