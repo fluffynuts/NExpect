@@ -2,8 +2,14 @@ using System;
 
 namespace NExpect.Interfaces
 {
+    /// <summary>
+    /// Base interface for instance testing (TODO)
+    /// </summary>
     public interface IInstance
     {
+        /// <summary>
+        /// Type of the object being tested
+        /// </summary>
         Type Type { get; }
     }
 
