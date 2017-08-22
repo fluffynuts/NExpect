@@ -5,7 +5,7 @@ using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations
 {
-    public abstract class ExpectationContext<T> : 
+    internal abstract class ExpectationContext<T> : 
         IExpectationContext<T>
     {
         private IExpectationContext<T> _parent;

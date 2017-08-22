@@ -1720,6 +1720,11 @@ namespace NExpect.Tests
                     Y = y;
                 }
 
+                public override int GetHashCode() 
+                {
+                    return $"{X}-{Y}".GetHashCode();
+                }
+
                 public override bool Equals(object obj)
                 {
                     var other = obj as Coordinate;

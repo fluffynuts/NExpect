@@ -11,6 +11,9 @@ namespace NExpect.Exceptions
     /// </summary>
     public class UnmetExpectationException : Exception
     {
+        /// <summary>
+        /// Provides a stack trace up to the point where the expectation failed
+        /// </summary>
         public override string StackTrace => GetEditedStackTrace();
 
         private string GetEditedStackTrace()

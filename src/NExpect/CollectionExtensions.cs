@@ -238,8 +238,27 @@ namespace NExpect
             });
         }
 
+        /// <summary>
+        /// Tests whether or not a collection is null
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <typeparam name="T">Collection item type</typeparam>
         public static void Null<T>(
             this ICollectionBe<T> be
+        )
+        {
+            be.Null(null);
+        }
+
+        /// <summary>
+        /// Tests whether or not a collection is null
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="customMessage">Provide a custom message to include when the matcher fails</param>
+        /// <typeparam name="T">Collection item type</typeparam>
+        public static void Null<T>(
+            this ICollectionBe<T> be,
+            string customMessage
         )
         {
             be.AddMatcher(collection =>
@@ -248,7 +267,10 @@ namespace NExpect
                 var not = passed ? "not " : "";
                 return new MatcherResult(
                     passed,
-                    $"Expected {CollectionPrint(collection)} {not}to be null"
+                    FinalMessageFor(
+                        $"Expected {CollectionPrint(collection)} {not}to be null",
+                        customMessage
+                    )
                 );
             });
         }
