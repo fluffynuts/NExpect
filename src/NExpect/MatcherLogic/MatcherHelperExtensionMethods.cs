@@ -26,10 +26,15 @@ namespace NExpect.MatcherLogic
             this ICountMatchContinuation<T> continuation
         )
         {
-            var actual = continuation as CountMatchContinuation<T>;
-            if (actual != null)
-                return actual.ExpectedCount;
-            return continuation.TryGetPropertyValue<int?>("ExpectedCount") ?? 0;
+            switch (continuation)
+            {
+                case CountMatchContinuation<T> countMatch:
+                    return countMatch.ExpectedCount;
+                default:
+                    return continuation.TryGetPropertyValue<int?>(
+                        nameof(CountMatchContinuation<T>.ExpectedCount)
+                    ) ?? 0;
+            }
         }
 
         /// <summary>
@@ -46,11 +51,17 @@ namespace NExpect.MatcherLogic
             this ICountMatchContinuation<T> continuation
         )
         {
-            var actual = continuation as CountMatchContinuation<T>;
-            if (actual != null)
-                return actual.CountMatchMethod;
-            return continuation.TryGetPropertyValue<CountMatchMethods>("CountMatchMethod");
+            switch (continuation)
+            {
+                case CountMatchContinuation<T> countMatch:
+                    return countMatch.CountMatchMethod;
+                default:
+                    return continuation.TryGetPropertyValue<CountMatchMethods?>(
+                               nameof(CountMatchContinuation<T>.CountMatchMethod)) ??
+                           CountMatchMethods.Exactly;
+            }
         }
+
 
         internal static T TryGetPropertyValue<T>(this object o, string prop)
         {
@@ -66,6 +77,5 @@ namespace NExpect.MatcherLogic
                 return default(T);
             }
         }
-
     }
 }

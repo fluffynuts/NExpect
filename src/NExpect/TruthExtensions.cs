@@ -2,6 +2,7 @@ using System;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+// ReSharper disable UnusedMember.Global
 
 namespace NExpect
 {
