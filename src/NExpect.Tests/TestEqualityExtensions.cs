@@ -1567,6 +1567,146 @@ namespace NExpect.Tests
         }
 
         [TestFixture]
+        public class ActingOnMismatchedTypes
+        {
+            [Test]
+            public void Expect_Byte_ToEqual_Int_WhenMatches_ShouldNotThrow()
+            {
+                // Arrange
+                byte actual = 1;
+                int expected = 1;
+                // Pre-Assert
+
+                // Act
+                Assert.That(
+                    () => Expect(actual).To.Equal(expected),
+                    Throws.Nothing
+                );
+                // Assert
+            }
+
+            [Test]
+            public void Expect_Byte_ToEqual_Int_WhenNotMatches_ShouldThrow()
+            {
+                // Arrange
+                byte actual = 1;
+                int expected = 2;
+                // Pre-Assert
+
+                // Act
+                Assert.That(
+                    () => Expect(actual).To.Equal(expected),
+                    Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains($"Expected {expected} but got {actual}")
+                );
+                // Assert
+            }
+
+            [Test]
+            public void Expect_Short_ToEqual_Long_WhenMatches_ShouldNotThrow()
+            {
+                // Arrange
+                short actual = 1;
+                long expected = 1;
+                // Pre-Assert
+
+                // Act
+                Assert.That(
+                    () => Expect(actual).To.Equal(expected),
+                    Throws.Nothing
+                );
+                // Assert
+            }
+
+            [Test]
+            public void Expect_Short_ToEqual_Long_WhenNotMatches_ShouldThrow()
+            {
+                // Arrange
+                short actual = 1;
+                long expected = 2;
+                // Pre-Assert
+
+                // Act
+                Assert.That(
+                    () => Expect(actual).To.Equal(expected),
+                    Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains($"Expected {expected} but got {actual}")
+                );
+                // Assert
+            }
+
+            [Test]
+            public void Expect_Int_ToEqual_Long_WhenMatches_ShouldNotThrow()
+            {
+                // Arrange
+                int actual = 1;
+                long expected = 1;
+                // Pre-Assert
+
+                // Act
+                Assert.That(
+                    () => Expect(actual).To.Equal(expected),
+                    Throws.Nothing
+                );
+                // Assert
+            }
+
+            [Test]
+            public void Expect_Int_ToEqual_Long_WhenNotMatches_ShouldThrow()
+            {
+                // Arrange
+                int actual = 1;
+                long expected = 2;
+                // Pre-Assert
+
+                // Act
+                Assert.That(
+                    () => Expect(actual).To.Equal(expected),
+                    Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains($"Expected {expected} but got {actual}")
+                );
+                // Assert
+            }
+            
+            [Test]
+            public void Expect_Float_ToEqual_Double_WhenMatches_ShouldNotThrow()
+            {
+                // Arrange
+                float actual = 1.1f;
+                double expected = 1.1f;
+                // Pre-Assert
+
+                // Act
+                Assert.That(
+                    () => Expect(actual).To.Equal(expected),
+                    Throws.Nothing
+                );
+                // Assert
+            }
+
+            [Test]
+            public void Expect_Float_ToEqual_Double_WhenNotMatches_ShouldThrow()
+            {
+                // Arrange
+                float actual = 1.1f;
+                double expected = 1.2f;
+                // Pre-Assert
+
+                // Act
+                Assert.That(
+                    () => Expect(actual).To.Equal(expected),
+                    Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains($"Expected {expected} but got {actual}")
+                );
+                // Assert
+            }
+        }
+
+        [TestFixture]
         public class ReferenceEqualityTesting
         {
             public class Coordinate

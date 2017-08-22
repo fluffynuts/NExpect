@@ -25,6 +25,83 @@ namespace NExpect
         }
 
         /// <summary>
+        /// Starts an expectation with sbyte value and up casts to long. Usually used to
+        /// check for equality.
+        /// </summary>
+        /// <param name="value">SByte value to start with.</param>
+        /// <returns>IExpectation&lt;longT&gt;</returns>
+        public static IExpectation<long> Expect(sbyte value)
+        {
+            return new Expectation<long>(value);
+        }
+
+        /// <summary>
+        /// Starts an expectation with short value and up casts to long. Usually used to
+        /// check for equality.
+        /// </summary>
+        /// <param name="value">Short value to start with.</param>
+        /// <returns>IExpectation&lt;longT&gt;</returns>
+        public static IExpectation<long> Expect(short value)
+        {
+            return new Expectation<long>(value);
+        }
+
+        /// <summary>
+        /// Starts an expectation with integer value and up casts to long. Usually used to
+        /// check for equality.
+        /// </summary>
+        /// <param name="value">Int value to start with.</param>
+        /// <returns>IExpectation&lt;longT&gt;</returns>
+        public static IExpectation<long> Expect(int value)
+        {
+            return new Expectation<long>(value);
+        }
+
+        /// <summary>
+        /// Starts an expectation with byte value and up casts to long. Usually used to
+        /// check for equality.
+        /// </summary>
+        /// <param name="value">Byte value to start with.</param>
+        /// <returns>IExpectation&lt;long&gt;</returns>
+        public static IExpectation<long> Expect(byte value)
+        {
+            return new Expectation<long>(value);
+        }
+
+        /// <summary>
+        /// Starts an expectation with unsigned short value and up casts to long. Usually used to
+        /// check for equality.
+        /// </summary>
+        /// <param name="value">UShort value to start with.</param>
+        /// <returns>IExpectation&lt;long&gt;</returns>
+        public static IExpectation<long> Expect(ushort value)
+        {
+            return new Expectation<long>(value);
+        }
+
+        /// <summary>
+        /// Starts an expectation with unsigned integer value and up casts to long. Usually used to
+        /// check for equality.
+        /// </summary>
+        /// <param name="value">UInt value to start with.</param>
+        /// <returns>IExpectation&lt;long&gt;</returns>
+        public static IExpectation<long> Expect(uint value)
+        {
+            return new Expectation<long>(value);
+        }
+
+        /// <summary>
+        /// Starts an expectation with float value and up casts to double. Usually used to
+        /// check for equality.
+        /// </summary>
+        /// <param name="value">Float value to start with.</param>
+        /// <returns>IExpectation&lt;double&gt;</returns>
+        public static IExpectation<double> Expect(float value)
+        {
+            return new Expectation<double>(value);
+        }
+
+        /// <summary>
         /// Start an expectation with an action. Usually used to check
         /// if said action throws an exception
         /// </summary>
