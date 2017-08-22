@@ -1412,7 +1412,7 @@ namespace NExpect.Tests
                         },
                         Throws.Exception
                             .InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"{actual} to be less than {expected}"));
+                            .With.Message.Contains($"{(double)actual} to be less than {(double)expected}"));
                     // Assert
                 }
 
@@ -1430,7 +1430,7 @@ namespace NExpect.Tests
                         },
                         Throws.Exception
                             .InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"{actual} to be less than {expected}"));
+                            .With.Message.Contains($"{(double)actual} to be less than {(double)expected}"));
                     // Assert
                 }
             }
