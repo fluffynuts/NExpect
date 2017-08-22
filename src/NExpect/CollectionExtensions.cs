@@ -242,13 +242,22 @@ namespace NExpect
             this ICollectionBe<T> be
         )
         {
+            be.Null(null);
+        }
+
+        public static void Null<T>(
+            this ICollectionBe<T> be,
+            string customMessage
+        )
+        {
             be.AddMatcher(collection =>
             {
                 var passed = collection == null;
                 var not = passed ? "not " : "";
                 return new MatcherResult(
                     passed,
-                    $"Expected {CollectionPrint(collection)} {not}to be null"
+                    FinalMessageFor($"Expected {CollectionPrint(collection)} {not}to be null",
+                    customMessage)
                 );
             });
         }

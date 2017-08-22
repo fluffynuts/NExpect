@@ -1144,6 +1144,26 @@ namespace NExpect.Tests
                     .With.Message.Contains("] to be null"));
                 // Assert
             }
+
+            [TestFixture]
+            public class WithCustomMessage
+            {
+                [Test]
+                public void OperatingOnNull_Negated_ShouldThrow()
+                {
+                    // Arrange
+                    var expectedMessage = "My Message";
+                    List<string> collection = null;
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(collection).Not.To.Be.Null(expectedMessage);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains(expectedMessage));
+                    // Assert
+                }
+            }
         }
     }
 }
