@@ -13,6 +13,10 @@ namespace NExpect.Interfaces
         /// </summary>
         ICountMatchEqual<T> Equal { get; }
 
+        /// <summary>
+        /// Continuation to attempt to match the collection items with a user-defined
+        /// function
+        /// </summary>
         ICountMatchMatched<T> Matched { get; }
     }
 

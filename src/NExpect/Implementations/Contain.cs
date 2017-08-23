@@ -14,14 +14,4 @@ namespace NExpect.Implementations
             Actual = actual;
         }
     }
-
-    public class ContainAt<T>
-        : ExpectationContext<T>, IContainAt<T>
-    {
-        T Actual { get; }
-        public ContainAt(T actual)
-        {
-            Actual = actual;
-        }
-    }
 }

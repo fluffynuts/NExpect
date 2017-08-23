@@ -3,53 +3,76 @@ using System.Collections.Generic;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect
 {
+    /// <summary>
+    /// Provides extensions for testing equality
+    /// </summary>
     public static class EqualityProviderExtensions
     {
-        public static void Be<T>(this ITo<T> be, object other)
+        /// <summary>
+        /// Performs reference equality checking between your actual and the provided expected value
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <typeparam name="T">Type of the object being tested</typeparam>
+        public static void Be<T>(this ITo<T> be, object expected)
         {
-            be.AddMatcher(CreateRefEqualMatcherFor<T>(other));
+            be.AddMatcher(CreateRefEqualMatcherFor<T>(expected));
         }
 
-        public static void Be<T>(this IToAfterNot<T> be, object other)
+        /// <summary>
+        /// Performs reference equality checking between your actual and the provided expected value
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <typeparam name="T">Type of the object being tested</typeparam>
+        public static void Be<T>(this IToAfterNot<T> be, object expected)
         {
-            be.AddMatcher(CreateRefEqualMatcherFor<T>(other));
+            be.AddMatcher(CreateRefEqualMatcherFor<T>(expected));
         }
 
-        public static void Be<T>(this ICollectionTo<T> be, object other)
+        /// <summary>
+        /// Performs reference equality checking between your actual and the provided expected value
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <typeparam name="T">Type of the object being tested</typeparam>
+        public static void Be<T>(this ICollectionTo<T> be, object expected)
         {
-            be.AddMatcher(CreateCollectionRefEqualMatcherFor<T>(other));
-        }
-
-        private static Func<T, IMatcherResult> CreateRefEqualMatcherFor<T>(object other)
-        {
-            return actual => RefCompare(actual, other);
-        }
-
-        private static Func<IEnumerable<T>, IMatcherResult> CreateCollectionRefEqualMatcherFor<T>(object other)
-        {
-            return actual => RefCompare(actual, other);
-        }
-
-        private static IMatcherResult RefCompare(object actual, object other)
-        {
-            var passed = ReferenceEquals(actual, other);
-            var not = passed ? "not " : "";
-            return new MatcherResult(
-                passed,
-                $"Expected {actual} {not}to be the same reference as {other}"
-            );
+            be.AddMatcher(CreateCollectionRefEqualMatcherFor<T>(expected));
         }
 
         // TODO: lock down .Equal to act on ITo<T> and IToAfterNot<T>, as above
-        public static void Equal<T>(this ICanAddMatcher<T> expectation, T expected)
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICanAddMatcher<T> continuation, 
+            T expected
+        )
         {
-            expectation.Equal(expected, null);
+            continuation.Equal(expected, null);
         }
 
-        public static void Equal<T>(this ICanAddMatcher<T> continuation, T expected, string customMessage)
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessage">Custom message to include when failing</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICanAddMatcher<T> continuation, 
+            T expected, 
+            string customMessage
+        )
         {
             continuation.AddMatcher(actual =>
             {
@@ -63,6 +86,12 @@ namespace NExpect
             });
         }
 
+        /// <summary>
+        /// Tests if a value is null
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="customMessage">Custom message to include when failing</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
         public static void Null<T>(this IBe<T> continuation, string customMessage)
         {
             continuation.AddMatcher(actual =>
@@ -79,11 +108,22 @@ namespace NExpect
             });
         }
 
+        /// <summary>
+        /// Tests if a value is null
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
         public static void Null<T>(this IBe<T> continuation)
         {
             continuation.Null(null);
         }
 
+        /// <summary>
+        /// Last part of the .To.Be.Equal.To() chain
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <typeparam name="T">Object type being tested</typeparam>
         public static void To<T>(
             this IEqualityContinuation<T> continuation,
             T expected
@@ -92,6 +132,13 @@ namespace NExpect
             continuation.To(expected, null);
         }
 
+        /// <summary>
+        /// Last part of the .To.Be.Equal.To() chain
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessage">Custom message to include when failing</param>
+        /// <typeparam name="T">Object type being tested</typeparam>
         public static void To<T>(
             this IEqualityContinuation<T> continuation,
             T expected,
@@ -109,7 +156,12 @@ namespace NExpect
                 return new MatcherResult(passed, message);
             });
         }
-        
+
+        /// <summary>
+        /// Tests if a string is empty, with a provided custom error message
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="customMessage">Custom message to include when failing</param>
         public static void Empty(this IBe<string> continuation, string customMessage)
         {
             continuation.AddMatcher(actual =>
@@ -173,6 +225,24 @@ namespace NExpect
             });
         }
 
+        private static Func<T, IMatcherResult> CreateRefEqualMatcherFor<T>(object other)
+        {
+            return actual => RefCompare(actual, other);
+        }
 
+        private static Func<IEnumerable<T>, IMatcherResult> CreateCollectionRefEqualMatcherFor<T>(object other)
+        {
+            return actual => RefCompare(actual, other);
+        }
+
+        private static IMatcherResult RefCompare(object actual, object other)
+        {
+            var passed = ReferenceEquals(actual, other);
+            var not = passed ? "not " : "";
+            return new MatcherResult(
+                passed,
+                $"Expected {actual} {not}to be the same reference as {other}"
+            );
+        }
     }
 }

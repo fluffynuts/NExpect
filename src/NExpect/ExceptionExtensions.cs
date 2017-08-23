@@ -39,6 +39,15 @@ namespace NExpect
             return continuation;
         }
 
+        /// <summary>
+        /// Allows testing a specific property on the thrown exception
+        /// </summary>
+        /// <param name="continuation">Exception-based continuation</param>
+        /// <param name="fetcher">Func to invoke to get the property you'd like to test</param>
+        /// <typeparam name="T">Type of the Exception</typeparam>
+        /// <typeparam name="TValue">Type of the property you're testing</typeparam>
+        /// <returns>Throw continuation, used to continue with testing the property you just selected</returns>
+        /// <exception cref="ArgumentException">Thrown if the continuation is not a known ThrowContinuation. Userland implementation of IThrowContinuation is not supported - yet. Make a request if you need it!</exception>
         public static IExceptionPropertyContinuation<TValue> With<T, TValue>(
             this IThrowContinuation<T> continuation, 
             Func<T, TValue> fetcher

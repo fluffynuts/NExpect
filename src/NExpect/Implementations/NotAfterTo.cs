@@ -2,12 +2,13 @@
 
 namespace NExpect.Implementations
 {
-    public class NotAfterTo<T>: ExpectationContext<T>, INotAfterTo<T>
+    internal class NotAfterTo<T>: ExpectationContext<T>, INotAfterTo<T>
     {
         public T Actual { get; }
         public NotAfterTo(T actual)
         {
             Actual = actual;
+            // ReSharper disable once VirtualMemberCallInConstructor
             Negate();
         }
 

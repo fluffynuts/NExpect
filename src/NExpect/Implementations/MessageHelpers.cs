@@ -6,8 +6,19 @@ using System.Linq;
 
 namespace NExpect.Implementations
 {
+    /// <summary>
+    /// Provides some helpers for formatting and creating failure messages
+    /// </summary>
     public static class MessageHelpers
     {
+        /// <summary>
+        /// Provides a final message, given a standard message and
+        /// a custom message - if the custom message is null, the standard
+        /// message alone is returned
+        /// </summary>
+        /// <param name="standardMessage">Message which should always be shown at the point of failure</param>
+        /// <param name="customMessage">Optional custom message to show if not null</param>
+        /// <returns>Final message derived from the two parameters</returns>
         public static string FinalMessageFor(
             string standardMessage,
             string customMessage
@@ -60,11 +71,23 @@ namespace NExpect.Implementations
                 : $"Expected {Quote(src)} not to contain {Quote(search)}";
         }
 
+        /// <summary>
+        /// Quotes a string if not null
+        /// </summary>
+        /// <param name="str">String to quote</param>
+        /// <returns>Quoted string, if not null</returns>
         public static string Quote(string str)
         {
-            return str == null ? str : $"\"{str}\"";
+            return str == null ? null : $"\"{str}\"";
         }
 
+        /// <summary>
+        /// Quotes a string or object, as required. Only non-null strings
+        /// get quotes.
+        /// </summary>
+        /// <param name="o">Object to quote</param>
+        /// <typeparam name="T">Type of object</typeparam>
+        /// <returns>String representation of object</returns>
         public static string Quote<T>(T o)
         {
             if (o == null)
@@ -73,17 +96,31 @@ namespace NExpect.Implementations
             return asString == null ? o.ToString() : Quote(asString);
         }
 
+        /// <summary>
+        /// Returns a collection as a comma-separated list
+        /// </summary>
+        /// <param name="collection">Collection to operate on</param>
+        /// <typeparam name="T">Item type of collection</typeparam>
+        /// <returns>Comma-separated list representing the collection</returns>
         public static string Stringify<T>(IEnumerable<T> collection)
         {
-            return collection == null ? NULL : string.Join(", ", collection.Select(o => Quote(o)));
+            return collection == null 
+                    ? Null : 
+                    string.Join(", ", collection.Select(Quote));
         }
 
-        private const string NULL = "(null)";
+        private const string Null = "(null)";
 
+        /// <summary>
+        /// Returns string with up to 10 elements from a collection with ellipsis if required
+        /// </summary>
+        /// <param name="collection">Collection to inspect</param>
+        /// <typeparam name="T">Item type of collection</typeparam>
+        /// <returns>Something like `[ "a", "b", "c" ]`</returns>
         public static string CollectionPrint<T>(IEnumerable<T> collection)
         {
             if (collection == null)
-                return NULL;
+                return Null;
             var asArray = collection.ToArray();
             var ellipsis = asArray.Length > 10
                 ? " ..."

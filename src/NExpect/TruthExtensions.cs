@@ -1,21 +1,90 @@
 using System;
-using System.Diagnostics;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+// ReSharper disable UnusedMember.Global
 
 namespace NExpect
 {
+    /// <summary>
+    /// Provides extension methods to test True / False
+    /// </summary>
     public static class TruthExtensions
     {
-        public static void True(this IBe<bool> expectation)
+        /// <summary>
+        /// Tests if a boolean value is True
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        public static void True(this IBe<bool> continuation)
         {
-            expectation.True(null);
+            continuation.True(null);
         }
 
-        public static void True(this IBe<bool> expectation, string message)
+        /// <summary>
+        /// Tests if a boolean value is True
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="message">Custom message to include on failure</param>
+        public static void True(this IBe<bool> continuation, string message)
         {
-            TestBoolean(expectation, true, message);
+            TestBoolean(continuation, true, message);
+        }
+
+        /// <summary>
+        /// Tests if a boolean value is True
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        public static void True(this IBe<bool?> continuation)
+        {
+            continuation.AddMatcher(TruthTestFor(true as bool?, null));
+        }
+
+        /// <summary>
+        /// Tests if a boolean value is True
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="message">Custom message to include on failure</param>
+        public static void True(this IBe<bool?> continuation, string message)
+        {
+            continuation.AddMatcher(TruthTestFor(true as bool?, message));
+        }
+
+        /// <summary>
+        /// Tests if a boolean value is False
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        public static void False(this IBe<bool> continuation)
+        {
+            continuation.AddMatcher(TruthTestFor(false, null));
+        }
+
+        /// <summary>
+        /// Tests if a boolean value is False
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="message">Custom message to include on failure</param>
+        public static void False(this IBe<bool> continuation, string message)
+        {
+            continuation.AddMatcher(TruthTestFor(false, message));
+        }
+
+        /// <summary>
+        /// Tests if a boolean value is False
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        public static void False(this IBe<bool?> continuation)
+        {
+            continuation.AddMatcher(TruthTestFor(false as bool?, null));
+        }
+
+        /// <summary>
+        /// Tests if a boolean value is False
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="message">Custom message to include on failure</param>
+        public static void False(this IBe<bool?> continuation, string message)
+        {
+            continuation.AddMatcher(TruthTestFor(false as bool?, message));
         }
 
         private static void TestBoolean(
@@ -42,36 +111,6 @@ namespace NExpect
                         message
                     ));
             };
-        }
-
-        public static void True(this IBe<bool?> expectation)
-        {
-            expectation.AddMatcher(TruthTestFor(true as bool?, null));
-        }
-
-        public static void True(this IBe<bool?> expectation, string message)
-        {
-            expectation.AddMatcher(TruthTestFor(true as bool?, message));
-        }
-
-        public static void False(this IBe<bool> expectation)
-        {
-            expectation.AddMatcher(TruthTestFor(false, null));
-        }
-
-        public static void False(this IBe<bool> expectation, string message)
-        {
-            expectation.AddMatcher(TruthTestFor(false, message));
-        }
-
-        public static void False(this IBe<bool?> expectation)
-        {
-            expectation.AddMatcher(TruthTestFor(false as bool?, null));
-        }
-
-        public static void False(this IBe<bool?> expectation, string message)
-        {
-            expectation.AddMatcher(TruthTestFor(false as bool?, message));
         }
     }
 }

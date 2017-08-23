@@ -238,13 +238,24 @@ namespace NExpect
             });
         }
 
+        /// <summary>
+        /// Tests whether or not a collection is null
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <typeparam name="T">Collection item type</typeparam>
         public static void Null<T>(
             this ICollectionBe<T> be
         )
         {
             be.Null(null);
         }
-
+        
+        /// <summary>
+        /// Tests whether or not a collection is null
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="customMessage">Provide a custom message to include when the matcher fails</param>
+        /// <typeparam name="T">Collection item type</typeparam>
         public static void Null<T>(
             this ICollectionBe<T> be,
             string customMessage

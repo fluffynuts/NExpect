@@ -50,13 +50,17 @@
     <Compile Include="Implementations\CollectionBe.cs" />
     <Compile Include="Implementations\CollectionEquivalent.cs" />
     <Compile Include="Implementations\Contain.cs" />
+    <Compile Include="Implementations\ContainAt.cs" />
     <Compile Include="Implementations\CountMatchContinuation.cs" />
     <Compile Include="Implementations\CountMatchEqual.cs" />
     <Compile Include="Implementations\CountMatchMatched.cs" />
     <Compile Include="Implementations\EqualityContinuation.cs" />
+    <Compile Include="Implementations\ExpectationBase.cs" />
     <Compile Include="Implementations\GreaterContinuation.cs" />
     <Compile Include="Implementations\Have.cs" />
+    <Compile Include="Implementations\Instance.cs" />
     <Compile Include="Implementations\LessContinuation.cs" />
+    <Compile Include="Implementations\MatcherRunner.cs" />
     <Compile Include="Interfaces\CountMatchMethods.cs" />
     <Compile Include="Interfaces\IA.cs" />
     <Compile Include="Interfaces\IAn.cs" />
