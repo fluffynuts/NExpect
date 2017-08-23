@@ -213,6 +213,62 @@ namespace NExpect.Tests
 
                 // Assert
             }
+            
+            [TestFixture]
+            public class ActingOnNulls
+            {
+                [Test]
+                public void GivenActualIsNull_WhenDoesNotMatch_ShouldThrow_WithValidMessage()
+                {
+                    // Arrange
+                    string actual = null;
+                    string expected = "1";
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(
+                        () => Expect(actual).To.Equal(expected),
+                        Throws.Exception
+                            .InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains($"Expected {expected} but got {actual}")
+                    );
+                    // Assert
+                }
+
+                [Test]
+                public void GivenExpectationIsNull_WhenDoesNotMatch_ShouldThrow_WithValidMessage()
+                {
+                    // Arrange
+                    string actual = "1";
+                    string expected = null;
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(
+                        () => Expect(actual).To.Equal(expected),
+                        Throws.Exception
+                            .InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains($"Expected {expected} but got {actual}")
+                    );
+                    // Assert
+                }
+
+                [Test]
+                public void GivenActualAndExpectationAreNull_WhenMatches_ShouldNotThrow()
+                {
+                    // Arrange
+                    string actual = null;
+                    string expected = null;
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(
+                        () => Expect(actual).To.Equal(expected),
+                        Throws.Nothing
+                    );
+                    // Assert
+                }
+            }
         }
 
         public class ToMatch
