@@ -54,7 +54,7 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
         public static void Equal<T>(
-            this ICanAddMatcher<T> continuation, 
+            this ICanAddMatcher<T> continuation,
             T expected
         )
         {
@@ -69,14 +69,15 @@ namespace NExpect
         /// <param name="customMessage">Custom message to include when failing</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
         public static void Equal<T>(
-            this ICanAddMatcher<T> continuation, 
-            T expected, 
+            this ICanAddMatcher<T> continuation,
+            T expected,
             string customMessage
         )
         {
             continuation.AddMatcher(actual =>
             {
-                if (actual.Equals(expected))
+                if (ValuesAreEqual(expected, actual)||
+                    BothAreNull(expected, actual))
                     return new MatcherResult(true, $"Did not expect {expected}, but got exactly that");
                 return new MatcherResult(false,
                     FinalMessageFor(
@@ -84,6 +85,16 @@ namespace NExpect
                         customMessage
                     ));
             });
+        }
+
+        private static bool ValuesAreEqual<T>(T expected, T actual)
+        {
+            return actual != null && (actual.Equals(expected));
+        }
+
+        private static bool BothAreNull<T>(T expected, T actual)
+        {
+            return actual == null && expected == null;
         }
 
         /// <summary>
@@ -195,7 +206,7 @@ namespace NExpect
             this INullOr<string> nullOr
         )
         {
-            nullOr.AddMatcher(actual => 
+            nullOr.AddMatcher(actual =>
             {
                 var passed = string.IsNullOrEmpty(actual);
                 var not = passed ? "not " : "";
@@ -214,7 +225,7 @@ namespace NExpect
             this INullOr<string> nullOr
         )
         {
-            nullOr.AddMatcher(actual => 
+            nullOr.AddMatcher(actual =>
             {
                 var passed = string.IsNullOrWhiteSpace(actual);
                 var not = passed ? "not " : "";

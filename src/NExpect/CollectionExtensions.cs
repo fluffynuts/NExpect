@@ -249,7 +249,7 @@ namespace NExpect
         {
             be.Null(null);
         }
-
+        
         /// <summary>
         /// Tests whether or not a collection is null
         /// </summary>
@@ -267,10 +267,8 @@ namespace NExpect
                 var not = passed ? "not " : "";
                 return new MatcherResult(
                     passed,
-                    FinalMessageFor(
-                        $"Expected {CollectionPrint(collection)} {not}to be null",
-                        customMessage
-                    )
+                    FinalMessageFor($"Expected {CollectionPrint(collection)} {not}to be null",
+                    customMessage)
                 );
             });
         }

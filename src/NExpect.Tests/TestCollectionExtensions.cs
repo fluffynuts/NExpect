@@ -1119,7 +1119,7 @@ namespace NExpect.Tests
             {
                 // Arrange
                 var collection = new List<string>();
-                
+
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -1134,7 +1134,7 @@ namespace NExpect.Tests
             {
                 // Arrange
                 var collection = new List<string>();
-                
+
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -1145,36 +1145,56 @@ namespace NExpect.Tests
                 // Assert
             }
 
-            [Test]
-            public void OperatingOnNotNull_WithCustomMessage_ShouldThrow_IncludingCustomMessage()
+            [TestFixture]
+            public class WithCustomMessage
             {
-                // Arrange
-                var collection = new List<string>();
-                var expected = GetRandomString();
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
+                [Test]
+                public void OperatingOnNull_Negated_ShouldThrow()
                 {
-                    Expect(collection).To.Be.Null(expected);
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains(expected));
-                // Assert
-            }
+                    // Arrange
+                    var expectedMessage = "My Message";
+                    List<string> collection = null;
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(collection).Not.To.Be.Null(expectedMessage);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains(expectedMessage));
+                    // Assert
+                }
 
-            [Test]
-            public void OperatingOnNotNullAlt_WithCustomMessage_ShouldThrow_IncludingCustomMessage()
-            {
-                // Arrange
-                List<string> collection = null;
-                var expected = GetRandomString();
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
+                [Test]
+                public void OperatingOnNotNull_WithCustomMessage_ShouldThrow_IncludingCustomMessage()
                 {
-                    Expect(collection).To.Not.Be.Null(expected);
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains(expected));
-                // Assert
+                    // Arrange
+                    var collection = new List<string>();
+                    var expected = GetRandomString();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(collection).To.Be.Null(expected);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains(expected));
+                    // Assert
+                }
+
+                [Test]
+                public void OperatingOnNotNullAlt_WithCustomMessage_ShouldThrow_IncludingCustomMessage()
+                {
+                    // Arrange
+                    List<string> collection = null;
+                    var expected = GetRandomString();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(collection).To.Not.Be.Null(expected);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains(expected));
+                    // Assert
+                }
             }
         }
     }
