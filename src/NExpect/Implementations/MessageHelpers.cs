@@ -71,16 +71,6 @@ namespace NExpect.Implementations
         }
 
         /// <summary>
-        /// Quotes a string if not null
-        /// </summary>
-        /// <param name="str">String to quote</param>
-        /// <returns>Quoted string, if not null</returns>
-        public static string Quote(string str)
-        {
-            return str == null ? Null : $"\"{str}\"";
-        }
-
-        /// <summary>
         /// Quotes a string or object, as required. Only non-null strings
         /// get quotes.
         /// </summary>
@@ -92,7 +82,7 @@ namespace NExpect.Implementations
             var asString = o as string;
             return asString == null
                     ? o?.ToString() ?? Null
-                    : Quote(asString);
+                    : $"\"{asString}\"";
         }
 
         /// <summary>
