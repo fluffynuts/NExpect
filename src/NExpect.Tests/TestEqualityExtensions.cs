@@ -230,7 +230,7 @@ namespace NExpect.Tests
                         () => Expect(actual).To.Equal(expected),
                         Throws.Exception
                             .InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"Expected {expected} but got {actual}")
+                            .With.Message.Contains($"Expected \"{expected}\" but got {actual}")
                     );
                     // Assert
                 }
@@ -248,7 +248,7 @@ namespace NExpect.Tests
                         () => Expect(actual).To.Equal(expected),
                         Throws.Exception
                             .InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"Expected {expected} but got {actual}")
+                            .With.Message.Contains($"Expected (null) but got \"{actual}\"")
                     );
                     // Assert
                 }
@@ -1877,6 +1877,117 @@ namespace NExpect.Tests
                 {
                     Expect(collection).To.Be(other);
                 }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+        }
+        
+        [TestFixture]
+        public class UnmetExpectationMessageTesting
+        {
+            [Test]
+            public void GivenStrings_WhenNotMatched_ShouldThrow_WithQuotesAroundValuesInMessage()
+            {
+                // Arrange
+                var actual = GetRandomString();
+                var expected = GetAnother(actual);
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(actual).To.Equal(expected);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains($"Expected \"{expected}\" but got \"{actual}\"")
+                );
+                // Assert
+            }
+
+            [Test]
+            public void GivenStrings_WhenMatchedAndNegated_ShouldThrow_WithQuotesAroundValuesInMessage()
+            {
+                // Arrange
+                var value = GetRandomString();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(value).To.Not.Equal(value);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains($"Did not expect \"{value}\", but got exactly that")
+                );
+                // Assert
+            }
+
+            [Test]
+            public void GivenStringAndNullString_WhenNotMatched_ShouldThrow_WithNullIdentifierInMessage()
+            {
+                // Arrange
+                string actual = null;
+                var expected = GetRandomString();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(actual).To.Equal(expected);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains($"Expected \"{expected}\" but got (null)")
+                );
+                // Assert
+            }
+
+            [Test]
+            public void GivenObjectAndNullObject_WhenNotMatched_ShouldThrow_WithNullIdentifierInMessage()
+            {
+                // Arrange
+                object actual = null;
+                var expected = new object();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(actual).To.Equal(expected);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains($"Expected {expected} but got (null)")
+                );
+                // Assert
+            }
+
+            [Test]
+            public void GivenInts_WhenNotMatched_ShouldThrow_WithoutQuotesAroundValuesInMessage()
+            {
+                // Arrange
+                var actual = GetRandomInt();
+                var expected = GetAnother(actual);
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(actual).To.Equal(expected);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains($"Expected {expected} but got {actual}")
+                );
+                // Assert
+            }
+
+            [Test]
+            public void GivenObjects_WhenNotMatched_ShouldThrow_WithoutQuotesAroundValuesInMessage()
+            {
+                // Arrange
+                var actual = new object();
+                var expected = new object();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(actual).To.Equal(expected);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains($"Expected {expected} but got {actual}")
+                );
                 // Assert
             }
         }

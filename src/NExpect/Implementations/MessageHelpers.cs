@@ -78,7 +78,7 @@ namespace NExpect.Implementations
         /// <returns>Quoted string, if not null</returns>
         public static string Quote(string str)
         {
-            return str == null ? null : $"\"{str}\"";
+            return str == null ? Null : $"\"{str}\"";
         }
 
         /// <summary>
@@ -90,10 +90,14 @@ namespace NExpect.Implementations
         /// <returns>String representation of object</returns>
         public static string Quote<T>(T o)
         {
-            if (o == null)
-                return null;
-            var asString = o as string;
-            return asString == null ? o.ToString() : Quote(asString);
+            if (typeof(T) == typeof(string))
+            {
+                return Quote(o as string);
+            }
+
+            return o == null
+                ? Null
+                : o.ToString();
         }
 
         /// <summary>
