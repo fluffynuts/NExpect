@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -90,14 +89,10 @@ namespace NExpect.Implementations
         /// <returns>String representation of object</returns>
         public static string Quote<T>(T o)
         {
-            if (typeof(T) == typeof(string))
-            {
-                return Quote(o as string);
-            }
-
-            return o == null
-                ? Null
-                : o.ToString();
+            var asString = o as string;
+            return asString == null
+                    ? o?.ToString() ?? Null
+                    : Quote(asString);
         }
 
         /// <summary>
