@@ -47,6 +47,8 @@
     <Compile Include="GreaterOrLessContinuationExtensions.cs" />
     <Compile Include="Implementations\A.cs" />
     <Compile Include="Implementations\An.cs" />
+    <Compile Include="Implementations\CollectionUnique.cs" />
+    <Compile Include="Implementations\CollectionHave.cs" />
     <Compile Include="Implementations\CollectionBe.cs" />
     <Compile Include="Implementations\CollectionEquivalent.cs" />
     <Compile Include="Implementations\Contain.cs" />
@@ -64,6 +66,8 @@
     <Compile Include="Interfaces\CountMatchMethods.cs" />
     <Compile Include="Interfaces\IA.cs" />
     <Compile Include="Interfaces\IAn.cs" />
+    <Compile Include="Interfaces\ICollectionUnique.cs" />
+    <Compile Include="Interfaces\ICollectionHave.cs" />
     <Compile Include="Interfaces\ICollectionBe.cs" />
     <Compile Include="Interfaces\ICollectionEquivalent.cs" />
     <Compile Include="Interfaces\ICollectionNot.cs" />

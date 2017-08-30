@@ -273,6 +273,58 @@ namespace NExpect
             });
         }
 
+        /// <summary>
+        /// Tests whether or not a collection contains unique items
+        /// </summary>
+        /// <param name="unique">Continuation to operate on</param>
+        /// <typeparam name="T">Collection item type</typeparam>
+        public static void Items<T>(
+            this ICollectionUnique<T> unique
+        )
+        {
+            unique.Items(null);
+        }
+
+        /// <summary>
+        /// Tests whether or not a collection contains unique items
+        /// </summary>
+        /// <param name="unique">Continuation to operate on</param>
+        /// <param name="customMessage">Provide a custom message to include when the matcher fails</param>
+        /// <typeparam name="T">Collection item type</typeparam>
+        public static void Items<T>(
+            this ICollectionUnique<T> unique,
+            string customMessage
+        )
+        {
+            CheckDistinct(unique, customMessage);
+        }
+
+        /// <summary>
+        /// Tests whether or not a collection contains unique items
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <typeparam name="T">Collection item type</typeparam>
+        public static void Distinct<T>(
+            this ICollectionBe<T> be
+        )
+        {
+            be.Distinct(null);
+        }
+
+        /// <summary>
+        /// Tests whether or not a collection contains unique items
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="customMessage">Provide a custom message to include when the matcher fails</param>
+        /// <typeparam name="T">Collection item type</typeparam>
+        public static void Distinct<T>(
+            this ICollectionBe<T> be,
+            string customMessage
+        )
+        {
+            CheckDistinct(be, customMessage);
+        }
+
         private static bool TestEquivalenceOf<T>(
             IEnumerable<T> collectionA,
             IEnumerable<T> collectionB)
@@ -321,6 +373,25 @@ namespace NExpect
                     $"Exactly<T>() cannot extend null IContain<IEnumerable<{typeof(T).Name}>>");
         }
 
+        private static void CheckDistinct<T>(ICanAddMatcher<IEnumerable<T>> distinct, string customMessage)
+        {
+            distinct.AddMatcher(collection =>
+            {
+                var isDistinct = CollectionIsDistinct(collection);
+                var isEmpty = (collection?.Count() ?? 0) == 0;
+                return new MatcherResult(
+                    isDistinct,
+                    FinalMessageFor(CreateCheckDistinctMessageFor(CollectionPrint(collection), isDistinct, isEmpty),
+                        customMessage)
+                );
+            });
+        }
+
+        private static bool CollectionIsDistinct<T>(IEnumerable<T> collection)
+        {
+            return (collection?.Distinct().Count() ?? 0) == (collection?.Count() ?? 0);
+        }
+        
         private static readonly Dictionary<CountMatchMethods,
             Func<bool, object, int, int, string>> _collectionCountMessageStrategies =
             new Dictionary<CountMatchMethods, Func<bool, object, int, int, string>>()
@@ -444,6 +515,33 @@ namespace NExpect
                 ? ""
                 : "es";
             return $"Expected not to find {comparison} {want} match{s} but found {have}";
+        }
+
+        private static string CreateCheckDistinctMessageFor(
+            string printedCollection,
+            bool isDistinct,
+            bool isEmpty
+        )
+        {
+            return isDistinct
+                ? CreateDistinctMessageFor(printedCollection, isEmpty)
+                : CreateNonDistinctMessageFor(printedCollection);
+        }
+
+        private static string CreateDistinctMessageFor(
+            string printedCollection,
+            bool isEmpty
+        )
+        {
+            var empty = isEmpty ? ", but found empty collection" : "";
+            return $"Expected {printedCollection} to contain duplicate items{empty}";
+        }
+
+        private static string CreateNonDistinctMessageFor(
+            string printedCollection
+        )
+        {
+            return $"Expected {printedCollection} to only contain unique items";
         }
     }
 
