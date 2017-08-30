@@ -61,6 +61,8 @@
     <Compile Include="Implementations\Instance.cs" />
     <Compile Include="Implementations\LessContinuation.cs" />
     <Compile Include="Implementations\MatcherRunner.cs" />
+    <Compile Include="Implementations\Null.cs" />
+    <Compile Include="Implementations\NullOr.cs" />
     <Compile Include="Interfaces\CountMatchMethods.cs" />
     <Compile Include="Interfaces\IA.cs" />
     <Compile Include="Interfaces\IAn.cs" />

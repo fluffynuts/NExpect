@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NExpect.Interfaces;
+// ReSharper disable UsePatternMatching
 
 namespace NExpect.MatcherLogic
 {

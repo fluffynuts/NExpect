@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 
