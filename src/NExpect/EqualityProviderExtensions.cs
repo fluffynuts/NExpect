@@ -76,12 +76,12 @@ namespace NExpect
         {
             continuation.AddMatcher(actual =>
             {
-                if (ValuesAreEqual(expected, actual)||
+                if (ValuesAreEqual(expected, actual) ||
                     BothAreNull(expected, actual))
-                    return new MatcherResult(true, $"Did not expect {expected}, but got exactly that");
+                    return new MatcherResult(true, $"Did not expect {Quote(expected)}, but got exactly that");
                 return new MatcherResult(false,
                     FinalMessageFor(
-                        $"Expected {expected} but got {actual}",
+                        $"Expected {Quote(expected)} but got {Quote(actual)}",
                         customMessage
                     ));
             });
