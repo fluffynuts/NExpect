@@ -101,7 +101,6 @@
     <Compile Include="Interfaces\IExceptionPropertyContinuation.cs" />
     <Compile Include="Interfaces\IExpectationContext.cs" />
     <Compile Include="Interfaces\IExpectationParentContext.cs" />
-    <Compile Include="Interfaces\IGrammarContinuation.cs" />
     <Compile Include="Interfaces\IHasActual.cs" />
     <Compile Include="Interfaces\IThrowContinuation.cs" />
     <Compile Include="Interfaces\IWithAfterThrowContinuation.cs" />

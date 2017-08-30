@@ -1,8 +1,9 @@
 using NExpect.Interfaces;
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect.Implementations
 {
-    // ReSharper disable once ClassNeverInstantiated.Global
     internal class ValueContinuation<TValue>
         : ExpectationContext<TValue>,
             IExceptionPropertyContinuation<TValue>

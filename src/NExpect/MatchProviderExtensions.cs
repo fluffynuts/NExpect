@@ -2,6 +2,7 @@ using System;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+// ReSharper disable UnusedMember.Global
 
 namespace NExpect
 {
@@ -12,7 +13,6 @@ namespace NExpect
     /// </summary>
     public static class MatchProviderExtensions
     {
-        // TODO: similarly, allow Func<T, IMatcherResult>
         /// <summary>
         /// Match the value under test with a simple Func which takes in your value
         /// and returns true if the test should pass.

@@ -2,6 +2,7 @@
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+// ReSharper disable UnusedMethodReturnValue.Global
 
 namespace NExpect
 {
