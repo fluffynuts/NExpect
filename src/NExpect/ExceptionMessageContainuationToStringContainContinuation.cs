@@ -1,5 +1,6 @@
 using NExpect.Implementations;
 using NExpect.Interfaces;
+// ReSharper disable ClassNeverInstantiated.Global
 
 namespace NExpect
 {

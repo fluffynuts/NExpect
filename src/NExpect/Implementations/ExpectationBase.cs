@@ -1,5 +1,6 @@
 ﻿using System;
 using NExpect.MatcherLogic;
+// ReSharper disable MemberCanBeProtected.Global
 
 namespace NExpect.Implementations
 {

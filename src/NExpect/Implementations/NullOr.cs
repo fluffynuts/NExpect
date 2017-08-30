@@ -4,11 +4,13 @@
 
 namespace NExpect.Implementations
 {
-    internal class A<T> : ExpectationContext<T>, IA<T>
+    internal class NullOr<T> :
+        ExpectationContext<T>,
+        INullOr<T>
     {
-        public object Actual { get; }
+        public T Actual { get; }
 
-        public A(object actual)
+        public NullOr(T actual)
         {
             Actual = actual;
         }

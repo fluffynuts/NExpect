@@ -36,6 +36,7 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         public static void True(this IBe<bool?> continuation)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             continuation.AddMatcher(TruthTestFor(true as bool?, null));
         }
 
@@ -46,6 +47,7 @@ namespace NExpect
         /// <param name="message">Custom message to include on failure</param>
         public static void True(this IBe<bool?> continuation, string message)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             continuation.AddMatcher(TruthTestFor(true as bool?, message));
         }
 
@@ -74,6 +76,7 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         public static void False(this IBe<bool?> continuation)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             continuation.AddMatcher(TruthTestFor(false as bool?, null));
         }
 
@@ -84,6 +87,7 @@ namespace NExpect
         /// <param name="message">Custom message to include on failure</param>
         public static void False(this IBe<bool?> continuation, string message)
         {
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
             continuation.AddMatcher(TruthTestFor(false as bool?, message));
         }
 

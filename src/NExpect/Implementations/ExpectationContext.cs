@@ -22,7 +22,7 @@ namespace NExpect.Implementations
         }
 
         private int _storedNegations;
-        private List<Func<T, IMatcherResult>> _storedExpectations = new List<Func<T, IMatcherResult>>();
+        private readonly List<Func<T, IMatcherResult>> _storedExpectations = new List<Func<T, IMatcherResult>>();
 
         public virtual void Negate()
         {

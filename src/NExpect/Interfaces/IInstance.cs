@@ -1,11 +1,12 @@
 using System;
+// ReSharper disable InheritdocConsiderUsage
 
 namespace NExpect.Interfaces
 {
     /// <summary>
     /// Base interface for instance testing (TODO)
     /// </summary>
-    public interface IInstance
+    internal interface IInstance
     {
         /// <summary>
         /// Type of the object being tested
@@ -17,7 +18,7 @@ namespace NExpect.Interfaces
     /// Continuation for .Instance.Of&lt;T&gt;()
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IInstance<T> :
+    internal interface IInstance<T> :
         IInstance,
         ICanAddMatcher<T>,
         IHasActual<T>

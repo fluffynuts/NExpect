@@ -1,8 +1,10 @@
 ﻿using NExpect.Interfaces;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect.Implementations
 {
-    // ReSharper disable once ClassNeverInstantiated.Global
     internal class An<T> : ExpectationContext<T>, IAn<T>
     {
         public T Actual { get; }

@@ -1,6 +1,7 @@
 using System;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect.Implementations
 {

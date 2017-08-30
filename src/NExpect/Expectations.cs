@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using NExpect.Exceptions;
 using NExpect.Implementations;
 using NExpect.Interfaces;
+// ReSharper disable UnusedMember.Global
 
 namespace NExpect
 {

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+// ReSharper disable InheritdocConsiderUsage
 
 namespace NExpect.Interfaces
 {

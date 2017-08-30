@@ -1,4 +1,5 @@
-﻿namespace NExpect.Interfaces
+﻿// ReSharper disable InheritdocConsiderUsage
+namespace NExpect.Interfaces
 {
     /// <summary>
     /// Provides ".To" after a ".Not"

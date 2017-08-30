@@ -1,10 +1,11 @@
 ﻿using NExpect.Interfaces;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable MemberCanBeProtected.Global
 
 namespace NExpect.Implementations
 {
     internal class Be<T> : ExpectationContext<T>, IBe<T>
     {
-        // ReSharper disable once MemberCanBePrivate.Global
         public T Actual { get; }
 
         public INotAfterBe<T> Not => Factory.Create<T, NotAfterBe<T>>(Actual, this);
@@ -27,32 +28,6 @@ namespace NExpect.Implementations
         public INull<T> Null => Factory.Create<T, Null<T>>(Actual, this);
 
         public Be(T actual)
-        {
-            Actual = actual;
-        }
-    }
-
-    internal class Null<T> :
-        ExpectationContext<T>,
-        INull<T>
-    {
-        T Actual { get; }
-
-        public Null(T actual)
-        {
-            Actual = actual;
-        }
-
-        public INullOr<T> Or => Factory.Create<T, NullOr<T>>(Actual, this);
-    }
-
-    internal class NullOr<T> :
-        ExpectationContext<T>,
-        INullOr<T>
-    {
-        public T Actual { get; }
-
-        public NullOr(T actual)
         {
             Actual = actual;
         }

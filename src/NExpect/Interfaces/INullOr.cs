@@ -1,4 +1,5 @@
-﻿namespace NExpect.Interfaces
+﻿// ReSharper disable InheritdocConsiderUsage
+namespace NExpect.Interfaces
 {
     /// <summary>
     /// Continuation to test for null or something else (typically empty or whitespace)
