@@ -21,5 +21,9 @@ namespace NExpect.Interfaces
         /// Prepares to test the state of the collection (eg, for emptiness)
         /// </summary>
         ICollectionBe<T> Be { get; }
+        /// <summary>
+        /// Prepares to test the state of the collection (eg, for uniqueness)
+        /// </summary>
+        ICollectionHave<T> Have { get; }
     }
 }
