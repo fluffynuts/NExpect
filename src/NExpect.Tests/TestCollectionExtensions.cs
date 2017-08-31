@@ -7,6 +7,7 @@ using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
 using static PeanutButter.Utils.PyLike;
 using NExpect.Exceptions;
+
 // ReSharper disable PossibleMultipleEnumeration
 
 namespace NExpect.Tests
@@ -1262,7 +1263,7 @@ namespace NExpect.Tests
             public void OperatingOnCollectionWithSameItems_ShouldThrow()
             {
                 // Arrange
-                var collection = new List<int> { 1, 1 };
+                var collection = new List<int> {1, 1};
 
                 // Pre-Assert
 
@@ -1279,7 +1280,7 @@ namespace NExpect.Tests
             public void OperatingOnCollectionWithUniqueItems_ShouldNotThrow()
             {
                 // Arrange
-                var collection = new List<int> { 1, 2, 3 };
+                var collection = new List<int> {1, 2, 3};
 
                 // Pre-Assert
 
@@ -1296,7 +1297,7 @@ namespace NExpect.Tests
             public void Negated_OperatingOnCollectionWithUniqueItems_ShouldThrow()
             {
                 // Arrange
-                var collection = new List<int> { 1, 2, 3 };
+                var collection = new List<int> {1, 2, 3};
 
                 // Pre-Assert
 
@@ -1313,7 +1314,7 @@ namespace NExpect.Tests
             public void Negated_AltGrammar_OperatingOnCollectionWithUniqueItems_ShouldThrow()
             {
                 // Arrange
-                var collection = new List<int> { 1, 2, 3 };
+                var collection = new List<int> {1, 2, 3};
 
                 // Pre-Assert
 
@@ -1330,7 +1331,7 @@ namespace NExpect.Tests
             public void Negated_OperatingOnCollectionWithSameItems_ShouldNotThrow()
             {
                 // Arrange
-                var collection = new List<int> { 1, 1 };
+                var collection = new List<int> {1, 1};
 
                 // Pre-Assert
 
@@ -1347,7 +1348,7 @@ namespace NExpect.Tests
             public void Negated_AltGrammar_OperatingOnCollectionWithSameItems_ShouldNotThrow()
             {
                 // Arrange
-                var collection = new List<int> { 1, 1 };
+                var collection = new List<int> {1, 1};
 
                 // Pre-Assert
 
@@ -1422,7 +1423,7 @@ namespace NExpect.Tests
             public void OperatingOnCollectionWithSameItems_ShouldThrow()
             {
                 // Arrange
-                var collection = new List<int> { 1, 1 };
+                var collection = new List<int> {1, 1};
 
                 // Pre-Assert
 
@@ -1439,7 +1440,7 @@ namespace NExpect.Tests
             public void OperatingOnCollectionWithUniqueItems_ShouldNotThrow()
             {
                 // Arrange
-                var collection = new List<int> { 1, 2, 3 };
+                var collection = new List<int> {1, 2, 3};
 
                 // Pre-Assert
 
@@ -1456,7 +1457,7 @@ namespace NExpect.Tests
             public void Negated_OperatingOnCollectionWithUniqueItems_ShouldThrow()
             {
                 // Arrange
-                var collection = new List<int> { 1, 2, 3 };
+                var collection = new List<int> {1, 2, 3};
 
                 // Pre-Assert
 
@@ -1473,7 +1474,7 @@ namespace NExpect.Tests
             public void Negated_AltGrammar_OperatingOnCollectionWithUniqueItems_ShouldThrow()
             {
                 // Arrange
-                var collection = new List<int> { 1, 2, 3 };
+                var collection = new List<int> {1, 2, 3};
 
                 // Pre-Assert
 
@@ -1490,7 +1491,7 @@ namespace NExpect.Tests
             public void Negated_OperatingOnCollectionWithSameItems_ShouldNotThrow()
             {
                 // Arrange
-                var collection = new List<int> { 1, 1 };
+                var collection = new List<int> {1, 1};
 
                 // Pre-Assert
 
@@ -1507,7 +1508,7 @@ namespace NExpect.Tests
             public void Negated_AltGrammar_OperatingOnCollectionWithSameItems_ShouldNotThrow()
             {
                 // Arrange
-                var collection = new List<int> { 1, 1 };
+                var collection = new List<int> {1, 1};
 
                 // Pre-Assert
 
@@ -1527,7 +1528,7 @@ namespace NExpect.Tests
                 public void OperatingOnCollectionWithSameItems()
                 {
                     // Arrange
-                    var collection = new List<int>{1,1,1};
+                    var collection = new List<int> {1, 1, 1};
 
                     // Pre-Assert
 
@@ -1545,7 +1546,7 @@ namespace NExpect.Tests
                 public void OperatingOnCollectionWithUniqueItems()
                 {
                     // Arrange
-                    var collection = new List<int> { 1, 2, 3 };
+                    var collection = new List<int> {1, 2, 3};
 
                     // Pre-Assert
 
@@ -1572,7 +1573,8 @@ namespace NExpect.Tests
                         {
                             Expect(collection).Not.To.Have.Unique.Items();
                         }, Throws.Exception.TypeOf<UnmetExpectationException>()
-                        .With.Message.EqualTo("Expected [  ] to contain duplicate items, but found empty collection")
+                            .With.Message
+                            .EqualTo("Expected [  ] to contain duplicate items, but found empty collection")
                     );
                     // Assert
                 }
@@ -1593,6 +1595,139 @@ namespace NExpect.Tests
                         }, Throws.Exception.TypeOf<UnmetExpectationException>()
                             .With.Message.Contains("Expected IEnumerable<Int32>, but found (null)")
                     );
+                    // Assert
+                }
+            }
+
+            [TestFixture]
+            public class ItemCountTesting
+            {
+                [Test]
+                public void WhenCollectionHasExpectedCount_ShouldNotThrow()
+                {
+                    // Arrange
+                    var expected = GetRandomInt(1);
+                    var input = new int[expected];
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(input).To.Contain.Exactly(expected).Items();
+                    }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void WhenCollectionDoesNotHaveExpectedCount_ShouldThrow()
+                {
+                    // Arrange
+                    var expected = GetRandomInt(10);
+                    var delta = GetRandomInt(1, 3);
+                    var actual = GetRandomBoolean() ? expected + delta : expected - delta;
+                    var input = new int[actual];
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(input).To.Contain.Exactly(expected).Items();
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                           .With.Message.Contains($"Expected to find {expected}"));
+                    // Assert
+                }
+
+                [Test]
+                public void Negated_WhenCollectionDoesNotHaveExpectedCount_ShouldNotThrow()
+                {
+                    // Arrange
+                    var expected = GetRandomInt(10);
+                    var delta = GetRandomInt(1, 3);
+                    var actual = GetRandomBoolean() ? expected + delta : expected - delta;
+                    var input = new int[actual];
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(input).Not.To.Contain.Exactly(expected).Items();
+                    }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void Negated_WhenCollectionDoesHaveExpectedCount_ShouldThrow()
+                {
+                    // Arrange
+                    var expected = GetRandomInt(10);
+                    var delta = GetRandomInt(1, 3);
+                    var actual = GetRandomBoolean() ? expected + delta : expected - delta;
+                    var input = new int[actual];
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(input).Not.To.Contain.Exactly(actual).Items();
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains($"Expected not to find {actual} items"));
+                    // Assert
+                }
+
+                [Test]
+                public void Negated_AltGrammar_WhenCollectionDoesNotHaveExpectedCount_ShouldNotThrow()
+                {
+                    // Arrange
+                    var expected = GetRandomInt(10);
+                    var delta = GetRandomInt(1, 3);
+                    var actual = GetRandomBoolean() ? expected + delta : expected - delta;
+                    var input = new int[actual];
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(input).To.Not.Contain.Exactly(expected).Items();
+                    }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void No_WhenCollectionHasNoItems_ShouldThrow()
+                {
+                    // Arrange
+                    var input = new int[0];
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(input).To.Contain.No().Items();
+                    }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void No_WhenCollectionHasItems_ShouldThrow()
+                {
+                    // Arrange
+                    var expected = GetRandomInt(1);
+                    var input = new int[expected];
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(input).To.Contain.No().Items();
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    // Assert
+                }
+
+                [Test]
+                public void No_Negated_WhenCollectionHasItems_ShouldNotThrow()
+                {
+                    // Arrange
+                    var expected = GetRandomInt(1);
+                    var input = new int[expected];
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(input).Not.To.Contain.No().Items();
+                    }, Throws.Nothing);
                     // Assert
                 }
             }

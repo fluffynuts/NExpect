@@ -96,6 +96,23 @@ namespace NExpect
         }
 
         /// <summary>
+        /// Starts continuation to match no items in the source collection
+        /// </summary>
+        /// <param name="contain">Continuation to continue from</param>
+        /// <typeparam name="T">Type of items in collection</typeparam>
+        /// <returns></returns>
+        public static ICountMatchContinuation<IEnumerable<T>> No<T>(
+            this IContain<IEnumerable<T>> contain
+        )
+        {
+            return new CountMatchContinuation<IEnumerable<T>>(
+                contain,
+                CountMatchMethods.Exactly,
+                0
+            );
+        }
+
+        /// <summary>
         /// Starts continuation to match all items in the source collection
         /// </summary>
         /// <param name="contain">Continuation to continue from</param>
@@ -324,6 +341,42 @@ namespace NExpect
         )
         {
             CheckDistinct(be, customMessage);
+        }
+
+        /// <summary>
+        /// Tests for the presence of any items, using the count matcher that preceded
+        /// </summary>
+        /// <param name="contain">Collection to test</param>
+        /// <typeparam name="T">Item type of the collection</typeparam>
+        public static void Items<T>(
+            this ICountMatchContinuation<IEnumerable<T>> contain
+        )
+        {
+            contain.Items(null);
+        }
+
+        /// <summary>
+        /// Tests for the presence of any items, using the count matcher that preceded
+        /// </summary>
+        /// <param name="contain">Collection to test</param>
+        /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <typeparam name="T">Item type of the collection</typeparam>
+        public static void Items<T>(
+            this ICountMatchContinuation<IEnumerable<T>> contain,
+            string customMessage
+        )
+        {
+            contain.AddMatcher(collection =>
+            {
+                var expected = contain.GetExpectedCount();
+                var actual = collection?.Count() ?? 0;
+                var passed = actual == expected;
+                var not = passed ? "not " : "";
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor($"Expected {not}to find {expected} items but actually found {actual}", customMessage)
+                );
+            });
         }
 
         private static bool TestEquivalenceOf<T>(
