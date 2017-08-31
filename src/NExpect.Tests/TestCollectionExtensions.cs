@@ -1663,7 +1663,7 @@ namespace NExpect.Tests
                     {
                         Expect(input).To.Contain.Exactly(expected).Items();
                     }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                           .With.Message.Contains($"Expected to find {expected}"));
+                        .With.Message.Contains($"Expected to find {expected}"));
                     // Assert
                 }
 
@@ -1760,6 +1760,280 @@ namespace NExpect.Tests
                     {
                         Expect(input).Not.To.Contain.No().Items();
                     }, Throws.Nothing);
+                    // Assert
+                }
+            }
+        }
+
+        [TestFixture]
+        public class Equality
+        {
+            [TestFixture]
+            public class WithNoCustomMessage
+            {
+                [Test]
+                public void GivenTwoCollectionsWithSameItemsInSameOrder_ShouldNotThrow()
+                {
+                    // Arrange
+                    var left = new[] {1, 2};
+                    var right = new[] {1, 2};
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(left).To.Equal(right);
+                    }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void Negated_GivenTwoCollectionsWithSameItemsInSameOrder_ShouldThrow()
+                {
+                    // Arrange
+                    var left = new[] {1, 2};
+                    var right = new[] {1, 2};
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(left).Not.To.Equal(right);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    // Assert
+                }
+
+                [Test]
+                public void Negated_AltGrammar_GivenTwoCollectionsWithSameItemsInSameOrder_ShouldThrow()
+                {
+                    // Arrange
+                    var left = new[] {1, 2};
+                    var right = new[] {1, 2};
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(left).To.Not.Equal(right);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    // Assert
+                }
+
+                [Test]
+                public void GivenTwoCollectionsWithSameItemsOutOfOrder_ShouldThrow()
+                {
+                    // Arrange
+                    var left = new[] {1, 2};
+                    var right = new[] {2, 1};
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(left).To.Equal(right);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    // Assert
+                }
+            }
+
+            [TestFixture]
+            public class WithNoCustomMessageLongerSyntax
+            {
+                [Test]
+                public void GivenTwoCollectionsWithSameItemsInSameOrder_ShouldNotThrow()
+                {
+                    // Arrange
+                    var left = new[] {1, 2};
+                    var right = new[] {1, 2};
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(left).To.Be.Equal.To(right);
+                    }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void Negated_GivenTwoCollectionsWithSameItemsInSameOrder_ShouldThrow()
+                {
+                    // Arrange
+                    var left = new[] {1, 2};
+                    var right = new[] {1, 2};
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(left).Not.To.Be.Equal.To(right);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    // Assert
+                }
+
+                [Test]
+                public void Negated_AltGrammar_GivenTwoCollectionsWithSameItemsInSameOrder_ShouldThrow()
+                {
+                    // Arrange
+                    var left = new[] {1, 2};
+                    var right = new[] {1, 2};
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(left).To.Not.Be.Equal.To(right);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    // Assert
+                }
+
+                [Test]
+                public void GivenTwoCollectionsWithSameItemsOutOfOrder_ShouldThrow()
+                {
+                    // Arrange
+                    var left = new[] {1, 2};
+                    var right = new[] {2, 1};
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(left).To.Be.Equal.To(right);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    // Assert
+                }
+            }
+
+            [TestFixture]
+            public class WithCustomMessage
+            {
+                [Test]
+                public void GivenTwoCollectionsWithSameItemsInSameOrder_ShouldNotThrow()
+                {
+                    // Arrange
+                    var left = new[] {1, 2};
+                    var right = new[] {1, 2};
+                    var message = GetRandomString();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(left).To.Equal(right, message);
+                    }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void Negated_GivenTwoCollectionsWithSameItemsInSameOrder_ShouldThrow()
+                {
+                    // Arrange
+                    var left = new[] {1, 2};
+                    var right = new[] {1, 2};
+                    var message = GetRandomString();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(left).Not.To.Equal(right, message);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains(message));
+                    // Assert
+                }
+
+                [Test]
+                public void Negated_AltGrammar_GivenTwoCollectionsWithSameItemsInSameOrder_ShouldThrow()
+                {
+                    // Arrange
+                    var left = new[] {1, 2};
+                    var right = new[] {1, 2};
+                    var message = GetRandomString();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(left).To.Not.Equal(right, message);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains(message));
+                    // Assert
+                }
+
+                [Test]
+                public void GivenTwoCollectionsWithSameItemsOutOfOrder_ShouldThrow()
+                {
+                    // Arrange
+                    var left = new[] {1, 2};
+                    var right = new[] {2, 1};
+                    var message = GetRandomString();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(left).To.Equal(right, message);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains(message));
+                    // Assert
+                }
+            }
+
+            [TestFixture]
+            public class WithCustomMessageLongerSyntax
+            {
+                [Test]
+                public void GivenTwoCollectionsWithSameItemsInSameOrder_ShouldNotThrow()
+                {
+                    // Arrange
+                    var left = new[] {1, 2};
+                    var right = new[] {1, 2};
+                    var message = GetRandomString();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(left).To.Be.Equal.To(right, message);
+                    }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void Negated_GivenTwoCollectionsWithSameItemsInSameOrder_ShouldThrow()
+                {
+                    // Arrange
+                    var left = new[] {1, 2};
+                    var right = new[] {1, 2};
+                    var message = GetRandomString();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(left).Not.To.Be.Equal.To(right, message);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains(message));
+                    // Assert
+                }
+
+                [Test]
+                public void Negated_AltGrammar_GivenTwoCollectionsWithSameItemsInSameOrder_ShouldThrow()
+                {
+                    // Arrange
+                    var left = new[] {1, 2};
+                    var right = new[] {1, 2};
+                    var message = GetRandomString();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(left).To.Not.Be.Equal.To(right, message);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains(message));
+                    // Assert
+                }
+
+                [Test]
+                public void GivenTwoCollectionsWithSameItemsOutOfOrder_ShouldThrow()
+                {
+                    // Arrange
+                    var left = new[] {1, 2};
+                    var right = new[] {2, 1};
+                    var message = GetRandomString();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(left).To.Be.Equal.To(right, message);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains(message));
                     // Assert
                 }
             }

@@ -13,5 +13,10 @@ namespace NExpect.Interfaces
         /// Prepares to do an out-of-order match with an expected collection
         /// </summary>
         ICollectionEquivalent<T> Equivalent { get; }
+
+        /// <summary>
+        /// Prepares to do an in-order match with an expected collection
+        /// </summary>
+        ICollectionEqual<T> Equal { get; }
     }
 }

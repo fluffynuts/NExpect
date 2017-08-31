@@ -45,8 +45,6 @@ namespace NExpect
             be.AddMatcher(CreateCollectionRefEqualMatcherFor<T>(expected));
         }
 
-        // TODO: lock down .Equal to act on ITo<T> and IToAfterNot<T>, as above
-
         /// <summary>
         /// Performs equality checking -- the end of .To.Equal()
         /// </summary>
@@ -54,7 +52,7 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
         public static void Equal<T>(
-            this ICanAddMatcher<T> continuation,
+            this ITo<T> continuation,
             T expected
         )
         {
@@ -66,15 +64,88 @@ namespace NExpect
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
-        /// <param name="customMessage">Custom message to include when failing</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
         public static void Equal<T>(
-            this ICanAddMatcher<T> continuation,
+            this IToAfterNot<T> continuation,
+            T expected
+        )
+        {
+            continuation.Equal(expected, null);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this IToAfterNot<T> continuation,
             T expected,
             string customMessage
         )
         {
-            continuation.AddMatcher(actual =>
+            continuation.AddMatcher(
+                GenerateEqualityMatcherFor(expected, customMessage)
+            );
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this INotAfterTo<T> continuation,
+            T expected
+        )
+        {
+            continuation.Equal(expected, null);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this INotAfterTo<T> continuation,
+            T expected,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(
+                GenerateEqualityMatcherFor(expected, customMessage)
+            );
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessage">Custom message to include when failing</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ITo<T> continuation,
+            T expected,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(
+                GenerateEqualityMatcherFor(expected, customMessage)
+            );
+        }
+
+        private static Func<T, IMatcherResult> GenerateEqualityMatcherFor<T>(
+            T expected, string customMessage
+        )
+        {
+            return actual =>
             {
                 if (ValuesAreEqual(expected, actual) ||
                     BothAreNull(expected, actual))
@@ -84,7 +155,7 @@ namespace NExpect
                         $"Expected {Quote(expected)} but got {Quote(actual)}",
                         customMessage
                     ));
-            });
+            };
         }
 
         private static bool ValuesAreEqual<T>(T expected, T actual)

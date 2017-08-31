@@ -12,6 +12,9 @@ namespace NExpect.Implementations
         public ICollectionEquivalent<T> Equivalent =>
             Factory.Create<IEnumerable<T>, CollectionEquivalent<T>>(Actual, this);
 
+        public ICollectionEqual<T> Equal =>
+            Factory.Create<IEnumerable<T>, CollectionEqual<T>>(Actual, this);
+
         public IEnumerable<T> Actual { get; }
 
         public CollectionBe(IEnumerable<T> actual)

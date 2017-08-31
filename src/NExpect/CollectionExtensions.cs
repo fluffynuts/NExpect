@@ -436,6 +436,167 @@ namespace NExpect
             });
         }
 
+        //----------------
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICollectionTo<T> continuation,
+            IEnumerable<T> expected
+        )
+        {
+            continuation.Equal(expected, null);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICollectionToAfterNot<T> continuation,
+            IEnumerable<T> expected
+        )
+        {
+            continuation.Equal(expected, null);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICollectionToAfterNot<T> continuation,
+            IEnumerable<T> expected,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(
+                GenerateEqualityMatcherFor(expected, customMessage)
+            );
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICollectionNotAfterTo<T> continuation,
+            IEnumerable<T> expected
+        )
+        {
+            continuation.Equal(expected, null);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICollectionNotAfterTo<T> continuation,
+            IEnumerable<T> expected,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(
+                GenerateEqualityMatcherFor(expected, customMessage)
+            );
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessage">Custom message to include when failing</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICollectionTo<T> continuation,
+            IEnumerable<T> expected,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(
+                GenerateEqualityMatcherFor(expected, customMessage)
+            );
+        }
+
+        /// <summary>
+        /// Performs in-order equality testing on items in two collections
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected collection to match against</param>
+        /// <typeparam name="T">Collection item type</typeparam>
+        public static void To<T>(
+            this ICollectionEqual<T> continuation,
+            IEnumerable<T> expected
+        )
+        {
+            continuation.To(expected, null);
+        }
+
+        /// <summary>
+        /// Performs in-order equality testing on items in two collections
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected collection to match against</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T">Collection item type</typeparam>
+        public static void To<T>(
+            this ICollectionEqual<T> continuation,
+            IEnumerable<T> expected,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(GenerateEqualityMatcherFor(expected, customMessage));
+        }
+
+        private static Func<IEnumerable<T>, IMatcherResult> GenerateEqualityMatcherFor<T>(
+            IEnumerable<T> expected, string customMessage
+        )
+        {
+            return actual =>
+            {
+                var passed = AllItemsMatchInOrder(actual, expected);
+                var not = passed ? "not " : "";
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor($"Expected collection:\n{actual.PrettyPrint()}\n{not}to match:\n{expected.PrettyPrint()}", customMessage)
+                );
+            };
+        }
+
+        private static bool AllItemsMatchInOrder<T>(
+            IEnumerable<T> actual, 
+            IEnumerable<T> expected
+        )
+        {
+            if (actual == null && expected == null)
+                return true;
+            if (actual == null || expected == null)
+                return false;
+            var actualArray = actual.ToArray();
+            var expectedArray = expected.ToArray();
+            if (actualArray.Length != expectedArray.Length)
+                return false;
+            return actualArray.Zip(expectedArray, Tuple.Create)
+                        .All(o => AreEqual(o.Item1, o.Item2));
+
+        }
+        //--------------------
+
         private static bool TestEquivalenceOf<T>(
             IEnumerable<T> collectionA,
             IEnumerable<T> collectionB)
