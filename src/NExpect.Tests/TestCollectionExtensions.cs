@@ -1219,7 +1219,7 @@ namespace NExpect.Tests
             }
 
             [Test]
-            public void OperatingOnNullCollection_ShouldNotThrow()
+            public void OperatingOnNullCollection_ShouldThrow()
             {
                 // Arrange
                 List<int> collection = null;
@@ -1230,7 +1230,7 @@ namespace NExpect.Tests
                 Assert.That(() =>
                 {
                     Expect(collection).To.Be.Distinct();
-                }, Throws.Nothing);
+                }, Throws.Exception.TypeOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -1378,7 +1378,7 @@ namespace NExpect.Tests
             }
 
             [Test]
-            public void OperatingOnNullCollection_ShouldNotThrow()
+            public void OperatingOnNullCollection_ShouldThrow()
             {
                 // Arrange
                 List<int> collection = null;
@@ -1389,7 +1389,7 @@ namespace NExpect.Tests
                 Assert.That(() =>
                 {
                     Expect(collection).To.Have.Unique.Items();
-                }, Throws.Nothing);
+                }, Throws.Exception.TypeOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -1567,6 +1567,24 @@ namespace NExpect.Tests
                             Expect(collection).Not.To.Have.Unique.Items();
                         }, Throws.Exception.TypeOf<UnmetExpectationException>()
                         .With.Message.EqualTo("Expected [  ] to contain duplicate items, but found empty collection")
+                    );
+                    // Assert
+                }
+
+                [Test]
+                public void OperatingOnNullCollection()
+                {
+                    // Arrange
+                    List<int> collection = null;
+
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(collection).To.Have.Unique.Items();
+                        }, Throws.Exception.TypeOf<UnmetExpectationException>()
+                            .With.Message.Contains("Expected IEnumerable<Int32>, but found (null)")
                     );
                     // Assert
                 }

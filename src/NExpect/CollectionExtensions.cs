@@ -389,7 +389,9 @@ namespace NExpect
 
         private static bool CollectionIsDistinct<T>(IEnumerable<T> collection)
         {
-            return (collection?.Distinct().Count() ?? 0) == (collection?.Count() ?? 0);
+            return (collection == null)
+                ? throw new ArgumentNullException(nameof(collection), $"Expected IEnumerable<{typeof(T).Name}>, but found {CollectionPrint(collection)}")
+                : collection.Distinct().Count() == collection.Count();
         }
         
         private static readonly Dictionary<CountMatchMethods,
