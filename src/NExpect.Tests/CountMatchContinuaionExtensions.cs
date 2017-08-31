@@ -22,7 +22,7 @@ namespace NExpect.Tests
                 var not = passed ? "" : "not ";
                 return new MatcherResult(
                     passed,
-                    $"Expected {MessageHelpers.CollectionPrint(collection)} {not}to be only odd numbers"
+                    $"Expected {MessageHelpers.PrettyPrint(collection)} {not}to be only odd numbers"
                 );
             });
         }

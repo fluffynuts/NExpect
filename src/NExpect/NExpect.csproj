@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assertions.cs" />
+    <Compile Include="CollectionFluencyExtensions.cs" />
     <Compile Include="ExceptionMessageContainuationToStringContainContinuation.cs" />
     <Compile Include="Expectations.cs" />
     <Compile Include="GreaterOrLessContinuationExtensions.cs" />

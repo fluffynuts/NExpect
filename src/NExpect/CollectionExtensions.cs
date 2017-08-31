@@ -5,6 +5,7 @@ using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
+// ReSharper disable MemberCanBePrivate.Global
 
 // ReSharper disable PossibleMultipleEnumeration
 
@@ -209,7 +210,7 @@ namespace NExpect
                     : "";
                 return new MatcherResult(
                     passed,
-                    $"Expected {CollectionPrint(collection)} {not}to be an empty collection"
+                    $"Expected {collection.PrettyPrint()} {not}to be an empty collection"
                 );
             });
         }
@@ -233,7 +234,7 @@ namespace NExpect
                     : "";
                 return new MatcherResult(
                     passed,
-                    $"Expected {CollectionPrint(collection)} {not}to be equivalent to {CollectionPrint(other)}"
+                    $"Expected {collection.PrettyPrint()} {not}to be equivalent to {other.PrettyPrint()}"
                 );
             });
         }
@@ -267,7 +268,7 @@ namespace NExpect
                 var not = passed ? "not " : "";
                 return new MatcherResult(
                     passed,
-                    FinalMessageFor($"Expected {CollectionPrint(collection)} {not}to be null",
+                    FinalMessageFor($"Expected {collection.PrettyPrint()} {not}to be null",
                     customMessage)
                 );
             });
@@ -373,27 +374,26 @@ namespace NExpect
                     $"Exactly<T>() cannot extend null IContain<IEnumerable<{typeof(T).Name}>>");
         }
 
-        private static void CheckDistinct<T>(ICanAddMatcher<IEnumerable<T>> distinct, string customMessage)
+        private static void CheckDistinct<T>(
+            ICanAddMatcher<IEnumerable<T>> 
+            distinct, string customMessage
+        )
         {
             distinct.AddMatcher(collection =>
             {
-                var isDistinct = CollectionIsDistinct(collection);
-                var isEmpty = (collection?.Count() ?? 0) == 0;
+                var passed = collection.IsDistinct();
                 return new MatcherResult(
-                    isDistinct,
-                    FinalMessageFor(CreateCheckDistinctMessageFor(CollectionPrint(collection), isDistinct, isEmpty),
-                        customMessage)
+                        passed,
+                        FinalMessageFor(CreateCheckDistinctMessageFor(
+                            collection.PrettyPrint(), 
+                            passed,
+                            collection.IsEmpty()
+                        ),
+                    customMessage)
                 );
             });
         }
 
-        private static bool CollectionIsDistinct<T>(IEnumerable<T> collection)
-        {
-            return (collection == null)
-                ? throw new ArgumentNullException(nameof(collection), $"Expected IEnumerable<{typeof(T).Name}>, but found {CollectionPrint(collection)}")
-                : collection.Distinct().Count() == collection.Count();
-        }
-        
         private static readonly Dictionary<CountMatchMethods,
             Func<bool, object, int, int, string>> _collectionCountMessageStrategies =
             new Dictionary<CountMatchMethods, Func<bool, object, int, int, string>>()
@@ -546,11 +546,4 @@ namespace NExpect
             return $"Expected {printedCollection} to only contain unique items";
         }
     }
-
-//    public static class TypeExtensions
-//    {
-//        public static void A<T2>(this IBe<T> be)
-//        {
-//        }
-//    }
 }

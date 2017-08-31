@@ -91,7 +91,7 @@ namespace NExpect.Implementations
         /// <param name="collection">Collection to operate on</param>
         /// <typeparam name="T">Item type of collection</typeparam>
         /// <returns>Comma-separated list representing the collection</returns>
-        public static string Stringify<T>(IEnumerable<T> collection)
+        public static string Stringify<T>(this IEnumerable<T> collection)
         {
             return collection == null 
                     ? Null : 
@@ -106,7 +106,7 @@ namespace NExpect.Implementations
         /// <param name="collection">Collection to inspect</param>
         /// <typeparam name="T">Item type of collection</typeparam>
         /// <returns>Something like `[ "a", "b", "c" ]`</returns>
-        public static string CollectionPrint<T>(IEnumerable<T> collection)
+        public static string PrettyPrint<T>(this IEnumerable<T> collection)
         {
             if (collection == null)
                 return Null;
@@ -114,7 +114,7 @@ namespace NExpect.Implementations
             var ellipsis = asArray.Length > 10
                 ? " ..."
                 : "";
-            return $"[ {Stringify(asArray.Take(10))}{ellipsis} ]";
+            return $"[ {asArray.Take(10).Stringify()}{ellipsis} ]";
         }
 
     }

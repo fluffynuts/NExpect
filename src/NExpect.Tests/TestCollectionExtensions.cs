@@ -7,6 +7,7 @@ using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
 using static PeanutButter.Utils.PyLike;
 using NExpect.Exceptions;
+// ReSharper disable PossibleMultipleEnumeration
 
 namespace NExpect.Tests
 {
@@ -1094,6 +1095,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                 {
+                    // ReSharper disable once ExpressionIsAlwaysNull
                     Expect(collection).To.Be.Null();
                 }, Throws.Nothing);
                 // Assert
@@ -1158,6 +1160,7 @@ namespace NExpect.Tests
                     // Act
                     Assert.That(() =>
                     {
+                        // ReSharper disable once ExpressionIsAlwaysNull
                         Expect(collection).Not.To.Be.Null(expectedMessage);
                     }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains(expectedMessage));
@@ -1190,6 +1193,7 @@ namespace NExpect.Tests
                     // Act
                     Assert.That(() =>
                     {
+                        // ReSharper disable once ExpressionIsAlwaysNull
                         Expect(collection).To.Not.Be.Null(expected);
                     }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains(expected));
@@ -1229,6 +1233,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                 {
+                    // ReSharper disable once ExpressionIsAlwaysNull
                     Expect(collection).To.Be.Distinct();
                 }, Throws.Exception.TypeOf<UnmetExpectationException>());
 
@@ -1388,6 +1393,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                 {
+                    // ReSharper disable once ExpressionIsAlwaysNull
                     Expect(collection).To.Have.Unique.Items();
                 }, Throws.Exception.TypeOf<UnmetExpectationException>());
 
@@ -1582,6 +1588,7 @@ namespace NExpect.Tests
                     // Act
                     Assert.That(() =>
                         {
+                            // ReSharper disable once ExpressionIsAlwaysNull
                             Expect(collection).To.Have.Unique.Items();
                         }, Throws.Exception.TypeOf<UnmetExpectationException>()
                             .With.Message.Contains("Expected IEnumerable<Int32>, but found (null)")
