@@ -385,6 +385,38 @@ namespace NExpect.Tests
                     // Assert
                 }
 
+                [Test]
+                public void Contain_Any_MatchedByWithIndex_WhenCollectionHasMismatchesWithMatcher_ShouldThrow()
+                {
+                    // Arrange
+                    var items = Range(10).Select(i => i + 1).ToArray();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(items).To.Contain.Any().Matched.By((idx, item) => item == idx);
+                        },
+                        Throws.Exception
+                            .InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains("Expected to find any matching but found none"));
+                    // Assert
+                }
+
+                [Test]
+                public void Contain_All_MatchedByWithIndex_WhenCollectionHasMismatchesWithMatcher_ShouldThrow()
+                {
+                    // Arrange
+                    var items = Range(10).Select(i => i).ToArray();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(items).To.Contain.All().Matched.By((idx, item) => item == idx);
+                        },
+                        Throws.Nothing);
+                    // Assert
+                }
+
 
                 [Test]
                 public void Contain_All_WhenCollectionHasNoMismatches_ShouldNotThrow()

@@ -188,6 +188,7 @@ namespace NExpect
             });
         }
 
+
         /// <summary>
         /// Continuation for Matched, allowing testing the artifact with a simple func
         /// </summary>
@@ -199,6 +200,22 @@ namespace NExpect
             Func<T, bool> test
         )
         {
+            countMatch.By(test, null);
+        }
+
+        /// <summary>
+        /// Continuation for Matched, allowing testing the artifact with a simple func
+        /// </summary>
+        /// <param name="countMatch">Matched continuation</param>
+        /// <param name="test">Func to test Actual value with; return true for match, false for non-match</param>
+        /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <typeparam name="T">Type of artifact being tested</typeparam>
+        public static void By<T>(
+            this ICountMatchMatched<IEnumerable<T>> countMatch,
+            Func<T, bool> test,
+            string customMessage
+        )
+        {
             countMatch.Continuation.AddMatcher(collection =>
             {
                 var have = collection.Where(test).Count();
@@ -206,7 +223,47 @@ namespace NExpect
                 var passed = _collectionCountMatchStrategies[countMatch.Method](have, compare);
                 var message =
                     _collectionCountMatchMessageStrategies[countMatch.Method](passed, have, countMatch.Compare);
-                return new MatcherResult(passed, message);
+                return new MatcherResult(passed, FinalMessageFor(message, customMessage));
+            });
+        }
+
+        /// <summary>
+        /// Continuation for Matched, allowing testing the artifact with a simple func
+        /// </summary>
+        /// <param name="countMatch">Matched continuation</param>
+        /// <param name="test">Func to test Actual value with; return true for match, false for non-match</param>
+        /// <typeparam name="T">Type of artifact being tested</typeparam>
+        public static void By<T>(
+            this ICountMatchMatched<IEnumerable<T>> countMatch,
+            Func<int, T, bool> test
+        )
+        {
+            countMatch.By(test, null);
+        }
+
+        /// <summary>
+        /// Continuation for Matched, allowing testing the artifact with a simple func
+        /// </summary>
+        /// <param name="countMatch">Matched continuation</param>
+        /// <param name="test">Func to test Actual value with; return true for match, false for non-match</param>
+        /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <typeparam name="T">Type of artifact being tested</typeparam>
+        public static void By<T>(
+            this ICountMatchMatched<IEnumerable<T>> countMatch,
+            Func<int, T, bool> test,
+            string customMessage
+        )
+        {
+            countMatch.Continuation.AddMatcher(collection =>
+            {
+                var idx = 0;
+                var have = collection.Select(o => new { o, idx = idx++ })
+                                    .Count(o => test(o.idx, o.o));
+                var compare = countMatch.Method == CountMatchMethods.All ? collection.Count() : countMatch.Compare;
+                var passed = _collectionCountMatchStrategies[countMatch.Method](have, compare);
+                var message =
+                    _collectionCountMatchMessageStrategies[countMatch.Method](passed, have, countMatch.Compare);
+                return new MatcherResult(passed, FinalMessageFor(message, customMessage));
             });
         }
 
