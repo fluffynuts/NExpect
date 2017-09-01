@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NExpect.Interfaces;
 
 namespace NExpect.Implementations
@@ -11,20 +12,43 @@ namespace NExpect.Implementations
         where T : Exception
     {
         public IExceptionPropertyContinuation<string> Message =>
-            Factory.Create<string, ValueContinuation<string>>(
+            Factory.Create<string, ExceptionPropertyContinuation<string>>(
                 Actual.Message,
                 new WrappingContinuation<Exception, string>(
                     this, c => c.Actual?.Message
                 )
             );
-        public IExceptionPropertyContinuation<TValue> Property<TValue>(Func<T, TValue> propertyValueFetcher)
-        {
-            var exceptionPropertyValue = propertyValueFetcher(Actual);
 
-            return Factory.Create<TValue, ValueContinuation<TValue>>(
-                exceptionPropertyValue,
-                new WrappingContinuation<Exception, TValue>(
-                    this, c => exceptionPropertyValue
+        public IExceptionPropertyContinuation<TValue> Property<TValue>(
+            Func<T, TValue> propertyValueFetcher
+        )
+        {
+            return CreateFor(propertyValueFetcher);
+        }
+
+        public IExceptionCollectionPropertyContinuation<TItem> CollectionProperty<TItem>(
+            Func<T, IEnumerable<TItem>> propertyValueFetcher
+        )
+        {
+            var continuationValue = propertyValueFetcher(Actual);
+            return Factory.Create<IEnumerable<TItem>,
+                ExceptionCollectionPropertyContinuation<TItem>>(
+                continuationValue,
+                new WrappingContinuation<Exception, IEnumerable<TItem>>(
+                    this, c => continuationValue
+                )
+            );
+        }
+
+        private ExceptionPropertyContinuation<TContinuationValue> CreateFor<TContinuationValue>(
+            Func<T, TContinuationValue> propertyValueFetcher
+        )
+        {
+            var continuationValue = propertyValueFetcher(Actual);
+            return Factory.Create<TContinuationValue, ExceptionPropertyContinuation<TContinuationValue>>(
+                continuationValue,
+                new WrappingContinuation<Exception, TContinuationValue>(
+                    this, c => continuationValue
                 )
             );
         }

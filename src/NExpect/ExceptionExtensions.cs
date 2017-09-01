@@ -63,7 +63,7 @@ namespace NExpect
             }
             var exceptionPropertyValue = fetcher(actual);
 
-            return Factory.Create<TValue, ValueContinuation<TValue>>(
+            return Factory.Create<TValue, ExceptionPropertyContinuation<TValue>>(
                 exceptionPropertyValue,
                 new WrappingContinuation<T, TValue>(
                     moo, c => exceptionPropertyValue

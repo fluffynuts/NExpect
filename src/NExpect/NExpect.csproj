@@ -111,7 +111,7 @@
     <Compile Include="Interfaces\IHasActual.cs" />
     <Compile Include="Interfaces\IThrowContinuation.cs" />
     <Compile Include="Interfaces\IWithAfterThrowContinuation.cs" />
-    <Compile Include="Implementations\ValueContinuation.cs" />
+    <Compile Include="Implementations\ExceptionPropertyContinuation.cs" />
     <Compile Include="Implementations\ThrowContinuation.cs" />
     <Compile Include="Implementations\WithAfterThrowContinuation.cs" />
     <Compile Include="Implementations\WrappingContinuation.cs" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NExpect.Exceptions;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
@@ -118,7 +119,7 @@ namespace NExpect.Tests
                 // Arrange
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
-                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -164,7 +165,7 @@ namespace NExpect.Tests
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
                 var e3 = GetRandomString();
-                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -189,7 +190,7 @@ namespace NExpect.Tests
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
                 var e3 = GetRandomString();
-                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -212,7 +213,7 @@ namespace NExpect.Tests
                 // Arrange
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
-                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -323,7 +324,7 @@ namespace NExpect.Tests
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
                 var e3 = GetRandomString();
-                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -348,7 +349,7 @@ namespace NExpect.Tests
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
                 var e3 = GetRandomString();
-                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -371,7 +372,7 @@ namespace NExpect.Tests
                 // Arrange
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
-                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -490,7 +491,8 @@ namespace NExpect.Tests
         public class GenericProperty
         {
             [Test]
-            public void Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_HappyPath_TestingEqualTo()
+            public void
+                Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_HappyPath_TestingEqualTo()
             {
                 // Arrange
                 var expected = GetRandomString();
@@ -502,7 +504,8 @@ namespace NExpect.Tests
                     {
                         Expect(() => throw new ArgumentNullException(expected))
                             .To.Throw<ArgumentNullException>()
-                            .With.Property(ex => ex.ParamName).Equal.To(expected);
+                            .With.Property(ex => ex.ParamName)
+                            .Equal.To(expected);
                     },
                     Throws.Nothing);
 
@@ -510,7 +513,8 @@ namespace NExpect.Tests
             }
 
             [Test]
-            public void Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_SadPath_TestingEqualTo()
+            public void
+                Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_SadPath_TestingEqualTo()
             {
                 // Arrange
                 var expected = GetRandomString();
@@ -523,7 +527,8 @@ namespace NExpect.Tests
                     {
                         Expect(() => throw new ArgumentNullException(unexpected))
                             .To.Throw<ArgumentNullException>()
-                            .With.Property(ex => ex.ParamName).Equal.To(expected);
+                            .With.Property(ex => ex.ParamName)
+                            .Equal.To(expected);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains($"Expected \"{unexpected}\" to equal \"{expected}\""));
@@ -532,7 +537,8 @@ namespace NExpect.Tests
             }
 
             [Test]
-            public void Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_HappyPath_TestingContains()
+            public void
+                Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_HappyPath_TestingContains()
             {
                 // Arrange
                 var expected = GetRandomString(8, 8);
@@ -545,7 +551,8 @@ namespace NExpect.Tests
                     {
                         Expect(() => throw new ArgumentNullException(expected))
                             .To.Throw<ArgumentNullException>()
-                            .With.Property(ex => ex.ParamName).Containing(expectedSubstring);
+                            .With.Property(ex => ex.ParamName)
+                            .Containing(expectedSubstring);
                     },
                     Throws.Nothing);
 
@@ -553,7 +560,8 @@ namespace NExpect.Tests
             }
 
             [Test]
-            public void Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_SadPath_TestingContains()
+            public void
+                Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_SadPath_TestingContains()
             {
                 // Arrange
                 var expected = GetRandomString();
@@ -567,11 +575,42 @@ namespace NExpect.Tests
                     {
                         Expect(() => throw new ArgumentNullException(unexpected))
                             .To.Throw<ArgumentNullException>()
-                            .With.Property(ex => ex.ParamName).Containing(unexpectedSubstring);
+                            .With.Property(ex => ex.ParamName)
+                            .Containing(unexpectedSubstring);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains($"Expected \"{unexpected}\" to contain \"{unexpectedSubstring}\""));
 
+                // Assert
+            }
+
+            public class ExceptionWithInts : Exception
+            {
+                public IEnumerable<int> Ints { get; }
+
+                public ExceptionWithInts(IEnumerable<int> ints)
+                {
+                    Ints = ints;
+                }
+            }
+
+            [Test]
+            public void Throw_UsingProperty_ShouldDoCollectionComparisonOnCollections()
+            {
+                // Arrange
+                var expected = new[] {1, 2};
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(() =>
+                        {
+                            throw new ExceptionWithInts(new[] {1, 2});
+                        })
+                        .To.Throw<ExceptionWithInts>()
+                        .With.CollectionProperty(e => e.Ints)
+                        .Equal.To(expected);
+                }, Throws.Nothing);
                 // Assert
             }
         }
@@ -598,7 +637,8 @@ namespace NExpect.Tests
                             {
                                 Expect(() => throw new ArgumentNullException(expected))
                                     .To.Throw<ArgumentNullException>()
-                                    .With(ex => ex.ParamName).Equal.To(expected);
+                                    .With(ex => ex.ParamName)
+                                    .Equal.To(expected);
                             },
                             Throws.Nothing);
 
@@ -619,7 +659,8 @@ namespace NExpect.Tests
                             {
                                 Expect(() => throw new ArgumentNullException(unexpected))
                                     .To.Throw<ArgumentNullException>()
-                                    .With(ex => ex.ParamName).Equal.To(expected);
+                                    .With(ex => ex.ParamName)
+                                    .Equal.To(expected);
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>()
                                 .With.Message.Contains($"Expected \"{unexpected}\" to equal \"{expected}\""));
@@ -630,5 +671,4 @@ namespace NExpect.Tests
             }
         }
     }
-
 }
