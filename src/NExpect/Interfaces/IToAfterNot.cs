@@ -19,5 +19,9 @@ namespace NExpect.Interfaces
         /// Starts a property expectation
         /// </summary>
         IHave<T> Have { get; }
+        /// <summary>
+        /// Starts a deep equality test expectation
+        /// </summary>
+        IDeep<T> Deep { get; }
     }
 }

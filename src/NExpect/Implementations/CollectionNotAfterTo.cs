@@ -20,6 +20,9 @@ namespace NExpect.Implementations
         public ICollectionHave<T> Have =>
             Factory.Create<IEnumerable<T>, CollectionHave<T>>(Actual, this);
 
+        public ICollectionDeep<T> Deep =>
+            Factory.Create<IEnumerable<T>, CollectionDeep<T>>(Actual, this);
+
         public CollectionNotAfterTo(IEnumerable<T> actual)
         {
             Actual = actual;

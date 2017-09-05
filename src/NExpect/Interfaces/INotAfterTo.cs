@@ -11,5 +11,9 @@ namespace NExpect.Interfaces
         /// Continuation of Be, carrying type
         /// </summary>
         IBe<T> Be { get; }
+        /// <summary>
+        /// Continuation to start deep equality test
+        /// </summary>
+        IDeep<T> Deep { get; }
     }
 }

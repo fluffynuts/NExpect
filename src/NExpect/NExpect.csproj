@@ -84,6 +84,7 @@
     <Compile Include="Implementations\CountMatchContinuation.cs" />
     <Compile Include="Implementations\CountMatchEqual.cs" />
     <Compile Include="Implementations\CountMatchMatched.cs" />
+    <Compile Include="Implementations\Deep.cs" />
     <Compile Include="Implementations\EqualityContinuation.cs" />
     <Compile Include="Implementations\ExpectationBase.cs" />
     <Compile Include="Implementations\GreaterContinuation.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="Interfaces\ICountMatchContinuation.cs" />
     <Compile Include="Interfaces\ICountMatchEqual.cs" />
     <Compile Include="Interfaces\ICountMatchMatched.cs" />
+    <Compile Include="Interfaces\IDeep.cs" />
     <Compile Include="Interfaces\IEqualityContinuation.cs" />
     <Compile Include="Interfaces\IGreaterContinuation.cs" />
     <Compile Include="Interfaces\IGreaterOrLessContinuation.cs" />

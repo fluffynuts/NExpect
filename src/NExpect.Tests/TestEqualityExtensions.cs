@@ -273,6 +273,89 @@ namespace NExpect.Tests
                     }
                 }
             }
+
+            [TestFixture]
+            public class Deep
+            {
+                [TestFixture]
+                public class Equal
+                {
+                    public class NamedIdentifier
+                    {
+                        public int Id { get; }
+                        public string Name { get; }
+                        public NamedIdentifier(int id, string name)
+                        {
+                            Id = id;
+                            Name = name;
+                        }
+                    }
+
+                    [Test]
+                    public void PositiveResult_ShouldNotThrow()
+                    {
+                        // Arrange
+                        var left = new NamedIdentifier(1, "moo");
+                        var right = new NamedIdentifier(1, "moo");
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(left).To.Deep.Equal(right);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void NegativeResult_ShouldNotThrow()
+                    {
+                        // Arrange
+                        var left = new NamedIdentifier(1, "moo");
+                        var right = new NamedIdentifier(2, "moo");
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(left).To.Deep.Equal(right);
+                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+
+                    [Test]
+                    public void PositiveResult_Negated_ShouldThrow()
+                    {
+                        // Arrange
+                        var left = new NamedIdentifier(1, "moo");
+                        var right = new NamedIdentifier(1, "moo");
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(left).Not.To.Deep.Equal(right);
+                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+
+                    [Test]
+                    public void PositiveResult_Negated_AltGrammar_ShouldThrow()
+                    {
+                        // Arrange
+                        var left = new NamedIdentifier(1, "moo");
+                        var right = new NamedIdentifier(1, "moo");
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(left).To.Not.Deep.Equal(right);
+                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+                }
+            }
         }
 
         public class Match

@@ -2079,7 +2079,7 @@ namespace NExpect.Tests
                 }
 
                 [Test]
-                public void NegativeExpectation_WhenCollectionsMatch_ShouldNotThrow()
+                public void NegativeExpectation_WhenCollectionsMatch_ShouldThrow()
                 {
                     // Arrange
                     var first = new[] { o(1, "bob"), o(2, "janet") };
@@ -2089,6 +2089,21 @@ namespace NExpect.Tests
                     Assert.That(() =>
                     {
                         Expect(first).Not.To.Deep.Equal(second);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    // Assert
+                }
+
+                [Test]
+                public void NegativeExpectation_AltGrammar_WhenCollectionsMatch_ShouldThrow()
+                {
+                    // Arrange
+                    var first = new[] { o(1, "bob"), o(2, "janet") };
+                    var second = new[] { o(1, "bob"), o(2, "janet") };
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(first).To.Not.Deep.Equal(second);
                     }, Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
                 }

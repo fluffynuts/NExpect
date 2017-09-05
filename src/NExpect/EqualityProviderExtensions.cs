@@ -145,6 +145,44 @@ namespace NExpect
             );
         }
 
+        public static void Equal<T>(
+            this IDeep<T> continuation,
+            T expected
+        )
+        {
+            continuation.Equal(expected, null);
+        }
+
+        public static void Equal<T>(
+            this IDeep<T> continuation,
+            T expected,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(
+                MakeDeepEqualMatcherFor(expected, customMessage)
+            );
+        }
+
+        private static Func<T, IMatcherResult> MakeDeepEqualMatcherFor<T>(
+            T expected, 
+            string customMessage
+        )
+        {
+            return actual =>
+            {
+                var passed = AreDeepEqual(actual, expected);
+                var not = passed ? "not " : "";
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        $"Expected {Stringifier.Stringify(actual)}\n{not}to deep equal\n{Stringifier.Stringify(expected)}",
+                        customMessage
+                    )
+                );
+            };
+        }
+
         /// <summary>
         /// Does deep-equality testing on two collections, ignoring complex item referencing
         /// </summary>
@@ -172,7 +210,9 @@ namespace NExpect
             string customMessage
         )
         {
-            continuation.AddMatcher(MakeDeepEqualMatcherFor(expected, customMessage));
+            continuation.AddMatcher(
+                MakeCollectionDeepEqualMatcherFor(expected, customMessage)
+            );
         }
 
         /// <summary>
@@ -202,10 +242,10 @@ namespace NExpect
             string customMessage
         )
         {
-            continuation.AddMatcher(MakeDeepEqualMatcherFor(expected, customMessage));
+            continuation.AddMatcher(MakeCollectionDeepEqualMatcherFor(expected, customMessage));
         }
 
-        private static Func<IEnumerable<T>, IMatcherResult> MakeDeepEqualMatcherFor<T>(
+        private static Func<IEnumerable<T>, IMatcherResult> MakeCollectionDeepEqualMatcherFor<T>(
             IEnumerable<T> expected,
             string customMessage
         )
