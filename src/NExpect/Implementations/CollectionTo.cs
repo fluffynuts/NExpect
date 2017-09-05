@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using NExpect.Interfaces;
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect.Implementations
 {
@@ -20,6 +22,9 @@ namespace NExpect.Implementations
 
         public ICollectionHave<T> Have =>
             Factory.Create<IEnumerable<T>, CollectionHave<T>>(Actual, this);
+
+        public ICollectionDeep<T> Deep =>
+            Factory.Create<IEnumerable<T>, CollectionDeep<T>>(Actual, this);
 
         public CollectionTo(IEnumerable<T> actual)
         {

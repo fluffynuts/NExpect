@@ -13,252 +13,17 @@ namespace NExpect.Tests
     [TestFixture]
     public class TestEqualityExtensions
     {
-        public class Equality
+        [TestFixture]
+        public class To
         {
-            [Test]
-            public void Expect_src_ToEqual_value_WhenMatches_ShouldNotThrow()
-            {
-                // Arrange
-                var actual = 1;
-                var expected = 1;
-                // Pre-Assert
-
-                // Act
-                Assert.That(
-                    () => Expect(actual).To.Equal(expected),
-                    Throws.Nothing
-                );
-                // Assert
-            }
-
-            [Test]
-            public void Expect_src_ToEqual_value_WhenDoesNotMatch_ShouldThrow()
-            {
-                // Arrange
-                var actual = 1;
-                var expected = 2;
-                // Pre-Assert
-
-                // Act
-                Assert.That(
-                    () => Expect(actual).To.Equal(expected),
-                    Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected {expected} but got {actual}")
-                );
-                // Assert
-            }
-
-            [Test]
-            public void
-                Expect_src_ToEqual_value_WhenDoesNotMatch_GivenCustomMessage_ShouldThrowWithCustomMessageAndRegularOne()
-            {
-                // Arrange
-                var actual = 1;
-                var expected = 2;
-                var custom = GetRandomString(5);
-                // Pre-Assert
-
-                // Act
-                Assert.That(
-                    () => Expect(actual).To.Equal(expected, custom),
-                    Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected {expected} but got {actual}")
-                );
-                Assert.That(
-                    () => Expect(actual).To.Equal(expected, custom),
-                    Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains(custom)
-                );
-                // Assert
-            }
-
-            [Test]
-            public void Negation_WhenValuesDoNotMatch_ShouldNotThrow()
-            {
-                // Arrange
-                var actual = 1;
-                var expected = 2;
-
-                // Pre-Assert
-
-                // Act
-                Assert.That(
-                    () => Expect(actual).Not.To.Equal(expected),
-                    Throws.Nothing
-                );
-
-                // Assert
-            }
-
-            [Test]
-            public void ReversedNegation_WhenValuesDoNotMatch_ShouldNotThrow()
-            {
-                // Arrange
-                var actual = 1;
-                var expected = 2;
-
-                // Pre-Assert
-
-                // Act
-                Assert.That(
-                    () => Expect(actual).To.Not.Equal(expected),
-                    Throws.Nothing
-                );
-
-                // Assert
-            }
-
-
-            [Test]
-            public void AlternativeEqualGrammar_HappyPath()
-            {
-                // Arrange
-                var value = GetRandomInt();
-                // Pre-Assert
-
-                // Act
-                Assert.That(() =>
-                    {
-                        Expect(value).To.Be.Equal.To(value);
-                    },
-                    Throws.Nothing);
-
-                // Assert
-            }
-
-            [Test]
-            public void AlternativeEqualGrammar_SadPath()
-            {
-                // Arrange
-                var value = GetRandomInt();
-                var expected = GetAnother(value);
-                // Pre-Assert
-
-                // Act
-                Assert.That(() =>
-                    {
-                        Expect(value).To.Be.Equal.To(expected);
-                    },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>());
-
-                // Assert
-            }
-
-            [Test]
-            public void AlternativeEqualGrammar_Negated_HappyPath()
-            {
-                // Arrange
-                var value = GetRandomInt();
-                var unexpected = GetAnother(value);
-                // Pre-Assert
-
-                // Act
-                Assert.That(() =>
-                    {
-                        Expect(value).Not.To.Be.Equal.To(unexpected);
-                    },
-                    Throws.Nothing);
-
-                // Assert
-            }
-
-            [Test]
-            public void AlternativeEqualGrammar_Negated_SadPath()
-            {
-                // Arrange
-                var value = GetRandomInt();
-                // Pre-Assert
-
-                // Act
-                Assert.That(() =>
-                    {
-                        Expect(value).Not.To.Be.Equal.To(value);
-                    },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>());
-
-                // Assert
-            }
-
-            [Test]
-            public void AlternativeEqualGrammar_AltNegated_HappyPath()
-            {
-                // Arrange
-                var value = GetRandomInt();
-                var unexpected = GetAnother(value);
-                // Pre-Assert
-
-                // Act
-                Assert.That(() =>
-                    {
-                        Expect(value).To.Not.Be.Equal.To(unexpected);
-                    },
-                    Throws.Nothing);
-
-                // Assert
-            }
-
-            [Test]
-            public void AlternativeEqualGrammar_AltNegated_SadPath()
-            {
-                // Arrange
-                var value = GetRandomInt();
-                // Pre-Assert
-
-                // Act
-                Assert.That(() =>
-                    {
-                        Expect(value).To.Not.Be.Equal.To(value);
-                    },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>());
-
-                // Assert
-            }
-            
-            [TestFixture]
-            public class ActingOnNulls
+            public class Equal
             {
                 [Test]
-                public void GivenActualIsNull_WhenDoesNotMatch_ShouldThrow_WithValidMessage()
+                public void Expect_src_ToEqual_value_WhenMatches_ShouldNotThrow()
                 {
                     // Arrange
-                    string actual = null;
-                    string expected = "1";
-                    // Pre-Assert
-
-                    // Act
-                    Assert.That(
-                        () => Expect(actual).To.Equal(expected),
-                        Throws.Exception
-                            .InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"Expected \"{expected}\" but got {actual}")
-                    );
-                    // Assert
-                }
-
-                [Test]
-                public void GivenExpectationIsNull_WhenDoesNotMatch_ShouldThrow_WithValidMessage()
-                {
-                    // Arrange
-                    string actual = "1";
-                    string expected = null;
-                    // Pre-Assert
-
-                    // Act
-                    Assert.That(
-                        () => Expect(actual).To.Equal(expected),
-                        Throws.Exception
-                            .InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"Expected (null) but got \"{actual}\"")
-                    );
-                    // Assert
-                }
-
-                [Test]
-                public void GivenActualAndExpectationAreNull_WhenMatches_ShouldNotThrow()
-                {
-                    // Arrange
-                    string actual = null;
-                    string expected = null;
+                    var actual = 1;
+                    var expected = 1;
                     // Pre-Assert
 
                     // Act
@@ -268,10 +33,249 @@ namespace NExpect.Tests
                     );
                     // Assert
                 }
+
+                [Test]
+                public void Expect_src_ToEqual_value_WhenDoesNotMatch_ShouldThrow()
+                {
+                    // Arrange
+                    var actual = 1;
+                    var expected = 2;
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(
+                        () => Expect(actual).To.Equal(expected),
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains($"Expected {expected} but got {actual}")
+                    );
+                    // Assert
+                }
+
+                [Test]
+                public void
+                    Expect_src_ToEqual_value_WhenDoesNotMatch_GivenCustomMessage_ShouldThrowWithCustomMessageAndRegularOne()
+                {
+                    // Arrange
+                    var actual = 1;
+                    var expected = 2;
+                    var custom = GetRandomString(5);
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(
+                        () => Expect(actual).To.Equal(expected, custom),
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains($"Expected {expected} but got {actual}")
+                    );
+                    Assert.That(
+                        () => Expect(actual).To.Equal(expected, custom),
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains(custom)
+                    );
+                    // Assert
+                }
+
+                [Test]
+                public void Negation_WhenValuesDoNotMatch_ShouldNotThrow()
+                {
+                    // Arrange
+                    var actual = 1;
+                    var expected = 2;
+
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(
+                        () => Expect(actual).Not.To.Equal(expected),
+                        Throws.Nothing
+                    );
+
+                    // Assert
+                }
+
+                [Test]
+                public void ReversedNegation_WhenValuesDoNotMatch_ShouldNotThrow()
+                {
+                    // Arrange
+                    var actual = 1;
+                    var expected = 2;
+
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(
+                        () => Expect(actual).To.Not.Equal(expected),
+                        Throws.Nothing
+                    );
+
+                    // Assert
+                }
+
+
+                [Test]
+                public void AlternativeEqualGrammar_HappyPath()
+                {
+                    // Arrange
+                    var value = GetRandomInt();
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(value).To.Be.Equal.To(value);
+                        },
+                        Throws.Nothing);
+
+                    // Assert
+                }
+
+                [Test]
+                public void AlternativeEqualGrammar_SadPath()
+                {
+                    // Arrange
+                    var value = GetRandomInt();
+                    var expected = GetAnother(value);
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(value).To.Be.Equal.To(expected);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
+
+                    // Assert
+                }
+
+                [Test]
+                public void AlternativeEqualGrammar_Negated_HappyPath()
+                {
+                    // Arrange
+                    var value = GetRandomInt();
+                    var unexpected = GetAnother(value);
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(value).Not.To.Be.Equal.To(unexpected);
+                        },
+                        Throws.Nothing);
+
+                    // Assert
+                }
+
+                [Test]
+                public void AlternativeEqualGrammar_Negated_SadPath()
+                {
+                    // Arrange
+                    var value = GetRandomInt();
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(value).Not.To.Be.Equal.To(value);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
+
+                    // Assert
+                }
+
+                [Test]
+                public void AlternativeEqualGrammar_AltNegated_HappyPath()
+                {
+                    // Arrange
+                    var value = GetRandomInt();
+                    var unexpected = GetAnother(value);
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(value).To.Not.Be.Equal.To(unexpected);
+                        },
+                        Throws.Nothing);
+
+                    // Assert
+                }
+
+                [Test]
+                public void AlternativeEqualGrammar_AltNegated_SadPath()
+                {
+                    // Arrange
+                    var value = GetRandomInt();
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(value).To.Not.Be.Equal.To(value);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
+
+                    // Assert
+                }
+
+                [TestFixture]
+                public class ActingOnNulls
+                {
+                    [Test]
+                    public void GivenActualIsNull_WhenDoesNotMatch_ShouldThrow_WithValidMessage()
+                    {
+                        // Arrange
+                        string actual = null;
+                        string expected = "1";
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(
+                            () => Expect(actual).To.Equal(expected),
+                            Throws.Exception
+                                .InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains($"Expected \"{expected}\" but got {actual}")
+                        );
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GivenExpectationIsNull_WhenDoesNotMatch_ShouldThrow_WithValidMessage()
+                    {
+                        // Arrange
+                        string actual = "1";
+                        string expected = null;
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(
+                            () => Expect(actual).To.Equal(expected),
+                            Throws.Exception
+                                .InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains($"Expected (null) but got \"{actual}\"")
+                        );
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GivenActualAndExpectationAreNull_WhenMatches_ShouldNotThrow()
+                    {
+                        // Arrange
+                        string actual = null;
+                        string expected = null;
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(
+                            () => Expect(actual).To.Equal(expected),
+                            Throws.Nothing
+                        );
+                        // Assert
+                    }
+                }
             }
         }
 
-        public class ToMatch
+        public class Match
         {
             [Test]
             public void WhenMatches_WithSimpleBooleanReturn_ShouldNotThrow()
@@ -338,137 +342,142 @@ namespace NExpect.Tests
             }
         }
 
-        public class Null
+        [TestFixture]
+        public class Be
         {
-            [Test]
-            public void OperatingOnString_WhenIsNull_ShouldNotThrow()
+            [TestFixture]
+            public class Null
             {
-                // Arrange
-                var input = null as string;
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
-                    {
-                        Expect(input).To.Be.Null();
-                    },
-                    Throws.Nothing);
-                // Assert
-            }
-
-            [Test]
-            public void OperatingOnStringNegated_WhenIsNull_ShouldThrow()
-            {
-                // Arrange
-                var input = null as string;
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
-                    {
-                        Expect(input).Not.To.Be.Null();
-                    },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains("Expected not to get null"));
-                // Assert
-            }
-
-            [Test]
-            public void OperatingOnStringNegated_GivenCustomMessage_WhenIsNull_ShouldThrowIncludingCustomMessage()
-            {
-                // Arrange
-                var input = null as string;
-                var expected = GetRandomString();
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
-                    {
-                        Expect(input).Not.To.Be.Null(expected);
-                    },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.EqualTo($"{expected}\n\nExpected not to get null"));
-                // Assert
-            }
-
-            [Test]
-            public void ExpectOnPureNull()
-            {
-                // Arrange
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
+                [Test]
+                public void OperatingOnString_WhenIsNull_ShouldNotThrow()
                 {
-                    Expect(null).To.Be.Null();
-                }, Throws.Nothing);
-                // Assert
-            }
+                    // Arrange
+                    var input = null as string;
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(input).To.Be.Null();
+                        },
+                        Throws.Nothing);
+                    // Assert
+                }
 
-            [Test]
-            public void OperatingOnObjectAltNegated_WhenIsNull_ShouldThrow()
-            {
-                // Arrange
-                var input = null as object;
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
-                    {
-                        Expect(input).To.Not.Be.Null();
-                    },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains("Expected not to get null"));
-                // Assert
-            }
+                [Test]
+                public void OperatingOnStringNegated_WhenIsNull_ShouldThrow()
+                {
+                    // Arrange
+                    var input = null as string;
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(input).Not.To.Be.Null();
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains("Expected not to get null"));
+                    // Assert
+                }
 
-            [Test]
-            public void OperatingOnString_WhenIsNotNull_ShouldThrow()
-            {
-                // Arrange
-                var input = GetRandomString();
-                Assert.That(input, Is.Not.Null);
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
-                    {
-                        Expect(input).To.Be.Null();
-                    },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected null but got \"{input}\""));
-                // Assert
-            }
+                [Test]
+                public void OperatingOnStringNegated_GivenCustomMessage_WhenIsNull_ShouldThrowIncludingCustomMessage()
+                {
+                    // Arrange
+                    var input = null as string;
+                    var expected = GetRandomString();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(input).Not.To.Be.Null(expected);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.EqualTo($"{expected}\n\nExpected not to get null"));
+                    // Assert
+                }
 
-            [Test]
-            public void OperatingOnString_Negated_WhenIsNotNull_ShouldNotThrow()
-            {
-                // Arrange
-                var input = GetRandomString();
-                Assert.That(input, Is.Not.Null);
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
+                [Test]
+                public void ExpectOnPureNull()
+                {
+                    // Arrange
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
                     {
-                        Expect(input).Not.To.Be.Null();
-                    },
-                    Throws.Nothing);
-                // Assert
-            }
+                        Expect(null).To.Be.Null();
+                    }, Throws.Nothing);
+                    // Assert
+                }
 
-            [Test]
-            public void OperatingOnString_AltNegated_WhenIsNotNull_ShouldNotThrow()
-            {
-                // Arrange
-                var input = GetRandomString();
-                Assert.That(input, Is.Not.Null);
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
-                    {
-                        Expect(input).To.Not.Be.Null();
-                    },
-                    Throws.Nothing);
-                // Assert
+                [Test]
+                public void OperatingOnObjectAltNegated_WhenIsNull_ShouldThrow()
+                {
+                    // Arrange
+                    var input = null as object;
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(input).To.Not.Be.Null();
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains("Expected not to get null"));
+                    // Assert
+                }
+
+                [Test]
+                public void OperatingOnString_WhenIsNotNull_ShouldThrow()
+                {
+                    // Arrange
+                    var input = GetRandomString();
+                    Assert.That(input, Is.Not.Null);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(input).To.Be.Null();
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains($"Expected null but got \"{input}\""));
+                    // Assert
+                }
+
+                [Test]
+                public void OperatingOnString_Negated_WhenIsNotNull_ShouldNotThrow()
+                {
+                    // Arrange
+                    var input = GetRandomString();
+                    Assert.That(input, Is.Not.Null);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(input).Not.To.Be.Null();
+                        },
+                        Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void OperatingOnString_AltNegated_WhenIsNotNull_ShouldNotThrow()
+                {
+                    // Arrange
+                    var input = GetRandomString();
+                    Assert.That(input, Is.Not.Null);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(input).To.Not.Be.Null();
+                        },
+                        Throws.Nothing);
+                    // Assert
+                }
             }
         }
 
         [TestFixture]
-        public class ActingOnStrings
+        public class Be_ActingOnStrings
         {
             [TestFixture]
             public class Empty
@@ -1468,7 +1477,7 @@ namespace NExpect.Tests
                         },
                         Throws.Exception
                             .InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"{(double)actual} to be less than {(double)expected}"));
+                            .With.Message.Contains($"{(double) actual} to be less than {(double) expected}"));
                     // Assert
                 }
 
@@ -1486,7 +1495,7 @@ namespace NExpect.Tests
                         },
                         Throws.Exception
                             .InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"{(double)actual} to be less than {(double)expected}"));
+                            .With.Message.Contains($"{(double) actual} to be less than {(double) expected}"));
                     // Assert
                 }
             }
@@ -1726,7 +1735,7 @@ namespace NExpect.Tests
                 );
                 // Assert
             }
-            
+
             [Test]
             public void Expect_Float_ToEqual_Double_WhenMatches_ShouldNotThrow()
             {
@@ -1776,7 +1785,7 @@ namespace NExpect.Tests
                     Y = y;
                 }
 
-                public override int GetHashCode() 
+                public override int GetHashCode()
                 {
                     return $"{X}-{Y}".GetHashCode();
                 }
@@ -1817,7 +1826,7 @@ namespace NExpect.Tests
                 {
                     Expect(instance).To.Be(other);
                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                .With.Message.EqualTo($"Expected {instance} to be the same reference as {other}"));
+                    .With.Message.EqualTo($"Expected {instance} to be the same reference as {other}"));
                 // Assert
             }
 
@@ -1832,7 +1841,7 @@ namespace NExpect.Tests
                 {
                     Expect(instance).Not.To.Be(instance);
                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                .With.Message.EqualTo($"Expected {instance} not to be the same reference as {instance}"));
+                    .With.Message.EqualTo($"Expected {instance} not to be the same reference as {instance}"));
                 // Assert
             }
 
@@ -1865,6 +1874,7 @@ namespace NExpect.Tests
                 }, Throws.Nothing);
                 // Assert
             }
+
             [Test]
             public void Be_ActingOnCollection_WhenNotRefEqual_ShouldThrow()
             {
@@ -1880,7 +1890,7 @@ namespace NExpect.Tests
                 // Assert
             }
         }
-        
+
         [TestFixture]
         public class UnmetExpectationMessageTesting
         {

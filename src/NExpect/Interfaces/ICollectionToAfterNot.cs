@@ -21,5 +21,10 @@ namespace NExpect.Interfaces
         /// Prepares to test the state of the collection (eg, for uniqueness)
         /// </summary>
         ICollectionHave<T> Have { get; }
+        /// <summary>
+        /// Provides the negated .Deep grammar extension for collection
+        /// deep-equality testing
+        /// </summary>
+        ICollectionDeep<T> Deep { get; }
     }
 }

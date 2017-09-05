@@ -17,7 +17,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\NExpect.xml</DocumentationFile>
@@ -41,6 +41,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ArrayExtensions.cs">
+      <Link>Imported\ArrayExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DeepEqualityTester.cs">
+      <Link>Imported\DeepEqualityTester.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ExtensionsForIEnumerables.cs">
+      <Link>Imported\ExtensionsForIEnumerables.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PropertyOrField.cs">
+      <Link>Imported\PropertyOrField.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PyLike.cs">
+      <Link>Imported\PyLike.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Stringifier.cs">
+      <Link>Imported\Stringifier.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\TypeExtensions.cs">
+      <Link>Imported\TypeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Types.cs">
+      <Link>Imported\Types.cs</Link>
+    </Compile>
     <Compile Include="Assertions.cs" />
     <Compile Include="CollectionFluencyExtensions.cs" />
     <Compile Include="ExceptionMessageContainuationToStringContainContinuation.cs" />
@@ -48,6 +72,8 @@
     <Compile Include="GreaterOrLessContinuationExtensions.cs" />
     <Compile Include="Implementations\A.cs" />
     <Compile Include="Implementations\An.cs" />
+    <Compile Include="Implementations\CollectionDeep.cs" />
+    <Compile Include="Implementations\CollectionDeepEqual.cs" />
     <Compile Include="Implementations\CollectionEqual.cs" />
     <Compile Include="Implementations\CollectionUnique.cs" />
     <Compile Include="Implementations\CollectionHave.cs" />
@@ -70,6 +96,8 @@
     <Compile Include="Interfaces\CountMatchMethods.cs" />
     <Compile Include="Interfaces\IA.cs" />
     <Compile Include="Interfaces\IAn.cs" />
+    <Compile Include="Interfaces\ICollectionDeep.cs" />
+    <Compile Include="Interfaces\ICollectionDeepEqual.cs" />
     <Compile Include="Interfaces\ICollectionEqual.cs" />
     <Compile Include="Interfaces\ICollectionUnique.cs" />
     <Compile Include="Interfaces\ICollectionHave.cs" />

@@ -7,6 +7,7 @@ using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
 using static PeanutButter.Utils.PyLike;
 using NExpect.Exceptions;
+// ReSharper disable MemberCanBePrivate.Global
 
 // ReSharper disable PossibleMultipleEnumeration
 
@@ -472,111 +473,115 @@ namespace NExpect.Tests
             }
 
             [TestFixture]
-            public class ThatMatches
+            public class Matched
             {
-                [Test]
-                public void OperatingOnCollection_WhenSeeking1Match_AndHas1Match_ShouldNotThrow()
+                [TestFixture]
+                public class By
                 {
-                    // Arrange
-                    var collection = GetRandomCollection<string>(3, 3).ToArray();
-                    var search = collection.Randomize().First();
-                    // Pre-Assert
+                    [Test]
+                    public void OperatingOnCollection_WhenSeeking1Match_AndHas1Match_ShouldNotThrow()
+                    {
+                        // Arrange
+                        var collection = GetRandomCollection<string>(3, 3).ToArray();
+                        var search = collection.Randomize().First();
+                        // Pre-Assert
 
-                    // Act
-                    Assert.That(() =>
-                        {
-                            Expect(collection)
-                                .To.Contain
-                                .At.Least(1)
-                                .Matched.By(s => s == search);
-                        },
-                        Throws.Nothing);
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(collection)
+                                    .To.Contain
+                                    .At.Least(1)
+                                    .Matched.By(s => s == search);
+                            },
+                            Throws.Nothing);
 
-                    // Assert
-                }
+                        // Assert
+                    }
 
-                [Test]
-                public void OperatingOnCollection_WhenSeeking1Match_AndHas2Matches_ShouldNotThrow()
-                {
-                    // Arrange
-                    var collection = GetRandomCollection<string>(3, 3).ToArray();
-                    var search = collection.Randomize().First();
-                    collection = collection.And(search).Randomize().ToArray();
-                    // Pre-Assert
-                    Assert.That(collection.Count(s => s == search), Is.EqualTo(2));
-                    // Act
-                    Assert.That(() =>
-                        {
-                            Expect(collection)
-                                .To.Contain
-                                .At.Least(1)
-                                .Matched.By(s => s == search);
-                        },
-                        Throws.Nothing);
+                    [Test]
+                    public void OperatingOnCollection_WhenSeeking1Match_AndHas2Matches_ShouldNotThrow()
+                    {
+                        // Arrange
+                        var collection = GetRandomCollection<string>(3, 3).ToArray();
+                        var search = collection.Randomize().First();
+                        collection = collection.And(search).Randomize().ToArray();
+                        // Pre-Assert
+                        Assert.That(collection.Count(s => s == search), Is.EqualTo(2));
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(collection)
+                                    .To.Contain
+                                    .At.Least(1)
+                                    .Matched.By(s => s == search);
+                            },
+                            Throws.Nothing);
 
-                    // Assert
-                }
+                        // Assert
+                    }
 
-                [Test]
-                public void OperatingOnCollection_WhenSeeking2Matches_AndHas1Match_ShouldThrow()
-                {
-                    // Arrange
-                    var collection = GetRandomCollection<string>(3, 3).ToArray();
-                    var search = collection.Randomize().First();
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
-                        {
-                            Expect(collection)
-                                .To.Contain
-                                .At.Least(2)
-                                .Matched.By(s => s == search);
-                        },
-                        Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    [Test]
+                    public void OperatingOnCollection_WhenSeeking2Matches_AndHas1Match_ShouldThrow()
+                    {
+                        // Arrange
+                        var collection = GetRandomCollection<string>(3, 3).ToArray();
+                        var search = collection.Randomize().First();
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(collection)
+                                    .To.Contain
+                                    .At.Least(2)
+                                    .Matched.By(s => s == search);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
 
-                    // Assert
-                }
+                        // Assert
+                    }
 
-                [Test]
-                public void Negated_OperatingOnCollection_WhenSeeking1Match_AndHas1Match_ShouldThrow()
-                {
-                    // Arrange
-                    var collection = GetRandomCollection<string>(3, 3).ToArray();
-                    var search = collection.Randomize().First();
-                    // Pre-Assert
+                    [Test]
+                    public void Negated_OperatingOnCollection_WhenSeeking1Match_AndHas1Match_ShouldThrow()
+                    {
+                        // Arrange
+                        var collection = GetRandomCollection<string>(3, 3).ToArray();
+                        var search = collection.Randomize().First();
+                        // Pre-Assert
 
-                    // Act
-                    Assert.That(() =>
-                        {
-                            Expect(collection)
-                                .Not.To.Contain
-                                .At.Least(1)
-                                .Matched.By(s => s == search);
-                        },
-                        Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(collection)
+                                    .Not.To.Contain
+                                    .At.Least(1)
+                                    .Matched.By(s => s == search);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
 
-                    // Assert
-                }
+                        // Assert
+                    }
 
-                [Test]
-                public void NegatedAlt_OperatingOnCollection_WhenSeeking1Match_AndHas1Match_ShouldThrow()
-                {
-                    // Arrange
-                    var collection = GetRandomCollection<string>(3, 3).ToArray();
-                    var search = collection.Randomize().First();
-                    // Pre-Assert
+                    [Test]
+                    public void NegatedAlt_OperatingOnCollection_WhenSeeking1Match_AndHas1Match_ShouldThrow()
+                    {
+                        // Arrange
+                        var collection = GetRandomCollection<string>(3, 3).ToArray();
+                        var search = collection.Randomize().First();
+                        // Pre-Assert
 
-                    // Act
-                    Assert.That(() =>
-                        {
-                            Expect(collection)
-                                .To.Not.Contain
-                                .At.Least(1)
-                                .Matched.By(s => s == search);
-                        },
-                        Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(collection)
+                                    .To.Not.Contain
+                                    .At.Least(1)
+                                    .Matched.By(s => s == search);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
 
-                    // Assert
+                        // Assert
+                    }
                 }
             }
         }
@@ -1143,6 +1148,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                 {
+                    // ReSharper disable once ExpressionIsAlwaysNull
                     Expect(collection).Not.To.Be.Null();
                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains("not to be null"));
@@ -1766,10 +1772,10 @@ namespace NExpect.Tests
         }
 
         [TestFixture]
-        public class Equality
+        public class To
         {
             [TestFixture]
-            public class WithNoCustomMessage
+            public class Equal_WithNoCustomMessage
             {
                 [Test]
                 public void GivenTwoCollectionsWithSameItemsInSameOrder_ShouldNotThrow()
@@ -1833,7 +1839,7 @@ namespace NExpect.Tests
             }
 
             [TestFixture]
-            public class WithNoCustomMessageLongerSyntax
+            public class Equal_NoCustomMessage_LongerSyntax
             {
                 [Test]
                 public void GivenTwoCollectionsWithSameItemsInSameOrder_ShouldNotThrow()
@@ -1897,7 +1903,7 @@ namespace NExpect.Tests
             }
 
             [TestFixture]
-            public class WithCustomMessage
+            public class Equal_WithCustomMessage
             {
                 [Test]
                 public void GivenTwoCollectionsWithSameItemsInSameOrder_ShouldNotThrow()
@@ -1968,7 +1974,7 @@ namespace NExpect.Tests
             }
 
             [TestFixture]
-            public class WithCustomMessageLongerSyntax
+            public class Equal_WithCustomMessageLongerSyntax
             {
                 [Test]
                 public void GivenTwoCollectionsWithSameItemsInSameOrder_ShouldNotThrow()
@@ -2037,6 +2043,87 @@ namespace NExpect.Tests
                     // Assert
                 }
             }
+
+            [TestFixture]
+            public class Equal_GivenComparisonFunction
+            {
+                public class IdentifierAndName
+                {
+                    public int Id { get; }
+                    public string Name { get; }
+                    public IdentifierAndName(int id, string name)
+                    {
+                        Id = id;
+                        Name = name;
+                    }
+                }
+
+                private static IdentifierAndName o(int id, string name) 
+                {
+                    return new IdentifierAndName(id, name);
+                }
+
+                [Test]
+                public void PositiveExpectation_WhenCollectionsMatch_ShouldNotThrow()
+                {
+                    // Arrange
+                    var first = new[] { o(1, "bob"), o(2, "janet") };
+                    var second = new[] { o(1, "bob"), o(2, "janet") };
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(first).To.Deep.Equal(second);
+                    }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void NegativeExpectation_WhenCollectionsMatch_ShouldNotThrow()
+                {
+                    // Arrange
+                    var first = new[] { o(1, "bob"), o(2, "janet") };
+                    var second = new[] { o(1, "bob"), o(2, "janet") };
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(first).Not.To.Deep.Equal(second);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    // Assert
+                }
+
+                [Test]
+                public void PositiveExpectation_AltGrammer_WhenCollectionsMatch_ShouldNotThrow()
+                {
+                    // Arrange
+                    var first = new[] { o(1, "bob"), o(2, "janet") };
+                    var second = new[] { o(1, "bob"), o(2, "janet") };
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(first).To.Be.Deep.Equal.To(second);
+                    }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void NegativeExpectation_AltGrammar_WhenCollectionsMatch_ShouldNotThrow()
+                {
+                    // Arrange
+                    var first = new[] { o(1, "bob"), o(2, "janet") };
+                    var second = new[] { o(1, "bob"), o(2, "janet") };
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(first).Not.To.Be.Deep.Equal.To(second);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    // Assert
+                }
+            }
         }
     }
+
 }

@@ -18,5 +18,10 @@ namespace NExpect.Interfaces
         /// Prepares to do an in-order match with an expected collection
         /// </summary>
         ICollectionEqual<T> Equal { get; }
+
+        /// <summary>
+        /// Prepares for deep-equality testing
+        /// </summary>
+        ICollectionDeep<T> Deep { get; }
     }
 }
