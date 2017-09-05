@@ -307,17 +307,105 @@ namespace NExpect
             IEnumerable<T> other
         )
         {
+            equivalent.To(other, null as string);
+        }
+
+        /// <summary>
+        /// Tests equivalence with another collection
+        /// </summary>
+        /// <param name="equivalent">continuation for test</param>
+        /// <param name="other">collection to test against</param>
+        /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <typeparam name="T"></typeparam>
+        public static void To<T>(
+            this ICollectionEquivalent<T> equivalent,
+            IEnumerable<T> other,
+            string customMessage
+        )
+        {
+            equivalent.To(other, null as IEqualityComparer<T>, customMessage);
+        }
+
+        /// <summary>
+        /// Tests equivalence with another collection
+        /// </summary>
+        /// <param name="equivalent">continuation for test</param>
+        /// <param name="other">collection to test against</param>
+        /// <param name="comparer">Custom equality comparer for each item</param>
+        /// <typeparam name="T"></typeparam>
+        public static void To<T>(
+            this ICollectionEquivalent<T> equivalent,
+            IEnumerable<T> other,
+            IEqualityComparer<T> comparer
+        )
+        {
+            equivalent.To(other, comparer, null);
+        }
+
+        /// <summary>
+        /// Tests equivalence with another collection
+        /// </summary>
+        /// <param name="equivalent">continuation for test</param>
+        /// <param name="other">collection to test against</param>
+        /// <param name="comparer">Custom equality comparer for each item</param>
+        /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <typeparam name="T"></typeparam>
+        public static void To<T>(
+            this ICollectionEquivalent<T> equivalent,
+            IEnumerable<T> other,
+            IEqualityComparer<T> comparer,
+            string customMessage
+        )
+        {
             equivalent.AddMatcher(collection =>
             {
-                var passed = TestEquivalenceOf(collection, other);
+                var passed = TestEquivalenceOf(collection, other, comparer ?? new DefaultEqualityComparer<T>());
                 var not = passed
                     ? "not "
                     : "";
-                return new MatcherResult(
-                    passed,
-                    $"Expected {collection.PrettyPrint()} {not}to be equivalent to {other.PrettyPrint()}"
+            return new MatcherResult(
+                passed,
+                FinalMessageFor(
+                    $"Expected {collection.PrettyPrint()} {not}to be equivalent to {other.PrettyPrint()}",
+                    customMessage
+                    )
                 );
             });
+        }
+
+        /// <summary>
+        /// Tests equivalence with another collection
+        /// </summary>
+        /// <param name="equivalent">continuation for test</param>
+        /// <param name="other">collection to test against</param>
+        /// <param name="comparer">Custom equality comparer function for each item</param>
+        /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <typeparam name="T"></typeparam>
+        public static void To<T>(
+            this ICollectionEquivalent<T> equivalent,
+            IEnumerable<T> other,
+            Func<T, T, bool> comparer
+        )
+        {
+            equivalent.To(other, comparer, null);
+        }
+
+        /// <summary>
+        /// Tests equivalence with another collection
+        /// </summary>
+        /// <param name="equivalent">continuation for test</param>
+        /// <param name="other">collection to test against</param>
+        /// <param name="comparer">Custom equality comparer function for each item</param>
+        /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <typeparam name="T"></typeparam>
+        public static void To<T>(
+            this ICollectionEquivalent<T> equivalent,
+            IEnumerable<T> other,
+            Func<T, T, bool> comparer,
+            string customMessage
+        )
+        {
+            equivalent.To(other, new FuncComparer<T>(comparer), customMessage);
         }
 
         /// <summary>
@@ -835,7 +923,9 @@ namespace NExpect
 
         private static bool TestEquivalenceOf<T>(
             IEnumerable<T> collectionA,
-            IEnumerable<T> collectionB)
+            IEnumerable<T> collectionB,
+            IEqualityComparer<T> comparer
+        )
         {
             if (collectionA == null &&
                 collectionB == null)
@@ -854,7 +944,7 @@ namespace NExpect
                 {
                     if (!acc)
                         return false;
-                    var match = countsB.FirstOrDefault(o => AreEqual(o.Item1, cur.Item1));
+                    var match = countsB.FirstOrDefault(o => comparer.Equals(o.Item1, cur.Item1));
                     return match?.Item2 == cur.Item2;
                 });
         }
