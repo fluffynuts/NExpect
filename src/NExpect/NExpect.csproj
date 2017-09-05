@@ -85,8 +85,10 @@
     <Compile Include="Implementations\CountMatchEqual.cs" />
     <Compile Include="Implementations\CountMatchMatched.cs" />
     <Compile Include="Implementations\Deep.cs" />
+    <Compile Include="Implementations\DefaultEqualityComparer.cs" />
     <Compile Include="Implementations\EqualityContinuation.cs" />
     <Compile Include="Implementations\ExpectationBase.cs" />
+    <Compile Include="Implementations\FuncComparer.cs" />
     <Compile Include="Implementations\GreaterContinuation.cs" />
     <Compile Include="Implementations\Have.cs" />
     <Compile Include="Implementations\Instance.cs" />

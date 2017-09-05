@@ -7,6 +7,7 @@ using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
 using static PeanutButter.Utils.PyLike;
 using NExpect.Exceptions;
+
 // ReSharper disable MemberCanBePrivate.Global
 
 // ReSharper disable PossibleMultipleEnumeration
@@ -20,244 +21,423 @@ namespace NExpect.Tests
         public class Exactly
         {
             [TestFixture]
-            public class EqualTo
+            public class Equal
             {
-                [Test]
-                public void Contain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldNotThrow()
+                [TestFixture]
+                // ReSharper disable once MemberHidesStaticFromOuterClass
+                public class To
                 {
-                    // Arrange
-                    var search = GetRandomString(3);
-                    var other1 = GetAnother(search);
-                    var other2 = GetAnother<string>(new[] {search, other1});
-                    var collection = new[]
+                    [Test]
+                    public void Contain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldNotThrow()
                     {
-                        search,
-                        other1,
-                        other2
-                    }.Randomize();
-
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
+                        // Arrange
+                        var search = GetRandomString(3);
+                        var other1 = GetAnother(search);
+                        var other2 = GetAnother<string>(new[] {search, other1});
+                        var collection = new[]
                         {
-                            Expect(collection).To.Contain.Exactly(1).Equal.To(search);
-                        },
-                        Throws.Nothing);
+                            search,
+                            other1,
+                            other2
+                        }.Randomize();
 
-                    // Assert
-                }
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(1).Equal.To(search);
+                            },
+                            Throws.Nothing);
 
-                [Test]
-                public void ShortContain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldNotThrow()
-                {
-                    // Arrange
-                    var search = GetRandomString(3);
-                    var other1 = GetAnother(search);
-                    var other2 = GetAnother<string>(new[] {search, other1});
-                    var collection = new[]
+                        // Assert
+                    }
+
+                    [Test]
+                    public void ShortContain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldNotThrow()
                     {
-                        search,
-                        other1,
-                        other2
-                    }.Randomize();
-
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
+                        // Arrange
+                        var search = GetRandomString(3);
+                        var other1 = GetAnother(search);
+                        var other2 = GetAnother<string>(new[] {search, other1});
+                        var collection = new[]
                         {
-                            Expect(collection).To.Contain(search);
-                        },
-                        Throws.Nothing);
+                            search,
+                            other1,
+                            other2
+                        }.Randomize();
 
-                    // Assert
-                }
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain(search);
+                            },
+                            Throws.Nothing);
 
-                [Test]
-                public void Contain_OperatingOnCollectionOfStrings_WhenSeeking2AndDoesContain2_ShouldNotThrow()
-                {
-                    // Arrange
-                    var search = GetRandomString(3);
-                    var other1 = GetAnother(search);
-                    var other2 = GetAnother<string>(new[] {search, other1});
-                    var collection = new[]
+                        // Assert
+                    }
+
+                    [Test]
+                    public void Contain_OperatingOnCollectionOfStrings_WhenSeeking2AndDoesContain2_ShouldNotThrow()
                     {
-                        search,
-                        other1,
-                        other2,
-                        search
-                    }.Randomize();
-
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
+                        // Arrange
+                        var search = GetRandomString(3);
+                        var other1 = GetAnother(search);
+                        var other2 = GetAnother<string>(new[] {search, other1});
+                        var collection = new[]
                         {
-                            Expect(collection).To.Contain.Exactly(2).Equal.To(search);
-                        },
-                        Throws.Nothing);
+                            search,
+                            other1,
+                            other2,
+                            search
+                        }.Randomize();
 
-                    // Assert
-                }
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(2).Equal.To(search);
+                            },
+                            Throws.Nothing);
 
-                [Test]
-                public void Contain_OperatingOnCollectionOfStrings_WhenSeeking1AndDoesContain2_ShouldThrow()
-                {
-                    // Arrange
-                    var search = GetRandomString(3);
-                    var other1 = GetAnother(search);
-                    var other2 = GetAnother<string>(new[] {search, other1});
-                    var collection = new[]
+                        // Assert
+                    }
+
+                    [Test]
+                    public void Contain_OperatingOnCollectionOfStrings_WhenSeeking1AndDoesContain2_ShouldThrow()
                     {
-                        search,
-                        other1,
-                        other2,
-                        search
-                    }.Randomize();
-
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
+                        // Arrange
+                        var search = GetRandomString(3);
+                        var other1 = GetAnother(search);
+                        var other2 = GetAnother<string>(new[] {search, other1});
+                        var collection = new[]
                         {
-                            Expect(collection).To.Contain.Exactly(1).Equal.To(search);
-                        },
-                        Throws.Exception
-                            .InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"to find exactly 1 occurrence of {search} but found 2"));
+                            search,
+                            other1,
+                            other2,
+                            search
+                        }.Randomize();
 
-                    // Assert
-                }
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(1).Equal.To(search);
+                            },
+                            Throws.Exception
+                                .InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains($"to find exactly 1 occurrence of {search} but found 2"));
 
-                [Test]
-                public void Contain_OperatingOnCollectionOfStrings_WhenDoesNoContain_ShouldThrow()
-                {
-                    // Arrange
-                    var search = GetRandomString(3);
-                    var other1 = GetAnother(search);
-                    var other2 = GetAnother<string>(new[] {search, other1});
-                    var collection = new[]
+                        // Assert
+                    }
+
+                    [Test]
+                    public void Contain_OperatingOnCollectionOfStrings_WhenDoesNoContain_ShouldThrow()
                     {
-                        other1,
-                        other2
-                    }.Randomize();
-
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
+                        // Arrange
+                        var search = GetRandomString(3);
+                        var other1 = GetAnother(search);
+                        var other2 = GetAnother<string>(new[] {search, other1});
+                        var collection = new[]
                         {
-                            Expect(collection).To.Contain.Exactly(1).Equal.To(search);
-                        },
-                        Throws.Exception
-                            .InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains("find exactly 1 occurrence of"));
+                            other1,
+                            other2
+                        }.Randomize();
 
-                    // Assert
-                }
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(1).Equal.To(search);
+                            },
+                            Throws.Exception
+                                .InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("find exactly 1 occurrence of"));
 
-                [Test]
-                public void Negated_Contain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldThrow()
-                {
-                    // Arrange
-                    var search = GetRandomString(3);
-                    var other1 = GetAnother(search);
-                    var other2 = GetAnother<string>(new[] {search, other1});
-                    var collection = new[]
+                        // Assert
+                    }
+
+                    [Test]
+                    public void Negated_Contain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldThrow()
                     {
-                        search,
-                        other1,
-                        other2
-                    }.Randomize();
-
-                    // Pre-Assert
-
-                    // Act
-                    Assert.That(() =>
+                        // Arrange
+                        var search = GetRandomString(3);
+                        var other1 = GetAnother(search);
+                        var other2 = GetAnother<string>(new[] {search, other1});
+                        var collection = new[]
                         {
-                            Expect(collection).Not.To.Contain.Exactly(1).Equal.To(search);
-                        },
-                        Throws
-                            .Exception
-                            .InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"not to find exactly 1 occurrence of {search} but found 1"));
+                            search,
+                            other1,
+                            other2
+                        }.Randomize();
 
-                    // Assert
-                }
+                        // Pre-Assert
 
-                [Test]
-                public void Negated_Contain_OperatingOnCollectionOfStrings_WhenDoesNotContain_ShouldNotThrow()
-                {
-                    // Arrange
-                    var search = GetRandomString(3);
-                    var other1 = GetAnother(search);
-                    var other2 = GetAnother<string>(new[] {search, other1});
-                    var collection = new[]
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(collection).Not.To.Contain.Exactly(1).Equal.To(search);
+                            },
+                            Throws
+                                .Exception
+                                .InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains($"not to find exactly 1 occurrence of {search} but found 1"));
+
+                        // Assert
+                    }
+
+                    [Test]
+                    public void Negated_Contain_OperatingOnCollectionOfStrings_WhenDoesNotContain_ShouldNotThrow()
                     {
-                        other1,
-                        other2
-                    }.Randomize();
-
-                    // Pre-Assert
-
-                    // Act
-                    Assert.That(() =>
+                        // Arrange
+                        var search = GetRandomString(3);
+                        var other1 = GetAnother(search);
+                        var other2 = GetAnother<string>(new[] {search, other1});
+                        var collection = new[]
                         {
-                            Expect(collection).Not.To.Contain.Exactly(1).Equal.To(search);
-                        },
-                        Throws.Nothing);
+                            other1,
+                            other2
+                        }.Randomize();
 
-                    // Assert
-                }
+                        // Pre-Assert
 
-                [Test]
-                public void Negated_Alt_Contain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldThrow()
-                {
-                    // Arrange
-                    var search = GetRandomString(3);
-                    var other1 = GetAnother(search);
-                    var other2 = GetAnother<string>(new[] {search, other1});
-                    var collection = new[]
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(collection).Not.To.Contain.Exactly(1).Equal.To(search);
+                            },
+                            Throws.Nothing);
+
+                        // Assert
+                    }
+
+                    [Test]
+                    public void Negated_Alt_Contain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldThrow()
                     {
-                        search,
-                        other1,
-                        other2
-                    }.Randomize();
-
-                    // Pre-Assert
-
-                    // Act
-                    Assert.That(() =>
+                        // Arrange
+                        var search = GetRandomString(3);
+                        var other1 = GetAnother(search);
+                        var other2 = GetAnother<string>(new[] {search, other1});
+                        var collection = new[]
                         {
-                            Expect(collection).To.Not.Contain.Exactly(1).Equal.To(search);
-                        },
-                        Throws
-                            .Exception
-                            .InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"not to find exactly 1 occurrence of {search} but found 1"));
+                            search,
+                            other1,
+                            other2
+                        }.Randomize();
 
-                    // Assert
-                }
+                        // Pre-Assert
 
-                [Test]
-                public void Negated_Alt_Contain_OperatingOnCollectionOfStrings_WhenDoesNotContain_ShouldNotThrow()
-                {
-                    // Arrange
-                    var search = GetRandomString(3);
-                    var other1 = GetAnother(search);
-                    var other2 = GetAnother<string>(new[] {search, other1});
-                    var collection = new[]
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(collection).To.Not.Contain.Exactly(1).Equal.To(search);
+                            },
+                            Throws
+                                .Exception
+                                .InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains($"not to find exactly 1 occurrence of {search} but found 1"));
+
+                        // Assert
+                    }
+
+                    [Test]
+                    public void Negated_Alt_Contain_OperatingOnCollectionOfStrings_WhenDoesNotContain_ShouldNotThrow()
                     {
-                        other1,
-                        other2
-                    }.Randomize();
-
-                    // Pre-Assert
-
-                    // Act
-                    Assert.That(() =>
+                        // Arrange
+                        var search = GetRandomString(3);
+                        var other1 = GetAnother(search);
+                        var other2 = GetAnother<string>(new[] {search, other1});
+                        var collection = new[]
                         {
-                            Expect(collection).To.Not.Contain.Exactly(1).Equal.To(search);
-                        },
-                        Throws.Nothing);
+                            other1,
+                            other2
+                        }.Randomize();
 
-                    // Assert
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(collection).To.Not.Contain.Exactly(1).Equal.To(search);
+                            },
+                            Throws.Nothing);
+
+                        // Assert
+                    }
+
+                    [TestFixture]
+                    public class CustomEqualityTesting
+                    {
+                        // TODO: could have more tests
+                        //  -> the other implementations lean on the logic to
+                        //      accomplish this, so, techically, the other cases are covered...
+                        [TestFixture]
+                        public class WithProvidedComparer
+                        {
+                            public class FirstCharacterComparer : IEqualityComparer<string>
+                            {
+                                public bool Equals(string x, string y)
+                                {
+                                    if (x == null &&
+                                        y == null) return true;
+                                    if (x == null ||
+                                        y == null) return false;
+                                    if (x.Length == 0 &&
+                                        y.Length == 0) return true;
+                                    if (x.Length == 0 ||
+                                        y.Length == 0) return false;
+                                    return x[0] == y[0];
+                                }
+
+                                public int GetHashCode(string obj)
+                                {
+                                    var chr = string.IsNullOrEmpty(obj)
+                                        ? null
+                                        : obj[0] as char?;
+                                    return chr == null
+                                        ? 0
+                                        : chr.GetHashCode();
+                                }
+                            }
+
+                            [Test]
+                            public void PositiveResult_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var left = new[] {$"A{GetRandomString()}", $"B{GetRandomString()}"};
+                                var right = new[] {$"A{GetRandomString()}", $"B{GetRandomString()}"};
+                                var withComparer = new FirstCharacterComparer();
+                                Assert.That(withComparer.Equals(left[0], right[0]), Is.True);
+
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(left).To.Equal(right, withComparer);
+                                    },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+
+                            [Test]
+                            public void NegativeNegatedResult_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var left = new[] {$"A{GetRandomString()}", $"B{GetRandomString()}"};
+                                var right = new[] {$"B{GetRandomString()}", $"A{GetRandomString()}"};
+                                var withComparer = new FirstCharacterComparer();
+                                Assert.That(withComparer.Equals(left[0], right[0]), Is.False);
+
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(left).Not.To.Equal(right, withComparer);
+                                    },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+
+                            [Test]
+                            public void NegativeNegatedResult_AltGrammar_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var left = new[] {$"A{GetRandomString()}", $"B{GetRandomString()}"};
+                                var right = new[] {$"B{GetRandomString()}", $"A{GetRandomString()}"};
+                                var withComparer = new FirstCharacterComparer();
+                                Assert.That(withComparer.Equals(left[0], right[0]), Is.False);
+
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(left).To.Not.Equal(right, withComparer);
+                                    },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+                        }
+
+                        [TestFixture]
+                        public class WithProvidedComparisonFunc
+                        {
+                            private static bool FirstLetterComparer(string x, string y)
+                            {
+                                if (x == null &&
+                                    y == null) return true;
+                                if (x == null ||
+                                    y == null) return false;
+                                if (x.Length == 0 &&
+                                    y.Length == 0) return true;
+                                if (x.Length == 0 ||
+                                    y.Length == 0) return false;
+                                return x[0] == y[0];
+                            }
+
+                            [Test]
+                            public void PositiveResult_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var left = new[] {$"A{GetRandomString()}", $"B{GetRandomString()}"};
+                                var right = new[] {$"A{GetRandomString()}", $"B{GetRandomString()}"};
+
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(left).To.Equal(right, FirstLetterComparer);
+                                    },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+
+                            [Test]
+                            public void NegativeNegatedResult_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var left = new[] {$"A{GetRandomString()}", $"B{GetRandomString()}"};
+                                var right = new[] {$"B{GetRandomString()}", $"A{GetRandomString()}"};
+
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(left).Not.To.Equal(right, FirstLetterComparer);
+                                    },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+
+                            [Test]
+                            public void NegativeNegatedResult_AltGrammar_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var left = new[] {$"A{GetRandomString()}", $"B{GetRandomString()}"};
+                                var right = new[] {$"B{GetRandomString()}", $"A{GetRandomString()}"};
+
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(left).To.Not.Equal(right, FirstLetterComparer);
+                                    },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -845,9 +1025,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).To.Be.Empty();
-                }, Throws.Nothing);
+                    {
+                        Expect(collection).To.Be.Empty();
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -862,11 +1043,12 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).Not.To.Be.Empty();
-                }, Throws.Exception
-                    .InstanceOf<UnmetExpectationException>()
-                    .With.Message.EqualTo("Expected [  ] not to be an empty collection"));
+                    {
+                        Expect(collection).Not.To.Be.Empty();
+                    },
+                    Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.EqualTo("Expected [  ] not to be an empty collection"));
 
                 // Assert
             }
@@ -881,11 +1063,12 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).To.Be.Empty();
-                }, Throws.Exception
-                    .InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("] to be an empty collection"));
+                    {
+                        Expect(collection).To.Be.Empty();
+                    },
+                    Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains("] to be an empty collection"));
 
                 // Assert
             }
@@ -900,9 +1083,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).Not.To.Be.Empty();
-                }, Throws.Nothing);
+                    {
+                        Expect(collection).Not.To.Be.Empty();
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -917,9 +1101,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).To.Not.Be.Empty();
-                }, Throws.Nothing);
+                    {
+                        Expect(collection).To.Not.Be.Empty();
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -939,9 +1124,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).To.Be.Equivalent.To(compare);
-                }, Throws.Nothing);
+                    {
+                        Expect(collection).To.Be.Equivalent.To(compare);
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -956,9 +1142,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(start).To.Be.Equivalent.To(other);
-                }, Throws.Nothing);
+                    {
+                        Expect(start).To.Be.Equivalent.To(other);
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -973,9 +1160,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(start).To.Be.Equivalent.To(other);
-                }, Throws.Nothing);
+                    {
+                        Expect(start).To.Be.Equivalent.To(other);
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -990,11 +1178,12 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(test).To.Be.Equivalent.To(other);
-                }, Throws.Exception
-                    .InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("] to be equivalent to ["));
+                    {
+                        Expect(test).To.Be.Equivalent.To(other);
+                    },
+                    Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains("] to be equivalent to ["));
 
                 // Assert
             }
@@ -1009,9 +1198,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(test).Not.To.Be.Equivalent.To(other);
-                }, Throws.Nothing);
+                    {
+                        Expect(test).Not.To.Be.Equivalent.To(other);
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -1026,9 +1216,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(test).To.Not.Be.Equivalent.To(other);
-                }, Throws.Nothing);
+                    {
+                        Expect(test).To.Not.Be.Equivalent.To(other);
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -1044,9 +1235,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(test).To.Be.Equivalent.To(other);
-                }, Throws.Nothing);
+                    {
+                        Expect(test).To.Be.Equivalent.To(other);
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -1062,11 +1254,12 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(test).To.Be.Equivalent.To(other);
-                }, Throws.Exception
-                    .InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("] to be equivalent to ["));
+                    {
+                        Expect(test).To.Be.Equivalent.To(other);
+                    },
+                    Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains("] to be equivalent to ["));
 
                 // Assert
             }
@@ -1082,11 +1275,12 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(test).Not.To.Be.Equivalent.To(other);
-                }, Throws.Exception
-                    .InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("] not to be equivalent to ["));
+                    {
+                        Expect(test).Not.To.Be.Equivalent.To(other);
+                    },
+                    Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains("] not to be equivalent to ["));
 
                 // Assert
             }
@@ -1099,9 +1293,10 @@ namespace NExpect.Tests
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(evens).Not.To.Contain.Any().Odds();
-                }, Throws.Nothing);
+                    {
+                        Expect(evens).Not.To.Contain.Any().Odds();
+                    },
+                    Throws.Nothing);
                 // Assert
             }
 
@@ -1132,10 +1327,11 @@ namespace NExpect.Tests
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
-                {
-                    // ReSharper disable once ExpressionIsAlwaysNull
-                    Expect(collection).To.Be.Null();
-                }, Throws.Nothing);
+                    {
+                        // ReSharper disable once ExpressionIsAlwaysNull
+                        Expect(collection).To.Be.Null();
+                    },
+                    Throws.Nothing);
                 // Assert
             }
 
@@ -1147,11 +1343,12 @@ namespace NExpect.Tests
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
-                {
-                    // ReSharper disable once ExpressionIsAlwaysNull
-                    Expect(collection).Not.To.Be.Null();
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("not to be null"));
+                    {
+                        // ReSharper disable once ExpressionIsAlwaysNull
+                        Expect(collection).Not.To.Be.Null();
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains("not to be null"));
                 // Assert
             }
 
@@ -1164,9 +1361,10 @@ namespace NExpect.Tests
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).Not.To.Be.Null();
-                }, Throws.Nothing);
+                    {
+                        Expect(collection).Not.To.Be.Null();
+                    },
+                    Throws.Nothing);
                 // Assert
             }
 
@@ -1179,10 +1377,11 @@ namespace NExpect.Tests
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).To.Be.Null();
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("] to be null"));
+                    {
+                        Expect(collection).To.Be.Null();
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains("] to be null"));
                 // Assert
             }
 
@@ -1198,11 +1397,12 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        // ReSharper disable once ExpressionIsAlwaysNull
-                        Expect(collection).Not.To.Be.Null(expectedMessage);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains(expectedMessage));
+                        {
+                            // ReSharper disable once ExpressionIsAlwaysNull
+                            Expect(collection).Not.To.Be.Null(expectedMessage);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains(expectedMessage));
                     // Assert
                 }
 
@@ -1215,10 +1415,11 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(collection).To.Be.Null(expected);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains(expected));
+                        {
+                            Expect(collection).To.Be.Null(expected);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains(expected));
                     // Assert
                 }
 
@@ -1231,11 +1432,12 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        // ReSharper disable once ExpressionIsAlwaysNull
-                        Expect(collection).To.Not.Be.Null(expected);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains(expected));
+                        {
+                            // ReSharper disable once ExpressionIsAlwaysNull
+                            Expect(collection).To.Not.Be.Null(expected);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains(expected));
                     // Assert
                 }
             }
@@ -1254,9 +1456,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).To.Be.Distinct();
-                }, Throws.Nothing);
+                    {
+                        Expect(collection).To.Be.Distinct();
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -1271,10 +1474,11 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    // ReSharper disable once ExpressionIsAlwaysNull
-                    Expect(collection).To.Be.Distinct();
-                }, Throws.Exception.TypeOf<UnmetExpectationException>());
+                    {
+                        // ReSharper disable once ExpressionIsAlwaysNull
+                        Expect(collection).To.Be.Distinct();
+                    },
+                    Throws.Exception.TypeOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -1291,7 +1495,8 @@ namespace NExpect.Tests
                 Assert.That(() =>
                     {
                         Expect(collection).Not.To.Be.Distinct();
-                    }, Throws.Exception.TypeOf<UnmetExpectationException>()
+                    },
+                    Throws.Exception.TypeOf<UnmetExpectationException>()
                 );
 
                 // Assert
@@ -1307,9 +1512,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).To.Be.Distinct();
-                }, Throws.Exception.TypeOf<UnmetExpectationException>());
+                    {
+                        Expect(collection).To.Be.Distinct();
+                    },
+                    Throws.Exception.TypeOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -1324,9 +1530,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).To.Be.Distinct();
-                }, Throws.Nothing);
+                    {
+                        Expect(collection).To.Be.Distinct();
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -1341,9 +1548,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).Not.To.Be.Distinct();
-                }, Throws.Exception.TypeOf<UnmetExpectationException>());
+                    {
+                        Expect(collection).Not.To.Be.Distinct();
+                    },
+                    Throws.Exception.TypeOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -1358,9 +1566,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).To.Not.Be.Distinct();
-                }, Throws.Exception.TypeOf<UnmetExpectationException>());
+                    {
+                        Expect(collection).To.Not.Be.Distinct();
+                    },
+                    Throws.Exception.TypeOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -1375,9 +1584,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).Not.To.Be.Distinct();
-                }, Throws.Nothing);
+                    {
+                        Expect(collection).Not.To.Be.Distinct();
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -1392,9 +1602,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).To.Not.Be.Distinct();
-                }, Throws.Nothing);
+                    {
+                        Expect(collection).To.Not.Be.Distinct();
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -1415,7 +1626,8 @@ namespace NExpect.Tests
                 Assert.That(() =>
                     {
                         Expect(collection).To.Have.Unique.Items();
-                    }, Throws.Nothing
+                    },
+                    Throws.Nothing
                 );
 
                 // Assert
@@ -1431,10 +1643,11 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    // ReSharper disable once ExpressionIsAlwaysNull
-                    Expect(collection).To.Have.Unique.Items();
-                }, Throws.Exception.TypeOf<UnmetExpectationException>());
+                    {
+                        // ReSharper disable once ExpressionIsAlwaysNull
+                        Expect(collection).To.Have.Unique.Items();
+                    },
+                    Throws.Exception.TypeOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -1451,7 +1664,8 @@ namespace NExpect.Tests
                 Assert.That(() =>
                     {
                         Expect(collection).Not.To.Have.Unique.Items();
-                    }, Throws.Exception.TypeOf<UnmetExpectationException>()
+                    },
+                    Throws.Exception.TypeOf<UnmetExpectationException>()
                 );
 
                 // Assert
@@ -1467,9 +1681,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).To.Have.Unique.Items();
-                }, Throws.Exception.TypeOf<UnmetExpectationException>());
+                    {
+                        Expect(collection).To.Have.Unique.Items();
+                    },
+                    Throws.Exception.TypeOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -1484,9 +1699,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).To.Have.Unique.Items();
-                }, Throws.Nothing);
+                    {
+                        Expect(collection).To.Have.Unique.Items();
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -1501,9 +1717,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).Not.To.Have.Unique.Items();
-                }, Throws.Exception.TypeOf<UnmetExpectationException>());
+                    {
+                        Expect(collection).Not.To.Have.Unique.Items();
+                    },
+                    Throws.Exception.TypeOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -1518,9 +1735,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).To.Not.Have.Unique.Items();
-                }, Throws.Exception.TypeOf<UnmetExpectationException>());
+                    {
+                        Expect(collection).To.Not.Have.Unique.Items();
+                    },
+                    Throws.Exception.TypeOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -1535,9 +1753,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).Not.To.Have.Unique.Items();
-                }, Throws.Nothing);
+                    {
+                        Expect(collection).Not.To.Have.Unique.Items();
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -1552,9 +1771,10 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(() =>
-                {
-                    Expect(collection).To.Not.Have.Unique.Items();
-                }, Throws.Nothing);
+                    {
+                        Expect(collection).To.Not.Have.Unique.Items();
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -1574,7 +1794,8 @@ namespace NExpect.Tests
                     Assert.That(() =>
                         {
                             Expect(collection).To.Have.Unique.Items();
-                        }, Throws.Exception.TypeOf<UnmetExpectationException>()
+                        },
+                        Throws.Exception.TypeOf<UnmetExpectationException>()
                             .With.Message.EqualTo("Expected [ 1, 1, 1 ] to only contain unique items")
                     );
                     // Assert
@@ -1592,7 +1813,8 @@ namespace NExpect.Tests
                     Assert.That(() =>
                         {
                             Expect(collection).Not.To.Have.Unique.Items();
-                        }, Throws.Exception.TypeOf<UnmetExpectationException>()
+                        },
+                        Throws.Exception.TypeOf<UnmetExpectationException>()
                             .With.Message.EqualTo("Expected [ 1, 2, 3 ] to contain duplicate items")
                     );
                     // Assert
@@ -1610,7 +1832,8 @@ namespace NExpect.Tests
                     Assert.That(() =>
                         {
                             Expect(collection).Not.To.Have.Unique.Items();
-                        }, Throws.Exception.TypeOf<UnmetExpectationException>()
+                        },
+                        Throws.Exception.TypeOf<UnmetExpectationException>()
                             .With.Message
                             .EqualTo("Expected [  ] to contain duplicate items, but found empty collection")
                     );
@@ -1630,7 +1853,8 @@ namespace NExpect.Tests
                         {
                             // ReSharper disable once ExpressionIsAlwaysNull
                             Expect(collection).To.Have.Unique.Items();
-                        }, Throws.Exception.TypeOf<UnmetExpectationException>()
+                        },
+                        Throws.Exception.TypeOf<UnmetExpectationException>()
                             .With.Message.Contains("Expected IEnumerable<Int32>, but found (null)")
                     );
                     // Assert
@@ -1649,9 +1873,10 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(input).To.Contain.Exactly(expected).Items();
-                    }, Throws.Nothing);
+                        {
+                            Expect(input).To.Contain.Exactly(expected).Items();
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
 
@@ -1661,15 +1886,18 @@ namespace NExpect.Tests
                     // Arrange
                     var expected = GetRandomInt(10);
                     var delta = GetRandomInt(1, 3);
-                    var actual = GetRandomBoolean() ? expected + delta : expected - delta;
+                    var actual = GetRandomBoolean()
+                        ? expected + delta
+                        : expected - delta;
                     var input = new int[actual];
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(input).To.Contain.Exactly(expected).Items();
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected to find {expected}"));
+                        {
+                            Expect(input).To.Contain.Exactly(expected).Items();
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains($"Expected to find {expected}"));
                     // Assert
                 }
 
@@ -1679,14 +1907,17 @@ namespace NExpect.Tests
                     // Arrange
                     var expected = GetRandomInt(10);
                     var delta = GetRandomInt(1, 3);
-                    var actual = GetRandomBoolean() ? expected + delta : expected - delta;
+                    var actual = GetRandomBoolean()
+                        ? expected + delta
+                        : expected - delta;
                     var input = new int[actual];
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(input).Not.To.Contain.Exactly(expected).Items();
-                    }, Throws.Nothing);
+                        {
+                            Expect(input).Not.To.Contain.Exactly(expected).Items();
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
 
@@ -1696,15 +1927,18 @@ namespace NExpect.Tests
                     // Arrange
                     var expected = GetRandomInt(10);
                     var delta = GetRandomInt(1, 3);
-                    var actual = GetRandomBoolean() ? expected + delta : expected - delta;
+                    var actual = GetRandomBoolean()
+                        ? expected + delta
+                        : expected - delta;
                     var input = new int[actual];
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(input).Not.To.Contain.Exactly(actual).Items();
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected not to find {actual} items"));
+                        {
+                            Expect(input).Not.To.Contain.Exactly(actual).Items();
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains($"Expected not to find {actual} items"));
                     // Assert
                 }
 
@@ -1714,14 +1948,17 @@ namespace NExpect.Tests
                     // Arrange
                     var expected = GetRandomInt(10);
                     var delta = GetRandomInt(1, 3);
-                    var actual = GetRandomBoolean() ? expected + delta : expected - delta;
+                    var actual = GetRandomBoolean()
+                        ? expected + delta
+                        : expected - delta;
                     var input = new int[actual];
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(input).To.Not.Contain.Exactly(expected).Items();
-                    }, Throws.Nothing);
+                        {
+                            Expect(input).To.Not.Contain.Exactly(expected).Items();
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
 
@@ -1733,9 +1970,10 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(input).To.Contain.No().Items();
-                    }, Throws.Nothing);
+                        {
+                            Expect(input).To.Contain.No().Items();
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
 
@@ -1748,9 +1986,10 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(input).To.Contain.No().Items();
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        {
+                            Expect(input).To.Contain.No().Items();
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
                 }
 
@@ -1763,9 +2002,10 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(input).Not.To.Contain.No().Items();
-                    }, Throws.Nothing);
+                        {
+                            Expect(input).Not.To.Contain.No().Items();
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
             }
@@ -1786,9 +2026,10 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(left).To.Equal(right);
-                    }, Throws.Nothing);
+                        {
+                            Expect(left).To.Equal(right);
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
 
@@ -1801,9 +2042,10 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(left).Not.To.Equal(right);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        {
+                            Expect(left).Not.To.Equal(right);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
                 }
 
@@ -1816,9 +2058,10 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(left).To.Not.Equal(right);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        {
+                            Expect(left).To.Not.Equal(right);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
                 }
 
@@ -1831,9 +2074,10 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(left).To.Equal(right);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        {
+                            Expect(left).To.Equal(right);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
                 }
             }
@@ -1850,9 +2094,10 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(left).To.Be.Equal.To(right);
-                    }, Throws.Nothing);
+                        {
+                            Expect(left).To.Be.Equal.To(right);
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
 
@@ -1865,9 +2110,10 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(left).Not.To.Be.Equal.To(right);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        {
+                            Expect(left).Not.To.Be.Equal.To(right);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
                 }
 
@@ -1880,9 +2126,10 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(left).To.Not.Be.Equal.To(right);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        {
+                            Expect(left).To.Not.Be.Equal.To(right);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
                 }
 
@@ -1895,9 +2142,10 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(left).To.Be.Equal.To(right);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        {
+                            Expect(left).To.Be.Equal.To(right);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
                 }
             }
@@ -1915,9 +2163,10 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(left).To.Equal(right, message);
-                    }, Throws.Nothing);
+                        {
+                            Expect(left).To.Equal(right, message);
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
 
@@ -1931,10 +2180,11 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(left).Not.To.Equal(right, message);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains(message));
+                        {
+                            Expect(left).Not.To.Equal(right, message);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains(message));
                     // Assert
                 }
 
@@ -1948,10 +2198,11 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(left).To.Not.Equal(right, message);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains(message));
+                        {
+                            Expect(left).To.Not.Equal(right, message);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains(message));
                     // Assert
                 }
 
@@ -1965,10 +2216,11 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(left).To.Equal(right, message);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains(message));
+                        {
+                            Expect(left).To.Equal(right, message);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains(message));
                     // Assert
                 }
             }
@@ -1986,9 +2238,10 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(left).To.Be.Equal.To(right, message);
-                    }, Throws.Nothing);
+                        {
+                            Expect(left).To.Be.Equal.To(right, message);
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
 
@@ -2002,10 +2255,11 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(left).Not.To.Be.Equal.To(right, message);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains(message));
+                        {
+                            Expect(left).Not.To.Be.Equal.To(right, message);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains(message));
                     // Assert
                 }
 
@@ -2019,10 +2273,11 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(left).To.Not.Be.Equal.To(right, message);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains(message));
+                        {
+                            Expect(left).To.Not.Be.Equal.To(right, message);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains(message));
                     // Assert
                 }
 
@@ -2036,10 +2291,11 @@ namespace NExpect.Tests
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(left).To.Be.Equal.To(right, message);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains(message));
+                        {
+                            Expect(left).To.Be.Equal.To(right, message);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains(message));
                     // Assert
                 }
             }
@@ -2051,6 +2307,7 @@ namespace NExpect.Tests
                 {
                     public int Id { get; }
                     public string Name { get; }
+
                     public IdentifierAndName(int id, string name)
                     {
                         Id = id;
@@ -2058,7 +2315,7 @@ namespace NExpect.Tests
                     }
                 }
 
-                private static IdentifierAndName o(int id, string name) 
+                private static IdentifierAndName o(int id, string name)
                 {
                     return new IdentifierAndName(id, name);
                 }
@@ -2067,14 +2324,15 @@ namespace NExpect.Tests
                 public void PositiveExpectation_WhenCollectionsMatch_ShouldNotThrow()
                 {
                     // Arrange
-                    var first = new[] { o(1, "bob"), o(2, "janet") };
-                    var second = new[] { o(1, "bob"), o(2, "janet") };
+                    var first = new[] {o(1, "bob"), o(2, "janet")};
+                    var second = new[] {o(1, "bob"), o(2, "janet")};
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(first).To.Deep.Equal(second);
-                    }, Throws.Nothing);
+                        {
+                            Expect(first).To.Deep.Equal(second);
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
 
@@ -2082,14 +2340,15 @@ namespace NExpect.Tests
                 public void NegativeExpectation_WhenCollectionsMatch_ShouldThrow()
                 {
                     // Arrange
-                    var first = new[] { o(1, "bob"), o(2, "janet") };
-                    var second = new[] { o(1, "bob"), o(2, "janet") };
+                    var first = new[] {o(1, "bob"), o(2, "janet")};
+                    var second = new[] {o(1, "bob"), o(2, "janet")};
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(first).Not.To.Deep.Equal(second);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        {
+                            Expect(first).Not.To.Deep.Equal(second);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
                 }
 
@@ -2097,14 +2356,15 @@ namespace NExpect.Tests
                 public void NegativeExpectation_AltGrammar_WhenCollectionsMatch_ShouldThrow()
                 {
                     // Arrange
-                    var first = new[] { o(1, "bob"), o(2, "janet") };
-                    var second = new[] { o(1, "bob"), o(2, "janet") };
+                    var first = new[] {o(1, "bob"), o(2, "janet")};
+                    var second = new[] {o(1, "bob"), o(2, "janet")};
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(first).To.Not.Deep.Equal(second);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        {
+                            Expect(first).To.Not.Deep.Equal(second);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
                 }
 
@@ -2112,14 +2372,15 @@ namespace NExpect.Tests
                 public void PositiveExpectation_AltGrammer_WhenCollectionsMatch_ShouldNotThrow()
                 {
                     // Arrange
-                    var first = new[] { o(1, "bob"), o(2, "janet") };
-                    var second = new[] { o(1, "bob"), o(2, "janet") };
+                    var first = new[] {o(1, "bob"), o(2, "janet")};
+                    var second = new[] {o(1, "bob"), o(2, "janet")};
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(first).To.Be.Deep.Equal.To(second);
-                    }, Throws.Nothing);
+                        {
+                            Expect(first).To.Be.Deep.Equal.To(second);
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
 
@@ -2127,18 +2388,18 @@ namespace NExpect.Tests
                 public void NegativeExpectation_AltGrammar_WhenCollectionsMatch_ShouldNotThrow()
                 {
                     // Arrange
-                    var first = new[] { o(1, "bob"), o(2, "janet") };
-                    var second = new[] { o(1, "bob"), o(2, "janet") };
+                    var first = new[] {o(1, "bob"), o(2, "janet")};
+                    var second = new[] {o(1, "bob"), o(2, "janet")};
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
-                    {
-                        Expect(first).Not.To.Be.Deep.Equal.To(second);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        {
+                            Expect(first).Not.To.Be.Deep.Equal.To(second);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
                 }
             }
         }
     }
-
 }
