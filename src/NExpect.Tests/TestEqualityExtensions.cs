@@ -2043,7 +2043,7 @@ namespace NExpect.Tests
                         Expect(actual).To.Equal(expected);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected {expected} but got (null)")
+                        .With.Message.Contains("Expected {} but got (null)")
                 );
                 // Assert
             }
@@ -2079,7 +2079,7 @@ namespace NExpect.Tests
                         Expect(actual).To.Equal(expected);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected {expected} but got {actual}")
+                        .With.Message.Contains("Expected {} but got {}")
                 );
                 // Assert
             }

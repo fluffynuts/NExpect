@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using PeanutButter.Utils;
 
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -79,10 +80,7 @@ namespace NExpect.Implementations
         /// <returns>String representation of object</returns>
         public static string Quote<T>(T o)
         {
-            var asString = o as string;
-            return asString == null
-                    ? o?.ToString() ?? Null
-                    : $"\"{asString}\"";
+            return Stringifier.Stringify(o, Null);
         }
 
         /// <summary>
@@ -98,7 +96,7 @@ namespace NExpect.Implementations
                     string.Join(", ", collection.Select(Quote));
         }
 
-        private const string Null = "(null)";
+        internal const string Null = "(null)";
 
         /// <summary>
         /// Returns string with up to 10 elements from a collection with ellipsis if required

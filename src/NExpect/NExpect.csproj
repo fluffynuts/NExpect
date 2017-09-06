@@ -44,6 +44,9 @@
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ArrayExtensions.cs">
       <Link>Imported\ArrayExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ByteArrayExtensions.cs">
+      <Link>Imported\ByteArrayExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DeepEqualityTester.cs">
       <Link>Imported\DeepEqualityTester.cs</Link>
     </Compile>
@@ -55,6 +58,9 @@
     </Compile>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PyLike.cs">
       <Link>Imported\PyLike.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\StringExtensions.cs">
+      <Link>Imported\StringExtensions.cs</Link>
     </Compile>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Stringifier.cs">
       <Link>Imported\Stringifier.cs</Link>
@@ -74,6 +80,7 @@
     <Compile Include="Implementations\An.cs" />
     <Compile Include="Implementations\CollectionDeep.cs" />
     <Compile Include="Implementations\CollectionDeepEqual.cs" />
+    <Compile Include="Implementations\CollectionDeepEquivalent.cs" />
     <Compile Include="Implementations\CollectionEqual.cs" />
     <Compile Include="Implementations\CollectionUnique.cs" />
     <Compile Include="Implementations\CollectionHave.cs" />
@@ -101,6 +108,7 @@
     <Compile Include="Interfaces\IAn.cs" />
     <Compile Include="Interfaces\ICollectionDeep.cs" />
     <Compile Include="Interfaces\ICollectionDeepEqual.cs" />
+    <Compile Include="Interfaces\ICollectionDeepEquivalent.cs" />
     <Compile Include="Interfaces\ICollectionEqual.cs" />
     <Compile Include="Interfaces\ICollectionUnique.cs" />
     <Compile Include="Interfaces\ICollectionHave.cs" />

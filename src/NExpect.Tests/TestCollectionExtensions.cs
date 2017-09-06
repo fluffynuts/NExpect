@@ -8,8 +8,9 @@ using static NExpect.Expectations;
 using static PeanutButter.Utils.PyLike;
 using NExpect.Exceptions;
 
+// ReSharper disable MemberHidesStaticFromOuterClass
+// ReSharper disable InconsistentNaming
 // ReSharper disable MemberCanBePrivate.Global
-
 // ReSharper disable PossibleMultipleEnumeration
 
 namespace NExpect.Tests
@@ -24,7 +25,6 @@ namespace NExpect.Tests
             public class Equal
             {
                 [TestFixture]
-                // ReSharper disable once MemberHidesStaticFromOuterClass
                 public class To
                 {
                     [Test]
@@ -344,13 +344,17 @@ namespace NExpect.Tests
                             private static bool FirstLetterComparer(string x, string y)
                             {
                                 if (x == null &&
-                                    y == null) return true;
+                                    y == null)
+                                    return true;
                                 if (x == null ||
-                                    y == null) return false;
+                                    y == null)
+                                    return false;
                                 if (x.Length == 0 &&
-                                    y.Length == 0) return true;
+                                    y.Length == 0)
+                                    return true;
                                 if (x.Length == 0 ||
-                                    y.Length == 0) return false;
+                                    y.Length == 0)
+                                    return false;
                                 return x[0] == y[0];
                             }
 
@@ -1088,7 +1092,6 @@ namespace NExpect.Tests
         public class Equivalent
         {
             [TestFixture]
-            // ReSharper disable once MemberHidesStaticFromOuterClass
             public class To
             {
                 [Test]
@@ -2277,7 +2280,7 @@ namespace NExpect.Tests
             }
 
             [TestFixture]
-            public class Equal_GivenComparisonFunction
+            public class Deep
             {
                 public class IdentifierAndName
                 {
@@ -2296,84 +2299,141 @@ namespace NExpect.Tests
                     return new IdentifierAndName(id, name);
                 }
 
-                [Test]
-                public void PositiveExpectation_WhenCollectionsMatch_ShouldNotThrow()
+                [TestFixture]
+                public class Equivalent
                 {
-                    // Arrange
-                    var first = new[] {o(1, "bob"), o(2, "janet")};
-                    var second = new[] {o(1, "bob"), o(2, "janet")};
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
+                    [TestFixture]
+                    public class To
+                    {
+                        [Test]
+                        public void PositiveExpectation_WhenHaveEquivalence_ShouldNotThrow()
                         {
-                            Expect(first).To.Deep.Equal(second);
-                        },
-                        Throws.Nothing);
-                    // Assert
+                            // Arrange
+                            var first = new[] { o(1, "moo"), o(2, "cow") };
+                            var second = new[] { o(2, "cow"), o(1, "moo") };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(first).To.Be.Deep.Equivalent.To(second);
+                            }, Throws.Nothing);
+                            // Assert
+                        }
+
+                        [Test]
+                        public void NegativeExpectation_WhenHaveEquivalence_ShouldThrow()
+                        {
+                            // Arrange
+                            var first = new[] { o(1, "moo"), o(2, "cow") };
+                            var second = new[] { o(2, "cow"), o(1, "moo") };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(first).Not.To.Be.Deep.Equivalent.To(second);
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
+
+                        [Test]
+                        public void NegativeExpectation_AltGrammar_WhenHaveEquivalence_ShouldThrow()
+                        {
+                            // Arrange
+                            var first = new[] { o(1, "moo"), o(2, "cow") };
+                            var second = new[] { o(2, "cow"), o(1, "moo") };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(first).To.Not.Be.Deep.Equivalent.To(second);
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
+                    }
                 }
 
-                [Test]
-                public void NegativeExpectation_WhenCollectionsMatch_ShouldThrow()
+                [TestFixture]
+                public class Equal
                 {
-                    // Arrange
-                    var first = new[] {o(1, "bob"), o(2, "janet")};
-                    var second = new[] {o(1, "bob"), o(2, "janet")};
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
-                        {
-                            Expect(first).Not.To.Deep.Equal(second);
-                        },
-                        Throws.Exception.InstanceOf<UnmetExpectationException>());
-                    // Assert
-                }
+                    [Test]
+                    public void PositiveExpectation_WhenCollectionsMatch_ShouldNotThrow()
+                    {
+                        // Arrange
+                        var first = new[] {o(1, "bob"), o(2, "janet")};
+                        var second = new[] {o(1, "bob"), o(2, "janet")};
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(first).To.Deep.Equal(second);
+                            },
+                            Throws.Nothing);
+                        // Assert
+                    }
 
-                [Test]
-                public void NegativeExpectation_AltGrammar_WhenCollectionsMatch_ShouldThrow()
-                {
-                    // Arrange
-                    var first = new[] {o(1, "bob"), o(2, "janet")};
-                    var second = new[] {o(1, "bob"), o(2, "janet")};
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
-                        {
-                            Expect(first).To.Not.Deep.Equal(second);
-                        },
-                        Throws.Exception.InstanceOf<UnmetExpectationException>());
-                    // Assert
-                }
+                    [Test]
+                    public void NegativeExpectation_WhenCollectionsMatch_ShouldThrow()
+                    {
+                        // Arrange
+                        var first = new[] {o(1, "bob"), o(2, "janet")};
+                        var second = new[] {o(1, "bob"), o(2, "janet")};
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(first).Not.To.Deep.Equal(second);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
 
-                [Test]
-                public void PositiveExpectation_AltGrammer_WhenCollectionsMatch_ShouldNotThrow()
-                {
-                    // Arrange
-                    var first = new[] {o(1, "bob"), o(2, "janet")};
-                    var second = new[] {o(1, "bob"), o(2, "janet")};
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
-                        {
-                            Expect(first).To.Be.Deep.Equal.To(second);
-                        },
-                        Throws.Nothing);
-                    // Assert
-                }
+                    [Test]
+                    public void NegativeExpectation_AltGrammar_WhenCollectionsMatch_ShouldThrow()
+                    {
+                        // Arrange
+                        var first = new[] {o(1, "bob"), o(2, "janet")};
+                        var second = new[] {o(1, "bob"), o(2, "janet")};
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(first).To.Not.Deep.Equal(second);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
 
-                [Test]
-                public void NegativeExpectation_AltGrammar_WhenCollectionsMatch_ShouldNotThrow()
-                {
-                    // Arrange
-                    var first = new[] {o(1, "bob"), o(2, "janet")};
-                    var second = new[] {o(1, "bob"), o(2, "janet")};
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
-                        {
-                            Expect(first).Not.To.Be.Deep.Equal.To(second);
-                        },
-                        Throws.Exception.InstanceOf<UnmetExpectationException>());
-                    // Assert
+                    [Test]
+                    public void PositiveExpectation_AltGrammer_WhenCollectionsMatch_ShouldNotThrow()
+                    {
+                        // Arrange
+                        var first = new[] {o(1, "bob"), o(2, "janet")};
+                        var second = new[] {o(1, "bob"), o(2, "janet")};
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(first).To.Be.Deep.Equal.To(second);
+                            },
+                            Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void NegativeExpectation_AltGrammar_WhenCollectionsMatch_ShouldNotThrow()
+                    {
+                        // Arrange
+                        var first = new[] {o(1, "bob"), o(2, "janet")};
+                        var second = new[] {o(1, "bob"), o(2, "janet")};
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(first).Not.To.Be.Deep.Equal.To(second);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
                 }
             }
 
@@ -2441,16 +2501,20 @@ namespace NExpect.Tests
                 private static bool FirstLetterComparer(string x, string y)
                 {
                     if (x == null &&
-                        y == null) return true;
+                        y == null)
+                        return true;
                     if (x == null ||
-                        y == null) return false;
+                        y == null)
+                        return false;
                     if (x.Length == 0 &&
-                        y.Length == 0) return true;
+                        y.Length == 0)
+                        return true;
                     if (x.Length == 0 ||
-                        y.Length == 0) return false;
+                        y.Length == 0)
+                        return false;
                     return x[0] == y[0];
                 }
-                
+
                 [Test]
                 public void Positive_WhenMatches_ShouldNotThrow()
                 {

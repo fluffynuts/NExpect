@@ -12,6 +12,9 @@ namespace NExpect.Implementations
         public ICollectionDeepEqual<T> Equal =>
             Factory.Create<IEnumerable<T>, CollectionDeepEqual<T>>(Actual, this);
 
+        public ICollectionDeepEquivalent<T> Equivalent =>
+            Factory.Create<IEnumerable<T>, CollectionDeepEquivalent<T>>(Actual, this);
+
         public IEnumerable<T> Actual { get; }
         public CollectionDeep(IEnumerable<T> actual)
         {

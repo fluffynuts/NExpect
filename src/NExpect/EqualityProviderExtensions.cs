@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using PeanutButter.Utils;
@@ -145,6 +146,12 @@ namespace NExpect
             );
         }
 
+        /// <summary>
+        /// Performs deep equality testing on two objects
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <typeparam name="T">Type of object</typeparam>
         public static void Equal<T>(
             this IDeep<T> continuation,
             T expected
@@ -153,6 +160,13 @@ namespace NExpect
             continuation.Equal(expected, null);
         }
 
+        /// <summary>
+        /// Performs deep equality testing on two objects
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object</typeparam>
         public static void Equal<T>(
             this IDeep<T> continuation,
             T expected,
@@ -176,7 +190,7 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {Stringifier.Stringify(actual)}\n{not}to deep equal\n{Stringifier.Stringify(expected)}",
+                        $"Expected {Stringifier.Stringify(actual, MessageHelpers.Null)}\n{not}to deep equal\n{Stringifier.Stringify(expected, MessageHelpers.Null)}",
                         customMessage
                     )
                 );
@@ -245,6 +259,50 @@ namespace NExpect
             continuation.AddMatcher(MakeCollectionDeepEqualMatcherFor(expected, customMessage));
         }
 
+        /// <summary>
+        /// Does deep-equivalence testing on two collections, ignoring complex item referencing.
+        /// Two collections are deep-equivalent when their object data matches, but not necessarily
+        /// in order.
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Collection to match</param>
+        /// <typeparam name="T">Collection item type</typeparam>
+        public static void To<T>(
+            this ICollectionDeepEquivalent<T> continuation,
+            ICollection<T> expected
+        )
+        {
+            continuation.To(expected, null);
+        }
+
+        /// <summary>
+        /// Does deep-equivalence testing on two collections, ignoring complex item referencing.
+        /// Two collections are deep-equivalent when their object data matches, but not necessarily
+        /// in order.
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Collection to match</param>
+        /// <param name="customMessage">Custom message to add when failing</param>
+        /// <typeparam name="T">Collection item type</typeparam>
+        public static void To<T>(
+            this ICollectionDeepEquivalent<T> continuation,
+            ICollection<T> expected,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(collection =>
+            {
+                var passed = CollectionsAreDeepEquivalent(collection, expected);
+                var not = passed ? "not " : "";
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        $"Expected \n{collection.PrettyPrint()}\n{not} to be deep equivalent to\n{expected.PrettyPrint()}",
+                        customMessage
+                    ));
+            });
+        }
+
         private static Func<IEnumerable<T>, IMatcherResult> MakeCollectionDeepEqualMatcherFor<T>(
             IEnumerable<T> expected,
             string customMessage
@@ -264,20 +322,53 @@ namespace NExpect
             };
         }
 
+        private static bool CollectionsAreDeepEquivalent<T>(
+            IEnumerable<T> collection, 
+            ICollection<T> expected)
+        {
+            return DeepCollectionCompare(collection, expected,
+                (master, compare) =>
+                {
+                    while (master.Any())
+                    {
+                        var currentMaster = master.First();
+                        var compareMatch = compare.FirstOrDefault(c => AreDeepEqual(currentMaster, c));
+                        if (compareMatch == null)
+                            return false;
+                        master.Remove(currentMaster);
+                        compare.Remove(compareMatch);
+                    }
+                    return true;
+                });
+        }
+
         private static bool CollectionsAreDeepEqual<T>(
             IEnumerable<T> collection, 
-            IEnumerable<T> expected)
+            IEnumerable<T> expected
+        )
+        {
+            return DeepCollectionCompare(collection, expected, 
+                (master, compare) => Zip(master, compare).Aggregate(
+                    true, (acc, cur) => acc || AreDeepEqual(cur.Item1, cur.Item2)
+                )
+            );
+        }
+
+        private static bool DeepCollectionCompare<T>(
+            IEnumerable<T> collection,
+            IEnumerable<T> expected,
+            Func<List<T>, List<T>, bool> finalComparison
+        )
         {
             if (collection == null && expected == null)
                 return true;
-            if (collection == null || collection == null)
+            if (collection == null || expected == null)
                 return false;
-            var master = collection.ToArray();
-            var compare = expected.ToArray();
-            if (master.Length != compare.Length)
+            var master = collection.ToList();
+            var compare = expected.ToList();
+            if (master.Count != compare.Count)
                 return false;
-            return Zip(master, compare).Aggregate(
-                true, (acc, cur) => acc || AreDeepEqual(cur.Item1, cur.Item2));
+            return finalComparison(master, compare);
         }
 
         private static bool AreDeepEqual<T>(T item1, T item2)

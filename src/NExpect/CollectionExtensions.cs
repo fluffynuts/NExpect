@@ -379,7 +379,6 @@ namespace NExpect
         /// <param name="equivalent">continuation for test</param>
         /// <param name="other">collection to test against</param>
         /// <param name="comparer">Custom equality comparer function for each item</param>
-        /// <param name="customMessage">Custom message to include in failure messages</param>
         /// <typeparam name="T"></typeparam>
         public static void To<T>(
             this ICollectionEquivalent<T> equivalent,
