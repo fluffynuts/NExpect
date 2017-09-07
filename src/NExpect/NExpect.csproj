@@ -78,6 +78,7 @@
     <Compile Include="GreaterOrLessContinuationExtensions.cs" />
     <Compile Include="Implementations\A.cs" />
     <Compile Include="Implementations\An.cs" />
+    <Compile Include="Implementations\CollectionAn.cs" />
     <Compile Include="Implementations\CollectionDeep.cs" />
     <Compile Include="Implementations\CollectionDeepEqual.cs" />
     <Compile Include="Implementations\CollectionDeepEquivalent.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Interfaces\CountMatchMethods.cs" />
     <Compile Include="Interfaces\IA.cs" />
     <Compile Include="Interfaces\IAn.cs" />
+    <Compile Include="Interfaces\ICollectionAn.cs" />
     <Compile Include="Interfaces\ICollectionDeep.cs" />
     <Compile Include="Interfaces\ICollectionDeepEqual.cs" />
     <Compile Include="Interfaces\ICollectionDeepEquivalent.cs" />

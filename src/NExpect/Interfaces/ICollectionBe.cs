@@ -23,5 +23,10 @@ namespace NExpect.Interfaces
         /// Prepares for deep-equality testing
         /// </summary>
         ICollectionDeep<T> Deep { get; }
+
+        /// <summary>
+        /// Prepares for instance testing
+        /// </summary>
+        ICollectionAn<T> An { get; }
     }
 }

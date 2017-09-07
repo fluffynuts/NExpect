@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NUnit.Framework;
 using NExpect.Exceptions;
 using static NExpect.Expectations;
@@ -122,6 +123,25 @@ namespace NExpect.Tests
                                 Expect(sut).Not.To.Be.An.Instance.Of<TestClass>("Custom Message");
                             }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                                 .With.Message.Contains("Custom Message"));
+                            // Assert
+                        }
+                    }
+                    
+                    [TestFixture]
+                    public class OperatingOnCollection
+                    {
+                        [Test]
+                        public void InstanceOf_Negated_WhenIsInstance_ShouldThrow()
+                        {
+                            // Arrange
+                            var sut = new List<TestClass>();
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(sut).Not.To.Be.An.Instance.Of<List<TestClass>>();
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("to not be of type"));
                             // Assert
                         }
                     }
