@@ -9,11 +9,13 @@ namespace NExpect.Implementations
         IExpectation<T>,
         IExpectationContext<T>
     {
+        public IExpectationContext Parent => (this as IExpectationContext<T>).TypedParent;
+        IExpectationContext<T> IExpectationContext<T>.TypedParent { get; set; }
+
         public T Actual { get; }
         public ITo<T> To => Factory.Create<T, To<T>>(Actual, this);
         public INot<T> Not => Factory.Create<T, Not<T>>(Actual, this);
 
-        IExpectationContext<T> IExpectationContext<T>.Parent { get; set; }
 
         public Expectation(T actual)
         {

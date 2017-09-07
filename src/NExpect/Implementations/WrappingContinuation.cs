@@ -10,14 +10,19 @@ namespace NExpect.Implementations
         ICanAddMatcher<TTo>,
         IExpectationContext<TTo>
     {
+        public IExpectationContext<TTo> TypedParent { get; set; }
+        public IExpectationContext Parent => TypedParent;
+
         public TTo Actual => _unwrap(_wrapped);
+
+        private readonly IHasActual<TFrom> _wrapped;
+        private readonly Func<IHasActual<TFrom>, TTo> _unwrap;
+
         public void RunMatcher(Func<TTo, IMatcherResult> matcher)
         {
             RunMatcher(Actual, IsNegated, matcher);
         }
 
-        private readonly IHasActual<TFrom> _wrapped;
-        private readonly Func<IHasActual<TFrom>, TTo> _unwrap;
 
         internal WrappingContinuation(
             IHasActual<TFrom> toWrap, 
@@ -27,7 +32,5 @@ namespace NExpect.Implementations
             _wrapped = toWrap;
             _unwrap = unwrap;
         }
-
-        public IExpectationContext<TTo> Parent { get; set; }
     }
 }

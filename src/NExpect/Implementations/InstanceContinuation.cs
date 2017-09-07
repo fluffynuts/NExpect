@@ -4,16 +4,18 @@ using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations
 {
-    internal class InstanceContinuation<T> :
+    internal class InstanceContinuation :
         IExpectationContext<Type>,
         IInstanceContinuation
     {
         public Type Actual { get; }
+        public IExpectationContext<Type> TypedParent { get; set; }
+        public IExpectationContext Parent { get; }
 
-        public InstanceContinuation(Type actual, IExpectationContext<T> originalParent)
+        public InstanceContinuation(Type actual, IExpectationContext originalParent)
         {
             Actual = actual;
-            _originalParent = originalParent;
+            Parent = originalParent;
         }
 
         public void Negate()
@@ -33,25 +35,8 @@ namespace NExpect.Implementations
                 MatcherRunner.ProcessMatcherException(ex);
                 return;
             }
-            
-            MatcherRunner.ProcessMatcherResult(IsOriginalContextNegated(), result);
-        }
 
-        private bool IsOriginalContextNegated()
-        {
-            var originalContextIsNegated = false;
-            try
-            {
-                _originalParent.RunMatcher(t => new MatcherResult(true));
-            }
-            catch
-            {
-                originalContextIsNegated = true;
-            }
-            return originalContextIsNegated;
+            MatcherRunner.ProcessMatcherResult(Parent.IsNegated(), result);
         }
-
-        private readonly IExpectationContext<T> _originalParent;
-        public IExpectationContext<Type> Parent { get; set; }
     }
 }

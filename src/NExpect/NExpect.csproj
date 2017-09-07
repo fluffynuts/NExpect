@@ -95,6 +95,7 @@
     <Compile Include="Implementations\Deep.cs" />
     <Compile Include="Implementations\DefaultEqualityComparer.cs" />
     <Compile Include="Implementations\EqualityContinuation.cs" />
+    <Compile Include="Implementations\InstanceOfHelperExtensions.cs" />
     <Compile Include="Implementations\ExpectationBase.cs" />
     <Compile Include="Implementations\FuncComparer.cs" />
     <Compile Include="Implementations\GreaterContinuation.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Implementations\MatcherRunner.cs" />
     <Compile Include="Implementations\Null.cs" />
     <Compile Include="Implementations\NullOr.cs" />
+    <Compile Include="Implementations\TypeExtensions.cs" />
     <Compile Include="Interfaces\CountMatchMethods.cs" />
     <Compile Include="Interfaces\IA.cs" />
     <Compile Include="Interfaces\IAn.cs" />

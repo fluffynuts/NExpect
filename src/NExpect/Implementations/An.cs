@@ -14,6 +14,6 @@ namespace NExpect.Implementations
             Actual = actual;
         }
 
-        public IInstanceContinuation Instance => new InstanceContinuation<T>(Actual.GetType(), this);
+        public IInstanceContinuation Instance => new InstanceContinuation(Actual.GetType(), this);
     }
 }

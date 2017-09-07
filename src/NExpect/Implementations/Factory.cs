@@ -12,7 +12,7 @@ namespace NExpect.Implementations
         ) where T2 : IExpectationContext<T1>
         {
             var result = (T2) Activator.CreateInstance(typeof(T2), actual);
-            result.Parent = parent;
+            result.TypedParent = parent;
             afterConstruction?.Invoke(result);
             return result;
         }

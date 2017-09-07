@@ -9,7 +9,8 @@ namespace NExpect.Implementations
         ExpectationContext<IEnumerable<T>>,
         ICollectionAn<T>
     {
-        public IInstanceContinuation Instance => new InstanceContinuation<T>(Actual.GetType(), this as IExpectationContext<T>);
+        public IInstanceContinuation Instance => 
+            new InstanceContinuation(Actual.GetType(), this);
 
         public IEnumerable<T> Actual { get; }
 

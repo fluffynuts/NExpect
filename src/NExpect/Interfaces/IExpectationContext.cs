@@ -1,7 +1,15 @@
-﻿namespace NExpect.Interfaces
+﻿// ReSharper disable UnusedMemberInSuper.Global
+namespace NExpect.Interfaces
 {
-    internal interface IExpectationContext<T> : IExpectationParentContext<T>
+    internal interface IExpectationContext
     {
-        IExpectationContext<T> Parent { get; set; }
+        IExpectationContext Parent { get; }
+    }
+
+    internal interface IExpectationContext<T> : 
+        IExpectationContext,
+        IExpectationParentContext<T>
+    {
+        IExpectationContext<T> TypedParent { get; set; }
     }
 }

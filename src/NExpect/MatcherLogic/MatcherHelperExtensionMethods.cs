@@ -62,19 +62,6 @@ namespace NExpect.MatcherLogic
         }
 
 
-        internal static T TryGetPropertyValue<T>(this object o, string prop)
-        {
-            var propInfo = o.GetType().GetProperty(prop, BindingFlags.Public | BindingFlags.Instance);
-            if (propInfo == null)
-                return default(T);
-            try
-            {
-                return (T) propInfo.GetValue(o);
-            }
-            catch
-            {
-                return default(T);
-            }
-        }
     }
+
 }
