@@ -26,6 +26,7 @@ Expect(null).To.Be.Null();
 Expect(someString).To.Contain("moo").And("cow");
 Expect(someCollection).To.Contain.Exactly(2).Matched.By(item => item.IsWhatWeWant());
 Expect(someFlags).To.Contain.At.Least(3).Equal.To(true);
+Expect(someObject).To.Be.An.Instance.Of<Cow>();
 ```
 
 ## Extending
