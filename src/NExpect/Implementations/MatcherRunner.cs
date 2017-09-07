@@ -15,16 +15,32 @@ namespace NExpect.Implementations
             try
             {
                 result = matcher(actual);
-                var isPass = negated ? !result.Passed : result.Passed;
-                if (isPass)
-                    return;
             }
             catch (Exception ex)
             {
-                // TODO: make this better, ie, include the exception as an inner
-                Assertions.Throw(ex.Message);
+                ProcessMatcherException(ex);
                 return;
             }
+
+            ProcessMatcherResult(negated, result);
+        }
+
+        public static void ProcessMatcherException(
+            Exception matcherException
+        )
+        {
+            // TODO: make this better, ie, include the exception as an inner
+            Assertions.Throw(matcherException.Message);
+        }
+
+        public static void ProcessMatcherResult(
+            bool negated,
+            IMatcherResult result
+        )
+        {
+            var isPass = negated ? !result.Passed : result.Passed;
+            if (isPass)
+                return;
             Assertions.Throw(result.Message);
         }
     }

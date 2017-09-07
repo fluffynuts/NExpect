@@ -98,7 +98,7 @@
     <Compile Include="Implementations\FuncComparer.cs" />
     <Compile Include="Implementations\GreaterContinuation.cs" />
     <Compile Include="Implementations\Have.cs" />
-    <Compile Include="Implementations\Instance.cs" />
+    <Compile Include="Implementations\InstanceContinuation.cs" />
     <Compile Include="Implementations\LessContinuation.cs" />
     <Compile Include="Implementations\MatcherRunner.cs" />
     <Compile Include="Implementations\Null.cs" />
@@ -127,7 +127,7 @@
     <Compile Include="Interfaces\IGreaterContinuation.cs" />
     <Compile Include="Interfaces\IGreaterOrLessContinuation.cs" />
     <Compile Include="Interfaces\IHave.cs" />
-    <Compile Include="Interfaces\IInstance.cs" />
+    <Compile Include="Interfaces\IInstanceContinuation.cs" />
     <Compile Include="Interfaces\ILessContinuation.cs" />
     <Compile Include="Interfaces\INull.cs" />
     <Compile Include="Interfaces\INullOr.cs" />
@@ -180,6 +180,7 @@
     <Compile Include="Implementations\To.cs" />
     <Compile Include="TruthExtensions.cs" />
     <Compile Include="Exceptions\UnmetExpectationException.cs" />
+    <Compile Include="TypeExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
