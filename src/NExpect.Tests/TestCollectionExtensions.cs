@@ -2349,6 +2349,22 @@ namespace NExpect.Tests
                             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
                             // Assert
                         }
+
+                        [Test]
+                        public void PositiveExpectation_WhenCollectionsDontMatch_ShouldThrow()
+                        {
+                            // Arrange
+                            var first = new[] { o(1, "bob"), o(2, "janet") };
+                            var second = new[] { o(1, "bobby"), o(2, "janet") };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                                {
+                                    Expect(first).To.Be.Deep.Equivalent.To(second);
+                                },
+                                Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
                     }
                 }
 
@@ -2430,6 +2446,38 @@ namespace NExpect.Tests
                         Assert.That(() =>
                             {
                                 Expect(first).Not.To.Be.Deep.Equal.To(second);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+
+                    [Test]
+                    public void PositiveExpectation_WhenCollectionsDontMatchInFirstRecord_ShouldThrow()
+                    {
+                        // Arrange
+                        var first = new[] { o(1, "bob"), o(2, "janet"), o(3, "paddy") };
+                        var second = new[] { o(1, "bobby"), o(2, "janet"), o(3, "paddy") };
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(first).To.Deep.Equal(second);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+
+                    [Test]
+                    public void PositiveExpectation_WhenCollectionsDontMatchInLastRecord_ShouldThrow()
+                    {
+                        // Arrange
+                        var first = new[] { o(1, "bob"), o(2, "janet"), o(3, "paddy") };
+                        var second = new[] { o(1, "bob"), o(2, "janet"), o(3, "mcgee") };
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(first).To.Deep.Equal(second);
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>());
                         // Assert
