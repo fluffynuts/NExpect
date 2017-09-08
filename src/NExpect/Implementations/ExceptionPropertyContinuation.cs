@@ -42,5 +42,8 @@ namespace NExpect.Implementations
 
         public ICollectionDeep<T> Deep =>
             Factory.Create<IEnumerable<T>, CollectionDeep<T>>(Actual, this);
+
+        public ICollectionAn<T> An =>
+            Factory.Create<IEnumerable<T>, CollectionAn<T>>(Actual, this);
     }
 }

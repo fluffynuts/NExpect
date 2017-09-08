@@ -1,16 +1,16 @@
 using System;
-using System.Collections.Generic;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations
 {
-    internal abstract class ExpectationContext<T> : 
+    internal abstract class ExpectationContext<T> :
         IExpectationContext<T>
     {
+        public IExpectationContext Parent => _parent;
         private IExpectationContext<T> _parent;
 
-        IExpectationContext<T> IExpectationContext<T>.Parent
+        IExpectationContext<T> IExpectationContext<T>.TypedParent
         {
             get => _parent;
             set
@@ -21,45 +21,42 @@ namespace NExpect.Implementations
             }
         }
 
-        private int _storedNegations;
-        private readonly List<Func<T, IMatcherResult>> _storedExpectations = new List<Func<T, IMatcherResult>>();
+        private bool _storedNegation;
+        private Func<T, IMatcherResult> _storedExpectation;
+
 
         public virtual void Negate()
         {
-            _storedNegations++;
+            _storedNegation = true;
             RunNegations();
         }
 
         public virtual void RunMatcher(Func<T, IMatcherResult> matcher)
         {
-            _storedExpectations.Add(matcher);
+            _storedExpectation = matcher;
             RunExpectations();
         }
 
         private void RunNegations()
         {
-            if (_parent == null)
+            if (_parent == null || !_storedNegation)
                 return;
 
-            for (var i = 0; i < _storedNegations % 2; i++)
-                _parent.Negate();
-            _storedNegations = 0;
+            _parent.Negate();
+            _storedNegation = false;
         }
 
         private void RunExpectations()
         {
-            if (_parent == null)
+            if (_parent == null || _storedExpectation == null)
                 return;
-            foreach (var e in _storedExpectations)
-            {
-                _parent.RunMatcher(e);
-            }
-            _storedExpectations.Clear();
+            _parent.RunMatcher(_storedExpectation);
+            _storedExpectation = null;
         }
 
         internal void SetParent(IExpectationContext<T> parent)
         {
-            (this as IExpectationContext<T>).Parent = parent;
+            (this as IExpectationContext<T>).TypedParent = parent;
         }
     }
 }

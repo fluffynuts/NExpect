@@ -14,7 +14,6 @@ namespace NExpect.Implementations
             Actual = actual;
         }
 
-        public IInstance<T> Instance =>
-            Factory.Create<T, Instance<T>>(Actual, this);
+        public IInstanceContinuation Instance => new InstanceContinuation(Actual.GetType(), this);
     }
 }

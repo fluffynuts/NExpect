@@ -4,9 +4,13 @@ using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations
 {
-    internal abstract class ExpectationBase<T>
+    internal abstract class ExpectationBase
     {
-        public bool IsNegated { get; private set ; }
+        public bool IsNegated { get; protected set ; }
+    }
+
+    internal abstract class ExpectationBase<T>: ExpectationBase
+    {
 
         public void Negate()
         {

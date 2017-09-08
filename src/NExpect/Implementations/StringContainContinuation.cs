@@ -7,6 +7,13 @@ namespace NExpect.Implementations
     internal class StringContainContinuation : IStringContainContinuation,
         IExpectationContext<string>
     {
+        public IExpectationContext Parent => _expectationContext;
+        IExpectationContext<string> IExpectationContext<string>.TypedParent
+        {
+            get => _expectationContext.TypedParent;
+            set => _expectationContext.TypedParent = value;
+        }
+
         private readonly IExpectationContext<string> _expectationContext;
 
         public StringContainContinuation(ICanAddMatcher<string> continuation)
@@ -23,12 +30,6 @@ namespace NExpect.Implementations
         public void RunMatcher(Func<string, IMatcherResult> matcher)
         {
             _expectationContext.RunMatcher(matcher);
-        }
-
-        IExpectationContext<string> IExpectationContext<string>.Parent
-        {
-            get => _expectationContext.Parent;
-            set => _expectationContext.Parent = value;
         }
     }
 }

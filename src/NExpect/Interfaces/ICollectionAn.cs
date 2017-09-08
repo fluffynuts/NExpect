@@ -1,12 +1,11 @@
-// ReSharper disable InheritdocConsiderUsage
-
+﻿// ReSharper disable UnusedTypeParameter
 namespace NExpect.Interfaces
 {
     /// <summary>
-    /// Continuation to provide the ".An" grammar
+    /// Continuation to provide the ".An" grammar for collections
     /// </summary>
     /// <typeparam name="T">Type of the continuation</typeparam>
-    public interface IAn<T> : ICanAddMatcher<T>, IHasActual<T>
+    public interface ICollectionAn<T>
     {
         /// <summary>
         /// Prepares to check the Type of Actual
