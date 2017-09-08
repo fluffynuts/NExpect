@@ -349,7 +349,7 @@ namespace NExpect
         {
             return DeepCollectionCompare(collection, expected, 
                 (master, compare) => Zip(master, compare).Aggregate(
-                    true, (acc, cur) => acc || AreDeepEqual(cur.Item1, cur.Item2)
+                    true, (acc, cur) => acc && AreDeepEqual(cur.Item1, cur.Item2)
                 )
             );
         }
