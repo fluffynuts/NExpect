@@ -224,9 +224,10 @@ namespace NExpect
             continuation.AddMatcher(actual =>
             {
                 var passed = test(actual, expected);
+                var compare = continuation is IGreaterContinuation<T1> ? "greater" : "less";
                 var message = passed
-                    ? $"Expected {actual} not to be less than {expected}"
-                    : $"Expected {actual} to be less than {expected}";
+                    ? $"Expected {actual} not to be {compare} than {expected}"
+                    : $"Expected {actual} to be {compare} than {expected}";
                 return new MatcherResult(passed, message);
             });
         }

@@ -284,6 +284,7 @@ namespace NExpect.Tests
                     {
                         public int Id { get; }
                         public string Name { get; }
+
                         public NamedIdentifier(int id, string name)
                         {
                             Id = id;
@@ -864,274 +865,309 @@ namespace NExpect.Tests
         public class ActingOnInts
         {
             [TestFixture]
-            public class GreaterThan
+            public class Greater
             {
-                [Test]
-                public void GreaterThan_WhenActualIsGreaterThanExpected_ShouldNotThrow()
+                public class Than
                 {
-                    // Arrange
-                    var actual = GetRandomInt(5, 10);
-                    var expected = GetRandomInt(0, 4);
-
-                    // Pre-Assert
-
-                    // Act
-                    Assert.That(() =>
+                    [Test]
+                    public void WhenActualIsEqualToExpected_ShouldThrow()
+                    {
+                        // Arrange
+                        var actual = 8;
+                        var expected = 8;
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
-                        },
-                        Throws.Nothing);
+                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains("8 to be greater than 8"));
+                        // Assert
+                    }
 
-                    // Assert
-                }
-
-                [Test]
-                public void GreaterThan_ShouldWorkWithDecimals()
-                {
-                    // Arrange
-                    decimal start = 0.6M;
-                    decimal test = 0.5M;
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
+                    [Test]
+                    public void WhenActualIsLessThanToExpected_ShouldThrow()
                     {
-                        Expect(start).To.Be.Greater.Than(test);
-                    }, Throws.Nothing);
-                    // Assert
-                }
-
-                [Test]
-                public void GreaterThan_ShouldWorkWithDecimalsAndDouble()
-                {
-                    // Arrange
-                    decimal start = 0.6M;
-                    double test = 0.5;
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
-                    {
-                        Expect(start).To.Be.Greater.Than(test);
-                    }, Throws.Nothing);
-                    // Assert
-                }
-
-                [Test]
-                public void GreaterThan_ShouldWorkWithDoublesAndDecimal()
-                {
-                    // Arrange
-                    double start = 0.6;
-                    decimal test = 0.5M;
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
-                    {
-                        Expect(start).To.Be.Greater.Than(test);
-                    }, Throws.Nothing);
-                    // Assert
-                }
-
-                [Test]
-                public void GreaterThan_ShouldWorkWithDoublesAndFloat()
-                {
-                    // Arrange
-                    double start = 0.6;
-                    float test = 0.5F;
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
-                    {
-                        Expect(start).To.Be.Greater.Than(test);
-                    }, Throws.Nothing);
-                    // Assert
-                }
-
-                [Test]
-                public void GreaterThan_ShouldWorkWithDoublesAndLong()
-                {
-                    // Arrange
-                    double start = 0.6;
-                    long test = -1;
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
-                    {
-                        Expect(start).To.Be.Greater.Than(test);
-                    }, Throws.Nothing);
-                    // Assert
-                }
-
-                [Test]
-                public void GreaterThan_ShouldWorkWithFloatAndDecimal()
-                {
-                    // Arrange
-                    float start = 0.6F;
-                    decimal test = 0.5M;
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
-                    {
-                        Expect(start).To.Be.Greater.Than(test);
-                    }, Throws.Nothing);
-                    // Assert
-                }
-
-                [Test]
-                public void GreaterThan_ShouldWorkWithFloatAndLong()
-                {
-                    // Arrange
-                    double start = 0.6;
-                    long test = 0;
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
-                    {
-                        Expect(start).To.Be.Greater.Than(test);
-                    }, Throws.Nothing);
-                    // Assert
-                }
-
-                [Test]
-                public void GreaterThan_ShouldWorkWithLongAndDecimal()
-                {
-                    // Arrange
-                    long start = 1;
-                    decimal test = 0;
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
-                    {
-                        Expect(start).To.Be.Greater.Than(test);
-                    }, Throws.Nothing);
-                    // Assert
-                }
-
-                [Test]
-                public void GreaterThan_ShouldWorkWithLongAndDouble()
-                {
-                    // Arrange
-                    long start = 1;
-                    double test = 0;
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
-                    {
-                        Expect(start).To.Be.Greater.Than(test);
-                    }, Throws.Nothing);
-                    // Assert
-                }
-
-                [Test]
-                public void GreaterThan_ShouldWorkWithDecimalsAndFloat()
-                {
-                    // Arrange
-                    decimal start = 0.6M;
-                    float test = 0.5F;
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
-                    {
-                        Expect(start).To.Be.Greater.Than(test);
-                    }, Throws.Nothing);
-                    // Assert
-                }
-
-                [Test]
-                public void GreaterThan_ShouldWorkWithDecimalsAndInt()
-                {
-                    // Arrange
-                    decimal start = 0.6M;
-                    int test = 0;
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
-                    {
-                        Expect(start).To.Be.Greater.Than(test);
-                    }, Throws.Nothing);
-                    // Assert
-                }
-
-                [Test]
-                public void GreaterThan_ShouldWorkWithDecimalsAndLong()
-                {
-                    // Arrange
-                    decimal start = 0.6M;
-                    long test = 0;
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
-                    {
-                        Expect(start).To.Be.Greater.Than(test);
-                    }, Throws.Nothing);
-                    // Assert
-                }
-
-                [Test]
-                public void GreaterThan_WhenActualIsEqualToExpected_ShouldThrow()
-                {
-                    // Arrange
-                    var actual = GetRandomInt(5, 10);
-
-                    // Pre-Assert
-
-                    // Act
-                    Assert.That(() =>
-                        {
-                            Expect(actual).To.Be.Greater.Than(actual);
-                        },
-                        Throws.Exception.InstanceOf<UnmetExpectationException>());
-
-                    // Assert
-                }
-
-                [Test]
-                public void GreaterThan_WhenActualIsLessThanExpected_ShouldThrow()
-                {
-                    // Arrange
-                    var actual = GetRandomInt(5, 10);
-                    var expected = GetRandomInt(11, 20);
-
-                    // Pre-Assert
-
-                    // Act
-                    Assert.That(() =>
+                        // Arrange
+                        var actual = 7;
+                        var expected = 8;
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
-                        },
-                        Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains("7 to be greater than 8"));
+                        // Assert
+                    }
 
-                    // Assert
-                }
+                    [Test]
+                    public void GreaterThan_WhenActualIsGreaterThanExpected_ShouldNotThrow()
+                    {
+                        // Arrange
+                        var actual = GetRandomInt(5, 10);
+                        var expected = GetRandomInt(0, 4);
 
-                [Test]
-                public void GreaterThan_Negated_WhenActualIsGreaterThanExpected_ShouldThrow()
-                {
-                    // Arrange
-                    var actual = GetRandomInt(5, 10);
-                    var expected = GetRandomInt(1, 4);
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(actual).To.Be.Greater.Than(expected);
+                            },
+                            Throws.Nothing);
+
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GreaterThan_ShouldWorkWithDecimals()
+                    {
+                        // Arrange
+                        decimal start = 0.6M;
+                        decimal test = 0.5M;
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
                         {
-                            Expect(actual).Not.To.Be.Greater.Than(expected);
-                        },
-                        Throws.Exception.InstanceOf<UnmetExpectationException>());
-                    // Assert
-                }
+                            Expect(start).To.Be.Greater.Than(test);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
 
-                [Test]
-                public void GreaterThan_AltNegated_WhenActualIsGreaterThanExpected_ShouldThrow()
-                {
-                    // Arrange
-                    var actual = GetRandomInt(5, 10);
-                    var expected = GetRandomInt(1, 4);
-                    // Pre-Assert
-                    // Act
-                    Assert.That(() =>
+                    [Test]
+                    public void GreaterThan_ShouldWorkWithDecimalsAndDouble()
+                    {
+                        // Arrange
+                        decimal start = 0.6M;
+                        double test = 0.5;
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
                         {
-                            Expect(actual).To.Not.Be.Greater.Than(expected);
-                        },
-                        Throws.Exception.InstanceOf<UnmetExpectationException>());
-                    // Assert
+                            Expect(start).To.Be.Greater.Than(test);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GreaterThan_ShouldWorkWithDoublesAndDecimal()
+                    {
+                        // Arrange
+                        double start = 0.6;
+                        decimal test = 0.5M;
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(start).To.Be.Greater.Than(test);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GreaterThan_ShouldWorkWithDoublesAndFloat()
+                    {
+                        // Arrange
+                        double start = 0.6;
+                        float test = 0.5F;
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(start).To.Be.Greater.Than(test);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GreaterThan_ShouldWorkWithDoublesAndLong()
+                    {
+                        // Arrange
+                        double start = 0.6;
+                        long test = -1;
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(start).To.Be.Greater.Than(test);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GreaterThan_ShouldWorkWithFloatAndDecimal()
+                    {
+                        // Arrange
+                        float start = 0.6F;
+                        decimal test = 0.5M;
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(start).To.Be.Greater.Than(test);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GreaterThan_ShouldWorkWithFloatAndLong()
+                    {
+                        // Arrange
+                        double start = 0.6;
+                        long test = 0;
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(start).To.Be.Greater.Than(test);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GreaterThan_ShouldWorkWithLongAndDecimal()
+                    {
+                        // Arrange
+                        long start = 1;
+                        decimal test = 0;
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(start).To.Be.Greater.Than(test);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GreaterThan_ShouldWorkWithLongAndDouble()
+                    {
+                        // Arrange
+                        long start = 1;
+                        double test = 0;
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(start).To.Be.Greater.Than(test);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GreaterThan_ShouldWorkWithDecimalsAndFloat()
+                    {
+                        // Arrange
+                        decimal start = 0.6M;
+                        float test = 0.5F;
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(start).To.Be.Greater.Than(test);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GreaterThan_ShouldWorkWithDecimalsAndInt()
+                    {
+                        // Arrange
+                        decimal start = 0.6M;
+                        int test = 0;
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(start).To.Be.Greater.Than(test);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GreaterThan_ShouldWorkWithDecimalsAndLong()
+                    {
+                        // Arrange
+                        decimal start = 0.6M;
+                        long test = 0;
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(start).To.Be.Greater.Than(test);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GreaterThan_WhenActualIsEqualToExpected_ShouldThrow()
+                    {
+                        // Arrange
+                        var actual = GetRandomInt(5, 10);
+
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(actual).To.Be.Greater.Than(actual);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GreaterThan_WhenActualIsLessThanExpected_ShouldThrow()
+                    {
+                        // Arrange
+                        var actual = GetRandomInt(5, 10);
+                        var expected = GetRandomInt(11, 20);
+
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(actual).To.Be.Greater.Than(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GreaterThan_Negated_WhenActualIsGreaterThanExpected_ShouldThrow()
+                    {
+                        // Arrange
+                        var actual = GetRandomInt(5, 10);
+                        var expected = GetRandomInt(1, 4);
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(actual).Not.To.Be.Greater.Than(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GreaterThan_AltNegated_WhenActualIsGreaterThanExpected_ShouldThrow()
+                    {
+                        // Arrange
+                        var actual = GetRandomInt(5, 10);
+                        var expected = GetRandomInt(1, 4);
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(actual).To.Not.Be.Greater.Than(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
                 }
             }
 
