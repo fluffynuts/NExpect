@@ -16,6 +16,10 @@ namespace NExpect.Tests
         {
         }
 
+        private class DerivedClass : TestClass
+        {
+        }
+
         // ReSharper disable once ClassNeverInstantiated.Local
         private class AnotherTestClass : ITestInterface
         {
@@ -35,114 +39,188 @@ namespace NExpect.Tests
                 [TestFixture]
                 public class An
                 {
-                    [Test]
-                    public void InstanceOf_Negated_WhenIsInstance_ShouldThrow()
-                    {
-                        // Arrange
-                        var sut = new TestClass();
-                        // Pre-Assert
-                        // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Be.An.Instance.Of<TestClass>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains("to not be of type"));
-                        // Assert
-                    }
-
-                    [Test]
-                    public void InstanceOf_WhenIsInstance_ShouldNotThrow()
-                    {
-                        // Arrange
-                        var sut = new TestClass();
-                        // Pre-Assert
-                        // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Be.An.Instance.Of<TestClass>();
-                        }, Throws.Nothing);
-                        // Assert
-                    }
-
-                    [Test]
-                    public void InstanceOf_Negated_WhenIsNotInstance_ShouldNotThrow()
-                    {
-                        // Arrange
-                        var sut = new TestClass();
-                        // Pre-Assert
-                        // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Be.An.Instance.Of<AnotherTestClass>();
-                        }, Throws.Nothing);
-                        // Assert
-                    }
-
-                    [Test]
-                    public void InstanceOf_WhenIsNotInstance_ShouldThrow()
-                    {
-                        // Arrange
-                        var sut = new TestClass();
-                        // Pre-Assert
-                        // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Be.An.Instance.Of<AnotherTestClass>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains("to be of type"));
-                        // Assert
-                    }
-
-                    [Test]
-                    public void InstanceOf_WithGenerics_ShouldThrowWithValidCalssName()
-                    {
-                        // Arrange
-                        var sut = new GenericTestClass<TestClass>();
-                        // Pre-Assert
-                        // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Be.An.Instance.Of<AnotherTestClass>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains("TestTypeExtensions+GenericTestClass<NExpect.Tests.TestTypeExtensions+TestClass>"));
-                        // Assert
-                    }
-                    
                     [TestFixture]
-                    public class CustomMessage
+                    public class Instance
                     {
-                        [Test]
-                        public void InstanceOf_Negated_WhenIsInstance_ShouldThrow()
+                        [TestFixture]
+                        public class Of
                         {
-                            // Arrange
-                            var sut = new TestClass();
-                            // Pre-Assert
-                            // Act
-                            Assert.That(() =>
+                            [Test]
+                            public void Negated_WhenIsInstance_ShouldThrow()
                             {
-                                Expect(sut).Not.To.Be.An.Instance.Of<TestClass>("Custom Message");
-                            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                .With.Message.Contains("Custom Message"));
-                            // Assert
-                        }
-                    }
-                    
-                    [TestFixture]
-                    public class OperatingOnCollection
-                    {
-                        [Test]
-                        public void InstanceOf_Negated_WhenIsInstance_ShouldThrow()
-                        {
-                            // Arrange
-                            var sut = new List<TestClass>();
-                            // Pre-Assert
-                            // Act
-                            Assert.That(() =>
+                                // Arrange
+                                var sut = new TestClass();
+                                // Pre-Assert
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(sut).Not.To.Be.An.Instance.Of<TestClass>();
+                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    .With.Message.Contains("to not be an instance of"));
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenIsInstance_ShouldNotThrow()
                             {
-                                Expect(sut).Not.To.Be.An.Instance.Of<List<TestClass>>();
-                            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                .With.Message.Contains("to not be of type"));
-                            // Assert
+                                // Arrange
+                                var sut = new TestClass();
+                                // Pre-Assert
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(sut).To.Be.An.Instance.Of<TestClass>();
+                                }, Throws.Nothing);
+                                // Assert
+                            }
+
+                            [Test]
+                            public void Negated_WhenIsNotInstance_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var sut = new TestClass();
+                                // Pre-Assert
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(sut).Not.To.Be.An.Instance.Of<AnotherTestClass>();
+                                }, Throws.Nothing);
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenIsNotInstance_ShouldThrow()
+                            {
+                                // Arrange
+                                var sut = new TestClass();
+                                // Pre-Assert
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(sut).To.Be.An.Instance.Of<AnotherTestClass>();
+                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    .With.Message.Contains("to be an instance of"));
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WithGenerics_ShouldThrowWithValidCalssName()
+                            {
+                                // Arrange
+                                var sut = new GenericTestClass<TestClass>();
+                                // Pre-Assert
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(sut).To.Be.An.Instance.Of<AnotherTestClass>();
+                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    .With.Message
+                                    .Contains(
+                                        "TestTypeExtensions+GenericTestClass<NExpect.Tests.TestTypeExtensions+TestClass>"));
+                                // Assert
+                            }
+
+                            [TestFixture]
+                            public class OperatingOnDerivedClass
+                            {
+                                [Test]
+                                public void WhenProvidedObject_IsOfDerivedType_ShouldNotThrow()
+                                {
+                                    // Arrange
+                                    var obj = new DerivedClass();
+                                    // Pre-Assert
+                                    // Act
+                                    Assert.That(() =>
+                                    {
+                                        Expect(obj).To.Be.An.Instance.Of<TestClass>();
+                                    }, Throws.Nothing);
+                                    // Assert
+                                }
+
+                                [Test]
+                                public void Negated_WhenProvidedObject_IsOfDerivedType_ShouldThrow()
+                                {
+                                    // Arrange
+                                    var obj = new DerivedClass();
+                                    // Pre-Assert
+                                    // Act
+                                    Assert.That(() =>
+                                    {
+                                        Expect(obj).Not.To.Be.An.Instance.Of<TestClass>();
+                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                    // Assert
+                                }
+                            }
+
+                            [TestFixture]
+                            public class ExpectingInstanceOfInterface
+                            {
+                                [Test]
+                                public void WhenProvidedObject_ImplementsInterface_ShouldNotThrow()
+                                {
+                                    // Arrange
+                                    var obj = new TestClass();
+                                    // Pre-Assert
+                                    // Act
+                                    Assert.That(() =>
+                                    {
+                                        Expect(obj).To.Be.An.Instance.Of<ITestInterface>();
+                                    }, Throws.Nothing);
+                                    // Assert
+                                }
+
+                                [Test]
+                                public void Negated_WhenProvidedObject_ImplementsInterface_ShouldThrow()
+                                {
+                                    // Arrange
+                                    var obj = new TestClass();
+                                    // Pre-Assert
+                                    // Act
+                                    Assert.That(() =>
+                                    {
+                                        Expect(obj).Not.To.Be.An.Instance.Of<ITestInterface>();
+                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                    // Assert
+                                }
+                            }
+
+                            [TestFixture]
+                            public class CustomMessage
+                            {
+                                [Test]
+                                public void InstanceOf_Negated_WhenIsInstance_ShouldThrow()
+                                {
+                                    // Arrange
+                                    var sut = new TestClass();
+                                    // Pre-Assert
+                                    // Act
+                                    Assert.That(() =>
+                                    {
+                                        Expect(sut).Not.To.Be.An.Instance.Of<TestClass>("Custom Message");
+                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains("Custom Message"));
+                                    // Assert
+                                }
+                            }
+
+                            [TestFixture]
+                            public class OperatingOnCollection
+                            {
+                                [Test]
+                                public void InstanceOf_Negated_WhenIsInstance_ShouldThrow()
+                                {
+                                    // Arrange
+                                    var sut = new List<TestClass>();
+                                    // Pre-Assert
+                                    // Act
+                                    Assert.That(() =>
+                                    {
+                                        Expect(sut).Not.To.Be.An.Instance.Of<List<TestClass>>();
+                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains("to not be an instance of"));
+                                    // Assert
+                                }
+                            }
                         }
                     }
                 }

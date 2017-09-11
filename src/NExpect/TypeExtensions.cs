@@ -32,12 +32,12 @@ namespace NExpect
             instance.AddMatcher(expected =>
             {
                 var theExpectedType = typeof(TExpected);
-                var passed = instance.Actual.IsAssignableFrom(theExpectedType);
+                var passed = theExpectedType.IsAssignableFrom(instance.Actual);
                 var not = passed ? "not " : "";
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected <{instance.Actual.PrettyName()}> to {not}be of type <{theExpectedType.PrettyName()}>",
+                        $"Expected <{instance.Actual.PrettyName()}> to {not}be an instance of <{theExpectedType.PrettyName()}>",
                         customMessage
                     ));
             });
