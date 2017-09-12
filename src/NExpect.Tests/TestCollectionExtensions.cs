@@ -411,7 +411,7 @@ namespace NExpect.Tests
                                 Throws.Exception
                                     .InstanceOf<UnmetExpectationException>()
                                     .With.Message
-                                    .Contains($"to find exactly 1 occurrence of {search} but found 2"));
+                                    .Contains($"to find exactly 1 occurrence of \"{search}\" but found 2"));
 
                             // Assert
                         }
@@ -467,7 +467,7 @@ namespace NExpect.Tests
                                     .Exception
                                     .InstanceOf<UnmetExpectationException>()
                                     .With.Message
-                                    .Contains($"not to find exactly 1 occurrence of {search} but found 1"));
+                                    .Contains($"not to find exactly 1 occurrence of \"{search}\" but found 1"));
 
                             // Assert
                         }
@@ -523,7 +523,7 @@ namespace NExpect.Tests
                                     .Exception
                                     .InstanceOf<UnmetExpectationException>()
                                     .With.Message
-                                    .Contains($"not to find exactly 1 occurrence of {search} but found 1"));
+                                    .Contains($"not to find exactly 1 occurrence of \"{search}\" but found 1"));
 
                             // Assert
                         }

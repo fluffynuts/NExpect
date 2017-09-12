@@ -1174,7 +1174,7 @@ namespace NExpect
             var s = want == 1
                 ? ""
                 : "s";
-            return $"Expected to find {comparison} {want} occurrence{s} of {search} but found {have}";
+            return $"Expected to find {comparison} {want} occurrence{s} of {search.Stringify()} but found {have}";
         }
 
         private static string CreatePassMessageFor(
@@ -1187,7 +1187,7 @@ namespace NExpect
             var s = want == 1
                 ? ""
                 : "s";
-            return $"Expected not to find {comparison} {want} occurrence{s} of {search} but found {have}";
+            return $"Expected not to find {comparison} {want} occurrence{s} of {search.Stringify()} but found {have}";
         }
 
         private static string CreateFailedMatchMessageFor(
