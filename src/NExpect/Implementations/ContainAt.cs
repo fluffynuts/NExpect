@@ -1,4 +1,6 @@
 ﻿using NExpect.Interfaces;
+// ReSharper disable UnusedAutoPropertyAccessor.Local
+// ReSharper disable ClassNeverInstantiated.Global
 
 namespace NExpect.Implementations
 {

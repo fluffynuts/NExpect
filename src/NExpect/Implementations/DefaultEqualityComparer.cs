@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+// ReSharper disable ConstantConditionalAccessQualifier
+// ReSharper disable ConstantNullCoalescingCondition
 
 namespace NExpect.Implementations
 {

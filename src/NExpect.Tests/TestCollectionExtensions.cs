@@ -7,6 +7,8 @@ using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
 using static PeanutButter.Utils.PyLike;
 using NExpect.Exceptions;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable UnusedMember.Global
 
 // ReSharper disable MemberHidesStaticFromOuterClass
 // ReSharper disable InconsistentNaming
@@ -2478,6 +2480,230 @@ namespace NExpect.Tests
                         Assert.That(() =>
                             {
                                 Expect(first).To.Deep.Equal(second);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+                }
+            }
+
+            [TestFixture]
+            public class Intersection
+            {
+                public class IdentifierAndName
+                {
+                    public int Id { get; }
+                    public string Name { get; }
+
+                    public IdentifierAndName(int id, string name)
+                    {
+                        Id = id;
+                        Name = name;
+                    }
+                }
+
+                public class OtherIdentifierAndName
+                {
+                    public int Id { get; }
+                    public string Name { get; }
+                    public string Type => GetType().Name;
+
+                    public OtherIdentifierAndName(int id, string name)
+                    {
+                        Id = id;
+                        Name = name;
+                    }
+                }
+
+                private static IdentifierAndName o1(int id, string name)
+                {
+                    return new IdentifierAndName(id, name);
+                }
+
+                private static OtherIdentifierAndName o2(int id, string name)
+                {
+                    return new OtherIdentifierAndName(id, name);
+                }
+
+                [TestFixture]
+                public class Equivalent
+                {
+                    [TestFixture]
+                    public class To
+                    {
+                        [Test]
+                        public void PositiveExpectation_WhenHaveEquivalence_ShouldNotThrow()
+                        {
+                            // Arrange
+                            var first = new[] { o1(1, "moo"), o1(2, "cow") };
+                            var second = new[] { o2(2, "cow"), o2(1, "moo") };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(first.AsObjects()).To.Be.Intersection.Equivalent.To(second);
+                            }, Throws.Nothing);
+                            // Assert
+                        }
+
+                        [Test]
+                        public void NegativeExpectation_WhenHaveEquivalence_ShouldThrow()
+                        {
+                            // Arrange
+                            var first = new[] { o1(1, "moo"), o1(2, "cow") };
+                            var second = new[] { o2(2, "cow"), o2(1, "moo") };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(first.AsObjects()).Not.To.Be.Intersection.Equivalent.To(second);
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
+
+                        [Test]
+                        public void NegativeExpectation_AltGrammar_WhenHaveEquivalence_ShouldThrow()
+                        {
+                            // Arrange
+                            var first = new[] { o1(1, "moo"), o1(2, "cow") };
+                            var second = new[] { o2(2, "cow"), o2(1, "moo") };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(first.AsObjects()).To.Not.Be.Intersection.Equivalent.To(second);
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
+
+                        [Test]
+                        public void PositiveExpectation_WhenCollectionsDontMatch_ShouldThrow()
+                        {
+                            // Arrange
+                            var first = new[] { o1(1, "bob"), o1(2, "janet") };
+                            var second = new[] { o2(1, "bobby"), o2(2, "janet") };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                                {
+                                    Expect(first.AsObjects()).To.Be.Intersection.Equivalent.To(second);
+                                },
+                                Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
+                    }
+                }
+
+                [TestFixture]
+                public class Equal
+                {
+                    [Test]
+                    public void PositiveExpectation_WhenCollectionsMatch_ShouldNotThrow()
+                    {
+                        // Arrange
+                        var first = new[] {o1(1, "bob"), o1(2, "janet")};
+                        var second = new[] {o2(1, "bob"), o2(2, "janet")};
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(first.AsObjects()).To.Intersection.Equal(second);
+                            },
+                            Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void NegativeExpectation_WhenCollectionsMatch_ShouldThrow()
+                    {
+                        // Arrange
+                        var first = new[] {o1(1, "bob"), o1(2, "janet")};
+                        var second = new[] {o2(1, "bob"), o2(2, "janet")};
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(first.AsObjects()).Not.To.Intersection.Equal(second);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+
+                    [Test]
+                    public void NegativeExpectation_AltGrammar_WhenCollectionsMatch_ShouldThrow()
+                    {
+                        // Arrange
+                        var first = new[] {o1(1, "bob"), o1(2, "janet")};
+                        var second = new[] {o2(1, "bob"), o2(2, "janet")};
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(first.AsObjects()).To.Not.Intersection.Equal(second);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+
+                    [Test]
+                    public void PositiveExpectation_AltGrammer_WhenCollectionsMatch_ShouldNotThrow()
+                    {
+                        // Arrange
+                        var first = new[] {o1(1, "bob"), o1(2, "janet")};
+                        var second = new[] {o2(1, "bob"), o2(2, "janet")};
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(first.AsObjects()).To.Be.Intersection.Equal.To(second);
+                            },
+                            Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void NegativeExpectation_AltGrammar_WhenCollectionsMatch_ShouldNotThrow()
+                    {
+                        // Arrange
+                        var first = new[] {o1(1, "bob"), o1(2, "janet")};
+                        var second = new[] {o2(1, "bob"), o2(2, "janet")};
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(first.AsObjects()).Not.To.Be.Intersection.Equal.To(second);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+
+                    [Test]
+                    public void PositiveExpectation_WhenCollectionsDontMatchInFirstRecord_ShouldThrow()
+                    {
+                        // Arrange
+                        var first = new[] { o1(1, "bob"), o1(2, "janet"), o1(3, "paddy") };
+                        var second = new[] { o2(1, "bobby"), o2(2, "janet"), o2(3, "paddy") };
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(first.AsObjects()).To.Intersection.Equal(second);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+
+                    [Test]
+                    public void PositiveExpectation_WhenCollectionsDontMatchInLastRecord_ShouldThrow()
+                    {
+                        // Arrange
+                        var first = new[] { o1(1, "bob"), o1(2, "janet"), o1(3, "paddy") };
+                        var second = new[] { o2(1, "bob"), o2(2, "janet"), o2(3, "mcgee") };
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(first.AsObjects).To.Intersection.Equal(second);
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>());
                         // Assert

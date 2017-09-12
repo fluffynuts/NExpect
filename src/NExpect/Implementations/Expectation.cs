@@ -27,4 +27,5 @@ namespace NExpect.Implementations
             RunMatcher(Actual, IsNegated, matcher);
         }
     }
+
 }

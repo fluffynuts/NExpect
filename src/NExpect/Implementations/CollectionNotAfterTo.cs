@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NExpect.Interfaces;
+// ReSharper disable VirtualMemberCallInConstructor
 
 namespace NExpect.Implementations
 {
@@ -22,6 +23,9 @@ namespace NExpect.Implementations
 
         public ICollectionDeep<T> Deep =>
             Factory.Create<IEnumerable<T>, CollectionDeep<T>>(Actual, this);
+
+        public ICollectionIntersection<T> Intersection =>
+            Factory.Create<IEnumerable<T>, CollectionIntersection<T>>(Actual, this);
 
         public CollectionNotAfterTo(IEnumerable<T> actual)
         {

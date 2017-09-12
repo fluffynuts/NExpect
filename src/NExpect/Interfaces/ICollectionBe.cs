@@ -25,6 +25,12 @@ namespace NExpect.Interfaces
         ICollectionDeep<T> Deep { get; }
 
         /// <summary>
+        /// Prepares for intersection-equality testing
+        /// -> only item properties with the same name and type are tested
+        /// </summary>
+        ICollectionIntersection<T> Intersection { get; }
+
+        /// <summary>
         /// Prepares for instance testing
         /// </summary>
         ICollectionAn<T> An { get; }

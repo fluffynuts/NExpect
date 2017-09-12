@@ -12,8 +12,13 @@ namespace NExpect.Interfaces
         /// </summary>
         IBe<T> Be { get; }
         /// <summary>
-        /// Continuation to start deep equality test
+        /// Starts a deep equality test
         /// </summary>
         IDeep<T> Deep { get; }
+        /// <summary>
+        /// Starts an intersection equality test
+        /// -> only tests properties and fields which match by name and type
+        /// </summary>
+        IIntersection<T> Intersection { get; }
     }
 }

@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NExpect.Exceptions;
 using NUnit.Framework;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+// ReSharper disable MemberHidesStaticFromOuterClass
+// ReSharper disable InconsistentNaming
 
 // ReSharper disable RedundantArgumentDefaultValue
 // ReSharper disable ExpressionIsAlwaysNull
@@ -274,6 +275,101 @@ namespace NExpect.Tests
                 }
             }
 
+            [TestFixture]
+            public class Intersection
+            {
+                [TestFixture]
+                public class Equal
+                {
+                    public class NamedIdentifier
+                    {
+                        public int Id { get; }
+                        public string Name { get; }
+
+                        public NamedIdentifier(int id, string name)
+                        {
+                            Id = id;
+                            Name = name;
+                        }
+                    }
+
+                    public class OtherNamedIdentifier
+                    {
+                        public int Id { get; }
+                        public string Name { get; }
+                        public string Type => GetType().Name;
+                        public OtherNamedIdentifier(int id, string name)
+                        {
+                            Id = id;
+                            Name = name;
+                        }
+                    }
+
+                    [Test]
+                    public void PositiveResult_ShouldNotThrow()
+                    {
+                        // Arrange
+                        var left = new NamedIdentifier(1, "moo");
+                        var right = new OtherNamedIdentifier(1, "moo");
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(left as object).To.Intersection.Equal(right);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void NegativeResult_ShouldNotThrow()
+                    {
+                        // Arrange
+                        var left = new NamedIdentifier(1, "moo");
+                        var right = new OtherNamedIdentifier(2, "moo");
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(left).To.Intersection.Equal(right);
+                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+
+                    [Test]
+                    public void PositiveResult_Negated_ShouldThrow()
+                    {
+                        // Arrange
+                        var left = new NamedIdentifier(1, "moo");
+                        var right = new OtherNamedIdentifier(1, "moo");
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(left).Not.To.Intersection.Equal(right);
+                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+
+                    [Test]
+                    public void PositiveResult_Negated_AltGrammar_ShouldThrow()
+                    {
+                        // Arrange
+                        var left = new NamedIdentifier(1, "moo");
+                        var right = new OtherNamedIdentifier(1, "moo");
+                        // Pre-Assert
+
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(left).To.Not.Intersection.Equal(right);
+                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+                }
+            }
             [TestFixture]
             public class Deep
             {

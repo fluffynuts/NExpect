@@ -25,5 +25,9 @@ namespace NExpect.Interfaces
         /// Starts a deep-equality test for a collection
         /// </summary>
         ICollectionDeep<T> Deep { get; }
+        /// <summary>
+        /// Starts a intersection-equality test for a collection
+        /// </summary>
+        ICollectionIntersection<T> Intersection { get; }
     }
 }

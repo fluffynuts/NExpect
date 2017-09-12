@@ -115,5 +115,16 @@ namespace NExpect.Implementations
             return $"[ {asArray.Take(10).Stringify()}{ellipsis} ]";
         }
 
+        /// <summary>
+        /// Performs default stringification of an object
+        /// </summary>
+        /// <param name="item">Object to stringify</param>
+        /// <typeparam name="T">Type of object to stringify</typeparam>
+        /// <returns></returns>
+        public static string Stringify<T>(this T item)
+        {
+            return Stringifier.Stringify(item, Null);
+        }
+
     }
 }

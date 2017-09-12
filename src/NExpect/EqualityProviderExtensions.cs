@@ -8,6 +8,8 @@ using PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
 using static PeanutButter.Utils.PyLike;
 
+// ReSharper disable PossibleMultipleEnumeration
+
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect
@@ -154,7 +156,7 @@ namespace NExpect
         /// <typeparam name="T">Type of object</typeparam>
         public static void Equal<T>(
             this IDeep<T> continuation,
-            T expected
+            object expected
         )
         {
             continuation.Equal(expected, null);
@@ -169,32 +171,67 @@ namespace NExpect
         /// <typeparam name="T">Type of object</typeparam>
         public static void Equal<T>(
             this IDeep<T> continuation,
-            T expected,
+            object expected,
             string customMessage
         )
         {
             continuation.AddMatcher(
-                MakeDeepEqualMatcherFor(expected, customMessage)
+                actual =>
+                {
+                    var passed = AreDeepEqual(actual, expected);
+                    var not = passed ? "not " : "";
+                    return new MatcherResult(
+                        passed,
+                        FinalMessageFor(
+                            $"Expected {Stringifier.Stringify(actual, MessageHelpers.Null)}\n{not}to deep equal\n{Stringifier.Stringify(expected, MessageHelpers.Null)}",
+                            customMessage
+                        )
+                    );
+                }
             );
         }
 
-        private static Func<T, IMatcherResult> MakeDeepEqualMatcherFor<T>(
-            T expected, 
+        /// <summary>
+        /// Performs intersection-equality testing on two objects
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Object to test against</param>
+        /// <typeparam name="T">Original type</typeparam>
+        public static void Equal<T>(
+            this IIntersection<T> continuation,
+            object expected
+        )
+        {
+            continuation.Equal(expected, null);
+        }
+
+        /// <summary>
+        /// Performs intersection-equality testing on two objects
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Object to test against</param>
+        /// <param name="customMessage"></param>
+        /// <typeparam name="T">Original type</typeparam>
+        public static void Equal<T>(
+            this IIntersection<T> continuation,
+            object expected,
             string customMessage
         )
         {
-            return actual =>
-            {
-                var passed = AreDeepEqual(actual, expected);
-                var not = passed ? "not " : "";
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        $"Expected {Stringifier.Stringify(actual, MessageHelpers.Null)}\n{not}to deep equal\n{Stringifier.Stringify(expected, MessageHelpers.Null)}",
-                        customMessage
-                    )
-                );
-            };
+            continuation.AddMatcher(
+                actual =>
+                {
+                    var passed = AreIntersectionEqual(actual, expected);
+                    var not = passed ? "not " : "";
+                    return new MatcherResult(
+                        passed,
+                        FinalMessageFor(
+                            $"Expected {actual.Stringify()}\n{not}to intersection equal\n{expected.Stringify()}",
+                            customMessage
+                        )
+                    );
+                }
+            );
         }
 
         /// <summary>
@@ -210,6 +247,7 @@ namespace NExpect
         {
             continuation.Equal(expected, null);
         }
+
 
         /// <summary>
         /// Does deep-equality testing on two collections, ignoring complex item referencing
@@ -230,6 +268,38 @@ namespace NExpect
         }
 
         /// <summary>
+        /// Does intersection-equality testing on two collections, ignoring complex item referencing
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Collection to match</param>
+        /// <typeparam name="T">Collection item type</typeparam>
+        public static void Equal<T>(
+            this ICollectionIntersection<T> continuation,
+            IEnumerable<T> expected
+        )
+        {
+            continuation.Equal(expected, null);
+        }
+
+        /// <summary>
+        /// Does intersection-equality testing on two collections, ignoring complex item referencing
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Collection to match</param>
+        /// <param name="customMessage">Custom message to add when failing</param>
+        /// <typeparam name="T">Collection item type</typeparam>
+        public static void Equal<T>(
+            this ICollectionIntersection<T> continuation,
+            IEnumerable<T> expected,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(
+                MakeCollectionIntersectionEqualMatcherFor(expected, customMessage)
+            );
+        }
+
+        /// <summary>
         /// Does deep-equality testing on two collections, ignoring complex item referencing
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
@@ -237,7 +307,7 @@ namespace NExpect
         /// <typeparam name="T">Collection item type</typeparam>
         public static void To<T>(
             this ICollectionDeepEqual<T> continuation,
-            ICollection<T> expected
+            IEnumerable<T> expected
         )
         {
             continuation.To(expected, null);
@@ -252,7 +322,7 @@ namespace NExpect
         /// <typeparam name="T">Collection item type</typeparam>
         public static void To<T>(
             this ICollectionDeepEqual<T> continuation,
-            ICollection<T> expected,
+            IEnumerable<T> expected,
             string customMessage
         )
         {
@@ -260,6 +330,38 @@ namespace NExpect
         }
 
         /// <summary>
+        /// Performs intersection-equality testing on two collections
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected collection values</param>
+        /// <typeparam name="T">Type of collection item</typeparam>
+        public static void To<T>(
+            this ICollectionIntersectionEqual<T> continuation,
+            IEnumerable<T> expected
+        )
+        {
+            continuation.To(expected, null);
+        }
+
+        /// <summary>
+        /// Performs intersection-equality testing on two collections
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected collection values</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of collection item</typeparam>
+        public static void To<T>(
+            this ICollectionIntersectionEqual<T> continuation,
+            IEnumerable<T> expected,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(
+                MakeCollectionIntersectionEqualMatcherFor(expected, customMessage)
+            );
+        }
+
+        /// <summary>
         /// Does deep-equivalence testing on two collections, ignoring complex item referencing.
         /// Two collections are deep-equivalent when their object data matches, but not necessarily
         /// in order.
@@ -269,7 +371,7 @@ namespace NExpect
         /// <typeparam name="T">Collection item type</typeparam>
         public static void To<T>(
             this ICollectionDeepEquivalent<T> continuation,
-            ICollection<T> expected
+            IEnumerable<T> expected
         )
         {
             continuation.To(expected, null);
@@ -286,7 +388,7 @@ namespace NExpect
         /// <typeparam name="T">Collection item type</typeparam>
         public static void To<T>(
             this ICollectionDeepEquivalent<T> continuation,
-            ICollection<T> expected,
+            IEnumerable<T> expected,
             string customMessage
         )
         {
@@ -303,6 +405,88 @@ namespace NExpect
             });
         }
 
+        /// <summary>
+        /// Provides deep intersection-equality testing for two collections
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected values</param>
+        /// <typeparam name="T">Original type of collection</typeparam>
+        public static void To<T>(
+            this ICollectionIntersectionEquivalent<T> continuation,
+            IEnumerable<T> expected
+        )
+        {
+            continuation.To(expected, null);
+        }
+
+        /// <summary>
+        /// Provides deep intersection-equality testing for two collections
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected values</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T">Original type of collection</typeparam>
+        public static void To<T>(
+            this ICollectionIntersectionEquivalent<T> continuation,
+            IEnumerable<T> expected,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(collection =>
+            {
+                var passed = CollectionsAreIntersectionEquivalent(collection, expected);
+                var not = passed ? "not " : "";
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        $"Expected\n{collection.PrettyPrint()}\n{not} to be intersection equivalent to\n{expected.PrettyPrint()}",
+                        customMessage
+                    )
+                );
+            });
+        }
+
+        private static bool CollectionsAreIntersectionEquivalent<T>(
+            IEnumerable<T> collection,
+            IEnumerable<T> expected
+        )
+        {
+            return CollectionCompare(collection, expected,
+                (master, compare) =>
+                {
+                    while (master.Any())
+                    {
+                        var currentMaster = master.First();
+                        var compareMatch = compare.FirstOrDefault(c => AreIntersectionEqual(currentMaster, c));
+                        if (compareMatch == null)
+                            return false;
+                        master.Remove(currentMaster);
+                        compare.Remove(compareMatch);
+                    }
+                    return true;
+                });
+        }
+
+
+        private static Func<IEnumerable<T>, IMatcherResult> MakeCollectionIntersectionEqualMatcherFor<T>(
+            IEnumerable<T> expected,
+            string customMessage
+        )
+        {
+            return collection =>
+            {
+                var passed = CollectionsAreIntersectionEqual(collection, expected);
+                var not = passed ? "not " : "";
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        $"Expected\n{collection.PrettyPrint()}\n{not} to intersect equal\n{expected.PrettyPrint()}",
+                        customMessage
+                    )
+                );
+            };
+        }
+
         private static Func<IEnumerable<T>, IMatcherResult> MakeCollectionDeepEqualMatcherFor<T>(
             IEnumerable<T> expected,
             string customMessage
@@ -315,7 +499,7 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {collection.PrettyPrint()}\n{not}to deep equal\n{expected.PrettyPrint()}", 
+                        $"Expected\n{collection.PrettyPrint()}\n{not}to deep equal\n{expected.PrettyPrint()}",
                         customMessage
                     )
                 );
@@ -323,10 +507,10 @@ namespace NExpect
         }
 
         private static bool CollectionsAreDeepEquivalent<T>(
-            IEnumerable<T> collection, 
-            ICollection<T> expected)
+            IEnumerable<T> collection,
+            IEnumerable<T> expected)
         {
-            return DeepCollectionCompare(collection, expected,
+            return CollectionCompare(collection, expected,
                 (master, compare) =>
                 {
                     while (master.Any())
@@ -342,19 +526,37 @@ namespace NExpect
                 });
         }
 
-        private static bool CollectionsAreDeepEqual<T>(
-            IEnumerable<T> collection, 
+        private static bool CollectionsAreIntersectionEqual<T>(
+            IEnumerable<T> collection,
             IEnumerable<T> expected
         )
         {
-            return DeepCollectionCompare(collection, expected, 
-                (master, compare) => Zip(master, compare).Aggregate(
-                    true, (acc, cur) => acc && AreDeepEqual(cur.Item1, cur.Item2)
-                )
+            return CollectionCompare(
+                collection,
+                expected,
+                (master, compare) => Zip(master, compare)
+                    .Aggregate(
+                        true, (acc, cur) => acc && AreIntersectionEqual(cur.Item1, cur.Item2)
+                    )
             );
         }
 
-        private static bool DeepCollectionCompare<T>(
+        private static bool CollectionsAreDeepEqual<T>(
+            IEnumerable<T> collection,
+            IEnumerable<T> expected
+        )
+        {
+            return CollectionCompare(
+                collection,
+                expected,
+                (master, compare) => Zip(master, compare)
+                    .Aggregate(
+                        true, (acc, cur) => acc && AreDeepEqual(cur.Item1, cur.Item2)
+                    )
+            );
+        }
+
+        private static bool CollectionCompare<T>(
             IEnumerable<T> collection,
             IEnumerable<T> expected,
             Func<List<T>, List<T>, bool> finalComparison
@@ -371,7 +573,19 @@ namespace NExpect
             return finalComparison(master, compare);
         }
 
-        private static bool AreDeepEqual<T>(T item1, T item2)
+        private static bool AreIntersectionEqual<T>(T item1, T item2)
+        {
+            var tester = new DeepEqualityTester(item1, item2)
+            {
+                OnlyTestIntersectingProperties = true,
+                RecordErrors = false,
+                FailOnMissingProperties = false,
+                IncludeFields = true
+            };
+            return tester.AreDeepEqual();
+        }
+
+        private static bool AreDeepEqual(object item1, object item2)
         {
             var tester = new DeepEqualityTester(item1, item2)
             {
@@ -567,6 +781,24 @@ namespace NExpect
                 passed,
                 $"Expected {actual} {not}to be the same reference as {other}"
             );
+        }
+    }
+
+    /// <summary>
+    /// Provides some convenience extensions for deep equality testing
+    /// </summary>
+    public static class DeepEqualityTestingHelperExtensions
+    {
+        /// <summary>
+        /// "Dumbs down" a collection to be of IEnumerable&lt;object&gt; 
+        ///   to make deep equality testing convenient on different types
+        /// </summary>
+        /// <param name="collection">Collection to convert</param>
+        /// <typeparam name="T">Original item type</typeparam>
+        /// <returns></returns>
+        public static IEnumerable<object> AsObjects<T>(this IEnumerable<T> collection)
+        {
+            return collection.Select(o => o as object);
         }
     }
 }

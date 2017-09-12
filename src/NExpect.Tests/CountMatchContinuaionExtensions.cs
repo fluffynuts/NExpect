@@ -4,6 +4,7 @@ using System.Linq;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+// ReSharper disable PossibleMultipleEnumeration
 
 namespace NExpect.Tests
 {

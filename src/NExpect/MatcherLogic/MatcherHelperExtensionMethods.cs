@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using NExpect.Implementations;
+﻿using NExpect.Implementations;
 using NExpect.Interfaces;
 
 namespace NExpect.MatcherLogic

@@ -5,6 +5,7 @@ using NExpect.MatcherLogic;
 
 namespace NExpect
 {
+    // TODO: allow passing in a custom message for all Thans
     /// <summary>
     /// Adds extension methods for Greater and Less
     /// </summary>

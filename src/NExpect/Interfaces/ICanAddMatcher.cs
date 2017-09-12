@@ -1,4 +1,5 @@
-﻿namespace NExpect.Interfaces
+﻿// ReSharper disable UnusedTypeParameter
+namespace NExpect.Interfaces
 {
     /// <summary>
     /// Most general interface for object which should allow the .AddMatcher() syntax

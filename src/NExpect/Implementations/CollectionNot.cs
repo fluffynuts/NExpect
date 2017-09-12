@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using NExpect.Interfaces;
+// ReSharper disable VirtualMemberCallInConstructor
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable ClassNeverInstantiated.Global
 
 namespace NExpect.Implementations
 {

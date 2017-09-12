@@ -74,6 +74,7 @@
     <Compile Include="Assertions.cs" />
     <Compile Include="CollectionFluencyExtensions.cs" />
     <Compile Include="ExceptionMessageContainuationToStringContainContinuation.cs" />
+    <Compile Include="Exceptions\StackFrameExtensions.cs" />
     <Compile Include="Expectations.cs" />
     <Compile Include="GreaterOrLessContinuationExtensions.cs" />
     <Compile Include="Implementations\A.cs" />
@@ -83,6 +84,9 @@
     <Compile Include="Implementations\CollectionDeepEqual.cs" />
     <Compile Include="Implementations\CollectionDeepEquivalent.cs" />
     <Compile Include="Implementations\CollectionEqual.cs" />
+    <Compile Include="Implementations\CollectionIntersection.cs" />
+    <Compile Include="Implementations\CollectionIntersectionEqual.cs" />
+    <Compile Include="Implementations\CollectionIntersectionEquivalent.cs" />
     <Compile Include="Implementations\CollectionUnique.cs" />
     <Compile Include="Implementations\CollectionHave.cs" />
     <Compile Include="Implementations\CollectionBe.cs" />
@@ -101,6 +105,7 @@
     <Compile Include="Implementations\GreaterContinuation.cs" />
     <Compile Include="Implementations\Have.cs" />
     <Compile Include="Implementations\InstanceContinuation.cs" />
+    <Compile Include="Implementations\Intersection.cs" />
     <Compile Include="Implementations\LessContinuation.cs" />
     <Compile Include="Implementations\MatcherRunner.cs" />
     <Compile Include="Implementations\Null.cs" />
@@ -114,6 +119,9 @@
     <Compile Include="Interfaces\ICollectionDeepEqual.cs" />
     <Compile Include="Interfaces\ICollectionDeepEquivalent.cs" />
     <Compile Include="Interfaces\ICollectionEqual.cs" />
+    <Compile Include="Interfaces\ICollectionIntersection.cs" />
+    <Compile Include="Interfaces\ICollectionIntersectionEqual.cs" />
+    <Compile Include="Interfaces\ICollectionIntersectionEquivalent.cs" />
     <Compile Include="Interfaces\ICollectionUnique.cs" />
     <Compile Include="Interfaces\ICollectionHave.cs" />
     <Compile Include="Interfaces\ICollectionBe.cs" />
@@ -132,6 +140,7 @@
     <Compile Include="Interfaces\IGreaterOrLessContinuation.cs" />
     <Compile Include="Interfaces\IHave.cs" />
     <Compile Include="Interfaces\IInstanceContinuation.cs" />
+    <Compile Include="Interfaces\IIntersection.cs" />
     <Compile Include="Interfaces\ILessContinuation.cs" />
     <Compile Include="Interfaces\INull.cs" />
     <Compile Include="Interfaces\INullOr.cs" />

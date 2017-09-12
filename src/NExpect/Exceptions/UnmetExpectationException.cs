@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
+
+// ReSharper disable InheritdocConsiderUsage
 
 namespace NExpect.Exceptions
 {
@@ -19,7 +20,7 @@ namespace NExpect.Exceptions
         private string GetEditedStackTrace()
         {
             var stackTrace = new StackTrace(this, true);
-            var reverseFrames = stackTrace.GetFrames().Reverse();
+            var reverseFrames = stackTrace.GetFrames()?.Reverse() ?? new StackFrame[0];
             var hitThisAssembly = false;
             var interestingFrames = reverseFrames.Aggregate(
                 new List<StackFrame>(), (acc, cur) =>
@@ -52,23 +53,6 @@ namespace NExpect.Exceptions
             string message
         ) : base(message)
         {
-        }
-    }
-
-    internal static class StackFrameExtensions
-    {
-        private static readonly Assembly ThisAssembly =
-            typeof(UnmetExpectationException).Assembly;
-
-        internal static bool IsFromOrReferencesThisAssembly(
-            this StackFrame frame
-        )
-        {
-            var methodInfo = frame.GetMethod();
-            if (methodInfo.DeclaringType.Assembly == ThisAssembly)
-                return true;
-            var parameters = methodInfo.GetParameters();
-            return parameters.Any(p => p.ParameterType.Assembly == ThisAssembly);
         }
     }
 }

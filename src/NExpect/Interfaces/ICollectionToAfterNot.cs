@@ -26,5 +26,10 @@ namespace NExpect.Interfaces
         /// deep-equality testing
         /// </summary>
         ICollectionDeep<T> Deep { get; }
+        /// <summary>
+        /// Provides the negated .Deep grammar extension for collection
+        /// intersection-equality testing
+        /// </summary>
+        ICollectionIntersection<T> Intersection { get; }
     }
 }

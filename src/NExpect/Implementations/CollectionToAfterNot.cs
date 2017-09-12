@@ -21,6 +21,9 @@ namespace NExpect.Implementations
         public ICollectionDeep<T> Deep =>
             Factory.Create<IEnumerable<T>, CollectionDeep<T>>(Actual, this);
 
+        public ICollectionIntersection<T> Intersection =>
+            Factory.Create<IEnumerable<T>, CollectionIntersection<T>>(Actual, this);
+
         public CollectionToAfterNot(IEnumerable<T> actual)
         {
             Actual = actual;
