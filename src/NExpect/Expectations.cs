@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 // ReSharper disable UnusedMember.Global
@@ -231,6 +232,34 @@ namespace NExpect
         )
         {
             return new CollectionExpectation<T>(hashSet);
+        }
+
+        /// <summary>
+        /// Starts an expectation on a concrete KeyCollection from a Dictionary
+        /// </summary>
+        /// <param name="keys">KeyCollection to start with</param>
+        /// <typeparam name="TKey">Key type of the dictionary</typeparam>
+        /// <typeparam name="TValue">Value type of the dictionary</typeparam>
+        /// <returns>ICollectionExpectation&lt;T&gt;</returns>
+        public static ICollectionExpectation<TKey> Expect<TKey, TValue>(
+            Dictionary<TKey,TValue>.KeyCollection keys
+        )
+        {
+            return new CollectionExpectation<TKey>(keys.ToArray());
+        }
+
+        /// <summary>
+        /// Starts an expectation on a concrete KeyCollection from a Dictionary
+        /// </summary>
+        /// <param name="values">KeyCollection to start with</param>
+        /// <typeparam name="TKey">Key type of the dictionary</typeparam>
+        /// <typeparam name="TValue">Value type of the dictionary</typeparam>
+        /// <returns>ICollectionExpectation&lt;T&gt;</returns>
+        public static ICollectionExpectation<TValue> Expect<TKey, TValue>(
+            Dictionary<TKey,TValue>.ValueCollection values
+        )
+        {
+            return new CollectionExpectation<TValue>(values.ToArray());
         }
     }
 }
