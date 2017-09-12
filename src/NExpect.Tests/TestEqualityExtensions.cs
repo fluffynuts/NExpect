@@ -3,6 +3,7 @@ using NExpect.Exceptions;
 using NUnit.Framework;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+
 // ReSharper disable MemberHidesStaticFromOuterClass
 // ReSharper disable InconsistentNaming
 
@@ -298,6 +299,7 @@ namespace NExpect.Tests
                         public int Id { get; }
                         public string Name { get; }
                         public string Type => GetType().Name;
+
                         public OtherNamedIdentifier(int id, string name)
                         {
                             Id = id;
@@ -316,8 +318,25 @@ namespace NExpect.Tests
                         // Act
                         Assert.That(() =>
                         {
-                            Expect(left as object).To.Intersection.Equal(right);
+                            Expect(left).To.Intersection.Equal(right);
                         }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    // TODO: it would be nice if the message could clarify that there
+                    //  are no intersecting properties
+                    [Test]
+                    public void WhenNoPropertiesInCommon_ShouldThrow()
+                    {
+                        // Arrange
+                        var left = new {moo = "cow"};
+                        var right = new {cow = "cake"};
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(left).To.Intersection.Equal(right);
+                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
                         // Assert
                     }
 
@@ -370,6 +389,7 @@ namespace NExpect.Tests
                     }
                 }
             }
+
             [TestFixture]
             public class Deep
             {
