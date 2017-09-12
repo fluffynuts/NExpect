@@ -1,13 +1,15 @@
+using System.Collections.Generic;
 using NExpect.Interfaces;
 
 namespace NExpect.Implementations
 {
     internal class CountMatchEqual<T>
-        : ICountMatchEqual<T>
+        : ExpectationContext<IEnumerable<T>>,
+           ICountMatchEqual<T>
     {
         public ICanAddMatcher<T> Continuation { get; }
         public CountMatchMethods Method { get; }
-        public int Compare { get; }
+        public int ExpectedCount { get; }
 
         public CountMatchEqual(
             ICanAddMatcher<T> continuation,
@@ -16,7 +18,7 @@ namespace NExpect.Implementations
         {
             Continuation = continuation;
             Method = method;
-            Compare = compare;
+            ExpectedCount = compare;
         }
     }
 }

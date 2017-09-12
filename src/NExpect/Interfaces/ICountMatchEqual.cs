@@ -1,3 +1,4 @@
+// ReSharper disable InheritdocConsiderUsage
 namespace NExpect.Interfaces
 {
     /// <summary>
@@ -5,24 +6,11 @@ namespace NExpect.Interfaces
     /// Essentially, the original continuation is frankensquished into this.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ICountMatchEqual<T>
+    public interface ICountMatchEqual<T>: ICountMatch
     {
         /// <summary>
         /// Original continuation
         /// </summary>
         ICanAddMatcher<T> Continuation { get; }
-        /// <summary>
-        /// Method to use when comparing the count, eg:
-        /// - at least
-        /// - at most
-        /// - exactly
-        /// - any
-        /// - all
-        /// </summary>
-        CountMatchMethods Method { get; }
-        /// <summary>
-        /// Comparison count, where appropriate (at least, at most, exactly)
-        /// </summary>
-        int Compare { get; }
     }
 }

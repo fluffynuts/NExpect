@@ -6,7 +6,7 @@ namespace NExpect.Interfaces
     /// Continuation from, eg At.Least(N)
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ICountMatchContinuation<T>: ICanAddMatcher<T>
+    public interface ICountMatchContinuation<T>: ICanAddMatcher<T>, ICountMatch
     {
         /// <summary>
         /// Continuation to attempt to match the collection items exactly
@@ -18,7 +18,15 @@ namespace NExpect.Interfaces
         /// function
         /// </summary>
         ICountMatchMatched<T> Matched { get; }
+
+        /// <summary>
+        /// Prepares for deep equality testing
+        /// </summary>
+        ICountMatchDeep<T> Deep { get; }
+
+        /// <summary>
+        /// Prepares for intersection equality testing
+        /// </summary>
+        ICountMatchIntersection<T> Intersection { get; }
     }
-
-
 }

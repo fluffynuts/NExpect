@@ -179,10 +179,11 @@ namespace NExpect
                 var passed = _collectionCountMatchStrategies[countMatch.Method](have,
                     countMatch.Method == CountMatchMethods.All
                         ? asArray.Length
-                        : countMatch.Compare
+                        : countMatch.ExpectedCount
                 );
                 var message =
-                    _collectionCountMessageStrategies[countMatch.Method](passed, search, have, countMatch.Compare);
+                    _collectionCountMessageStrategies[countMatch.Method](passed, search, have,
+                        countMatch.ExpectedCount);
 
                 return new MatcherResult(
                     passed,
@@ -363,11 +364,11 @@ namespace NExpect
                 var not = passed
                     ? "not "
                     : "";
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    $"Expected {collection.PrettyPrint()} {not}to be equivalent to {other.PrettyPrint()}",
-                    customMessage
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        $"Expected {collection.PrettyPrint()} {not}to be equivalent to {other.PrettyPrint()}",
+                        customMessage
                     )
                 );
             });
@@ -521,7 +522,7 @@ namespace NExpect
         {
             contain.AddMatcher(collection =>
             {
-                var expected = contain.GetExpectedCount();
+                var expected = contain.ExpectedCount;
                 var actual = collection?.Count() ?? 0;
                 var passed = actual == expected;
                 var not = passed
@@ -534,6 +535,95 @@ namespace NExpect
                 );
             });
         }
+
+        /// <summary>
+        /// Performs count-based deep-equality testing on collections
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Object to match</param>
+        /// <typeparam name="T">Type of collection item</typeparam>
+        public static void To<T>(
+            this ICountMatchDeepEqual<IEnumerable<T>> continuation,
+            object expected
+        )
+        {
+            continuation.To(expected, null);
+        }
+
+        /// <summary>
+        /// Performs count-based deep-equality testing on collections
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Object to match</param>
+        /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <typeparam name="T">Type of collection item</typeparam>
+        public static void To<T>(
+            this ICountMatchDeepEqual<IEnumerable<T>> continuation,
+            object expected,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(collection =>
+            {
+                var expectedCount = continuation.ExpectedCount;
+                var actualCount = collection?.Count(o => DeepTestHelpers.AreDeepEqual(o, expected)) ?? 0;
+                var passed = actualCount == expectedCount;
+                var not = passed ? "not " : "";
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        $"Expected {not}to find {expectedCount} items matching\n{expected.Stringify()}\n but actually found {actualCount}",
+                        customMessage
+                    )
+                );
+            });
+        }
+
+        /// <summary>
+        /// Performs count-based intersection-equality testing on collections
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Object to match</param>
+        /// <typeparam name="T">Type of collection item</typeparam>
+        public static void To<T>(
+            this ICountMatchIntersectionEqual<IEnumerable<T>> continuation,
+            object expected
+        )
+        {
+            continuation.To(expected, null);
+        }
+
+        /// <summary>
+        /// Performs count-based intersection-equality testing on collections
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Object to match</param>
+        /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <typeparam name="T">Type of collection item</typeparam>
+        public static void To<T>(
+            this ICountMatchIntersectionEqual<IEnumerable<T>> continuation,
+            object expected,
+            string customMessage
+        )
+        {
+            // TODO: Please refactor me -- there's a lot here in common with the .Deep.Equal.To
+            //  extension above, but no (as yet) common interface between the two
+            continuation.AddMatcher(collection =>
+            {
+                var expectedCount = continuation.ExpectedCount;
+                var actualCount = collection?.Count(o => DeepTestHelpers.AreIntersectionEqual(o, expected)) ?? 0;
+                var passed = actualCount == expectedCount;
+                var not = passed ? "not " : "";
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        $"Expected {not}to find {expectedCount} items matching\n{expected.Stringify()}\n but actually found {actualCount}",
+                        customMessage
+                    )
+                );
+            });
+        }
+
 
         //----------------
         /// <summary>
@@ -877,7 +967,9 @@ namespace NExpect
             string customMessage
         )
         {
-            continuation.AddMatcher(GenerateEqualityMatcherFor(expected, null, customMessage));
+            continuation.AddMatcher(GenerateEqualityMatcherFor(
+                expected, null, customMessage
+            ));
         }
 
         private static Func<IEnumerable<T>, IMatcherResult> GenerateEqualityMatcherFor<T>(
@@ -918,7 +1010,7 @@ namespace NExpect
             return actualArray.Zip(expectedArray, Tuple.Create)
                 .All(o => comparer.Equals(o.Item1, o.Item2));
         }
-        //--------------------
+
 
         private static bool TestEquivalenceOf<T>(
             IEnumerable<T> collectionA,

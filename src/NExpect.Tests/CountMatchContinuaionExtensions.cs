@@ -14,7 +14,7 @@ namespace NExpect.Tests
         {
             continuation.AddMatcher(collection =>
             {
-                var expectedCount = continuation.GetExpectedCount();
+                var expectedCount = continuation.ExpectedCount;
                 var method = continuation.GetCountMatchMethod();
                 // TODO: use count and method
                 var count = collection.Count(i => i % 2 == 1);

@@ -73,6 +73,7 @@
     </Compile>
     <Compile Include="Assertions.cs" />
     <Compile Include="CollectionFluencyExtensions.cs" />
+    <Compile Include="DeepTestHelpers.cs" />
     <Compile Include="ExceptionMessageContainuationToStringContainContinuation.cs" />
     <Compile Include="Exceptions\StackFrameExtensions.cs" />
     <Compile Include="Expectations.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="Implementations\Contain.cs" />
     <Compile Include="Implementations\ContainAt.cs" />
     <Compile Include="Implementations\CountMatchContinuation.cs" />
+    <Compile Include="Implementations\CountMatchDeep.cs" />
     <Compile Include="Implementations\CountMatchEqual.cs" />
     <Compile Include="Implementations\CountMatchMatched.cs" />
     <Compile Include="Implementations\Deep.cs" />
@@ -131,8 +133,13 @@
     <Compile Include="Interfaces\ICollectionTo.cs" />
     <Compile Include="Interfaces\ICollectionToAfterNot.cs" />
     <Compile Include="Interfaces\IContainAt.cs" />
+    <Compile Include="Interfaces\ICountMatch.cs" />
     <Compile Include="Interfaces\ICountMatchContinuation.cs" />
+    <Compile Include="Interfaces\ICountMatchDeep.cs" />
+    <Compile Include="Interfaces\ICountMatchDeepEqual.cs" />
     <Compile Include="Interfaces\ICountMatchEqual.cs" />
+    <Compile Include="Interfaces\ICountMatchIntersection.cs" />
+    <Compile Include="Interfaces\ICountMatchIntersectionEqual.cs" />
     <Compile Include="Interfaces\ICountMatchMatched.cs" />
     <Compile Include="Interfaces\IDeep.cs" />
     <Compile Include="Interfaces\IEqualityContinuation.cs" />

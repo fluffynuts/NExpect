@@ -7,6 +7,7 @@ using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
 using static PeanutButter.Utils.PyLike;
 using NExpect.Exceptions;
+
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedMember.Global
 
@@ -23,6 +24,257 @@ namespace NExpect.Tests
         [TestFixture]
         public class Exactly
         {
+            [TestFixture]
+            public class Deep
+            {
+                [TestFixture]
+                public class Equal
+                {
+                    [TestFixture]
+                    public class To
+                    {
+                        [Test]
+                        public void PositiveAssertion_WhenShouldPass_ShouldNotThrow()
+                        {
+                            // Arrange
+                            var src = new[]
+                            {
+                                new {Id = 1, Name = "moo"},
+                                new {Id = 2, Name = "Cake"}
+                            };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(src).To.Contain.Exactly(1).Deep.Equal.To(
+                                        new {Id = 1, Name = "moo"}
+                                    );
+                            }, Throws.Nothing);
+                            // Assert
+                        }
+
+                        [Test]
+                        public void NegativeAssertion_WhenShouldFail_ShouldThrow()
+                        {
+                            // Arrange
+                            var src = new[]
+                            {
+                                new {Id = 1, Name = "moo"},
+                                new {Id = 2, Name = "Cake"}
+                            };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(src).Not.To.Contain.Exactly(1).Deep.Equal.To(
+                                        new {Id = 1, Name = "moo"}
+                                    );
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
+
+                        [Test]
+                        public void NegativeAssertion_AltGrammer_WhenShouldFail_ShouldThrow()
+                        {
+                            // Arrange
+                            var src = new[]
+                            {
+                                new {Id = 1, Name = "moo"},
+                                new {Id = 2, Name = "Cake"}
+                            };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(src).To.Not.Contain.Exactly(1).Deep.Equal.To(
+                                        new {Id = 1, Name = "moo"}
+                                    );
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
+
+                        [Test]
+                        public void PositiveAssertion_WhenShouldFailForObjectMisMatch_ShouldThrow()
+                        {
+                            // Arrange
+                            var src = new[]
+                            {
+                                new {Id = 1, Name = "moo"},
+                                new {Id = 2, Name = "Cake"}
+                            };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(src).To.Contain.Exactly(1).Deep.Equal.To(
+                                        new {Id = 1, Name = "bar"}
+                                    );
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
+
+                        [Test]
+                        public void PositiveAssertion_WhenShouldFailForCountMismatch_ShouldThrow()
+                        {
+                            // Arrange
+                            var src = new[]
+                            {
+                                new {Id = 1, Name = "moo"},
+                                new {Id = 2, Name = "Cake"}
+                            };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(src).To.Contain.Exactly(2).Deep.Equal.To(
+                                        new {Id = 1, Name = "Cake"}
+                                    );
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
+                    }
+                }
+            }
+
+            [TestFixture]
+            public class Intersection
+            {
+                [TestFixture]
+                public class Equal
+                {
+                    [TestFixture]
+                    public class To
+                    {
+                        public class Item1
+                        {
+                            public int Id { get; set; }
+                            public string Name { get; set; }
+                        }
+
+                        public class Item2
+                        {
+                            public int Id { get; set; }
+                            public string Name { get; set; }
+                        }
+
+                        [Test]
+                        public void PositiveAssertion_WhenShouldPass_ShouldNotThrow()
+                        {
+                            // Arrange
+                            var src = new[]
+                            {
+                                new Item1 {Id = 1, Name = "moo"},
+                                new Item1 {Id = 2, Name = "Cake"}
+                            };
+                            // Pre-Assert
+                            // Act
+                            // FIXME: this is lazy -- should have a separate test fixture
+                            //  for At.Least and At.Most; I'm just in a bit of a hurry and
+                            //  need to prove the syntax
+                            Assert.That(() =>
+                            {
+                                Expect(src).To.Contain.Exactly(1).Intersection.Equal.To(
+                                        new Item2 {Id = 1, Name = "moo"}
+                                    );
+                            }, Throws.Nothing);
+                            Assert.That(() =>
+                            {
+                                Expect(src).To.Contain.At.Least(1).Intersection.Equal.To(
+                                        new Item2 {Id = 1, Name = "moo"}
+                                    );
+                            }, Throws.Nothing);
+                            Assert.That(() =>
+                            {
+                                Expect(src).To.Contain.At.Most(1).Intersection.Equal.To(
+                                        new Item2 {Id = 1, Name = "moo"}
+                                    );
+                            }, Throws.Nothing);
+                            // Assert
+                        }
+
+                        [Test]
+                        public void NegativeAssertion_WhenShouldFail_ShouldThrow()
+                        {
+                            // Arrange
+                            var src = new[]
+                            {
+                                new Item1 {Id = 1, Name = "moo"},
+                                new Item1 {Id = 2, Name = "Cake"}
+                            };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(src).Not.To.Contain.Exactly(1).Intersection.Equal.To(
+                                        new Item2 {Id = 1, Name = "moo"}
+                                    );
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
+
+                        [Test]
+                        public void NegativeAssertion_AltGrammer_WhenShouldFail_ShouldThrow()
+                        {
+                            // Arrange
+                            var src = new[]
+                            {
+                                new Item1 {Id = 1, Name = "moo"},
+                                new Item1 {Id = 2, Name = "Cake"}
+                            };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(src).To.Not.Contain.Exactly(1).Deep.Equal.To(
+                                        new Item2 {Id = 1, Name = "moo"}
+                                    );
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
+
+                        [Test]
+                        public void PositiveAssertion_WhenShouldFailForObjectMisMatch_ShouldThrow()
+                        {
+                            // Arrange
+                            var src = new[]
+                            {
+                                new Item1 {Id = 1, Name = "moo"},
+                                new Item1 {Id = 2, Name = "Cake"}
+                            };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(src).To.Contain.Exactly(1).Deep.Equal.To(
+                                        new Item2 {Id = 1, Name = "bar"}
+                                    );
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
+
+                        [Test]
+                        public void PositiveAssertion_WhenShouldFailForCountMismatch_ShouldThrow()
+                        {
+                            // Arrange
+                            var src = new[]
+                            {
+                                new Item1 {Id = 1, Name = "moo"},
+                                new Item1 {Id = 2, Name = "Cake"}
+                            };
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(src).To.Contain.At.Least(2).Deep.Equal.To(
+                                        new Item2 {Id = 1, Name = "Cake"}
+                                    );
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
+                    }
+                }
+            }
+
             [TestFixture]
             public class Equal
             {
@@ -2311,8 +2563,8 @@ namespace NExpect.Tests
                         public void PositiveExpectation_WhenHaveEquivalence_ShouldNotThrow()
                         {
                             // Arrange
-                            var first = new[] { o(1, "moo"), o(2, "cow") };
-                            var second = new[] { o(2, "cow"), o(1, "moo") };
+                            var first = new[] {o(1, "moo"), o(2, "cow")};
+                            var second = new[] {o(2, "cow"), o(1, "moo")};
                             // Pre-Assert
                             // Act
                             Assert.That(() =>
@@ -2326,8 +2578,8 @@ namespace NExpect.Tests
                         public void NegativeExpectation_WhenHaveEquivalence_ShouldThrow()
                         {
                             // Arrange
-                            var first = new[] { o(1, "moo"), o(2, "cow") };
-                            var second = new[] { o(2, "cow"), o(1, "moo") };
+                            var first = new[] {o(1, "moo"), o(2, "cow")};
+                            var second = new[] {o(2, "cow"), o(1, "moo")};
                             // Pre-Assert
                             // Act
                             Assert.That(() =>
@@ -2341,8 +2593,8 @@ namespace NExpect.Tests
                         public void NegativeExpectation_AltGrammar_WhenHaveEquivalence_ShouldThrow()
                         {
                             // Arrange
-                            var first = new[] { o(1, "moo"), o(2, "cow") };
-                            var second = new[] { o(2, "cow"), o(1, "moo") };
+                            var first = new[] {o(1, "moo"), o(2, "cow")};
+                            var second = new[] {o(2, "cow"), o(1, "moo")};
                             // Pre-Assert
                             // Act
                             Assert.That(() =>
@@ -2356,8 +2608,8 @@ namespace NExpect.Tests
                         public void PositiveExpectation_WhenCollectionsDontMatch_ShouldThrow()
                         {
                             // Arrange
-                            var first = new[] { o(1, "bob"), o(2, "janet") };
-                            var second = new[] { o(1, "bobby"), o(2, "janet") };
+                            var first = new[] {o(1, "bob"), o(2, "janet")};
+                            var second = new[] {o(1, "bobby"), o(2, "janet")};
                             // Pre-Assert
                             // Act
                             Assert.That(() =>
@@ -2457,8 +2709,8 @@ namespace NExpect.Tests
                     public void PositiveExpectation_WhenCollectionsDontMatchInFirstRecord_ShouldThrow()
                     {
                         // Arrange
-                        var first = new[] { o(1, "bob"), o(2, "janet"), o(3, "paddy") };
-                        var second = new[] { o(1, "bobby"), o(2, "janet"), o(3, "paddy") };
+                        var first = new[] {o(1, "bob"), o(2, "janet"), o(3, "paddy")};
+                        var second = new[] {o(1, "bobby"), o(2, "janet"), o(3, "paddy")};
                         // Pre-Assert
                         // Act
                         Assert.That(() =>
@@ -2473,8 +2725,8 @@ namespace NExpect.Tests
                     public void PositiveExpectation_WhenCollectionsDontMatchInLastRecord_ShouldThrow()
                     {
                         // Arrange
-                        var first = new[] { o(1, "bob"), o(2, "janet"), o(3, "paddy") };
-                        var second = new[] { o(1, "bob"), o(2, "janet"), o(3, "mcgee") };
+                        var first = new[] {o(1, "bob"), o(2, "janet"), o(3, "paddy")};
+                        var second = new[] {o(1, "bob"), o(2, "janet"), o(3, "mcgee")};
                         // Pre-Assert
                         // Act
                         Assert.That(() =>
@@ -2535,8 +2787,8 @@ namespace NExpect.Tests
                         public void PositiveExpectation_WhenHaveEquivalence_ShouldNotThrow()
                         {
                             // Arrange
-                            var first = new[] { o1(1, "moo"), o1(2, "cow") };
-                            var second = new[] { o2(2, "cow"), o2(1, "moo") };
+                            var first = new[] {o1(1, "moo"), o1(2, "cow")};
+                            var second = new[] {o2(2, "cow"), o2(1, "moo")};
                             // Pre-Assert
                             // Act
                             Assert.That(() =>
@@ -2550,8 +2802,8 @@ namespace NExpect.Tests
                         public void NegativeExpectation_WhenHaveEquivalence_ShouldThrow()
                         {
                             // Arrange
-                            var first = new[] { o1(1, "moo"), o1(2, "cow") };
-                            var second = new[] { o2(2, "cow"), o2(1, "moo") };
+                            var first = new[] {o1(1, "moo"), o1(2, "cow")};
+                            var second = new[] {o2(2, "cow"), o2(1, "moo")};
                             // Pre-Assert
                             // Act
                             Assert.That(() =>
@@ -2565,8 +2817,8 @@ namespace NExpect.Tests
                         public void NegativeExpectation_AltGrammar_WhenHaveEquivalence_ShouldThrow()
                         {
                             // Arrange
-                            var first = new[] { o1(1, "moo"), o1(2, "cow") };
-                            var second = new[] { o2(2, "cow"), o2(1, "moo") };
+                            var first = new[] {o1(1, "moo"), o1(2, "cow")};
+                            var second = new[] {o2(2, "cow"), o2(1, "moo")};
                             // Pre-Assert
                             // Act
                             Assert.That(() =>
@@ -2580,8 +2832,8 @@ namespace NExpect.Tests
                         public void PositiveExpectation_WhenCollectionsDontMatch_ShouldThrow()
                         {
                             // Arrange
-                            var first = new[] { o1(1, "bob"), o1(2, "janet") };
-                            var second = new[] { o2(1, "bobby"), o2(2, "janet") };
+                            var first = new[] {o1(1, "bob"), o1(2, "janet")};
+                            var second = new[] {o2(1, "bobby"), o2(2, "janet")};
                             // Pre-Assert
                             // Act
                             Assert.That(() =>
@@ -2681,8 +2933,8 @@ namespace NExpect.Tests
                     public void PositiveExpectation_WhenCollectionsDontMatchInFirstRecord_ShouldThrow()
                     {
                         // Arrange
-                        var first = new[] { o1(1, "bob"), o1(2, "janet"), o1(3, "paddy") };
-                        var second = new[] { o2(1, "bobby"), o2(2, "janet"), o2(3, "paddy") };
+                        var first = new[] {o1(1, "bob"), o1(2, "janet"), o1(3, "paddy")};
+                        var second = new[] {o2(1, "bobby"), o2(2, "janet"), o2(3, "paddy")};
                         // Pre-Assert
                         // Act
                         Assert.That(() =>
@@ -2697,8 +2949,8 @@ namespace NExpect.Tests
                     public void PositiveExpectation_WhenCollectionsDontMatchInLastRecord_ShouldThrow()
                     {
                         // Arrange
-                        var first = new[] { o1(1, "bob"), o1(2, "janet"), o1(3, "paddy") };
-                        var second = new[] { o2(1, "bob"), o2(2, "janet"), o2(3, "mcgee") };
+                        var first = new[] {o1(1, "bob"), o1(2, "janet"), o1(3, "paddy")};
+                        var second = new[] {o2(1, "bob"), o2(2, "janet"), o2(3, "mcgee")};
                         // Pre-Assert
                         // Act
                         Assert.That(() =>

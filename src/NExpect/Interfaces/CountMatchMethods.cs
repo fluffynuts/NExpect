@@ -1,7 +1,7 @@
 namespace NExpect.Interfaces
 {
     /// <summary>
-    /// CountMatchMethod to use looking at the number of items, eg in Exactly()
+    /// Method to use looking at the number of items, eg in Exactly()
     /// </summary>
     public enum CountMatchMethods
     {

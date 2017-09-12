@@ -178,7 +178,7 @@ namespace NExpect
             continuation.AddMatcher(
                 actual =>
                 {
-                    var passed = AreDeepEqual(actual, expected);
+                    var passed = DeepTestHelpers.AreDeepEqual(actual, expected);
                     var not = passed ? "not " : "";
                     return new MatcherResult(
                         passed,
@@ -221,7 +221,7 @@ namespace NExpect
             continuation.AddMatcher(
                 actual =>
                 {
-                    var passed = AreIntersectionEqual(actual, expected);
+                    var passed = DeepTestHelpers.AreIntersectionEqual(actual, expected);
                     var not = passed ? "not " : "";
                     return new MatcherResult(
                         passed,
@@ -457,7 +457,7 @@ namespace NExpect
                     while (master.Any())
                     {
                         var currentMaster = master.First();
-                        var compareMatch = compare.FirstOrDefault(c => AreIntersectionEqual(currentMaster, c));
+                        var compareMatch = compare.FirstOrDefault(c => DeepTestHelpers.AreIntersectionEqual(currentMaster, c));
                         if (compareMatch == null)
                             return false;
                         master.Remove(currentMaster);
@@ -516,7 +516,7 @@ namespace NExpect
                     while (master.Any())
                     {
                         var currentMaster = master.First();
-                        var compareMatch = compare.FirstOrDefault(c => AreDeepEqual(currentMaster, c));
+                        var compareMatch = compare.FirstOrDefault(c => DeepTestHelpers.AreDeepEqual(currentMaster, c));
                         if (compareMatch == null)
                             return false;
                         master.Remove(currentMaster);
@@ -536,7 +536,7 @@ namespace NExpect
                 expected,
                 (master, compare) => Zip(master, compare)
                     .Aggregate(
-                        true, (acc, cur) => acc && AreIntersectionEqual(cur.Item1, cur.Item2)
+                        true, (acc, cur) => acc && DeepTestHelpers.AreIntersectionEqual(cur.Item1, cur.Item2)
                     )
             );
         }
@@ -551,7 +551,7 @@ namespace NExpect
                 expected,
                 (master, compare) => Zip(master, compare)
                     .Aggregate(
-                        true, (acc, cur) => acc && AreDeepEqual(cur.Item1, cur.Item2)
+                        true, (acc, cur) => acc && DeepTestHelpers.AreDeepEqual(cur.Item1, cur.Item2)
                     )
             );
         }
@@ -571,30 +571,6 @@ namespace NExpect
             if (master.Count != compare.Count)
                 return false;
             return finalComparison(master, compare);
-        }
-
-        private static bool AreIntersectionEqual<T>(T item1, T item2)
-        {
-            var tester = new DeepEqualityTester(item1, item2)
-            {
-                OnlyTestIntersectingProperties = true,
-                RecordErrors = false,
-                FailOnMissingProperties = false,
-                IncludeFields = true
-            };
-            return tester.AreDeepEqual();
-        }
-
-        private static bool AreDeepEqual(object item1, object item2)
-        {
-            var tester = new DeepEqualityTester(item1, item2)
-            {
-                RecordErrors = false,
-                FailOnMissingProperties = true,
-                IncludeFields = true,
-                OnlyTestIntersectingProperties = false
-            };
-            return tester.AreDeepEqual();
         }
 
         private static Func<T, IMatcherResult> GenerateEqualityMatcherFor<T>(

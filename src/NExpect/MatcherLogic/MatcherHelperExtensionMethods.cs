@@ -21,7 +21,7 @@ namespace NExpect.MatcherLogic
         /// <typeparam name="T">Underlying type of the continuation.</typeparam>
         /// <returns></returns>
         public static int GetExpectedCount<T>(
-            this ICountMatchContinuation<T> continuation
+            this ICountMatch continuation
         )
         {
             switch (continuation)
@@ -36,10 +36,10 @@ namespace NExpect.MatcherLogic
         }
 
         /// <summary>
-        /// Acting on a continuation, will return the CountMatchMethod for that
+        /// Acting on a continuation, will return the Method for that
         /// continuation, either directly by casting to the internal concrete
         /// implementation, or, if you have your own implementation, looking, via
-        /// reflection for the CountMatchMethod property as an integer.
+        /// reflection for the Method property as an integer.
         /// Use like: var method = {continuation}.GetCountMatchMethod();
         /// </summary>
         /// <param name="continuation">Continuation to act on.</param>
@@ -52,10 +52,10 @@ namespace NExpect.MatcherLogic
             switch (continuation)
             {
                 case CountMatchContinuation<T> countMatch:
-                    return countMatch.CountMatchMethod;
+                    return countMatch.Method;
                 default:
                     return continuation.TryGetPropertyValue<CountMatchMethods?>(
-                               nameof(CountMatchContinuation<T>.CountMatchMethod)) ??
+                               nameof(CountMatchContinuation<T>.Method)) ??
                            CountMatchMethods.Exactly;
             }
         }
