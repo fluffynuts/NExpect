@@ -335,29 +335,83 @@ namespace NExpect.Tests
                             // Assert
                         }
 
-                        [Test]
-                        public void ShortContain_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldNotThrow()
+                        [TestFixture]
+                        public class ShortContain
                         {
-                            // Arrange
-                            var search = GetRandomString(3);
-                            var other1 = GetAnother(search);
-                            var other2 = GetAnother<string>(new[] {search, other1});
-                            var collection = new[]
+                            [Test]
+                            public void OperatingOnCollectionOfStrings_WhenDoesContain_ShouldNotThrow()
                             {
-                                search,
-                                other1,
-                                other2
-                            }.Randomize();
-
-                            // Pre-Assert
-                            // Act
-                            Assert.That(() =>
+                                // Arrange
+                                var search = GetRandomString(3);
+                                var other1 = GetAnother(search);
+                                var other2 = GetAnother<string>(new[] {search, other1});
+                                var collection = new[]
                                 {
-                                    Expect(collection).To.Contain(search);
-                                },
-                                Throws.Nothing);
+                                    search,
+                                    other1,
+                                    other2
+                                }.Randomize();
 
-                            // Assert
+                                // Pre-Assert
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(collection).To.Contain(search);
+                                    },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+
+                            [Test]
+                            public void Negated_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldThrow()
+                            {
+                                // Arrange
+                                var search = GetRandomString(3);
+                                var other1 = GetAnother(search);
+                                var other2 = GetAnother<string>(new[] {search, other1});
+                                var collection = new[]
+                                {
+                                    search,
+                                    other1,
+                                    other2
+                                }.Randomize();
+
+                                // Pre-Assert
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(collection).Not.To.Contain(search);
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+
+                                // Assert
+                            }
+
+                            [Test]
+                            public void Negated_AltGrammar_OperatingOnCollectionOfStrings_WhenDoesContain_ShouldThrow()
+                            {
+                                // Arrange
+                                var search = GetRandomString(3);
+                                var other1 = GetAnother(search);
+                                var other2 = GetAnother<string>(new[] {search, other1});
+                                var collection = new[]
+                                {
+                                    search,
+                                    other1,
+                                    other2
+                                }.Randomize();
+
+                                // Pre-Assert
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(collection).To.Not.Contain(search);
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+
+                                // Assert
+                            }
                         }
 
                         [Test]
@@ -1281,17 +1335,21 @@ namespace NExpect.Tests
                 Assert.That(() =>
                 {
                     Expect(new Dictionary<string, string>()
-                    {
-                        ["a"] = "aye"
-                    }.Keys).To.Contain.Exactly(1).Equal.To("a");
+                        {
+                            ["a"] = "aye"
+                        }.Keys)
+                        .To.Contain.Exactly(1)
+                        .Equal.To("a");
                 }, Throws.Nothing);
 
                 Assert.That(() =>
                 {
                     Expect(new Dictionary<string, string>()
-                    {
-                        ["a"] = "aye"
-                    }.Values).To.Contain.Exactly(1).Equal.To("aye");
+                        {
+                            ["a"] = "aye"
+                        }.Values)
+                        .To.Contain.Exactly(1)
+                        .Equal.To("aye");
                 }, Throws.Nothing);
 
                 // Assert

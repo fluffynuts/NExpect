@@ -26,7 +26,25 @@ namespace NExpect
         /// <typeparam name="T"></typeparam>
         public static void Contain<T>(
             this ICollectionTo<T> continuation,
-            T search)
+            T search
+        )
+        {
+            continuation.Contain(search, null);
+        }
+
+        /// <summary>
+        /// Short contain, equivalent to .Contain.At.Least.One.Equal.To(x)
+        /// -> less expressive, but shorter to type (:
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T"></typeparam>
+        public static void Contain<T>(
+            this ICollectionTo<T> continuation,
+            T search,
+            string customMessage
+        )
         {
             continuation.AddMatcher(collection =>
             {
@@ -39,6 +57,97 @@ namespace NExpect
                     $"Expected {collection} {notPart}to contain {search}"
                 );
             });
+            continuation.AddMatcher(
+                CreateShortContainMatcherFor(search, customMessage)
+            );
+        }
+
+        /// <summary>
+        /// Short contain, equivalent to .Contain.At.Least.One.Equal.To(x)
+        /// -> less expressive, but shorter to type (:
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Contain<T>(
+            this ICollectionToAfterNot<T> continuation,
+            T search
+        )
+        {
+            continuation.Contain(search, null);
+        }
+
+        /// <summary>
+        /// Short contain, equivalent to .Contain.At.Least.One.Equal.To(x)
+        /// -> less expressive, but shorter to type (:
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T"></typeparam>
+        public static void Contain<T>(
+            this ICollectionToAfterNot<T> continuation,
+            T search,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(
+                CreateShortContainMatcherFor(search, customMessage)
+            );
+        }
+
+        /// <summary>
+        /// Short contain, equivalent to .Contain.At.Least.One.Equal.To(x)
+        /// -> less expressive, but shorter to type (:
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Contain<T>(
+            this ICollectionNotAfterTo<T> continuation,
+            T search
+        )
+        {
+            continuation.Contain(search, null);
+        }
+
+        /// <summary>
+        /// Short contain, equivalent to .Contain.At.Least.One.Equal.To(x)
+        /// -> less expressive, but shorter to type (:
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T"></typeparam>
+        public static void Contain<T>(
+            this ICollectionNotAfterTo<T> continuation,
+            T search,
+            string customMessage
+        )
+        {
+            continuation.AddMatcher(
+                CreateShortContainMatcherFor(search, customMessage)
+            );
+        }
+
+        private static Func<IEnumerable<T>, IMatcherResult> CreateShortContainMatcherFor<T>(
+            T search,
+            string customMessage
+        )
+        {
+            return collection => {
+                var passed = collection.Contains(search);
+                var not = passed
+                    ? ""
+                    : "not ";
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        $"Expected {collection} {not}to contain {search}",
+                        customMessage
+                    )
+                );
+            };
         }
 
         /// <summary>
