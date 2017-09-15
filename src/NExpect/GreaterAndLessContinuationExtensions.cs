@@ -10,7 +10,7 @@ namespace NExpect
     /// <summary>
     /// Adds extension methods for Greater and Less
     /// </summary>
-    public static class GreaterOrLessContinuationExtensions
+    public static class GreaterAndLessContinuationExtensions
     {
         /// <summary>
         /// Compares two values
@@ -31,9 +31,8 @@ namespace NExpect
         /// </summary>
         /// <param name="continuation"></param>
         /// <param name="expected"></param>
-        /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IGreaterThan<int> Than<T>(
+        public static IGreaterThan<int> Than(
             this IGreaterContinuation<int> continuation,
             int expected
         ) {

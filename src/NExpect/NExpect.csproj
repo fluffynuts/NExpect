@@ -77,7 +77,7 @@
     <Compile Include="ExceptionMessageContainuationToStringContainContinuation.cs" />
     <Compile Include="Exceptions\StackFrameExtensions.cs" />
     <Compile Include="Expectations.cs" />
-    <Compile Include="GreaterOrLessContinuationExtensions.cs" />
+    <Compile Include="GreaterAndLessContinuationExtensions.cs" />
     <Compile Include="Implementations\A.cs" />
     <Compile Include="Implementations\An.cs" />
     <Compile Include="Implementations\CollectionAn.cs" />
