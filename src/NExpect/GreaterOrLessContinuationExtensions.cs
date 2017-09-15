@@ -215,6 +215,23 @@ namespace NExpect
             AddMatcher(continuation, expected, test);
         }
 
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater or .Less</param>
+        /// <param name="expected">value to compare with</param>
+        public static void Than(
+            this IGreaterOrLessContinuation<DateTime> continuation,
+            DateTime expected
+        )
+        {
+            var test =
+                continuation is IGreaterContinuation<DateTime>
+                    ? (Func<DateTime, DateTime, bool>)((a, e) => a > e)
+                    : (a, e) => a < e;
+            AddMatcher(continuation, expected, test);
+        }
+
 
         private static void AddMatcher<T1, T2>(
             IGreaterOrLessContinuation<T1> continuation,
