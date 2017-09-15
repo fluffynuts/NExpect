@@ -5,7 +5,7 @@ namespace NExpect.Interfaces
     /// Provides the .Less grammar continuation
     /// </summary>
     /// <typeparam name="T">Type of the continuation</typeparam>
-    public interface ILessContinuation<T> : IGreaterOrLessContinuation<T>
+    public interface ILessContinuation<T> : ICanAddMatcher<T>
     {
     }
 }

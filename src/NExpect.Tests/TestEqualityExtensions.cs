@@ -1286,6 +1286,69 @@ namespace NExpect.Tests
                         // Assert
                     }
                 }
+
+                [TestFixture]
+                public class And 
+                {
+                    [TestFixture]
+                    public class Less
+                    {
+                        [TestFixture]
+                        public class Than
+                        {
+                            [Test]
+                            public void PositiveExpectation_WhenIntsWithinRange_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var min = GetRandomInt(1, 5);
+                                var max = GetRandomInt(10, 15);
+                                var actual = GetRandomInt(min + 1, max - 1);
+                                // Pre-Assert
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(actual).To.Be.Greater.Than(min)
+                                        .And.Less.Than(max);
+                                }, Throws.Nothing);
+                                // Assert
+                            }
+
+                            [Test]
+                            public void NegativeExpectation_WhenIntsWithinRange_ShouldThrow()
+                            {
+                                // Arrange
+                                var min = GetRandomInt(1, 5);
+                                var max = GetRandomInt(10, 15);
+                                var actual = GetRandomInt(min + 1, max - 1);
+                                // Pre-Assert
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(actual).Not.To.Be.Greater.Than(min)
+                                        .And.Less.Than(max);
+                                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                // Assert
+                            }
+
+                            [Test]
+                            public void NegativeExpectation_AltSyntax_WhenIntsWithinRange_ShouldThrow()
+                            {
+                                // Arrange
+                                var min = GetRandomInt(1, 5);
+                                var max = GetRandomInt(10, 15);
+                                var actual = GetRandomInt(min + 1, max - 1);
+                                // Pre-Assert
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(actual).To.Not.Be.Greater.Than(min)
+                                        .And.Less.Than(max);
+                                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                // Assert
+                            }
+                        }
+                    }
+                }
             }
 
             [TestFixture]

@@ -1,4 +1,7 @@
-﻿using NExpect.Implementations;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using NExpect.Implementations;
 using NExpect.Interfaces;
 
 namespace NExpect.MatcherLogic
@@ -60,7 +63,34 @@ namespace NExpect.MatcherLogic
             }
         }
 
+        /// <summary>
+        /// Attempts to sniff the actual value off of a continuation
+        /// </summary>
+        /// <param name="matcher">Continuation to operate on</param>
+        /// <typeparam name="T">Expected type of the Actual value</typeparam>
+        /// <returns>Actual value, if available</returns>
+        public static T GetActual<T>(this ICanAddMatcher<T> matcher)
+        {
+            // ReSharper disable once UsePatternMatching
+            var explicitImpl = matcher as IHasActual<T>;
+            return explicitImpl == null
+                    ? TryGetActual(matcher)
+                    : explicitImpl.Actual;
+        }
 
+        private static T TryGetActual<T>(ICanAddMatcher<T> matcher)
+        {
+            var prop = matcher?.GetType()
+                .GetProperties()
+                .FirstOrDefault(pi => pi.Name.ToLower() == "actual");
+            if (prop == null)
+                throw new InvalidOperationException("GetActual only works on IHasActual<T> or objects with an 'Actual' property");
+            try {
+                return (T)prop.GetValue(matcher);
+            } catch {
+                throw new InvalidOperationException($"Unable to get Actual value matching type {typeof(T)} from {matcher.Stringify()}");
+            }
+        }
     }
 
 }

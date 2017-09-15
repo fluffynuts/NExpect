@@ -1,10 +1,49 @@
 using System;
+using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 // ReSharper disable UnusedMember.Global
 
 namespace NExpect
 {
+
+    public interface IGreaterThan<T> 
+    {
+        IGreaterThanAnd<T> And { get; }
+    }
+
+    public interface IGreaterThanAnd<T>
+    {
+        ILessContinuation<T> Less { get; }
+    }
+
+    internal class GreaterThanAnd<T>: 
+        ExpectationContext<T>,
+        IGreaterThanAnd<T>
+    {
+        public T Actual { get; }
+        public ILessContinuation<T> Less =>
+            Factory.Create<T, LessContinuation<T>>(Actual, this);
+        public GreaterThanAnd(T actual)
+        {
+            Actual = actual;
+        }
+    }
+
+    internal class GreaterThan<T>
+        : ExpectationContext<T>,
+        IGreaterThan<T>
+    {
+        public T Actual { get; }
+        public IGreaterThanAnd<T> And =>
+            Factory.Create<T, GreaterThanAnd<T>>(Actual, this);
+
+        public GreaterThan(T actual)
+        {
+            Actual = actual;
+        }
+    }
+
     // TODO: allow passing in a custom message for all Thans
     /// <summary>
     /// Adds extension methods for Greater and Less
@@ -17,117 +56,170 @@ namespace NExpect
         /// <param name="continuation">.Greater or .Less</param>
         /// <param name="expected">value to compare with</param>
         public static void Than(
-            this IGreaterOrLessContinuation<int> continuation,
+            this ILessContinuation<int> continuation,
             int expected
         )
         {
-            var test =
-                continuation is IGreaterContinuation<int>
-                    ? (Func<int, int, bool>) ((a, e) => a > e)
-                    : (a, e) => a < e;
-            AddMatcher(continuation, expected, test);
+            AddMatcher(continuation, expected, (a, e) => a < e);
+        }
+
+        /// <summary>
+        /// Tests if a value is greater than an expected value, allowing continuation
+        /// to test if it is also less than another value
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="expected"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IGreaterThan<int> Than<T>(
+            this IGreaterContinuation<int> continuation,
+            int expected
+        ) {
+            AddMatcher(continuation, expected, (a, e) => a > e);
+            return continuation.Continue();
+        }
+
+        private static IGreaterThan<T> Continue<T>(
+            this IGreaterContinuation<T> continuation
+        ) {
+            return Factory.Create<T, GreaterThan<T>>(
+                continuation.GetActual(),
+                continuation as IExpectationContext<T>
+            );
         }
 
         /// <summary>
         /// Compares two values
         /// </summary>
-        /// <param name="continuation">.Greater or .Less</param>
+        /// <param name="continuation">.Less</param>
         /// <param name="expected">value to compare with</param>
         public static void Than(
-            this IGreaterOrLessContinuation<decimal> continuation,
+            this ILessContinuation<decimal> continuation,
             decimal expected
         )
         {
-            var test =
-                continuation is IGreaterContinuation<decimal>
-                    ? (Func<decimal, decimal, bool>) ((a, e) => a > e)
-                    : (a, e) => a < e;
-            AddMatcher(continuation, expected, test);
+            AddMatcher(continuation, expected, (a, e) => a < e);
         }
-
         /// <summary>
         /// Compares two values
         /// </summary>
-        /// <param name="continuation">.Greater or .Less</param>
+        /// <param name="continuation">.Greater</param>
         /// <param name="expected">value to compare with</param>
-        public static void Than(
-            this IGreaterOrLessContinuation<decimal> continuation,
-            double expected
-        )
-        {
-            var test =
-                continuation is IGreaterContinuation<decimal>
-                    ? ((a, e) => a > new Decimal(e))
-                    : (Func<decimal, double, bool>) ((a, e) => a < new Decimal(e));
-            AddMatcher(continuation, expected, test);
-        }
-
-        /// <summary>
-        /// Compares two values
-        /// </summary>
-        /// <param name="continuation">.Greater or .Less</param>
-        /// <param name="expected">value to compare with</param>
-        public static void Than(
-            this IGreaterOrLessContinuation<decimal> continuation,
-            long expected
-        )
-        {
-            var test =
-                continuation is IGreaterContinuation<decimal>
-                    ? ((a, e) => a > new Decimal(e))
-                    : (Func<decimal, double, bool>) ((a, e) => a < new Decimal(e));
-            AddMatcher(continuation, expected, test);
-        }
-
-        /// <summary>
-        /// Compares two values
-        /// </summary>
-        /// <param name="continuation">.Greater or .Less</param>
-        /// <param name="expected">value to compare with</param>
-        public static void Than(
-            this IGreaterOrLessContinuation<double> continuation,
-            double expected
-        )
-        {
-            var test =
-                continuation is IGreaterContinuation<double>
-                    ? (Func<double, double, bool>) ((a, e) => a > e)
-                    : (a, e) => a < e;
-            AddMatcher(continuation, expected, test);
-        }
-
-        /// <summary>
-        /// Compares two values
-        /// </summary>
-        /// <param name="continuation">.Greater or .Less</param>
-        /// <param name="expected">value to compare with</param>
-        public static void Than(
-            this IGreaterOrLessContinuation<double> continuation,
+        public static IGreaterThan<decimal> Than(
+            this IGreaterContinuation<decimal> continuation,
             decimal expected
         )
         {
-            var test =
-                continuation is IGreaterContinuation<double>
-                    ? (Func<double, decimal, bool>) ((a, e) => new Decimal(a) > e)
-                    : (a, e) => new Decimal(a) < e;
-            AddMatcher(continuation, expected, test);
+            AddMatcher(continuation, expected, (a, e) => a > e);
+            return continuation.Continue();
         }
 
         /// <summary>
         /// Compares two values
         /// </summary>
-        /// <param name="continuation">.Greater or .Less</param>
+        /// <param name="continuation">.Less</param>
         /// <param name="expected">value to compare with</param>
         public static void Than(
-            this IGreaterOrLessContinuation<double> continuation,
+            this ILessContinuation<decimal> continuation,
+            double expected
+        )
+        {
+            AddMatcher(continuation, expected, (a, e) => a < new Decimal(e));
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater</param>
+        /// <param name="expected">value to compare with</param>
+        public static IGreaterThan<decimal> Than(
+            this IGreaterContinuation<decimal> continuation,
+            double expected
+        )
+        {
+            AddMatcher(continuation, expected, (a, e) => a > new Decimal(e));
+            return continuation.Continue();
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Less</param>
+        /// <param name="expected">value to compare with</param>
+        public static void Than(
+            this ILessContinuation<decimal> continuation,
             long expected
         )
         {
-            var test =
-                continuation is IGreaterContinuation<double>
-                    ? (Func<double, decimal, bool>) ((a, e) => new Decimal(a) > e)
-                    : (a, e) => new Decimal(a) < e;
-            AddMatcher(continuation, expected, test);
+            AddMatcher(continuation, expected, (a, e) => a < new Decimal(e));
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater</param>
+        /// <param name="expected">value to compare with</param>
+        public static IGreaterThan<decimal> Than(
+            this IGreaterContinuation<decimal> continuation,
+            long expected
+        )
+        {
+            AddMatcher(continuation, expected, (a, e) => a > new Decimal(e));
+            return continuation.Continue();
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Less</param>
+        /// <param name="expected">value to compare with</param>
+        public static void Than(
+            this ILessContinuation<double> continuation,
+            double expected
+        )
+        {
+            AddMatcher(continuation, expected, (a, e) => a < e);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater</param>
+        /// <param name="expected">value to compare with</param>
+        public static IGreaterThan<double> Than(
+            this IGreaterContinuation<double> continuation,
+            double expected
+        )
+        {
+            AddMatcher(continuation, expected, (a, e) => a > e);
+            return continuation.Continue();
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Less</param>
+        /// <param name="expected">value to compare with</param>
+        public static void Than(
+            this ILessContinuation<double> continuation,
+            decimal expected
+        )
+        {
+            AddMatcher(continuation, expected, (a, e) => new Decimal(a) < e);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater</param>
+        /// <param name="expected">value to compare with</param>
+        public static IGreaterThan<double> Than(
+            this IGreaterContinuation<double> continuation,
+            decimal expected
+        )
+        {
+            AddMatcher(continuation, expected, (a, e) => new Decimal(a) > e);
+            return continuation.Continue();
         }
 
         /// <summary>
@@ -136,15 +228,52 @@ namespace NExpect
         /// <param name="continuation">.Greater or .Less</param>
         /// <param name="expected">value to compare with</param>
         public static void Than(
-            this IGreaterOrLessContinuation<float> continuation,
+            this ILessContinuation<double> continuation,
+            long expected
+        )
+        {
+            AddMatcher(continuation, expected, (a, e) => new Decimal(a) < e);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater or .Less</param>
+        /// <param name="expected">value to compare with</param>
+        public static IGreaterThan<double> Than(
+            this IGreaterContinuation<double> continuation,
+            long expected
+        )
+        {
+            AddMatcher(continuation, expected, (a, e) => new Decimal(a) > e);
+            return continuation.Continue();
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater or .Less</param>
+        /// <param name="expected">value to compare with</param>
+        public static void Than(
+            this ILessContinuation<float> continuation,
             float expected
         )
         {
-            var test =
-                continuation is IGreaterContinuation<float>
-                    ? (Func<float, float, bool>) ((a, e) => a > e)
-                    : (a, e) => a < e;
-            AddMatcher(continuation, expected, test);
+            AddMatcher(continuation, expected, (a, e) => a < e);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater or .Less</param>
+        /// <param name="expected">value to compare with</param>
+        public static IGreaterThan<float> Than(
+            this IGreaterContinuation<float> continuation,
+            float expected
+        )
+        {
+            AddMatcher(continuation, expected, (a, e) => a > e);
+            return continuation.Continue();
         }
 
         /// <summary>
@@ -153,15 +282,25 @@ namespace NExpect
         /// <param name="continuation">.Greater or .Less</param>
         /// <param name="expected">value to compare with</param>
         public static void Than(
-            this IGreaterOrLessContinuation<float> continuation,
+            this ILessContinuation<float> continuation,
             decimal expected
         )
         {
-            var test =
-                continuation is IGreaterContinuation<float>
-                    ? (Func<float, decimal, bool>) ((a, e) => new Decimal(a) > e)
-                    : (a, e) => new Decimal(a) < e;
-            AddMatcher(continuation, expected, test);
+            AddMatcher(continuation, expected, (a, e) => new Decimal(a) < e);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater or .Less</param>
+        /// <param name="expected">value to compare with</param>
+        public static IGreaterThan<float> Than(
+            this IGreaterContinuation<float> continuation,
+            decimal expected
+        )
+        {
+            AddMatcher(continuation, expected, (a, e) => new Decimal(a) > e);
+            return continuation.Continue();
         }
 
         /// <summary>
@@ -170,15 +309,25 @@ namespace NExpect
         /// <param name="continuation">.Greater or .Less</param>
         /// <param name="expected">value to compare with</param>
         public static void Than(
-            this IGreaterOrLessContinuation<long> continuation,
+            this ILessContinuation<long> continuation,
             long expected
         )
         {
-            var test =
-                continuation is IGreaterContinuation<long>
-                    ? (Func<long, long, bool>) ((a, e) => a > e)
-                    : (a, e) => a < e;
-            AddMatcher(continuation, expected, test);
+            AddMatcher(continuation, expected, (a, e) => a < e);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater or .Less</param>
+        /// <param name="expected">value to compare with</param>
+        public static IGreaterThan<long> Than(
+            this IGreaterContinuation<long> continuation,
+            long expected
+        )
+        {
+            AddMatcher(continuation, expected, (a, e) => a > e);
+            return continuation.Continue();
         }
 
         /// <summary>
@@ -187,15 +336,25 @@ namespace NExpect
         /// <param name="continuation">.Greater or .Less</param>
         /// <param name="expected">value to compare with</param>
         public static void Than(
-            this IGreaterOrLessContinuation<long> continuation,
+            this ILessContinuation<long> continuation,
             decimal expected
         )
         {
-            var test =
-                continuation is IGreaterContinuation<long>
-                    ? (Func<long, decimal, bool>) ((a, e) => a > e)
-                    : (a, e) => a < e;
-            AddMatcher(continuation, expected, test);
+            AddMatcher(continuation, expected, (a, e) => a < e);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater or .Less</param>
+        /// <param name="expected">value to compare with</param>
+        public static IGreaterThan<long> Than(
+            this IGreaterContinuation<long> continuation,
+            decimal expected
+        )
+        {
+            AddMatcher(continuation, expected, (a, e) => a > e);
+            return continuation.Continue();
         }
 
         /// <summary>
@@ -204,15 +363,25 @@ namespace NExpect
         /// <param name="continuation">.Greater or .Less</param>
         /// <param name="expected">value to compare with</param>
         public static void Than(
-            this IGreaterOrLessContinuation<long> continuation,
+            this ILessContinuation<long> continuation,
             double expected
         )
         {
-            var test =
-                continuation is IGreaterContinuation<long>
-                    ? (Func<long, double, bool>) ((a, e) => a > e)
-                    : (a, e) => a < e;
-            AddMatcher(continuation, expected, test);
+            AddMatcher(continuation, expected, (a, e) => a < e);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater or .Less</param>
+        /// <param name="expected">value to compare with</param>
+        public static IGreaterThan<long> Than(
+            this IGreaterContinuation<long> continuation,
+            double expected
+        )
+        {
+            AddMatcher(continuation, expected, (a, e) => a > e);
+            return continuation.Continue();
         }
 
         /// <summary>
@@ -221,20 +390,30 @@ namespace NExpect
         /// <param name="continuation">.Greater or .Less</param>
         /// <param name="expected">value to compare with</param>
         public static void Than(
-            this IGreaterOrLessContinuation<DateTime> continuation,
+            this ILessContinuation<DateTime> continuation,
             DateTime expected
         )
         {
-            var test =
-                continuation is IGreaterContinuation<DateTime>
-                    ? (Func<DateTime, DateTime, bool>)((a, e) => a > e)
-                    : (a, e) => a < e;
-            AddMatcher(continuation, expected, test);
+            AddMatcher(continuation, expected, (a, e) => a < e);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater or .Less</param>
+        /// <param name="expected">value to compare with</param>
+        public static IGreaterThan<DateTime> Than(
+            this IGreaterContinuation<DateTime> continuation,
+            DateTime expected
+        )
+        {
+            AddMatcher(continuation, expected, (a, e) => a > e);
+            return continuation.Continue();
         }
 
 
         private static void AddMatcher<T1, T2>(
-            IGreaterOrLessContinuation<T1> continuation,
+            ICanAddMatcher<T1> continuation,
             T2 expected,
             Func<T1, T2, bool> test
         )

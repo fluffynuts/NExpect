@@ -5,7 +5,7 @@ namespace NExpect.Interfaces
     /// Provides the extension point for .Greater.Than()
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IGreaterContinuation<T> : IGreaterOrLessContinuation<T>
+    public interface IGreaterContinuation<T> : ICanAddMatcher<T>
     {
     }
 }
