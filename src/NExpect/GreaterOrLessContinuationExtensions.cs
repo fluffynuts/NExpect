@@ -6,44 +6,6 @@ using NExpect.MatcherLogic;
 
 namespace NExpect
 {
-
-    public interface IGreaterThan<T> 
-    {
-        IGreaterThanAnd<T> And { get; }
-    }
-
-    public interface IGreaterThanAnd<T>
-    {
-        ILessContinuation<T> Less { get; }
-    }
-
-    internal class GreaterThanAnd<T>: 
-        ExpectationContext<T>,
-        IGreaterThanAnd<T>
-    {
-        public T Actual { get; }
-        public ILessContinuation<T> Less =>
-            Factory.Create<T, LessContinuation<T>>(Actual, this);
-        public GreaterThanAnd(T actual)
-        {
-            Actual = actual;
-        }
-    }
-
-    internal class GreaterThan<T>
-        : ExpectationContext<T>,
-        IGreaterThan<T>
-    {
-        public T Actual { get; }
-        public IGreaterThanAnd<T> And =>
-            Factory.Create<T, GreaterThanAnd<T>>(Actual, this);
-
-        public GreaterThan(T actual)
-        {
-            Actual = actual;
-        }
-    }
-
     // TODO: allow passing in a custom message for all Thans
     /// <summary>
     /// Adds extension methods for Greater and Less
