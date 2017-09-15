@@ -28,7 +28,7 @@ namespace NExpect.Tests
             }
 
             [Test]
-            [Ignore("Shows that UnmetExpectationException smashes the stack trace properly")]
+            [Explicit("Shows that UnmetExpectationException smashes the stack trace properly")]
             public void MooCakes()
             {
                 // Arrange
