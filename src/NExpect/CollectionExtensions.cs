@@ -393,18 +393,36 @@ namespace NExpect
             this ICollectionBe<T> be
         )
         {
+            be.Empty(null);
+        }
+
+        /// <summary>
+        /// Tests if a collection is empty from the continuation
+        /// </summary>
+        /// <param name="be">ICollectionBe&lt;T&gt; continuation</param>
+        /// <param name="customMessage"></param>
+        /// <typeparam name="T">Item type of the collection being tested</typeparam>
+        public static void Empty<T>(
+            this ICollectionBe<T> be,
+            string customMessage
+        )
+        {
             be.AddMatcher(collection =>
             {
                 var passed = collection != null && !collection.Any();
                 var not = passed
                     ? "not "
                     : "";
-                return new MatcherResult(
-                    passed,
-                    $"Expected {collection.PrettyPrint()} {not}to be an empty collection"
+            return new MatcherResult(
+                passed,
+                FinalMessageFor(
+                    $"Expected {collection.PrettyPrint()} {not}to be an empty collection",
+                    customMessage
+                    )
                 );
             });
         }
+
 
         /// <summary>
         /// Tests equivalence with another collection

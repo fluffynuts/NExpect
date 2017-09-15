@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using NExpect.Implementations;
@@ -260,6 +261,58 @@ namespace NExpect
         )
         {
             return new CollectionExpectation<TValue>(values.ToArray());
+        }
+
+        /// <summary>
+        /// Starts an expectation on a concrete Dictionary
+        /// </summary>
+        /// <param name="dictionary">Dictionary to start with</param>
+        /// <typeparam name="TKey">Key type of the dictionary</typeparam>
+        /// <typeparam name="TValue">Value type of the dictionary</typeparam>
+        /// <returns></returns>
+        public static ICollectionExpectation<KeyValuePair<TKey, TValue>>
+            Expect<TKey, TValue>(Dictionary<TKey, TValue> dictionary)
+        {
+            return new CollectionExpectation<KeyValuePair<TKey, TValue>>(dictionary);
+        }
+
+        /// <summary>
+        /// Starts an expectation on a concrete Dictionary
+        /// </summary>
+        /// <param name="dictionary">Dictionary to start with</param>
+        /// <typeparam name="TKey">Key type of the dictionary</typeparam>
+        /// <typeparam name="TValue">Value type of the dictionary</typeparam>
+        /// <returns></returns>
+        public static ICollectionExpectation<KeyValuePair<TKey, TValue>>
+            Expect<TKey, TValue>(SortedDictionary<TKey, TValue> dictionary)
+        {
+            return new CollectionExpectation<KeyValuePair<TKey, TValue>>(dictionary);
+        }
+
+        /// <summary>
+        /// Starts an expectation on a concrete Dictionary
+        /// </summary>
+        /// <param name="dictionary">Dictionary to start with</param>
+        /// <typeparam name="TKey">Key type of the dictionary</typeparam>
+        /// <typeparam name="TValue">Value type of the dictionary</typeparam>
+        /// <returns></returns>
+        public static ICollectionExpectation<KeyValuePair<TKey, TValue>>
+            Expect<TKey, TValue>(ConcurrentDictionary<TKey, TValue> dictionary)
+        {
+            return new CollectionExpectation<KeyValuePair<TKey, TValue>>(dictionary);
+        }
+
+        /// <summary>
+        /// Starts an expectation on a concrete Dictionary
+        /// </summary>
+        /// <param name="dictionary">Dictionary to start with</param>
+        /// <typeparam name="TKey">Key type of the dictionary</typeparam>
+        /// <typeparam name="TValue">Value type of the dictionary</typeparam>
+        /// <returns></returns>
+        public static ICollectionExpectation<KeyValuePair<TKey, TValue>>
+            Expect<TKey, TValue>(IDictionary<TKey, TValue> dictionary)
+        {
+            return new CollectionExpectation<KeyValuePair<TKey, TValue>>(dictionary);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
@@ -10,7 +12,6 @@ using NExpect.Exceptions;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedMember.Global
-
 // ReSharper disable MemberHidesStaticFromOuterClass
 // ReSharper disable InconsistentNaming
 // ReSharper disable MemberCanBePrivate.Global
@@ -164,6 +165,7 @@ namespace NExpect.Tests
                             {
                                 public int Id { get; set; }
                                 public string Name { get; set; }
+                                public DateTime DateTime => DateTime.Now;
                             }
 
                             public class Item2
@@ -1356,100 +1358,215 @@ namespace NExpect.Tests
             }
 
             [TestFixture]
-            public class ToBeEmpty
+            public class To
             {
-                [Test]
-                public void OperatingOnEmptyCollection_ShouldNotThrow()
+                [TestFixture]
+                public class Be
                 {
-                    // Arrange
-                    var collection = new List<string>();
-
-                    // Pre-Assert
-
-                    // Act
-                    Assert.That(() =>
+                    [TestFixture]
+                    public class Empty
+                    {
+                        [TestFixture]
+                        public class OperatingOnCollection
                         {
-                            Expect(collection).To.Be.Empty();
-                        },
-                        Throws.Nothing);
+                            [Test]
+                            public void WhenIsEmpty_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var collection = new List<string>();
 
-                    // Assert
-                }
+                                // Pre-Assert
 
-                [Test]
-                public void OperatingOnEmptyCollection_WhenNegated_ShouldThrow()
-                {
-                    // Arrange
-                    var collection = new List<string>();
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(collection).To.Be.Empty();
+                                    },
+                                    Throws.Nothing);
 
-                    // Pre-Assert
+                                // Assert
+                            }
 
-                    // Act
-                    Assert.That(() =>
+                            [Test]
+                            public void WhenIsEmpty_WhenNegated_ShouldThrow()
+                            {
+                                // Arrange
+                                var collection = new List<string>();
+
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(collection).Not.To.Be.Empty();
+                                    },
+                                    Throws.Exception
+                                        .InstanceOf<UnmetExpectationException>()
+                                        .With.Message.EqualTo("Expected [  ] not to be an empty collection"));
+
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenIsNotEmpty_ShouldThrow()
+                            {
+                                // Arrange
+                                var collection = GetRandomCollection<string>(2);
+
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(collection).To.Be.Empty();
+                                    },
+                                    Throws.Exception
+                                        .InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains("] to be an empty collection"));
+
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenIsNotEmpty_WhenNegated_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var collection = GetRandomCollection<string>(2);
+
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(collection).Not.To.Be.Empty();
+                                    },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenIsNotEmpty_WhenNegatedAlt_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var collection = GetRandomCollection<string>(2);
+
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(collection).To.Not.Be.Empty();
+                                    },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+                        }
+
+                        [TestFixture]
+                        public class OperatingOnDictionary
                         {
-                            Expect(collection).Not.To.Be.Empty();
-                        },
-                        Throws.Exception
-                            .InstanceOf<UnmetExpectationException>()
-                            .With.Message.EqualTo("Expected [  ] not to be an empty collection"));
+                            [Test]
+                            public void WhenIsEmpty_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var collection = new Dictionary<string, object>();
+                                var sorted = new SortedDictionary<int, string>();
+                                var concurrent = new ConcurrentDictionary<string, double>();
 
-                    // Assert
-                }
+                                // Pre-Assert
 
-                [Test]
-                public void OperatingOnNonEmptyCollection_ShouldThrow()
-                {
-                    // Arrange
-                    var collection = GetRandomCollection<string>(2);
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(collection as IDictionary<string, object>).To.Be.Empty();
+                                        Expect(collection).To.Be.Empty();
+                                        Expect(sorted).To.Be.Empty();
+                                        Expect(concurrent).To.Be.Empty();
+                                    },
+                                    Throws.Nothing);
 
-                    // Pre-Assert
+                                // Assert
+                            }
 
-                    // Act
-                    Assert.That(() =>
-                        {
-                            Expect(collection).To.Be.Empty();
-                        },
-                        Throws.Exception
-                            .InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains("] to be an empty collection"));
+                            [Test]
+                            public void WhenIsEmpty_WhenNegated_ShouldThrow()
+                            {
+                                // Arrange
+                                var collection = new List<string>();
 
-                    // Assert
-                }
+                                // Pre-Assert
 
-                [Test]
-                public void OperatingOnNonEmptyCollection_WhenNegated_ShouldNotThrow()
-                {
-                    // Arrange
-                    var collection = GetRandomCollection<string>(2);
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(collection).Not.To.Be.Empty();
+                                    },
+                                    Throws.Exception
+                                        .InstanceOf<UnmetExpectationException>()
+                                        .With.Message.EqualTo("Expected [  ] not to be an empty collection"));
 
-                    // Pre-Assert
+                                // Assert
+                            }
 
-                    // Act
-                    Assert.That(() =>
-                        {
-                            Expect(collection).Not.To.Be.Empty();
-                        },
-                        Throws.Nothing);
+                            [Test]
+                            public void WhenIsNotEmpty_ShouldThrow()
+                            {
+                                // Arrange
+                                var collection = GetRandomCollection<string>(2);
 
-                    // Assert
-                }
+                                // Pre-Assert
 
-                [Test]
-                public void OperatingOnNonEmptyCollection_WhenNegatedAlt_ShouldNotThrow()
-                {
-                    // Arrange
-                    var collection = GetRandomCollection<string>(2);
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(collection).To.Be.Empty();
+                                    },
+                                    Throws.Exception
+                                        .InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains("] to be an empty collection"));
 
-                    // Pre-Assert
+                                // Assert
+                            }
 
-                    // Act
-                    Assert.That(() =>
-                        {
-                            Expect(collection).To.Not.Be.Empty();
-                        },
-                        Throws.Nothing);
+                            [Test]
+                            public void WhenIsNotEmpty_WhenNegated_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var collection = GetRandomCollection<string>(2);
 
-                    // Assert
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(collection).Not.To.Be.Empty();
+                                    },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenIsNotEmpty_WhenNegatedAlt_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var collection = GetRandomCollection<string>(2);
+
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(collection).To.Not.Be.Empty();
+                                    },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+                        }
+                    }
                 }
             }
 
@@ -2649,21 +2766,38 @@ namespace NExpect.Tests
                 [TestFixture]
                 public class Deep
                 {
-                    public class IdentifierAndName
+                    public class IdentifierAndName1
                     {
                         public int Id { get; }
                         public string Name { get; }
 
-                        public IdentifierAndName(int id, string name)
+                        public IdentifierAndName1(int id, string name)
                         {
                             Id = id;
                             Name = name;
                         }
                     }
 
-                    private static IdentifierAndName o(int id, string name)
+                    public class IdentifierAndName2
                     {
-                        return new IdentifierAndName(id, name);
+                        public int Id { get; }
+                        public string Name { get; }
+
+                        public IdentifierAndName2(int id, string name)
+                        {
+                            Id = id;
+                            Name = name;
+                        }
+                    }
+
+                    private static IdentifierAndName1 o1(int id, string name)
+                    {
+                        return new IdentifierAndName1(id, name);
+                    }
+
+                    private static IdentifierAndName2 o2(int id, string name)
+                    {
+                        return new IdentifierAndName2(id, name);
                     }
 
                     [TestFixture]
@@ -2676,8 +2810,8 @@ namespace NExpect.Tests
                             public void PositiveExpectation_WhenHaveEquivalence_ShouldNotThrow()
                             {
                                 // Arrange
-                                var first = new[] {o(1, "moo"), o(2, "cow")};
-                                var second = new[] {o(2, "cow"), o(1, "moo")};
+                                var first = new[] {o1(1, "moo"), o1(2, "cow")};
+                                var second = new[] {o1(2, "cow"), o1(1, "moo")};
                                 // Pre-Assert
                                 // Act
                                 Assert.That(() =>
@@ -2691,8 +2825,8 @@ namespace NExpect.Tests
                             public void NegativeExpectation_WhenHaveEquivalence_ShouldThrow()
                             {
                                 // Arrange
-                                var first = new[] {o(1, "moo"), o(2, "cow")};
-                                var second = new[] {o(2, "cow"), o(1, "moo")};
+                                var first = new[] {o1(1, "moo"), o1(2, "cow")};
+                                var second = new[] {o1(2, "cow"), o1(1, "moo")};
                                 // Pre-Assert
                                 // Act
                                 Assert.That(() =>
@@ -2706,8 +2840,8 @@ namespace NExpect.Tests
                             public void NegativeExpectation_AltGrammar_WhenHaveEquivalence_ShouldThrow()
                             {
                                 // Arrange
-                                var first = new[] {o(1, "moo"), o(2, "cow")};
-                                var second = new[] {o(2, "cow"), o(1, "moo")};
+                                var first = new[] {o1(1, "moo"), o1(2, "cow")};
+                                var second = new[] {o1(2, "cow"), o1(1, "moo")};
                                 // Pre-Assert
                                 // Act
                                 Assert.That(() =>
@@ -2721,8 +2855,8 @@ namespace NExpect.Tests
                             public void PositiveExpectation_WhenCollectionsDontMatch_ShouldThrow()
                             {
                                 // Arrange
-                                var first = new[] {o(1, "bob"), o(2, "janet")};
-                                var second = new[] {o(1, "bobby"), o(2, "janet")};
+                                var first = new[] {o1(1, "bob"), o1(2, "janet")};
+                                var second = new[] {o1(1, "bobby"), o1(2, "janet")};
                                 // Pre-Assert
                                 // Act
                                 Assert.That(() =>
@@ -2742,13 +2876,13 @@ namespace NExpect.Tests
                         public void PositiveExpectation_WhenCollectionsMatch_ShouldNotThrow()
                         {
                             // Arrange
-                            var first = new[] {o(1, "bob"), o(2, "janet")};
-                            var second = new[] {o(1, "bob"), o(2, "janet")};
+                            var first = new[] {o1(1, "bob"), o1(2, "janet")};
+                            var second = new[] {o2(1, "bob"), o2(2, "janet")};
                             // Pre-Assert
                             // Act
                             Assert.That(() =>
                                 {
-                                    Expect(first).To.Deep.Equal(second);
+                                    Expect(first.AsObjects()).To.Deep.Equal(second);
                                 },
                                 Throws.Nothing);
                             // Assert
@@ -2758,8 +2892,8 @@ namespace NExpect.Tests
                         public void NegativeExpectation_WhenCollectionsMatch_ShouldThrow()
                         {
                             // Arrange
-                            var first = new[] {o(1, "bob"), o(2, "janet")};
-                            var second = new[] {o(1, "bob"), o(2, "janet")};
+                            var first = new[] {o1(1, "bob"), o1(2, "janet")};
+                            var second = new[] {o1(1, "bob"), o1(2, "janet")};
                             // Pre-Assert
                             // Act
                             Assert.That(() =>
@@ -2774,8 +2908,8 @@ namespace NExpect.Tests
                         public void NegativeExpectation_AltGrammar_WhenCollectionsMatch_ShouldThrow()
                         {
                             // Arrange
-                            var first = new[] {o(1, "bob"), o(2, "janet")};
-                            var second = new[] {o(1, "bob"), o(2, "janet")};
+                            var first = new[] {o1(1, "bob"), o1(2, "janet")};
+                            var second = new[] {o1(1, "bob"), o1(2, "janet")};
                             // Pre-Assert
                             // Act
                             Assert.That(() =>
@@ -2790,8 +2924,8 @@ namespace NExpect.Tests
                         public void PositiveExpectation_AltGrammer_WhenCollectionsMatch_ShouldNotThrow()
                         {
                             // Arrange
-                            var first = new[] {o(1, "bob"), o(2, "janet")};
-                            var second = new[] {o(1, "bob"), o(2, "janet")};
+                            var first = new[] {o1(1, "bob"), o1(2, "janet")};
+                            var second = new[] {o1(1, "bob"), o1(2, "janet")};
                             // Pre-Assert
                             // Act
                             Assert.That(() =>
@@ -2806,8 +2940,8 @@ namespace NExpect.Tests
                         public void NegativeExpectation_AltGrammar_WhenCollectionsMatch_ShouldNotThrow()
                         {
                             // Arrange
-                            var first = new[] {o(1, "bob"), o(2, "janet")};
-                            var second = new[] {o(1, "bob"), o(2, "janet")};
+                            var first = new[] {o1(1, "bob"), o1(2, "janet")};
+                            var second = new[] {o1(1, "bob"), o1(2, "janet")};
                             // Pre-Assert
                             // Act
                             Assert.That(() =>
@@ -2822,8 +2956,8 @@ namespace NExpect.Tests
                         public void PositiveExpectation_WhenCollectionsDontMatchInFirstRecord_ShouldThrow()
                         {
                             // Arrange
-                            var first = new[] {o(1, "bob"), o(2, "janet"), o(3, "paddy")};
-                            var second = new[] {o(1, "bobby"), o(2, "janet"), o(3, "paddy")};
+                            var first = new[] {o1(1, "bob"), o1(2, "janet"), o1(3, "paddy")};
+                            var second = new[] {o1(1, "bobby"), o1(2, "janet"), o1(3, "paddy")};
                             // Pre-Assert
                             // Act
                             Assert.That(() =>
@@ -2838,8 +2972,8 @@ namespace NExpect.Tests
                         public void PositiveExpectation_WhenCollectionsDontMatchInLastRecord_ShouldThrow()
                         {
                             // Arrange
-                            var first = new[] {o(1, "bob"), o(2, "janet"), o(3, "paddy")};
-                            var second = new[] {o(1, "bob"), o(2, "janet"), o(3, "mcgee")};
+                            var first = new[] {o1(1, "bob"), o1(2, "janet"), o1(3, "paddy")};
+                            var second = new[] {o1(1, "bob"), o1(2, "janet"), o1(3, "mcgee")};
                             // Pre-Assert
                             // Act
                             Assert.That(() =>
