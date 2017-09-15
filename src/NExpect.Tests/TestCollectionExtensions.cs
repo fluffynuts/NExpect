@@ -252,7 +252,7 @@ namespace NExpect.Tests
                                 {
                                     Expect(src)
                                         .To.Not.Contain.Exactly(1)
-                                        .Deep.Equal.To(
+                                        .Intersection.Equal.To(
                                             new Item2 {Id = 1, Name = "moo"}
                                         );
                                 }, Throws.Exception.InstanceOf<UnmetExpectationException>());
@@ -274,7 +274,7 @@ namespace NExpect.Tests
                                 {
                                     Expect(src)
                                         .To.Contain.Exactly(1)
-                                        .Deep.Equal.To(
+                                        .Intersection.Equal.To(
                                             new Item2 {Id = 1, Name = "bar"}
                                         );
                                 }, Throws.Exception.InstanceOf<UnmetExpectationException>());
@@ -296,7 +296,7 @@ namespace NExpect.Tests
                                 {
                                     Expect(src)
                                         .To.Contain.At.Least(2)
-                                        .Deep.Equal.To(
+                                        .Intersection.Equal.To(
                                             new Item2 {Id = 1, Name = "Cake"}
                                         );
                                 }, Throws.Exception.InstanceOf<UnmetExpectationException>());
