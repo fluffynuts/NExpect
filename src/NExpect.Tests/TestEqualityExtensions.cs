@@ -1748,7 +1748,7 @@ namespace NExpect.Tests
                 {
                     // Arrange
                     var actual = GetRandomDate();
-                    var expected = GetRandomDate(null, actual);
+                    var expected = GetRandomDate(null, actual.AddTicks(-1));
 
                     // Pre-Assert
 
@@ -1785,7 +1785,7 @@ namespace NExpect.Tests
                 {
                     // Arrange
                     var actual = GetRandomDate();
-                    var expected = GetRandomDate(actual, null);
+                    var expected = GetRandomDate(actual.AddTicks(1), null);
 
                     // Pre-Assert
 
@@ -1804,7 +1804,7 @@ namespace NExpect.Tests
                 {
                     // Arrange
                     var actual = GetRandomDate();
-                    var expected = GetRandomDate(actual, null);
+                    var expected = GetRandomDate(actual.AddTicks(1), null);
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
@@ -1824,7 +1824,7 @@ namespace NExpect.Tests
                 {
                     // Arrange
                     var actual = GetRandomDate();
-                    var expected = GetRandomDate(actual, null);
+                    var expected = GetRandomDate(actual.AddTicks(1), null);
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
@@ -1858,7 +1858,7 @@ namespace NExpect.Tests
                 {
                     // Arrange
                     var actual = GetRandomDate();
-                    var expected = GetRandomDate(null, actual);
+                    var expected = GetRandomDate(null, actual.AddTicks(-1));
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
@@ -1876,7 +1876,7 @@ namespace NExpect.Tests
                 {
                     // Arrange
                     var actual = GetRandomDate();
-                    var expected = GetRandomDate(null, actual);
+                    var expected = GetRandomDate(null, actual.AddTicks(-1));
                     // Pre-Assert
                     // Act
                     Assert.That(() =>
