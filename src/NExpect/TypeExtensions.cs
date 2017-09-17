@@ -33,11 +33,10 @@ namespace NExpect
             {
                 var theExpectedType = typeof(TExpected);
                 var passed = theExpectedType.IsAssignableFrom(instance.Actual);
-                var not = passed ? "not " : "";
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected <{instance.Actual.PrettyName()}> to {not}be an instance of <{theExpectedType.PrettyName()}>",
+                        $"Expected <{instance.Actual.PrettyName()}> to {passed.AsNot()}be an instance of <{theExpectedType.PrettyName()}>",
                         customMessage
                     ));
             });

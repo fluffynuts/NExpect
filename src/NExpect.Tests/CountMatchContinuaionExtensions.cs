@@ -20,10 +20,9 @@ namespace NExpect.Tests
                 var count = collection.Count(i => i % 2 == 1);
                 var total = collection.Count();
                 var passed = _strategies[method](total, count, expectedCount);
-                var not = passed ? "" : "not ";
                 return new MatcherResult(
                     passed,
-                    $"Expected {MessageHelpers.PrettyPrint(collection)} {not}to be only odd numbers"
+                    $"Expected {collection.PrettyPrint()} {passed.AsNot()}to be only odd numbers"
                 );
             });
         }

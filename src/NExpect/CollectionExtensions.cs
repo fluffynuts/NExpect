@@ -134,15 +134,13 @@ namespace NExpect
             string customMessage
         )
         {
-            return collection => {
+            return collection =>
+            {
                 var passed = collection.Contains(search);
-                var not = passed
-                    ? ""
-                    : "not ";
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {collection} {not}to contain {search}",
+                        $"Expected {collection} {passed.AsNot()}to contain {search}",
                         customMessage
                     )
                 );
@@ -290,7 +288,9 @@ namespace NExpect
                         : countMatch.ExpectedCount
                 );
                 var message =
-                    _collectionCountMessageStrategies[countMatch.Method](passed, search, have,
+                    _collectionCountMessageStrategies[countMatch.Method](passed,
+                        search,
+                        have,
                         countMatch.ExpectedCount);
 
                 return new MatcherResult(
@@ -409,14 +409,11 @@ namespace NExpect
             be.AddMatcher(collection =>
             {
                 var passed = collection != null && !collection.Any();
-                var not = passed
-                    ? "not "
-                    : "";
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    $"Expected {collection.PrettyPrint()} {not}to be an empty collection",
-                    customMessage
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        $"Expected {collection.PrettyPrint()} {passed.AsNot()}to be an empty collection",
+                        customMessage
                     )
                 );
             });
@@ -487,13 +484,10 @@ namespace NExpect
             equivalent.AddMatcher(collection =>
             {
                 var passed = TestEquivalenceOf(collection, other, comparer ?? new DefaultEqualityComparer<T>());
-                var not = passed
-                    ? "not "
-                    : "";
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {collection.PrettyPrint()} {not}to be equivalent to {other.PrettyPrint()}",
+                        $"Expected {collection.PrettyPrint()} {passed.AsNot()}to be equivalent to {other.PrettyPrint()}",
                         customMessage
                     )
                 );
@@ -560,12 +554,9 @@ namespace NExpect
             be.AddMatcher(collection =>
             {
                 var passed = collection == null;
-                var not = passed
-                    ? "not "
-                    : "";
                 return new MatcherResult(
                     passed,
-                    FinalMessageFor($"Expected {collection.PrettyPrint()} {not}to be null",
+                    FinalMessageFor($"Expected {collection.PrettyPrint()} {passed.AsNot()}to be null",
                         customMessage)
                 );
             });
@@ -651,12 +642,9 @@ namespace NExpect
                 var expected = contain.ExpectedCount;
                 var actual = collection?.Count() ?? 0;
                 var passed = actual == expected;
-                var not = passed
-                    ? "not "
-                    : "";
                 return new MatcherResult(
                     passed,
-                    FinalMessageFor($"Expected {not}to find {expected} items but actually found {actual}",
+                    FinalMessageFor($"Expected {passed.AsNot()}to find {expected} items but actually found {actual}",
                         customMessage)
                 );
             });
@@ -694,11 +682,10 @@ namespace NExpect
                 var expectedCount = continuation.ExpectedCount;
                 var actualCount = collection?.Count(o => DeepTestHelpers.AreDeepEqual(o, expected)) ?? 0;
                 var passed = actualCount == expectedCount;
-                var not = passed ? "not " : "";
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {not}to find {expectedCount} items matching\n{expected.Stringify()}\n but actually found {actualCount}",
+                        $"Expected {passed.AsNot()}to find {expectedCount} items matching\n{expected.Stringify()}\n but actually found {actualCount}",
                         customMessage
                     )
                 );
@@ -739,11 +726,10 @@ namespace NExpect
                 var expectedCount = continuation.ExpectedCount;
                 var actualCount = collection?.Count(o => DeepTestHelpers.AreIntersectionEqual(o, expected)) ?? 0;
                 var passed = actualCount == expectedCount;
-                var not = passed ? "not " : "";
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {not}to find {expectedCount} items matching\n{expected.Stringify()}\n but actually found {actualCount}",
+                        $"Expected {passed.AsNot()}to find {expectedCount} items matching\n{expected.Stringify()}\n but actually found {actualCount}",
                         customMessage
                     )
                 );
@@ -1094,7 +1080,9 @@ namespace NExpect
         )
         {
             continuation.AddMatcher(GenerateEqualityMatcherFor(
-                expected, null, customMessage
+                expected,
+                null,
+                customMessage
             ));
         }
 
@@ -1105,13 +1093,10 @@ namespace NExpect
             return actual =>
             {
                 var passed = AllItemsMatchInOrder(actual, expected, comparer ?? new DefaultEqualityComparer<T>());
-                var not = passed
-                    ? "not "
-                    : "";
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected collection:\n{actual.PrettyPrint()}\n{not}to match:\n{expected.PrettyPrint()}",
+                        $"Expected collection:\n{actual.PrettyPrint()}\n{passed.AsNot()}to match:\n{expected.PrettyPrint()}",
                         customMessage)
                 );
             };
@@ -1251,13 +1236,10 @@ namespace NExpect
         {
             return (passed, have, want) =>
             {
-                var not = passed
-                    ? "not "
-                    : "";
                 var haveWord = have > 0
                     ? have.ToString()
                     : "none";
-                return $"Expected {not}to find {comparison} matching but found {haveWord}";
+                return $"Expected {passed.AsNot()}to find {comparison} matching but found {haveWord}";
             };
         }
 

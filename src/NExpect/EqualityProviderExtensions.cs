@@ -179,11 +179,10 @@ namespace NExpect
                 actual =>
                 {
                     var passed = DeepTestHelpers.AreDeepEqual(actual, expected);
-                    var not = passed ? "not " : "";
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
-                            $"Expected {Stringifier.Stringify(actual, MessageHelpers.Null)}\n{not}to deep equal\n{Stringifier.Stringify(expected, MessageHelpers.Null)}",
+                            $"Expected {Stringifier.Stringify(actual, MessageHelpers.Null)}\n{passed.AsNot()}to deep equal\n{Stringifier.Stringify(expected, MessageHelpers.Null)}",
                             customMessage
                         )
                     );
@@ -222,11 +221,10 @@ namespace NExpect
                 actual =>
                 {
                     var passed = DeepTestHelpers.AreIntersectionEqual(actual, expected);
-                    var not = passed ? "not " : "";
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
-                            $"Expected {actual.Stringify()}\n{not}to intersection equal\n{expected.Stringify()}",
+                            $"Expected {actual.Stringify()}\n{passed.AsNot()}to intersection equal\n{expected.Stringify()}",
                             customMessage
                         )
                     );
@@ -395,11 +393,10 @@ namespace NExpect
             continuation.AddMatcher(collection =>
             {
                 var passed = CollectionsAreDeepEquivalent(collection, expected);
-                var not = passed ? "not " : "";
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected \n{collection.PrettyPrint()}\n{not} to be deep equivalent to\n{expected.PrettyPrint()}",
+                        $"Expected \n{collection.PrettyPrint()}\n{passed.AsNot()} to be deep equivalent to\n{expected.PrettyPrint()}",
                         customMessage
                     ));
             });
@@ -435,11 +432,10 @@ namespace NExpect
             continuation.AddMatcher(collection =>
             {
                 var passed = CollectionsAreIntersectionEquivalent(collection, expected);
-                var not = passed ? "not " : "";
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected\n{collection.PrettyPrint()}\n{not} to be intersection equivalent to\n{expected.PrettyPrint()}",
+                        $"Expected\n{collection.PrettyPrint()}\n{passed.AsNot()} to be intersection equivalent to\n{expected.PrettyPrint()}",
                         customMessage
                     )
                 );
@@ -451,13 +447,15 @@ namespace NExpect
             IEnumerable<T> expected
         )
         {
-            return CollectionCompare(collection, expected,
+            return CollectionCompare(collection,
+                expected,
                 (master, compare) =>
                 {
                     while (master.Any())
                     {
                         var currentMaster = master.First();
-                        var compareMatch = compare.FirstOrDefault(c => DeepTestHelpers.AreIntersectionEqual(currentMaster, c));
+                        var compareMatch =
+                            compare.FirstOrDefault(c => DeepTestHelpers.AreIntersectionEqual(currentMaster, c));
                         if (compareMatch == null)
                             return false;
                         master.Remove(currentMaster);
@@ -476,11 +474,10 @@ namespace NExpect
             return collection =>
             {
                 var passed = CollectionsAreIntersectionEqual(collection, expected);
-                var not = passed ? "not " : "";
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected\n{collection.PrettyPrint()}\n{not} to intersect equal\n{expected.PrettyPrint()}",
+                        $"Expected\n{collection.PrettyPrint()}\n{passed.AsNot()} to intersect equal\n{expected.PrettyPrint()}",
                         customMessage
                     )
                 );
@@ -495,11 +492,10 @@ namespace NExpect
             return collection =>
             {
                 var passed = CollectionsAreDeepEqual(collection, expected);
-                var not = passed ? "not " : "";
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected\n{collection.PrettyPrint()}\n{not}to deep equal\n{expected.PrettyPrint()}",
+                        $"Expected\n{collection.PrettyPrint()}\n{passed.AsNot()}to deep equal\n{expected.PrettyPrint()}",
                         customMessage
                     )
                 );
@@ -510,7 +506,8 @@ namespace NExpect
             IEnumerable<T> collection,
             IEnumerable<T> expected)
         {
-            return CollectionCompare(collection, expected,
+            return CollectionCompare(collection,
+                expected,
                 (master, compare) =>
                 {
                     while (master.Any())
@@ -536,7 +533,8 @@ namespace NExpect
                 expected,
                 (master, compare) => Zip(master, compare)
                     .Aggregate(
-                        true, (acc, cur) => acc && DeepTestHelpers.AreIntersectionEqual(cur.Item1, cur.Item2)
+                        true,
+                        (acc, cur) => acc && DeepTestHelpers.AreIntersectionEqual(cur.Item1, cur.Item2)
                     )
             );
         }
@@ -551,7 +549,8 @@ namespace NExpect
                 expected,
                 (master, compare) => Zip(master, compare)
                     .Aggregate(
-                        true, (acc, cur) => acc && DeepTestHelpers.AreDeepEqual(cur.Item1, cur.Item2)
+                        true,
+                        (acc, cur) => acc && DeepTestHelpers.AreDeepEqual(cur.Item1, cur.Item2)
                     )
             );
         }
@@ -562,9 +561,11 @@ namespace NExpect
             Func<List<T>, List<T>, bool> finalComparison
         )
         {
-            if (collection == null && expected == null)
+            if (collection == null &&
+                expected == null)
                 return true;
-            if (collection == null || expected == null)
+            if (collection == null ||
+                expected == null)
                 return false;
             var master = collection.ToList();
             var compare = expected.ToList();
@@ -662,9 +663,8 @@ namespace NExpect
             continuation.AddMatcher(actual =>
             {
                 var passed = actual.Equals(expected);
-                var not = passed ? "not " : "";
                 var message = FinalMessageFor(
-                    $"Expected {Quote(actual)} {not}to equal {Quote(expected)}",
+                    $"Expected {Quote(actual)} {passed.AsNot()}to equal {Quote(expected)}",
                     customMessage
                 );
                 return new MatcherResult(passed, message);
@@ -712,10 +712,9 @@ namespace NExpect
             nullOr.AddMatcher(actual =>
             {
                 var passed = string.IsNullOrEmpty(actual);
-                var not = passed ? "not " : "";
                 return new MatcherResult(
                     passed,
-                    $"Expected {actual} {not}to be null or empty"
+                    $"Expected {actual} {passed.AsNot()}to be null or empty"
                 );
             });
         }
@@ -731,10 +730,9 @@ namespace NExpect
             nullOr.AddMatcher(actual =>
             {
                 var passed = string.IsNullOrWhiteSpace(actual);
-                var not = passed ? "not " : "";
                 return new MatcherResult(
                     passed,
-                    $"Expected {actual} {not}to be null or whitespace"
+                    $"Expected {actual} {passed.AsNot()}to be null or whitespace"
                 );
             });
         }
@@ -752,10 +750,9 @@ namespace NExpect
         private static IMatcherResult RefCompare(object actual, object other)
         {
             var passed = ReferenceEquals(actual, other);
-            var not = passed ? "not " : "";
             return new MatcherResult(
                 passed,
-                $"Expected {actual} {not}to be the same reference as {other}"
+                $"Expected {actual} {passed.AsNot()}to be the same reference as {other}"
             );
         }
     }
