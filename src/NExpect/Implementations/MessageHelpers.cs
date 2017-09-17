@@ -29,6 +29,18 @@ namespace NExpect.Implementations
                 : $"{customMessage}\n\n{standardMessage}";
         }
 
+        /// <summary>
+        /// Provides the "not" for a matcher message, based on the passed flag.
+        /// When your matcher passes, you get "not ", so you can do, eg $"Expected foo {not}to be bar"
+        /// When your matcher fails, you get an empty string, which also works for the example given.
+        /// </summary>
+        /// <param name="passed"></param>
+        /// <returns></returns>
+        public static string AsNot(this bool passed)
+        {
+            return passed ? "not " : "";
+        }
+
         internal static string MessageForContainsResult(
             bool passed,
             string src,

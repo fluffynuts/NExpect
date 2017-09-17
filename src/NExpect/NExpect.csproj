@@ -74,6 +74,7 @@
     <Compile Include="Assertions.cs" />
     <Compile Include="CollectionFluencyExtensions.cs" />
     <Compile Include="DeepTestHelpers.cs" />
+    <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="ExceptionMessageContainuationToStringContainContinuation.cs" />
     <Compile Include="Exceptions\StackFrameExtensions.cs" />
     <Compile Include="Expectations.cs" />
