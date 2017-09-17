@@ -4,11 +4,12 @@ using System.Linq;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+
 // ReSharper disable PossibleMultipleEnumeration
 
-namespace NExpect.Tests
+namespace NExpect.Tests.Collections
 {
-    public static class CountMatchContinuaionExtensions
+    public static class CountMatchContinuationExtensionsForTesting
     {
         public static void Odds(this ICountMatchContinuation<IEnumerable<int>> continuation)
         {

@@ -58,17 +58,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CountMatchContinuaionExtensions.cs" />
-    <Compile Include="FirstLetterComparer.cs" />
-    <Compile Include="SetupTests.cs" />
-    <Compile Include="TestA.cs" />
-    <Compile Include="TestCollectionExtensions.cs" />
-    <Compile Include="TestStringExtensions.cs" />
-    <Compile Include="TestExceptionExtensions.cs" />
-    <Compile Include="TestEqualityExtensions.cs" />
+    <Compile Include="Collections\CountMatchContinuationExtensionsForTesting.cs" />
+    <Compile Include="Collections\CustomEqualityTesting.cs" />
+    <Compile Include="Collections\DeepEqualityTesting.cs" />
+    <Compile Include="Collections\FirstLetterComparer.cs" />
+    <Compile Include="DanglingPrepositions\An.cs" />
+    <Compile Include="DanglingPrepositions\A.cs" />
+    <Compile Include="Collections\TestCollectionExtensions.cs" />
+    <Compile Include="ObjectEquality\TestingForNull.cs" />
+    <Compile Include="ObjectEquality\TestingNullableTypes.cs" />
+    <Compile Include="ObjectEquality\TestingStringValues.cs" />
+    <Compile Include="Exceptions\EnforcingThrownExceptions.cs" />
+    <Compile Include="ObjectEquality\TestingObjectEquality.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestTruthExtensions.cs" />
-    <Compile Include="TestTypeExtensions.cs" />
+    <Compile Include="ObjectEquality\TestingBooleanValues.cs" />
+    <Compile Include="Types\TestingInstanceOfInterfaceOrBaseClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

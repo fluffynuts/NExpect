@@ -2,15 +2,14 @@
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
-using static NExpect.Expectations;
 
-namespace NExpect.Tests
+namespace NExpect.Tests.DanglingPrepositions
 {
     [TestFixture]
-    public class TestA
+    public class A
     {
         [Test]
-        public void A_ShouldProvideExtensionPoint()
+        public void ShouldProvideExtensionPoint()
         {
             // Arrange
 
@@ -19,11 +18,11 @@ namespace NExpect.Tests
             // Act
             Assert.That(() =>
             {
-                Expect(new Frog() as object).To.Be.A.Frog();
+                Expectations.Expect(new Frog() as object).To.Be.A.Frog();
             }, Throws.Nothing);
             Assert.That(() =>
             {
-                Expect(new Frog() as object).Not.To.Be.A.Frog();
+                Expectations.Expect(new Frog() as object).Not.To.Be.A.Frog();
             }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                 .With.Message.Contains("Expected not to get a frog"));
 
@@ -35,7 +34,7 @@ namespace NExpect.Tests
     {
     }
 
-    public static class TestAExtensions
+    public static class ExtensionsForTestingA
     {
         public static void Frog(this IA<object> continuation)
         {

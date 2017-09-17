@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using NUnit.Framework;
 using NExpect.Exceptions;
-using static NExpect.Expectations;
+using NUnit.Framework;
 
-namespace NExpect.Tests
+namespace NExpect.Tests.Types
 {
     [TestFixture]
-    public class TestTypeExtensions
+    public class TestingInstanceOfInterfaceOrBaseClass
     {
         private interface ITestInterface
         {
@@ -54,7 +53,7 @@ namespace NExpect.Tests
                                 // Act
                                 Assert.That(() =>
                                 {
-                                    Expect(sut).Not.To.Be.An.Instance.Of<TestClass>();
+                                    Expectations.Expect(sut).Not.To.Be.An.Instance.Of<TestClass>();
                                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                                     .With.Message.Contains("to not be an instance of"));
                                 // Assert
@@ -69,7 +68,7 @@ namespace NExpect.Tests
                                 // Act
                                 Assert.That(() =>
                                 {
-                                    Expect(sut).To.Be.An.Instance.Of<TestClass>();
+                                    Expectations.Expect(sut).To.Be.An.Instance.Of<TestClass>();
                                 }, Throws.Nothing);
                                 // Assert
                             }
@@ -83,7 +82,7 @@ namespace NExpect.Tests
                                 // Act
                                 Assert.That(() =>
                                 {
-                                    Expect(sut).Not.To.Be.An.Instance.Of<AnotherTestClass>();
+                                    Expectations.Expect(sut).Not.To.Be.An.Instance.Of<AnotherTestClass>();
                                 }, Throws.Nothing);
                                 // Assert
                             }
@@ -97,7 +96,7 @@ namespace NExpect.Tests
                                 // Act
                                 Assert.That(() =>
                                 {
-                                    Expect(sut).To.Be.An.Instance.Of<AnotherTestClass>();
+                                    Expectations.Expect(sut).To.Be.An.Instance.Of<AnotherTestClass>();
                                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                                     .With.Message.Contains("to be an instance of"));
                                 // Assert
@@ -112,11 +111,12 @@ namespace NExpect.Tests
                                 // Act
                                 Assert.That(() =>
                                 {
-                                    Expect(sut).To.Be.An.Instance.Of<AnotherTestClass>();
+                                    Expectations.Expect(sut).To.Be.An.Instance.Of<AnotherTestClass>();
                                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                                     .With.Message
-                                    .Contains(
-                                        "TestTypeExtensions+GenericTestClass<NExpect.Tests.TestTypeExtensions+TestClass>"));
+                                    .EqualTo(
+                                    "Expected <TestingInstanceOfInterfaceOrBaseClass+GenericTestClass<NExpect.Tests.Types.TestingInstanceOfInterfaceOrBaseClass+TestClass>> to be an instance of <NExpect.Tests.Types.TestingInstanceOfInterfaceOrBaseClass+AnotherTestClass>"
+                                    ));
                                 // Assert
                             }
 
@@ -132,7 +132,7 @@ namespace NExpect.Tests
                                     // Act
                                     Assert.That(() =>
                                     {
-                                        Expect(obj).To.Be.An.Instance.Of<TestClass>();
+                                        Expectations.Expect(obj).To.Be.An.Instance.Of<TestClass>();
                                     }, Throws.Nothing);
                                     // Assert
                                 }
@@ -146,7 +146,7 @@ namespace NExpect.Tests
                                     // Act
                                     Assert.That(() =>
                                     {
-                                        Expect(obj).Not.To.Be.An.Instance.Of<TestClass>();
+                                        Expectations.Expect(obj).Not.To.Be.An.Instance.Of<TestClass>();
                                     }, Throws.Exception.InstanceOf<UnmetExpectationException>());
                                     // Assert
                                 }
@@ -164,7 +164,7 @@ namespace NExpect.Tests
                                     // Act
                                     Assert.That(() =>
                                     {
-                                        Expect(obj).To.Be.An.Instance.Of<ITestInterface>();
+                                        Expectations.Expect(obj).To.Be.An.Instance.Of<ITestInterface>();
                                     }, Throws.Nothing);
                                     // Assert
                                 }
@@ -178,7 +178,7 @@ namespace NExpect.Tests
                                     // Act
                                     Assert.That(() =>
                                     {
-                                        Expect(obj).Not.To.Be.An.Instance.Of<ITestInterface>();
+                                        Expectations.Expect(obj).Not.To.Be.An.Instance.Of<ITestInterface>();
                                     }, Throws.Exception.InstanceOf<UnmetExpectationException>());
                                     // Assert
                                 }
@@ -196,7 +196,7 @@ namespace NExpect.Tests
                                     // Act
                                     Assert.That(() =>
                                     {
-                                        Expect(sut).Not.To.Be.An.Instance.Of<TestClass>("Custom Message");
+                                        Expectations.Expect(sut).Not.To.Be.An.Instance.Of<TestClass>("Custom Message");
                                     }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                                         .With.Message.Contains("Custom Message"));
                                     // Assert
@@ -215,7 +215,7 @@ namespace NExpect.Tests
                                     // Act
                                     Assert.That(() =>
                                     {
-                                        Expect(sut).Not.To.Be.An.Instance.Of<List<TestClass>>();
+                                        Expectations.Expect(sut).Not.To.Be.An.Instance.Of<List<TestClass>>();
                                     }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                                         .With.Message.Contains("to not be an instance of"));
                                     // Assert

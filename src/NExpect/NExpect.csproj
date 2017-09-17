@@ -72,7 +72,10 @@
       <Link>Imported\Types.cs</Link>
     </Compile>
     <Compile Include="Assertions.cs" />
+    <Compile Include="CollectionDeepEqualityExtensions.cs" />
     <Compile Include="CollectionFluencyExtensions.cs" />
+    <Compile Include="DeepEqualityExtensions.cs" />
+    <Compile Include="DeepEqualityTestingHelperExtensions.cs" />
     <Compile Include="DeepTestHelpers.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="ExceptionMessageContainuationToStringContainContinuation.cs" />
@@ -165,6 +168,7 @@
     <Compile Include="Implementations\CollectionTo.cs" />
     <Compile Include="Implementations\CollectionToAfterNot.cs" />
     <Compile Include="Interfaces\ICollectionExpectation.cs" />
+    <Compile Include="IntersectionEqualityExtensions.cs" />
     <Compile Include="MatcherLogic\MatcherHelperExtensionMethods.cs" />
     <Compile Include="MatchProviderExtensions.cs" />
     <Compile Include="StringExtensions.cs" />

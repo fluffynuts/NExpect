@@ -635,7 +635,22 @@ namespace NExpect
             this ICountMatchContinuation<IEnumerable<T>> contain
         )
         {
-            contain.Items(null);
+            contain.Item(null);
+        }
+
+
+        /// <summary>
+        /// Tests for the presence of any items, using the count matcher that preceded
+        /// </summary>
+        /// <param name="contain">Collection to test</param>
+        /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <typeparam name="T">Item type of the collection</typeparam>
+        public static void Item<T>(
+            this ICountMatchContinuation<IEnumerable<T>> contain,
+            string customMessage
+        )
+        {
+            contain.Items(customMessage);
         }
 
 

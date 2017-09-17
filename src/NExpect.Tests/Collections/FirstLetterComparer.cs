@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace NExpect.Tests
+namespace NExpect.Tests.Collections
 {
     public class FirstLetterComparer : IEqualityComparer<string>
     {

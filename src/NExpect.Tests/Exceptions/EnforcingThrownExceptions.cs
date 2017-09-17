@@ -12,7 +12,7 @@ using static PeanutButter.RandomGenerators.RandomValueGen;
 namespace NExpect.Tests
 {
     [TestFixture]
-    public class TestExceptionExtensions
+    public class EnforcingThrownExceptions
     {
         [Test]
         public void Throw_ForAction_WithNoGenericType_WhenSUTThrows_ShouldNotThrow()

@@ -1,12 +1,12 @@
 using NExpect.Exceptions;
 using NUnit.Framework;
-using static PeanutButter.RandomGenerators.RandomValueGen;
-using static NExpect.Expectations;
+using PeanutButter.RandomGenerators;
+
 // ReSharper disable ConditionIsAlwaysTrueOrFalse
 
-namespace NExpect.Tests
+namespace NExpect.Tests.ObjectEquality
 {
-    public class TestTruthExtensions
+    public class TestingBooleanValues
     {
         public class TrueEquality
         {
@@ -20,7 +20,7 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(
-                    () => Expect(value).To.Be.True(),
+                    () => Expectations.Expect(value).To.Be.True(),
                     Throws.Nothing
                 );
 
@@ -35,7 +35,7 @@ namespace NExpect.Tests
                 // Pre-Assert
                 // Act
                 // Assert
-                Expect(true).To.Be.False();
+                Expectations.Expect(true).To.Be.False();
             }
 
             [Test]
@@ -48,7 +48,7 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(
-                    () => Expect(value).To.Be.True(),
+                    () => Expectations.Expect(value).To.Be.True(),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains($"Expected True but got {value}")
                 );
@@ -61,19 +61,19 @@ namespace NExpect.Tests
             {
                 // Arrange
                 var value = false;
-                var message = GetRandomString(12);
+                var message = RandomValueGen.GetRandomString(12);
 
                 // Pre-Assert
 
                 // Act
                 Assert.That(
-                    () => Expect(value).To.Be.True(message),
+                    () => Expectations.Expect(value).To.Be.True(message),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains($"Expected True but got {value}")
                 );
 
                 Assert.That(
-                    () => Expect(value).To.Be.True(message),
+                    () => Expectations.Expect(value).To.Be.True(message),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains(message)
                 );
@@ -91,7 +91,7 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(
-                    () => Expect(value).Not.To.Be.True(),
+                    () => Expectations.Expect(value).Not.To.Be.True(),
                     Throws.Nothing
                 );
 
@@ -108,7 +108,7 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(
-                    () => Expect(value).To.Be.Not.True(),
+                    () => Expectations.Expect(value).To.Be.Not.True(),
                     Throws.Nothing
                 );
 
@@ -125,7 +125,7 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(
-                    () => Expect(value).Not.To.Be.True(),
+                    () => Expectations.Expect(value).Not.To.Be.True(),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                 );
 
@@ -142,7 +142,7 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(
-                    () => Expect(value).To.Be.Not.True(),
+                    () => Expectations.Expect(value).To.Be.Not.True(),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                 );
 
@@ -159,7 +159,7 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(
-                    () => Expect(value).To.Be.True(),
+                    () => Expectations.Expect(value).To.Be.True(),
                     Throws.Nothing
                 );
 
@@ -179,7 +179,7 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(
-                    () => Expect(value).To.Be.False(),
+                    () => Expectations.Expect(value).To.Be.False(),
                     Throws.Nothing
                 );
 
@@ -196,7 +196,7 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(
-                    () => Expect(value).To.Be.False(),
+                    () => Expectations.Expect(value).To.Be.False(),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains($"Expected False but got {value}")
                 );
@@ -209,19 +209,19 @@ namespace NExpect.Tests
             {
                 // Arrange
                 var value = true;
-                var message = GetRandomString(12);
+                var message = RandomValueGen.GetRandomString(12);
 
                 // Pre-Assert
 
                 // Act
                 Assert.That(
-                    () => Expect(value).To.Be.False(message),
+                    () => Expectations.Expect(value).To.Be.False(message),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains($"Expected False but got {value}")
                 );
 
                 Assert.That(
-                    () => Expect(value).To.Be.False(message),
+                    () => Expectations.Expect(value).To.Be.False(message),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains(message)
                 );
@@ -239,7 +239,7 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(
-                    () => Expect(value).Not.To.Be.False(),
+                    () => Expectations.Expect(value).Not.To.Be.False(),
                     Throws.Nothing
                 );
 
@@ -256,7 +256,7 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(
-                    () => Expect(value).To.Be.Not.False(),
+                    () => Expectations.Expect(value).To.Be.Not.False(),
                     Throws.Nothing
                 );
 
@@ -273,7 +273,7 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(
-                    () => Expect(value).Not.To.Be.False(),
+                    () => Expectations.Expect(value).Not.To.Be.False(),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                 );
 
@@ -290,7 +290,7 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(
-                    () => Expect(value).To.Be.Not.False(),
+                    () => Expectations.Expect(value).To.Be.Not.False(),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                 );
 
@@ -307,7 +307,7 @@ namespace NExpect.Tests
 
                 // Act
                 Assert.That(
-                    () => Expect(value).To.Be.False(),
+                    () => Expectations.Expect(value).To.Be.False(),
                     Throws.Nothing
                 );
 
