@@ -289,5 +289,5 @@ __pycache__/
 
 tools
 buildreports
-.swp
-.swo
+*.swp
+*.swo
