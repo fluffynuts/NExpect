@@ -518,7 +518,10 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="customMessage">Custom message to include when failing</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Null<T>(this IBe<T> continuation, string customMessage)
+        public static IMore<T> Null<T>(
+            this IBe<T> continuation, 
+            string customMessage
+        )
         {
             continuation.AddMatcher(actual =>
             {
@@ -532,6 +535,7 @@ namespace NExpect
                         customMessage)
                 );
             });
+            return continuation.More();
         }
 
         /// <summary>
@@ -539,9 +543,9 @@ namespace NExpect
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Null<T>(this IBe<T> continuation)
+        public static IMore<T> Null<T>(this IBe<T> continuation)
         {
-            continuation.Null(null);
+            return continuation.Null(null);
         }
 
         /// <summary>
