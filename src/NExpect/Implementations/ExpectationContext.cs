@@ -22,6 +22,7 @@ namespace NExpect.Implementations
         }
 
         private bool _storedNegation;
+        private bool _shouldResetNegation;
         private Func<T, IMatcherResult> _storedExpectation;
 
 
@@ -29,6 +30,19 @@ namespace NExpect.Implementations
         {
             _storedNegation = true;
             RunNegations();
+        }
+
+        public void ResetNegation()
+        {
+            _storedNegation = false;
+            RunResetNegations();
+        }
+
+        private void RunResetNegations()
+        {
+            if (_parent == null || !_shouldResetNegation)
+                return;
+            _parent.ResetNegation();
         }
 
         public virtual void RunMatcher(Func<T, IMatcherResult> matcher)
@@ -43,7 +57,7 @@ namespace NExpect.Implementations
                 return;
 
             _parent.Negate();
-            _storedNegation = false;
+            _shouldResetNegation = false;
         }
 
         private void RunExpectations()

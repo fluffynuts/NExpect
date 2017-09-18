@@ -17,12 +17,21 @@ namespace NExpect.Implementations
             IsNegated = !IsNegated;
         }
 
+        public void ResetNegation()
+        {
+            IsNegated = false;
+        }
+
         public void RunMatcher(
             T actual,
             bool negated,
-            Func<T, IMatcherResult> matcher)
+            Func<T, IMatcherResult> matcher,
+            bool resetNegationAfterRun
+        )
         {
             MatcherRunner.RunMatcher(actual, negated, matcher);
+            if (resetNegationAfterRun)
+                ResetNegation();
         }
     }
 }

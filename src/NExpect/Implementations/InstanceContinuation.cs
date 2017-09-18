@@ -23,6 +23,11 @@ namespace NExpect.Implementations
             throw new InvalidOperationException("This context cannot be negated");
         }
 
+        public void ResetNegation()
+        {
+            throw new InvalidOperationException("This context cannot be negated");
+        }
+
         public void RunMatcher(Func<Type, IMatcherResult> matcher)
         {
             IMatcherResult result;

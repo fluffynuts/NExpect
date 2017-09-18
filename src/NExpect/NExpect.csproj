@@ -84,6 +84,7 @@
     <Compile Include="GreaterAndLessContinuationExtensions.cs" />
     <Compile Include="Implementations\A.cs" />
     <Compile Include="Implementations\An.cs" />
+    <Compile Include="Implementations\And.cs" />
     <Compile Include="Implementations\CollectionAn.cs" />
     <Compile Include="Implementations\CollectionDeep.cs" />
     <Compile Include="Implementations\CollectionDeepEqual.cs" />
@@ -116,12 +117,14 @@
     <Compile Include="Implementations\Intersection.cs" />
     <Compile Include="Implementations\LessContinuation.cs" />
     <Compile Include="Implementations\MatcherRunner.cs" />
+    <Compile Include="Implementations\More.cs" />
     <Compile Include="Implementations\Null.cs" />
     <Compile Include="Implementations\NullOr.cs" />
     <Compile Include="Implementations\TypeExtensions.cs" />
     <Compile Include="Interfaces\CountMatchMethods.cs" />
     <Compile Include="Interfaces\IA.cs" />
     <Compile Include="Interfaces\IAn.cs" />
+    <Compile Include="Interfaces\IAnd.cs" />
     <Compile Include="Interfaces\ICollectionAn.cs" />
     <Compile Include="Interfaces\ICollectionDeep.cs" />
     <Compile Include="Interfaces\ICollectionDeepEqual.cs" />
@@ -157,6 +160,7 @@
     <Compile Include="Interfaces\IInstanceContinuation.cs" />
     <Compile Include="Interfaces\IIntersection.cs" />
     <Compile Include="Interfaces\ILessContinuation.cs" />
+    <Compile Include="Interfaces\IMore.cs" />
     <Compile Include="Interfaces\INull.cs" />
     <Compile Include="Interfaces\INullOr.cs" />
     <Compile Include="Interfaces\IStringContainContinuation.cs" />
@@ -170,6 +174,7 @@
     <Compile Include="Interfaces\ICollectionExpectation.cs" />
     <Compile Include="IntersectionEqualityExtensions.cs" />
     <Compile Include="MatcherLogic\MatcherHelperExtensionMethods.cs" />
+    <Compile Include="MatcherLogic\MoreExtensions.cs" />
     <Compile Include="MatchProviderExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Implementations\MessageHelpers.cs" />

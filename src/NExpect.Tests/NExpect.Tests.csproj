@@ -67,6 +67,7 @@
     <Compile Include="DanglingPrepositions\An.cs" />
     <Compile Include="DanglingPrepositions\A.cs" />
     <Compile Include="Collections\TestCollectionExtensions.cs" />
+    <Compile Include="EnablingUserComposition.cs" />
     <Compile Include="ObjectEquality\TestingForNull.cs" />
     <Compile Include="ObjectEquality\TestingNullableTypes.cs" />
     <Compile Include="ObjectEquality\TestingStringValues.cs" />

@@ -27,6 +27,11 @@ namespace NExpect.Implementations
             _expectationContext.Negate();
         }
 
+        public void ResetNegation()
+        {
+            _expectationContext.ResetNegation();
+        }
+
         public void RunMatcher(Func<string, IMatcherResult> matcher)
         {
             _expectationContext.RunMatcher(matcher);

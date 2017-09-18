@@ -20,7 +20,7 @@ namespace NExpect.Implementations
 
         public void RunMatcher(Func<TTo, IMatcherResult> matcher)
         {
-            RunMatcher(Actual, IsNegated, matcher);
+            RunMatcher(Actual, IsNegated, matcher, false);
         }
 
 

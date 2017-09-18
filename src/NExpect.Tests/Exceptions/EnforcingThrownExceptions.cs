@@ -4,6 +4,7 @@ using NExpect.Exceptions;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
+using static NExpect.Expectations;
 
 // ReSharper disable ConvertToLambdaExpression
 
@@ -21,7 +22,7 @@ namespace NExpect.Tests.Exceptions
             Assert.DoesNotThrow(
                 () =>
                 {
-                    Expectations.Expect(() =>
+                    Expect(() =>
                         {
                             throw new Exception(RandomValueGen.GetRandomString());
                         })
@@ -39,7 +40,7 @@ namespace NExpect.Tests.Exceptions
             // Act
             Assert.That(() =>
             {
-                Expectations.Expect(() =>
+                Expect(() =>
                     {
                     })
                     .To.Throw();
@@ -56,7 +57,7 @@ namespace NExpect.Tests.Exceptions
             Assert.DoesNotThrow(
                 () =>
                 {
-                    Expectations.Expect(() =>
+                    Expect(() =>
                         {
                             if (MakeFalse())
                                 return 1;
@@ -81,7 +82,7 @@ namespace NExpect.Tests.Exceptions
             // Act
             Assert.That(() =>
             {
-                Expectations.Expect(() =>
+                Expect(() =>
                     {
                         return "moo";
                     })
@@ -101,7 +102,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.DoesNotThrow(() =>
                 {
-                    Expectations.Expect(() =>
+                    Expect(() =>
                         {
                             throw new Exception(expected);
                         })
@@ -122,7 +123,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() =>
+                        Expect(() =>
                             {
                                 throw new Exception(message);
                             })
@@ -144,7 +145,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() =>
+                        Expect(() =>
                             {
                                 throw new Exception(other);
                             })
@@ -168,7 +169,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() =>
+                        Expect(() =>
                             {
                                 throw new Exception(message);
                             })
@@ -193,7 +194,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() =>
+                        Expect(() =>
                             {
                                 throw new Exception(message);
                             })
@@ -216,7 +217,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() =>
+                        Expect(() =>
                             {
                                 throw new Exception(message);
                             })
@@ -241,7 +242,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() =>
+                        Expect(() =>
                             {
                                 throw new Exception(msg);
                             })
@@ -263,7 +264,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() =>
+                        Expect(() =>
                             {
                                 throw new Exception(RandomValueGen.GetAnother(msg));
                             })
@@ -285,7 +286,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() =>
+                        Expect(() =>
                             {
                                 throw new Exception(RandomValueGen.GetAnother(msg));
                             })
@@ -306,7 +307,7 @@ namespace NExpect.Tests.Exceptions
             // Act
             Assert.That(() =>
                 {
-                    Expectations.Expect(() => throw new InvalidOperationException("moo"))
+                    Expect(() => throw new InvalidOperationException("moo"))
                         .To.Throw<InvalidOperationException>();
                 },
                 Throws.Nothing);
@@ -327,7 +328,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() =>
+                        Expect(() =>
                             {
                                 throw new InvalidOperationException(message);
                             })
@@ -352,7 +353,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() =>
+                        Expect(() =>
                             {
                                 throw new ArgumentNullException(message);
                             })
@@ -375,7 +376,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() =>
+                        Expect(() =>
                             {
                                 throw new ArgumentOutOfRangeException(message);
                             })
@@ -395,7 +396,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() => throw new InvalidOperationException("moo"))
+                        Expect(() => throw new InvalidOperationException("moo"))
                             .Not.To.Throw<InvalidOperationException>();
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
@@ -414,7 +415,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() => throw new InvalidOperationException("moo"))
+                        Expect(() => throw new InvalidOperationException("moo"))
                             .To.Throw<NotImplementedException>();
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
@@ -435,7 +436,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() => throw new AccessViolationException(expected))
+                        Expect(() => throw new AccessViolationException(expected))
                             .To.Throw<AccessViolationException>()
                             .With.Message.Containing(expected);
                     },
@@ -456,7 +457,7 @@ namespace NExpect.Tests.Exceptions
             // Act
             Assert.That(() =>
                 {
-                    Expectations.Expect(() => throw new AccessViolationException(expected))
+                    Expect(() => throw new AccessViolationException(expected))
                         .To.Throw<AccessViolationException>()
                         .With.Message.Equal.To(expected);
                 },
@@ -476,7 +477,7 @@ namespace NExpect.Tests.Exceptions
             // Act
             Assert.That(() =>
                 {
-                    Expectations.Expect(() => throw new AccessViolationException(unexpected))
+                    Expect(() => throw new AccessViolationException(unexpected))
                         .To.Throw<AccessViolationException>()
                         .With.Message.Equal.To(expected);
                 },
@@ -500,7 +501,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() => throw new ArgumentNullException(expected))
+                        Expect(() => throw new ArgumentNullException(expected))
                             .To.Throw<ArgumentNullException>()
                             .With.Property(ex => ex.ParamName)
                             .Equal.To(expected);
@@ -523,7 +524,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() => throw new ArgumentNullException(unexpected))
+                        Expect(() => throw new ArgumentNullException(unexpected))
                             .To.Throw<ArgumentNullException>()
                             .With.Property(ex => ex.ParamName)
                             .Equal.To(expected);
@@ -547,7 +548,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() => throw new ArgumentNullException(expected))
+                        Expect(() => throw new ArgumentNullException(expected))
                             .To.Throw<ArgumentNullException>()
                             .With.Property(ex => ex.ParamName)
                             .Containing(expectedSubstring);
@@ -571,7 +572,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                     {
-                        Expectations.Expect(() => throw new ArgumentNullException(unexpected))
+                        Expect(() => throw new ArgumentNullException(unexpected))
                             .To.Throw<ArgumentNullException>()
                             .With.Property(ex => ex.ParamName)
                             .Containing(unexpectedSubstring);
@@ -601,7 +602,7 @@ namespace NExpect.Tests.Exceptions
                 // Act
                 Assert.That(() =>
                 {
-                    Expectations.Expect(() =>
+                    Expect(() =>
                         {
                             throw new ExceptionWithInts(new[] {1, 2});
                         })
@@ -633,7 +634,7 @@ namespace NExpect.Tests.Exceptions
                         // Act
                         Assert.That(() =>
                             {
-                                Expectations.Expect(() => throw new ArgumentNullException(expected))
+                                Expect(() => throw new ArgumentNullException(expected))
                                     .To.Throw<ArgumentNullException>()
                                     .With(ex => ex.ParamName)
                                     .Equal.To(expected);
@@ -655,7 +656,7 @@ namespace NExpect.Tests.Exceptions
                         // Act
                         Assert.That(() =>
                             {
-                                Expectations.Expect(() => throw new ArgumentNullException(unexpected))
+                                Expect(() => throw new ArgumentNullException(unexpected))
                                     .To.Throw<ArgumentNullException>()
                                     .With(ex => ex.ParamName)
                                     .Equal.To(expected);

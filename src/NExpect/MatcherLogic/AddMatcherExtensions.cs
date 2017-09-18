@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using NExpect.Exceptions;
+using NExpect.Implementations;
 using NExpect.Interfaces;
 using static NExpect.Implementations.MessageHelpers;
 // ReSharper disable UsePatternMatching
@@ -167,5 +168,4 @@ namespace NExpect.MatcherLogic
             asContext.RunMatcher(matcher);
         }
     }
-
 }
