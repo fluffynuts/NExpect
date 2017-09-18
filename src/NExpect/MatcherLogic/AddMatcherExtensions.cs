@@ -60,7 +60,6 @@ namespace NExpect.MatcherLogic
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expectationsRunner">Runs your composed expectations</param>
-        /// <param name="messageGenerator">Generates the final message, passing in the actual instance being tested as well as a boolean for passed/failed</param>
         /// <typeparam name="T"></typeparam>
         public static void Compose<T>(
             this ICanAddMatcher<T> continuation,
