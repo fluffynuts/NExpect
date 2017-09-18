@@ -58,9 +58,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ComposingExpectations.cs" />
     <Compile Include="Collections\CountMatchContinuationExtensionsForTesting.cs" />
     <Compile Include="Collections\CustomEqualityTesting.cs" />
     <Compile Include="Collections\DeepEqualityTesting.cs" />
+    <Compile Include="Collections\DictionaryTesting.cs" />
     <Compile Include="Collections\FirstLetterComparer.cs" />
     <Compile Include="DanglingPrepositions\An.cs" />
     <Compile Include="DanglingPrepositions\A.cs" />
