@@ -1,4 +1,5 @@
 ﻿using System;
+using NExpect.Exceptions;
 using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations
@@ -15,6 +16,10 @@ namespace NExpect.Implementations
             try
             {
                 result = matcher(actual);
+            }
+            catch(UnmetExpectationException)
+            {
+                throw;
             }
             catch (Exception ex)
             {

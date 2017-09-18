@@ -131,7 +131,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                 {
-                    Expect(new[] { person1, person2 }).To.Be.Bennies();
+                    Expect(new[] {person1, person2}).To.Be.Bennies();
                 }, Throws.Nothing);
                 // Assert
             }
@@ -148,10 +148,10 @@ namespace NExpect.Tests
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
-                    {
-                        Expect(person.AsArray()).To.Be.Bennies();
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Not.Contains("not"));
+                {
+                    Expect(person.AsArray()).To.Be.Bennies();
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    .With.Message.Not.Contains("not"));
                 // Assert
             }
 
@@ -207,8 +207,27 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                 {
-                    Expect(person.AsArray()).Not.To.Be.Bennies();
+                    Expect(person.AsArray()).Not.To.Be.Bennies2();
                 }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void PositiveComposition_WhenFails_OnCompositionWithoutMessageGenerator_ShouldThrow()
+            {
+                // Arrange
+                var person = new Person()
+                {
+                    Name = "Andrew",
+                    Gender = Genders.Male
+                };
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(person.AsArray()).To.Be.Bennies2();
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    .With.Message.Contains("Bennies2"));
                 // Assert
             }
         }
@@ -237,7 +256,7 @@ namespace NExpect.Tests
                 Expect(person).Not.To.Be.Null("Null person");
                 Expect(person.Gender).To.Equal(Genders.Male);
                 Expect(person.Name).To.Equal("Benny");
-            }, (person, passed) => 
+            }, (person, passed) =>
                 $"Expected {person.Stringify()} {passed.AsNot()}to be a Benny");
         }
 
@@ -249,7 +268,7 @@ namespace NExpect.Tests
                 {
                     Expect(p).To.Be.A.Benny();
                 });
-            }, (collection, passed) => 
+            }, (collection, passed) =>
                 $"Expected {collection.Stringify()} {passed.AsNot()}to all be Bennies");
         }
 

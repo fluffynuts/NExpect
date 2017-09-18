@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using NExpect.Exceptions;
 using NExpect.Interfaces;
 using static NExpect.Implementations.MessageHelpers;
@@ -60,13 +61,16 @@ namespace NExpect.MatcherLogic
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expectationsRunner">Runs your composed expectations</param>
+        /// <param name="callingMethod"></param>
         /// <typeparam name="T"></typeparam>
         public static void Compose<T>(
             this ICanAddMatcher<T> continuation,
-            Action<T> expectationsRunner
+            Action<T> expectationsRunner,
+            [CallerMemberName] string callingMethod = null
         )
         {
-            continuation.Compose(expectationsRunner, null);
+            continuation.Compose(expectationsRunner, 
+                (a, b) => $"{callingMethod} should {b.AsNot()}have passed.");
         }
 
         /// <summary>
@@ -91,10 +95,9 @@ namespace NExpect.MatcherLogic
                 }
                 catch (UnmetExpectationException e)
                 {
-                    var prefix = messageGenerator == null ? "" : "Specifically: ";
                     return new MatcherResult(false, 
                         FinalMessageFor(
-                            $"{prefix}{e.Message}",
+                            $"Specifically: {e.Message}",
                             messageGenerator?.Invoke(actual, false)
                         )
                     );
@@ -107,13 +110,15 @@ namespace NExpect.MatcherLogic
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expectationsRunner">Runs your composed expectations</param>
+        /// <param name="callingMethod"></param>
         /// <typeparam name="T"></typeparam>
         public static void Compose<T>(
             this ICanAddMatcher<IEnumerable<T>> continuation,
-            Action<IEnumerable<T>> expectationsRunner
+            Action<IEnumerable<T>> expectationsRunner,
+            [CallerMemberName] string callingMethod = null
         )
         {
-            continuation.Compose(expectationsRunner, null);
+            continuation.Compose(expectationsRunner, (a, b) => $"{callingMethod} should {b.AsNot()}have passed.");
         }
 
         /// <summary>
@@ -138,10 +143,9 @@ namespace NExpect.MatcherLogic
                 }
                 catch (UnmetExpectationException e)
                 {
-                    var prefix = messageGenerator == null ? "" : "Specifically: ";
                     return new MatcherResult(false, 
                         FinalMessageFor(
-                            $"{prefix}{e.Message}",
+                            $"Specifically: {e.Message}",
                             messageGenerator?.Invoke(actual, false)
                         )
                     );
