@@ -482,7 +482,7 @@ namespace NExpect
         }
 
 
-        private static Func<T, IMatcherResult> GenerateEqualityMatcherFor<T>(
+        internal static Func<T, IMatcherResult> GenerateEqualityMatcherFor<T>(
             T expected, 
             string customMessage
         )
