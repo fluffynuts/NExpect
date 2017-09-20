@@ -315,32 +315,331 @@ namespace NExpect.Tests.Collections
                             }
                         }
 
-                        //[TestFixture]
-                        //public class OperatingOnMisMatchedTypes
-                        //{
-                        //    [Test]
-                        //    public void WhenDictionaryValueIsByte_AndExpectedIsInt_ShouldThrow()
-                        //    {
-                        //        // Arrange
-                        //        var key = GetRandomString(2);
-                        //        var value = (sbyte)GetRandomInt(2);
-                        //        var src = new Dictionary<string, sbyte>()
-                        //        {
-                        //            [key] = value
-                        //        };
-                        //        var expected = (int)value;
-                        //        // Pre-Assert
+                        [TestFixture]
+                        public class OperatingOnMisMatchedTypes
+                        {
+                            [Test]
+                            public void WhenDictionaryValueIsSByte_AndExpectedIsInt_ValuesMatch_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var key = GetRandomString(2);
+                                var value = (sbyte)GetRandomInt(2);
+                                var src = new Dictionary<string, sbyte>()
+                                {
+                                    [key] = value
+                                };
+                                var expected = (int)value;
+                                // Pre-Assert
 
-                        //        // Act
-                        //        Assert.That(() =>
-                        //        {
-                        //            //Expect(src).To.Contain.Key(key).With.Value(expected);
-                        //        },
-                        //            Throws.Nothing);
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(src).To.Contain.Key(key).With.Value(expected);
+                                },
+                                    Throws.Nothing);
 
-                        //        // Assert
-                        //    }
-                        //}
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenDictionaryValueIsSByte_AndExpectedIsInt_ValuesDoNotMatch_ShouldThrow()
+                            {
+                                // Arrange
+                                var key = GetRandomString(2);
+                                var value = (sbyte)GetRandomInt(2);
+                                var src = new Dictionary<string, sbyte>()
+                                {
+                                    [key] = value
+                                };
+                                var expected = (int)GetAnother(value);
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(src).To.Contain.Key(key).With.Value(expected);
+                                    },
+                                    Throws.Exception.TypeOf<UnmetExpectationException>()
+                                    );
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenDictionaryValueIsShort_AndExpectedIsInt_ValuesMatch_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var key = GetRandomString(2);
+                                var value = (short)GetRandomInt(2);
+                                var src = new Dictionary<string, short>()
+                                {
+                                    [key] = value
+                                };
+                                var expected = (int)value;
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(src).To.Contain.Key(key).With.Value(expected);
+                                },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenDictionaryValueIsShort_AndExpectedIsInt_ValuesDoNotMatch_ShouldThrow()
+                            {
+                                // Arrange
+                                var key = GetRandomString(2);
+                                var value = (short)GetRandomInt(2);
+                                var src = new Dictionary<string, short>()
+                                {
+                                    [key] = value
+                                };
+                                var expected = (int)GetAnother(value);
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(src).To.Contain.Key(key).With.Value(expected);
+                                },
+                                    Throws.Exception.TypeOf<UnmetExpectationException>()
+                                    );
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenDictionaryValueIsInt_AndExpectedIsLong_ValuesMatch_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var key = GetRandomString(2);
+                                var value = GetRandomInt(2);
+                                var src = new Dictionary<string, int>()
+                                {
+                                    [key] = value
+                                };
+                                var expected = (long)value;
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(src).To.Contain.Key(key).With.Value(expected);
+                                },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenDictionaryValueIsInt_AndExpectedIsLong_ValuesDoNotMatch_ShouldThrow()
+                            {
+                                // Arrange
+                                var key = GetRandomString(2);
+                                var value = GetRandomInt(2);
+                                var src = new Dictionary<string, int>()
+                                {
+                                    [key] = value
+                                };
+                                var expected = (long)GetAnother(value);
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(src).To.Contain.Key(key).With.Value(expected);
+                                },
+                                    Throws.Exception.TypeOf<UnmetExpectationException>()
+                                    );
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenDictionaryValueIsByte_AndExpectedIsInt_ValuesMatch_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var key = GetRandomString(2);
+                                var value = (byte)GetRandomInt(2);
+                                var src = new Dictionary<string, byte>()
+                                {
+                                    [key] = value
+                                };
+                                var expected = (int)value;
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(src).To.Contain.Key(key).With.Value(expected);
+                                },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenDictionaryValueIsByte_AndExpectedIsInt_ValuesDoNotMatch_ShouldThrow()
+                            {
+                                // Arrange
+                                var key = GetRandomString(2);
+                                var value = (byte)GetRandomInt(2);
+                                var src = new Dictionary<string, byte>()
+                                {
+                                    [key] = value
+                                };
+                                var expected = (int)GetAnother(value);
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(src).To.Contain.Key(key).With.Value(expected);
+                                },
+                                    Throws.Exception.TypeOf<UnmetExpectationException>()
+                                    );
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenDictionaryValueIsUShort_AndExpectedIsInt_ValuesMatch_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var key = GetRandomString(2);
+                                var value = (ushort)GetRandomInt(2);
+                                var src = new Dictionary<string, ushort>()
+                                {
+                                    [key] = value
+                                };
+                                var expected = (int)value;
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(src).To.Contain.Key(key).With.Value(expected);
+                                },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenDictionaryValueIsUShort_AndExpectedIsInt_ValuesDoNotMatch_ShouldThrow()
+                            {
+                                // Arrange
+                                var key = GetRandomString(2);
+                                var value = (ushort)GetRandomInt(2);
+                                var src = new Dictionary<string, ushort>()
+                                {
+                                    [key] = value
+                                };
+                                var expected = (int)GetAnother(value);
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(src).To.Contain.Key(key).With.Value(expected);
+                                },
+                                    Throws.Exception.TypeOf<UnmetExpectationException>()
+                                    );
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenDictionaryValueIsUInt_AndExpectedIsLong_ValuesMatch_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var key = GetRandomString(2);
+                                var value = (uint)GetRandomInt(2);
+                                var src = new Dictionary<string, uint>()
+                                {
+                                    [key] = value
+                                };
+                                var expected = (long)value;
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(src).To.Contain.Key(key).With.Value(expected);
+                                },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenDictionaryValueIsUInt_AndExpectedIsLong_ValuesDoNotMatch_ShouldThrow()
+                            {
+                                // Arrange
+                                var key = GetRandomString(2);
+                                var value = (uint)GetRandomInt(2);
+                                var src = new Dictionary<string, uint>()
+                                {
+                                    [key] = value
+                                };
+                                var expected = (long)GetAnother(value);
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(src).To.Contain.Key(key).With.Value(expected);
+                                },
+                                    Throws.Exception.TypeOf<UnmetExpectationException>()
+                                    );
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenDictionaryValueIsFloat_AndExpectedIsDouble_ValuesMatch_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var key = GetRandomString(2);
+                                var value = 123f;
+                                var src = new Dictionary<string, float>()
+                                {
+                                    [key] = value
+                                };
+                                var expected = 123d;
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(src).To.Contain.Key(key).With.Value(expected);
+                                },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WhenDictionaryValueIsFloat_AndExpectedIsDouble_ValuesDoNotMatch_ShouldThrow()
+                            {
+                                // Arrange
+                                var key = GetRandomString(2);
+                                var value = 123.1f;
+                                var src = new Dictionary<string, float>()
+                                {
+                                    [key] = value
+                                };
+                                var expected = 54d;
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(src).To.Contain.Key(key).With.Value(expected);
+                                },
+                                    Throws.Exception.TypeOf<UnmetExpectationException>()
+                                    );
+                                // Assert
+                            }
+                        }
                     }
                 }
             }
