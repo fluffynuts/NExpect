@@ -42,5 +42,10 @@ namespace NExpect.Interfaces
         /// Use the extension method .Null() when you just want to test for null.
         /// </summary>
         INull<T> Null { get; }
+
+        /// <summary>
+        /// Provides the .For continuation extension point
+        /// </summary>
+        IFor<T> For { get; }
     }
 }

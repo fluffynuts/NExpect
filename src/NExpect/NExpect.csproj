@@ -156,6 +156,7 @@
     <Compile Include="Interfaces\IDictionaryValueContinuation.cs" />
     <Compile Include="Interfaces\IDictionaryValueWith.cs" />
     <Compile Include="Interfaces\IEqualityContinuation.cs" />
+    <Compile Include="Interfaces\IFor.cs" />
     <Compile Include="Interfaces\IGreaterContinuation.cs" />
     <Compile Include="Interfaces\IGreaterOrLessContinuation.cs" />
     <Compile Include="Interfaces\IGreaterThan.cs" />

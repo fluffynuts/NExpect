@@ -233,7 +233,7 @@ namespace NExpect.Tests
         }
     }
 
-    internal enum Genders
+    public enum Genders
     {
         Unknown,
         Male,
@@ -241,7 +241,7 @@ namespace NExpect.Tests
         Other
     }
 
-    internal class Person
+    public class Person
     {
         public string Name { get; set; }
         public Genders Gender { get; set; }
