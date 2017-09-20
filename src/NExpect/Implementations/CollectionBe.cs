@@ -24,6 +24,9 @@ namespace NExpect.Implementations
         public ICollectionAn<T> An =>
             Factory.Create<IEnumerable<T>, CollectionAn<T>>(Actual, this);
 
+        public ICollectionFor<T> For =>
+            Factory.Create<IEnumerable<T>, CollectionFor<T>>(Actual, this);
+
         public IEnumerable<T> Actual { get; }
 
         public CollectionBe(IEnumerable<T> actual)

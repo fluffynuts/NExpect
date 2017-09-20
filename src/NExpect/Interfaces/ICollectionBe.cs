@@ -34,5 +34,10 @@ namespace NExpect.Interfaces
         /// Prepares for instance testing
         /// </summary>
         ICollectionAn<T> An { get; }
+
+        /// <summary>
+        /// Starts the .For on a collection expectation
+        /// </summary>
+        ICollectionFor<T> For { get; }
     }
 }
