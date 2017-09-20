@@ -71,7 +71,7 @@ namespace NExpect.MatcherLogic
         )
         {
             continuation.Compose(expectationsRunner, 
-                (a, b) => $"{callingMethod} should {b.AsNot()}have passed.");
+                (a, b) => $"Expectation \"{callingMethod}\" should {(!b).AsNot()}have failed.");
         }
 
         /// <summary>
