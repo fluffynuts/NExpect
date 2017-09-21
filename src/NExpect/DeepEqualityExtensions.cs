@@ -1,7 +1,6 @@
 ﻿using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
-using PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -46,7 +45,7 @@ namespace NExpect
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
-                            $"Expected {Stringifier.Stringify(actual, Null)}\n{passed.AsNot()}to deep equal\n{Stringifier.Stringify(expected, Null)}",
+                            $"Expected {actual.Stringify()}\n{passed.AsNot()}to deep equal\n{expected.Stringify()}",
                             customMessage
                         )
                     );

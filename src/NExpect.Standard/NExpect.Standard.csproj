@@ -1,0 +1,187 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard1.6\NExpect.Standard.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\NExpect\Assertions.cs" Link="Assertions.cs" />
+    <Compile Include="..\NExpect\CollectionDeepEqualityExtensions.cs" Link="CollectionDeepEqualityExtensions.cs" />
+    <Compile Include="..\NExpect\CollectionExtensions.cs" Link="CollectionExtensions.cs" />
+    <Compile Include="..\NExpect\CollectionFluencyExtensions.cs" Link="CollectionFluencyExtensions.cs" />
+    <Compile Include="..\NExpect\DeepEqualityExtensions.cs" Link="DeepEqualityExtensions.cs" />
+    <Compile Include="..\NExpect\DeepEqualityTestingHelperExtensions.cs" Link="DeepEqualityTestingHelperExtensions.cs" />
+    <Compile Include="..\NExpect\DeepTestHelpers.cs" Link="DeepTestHelpers.cs" />
+    <Compile Include="..\NExpect\DictionaryExtensions.cs" Link="DictionaryExtensions.cs" />
+    <Compile Include="..\NExpect\EqualityProviderExtensions.cs" Link="EqualityProviderExtensions.cs" />
+    <Compile Include="..\NExpect\ExceptionExtensions.cs" Link="ExceptionExtensions.cs" />
+    <Compile Include="..\NExpect\ExceptionMessageContainuationToStringContainContinuation.cs" Link="ExceptionMessageContainuationToStringContainContinuation.cs" />
+    <Compile Include="..\NExpect\Exceptions\StackFrameExtensions.cs" Link="Exceptions\StackFrameExtensions.cs" />
+    <Compile Include="..\NExpect\Exceptions\UnmetExpectationException.cs" Link="Exceptions\UnmetExpectationException.cs" />
+    <Compile Include="..\NExpect\Expectations.cs" Link="Expectations.cs" />
+    <Compile Include="..\NExpect\GreaterAndLessContinuationExtensions.cs" Link="GreaterAndLessContinuationExtensions.cs" />
+    <Compile Include="..\NExpect\Implementations\A.cs" Link="Implementations\A.cs" />
+    <Compile Include="..\NExpect\Implementations\An.cs" Link="Implementations\An.cs" />
+    <Compile Include="..\NExpect\Implementations\And.cs" Link="Implementations\And.cs" />
+    <Compile Include="..\NExpect\Implementations\Be.cs" Link="Implementations\Be.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionAn.cs" Link="Implementations\CollectionAn.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionBe.cs" Link="Implementations\CollectionBe.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionDeep.cs" Link="Implementations\CollectionDeep.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionDeepEqual.cs" Link="Implementations\CollectionDeepEqual.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionDeepEquivalent.cs" Link="Implementations\CollectionDeepEquivalent.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionEqual.cs" Link="Implementations\CollectionEqual.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionEquivalent.cs" Link="Implementations\CollectionEquivalent.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionExpectation.cs" Link="Implementations\CollectionExpectation.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionFor.cs" Link="Implementations\CollectionFor.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionHave.cs" Link="Implementations\CollectionHave.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionIntersection.cs" Link="Implementations\CollectionIntersection.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionIntersectionEqual.cs" Link="Implementations\CollectionIntersectionEqual.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionIntersectionEquivalent.cs" Link="Implementations\CollectionIntersectionEquivalent.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionNot.cs" Link="Implementations\CollectionNot.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionNotAfterTo.cs" Link="Implementations\CollectionNotAfterTo.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionTo.cs" Link="Implementations\CollectionTo.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionToAfterNot.cs" Link="Implementations\CollectionToAfterNot.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionUnique.cs" Link="Implementations\CollectionUnique.cs" />
+    <Compile Include="..\NExpect\Implementations\Contain.cs" Link="Implementations\Contain.cs" />
+    <Compile Include="..\NExpect\Implementations\ContainAt.cs" Link="Implementations\ContainAt.cs" />
+    <Compile Include="..\NExpect\Implementations\CountMatchContinuation.cs" Link="Implementations\CountMatchContinuation.cs" />
+    <Compile Include="..\NExpect\Implementations\CountMatchDeep.cs" Link="Implementations\CountMatchDeep.cs" />
+    <Compile Include="..\NExpect\Implementations\CountMatchEqual.cs" Link="Implementations\CountMatchEqual.cs" />
+    <Compile Include="..\NExpect\Implementations\CountMatchMatched.cs" Link="Implementations\CountMatchMatched.cs" />
+    <Compile Include="..\NExpect\Implementations\Deep.cs" Link="Implementations\Deep.cs" />
+    <Compile Include="..\NExpect\Implementations\DefaultEqualityComparer.cs" Link="Implementations\DefaultEqualityComparer.cs" />
+    <Compile Include="..\NExpect\Implementations\DictionaryValueContinuation.cs" Link="Implementations\DictionaryValueContinuation.cs" />
+    <Compile Include="..\NExpect\Implementations\DictionaryValueWith.cs" Link="Implementations\DictionaryValueWith.cs" />
+    <Compile Include="..\NExpect\Implementations\EqualityContinuation.cs" Link="Implementations\EqualityContinuation.cs" />
+    <Compile Include="..\NExpect\Implementations\ExceptionCollectionPropertyContinuation.cs" Link="Implementations\ExceptionCollectionPropertyContinuation.cs" />
+    <Compile Include="..\NExpect\Implementations\ExceptionPropertyContinuation.cs" Link="Implementations\ExceptionPropertyContinuation.cs" />
+    <Compile Include="..\NExpect\Implementations\Expectation.cs" Link="Implementations\Expectation.cs" />
+    <Compile Include="..\NExpect\Implementations\ExpectationBase.cs" Link="Implementations\ExpectationBase.cs" />
+    <Compile Include="..\NExpect\Implementations\ExpectationContext.cs" Link="Implementations\ExpectationContext.cs" />
+    <Compile Include="..\NExpect\Implementations\Factory.cs" Link="Implementations\Factory.cs" />
+    <Compile Include="..\NExpect\Implementations\FuncComparer.cs" Link="Implementations\FuncComparer.cs" />
+    <Compile Include="..\NExpect\Implementations\GreaterContinuation.cs" Link="Implementations\GreaterContinuation.cs" />
+    <Compile Include="..\NExpect\Implementations\GreaterThan.cs" Link="Implementations\GreaterThan.cs" />
+    <Compile Include="..\NExpect\Implementations\GreaterThanAnd.cs" Link="Implementations\GreaterThanAnd.cs" />
+    <Compile Include="..\NExpect\Implementations\Have.cs" Link="Implementations\Have.cs" />
+    <Compile Include="..\NExpect\Implementations\InstanceContinuation.cs" Link="Implementations\InstanceContinuation.cs" />
+    <Compile Include="..\NExpect\Implementations\InstanceOfHelperExtensions.cs" Link="Implementations\InstanceOfHelperExtensions.cs" />
+    <Compile Include="..\NExpect\Implementations\Intersection.cs" Link="Implementations\Intersection.cs" />
+    <Compile Include="..\NExpect\Implementations\LessContinuation.cs" Link="Implementations\LessContinuation.cs" />
+    <Compile Include="..\NExpect\Implementations\MatcherRunner.cs" Link="Implementations\MatcherRunner.cs" />
+    <Compile Include="..\NExpect\Implementations\MessageHelpers.cs" Link="Implementations\MessageHelpers.cs" />
+    <Compile Include="..\NExpect\Implementations\More.cs" Link="Implementations\More.cs" />
+    <Compile Include="..\NExpect\Implementations\Not.cs" Link="Implementations\Not.cs" />
+    <Compile Include="..\NExpect\Implementations\NotAfterBe.cs" Link="Implementations\NotAfterBe.cs" />
+    <Compile Include="..\NExpect\Implementations\NotAfterTo.cs" Link="Implementations\NotAfterTo.cs" />
+    <Compile Include="..\NExpect\Implementations\Null.cs" Link="Implementations\Null.cs" />
+    <Compile Include="..\NExpect\Implementations\NullOr.cs" Link="Implementations\NullOr.cs" />
+    <Compile Include="..\NExpect\Implementations\StringContainContinuation.cs" Link="Implementations\StringContainContinuation.cs" />
+    <Compile Include="..\NExpect\Implementations\ThrowContinuation.cs" Link="Implementations\ThrowContinuation.cs" />
+    <Compile Include="..\NExpect\Implementations\To.cs" Link="Implementations\To.cs" />
+    <Compile Include="..\NExpect\Implementations\ToAfterNot.cs" Link="Implementations\ToAfterNot.cs" />
+    <Compile Include="..\NExpect\Implementations\TypeExtensions.cs" Link="Implementations\TypeExtensions.cs" />
+    <Compile Include="..\NExpect\Implementations\WithAfterThrowContinuation.cs" Link="Implementations\WithAfterThrowContinuation.cs" />
+    <Compile Include="..\NExpect\Implementations\WrappingContinuation.cs" Link="Implementations\WrappingContinuation.cs" />
+    <Compile Include="..\NExpect\Interfaces\CountMatchMethods.cs" Link="Interfaces\CountMatchMethods.cs" />
+    <Compile Include="..\NExpect\Interfaces\IA.cs" Link="Interfaces\IA.cs" />
+    <Compile Include="..\NExpect\Interfaces\IAn.cs" Link="Interfaces\IAn.cs" />
+    <Compile Include="..\NExpect\Interfaces\IAnd.cs" Link="Interfaces\IAnd.cs" />
+    <Compile Include="..\NExpect\Interfaces\IBe.cs" Link="Interfaces\IBe.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICanAddMatcher.cs" Link="Interfaces\ICanAddMatcher.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionAn.cs" Link="Interfaces\ICollectionAn.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionBe.cs" Link="Interfaces\ICollectionBe.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionDeep.cs" Link="Interfaces\ICollectionDeep.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionDeepEqual.cs" Link="Interfaces\ICollectionDeepEqual.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionDeepEquivalent.cs" Link="Interfaces\ICollectionDeepEquivalent.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionEqual.cs" Link="Interfaces\ICollectionEqual.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionEquivalent.cs" Link="Interfaces\ICollectionEquivalent.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionExpectation.cs" Link="Interfaces\ICollectionExpectation.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionFor.cs" Link="Interfaces\ICollectionFor.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionHave.cs" Link="Interfaces\ICollectionHave.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionIntersection.cs" Link="Interfaces\ICollectionIntersection.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionIntersectionEqual.cs" Link="Interfaces\ICollectionIntersectionEqual.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionIntersectionEquivalent.cs" Link="Interfaces\ICollectionIntersectionEquivalent.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionNot.cs" Link="Interfaces\ICollectionNot.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionNotAfterTo.cs" Link="Interfaces\ICollectionNotAfterTo.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionTo.cs" Link="Interfaces\ICollectionTo.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionToAfterNot.cs" Link="Interfaces\ICollectionToAfterNot.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionUnique.cs" Link="Interfaces\ICollectionUnique.cs" />
+    <Compile Include="..\NExpect\Interfaces\IContain.cs" Link="Interfaces\IContain.cs" />
+    <Compile Include="..\NExpect\Interfaces\IContainAt.cs" Link="Interfaces\IContainAt.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICountMatch.cs" Link="Interfaces\ICountMatch.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICountMatchContinuation.cs" Link="Interfaces\ICountMatchContinuation.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICountMatchDeep.cs" Link="Interfaces\ICountMatchDeep.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICountMatchDeepEqual.cs" Link="Interfaces\ICountMatchDeepEqual.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICountMatchEqual.cs" Link="Interfaces\ICountMatchEqual.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICountMatchIntersection.cs" Link="Interfaces\ICountMatchIntersection.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICountMatchIntersectionEqual.cs" Link="Interfaces\ICountMatchIntersectionEqual.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICountMatchMatched.cs" Link="Interfaces\ICountMatchMatched.cs" />
+    <Compile Include="..\NExpect\Interfaces\IDeep.cs" Link="Interfaces\IDeep.cs" />
+    <Compile Include="..\NExpect\Interfaces\IDictionaryValueContinuation.cs" Link="Interfaces\IDictionaryValueContinuation.cs" />
+    <Compile Include="..\NExpect\Interfaces\IDictionaryValueWith.cs" Link="Interfaces\IDictionaryValueWith.cs" />
+    <Compile Include="..\NExpect\Interfaces\IEqualityContinuation.cs" Link="Interfaces\IEqualityContinuation.cs" />
+    <Compile Include="..\NExpect\Interfaces\IExceptionPropertyContinuation.cs" Link="Interfaces\IExceptionPropertyContinuation.cs" />
+    <Compile Include="..\NExpect\Interfaces\IExpectation.cs" Link="Interfaces\IExpectation.cs" />
+    <Compile Include="..\NExpect\Interfaces\IExpectationContext.cs" Link="Interfaces\IExpectationContext.cs" />
+    <Compile Include="..\NExpect\Interfaces\IExpectationParentContext.cs" Link="Interfaces\IExpectationParentContext.cs" />
+    <Compile Include="..\NExpect\Interfaces\IFor.cs" Link="Interfaces\IFor.cs" />
+    <Compile Include="..\NExpect\Interfaces\IGreaterContinuation.cs" Link="Interfaces\IGreaterContinuation.cs" />
+    <Compile Include="..\NExpect\Interfaces\IGreaterOrLessContinuation.cs" Link="Interfaces\IGreaterOrLessContinuation.cs" />
+    <Compile Include="..\NExpect\Interfaces\IGreaterThan.cs" Link="Interfaces\IGreaterThan.cs" />
+    <Compile Include="..\NExpect\Interfaces\IGreaterThanAnd.cs" Link="Interfaces\IGreaterThanAnd.cs" />
+    <Compile Include="..\NExpect\Interfaces\IHasActual.cs" Link="Interfaces\IHasActual.cs" />
+    <Compile Include="..\NExpect\Interfaces\IHave.cs" Link="Interfaces\IHave.cs" />
+    <Compile Include="..\NExpect\Interfaces\IInstanceContinuation.cs" Link="Interfaces\IInstanceContinuation.cs" />
+    <Compile Include="..\NExpect\Interfaces\IIntersection.cs" Link="Interfaces\IIntersection.cs" />
+    <Compile Include="..\NExpect\Interfaces\ILessContinuation.cs" Link="Interfaces\ILessContinuation.cs" />
+    <Compile Include="..\NExpect\Interfaces\IMore.cs" Link="Interfaces\IMore.cs" />
+    <Compile Include="..\NExpect\Interfaces\INot.cs" Link="Interfaces\INot.cs" />
+    <Compile Include="..\NExpect\Interfaces\INotAfterBe.cs" Link="Interfaces\INotAfterBe.cs" />
+    <Compile Include="..\NExpect\Interfaces\INotAfterTo.cs" Link="Interfaces\INotAfterTo.cs" />
+    <Compile Include="..\NExpect\Interfaces\INull.cs" Link="Interfaces\INull.cs" />
+    <Compile Include="..\NExpect\Interfaces\INullOr.cs" Link="Interfaces\INullOr.cs" />
+    <Compile Include="..\NExpect\Interfaces\IStringContainContinuation.cs" Link="Interfaces\IStringContainContinuation.cs" />
+    <Compile Include="..\NExpect\Interfaces\IThrowContinuation.cs" Link="Interfaces\IThrowContinuation.cs" />
+    <Compile Include="..\NExpect\Interfaces\ITo.cs" Link="Interfaces\ITo.cs" />
+    <Compile Include="..\NExpect\Interfaces\IToAfterNot.cs" Link="Interfaces\IToAfterNot.cs" />
+    <Compile Include="..\NExpect\Interfaces\IWithAfterThrowContinuation.cs" Link="Interfaces\IWithAfterThrowContinuation.cs" />
+    <Compile Include="..\NExpect\IntersectionEqualityExtensions.cs" Link="IntersectionEqualityExtensions.cs" />
+    <Compile Include="..\NExpect\MatcherLogic\AddMatcherExtensions.cs" Link="MatcherLogic\AddMatcherExtensions.cs" />
+    <Compile Include="..\NExpect\MatcherLogic\IMatcherResult.cs" Link="MatcherLogic\IMatcherResult.cs" />
+    <Compile Include="..\NExpect\MatcherLogic\MatcherHelperExtensionMethods.cs" Link="MatcherLogic\MatcherHelperExtensionMethods.cs" />
+    <Compile Include="..\NExpect\MatcherLogic\MatcherResult.cs" Link="MatcherLogic\MatcherResult.cs" />
+    <Compile Include="..\NExpect\MatcherLogic\MoreExtensions.cs" Link="MatcherLogic\MoreExtensions.cs" />
+    <Compile Include="..\NExpect\MatchProviderExtensions.cs" Link="MatchProviderExtensions.cs" />
+    <Compile Include="..\NExpect\StringExtensions.cs" Link="StringExtensions.cs" />
+    <Compile Include="..\NExpect\TruthExtensions.cs" Link="TruthExtensions.cs" />
+    <Compile Include="..\NExpect\TypeExtensions.cs" Link="TypeExtensions.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ArrayExtensions.cs" Link="Imported\ArrayExtensions.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ByteArrayExtensions.cs" Link="Imported\ByteArrayExtensions.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DeepEqualityTester.cs" Link="Imported\DeepEqualityTester.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ExtensionsForIEnumerables.cs" Link="Imported\ExtensionsForIEnumerables.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PropertyOrField.cs" Link="Imported\PropertyOrField.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PyLike.cs" Link="Imported\PyLike.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\StringExtensions.cs" Link="Imported\StringExtensions.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Stringifier.cs" Link="Imported\Stringifier.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\TypeExtensions.cs" Link="Imported\TypeExtensions.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Types.cs" Link="Imported\Types.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+    <Folder Include="Implementations\" />
+    <Folder Include="Imported\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="MatcherLogic\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="system.diagnostics.stacktrace" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>

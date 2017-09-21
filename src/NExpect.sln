@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.14
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NExpect", "NExpect\NExpect.csproj", "{C850A6E9-1EC1-44E3-A1D1-9913E4425288}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NExpect.Tests", "NExpect.Tests\NExpect.Tests.csproj", "{C044137B-AA46-471F-AEF3-0A6D95D52DE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NExpect.Standard", "NExpect.Standard\NExpect.Standard.csproj", "{957E7D7A-D71F-45F6-8E60-3DD5DDFFA010}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +23,15 @@ Global
 		{C044137B-AA46-471F-AEF3-0A6D95D52DE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C044137B-AA46-471F-AEF3-0A6D95D52DE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C044137B-AA46-471F-AEF3-0A6D95D52DE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{957E7D7A-D71F-45F6-8E60-3DD5DDFFA010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{957E7D7A-D71F-45F6-8E60-3DD5DDFFA010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{957E7D7A-D71F-45F6-8E60-3DD5DDFFA010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{957E7D7A-D71F-45F6-8E60-3DD5DDFFA010}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {64CAF10D-A9A4-42A2-A5E7-4123B11F1CCD}
 	EndGlobalSection
 EndGlobal

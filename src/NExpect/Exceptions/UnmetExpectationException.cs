@@ -39,7 +39,13 @@ namespace NExpect.Exceptions
                 });
             return string.Join("",
                 interestingFrames
-                    .Select(f => new StackTrace(f))
+                    .Select(f =>
+#if NETSTANDARD1_6
+                    f
+#else
+                    new StackTrace(f)
+#endif
+                    )
                     .Select(f => f.ToString())
                     .Reverse()
             );

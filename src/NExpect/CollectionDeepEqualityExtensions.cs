@@ -5,7 +5,6 @@ using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
-using static PeanutButter.Utils.PyLike;
 using static NExpect.DeepTestHelpers;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable PossibleMultipleEnumeration
@@ -106,7 +105,7 @@ namespace NExpect
             return CollectionCompare(
                 collection,
                 expected,
-                (master, compare) => Zip(master, compare)
+                (master, compare) => master.Zip(compare, (o1, o2) => Tuple.Create(o1, o2))
                     .Aggregate(
                         true,
                         (acc, cur) => acc && AreDeepEqual(cur.Item1, cur.Item2)

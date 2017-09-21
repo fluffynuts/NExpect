@@ -2,6 +2,7 @@
 using System.Linq;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+using PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
 
 namespace NExpect
@@ -47,7 +48,7 @@ namespace NExpect
         {
             if (type == null)
                 return "(null Type)";
-            if (type.IsGenericType)
+            if (type.IsGenericType())
             {
                 if (type.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {

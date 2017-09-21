@@ -1,0 +1,109 @@
+﻿using System.Linq;
+using NExpect.Exceptions;
+using NExpect.Interfaces;
+using NExpect.MatcherLogic;
+using NUnit.Framework;
+using PeanutButter.Utils;
+using static PeanutButter.RandomGenerators.RandomValueGen;
+using static NExpect.Expectations;
+
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+
+namespace NExpect.Tests.DanglingPrepositions
+{
+    [TestFixture]
+    public class For
+    {
+        [TestFixture]
+        public class ForObjects
+        {
+            [Test]
+            public void ShouldProvideExtensionPoint()
+            {
+                // Arrange
+                var pet = GetRandom<Pet>();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(pet).To.Be.For.Owner(pet.Owner);
+                }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void ShouldProvideExtensionPoint_Negative()
+            {
+                // Arrange
+                var pet = GetRandom<Pet>();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(pet).Not.To.Be.For.Owner(pet.Owner);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+        }
+
+        [TestFixture]
+        public class ForCollections
+        {
+            [Test]
+            public void ShouldProvidExtensionPoint()
+            {
+                // Arrange
+                var pet1 = GetRandom<Pet>();
+                var pet2 = GetRandom<Pet>();
+                pet2.Owner = pet1.Owner;
+                var pets = new[] { pet1, pet2 };
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(pets).To.Be.For.Owner(pet1.Owner);
+                }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void ShouldProvidExtensionPoint_Negative()
+            {
+                // Arrange
+                var pet1 = GetRandom<Pet>();
+                var pet2 = GetRandom<Pet>();
+                pet2.Owner = pet1.Owner;
+                var pets = new[] { pet1, pet2 };
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(pets).Not.To.Be.For.Owner(pet1.Owner);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+        }
+    }
+
+    public class Pet
+    {
+        public Person Owner { get; set; }
+    }
+
+    internal static class ExtendingFor
+    {
+        internal static void Owner(this IFor<Pet> petFor, Person expectedOwner)
+        {
+            petFor.Compose(pet => Expect(pet.Owner).To.Deep.Equal(expectedOwner));
+        }
+
+        internal static void Owner(this ICollectionFor<Pet> petFor, Person expectedOwner)
+        {
+            petFor.Compose(pets =>
+            {
+                Expect(pets.All(p => p.Owner.DeepEquals(expectedOwner))).To.Be.True();
+            });
+        }
+    }
+}

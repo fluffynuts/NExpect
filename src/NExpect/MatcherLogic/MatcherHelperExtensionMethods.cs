@@ -2,6 +2,7 @@
 using System.Linq;
 using NExpect.Implementations;
 using NExpect.Interfaces;
+using PeanutButter.Utils;
 
 namespace NExpect.MatcherLogic
 {

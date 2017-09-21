@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using PeanutButter.Utils;
 
 namespace NExpect.Implementations
 {

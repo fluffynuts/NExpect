@@ -31,5 +31,7 @@
   <files>
     <file src="src\NExpect\bin\Debug\NExpect.dll" target="lib\net452"/>
     <file src="src\NExpect\bin\Debug\NExpect.xml" target="lib\net452"/>
+    <file src="src\NExpect.Standard\bin\Debug\netstandard1.6\NExpect.dll" target="lib\netstandard1.6"/>
+    <file src="src\NExpect.Standard\bin\Debug\netstandard1.6\NExpect.xml" target="lib\netstandard1.6"/>
   </files>
 </package>
