@@ -230,4 +230,7 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>del /s /q obj</PreBuildEvent>
+  </PropertyGroup>
 </Project>
