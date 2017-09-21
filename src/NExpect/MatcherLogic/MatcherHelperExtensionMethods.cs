@@ -2,6 +2,7 @@
 using System.Linq;
 using NExpect.Implementations;
 using NExpect.Interfaces;
+// ReSharper disable once RedundantUsingDirective
 using PeanutButter.Utils;
 
 namespace NExpect.MatcherLogic

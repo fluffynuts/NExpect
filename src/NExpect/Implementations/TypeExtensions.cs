@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+// ReSharper disable once RedundantUsingDirective
 using PeanutButter.Utils;
 
 namespace NExpect.Implementations

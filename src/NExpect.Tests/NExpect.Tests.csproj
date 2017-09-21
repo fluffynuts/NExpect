@@ -84,7 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NExpect\NExpect.csproj">
-      <Project>{c850a6e9-1ec1-44e3-a1d1-9913e4425288}</Project>
+      <Project>{C850A6E9-1EC1-44E3-A1D1-9913E4425288}</Project>
       <Name>NExpect</Name>
     </ProjectReference>
   </ItemGroup>

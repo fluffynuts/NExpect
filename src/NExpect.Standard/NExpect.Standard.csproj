@@ -6,6 +6,7 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard1.6\NExpect.Standard.xml</DocumentationFile>
+    <DefineConstants>TRACE;DEBUG;NETSTANDARD1_6, BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
