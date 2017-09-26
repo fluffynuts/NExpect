@@ -125,6 +125,7 @@
     <Compile Include="Implementations\More.cs" />
     <Compile Include="Implementations\Null.cs" />
     <Compile Include="Implementations\NullOr.cs" />
+    <Compile Include="Implementations\StringAnd.cs" />
     <Compile Include="Implementations\StringEnd.cs" />
     <Compile Include="Implementations\StringExpectation.cs" />
     <Compile Include="Implementations\StringNot.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="Interfaces\IMore.cs" />
     <Compile Include="Interfaces\INull.cs" />
     <Compile Include="Interfaces\INullOr.cs" />
+    <Compile Include="Interfaces\IStringAnd.cs" />
     <Compile Include="Interfaces\IStringContainContinuation.cs" />
     <Compile Include="Implementations\StringContainContinuation.cs" />
     <Compile Include="Implementations\CollectionExpectation.cs" />
@@ -188,6 +190,7 @@
     <Compile Include="Implementations\CollectionTo.cs" />
     <Compile Include="Implementations\CollectionToAfterNot.cs" />
     <Compile Include="Interfaces\ICollectionExpectation.cs" />
+    <Compile Include="Interfaces\IStringMore.cs" />
     <Compile Include="Interfaces\IStringToAfterNot.cs" />
     <Compile Include="IntersectionEqualityExtensions.cs" />
     <Compile Include="MatcherLogic\MatcherHelperExtensionMethods.cs" />

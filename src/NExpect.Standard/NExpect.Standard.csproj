@@ -83,6 +83,7 @@
     <Compile Include="..\NExpect\Implementations\NotAfterTo.cs" Link="Implementations\NotAfterTo.cs" />
     <Compile Include="..\NExpect\Implementations\Null.cs" Link="Implementations\Null.cs" />
     <Compile Include="..\NExpect\Implementations\NullOr.cs" Link="Implementations\NullOr.cs" />
+    <Compile Include="..\NExpect\Implementations\StringAnd.cs" Link="Implementations\StringAnd.cs" />
     <Compile Include="..\NExpect\Implementations\StringContainContinuation.cs" Link="Implementations\StringContainContinuation.cs" />
     <Compile Include="..\NExpect\Implementations\StringEnd.cs" Link="Implementations\StringEnd.cs" />
     <Compile Include="..\NExpect\Implementations\StringExpectation.cs" Link="Implementations\StringExpectation.cs" />
@@ -155,7 +156,9 @@
     <Compile Include="..\NExpect\Interfaces\INotAfterTo.cs" Link="Interfaces\INotAfterTo.cs" />
     <Compile Include="..\NExpect\Interfaces\INull.cs" Link="Interfaces\INull.cs" />
     <Compile Include="..\NExpect\Interfaces\INullOr.cs" Link="Interfaces\INullOr.cs" />
+    <Compile Include="..\NExpect\Interfaces\IStringAnd.cs" Link="Interfaces\IStringAnd.cs" />
     <Compile Include="..\NExpect\Interfaces\IStringContainContinuation.cs" Link="Interfaces\IStringContainContinuation.cs" />
+    <Compile Include="..\NExpect\Interfaces\IStringMore.cs" Link="Interfaces\IStringMore.cs" />
     <Compile Include="..\NExpect\Interfaces\IStringToAfterNot.cs" Link="Interfaces\IStringToAfterNot.cs" />
     <Compile Include="..\NExpect\Interfaces\IThrowContinuation.cs" Link="Interfaces\IThrowContinuation.cs" />
     <Compile Include="..\NExpect\Interfaces\ITo.cs" Link="Interfaces\ITo.cs" />

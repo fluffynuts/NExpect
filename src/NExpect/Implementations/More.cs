@@ -16,4 +16,19 @@ namespace NExpect.Implementations
             Actual = actual;
         }
     }
+
+    internal class StringMore
+        : ExpectationContext<string>,
+            IStringMore
+    {
+        public string Actual { get; }
+
+        public IStringAnd And =>
+            Factory.Create<string, StringAnd>(Actual, this);
+
+        public StringMore(string actual)
+        {
+            Actual = actual;
+        }
+    }
 }

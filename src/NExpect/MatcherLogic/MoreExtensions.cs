@@ -25,5 +25,21 @@ namespace NExpect.MatcherLogic
                 continuation as IExpectationContext<T>
             );
         }
+
+        /// <summary>
+        /// Creates an object with .And on it which you can use to chain on more
+        /// expectations, eg Expect(1).To.Be.SomeCustomMatcher().And.SomeOtherMatcher()
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <returns></returns>
+        public static IStringMore More(
+            this ICanAddMatcher<string> continuation
+        )
+        {
+            return Factory.Create<string, StringMore>(
+                continuation.GetActual(), 
+                continuation as IExpectationContext<string>
+            );
+        }
     }
 }

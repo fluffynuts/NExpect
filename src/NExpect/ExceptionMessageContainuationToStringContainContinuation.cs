@@ -13,5 +13,8 @@ namespace NExpect
         {
             Actual = actual;
         }
+
+        public IStringAnd And => 
+            Factory.Create<string, StringAnd>(Actual, this);
     }
 }

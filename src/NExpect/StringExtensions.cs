@@ -46,7 +46,7 @@ namespace NExpect
         /// </summary>
         /// <param name="start">Continuation to operate on</param>
         /// <param name="expected">String that is expected at the start of the Actual</param>
-        public static IMore<string> With(
+        public static IStringMore With(
             this IStringStart start,
             string expected
         )
@@ -60,7 +60,7 @@ namespace NExpect
         /// <param name="start">Continuation to operate on</param>
         /// <param name="expected">String that is expected at the start of the Actual</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
-        public static IMore<string> With(
+        public static IStringMore With(
             this IStringStart start,
             string expected,
             string customMessage
@@ -85,7 +85,7 @@ namespace NExpect
         /// </summary>
         /// <param name="end">Continuation to operate on</param>
         /// <param name="expected">String that is expected at the end of the Actual</param>
-        public static IMore<string> With(
+        public static IStringMore With(
             this IStringEnd end,
             string expected
         )
@@ -99,7 +99,7 @@ namespace NExpect
         /// <param name="end">Continuation to operate on</param>
         /// <param name="expected">String that is expected at the start of the Actual</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
-        public static IMore<string> With(
+        public static IStringMore With(
             this IStringEnd end,
             string expected,
             string customMessage
