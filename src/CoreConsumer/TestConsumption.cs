@@ -8,13 +8,29 @@ namespace CoreConsumer
     public class TestConsumption
     {
         [Test]
-        public void ShouldBeAbleToExpect()
+        public void ShouldBeAbleToExpect_Pass()
         {
             // Arrange
             // Pre-Assert
             // Act
-            Expect(1).To.Equal(1);
+            PerformExpectation(1, 1);
             // Assert
+        }
+
+        [Test]
+        [Explicit("Run to see stack trace")]
+        public void ShouldBeAbleToExpect_Fail()
+        {
+            // Arrange
+            // Pre-Assert
+            // Act
+            PerformExpectation(1, 2);
+            // Assert
+        }
+
+        private static void PerformExpectation(int left, int right)
+        {
+            Expect(left).To.Equal(right);
         }
     }
 }
