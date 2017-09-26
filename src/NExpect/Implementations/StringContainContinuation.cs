@@ -4,11 +4,12 @@ using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations
 {
-    internal class StringContainContinuation: 
+    internal class StringContainContinuation :
         IStringContainContinuation,
         IExpectationContext<string>
     {
         public IExpectationContext Parent => _expectationContext;
+
         IExpectationContext<string> IExpectationContext<string>.TypedParent
         {
             get => _expectationContext.TypedParent;
@@ -18,7 +19,9 @@ namespace NExpect.Implementations
         private readonly IExpectationContext<string> _expectationContext;
         public string Actual { get; }
 
-        public StringContainContinuation(ICanAddMatcher<string> continuation)
+        public StringContainContinuation(
+            ICanAddMatcher<string> continuation
+        )
         {
             Actual = continuation.GetActual();
             _expectationContext = continuation as IExpectationContext<string>;
@@ -40,7 +43,7 @@ namespace NExpect.Implementations
             _expectationContext.RunMatcher(matcher);
         }
 
-        public IStringAnd And => 
+        public IStringAnd And =>
             Factory.Create<string, StringAnd>(Actual, this);
     }
 }

@@ -122,7 +122,12 @@ namespace NExpect
             src.AddMatcher(s =>
             {
                 result.Actual = s;
-                var passed = s?.Contains(search) ?? false;
+                var nextOffset = s?.IndexOf(search) ?? -1;
+                if (nextOffset > -1)
+                    nextOffset += search?.Length ?? 0;
+                result.SetMetadata(SearchOffset, nextOffset);
+
+                var passed = nextOffset > -1;
                 return new MatcherResult(
                     passed,
                     MessageHelpers.MessageForContainsResult(
@@ -132,6 +137,8 @@ namespace NExpect
             });
             return result;
         }
+
+        private const string SearchOffset = "SearchOffset";
 
         /// <summary>
         /// Used to test exception messages

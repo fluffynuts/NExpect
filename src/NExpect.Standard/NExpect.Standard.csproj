@@ -77,6 +77,7 @@
     <Compile Include="..\NExpect\Implementations\LessContinuation.cs" Link="Implementations\LessContinuation.cs" />
     <Compile Include="..\NExpect\Implementations\MatcherRunner.cs" Link="Implementations\MatcherRunner.cs" />
     <Compile Include="..\NExpect\Implementations\MessageHelpers.cs" Link="Implementations\MessageHelpers.cs" />
+    <Compile Include="..\NExpect\Implementations\MetadataExtensions.cs" Link="Implementations\MetadataExtensions.cs" />
     <Compile Include="..\NExpect\Implementations\More.cs" Link="Implementations\More.cs" />
     <Compile Include="..\NExpect\Implementations\Not.cs" Link="Implementations\Not.cs" />
     <Compile Include="..\NExpect\Implementations\NotAfterBe.cs" Link="Implementations\NotAfterBe.cs" />
@@ -175,6 +176,7 @@
     <Compile Include="..\NExpect\TruthExtensions.cs" Link="TruthExtensions.cs" />
     <Compile Include="..\NExpect\TypeExtensions.cs" Link="TypeExtensions.cs" />
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ArrayExtensions.cs" Link="Imported\ArrayExtensions.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\AutoLocker.cs" Link="Imported\AutoLocker.cs" />
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ByteArrayExtensions.cs" Link="Imported\ByteArrayExtensions.cs" />
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DeepEqualityTester.cs" Link="Imported\DeepEqualityTester.cs" />
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ExtensionsForIEnumerables.cs" Link="Imported\ExtensionsForIEnumerables.cs" />

@@ -45,6 +45,9 @@
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ArrayExtensions.cs">
       <Link>Imported\ArrayExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\AutoLocker.cs">
+      <Link>Imported\AutoLocker.cs</Link>
+    </Compile>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ByteArrayExtensions.cs">
       <Link>Imported\ByteArrayExtensions.cs</Link>
     </Compile>
@@ -122,6 +125,7 @@
     <Compile Include="Implementations\Intersection.cs" />
     <Compile Include="Implementations\LessContinuation.cs" />
     <Compile Include="Implementations\MatcherRunner.cs" />
+    <Compile Include="Implementations\MetadataExtensions.cs" />
     <Compile Include="Implementations\More.cs" />
     <Compile Include="Implementations\Null.cs" />
     <Compile Include="Implementations\NullOr.cs" />

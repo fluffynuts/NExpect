@@ -74,6 +74,7 @@
     <Compile Include="ObjectEquality\Strings\NullorEmpty.cs" />
     <Compile Include="ObjectEquality\Strings\NullOrWhitespace.cs" />
     <Compile Include="ObjectEquality\Strings\MoreStringExpectations.cs" />
+    <Compile Include="ObjectEquality\Strings\OrderedPartialContaining.cs" />
     <Compile Include="ObjectEquality\Strings\StartingWith.cs" />
     <Compile Include="ObjectEquality\Strings\Equality.cs" />
     <Compile Include="ObjectEquality\TestingForNull.cs" />

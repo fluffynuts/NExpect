@@ -39,9 +39,11 @@ namespace NExpect
             string customMessage
         )
         {
-            AddContainsMatcherTo(continuation, search, customMessage);
-            return new StringContainContinuation(continuation);
+            var result = new StringContainContinuation(continuation);
+            AddContainsMatcherTo(continuation, search, customMessage, result);
+            return result;
         }
+
 
         /// <summary>
         /// Continue testing a string for another substring
@@ -70,8 +72,42 @@ namespace NExpect
             string customMessage
         )
         {
-            AddContainsMatcherTo(continuation, search, customMessage);
-            return new StringContainContinuation(continuation);
+            var result = new StringContainContinuation(continuation);
+            continuation.SetMetadata(SearchOffset, 0); // And will reset the offset -- it's not ordered
+            AddContainsMatcherTo(continuation, search, customMessage, result);
+            return result;
+        }
+
+        /// <summary>
+        /// Continue testing a string for another substring from beyond the end of the last match
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="search">String to search for</param>
+        /// <returns></returns>
+        public static IStringContainContinuation Then(
+            this IStringContainContinuation continuation,
+            string search
+        )
+        {
+            return continuation.Then(search, null);
+        }
+
+        /// <summary>
+        /// Continue testing a string for another substring from beyond the end of the last match
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="search">String to search for</param>
+        /// <param name="customMessage"></param>
+        /// <returns></returns>
+        public static IStringContainContinuation Then(
+            this IStringContainContinuation continuation,
+            string search,
+            string customMessage
+        )
+        {
+            var result = new StringContainContinuation(continuation);
+            AddContainsMatcherTo(continuation, search, customMessage, result);
+            return result;
         }
 
         /// <summary>
@@ -153,21 +189,30 @@ namespace NExpect
         }
 
 
+        private const string SearchOffset = "SearchOffset";
+
         private static void AddContainsMatcherTo(
             ICanAddMatcher<string> continuation,
             string search,
-            string customMessage
+            string customMessage,
+            StringContainContinuation next
         )
         {
             continuation.AddMatcher(s =>
             {
-                var passed = s?.Contains(search) ?? false;
+                var priorOffset = continuation.GetMetadata<int>(SearchOffset);
+                var nextOffset = s?.IndexOf(search, priorOffset) ?? -1;
+                if (nextOffset > -1)
+                    nextOffset += search?.Length ?? 0;
+
+                next.SetMetadata(SearchOffset, nextOffset);
+
+                var passed = nextOffset > -1;
+                var offsetMessage = priorOffset > 0 ? $" after index {priorOffset}" : "";
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        MessageForContainsResult(
-                            passed, s, search
-                        ),
+                        $"Expected {s.Stringify()} {passed.AsNot()}to contain {search.Stringify()}{offsetMessage}",
                         customMessage
                     )
                 );
