@@ -22,7 +22,24 @@ namespace NExpect
             string search
         )
         {
-            AddContainsMatcherTo(continuation, search);
+            return continuation.Contain(search, null);
+        }
+
+        /// <summary>
+        /// Tests if the value under test contains a given string. May be continued
+        /// with ".And"
+        /// </summary>
+        /// <param name="continuation">Continuation to act on</param>
+        /// <param name="search">String value to search for</param>
+        /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <returns>IStringContainContinuation onto which you can chain .And</returns>
+        public static IStringContainContinuation Contain(
+            this ICanAddMatcher<string> continuation,
+            string search,
+            string customMessage
+        )
+        {
+            AddContainsMatcherTo(continuation, search, customMessage);
             return new StringContainContinuation(continuation);
         }
 
@@ -37,7 +54,23 @@ namespace NExpect
             string search
         )
         {
-            AddContainsMatcherTo(continuation, search);
+            return continuation.And(search, null);
+        }
+
+        /// <summary>
+        /// Continue testing a string for another substring
+        /// </summary>
+        /// <param name="continuation">Existing continuation fron a Contain()</param>
+        /// <param name="search">string to search for</param>
+        /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <returns>IStringContainContinuation onto which you can chain .And</returns>
+        public static IStringContainContinuation And(
+            this IStringContainContinuation continuation,
+            string search,
+            string customMessage
+        )
+        {
+            AddContainsMatcherTo(continuation, search, customMessage);
             return new StringContainContinuation(continuation);
         }
 
@@ -122,7 +155,8 @@ namespace NExpect
 
         private static void AddContainsMatcherTo(
             ICanAddMatcher<string> continuation,
-            string search
+            string search,
+            string customMessage
         )
         {
             continuation.AddMatcher(s =>
@@ -130,8 +164,11 @@ namespace NExpect
                 var passed = s?.Contains(search) ?? false;
                 return new MatcherResult(
                     passed,
-                    MessageForContainsResult(
-                        passed, s, search
+                    FinalMessageFor(
+                        MessageForContainsResult(
+                            passed, s, search
+                        ),
+                        customMessage
                     )
                 );
             });

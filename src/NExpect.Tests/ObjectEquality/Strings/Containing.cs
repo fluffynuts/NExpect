@@ -1,5 +1,6 @@
 using NExpect.Exceptions;
 using NUnit.Framework;
+using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
 
 namespace NExpect.Tests.ObjectEquality.Strings
@@ -46,6 +47,26 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         },
                         Throws.Exception.InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains("Expected \"cow-moo-cow\" to contain \"foo\""));
+
+                    // Assert
+                }
+
+                [Test]
+                public void WhenActualDoesNotContainSearch_ShouldThrowWithCustomMessage()
+                {
+                    // Arrange
+                    var actual = "cow-moo-cow";
+                    var search = "foo";
+                    var expected = GetRandomString(2);
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Contain(search, expected);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains(expected));
 
                     // Assert
                 }
@@ -103,6 +124,25 @@ namespace NExpect.Tests.ObjectEquality.Strings
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>()
                                 .With.Message.Contains("\"a-b-c\" to contain \"f\""));
+                        // Assert
+                    }
+
+                    [Test]
+                    public void WhenActualMissingSecondBit_ShouldThrowWithCustomMessage()
+                    {
+                        // Arrange
+                        var actual = "a-b-c";
+                        var first = "b";
+                        var second = "f";
+                        var expected = GetRandomString(2);
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                            {
+                                Expect(actual).To.Contain(first).And(second, expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains(expected));
                         // Assert
                     }
 
