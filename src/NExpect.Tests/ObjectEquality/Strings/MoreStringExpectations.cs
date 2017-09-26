@@ -107,5 +107,125 @@ namespace NExpect.Tests.ObjectEquality.Strings
             // Assert
         }
         
+        [Test]
+        public void PositiveAssertion_ShorterSyntax_WhenShouldPass_ShouldNotThrow()
+        {
+            // Arrange
+            var start = GetRandomString(2);
+            var middle = GetRandomString();
+            var end = GetRandomString(2);
+            var actual = $"{start}{middle}{end}";
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(actual)
+                    .To.Start.With(start)
+                    .And.Contain(middle)
+                    .And.End.With(end);
+            }, Throws.Nothing);
+            // Assert
+        }
+        
+        [Test]
+        public void PositiveAssertion_ShorterSyntaxFlipped_WhenShouldPass_ShouldNotThrow()
+        {
+            // Arrange
+            var start = GetRandomString(2);
+            var middle = GetRandomString();
+            var end = GetRandomString(2);
+            var actual = $"{start}{middle}{end}";
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(actual)
+                    .To.End.With(end)
+                    .And.Contain(middle)
+                    .And.Start.With(start);
+            }, Throws.Nothing);
+            // Assert
+        }
+        
+        [Test]
+        public void PositiveAssertion_ShorterSyntax_WhenShouldFail_ShouldThrow()
+        {
+            // Arrange
+            var start = GetRandomString(2);
+            var middle = GetRandomString();
+            var end = GetRandomString(2);
+            var actual = $"{start}{middle}{end}";
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(actual)
+                    .To.Start.With(end)
+                    .And.Contain(middle)
+                    .And.End.With(start);
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            // Assert
+        }
+        
+        [Test]
+        public void PositiveAssertion_ShorterSyntaxFlipped_WhenShouldFail_ShouldThrow()
+        {
+            // Arrange
+            var start = GetRandomString(2);
+            var middle = GetRandomString();
+            var end = GetRandomString(2);
+            var actual = $"{start}{middle}{end}";
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(actual)
+                    .To.End.With(start)
+                    .And.Contain(middle)
+                    .And.Start.With(end);
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            // Assert
+        }
+        
+        [Test]
+        public void NegativeAssertion_ShorterSyntax_WhenShouldPass_ShouldNotThrow()
+        {
+            // Arrange
+            var start = GetRandomString(2);
+            var middle = GetRandomString();
+            var end = GetRandomString(2);
+            var actual = $"{start}{middle}{end}";
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(actual)
+                    .To.Start.With(start)
+                    .And.Contain(middle)
+                    .And.Not.End.With(start);
+            }, Throws.Nothing);
+            // Assert
+        }
+        
+        [Test]
+        public void NegativeAssertion_ShorterSyntax_WhenShouldFail_ShouldThrow()
+        {
+            // Arrange
+            var start = GetRandomString(2);
+            var middle = GetRandomString();
+            var end = GetRandomString(2);
+            var actual = $"{start}{middle}{end}";
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(actual)
+                    .To.Start.With(start)
+                    .And.Contain(middle)
+                    .And.Not.End.With(end);
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            // Assert
+        }
+        
     }
 }
