@@ -69,20 +69,6 @@ namespace NExpect.Tests.ObjectEquality
                     }
 
                     [Test]
-                    public void ExpectOnPureNull()
-                    {
-                        // Arrange
-                        // Pre-Assert
-                        // Act
-                        Assert.That(() =>
-                            {
-                                Expect(null).To.Be.Null();
-                            },
-                            Throws.Nothing);
-                        // Assert
-                    }
-
-                    [Test]
                     public void OperatingOnObjectAltNegated_WhenIsNull_ShouldThrow()
                     {
                         // Arrange

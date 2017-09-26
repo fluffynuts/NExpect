@@ -69,9 +69,15 @@
     <Compile Include="Collections\TestCollectionExtensions.cs" />
     <Compile Include="DanglingPrepositions\For.cs" />
     <Compile Include="EnablingUserComposition.cs" />
+    <Compile Include="ObjectEquality\Strings\Containing.cs" />
+    <Compile Include="ObjectEquality\Strings\EndingWith.cs" />
+    <Compile Include="ObjectEquality\Strings\NullorEmpty.cs" />
+    <Compile Include="ObjectEquality\Strings\NullOrWhitespace.cs" />
+    <Compile Include="ObjectEquality\Strings\StartingWith.cs" />
+    <Compile Include="ObjectEquality\Strings\Equality.cs" />
     <Compile Include="ObjectEquality\TestingForNull.cs" />
     <Compile Include="ObjectEquality\TestingNullableTypes.cs" />
-    <Compile Include="ObjectEquality\TestingStringValues.cs" />
+    <Compile Include="ObjectEquality\Strings\Empty.cs" />
     <Compile Include="Exceptions\EnforcingThrownExceptions.cs" />
     <Compile Include="ObjectEquality\TestingObjectEquality.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

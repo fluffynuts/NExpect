@@ -125,6 +125,13 @@
     <Compile Include="Implementations\More.cs" />
     <Compile Include="Implementations\Null.cs" />
     <Compile Include="Implementations\NullOr.cs" />
+    <Compile Include="Implementations\StringEnd.cs" />
+    <Compile Include="Implementations\StringExpectation.cs" />
+    <Compile Include="Implementations\StringNot.cs" />
+    <Compile Include="Implementations\StringNotAfterTo.cs" />
+    <Compile Include="Implementations\StringStart.cs" />
+    <Compile Include="Implementations\StringTo.cs" />
+    <Compile Include="Implementations\StringToAfterNot.cs" />
     <Compile Include="Implementations\TypeExtensions.cs" />
     <Compile Include="Interfaces\CountMatchMethods.cs" />
     <Compile Include="Interfaces\IA.cs" />
@@ -181,6 +188,7 @@
     <Compile Include="Implementations\CollectionTo.cs" />
     <Compile Include="Implementations\CollectionToAfterNot.cs" />
     <Compile Include="Interfaces\ICollectionExpectation.cs" />
+    <Compile Include="Interfaces\IStringToAfterNot.cs" />
     <Compile Include="IntersectionEqualityExtensions.cs" />
     <Compile Include="MatcherLogic\MatcherHelperExtensionMethods.cs" />
     <Compile Include="MatcherLogic\MoreExtensions.cs" />

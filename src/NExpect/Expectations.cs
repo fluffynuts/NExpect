@@ -104,6 +104,16 @@ namespace NExpect
         }
 
         /// <summary>
+        /// Starts a string-specific expectation
+        /// </summary>
+        /// <param name="value">Actual value to test</param>
+        /// <returns></returns>
+        public static IStringExpectation Expect(string value)
+        {
+            return new StringExpectation(value);
+        }
+
+        /// <summary>
         /// Start an expectation with an action. Usually used to check
         /// if said action throws an exception
         /// </summary>
@@ -315,4 +325,5 @@ namespace NExpect
             return new CollectionExpectation<KeyValuePair<TKey, TValue>>(dictionary);
         }
     }
+
 }

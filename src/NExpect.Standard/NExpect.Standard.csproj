@@ -84,6 +84,13 @@
     <Compile Include="..\NExpect\Implementations\Null.cs" Link="Implementations\Null.cs" />
     <Compile Include="..\NExpect\Implementations\NullOr.cs" Link="Implementations\NullOr.cs" />
     <Compile Include="..\NExpect\Implementations\StringContainContinuation.cs" Link="Implementations\StringContainContinuation.cs" />
+    <Compile Include="..\NExpect\Implementations\StringEnd.cs" Link="Implementations\StringEnd.cs" />
+    <Compile Include="..\NExpect\Implementations\StringExpectation.cs" Link="Implementations\StringExpectation.cs" />
+    <Compile Include="..\NExpect\Implementations\StringNot.cs" Link="Implementations\StringNot.cs" />
+    <Compile Include="..\NExpect\Implementations\StringNotAfterTo.cs" Link="Implementations\StringNotAfterTo.cs" />
+    <Compile Include="..\NExpect\Implementations\StringStart.cs" Link="Implementations\StringStart.cs" />
+    <Compile Include="..\NExpect\Implementations\StringTo.cs" Link="Implementations\StringTo.cs" />
+    <Compile Include="..\NExpect\Implementations\StringToAfterNot.cs" Link="Implementations\StringToAfterNot.cs" />
     <Compile Include="..\NExpect\Implementations\ThrowContinuation.cs" Link="Implementations\ThrowContinuation.cs" />
     <Compile Include="..\NExpect\Implementations\To.cs" Link="Implementations\To.cs" />
     <Compile Include="..\NExpect\Implementations\ToAfterNot.cs" Link="Implementations\ToAfterNot.cs" />
@@ -149,6 +156,7 @@
     <Compile Include="..\NExpect\Interfaces\INull.cs" Link="Interfaces\INull.cs" />
     <Compile Include="..\NExpect\Interfaces\INullOr.cs" Link="Interfaces\INullOr.cs" />
     <Compile Include="..\NExpect\Interfaces\IStringContainContinuation.cs" Link="Interfaces\IStringContainContinuation.cs" />
+    <Compile Include="..\NExpect\Interfaces\IStringToAfterNot.cs" Link="Interfaces\IStringToAfterNot.cs" />
     <Compile Include="..\NExpect\Interfaces\IThrowContinuation.cs" Link="Interfaces\IThrowContinuation.cs" />
     <Compile Include="..\NExpect\Interfaces\ITo.cs" Link="Interfaces\ITo.cs" />
     <Compile Include="..\NExpect\Interfaces\IToAfterNot.cs" Link="Interfaces\IToAfterNot.cs" />
@@ -177,9 +185,7 @@
 
   <ItemGroup>
     <Folder Include="Exceptions\" />
-    <Folder Include="Implementations\" />
     <Folder Include="Imported\" />
-    <Folder Include="Interfaces\" />
     <Folder Include="MatcherLogic\" />
   </ItemGroup>
 

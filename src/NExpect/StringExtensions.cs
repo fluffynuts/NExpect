@@ -1,6 +1,7 @@
 ﻿using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+using static NExpect.Implementations.MessageHelpers;
 
 namespace NExpect
 {
@@ -40,6 +41,85 @@ namespace NExpect
             return new StringContainContinuation(continuation);
         }
 
+        /// <summary>
+        /// Tests if a string starts with an expected value
+        /// </summary>
+        /// <param name="start">Continuation to operate on</param>
+        /// <param name="expected">String that is expected at the start of the Actual</param>
+        public static IMore<string> With(
+            this IStringStart start,
+            string expected
+        )
+        {
+            return start.With(expected, null);
+        }
+
+        /// <summary>
+        /// Tests if a string starts with an expected value
+        /// </summary>
+        /// <param name="start">Continuation to operate on</param>
+        /// <param name="expected">String that is expected at the start of the Actual</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        public static IMore<string> With(
+            this IStringStart start,
+            string expected,
+            string customMessage
+        )
+        {
+            start.AddMatcher(actual =>
+            {
+                var passed = actual?.StartsWith(expected) ?? false;
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        $"Expected {actual.Stringify()} {passed.AsNot()}to start with {expected.Stringify()}",
+                        customMessage
+                    )
+                );
+            });
+            return start.More();
+        }
+
+        /// <summary>
+        /// Tests if a string ends with an expected value
+        /// </summary>
+        /// <param name="end">Continuation to operate on</param>
+        /// <param name="expected">String that is expected at the end of the Actual</param>
+        public static IMore<string> With(
+            this IStringEnd end,
+            string expected
+        )
+        {
+            return end.With(expected, null);
+        }
+
+        /// <summary>
+        /// Tests if a string ends with an expected value
+        /// </summary>
+        /// <param name="end">Continuation to operate on</param>
+        /// <param name="expected">String that is expected at the start of the Actual</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        public static IMore<string> With(
+            this IStringEnd end,
+            string expected,
+            string customMessage
+        )
+        {
+            end.AddMatcher(actual =>
+            {
+                var passed = actual?.EndsWith(expected) ?? false;
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        $"Expected {actual.Stringify()} {passed.AsNot()}to end with {expected.Stringify()}",
+                        customMessage
+                    )
+                );
+            });
+            return end.More();
+        }
+
+
         private static void AddContainsMatcherTo(
             ICanAddMatcher<string> continuation,
             string search
@@ -50,7 +130,7 @@ namespace NExpect
                 var passed = s?.Contains(search) ?? false;
                 return new MatcherResult(
                     passed,
-                    MessageHelpers.MessageForContainsResult(
+                    MessageForContainsResult(
                         passed, s, search
                     )
                 );
