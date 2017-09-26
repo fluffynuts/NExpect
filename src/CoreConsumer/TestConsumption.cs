@@ -18,7 +18,7 @@ namespace CoreConsumer
         }
 
         [Test]
-        [Explicit("Run to see stack trace")]
+        [Ignore("Run to see stack trace")]
         public void ShouldBeAbleToExpect_Fail()
         {
             // Arrange
