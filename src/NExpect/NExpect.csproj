@@ -90,6 +90,7 @@
     <Compile Include="Implementations\An.cs" />
     <Compile Include="Implementations\And.cs" />
     <Compile Include="Implementations\CollectionAn.cs" />
+    <Compile Include="Implementations\CollectionAs.cs" />
     <Compile Include="Implementations\CollectionDeep.cs" />
     <Compile Include="Implementations\CollectionDeepEqual.cs" />
     <Compile Include="Implementations\CollectionDeepEquivalent.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Interfaces\IAn.cs" />
     <Compile Include="Interfaces\IAnd.cs" />
     <Compile Include="Interfaces\ICollectionAn.cs" />
+    <Compile Include="Interfaces\ICollectionAs.cs" />
     <Compile Include="Interfaces\ICollectionDeep.cs" />
     <Compile Include="Interfaces\ICollectionDeepEqual.cs" />
     <Compile Include="Interfaces\ICollectionDeepEquivalent.cs" />

@@ -67,7 +67,7 @@ namespace NExpect.Tests.Collections
                         // Act
                         Assert.That(() =>
                             {
-                                Expect(first.AsObjects()).To.Deep.Equal(second);
+                                Expect(first).As.Objects.To.Deep.Equal(second);
                             },
                             Throws.Nothing);
                         // Assert
@@ -226,7 +226,7 @@ namespace NExpect.Tests.Collections
                         // Act
                         Assert.That(() =>
                             {
-                                Expect(first.AsObjects()).To.Be.Intersection.Equivalent.To(second);
+                                Expect(first).As.Objects.To.Be.Intersection.Equivalent.To(second);
                             },
                             Throws.Nothing);
                         // Assert
@@ -242,7 +242,7 @@ namespace NExpect.Tests.Collections
                         // Act
                         Assert.That(() =>
                             {
-                                Expect(first.AsObjects()).Not.To.Be.Intersection.Equivalent.To(second);
+                                Expect(first).As.Objects.Not.To.Be.Intersection.Equivalent.To(second);
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>());
                         // Assert
@@ -258,7 +258,7 @@ namespace NExpect.Tests.Collections
                         // Act
                         Assert.That(() =>
                             {
-                                Expect(first.AsObjects()).To.Not.Be.Intersection.Equivalent.To(second);
+                                Expect(first).As.Objects.To.Not.Be.Intersection.Equivalent.To(second);
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>());
                         // Assert
@@ -274,7 +274,7 @@ namespace NExpect.Tests.Collections
                         // Act
                         Assert.That(() =>
                             {
-                                Expect(first.AsObjects()).To.Be.Intersection.Equivalent.To(second);
+                                Expect(first).As.Objects.To.Be.Intersection.Equivalent.To(second);
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>());
                         // Assert
@@ -295,7 +295,7 @@ namespace NExpect.Tests.Collections
                     // Act
                     Assert.That(() =>
                         {
-                            Expect(first.AsObjects()).To.Intersection.Equal(second);
+                            Expect(first).As.Objects.To.Intersection.Equal(second);
                         },
                         Throws.Nothing);
                     // Assert
@@ -311,7 +311,7 @@ namespace NExpect.Tests.Collections
                     // Act
                     Assert.That(() =>
                         {
-                            Expect(first.AsObjects()).Not.To.Intersection.Equal(second);
+                            Expect(first).As.Objects.Not.To.Intersection.Equal(second);
                         },
                         Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
@@ -327,7 +327,7 @@ namespace NExpect.Tests.Collections
                     // Act
                     Assert.That(() =>
                         {
-                            Expect(first.AsObjects()).To.Not.Intersection.Equal(second);
+                            Expect(first).As.Objects.To.Not.Intersection.Equal(second);
                         },
                         Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
@@ -343,7 +343,7 @@ namespace NExpect.Tests.Collections
                     // Act
                     Assert.That(() =>
                         {
-                            Expect(first.AsObjects()).To.Be.Intersection.Equal.To(second);
+                            Expect(first).As.Objects.To.Be.Intersection.Equal.To(second);
                         },
                         Throws.Nothing);
                     // Assert
@@ -359,7 +359,7 @@ namespace NExpect.Tests.Collections
                     // Act
                     Assert.That(() =>
                         {
-                            Expect(first.AsObjects()).Not.To.Be.Intersection.Equal.To(second);
+                            Expect(first).As.Objects.Not.To.Be.Intersection.Equal.To(second);
                         },
                         Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
@@ -375,7 +375,7 @@ namespace NExpect.Tests.Collections
                     // Act
                     Assert.That(() =>
                         {
-                            Expect(first.AsObjects()).To.Intersection.Equal(second);
+                            Expect(first).As.Objects.To.Intersection.Equal(second);
                         },
                         Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert
@@ -391,7 +391,7 @@ namespace NExpect.Tests.Collections
                     // Act
                     Assert.That(() =>
                         {
-                            Expect(first.AsObjects).To.Intersection.Equal(second);
+                            Expect(first).As.Objects.To.Intersection.Equal(second);
                         },
                         Throws.Exception.InstanceOf<UnmetExpectationException>());
                     // Assert

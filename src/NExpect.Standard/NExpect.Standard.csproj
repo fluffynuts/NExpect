@@ -32,6 +32,7 @@
     <Compile Include="..\NExpect\Implementations\And.cs" Link="Implementations\And.cs" />
     <Compile Include="..\NExpect\Implementations\Be.cs" Link="Implementations\Be.cs" />
     <Compile Include="..\NExpect\Implementations\CollectionAn.cs" Link="Implementations\CollectionAn.cs" />
+    <Compile Include="..\NExpect\Implementations\CollectionAs.cs" Link="Implementations\CollectionAs.cs" />
     <Compile Include="..\NExpect\Implementations\CollectionBe.cs" Link="Implementations\CollectionBe.cs" />
     <Compile Include="..\NExpect\Implementations\CollectionDeep.cs" Link="Implementations\CollectionDeep.cs" />
     <Compile Include="..\NExpect\Implementations\CollectionDeepEqual.cs" Link="Implementations\CollectionDeepEqual.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="..\NExpect\Interfaces\IBe.cs" Link="Interfaces\IBe.cs" />
     <Compile Include="..\NExpect\Interfaces\ICanAddMatcher.cs" Link="Interfaces\ICanAddMatcher.cs" />
     <Compile Include="..\NExpect\Interfaces\ICollectionAn.cs" Link="Interfaces\ICollectionAn.cs" />
+    <Compile Include="..\NExpect\Interfaces\ICollectionAs.cs" Link="Interfaces\ICollectionAs.cs" />
     <Compile Include="..\NExpect\Interfaces\ICollectionBe.cs" Link="Interfaces\ICollectionBe.cs" />
     <Compile Include="..\NExpect\Interfaces\ICollectionDeep.cs" Link="Interfaces\ICollectionDeep.cs" />
     <Compile Include="..\NExpect\Interfaces\ICollectionDeepEqual.cs" Link="Interfaces\ICollectionDeepEqual.cs" />

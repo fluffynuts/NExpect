@@ -14,5 +14,11 @@ namespace NExpect.Interfaces
         /// Negates the current expectation
         /// </summary>
         ICollectionNot<T> Not { get; }
+
+        /// <summary>
+        /// Provides the .As syntax on collection expectations to transform
+        /// item type
+        /// </summary>
+        ICollectionAs<T> As { get; }
     }
 }

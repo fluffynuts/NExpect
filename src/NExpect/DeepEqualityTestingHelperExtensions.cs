@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,6 +16,7 @@ namespace NExpect
         /// <param name="collection">Collection to convert</param>
         /// <typeparam name="T">Original item type</typeparam>
         /// <returns></returns>
+        [Obsolete("Please use the 'Expect({collection}).As.Objects...' syntax. This extension method will be deprecated in a future release")]
         public static IEnumerable<object> AsObjects<T>(this IEnumerable<T> collection)
         {
             return collection.Select(o => o as object);

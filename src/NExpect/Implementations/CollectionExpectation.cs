@@ -17,5 +17,8 @@ namespace NExpect.Implementations
 
         public new ICollectionNot<T> Not =>
             Factory.Create<IEnumerable<T>, CollectionNot<T>>(Actual, this);
+
+        public ICollectionAs<T> As =>
+            Factory.Create<IEnumerable<T>, CollectionAs<T>>(Actual, this);
     }
 }
