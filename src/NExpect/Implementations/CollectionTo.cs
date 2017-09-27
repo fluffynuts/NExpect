@@ -7,6 +7,7 @@ namespace NExpect.Implementations
 {
     internal class CollectionTo<T> :
         ExpectationContext<IEnumerable<T>>,
+        IHasActual<IEnumerable<T>>,
         ICollectionTo<T>
     {
         public IEnumerable<T> Actual { get; }

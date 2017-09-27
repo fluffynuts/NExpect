@@ -1,10 +1,12 @@
 using NExpect.Interfaces;
+using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations
 {
-    internal class CountMatchContinuation<T>
-        : ExpectationContext<T>,
-            ICountMatchContinuation<T>
+    internal class CountMatchContinuation<T>: 
+        ExpectationContext<T>,
+        IHasActual<T>,
+        ICountMatchContinuation<T>
     {
         public int ExpectedCount => _expectedCount;
         public CountMatchMethods Method => _method;
@@ -54,6 +56,8 @@ namespace NExpect.Implementations
             result.SetParent(this);
             return result;
         }
+
+        public T Actual => _wrapped.GetActual();
 
         public CountMatchContinuation(
             ICanAddMatcher<T> wrapped,

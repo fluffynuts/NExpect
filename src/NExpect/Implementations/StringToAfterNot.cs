@@ -1,11 +1,12 @@
 using NExpect.Interfaces;
+
 // ReSharper disable ClassNeverInstantiated.Global
 
 namespace NExpect.Implementations
 {
-    internal class StringToAfterNot
-        : ToAfterNot<string>,
-            IStringToAfterNot
+    internal class StringToAfterNot :
+        ToAfterNot<string>,
+        IStringToAfterNot
     {
         public IStringStart Start =>
             Factory.Create<string, StringStart>(Actual, this);
@@ -13,9 +14,12 @@ namespace NExpect.Implementations
         public IStringEnd End =>
             Factory.Create<string, StringEnd>(Actual, this);
 
-        public StringToAfterNot(string actual) : base(actual)
+        public new IStringBe Be =>
+            Factory.Create<string, StringBe>(Actual, this);
+
+        public StringToAfterNot(string actual)
+            : base(actual)
         {
         }
-
     }
 }

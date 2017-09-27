@@ -5,7 +5,10 @@
 
 namespace NExpect.Implementations
 {
-    internal class An<T> : ExpectationContext<T>, IAn<T>
+    internal class An<T> : 
+        ExpectationContext<T>, 
+        IHasActual<T>,
+        IAn<T>
     {
         public T Actual { get; }
 

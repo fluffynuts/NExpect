@@ -85,7 +85,7 @@ namespace NExpect.MatcherLogic
                 .GetProperties()
                 .FirstOrDefault(pi => pi.Name.ToLower() == "actual");
             if (prop == null)
-                throw new InvalidOperationException("GetActual only works on IHasActual<T> or objects with an 'Actual' property");
+                throw new InvalidOperationException($"Failed to GetActual on type {typeof(T)}. GetActual only works on IHasActual<T> or objects with an 'Actual' property");
             try {
                 return (T)prop.GetValue(matcher);
             } catch {

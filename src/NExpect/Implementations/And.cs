@@ -2,8 +2,10 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations
 {
-    internal class And<T>
-        : ExpectationContext<T>, IAnd<T>
+    internal class And<T> :
+        ExpectationContext<T>,
+        IHasActual<T>,
+        IAnd<T>
     {
         public T Actual { get; }
 

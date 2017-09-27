@@ -4,11 +4,14 @@
 
 namespace NExpect.Implementations
 {
-    internal class A<T> : ExpectationContext<T>, IA<T>
+    internal class A<T> : 
+        ExpectationContext<T>, 
+        IHasActual<T>,
+        IA<T>
     {
-        public object Actual { get; }
+        public T Actual { get; }
 
-        public A(object actual)
+        public A(T actual)
         {
             Actual = actual;
         }

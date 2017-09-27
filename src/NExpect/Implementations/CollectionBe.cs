@@ -7,6 +7,7 @@ namespace NExpect.Implementations
 {
     internal class CollectionBe<T> :
         ExpectationContext<IEnumerable<T>>,
+        IHasActual<IEnumerable<T>>,
         ICollectionBe<T>
     {
         public ICollectionEquivalent<T> Equivalent =>

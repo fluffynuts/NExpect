@@ -108,6 +108,7 @@
     <Compile Include="Implementations\CountMatchContinuation.cs" />
     <Compile Include="Implementations\CountMatchDeep.cs" />
     <Compile Include="Implementations\CountMatchEqual.cs" />
+    <Compile Include="Implementations\CountMatchIntersection.cs" />
     <Compile Include="Implementations\CountMatchMatched.cs" />
     <Compile Include="Implementations\Deep.cs" />
     <Compile Include="Implementations\DefaultEqualityComparer.cs" />
@@ -131,8 +132,11 @@
     <Compile Include="Implementations\Null.cs" />
     <Compile Include="Implementations\NullOr.cs" />
     <Compile Include="Implementations\StringAnd.cs" />
+    <Compile Include="Implementations\StringBe.cs" />
     <Compile Include="Implementations\StringEnd.cs" />
     <Compile Include="Implementations\StringExpectation.cs" />
+    <Compile Include="Implementations\StringMatched.cs" />
+    <Compile Include="Implementations\StringMore.cs" />
     <Compile Include="Implementations\StringNot.cs" />
     <Compile Include="Implementations\StringNotAfterTo.cs" />
     <Compile Include="Implementations\StringStart.cs" />
@@ -187,6 +191,7 @@
     <Compile Include="Interfaces\INull.cs" />
     <Compile Include="Interfaces\INullOr.cs" />
     <Compile Include="Interfaces\IStringAnd.cs" />
+    <Compile Include="Interfaces\IStringBe.cs" />
     <Compile Include="Interfaces\IStringContainContinuation.cs" />
     <Compile Include="Implementations\StringContainContinuation.cs" />
     <Compile Include="Implementations\CollectionExpectation.cs" />
@@ -196,7 +201,14 @@
     <Compile Include="Implementations\CollectionTo.cs" />
     <Compile Include="Implementations\CollectionToAfterNot.cs" />
     <Compile Include="Interfaces\ICollectionExpectation.cs" />
+    <Compile Include="Interfaces\IStringEnd.cs" />
+    <Compile Include="Interfaces\IStringExpectation.cs" />
+    <Compile Include="Interfaces\IStringMatched.cs" />
     <Compile Include="Interfaces\IStringMore.cs" />
+    <Compile Include="Interfaces\IStringNot.cs" />
+    <Compile Include="Interfaces\IStringNotAfterTo.cs" />
+    <Compile Include="Interfaces\IStringStart.cs" />
+    <Compile Include="Interfaces\IStringTo.cs" />
     <Compile Include="Interfaces\IStringToAfterNot.cs" />
     <Compile Include="IntersectionEqualityExtensions.cs" />
     <Compile Include="MatcherLogic\MatcherHelperExtensionMethods.cs" />

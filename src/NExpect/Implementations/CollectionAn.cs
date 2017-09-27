@@ -7,6 +7,7 @@ namespace NExpect.Implementations
 {
     internal class CollectionAn<T> :
         ExpectationContext<IEnumerable<T>>,
+        IHasActual<IEnumerable<T>>,
         ICollectionAn<T>
     {
         public IInstanceContinuation Instance => 

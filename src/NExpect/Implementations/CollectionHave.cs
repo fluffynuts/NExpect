@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NExpect.Interfaces;
+
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -7,6 +8,7 @@ namespace NExpect.Implementations
 {
     internal class CollectionHave<T> :
         ExpectationContext<IEnumerable<T>>,
+        IHasActual<IEnumerable<T>>,
         ICollectionHave<T>
     {
         public ICollectionUnique<T> Unique =>

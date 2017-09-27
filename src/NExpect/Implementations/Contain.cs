@@ -2,7 +2,10 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations
 {
-    internal class Contain<T> : ExpectationContext<T>, IContain<T>
+    internal class Contain<T> :
+        ExpectationContext<T>, 
+        IHasActual<T>,
+        IContain<T>
     {
         public T Actual { get; }
 

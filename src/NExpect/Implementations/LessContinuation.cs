@@ -1,11 +1,12 @@
 ﻿using NExpect.Interfaces;
+
 // ReSharper disable ClassNeverInstantiated.Global
-// ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect.Implementations
 {
     internal class LessContinuation<T> :
         ExpectationContext<T>,
+        IHasActual<T>,
         ILessContinuation<T>
     {
         public T Actual { get; }

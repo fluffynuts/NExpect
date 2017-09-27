@@ -1,10 +1,13 @@
 using NExpect.Interfaces;
+
 // ReSharper disable ClassNeverInstantiated.Global
-// ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect.Implementations
 {
-    internal class Have<T> : ExpectationContext<T>, IHave<T>
+    internal class Have<T> :
+        ExpectationContext<T>,
+        IHasActual<T>,
+        IHave<T>
     {
         public T Actual { get; }
         public IA<T> A => Factory.Create<T, A<T>>(Actual, this);

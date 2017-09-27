@@ -6,6 +6,7 @@ namespace NExpect.Implementations
 {
     internal class StringContainContinuation :
         IStringContainContinuation,
+        IHasActual<string>,
         IExpectationContext<string>
     {
         public IExpectationContext Parent => _expectationContext;

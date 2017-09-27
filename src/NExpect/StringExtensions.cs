@@ -1,7 +1,12 @@
-﻿using NExpect.Implementations;
+﻿using System;
+using System.Text.RegularExpressions;
+using NExpect.Exceptions;
+using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+using PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect
 {
@@ -188,6 +193,93 @@ namespace NExpect
             return end.More();
         }
 
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matched">Continuation to operate on</param>
+        /// <param name="regex">Regex instance to match with</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore By(
+            this IStringMatched matched,
+            Regex regex
+        )
+        {
+            return matched.By(regex, null);
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matched">Continuation to operate on</param>
+        /// <param name="regex">Regex instance to match with</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore By(
+            this IStringMatched matched,
+            Regex regex,
+            string customMessage
+        )
+        {
+            matched.AddMatcher(actual =>
+            {
+                var passed = regex.IsMatch(actual);
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        $"Expected {actual.Stringify()} {passed.AsNot()}to match regex \"{regex}\"",
+                        customMessage
+                    )
+                );
+            });
+            return matched.More();
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matched">Continuation to operate on</param>
+        /// <param name="regex">Regular expression which will be compiled into a Regex instance to match with</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore By(
+            this IStringMatched matched,
+            string regex
+        )
+        {
+            return matched.By(regex, null);
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matched">Continuation to operate on</param>
+        /// <param name="regex">Regular expression which will be compiled into a Regex instance to match with</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore By(
+            this IStringMatched matched,
+            string regex,
+            string customMessage
+        )
+        {
+            return matched.By(CompileRegexFor(regex), customMessage);
+        }
+
+        private static Regex CompileRegexFor(string regex)
+        {
+            try
+            {
+                return new Regex(regex);
+            }
+            catch (Exception e)
+            {
+                throw new UnmetExpectationException(new[] {
+                    $"Unable to compile {regex.Stringify()} as a Regex",
+                    "Specifically:",
+                    e.Message
+                }.JoinWith("\n"));
+            }
+        }
+
 
         private const string SearchOffset = "SearchOffset";
 
@@ -201,14 +293,14 @@ namespace NExpect
             continuation.AddMatcher(s =>
             {
                 var priorOffset = continuation.GetMetadata<int>(SearchOffset);
-                var nextOffset = s?.IndexOf(search, priorOffset) ?? -1;
-                if (nextOffset > -1)
-                    nextOffset += search?.Length ?? 0;
+                var nextOffset = GetNextOffsetOf(search, s, priorOffset);
 
                 next.SetMetadata(SearchOffset, nextOffset);
 
                 var passed = nextOffset > -1;
-                var offsetMessage = priorOffset > 0 ? $" after index {priorOffset}" : "";
+                var offsetMessage = priorOffset > 0
+                    ? $" after index {priorOffset}"
+                    : "";
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
@@ -217,6 +309,21 @@ namespace NExpect
                     )
                 );
             });
+        }
+
+        private static int GetNextOffsetOf(
+            string needle,
+            string haystack,
+            int priorOffset
+        )
+        {
+            if (priorOffset >= (haystack?.Length ?? 0) - 1)
+                return -1;
+
+            var nextOffset = haystack?.IndexOf(needle, priorOffset) ?? -1;
+            if (nextOffset > -1)
+                nextOffset += needle?.Length ?? 0;
+            return nextOffset;
         }
     }
 }

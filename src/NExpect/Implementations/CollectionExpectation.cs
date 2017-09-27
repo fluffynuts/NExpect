@@ -7,11 +7,6 @@ namespace NExpect.Implementations
         Expectation<IEnumerable<T>>,
         ICollectionExpectation<T>
     {
-        public CollectionExpectation(IEnumerable<T> actual)
-            : base(actual)
-        {
-        }
-
         public new ICollectionTo<T> To =>
             Factory.Create<IEnumerable<T>, CollectionTo<T>>(Actual, this);
 
@@ -20,5 +15,10 @@ namespace NExpect.Implementations
 
         public ICollectionAs<T> As =>
             Factory.Create<IEnumerable<T>, CollectionAs<T>>(Actual, this);
+
+        public CollectionExpectation(IEnumerable<T> actual)
+            : base(actual)
+        {
+        }
     }
 }

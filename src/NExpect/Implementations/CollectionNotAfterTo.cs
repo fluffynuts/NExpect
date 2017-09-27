@@ -5,9 +5,10 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    internal class CollectionNotAfterTo<T>
-        : ExpectationContext<IEnumerable<T>>,
-            ICollectionNotAfterTo<T>
+    internal class CollectionNotAfterTo<T>: 
+        ExpectationContext<IEnumerable<T>>,
+        IHasActual<IEnumerable<T>>,
+        ICollectionNotAfterTo<T>
     {
         // ReSharper disable once MemberCanBePrivate.Global
         public IEnumerable<T> Actual { get; }

@@ -1,10 +1,13 @@
 using NExpect.Interfaces;
 
+// ReSharper disable ClassNeverInstantiated.Global
+
 namespace NExpect.Implementations
 {
-    internal class More<T>
-        : ExpectationContext<T>,
-            IMore<T>
+    internal class More<T> :
+        ExpectationContext<T>,
+        IHasActual<T>,
+        IMore<T>
     {
         public T Actual { get; }
 
@@ -12,21 +15,6 @@ namespace NExpect.Implementations
             Factory.Create<T, And<T>>(Actual, this);
 
         public More(T actual)
-        {
-            Actual = actual;
-        }
-    }
-
-    internal class StringMore
-        : ExpectationContext<string>,
-            IStringMore
-    {
-        public string Actual { get; }
-
-        public IStringAnd And =>
-            Factory.Create<string, StringAnd>(Actual, this);
-
-        public StringMore(string actual)
         {
             Actual = actual;
         }

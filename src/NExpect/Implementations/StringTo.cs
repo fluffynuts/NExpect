@@ -16,6 +16,9 @@ namespace NExpect.Implementations
         public new IStringNotAfterTo Not =>
             Factory.Create<string, StringNotAfterTo>(Actual, this);
 
+        public new IStringBe Be =>
+            Factory.Create<string, StringBe>(Actual, this);
+
         public StringTo(string actual) : base(actual)
         {
         }

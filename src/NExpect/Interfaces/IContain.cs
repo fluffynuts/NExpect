@@ -5,7 +5,7 @@ namespace NExpect.Interfaces
     /// Provides the ".Contain" grammar extension
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IContain<T> : ICanAddMatcher<T>, IHasActual<T>
+    public interface IContain<T> : ICanAddMatcher<T>
     {
         /// <summary>
         /// Prepares for setting an expected count to test for, eg:

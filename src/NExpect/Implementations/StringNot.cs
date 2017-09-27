@@ -1,13 +1,15 @@
 using NExpect.Interfaces;
+
 // ReSharper disable ClassNeverInstantiated.Global
 
 namespace NExpect.Implementations
 {
-    internal class StringNot
-        : Not<string>,
-            IStringNot
+    internal class StringNot :
+        Not<string>,
+        IStringNot
     {
-        public StringNot(string actual): base(actual)
+        public StringNot(string actual)
+            : base(actual)
         {
         }
 

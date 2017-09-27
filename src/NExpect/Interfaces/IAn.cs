@@ -6,7 +6,7 @@ namespace NExpect.Interfaces
     /// Continuation to provide the ".An" grammar
     /// </summary>
     /// <typeparam name="T">Type of the continuation</typeparam>
-    public interface IAn<T> : ICanAddMatcher<T>, IHasActual<T>
+    public interface IAn<T> : ICanAddMatcher<T>
     {
         /// <summary>
         /// Prepares to check the Type of Actual

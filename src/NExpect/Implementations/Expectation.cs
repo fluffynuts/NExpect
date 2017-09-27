@@ -7,6 +7,7 @@ namespace NExpect.Implementations
     internal class Expectation<T> :
         ExpectationBase<T>,
         IExpectation<T>,
+        IHasActual<T>,
         IExpectationContext<T>
     {
         public IExpectationContext Parent => (this as IExpectationContext<T>).TypedParent;
@@ -27,5 +28,4 @@ namespace NExpect.Implementations
             RunMatcher(Actual, IsNegated, matcher, true);
         }
     }
-
 }

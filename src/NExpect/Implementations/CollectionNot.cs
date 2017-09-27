@@ -8,6 +8,7 @@ namespace NExpect.Implementations
 {
     internal class CollectionNot<T> :
         ExpectationContext<IEnumerable<T>>,
+        IHasActual<IEnumerable<T>>,
         ICollectionNot<T>
     {
         public IEnumerable<T> Actual { get; }

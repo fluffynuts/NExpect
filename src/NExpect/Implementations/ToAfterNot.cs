@@ -1,11 +1,13 @@
 using NExpect.Interfaces;
+
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect.Implementations
 {
-    internal class ToAfterNot<T>: 
-        ExpectationContext<T>, 
+    internal class ToAfterNot<T> :
+        ExpectationContext<T>,
+        IHasActual<T>,
         IToAfterNot<T>
     {
         public T Actual { get; }

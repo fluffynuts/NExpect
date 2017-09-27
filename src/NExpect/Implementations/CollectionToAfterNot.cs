@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using NExpect.Interfaces;
+// ReSharper disable ClassNeverInstantiated.Global
 
 namespace NExpect.Implementations
 {
     internal class CollectionToAfterNot<T> :
         ExpectationContext<IEnumerable<T>>,
+        IHasActual<IEnumerable<T>>,
         ICollectionToAfterNot<T>
     {
         public IEnumerable<T> Actual { get; }

@@ -3,6 +3,7 @@ using System.Linq;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable PossibleMultipleEnumeration
 
@@ -27,7 +28,7 @@ namespace NExpect
         {
             return continuation.Key(key, null);
         }
-        
+
         /// <summary>
         /// Tests if the provided collection contains the required key.
         /// </summary>
@@ -46,7 +47,7 @@ namespace NExpect
 
             return CreateValueContinuation(continuation, key);
         }
-        
+
         /// <summary>
         /// Tests if the provided collection contains the required key.
         /// Upcast from sbyte to long for convenience
@@ -317,7 +318,8 @@ namespace NExpect
             );
         }
 
-        private static void AddKeyMatcher<TKey, TValue>(IContain<IEnumerable<KeyValuePair<TKey, TValue>>> continuation, TKey key, string customMessage)
+        private static void AddKeyMatcher<TKey, TValue>(IContain<IEnumerable<KeyValuePair<TKey, TValue>>> continuation,
+            TKey key, string customMessage)
         {
             continuation.AddMatcher(collection =>
             {
@@ -339,7 +341,8 @@ namespace NExpect
             return Factory.Create<TValue, DictionaryValueContinuation<TValue>>(
                 continuationValue,
                 new WrappingContinuation<IEnumerable<KeyValuePair<TKey, TValue>>, TValue>(
-                    continuation, c => continuationValue
+                    continuation as IHasActual<IEnumerable<KeyValuePair<TKey, TValue>>>,
+                    c => continuationValue
                 )
             );
         }
@@ -351,7 +354,8 @@ namespace NExpect
             return Factory.Create<long, DictionaryValueContinuation<long>>(
                 continuationValue,
                 new WrappingContinuation<IEnumerable<KeyValuePair<TKey, sbyte>>, long>(
-                    continuation, c => continuationValue
+                    continuation as IHasActual<IEnumerable<KeyValuePair<TKey, sbyte>>>,
+                    c => continuationValue
                 )
             );
         }
@@ -363,7 +367,8 @@ namespace NExpect
             return Factory.Create<long, DictionaryValueContinuation<long>>(
                 continuationValue,
                 new WrappingContinuation<IEnumerable<KeyValuePair<TKey, short>>, long>(
-                    continuation, c => continuationValue
+                    continuation as IHasActual<IEnumerable<KeyValuePair<TKey, short>>>,
+                    c => continuationValue
                 )
             );
         }
@@ -375,7 +380,8 @@ namespace NExpect
             return Factory.Create<long, DictionaryValueContinuation<long>>(
                 continuationValue,
                 new WrappingContinuation<IEnumerable<KeyValuePair<TKey, int>>, long>(
-                    continuation, c => continuationValue
+                    continuation as IHasActual<IEnumerable<KeyValuePair<TKey, int>>>,
+                    c => continuationValue
                 )
             );
         }
@@ -387,7 +393,8 @@ namespace NExpect
             return Factory.Create<long, DictionaryValueContinuation<long>>(
                 continuationValue,
                 new WrappingContinuation<IEnumerable<KeyValuePair<TKey, byte>>, long>(
-                    continuation, c => continuationValue
+                    continuation as IHasActual<IEnumerable<KeyValuePair<TKey, byte>>>,
+                    c => continuationValue
                 )
             );
         }
@@ -399,7 +406,8 @@ namespace NExpect
             return Factory.Create<long, DictionaryValueContinuation<long>>(
                 continuationValue,
                 new WrappingContinuation<IEnumerable<KeyValuePair<TKey, ushort>>, long>(
-                    continuation, c => continuationValue
+                    continuation as IHasActual<IEnumerable<KeyValuePair<TKey, ushort>>>,
+                    c => continuationValue
                 )
             );
         }
@@ -411,7 +419,8 @@ namespace NExpect
             return Factory.Create<long, DictionaryValueContinuation<long>>(
                 continuationValue,
                 new WrappingContinuation<IEnumerable<KeyValuePair<TKey, uint>>, long>(
-                    continuation, c => continuationValue
+                    continuation as IHasActual<IEnumerable<KeyValuePair<TKey, uint>>>,
+                    c => continuationValue
                 )
             );
         }
@@ -423,12 +432,14 @@ namespace NExpect
             return Factory.Create<double, DictionaryValueContinuation<double>>(
                 continuationValue,
                 new WrappingContinuation<IEnumerable<KeyValuePair<TKey, float>>, double>(
-                    continuation, c => continuationValue
+                    continuation as IHasActual<IEnumerable<KeyValuePair<TKey, float>>>,
+                    c => continuationValue
                 )
             );
         }
 
-        private static TValue GetValueForKey<TKey, TValue>(ICanAddMatcher<IEnumerable<KeyValuePair<TKey, TValue>>> continuation, TKey key)
+        private static TValue GetValueForKey<TKey, TValue>(
+            ICanAddMatcher<IEnumerable<KeyValuePair<TKey, TValue>>> continuation, TKey key)
         {
             return continuation
                 .GetActual()

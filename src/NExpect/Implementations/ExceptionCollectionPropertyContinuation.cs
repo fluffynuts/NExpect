@@ -1,19 +1,15 @@
 using System.Collections.Generic;
 using NExpect.Interfaces;
+
 // ReSharper disable ClassNeverInstantiated.Global
-// ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect.Implementations
 {
-    internal class ExceptionCollectionPropertyContinuation<T>
-        : ExpectationContext<IEnumerable<T>>,
-            IExceptionCollectionPropertyContinuation<T>
+    internal class ExceptionCollectionPropertyContinuation<T> :
+        ExpectationContext<IEnumerable<T>>,
+        IHasActual<IEnumerable<T>>,
+        IExceptionCollectionPropertyContinuation<T>
     {
-        public ExceptionCollectionPropertyContinuation(IEnumerable<T> value)
-        {
-            Actual = value;
-        }
-
         public IEnumerable<T> Actual { get; }
 
         public ICollectionEquivalent<T> Equivalent =>
@@ -33,5 +29,10 @@ namespace NExpect.Implementations
 
         public ICollectionFor<T> For =>
             Factory.Create<IEnumerable<T>, CollectionFor<T>>(Actual, this);
+
+        public ExceptionCollectionPropertyContinuation(IEnumerable<T> value)
+        {
+            Actual = value;
+        }
     }
 }

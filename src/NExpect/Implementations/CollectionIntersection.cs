@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using NExpect.Interfaces;
+
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect.Implementations
 {
-    internal class CollectionIntersection<T>: 
+    internal class CollectionIntersection<T> :
         ExpectationContext<IEnumerable<T>>,
+        IHasActual<IEnumerable<T>>,
         ICollectionIntersection<T>
     {
         public IEnumerable<T> Actual { get; }

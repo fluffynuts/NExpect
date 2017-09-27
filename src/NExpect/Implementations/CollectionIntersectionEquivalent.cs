@@ -7,6 +7,7 @@ namespace NExpect.Implementations
 {
     internal class CollectionIntersectionEquivalent<T>:
         ExpectationContext<IEnumerable<T>>,
+        IHasActual<IEnumerable<T>>,
         ICollectionIntersectionEquivalent<T>
     {
         public IEnumerable<T> Actual { get; }

@@ -12,5 +12,10 @@
         /// Starts a negated .End expectation
         /// </summary>
         IStringEnd End { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        new IStringBe Be { get; }
     }
 }
