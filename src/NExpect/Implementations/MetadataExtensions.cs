@@ -59,6 +59,7 @@ namespace NExpect.Implementations
         {
             try
             {
+                // ReSharper disable once UnusedVariable
                 var interesting = default(T)?.Equals((T)stored);   // TODO: could this be optimised away?
                 return true;
             }
