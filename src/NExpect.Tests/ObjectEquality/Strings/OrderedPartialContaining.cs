@@ -57,7 +57,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
         public void PositiveAssertion_MultipleChains()
         {
             // Arrange
-            var strings = GetRandomArray<string>(5, 8);
+            var strings = GetRandomArray<string>(6, 8);
             var input = strings.JoinWith("");
 
             // Pre-Assert
