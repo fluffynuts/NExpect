@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NExpect.Exceptions;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -167,6 +168,28 @@ namespace NExpect
             );
         }
 
+        /// <summary>
+        /// Checks that collection only contains N number of items.
+        /// Continues with ICountMatchContinuation if it does
+        /// </summary>
+        /// <param name="contain">contain continuation</param>
+        /// <param name="howMany">how many items to match</param>
+        /// <typeparam name="T">Type of item to match</typeparam>
+        /// <returns>continuation be used: .Equal.To()</returns>
+        public static ICountMatchContinuation<IEnumerable<T>> Only<T>(
+            this IContain<IEnumerable<T>> contain,
+            int howMany
+        )
+        {
+            CheckContain(contain);
+            CheckOnly(contain, howMany);
+            return new CountMatchContinuation<IEnumerable<T>>(
+                contain,
+                CountMatchMethods.Only,
+                howMany
+            );
+        }
+        
         /// <summary>
         /// Match at least N elements with following matchers
         /// </summary>
@@ -371,7 +394,7 @@ namespace NExpect
             countMatch.Continuation.AddMatcher(collection =>
             {
                 var idx = 0;
-                var have = collection.Select(o => new {o, idx = idx++})
+                var have = collection.Select(o => new { o, idx = idx++ })
                     .Count(o => test(o.idx, o.o));
                 var compare = countMatch.Method == CountMatchMethods.All
                     ? collection.Count()
@@ -625,7 +648,7 @@ namespace NExpect
         {
             contain.Items(null);
         }
-        
+
         /// <summary>
         /// Tests for the presence of any items, using the count matcher that preceded
         /// </summary>
@@ -1204,6 +1227,15 @@ namespace NExpect
                     $"Exactly<T>() cannot extend null IContain<IEnumerable<{typeof(T).Name}>>");
         }
 
+        private static void CheckOnly<T>(ICanAddMatcher<IEnumerable<T>> contain, int howMany)
+        {
+            var itemInCollection = contain.GetActual().Count();
+            if (itemInCollection == howMany) return;
+            var s = howMany == 1 ? "" : "s";
+            throw new UnmetExpectationException(
+                $"Expected to find only {howMany} item{s} in collection, but found {itemInCollection}");
+        }
+
         private static void CheckDistinct<T>(
             ICanAddMatcher<IEnumerable<T>>
                 distinct, string customMessage
@@ -1229,6 +1261,7 @@ namespace NExpect
             new Dictionary<CountMatchMethods, Func<bool, object, int, int, string>>()
             {
                 [CountMatchMethods.Exactly] = CreateMessageFor("exactly"),
+                [CountMatchMethods.Only] = CreateMessageFor("only"),
                 [CountMatchMethods.Minimum] = CreateMessageFor("at least"),
                 [CountMatchMethods.Maximum] = CreateMessageFor("at most"),
                 [CountMatchMethods.Any] = CreateAnyMessage,
@@ -1254,6 +1287,7 @@ namespace NExpect
             new Dictionary<CountMatchMethods, Func<bool, int, int, string>>()
             {
                 [CountMatchMethods.Exactly] = CreateMatchMessageFor("exactly"),
+                [CountMatchMethods.Only] = CreateMatchMessageFor("only"),
                 [CountMatchMethods.Minimum] = CreateMatchMessageFor("at least"),
                 [CountMatchMethods.Maximum] = CreateMatchMessageFor("at most"),
                 [CountMatchMethods.Any] = CreateMatchAnyAllMessageFor("any"),
@@ -1276,6 +1310,7 @@ namespace NExpect
             new Dictionary<CountMatchMethods, Func<int, int, bool>>()
             {
                 [CountMatchMethods.Exactly] = (have, want) => have == want,
+                [CountMatchMethods.Only] = (have, want) => have == want,
                 [CountMatchMethods.Minimum] = (have, want) => have >= want,
                 [CountMatchMethods.Maximum] = (have, want) => have <= want,
                 [CountMatchMethods.Any] = (have, want) => have > 0,
