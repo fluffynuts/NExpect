@@ -79,7 +79,6 @@
     <Compile Include="..\NExpect\Implementations\LessContinuation.cs" Link="Implementations\LessContinuation.cs" />
     <Compile Include="..\NExpect\Implementations\MatcherRunner.cs" Link="Implementations\MatcherRunner.cs" />
     <Compile Include="..\NExpect\Implementations\MessageHelpers.cs" Link="Implementations\MessageHelpers.cs" />
-    <Compile Include="..\NExpect\Implementations\MetadataExtensions.cs" Link="Implementations\MetadataExtensions.cs" />
     <Compile Include="..\NExpect\Implementations\More.cs" Link="Implementations\More.cs" />
     <Compile Include="..\NExpect\Implementations\Not.cs" Link="Implementations\Not.cs" />
     <Compile Include="..\NExpect\Implementations\NotAfterBe.cs" Link="Implementations\NotAfterBe.cs" />
@@ -193,6 +192,7 @@
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ByteArrayExtensions.cs" Link="Imported\ByteArrayExtensions.cs" />
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DeepEqualityTester.cs" Link="Imported\DeepEqualityTester.cs" />
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ExtensionsForIEnumerables.cs" Link="Imported\ExtensionsForIEnumerables.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\MetadataExtensions.cs" Link="Imported\MetadataExtensions.cs" />
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PropertyOrField.cs" Link="Imported\PropertyOrField.cs" />
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PyLike.cs" Link="Imported\PyLike.cs" />
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\StringExtensions.cs" Link="Imported\StringExtensions.cs" />

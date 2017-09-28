@@ -57,6 +57,9 @@
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ExtensionsForIEnumerables.cs">
       <Link>Imported\ExtensionsForIEnumerables.cs</Link>
     </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\MetadataExtensions.cs">
+      <Link>Imported\MetadataExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PropertyOrField.cs">
       <Link>Imported\PropertyOrField.cs</Link>
     </Compile>
@@ -127,7 +130,6 @@
     <Compile Include="Implementations\Intersection.cs" />
     <Compile Include="Implementations\LessContinuation.cs" />
     <Compile Include="Implementations\MatcherRunner.cs" />
-    <Compile Include="Implementations\MetadataExtensions.cs" />
     <Compile Include="Implementations\More.cs" />
     <Compile Include="Implementations\Null.cs" />
     <Compile Include="Implementations\NullOr.cs" />

@@ -54,6 +54,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
         }
 
         [Test]
+        [Repeat(20)]
         public void PositiveAssertion_MultipleChains()
         {
             // Arrange
