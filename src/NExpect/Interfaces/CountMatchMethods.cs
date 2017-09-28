@@ -24,6 +24,10 @@ namespace NExpect.Interfaces
         /// <summary>
         /// Match all
         /// </summary>
-        All
+        All,
+        /// <summary>
+        /// Match only
+        /// </summary>
+        Only
     }
 }
