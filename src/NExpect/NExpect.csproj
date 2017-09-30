@@ -110,8 +110,10 @@
     <Compile Include="Implementations\ContainAt.cs" />
     <Compile Include="Implementations\CountMatchContinuation.cs" />
     <Compile Include="Implementations\CountMatchDeep.cs" />
+    <Compile Include="Implementations\CountMatchDeepEqual.cs" />
     <Compile Include="Implementations\CountMatchEqual.cs" />
     <Compile Include="Implementations\CountMatchIntersection.cs" />
+    <Compile Include="Implementations\CountMatchIntersectionEqual.cs" />
     <Compile Include="Implementations\CountMatchMatched.cs" />
     <Compile Include="Implementations\Deep.cs" />
     <Compile Include="Implementations\DefaultEqualityComparer.cs" />

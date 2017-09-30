@@ -54,8 +54,10 @@
     <Compile Include="..\NExpect\Implementations\ContainAt.cs" Link="Implementations\ContainAt.cs" />
     <Compile Include="..\NExpect\Implementations\CountMatchContinuation.cs" Link="Implementations\CountMatchContinuation.cs" />
     <Compile Include="..\NExpect\Implementations\CountMatchDeep.cs" Link="Implementations\CountMatchDeep.cs" />
+    <Compile Include="..\NExpect\Implementations\CountMatchDeepEqual.cs" Link="Implementations\CountMatchDeepEqual.cs" />
     <Compile Include="..\NExpect\Implementations\CountMatchEqual.cs" Link="Implementations\CountMatchEqual.cs" />
     <Compile Include="..\NExpect\Implementations\CountMatchIntersection.cs" Link="Implementations\CountMatchIntersection.cs" />
+    <Compile Include="..\NExpect\Implementations\CountMatchIntersectionEqual.cs" Link="Implementations\CountMatchIntersectionEqual.cs" />
     <Compile Include="..\NExpect\Implementations\CountMatchMatched.cs" Link="Implementations\CountMatchMatched.cs" />
     <Compile Include="..\NExpect\Implementations\Deep.cs" Link="Implementations\Deep.cs" />
     <Compile Include="..\NExpect\Implementations\DefaultEqualityComparer.cs" Link="Implementations\DefaultEqualityComparer.cs" />

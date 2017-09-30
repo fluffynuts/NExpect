@@ -36,42 +36,4 @@ namespace NExpect.Implementations
             return result;
         }
     }
-
-    internal class CountMatchDeepEqual<T>
-        : ExpectationContext<T>,
-        ICountMatchDeepEqual<T>, ICountMatchEqual<T>
-    {
-        public ICanAddMatcher<T> Continuation { get; }
-        public CountMatchMethods Method { get; }
-        public int ExpectedCount { get; }
-
-        public CountMatchDeepEqual(
-            ICanAddMatcher<T> continuation,
-            CountMatchMethods method,
-            int compare)
-        {
-            Continuation = continuation;
-            Method = method;
-            ExpectedCount = compare;
-        }
-    }    
-    
-    internal class CountMatchIntersectionEqual<T>
-        : ExpectationContext<T>,
-        ICountMatchIntersectionEqual<T>, ICountMatchEqual<T>
-    {
-        public ICanAddMatcher<T> Continuation { get; }
-        public CountMatchMethods Method { get; }
-        public int ExpectedCount { get; }
-
-        public CountMatchIntersectionEqual(
-            ICanAddMatcher<T> continuation,
-            CountMatchMethods method,
-            int compare)
-        {
-            Continuation = continuation;
-            Method = method;
-            ExpectedCount = compare;
-        }
-    }
 }

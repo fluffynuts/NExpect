@@ -64,13 +64,13 @@ namespace NExpect.MatcherLogic
         /// <param name="expectationsRunner">Runs your composed expectations</param>
         /// <param name="callingMethod"></param>
         /// <typeparam name="T"></typeparam>
-        public static void Compose<T>(
+        public static IMore<T> Compose<T>(
             this ICanAddMatcher<T> continuation,
             Action<T> expectationsRunner,
             [CallerMemberName] string callingMethod = null
         )
         {
-            continuation.Compose(expectationsRunner, 
+            return continuation.Compose(expectationsRunner, 
                 (a, b) => $"Expectation \"{callingMethod}\" should {(!b).AsNot()}have failed.");
         }
 
@@ -81,7 +81,7 @@ namespace NExpect.MatcherLogic
         /// <param name="expectationsRunner">Runs your composed expectations</param>
         /// <param name="messageGenerator">Generates the final message, passing in the actual instance being tested as well as a boolean for passed/failed</param>
         /// <typeparam name="T"></typeparam>
-        public static void Compose<T>(
+        public static IMore<T> Compose<T>(
             this ICanAddMatcher<T> continuation,
             Action<T> expectationsRunner,
             Func<T, bool, string> messageGenerator
@@ -104,6 +104,7 @@ namespace NExpect.MatcherLogic
                     );
                 }
             });
+            return continuation.More();
         }
 
         /// <summary>
@@ -113,13 +114,14 @@ namespace NExpect.MatcherLogic
         /// <param name="expectationsRunner">Runs your composed expectations</param>
         /// <param name="callingMethod"></param>
         /// <typeparam name="T"></typeparam>
-        public static void Compose<T>(
+        public static IMore<IEnumerable<T>> Compose<T>(
             this ICanAddMatcher<IEnumerable<T>> continuation,
             Action<IEnumerable<T>> expectationsRunner,
             [CallerMemberName] string callingMethod = null
         )
         {
-            continuation.Compose(expectationsRunner, (a, b) => $"{callingMethod} should {b.AsNot()}have passed.");
+            return continuation.Compose(expectationsRunner, 
+                (a, b) => $"{callingMethod} should {b.AsNot()}have passed.");
         }
 
         /// <summary>
@@ -129,7 +131,7 @@ namespace NExpect.MatcherLogic
         /// <param name="expectationsRunner">Runs your composed expectations</param>
         /// <param name="messageGenerator">Generates the final message, passing in the actual instance being tested as well as a boolean for passed/failed</param>
         /// <typeparam name="T"></typeparam>
-        public static void Compose<T>(
+        public static IMore<IEnumerable<T>> Compose<T>(
             this ICanAddMatcher<IEnumerable<T>> continuation,
             Action<IEnumerable<T>> expectationsRunner,
             Func<IEnumerable<T>, bool, string> messageGenerator
@@ -152,6 +154,7 @@ namespace NExpect.MatcherLogic
                     );
                 }
             });
+            return continuation.More();
         }
 
         private static void AddMatcherPrivate<T>(

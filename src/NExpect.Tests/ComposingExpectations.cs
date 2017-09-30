@@ -1,10 +1,12 @@
-﻿using NExpect.Exceptions;
+﻿using System.Collections.Generic;
+using NExpect.Exceptions;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
 using PeanutButter.Utils;
 using static NExpect.Expectations;
+using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Tests
 {
@@ -229,6 +231,40 @@ namespace NExpect.Tests
                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains("Bennies2"));
                 // Assert
+            }
+        }
+
+        [TestFixture]
+        public class More
+        {
+            [Test]
+            public void ObjectCompositionsShouldAllowQuickMore()
+            {
+                // Arrange
+                var src = GetRandomString();
+                var have = Expect(src).To.Have;
+                // Pre-Assert
+
+                // Act
+                var result = have.Compose(actual => Expect(actual).Not.To.Be.Null());
+
+                // Assert
+                Assert.That(result, Is.InstanceOf<IMore<string>>());
+            }
+
+            [Test]
+            public void CollectionCompositionsShouldAllowQuickMore()
+            {
+                // Arrange
+                var src = GetRandomCollection<string>();
+                var have = Expect(src).To.Have;
+                // Pre-Assert
+
+                // Act
+                var result = have.Compose(actual => Expect(actual).Not.To.Be.Null());
+
+                // Assert
+                Assert.That(result, Is.InstanceOf<IMore<IEnumerable<string>>>());
             }
         }
     }

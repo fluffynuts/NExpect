@@ -7,69 +7,12 @@ namespace NExpect.Tests.Collections
     [TestFixture]
     public class CustomEqualityTesting
     {
-        [TestFixture]
-        public class WithCustomEqualityComparer
-        {
-            [Test]
-            public void Positive_WhenMatches_ShouldNotThrow()
-            {
-                // Arrange
-                var left = new[] {$"A{GetRandomString()}", $"B{GetRandomString()}"};
-                var right = new[] {$"B{GetRandomString()}", $"A{GetRandomString()}"};
-
-                // Pre-Assert
-
-                // Act
-                Assert.That(() =>
-                    {
-                        Expect(left).To.Be.Equivalent.To(right, new FirstLetterComparer());
-                    },
-                    Throws.Nothing);
-
-                // Assert
-            }
-
-            [Test]
-            public void NegativeNegated_WhenNoMatches_ShouldNotThrow()
-            {
-                // Arrange
-                var left = new[] {$"A{GetRandomString()}", $"B{GetRandomString()}"};
-                var right = new[] {$"C{GetRandomString()}", $"A{GetRandomString()}"};
-
-                // Pre-Assert
-
-                // Act
-                Assert.That(() =>
-                    {
-                        Expect(left).Not.To.Be.Equivalent.To(right, new FirstLetterComparer());
-                    },
-                    Throws.Nothing);
-
-                // Assert
-            }
-
-            [Test]
-            public void NegativeNegated_AltGrammar_WhenNoMatches_ShouldNotThrow()
-            {
-                // Arrange
-                var left = new[] {$"A{GetRandomString()}", $"B{GetRandomString()}"};
-                var right = new[] {$"C{GetRandomString()}", $"A{GetRandomString()}"};
-
-                // Pre-Assert
-
-                // Act
-                Assert.That(() =>
-                    {
-                        Expect(left).To.Not.Be.Equivalent.To(right, new FirstLetterComparer());
-                    },
-                    Throws.Nothing);
-
-                // Assert
-            }
-        }
+        // TODO: could have more tests
+        //  -> the other implementations lean on the logic to
+        //      accomplish this, so, techically, the other cases are covered...
 
         [TestFixture]
-        public class WithCustomEqualityComparisonFunc
+        public class WithProvidedComparisonFunc
         {
             private static bool FirstLetterComparer(string x, string y)
             {
@@ -89,7 +32,26 @@ namespace NExpect.Tests.Collections
             }
 
             [Test]
-            public void Positive_WhenMatches_ShouldNotThrow()
+            public void PositiveResult_ShouldNotThrow()
+            {
+                // Arrange
+                var left = new[] {$"A{GetRandomString()}", $"B{GetRandomString()}"};
+                var right = new[] {$"A{GetRandomString()}", $"B{GetRandomString()}"};
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(left).To.Equal(right, FirstLetterComparer);
+                    },
+                    Throws.Nothing);
+
+                // Assert
+            }
+
+            [Test]
+            public void NegativeNegatedResult_ShouldNotThrow()
             {
                 // Arrange
                 var left = new[] {$"A{GetRandomString()}", $"B{GetRandomString()}"};
@@ -100,7 +62,7 @@ namespace NExpect.Tests.Collections
                 // Act
                 Assert.That(() =>
                     {
-                        Expect(left).To.Be.Equivalent.To(right, FirstLetterComparer);
+                        Expect(left).Not.To.Equal(right, FirstLetterComparer);
                     },
                     Throws.Nothing);
 
@@ -108,37 +70,18 @@ namespace NExpect.Tests.Collections
             }
 
             [Test]
-            public void NegativeNegated_WhenNoMatches_ShouldNotThrow()
+            public void NegativeNegatedResult_AltGrammar_ShouldNotThrow()
             {
                 // Arrange
                 var left = new[] {$"A{GetRandomString()}", $"B{GetRandomString()}"};
-                var right = new[] {$"C{GetRandomString()}", $"A{GetRandomString()}"};
+                var right = new[] {$"B{GetRandomString()}", $"A{GetRandomString()}"};
 
                 // Pre-Assert
 
                 // Act
                 Assert.That(() =>
                     {
-                        Expect(left).Not.To.Be.Equivalent.To(right, FirstLetterComparer);
-                    },
-                    Throws.Nothing);
-
-                // Assert
-            }
-
-            [Test]
-            public void NegativeNegated_AltGrammar_WhenNoMatches_ShouldNotThrow()
-            {
-                // Arrange
-                var left = new[] {$"A{GetRandomString()}", $"B{GetRandomString()}"};
-                var right = new[] {$"C{GetRandomString()}", $"A{GetRandomString()}"};
-
-                // Pre-Assert
-
-                // Act
-                Assert.That(() =>
-                    {
-                        Expect(left).To.Not.Be.Equivalent.To(right, FirstLetterComparer);
+                        Expect(left).To.Not.Equal(right, FirstLetterComparer);
                     },
                     Throws.Nothing);
 

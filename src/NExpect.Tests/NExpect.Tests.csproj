@@ -58,15 +58,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\All.cs" />
+    <Compile Include="Collections\Any.cs" />
+    <Compile Include="Collections\AtLeast.cs" />
+    <Compile Include="Collections\AtMost.cs" />
+    <Compile Include="Collections\CustomEqualityTesting.cs" />
+    <Compile Include="Collections\Emptiness.cs" />
+    <Compile Include="Collections\Equivalence.cs" />
+    <Compile Include="Collections\Exactly.cs" />
+    <Compile Include="Collections\Only.cs" />
     <Compile Include="ComposingExpectations.cs" />
     <Compile Include="Collections\CountMatchContinuationExtensionsForTesting.cs" />
-    <Compile Include="Collections\CustomEqualityTesting.cs" />
+    <Compile Include="Collections\CustomEquivalenceTesting.cs" />
     <Compile Include="Collections\DeepEqualityTesting.cs" />
     <Compile Include="Collections\DictionaryTesting.cs" />
     <Compile Include="Collections\FirstLetterComparer.cs" />
     <Compile Include="DanglingPrepositions\An.cs" />
     <Compile Include="DanglingPrepositions\A.cs" />
-    <Compile Include="Collections\TestCollectionExtensions.cs" />
+    <Compile Include="Collections\DifferentTypesOfCollections.cs" />
     <Compile Include="DanglingPrepositions\For.cs" />
     <Compile Include="EnablingUserComposition.cs" />
     <Compile Include="ObjectEquality\Strings\Containing.cs" />
