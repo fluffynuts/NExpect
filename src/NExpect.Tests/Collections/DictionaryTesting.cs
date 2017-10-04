@@ -309,7 +309,7 @@ namespace NExpect.Tests.Collections
                                     Expect(src).To.Contain.Key(key).With.Value(testingValue);
                                 },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                        .With.Message.Contains($"Expected {testingValue} but got {value}"));
+                                        .With.Message.Contains($"Expected {testingValue.Stringify()} but got {value.Stringify()}"));
 
                                 // Assert
                             }
