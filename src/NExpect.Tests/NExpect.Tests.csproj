@@ -94,7 +94,7 @@
     <Compile Include="ObjectEquality\TestingObjectEquality.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ObjectEquality\TestingBooleanValues.cs" />
-    <Compile Include="Stringify.cs" />
+    <Compile Include="TestStringify.cs" />
     <Compile Include="Types\TestingInstanceOfInterfaceOrBaseClass.cs" />
   </ItemGroup>
   <ItemGroup>

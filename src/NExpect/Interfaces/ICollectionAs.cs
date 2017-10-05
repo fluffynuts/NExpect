@@ -1,3 +1,4 @@
+// ReSharper disable UnusedTypeParameter
 namespace NExpect.Interfaces
 {
     /// <summary>

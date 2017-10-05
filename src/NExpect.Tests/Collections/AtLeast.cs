@@ -5,6 +5,7 @@ using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
+// ReSharper disable InconsistentNaming
 
 namespace NExpect.Tests.Collections
 {

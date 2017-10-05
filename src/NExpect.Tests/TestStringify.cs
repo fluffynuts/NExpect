@@ -7,7 +7,7 @@ using static PeanutButter.RandomGenerators.RandomValueGen;
 namespace NExpect.Tests
 {
     [TestFixture]
-    public class Stringify
+    public class TestStringify
     {
         [TestFixture]
         public class Enums
@@ -87,6 +87,32 @@ namespace NExpect.Tests
                     "  id: 1",
                     "  name: \"moo\"",
                     "} ]"
+                }.JoinWith("\n");
+                // Pre-Assert
+                // Act
+                var result = subject.Stringify();
+                // Assert
+                Expect(result).To.Equal(expected);
+            }
+
+            [Test]
+            public void AsProperty()
+            {
+                // Arrange
+                var subject = new
+                {
+                    collection = new[] {
+                        new { id = 1, name = "cow" }
+                    }
+                };
+                var expected = new[]
+                {
+                    "{",
+                    "  collection: [ {",
+                    "    id: 1",
+                    "    name: \"cow\"",
+                    "  } ]",
+                    "}"
                 }.JoinWith("\n");
                 // Pre-Assert
                 // Act
