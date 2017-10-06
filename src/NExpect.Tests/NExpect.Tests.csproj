@@ -78,6 +78,7 @@
     <Compile Include="Collections\DifferentTypesOfCollections.cs" />
     <Compile Include="DanglingPrepositions\For.cs" />
     <Compile Include="EnablingUserComposition.cs" />
+    <Compile Include="ObjectEquality\Safety.cs" />
     <Compile Include="ObjectEquality\Strings\Containing.cs" />
     <Compile Include="ObjectEquality\Strings\EndingWith.cs" />
     <Compile Include="ObjectEquality\Strings\NullorEmpty.cs" />

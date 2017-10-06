@@ -31,6 +31,7 @@
     <Compile Include="..\NExpect\Implementations\An.cs" Link="Implementations\An.cs" />
     <Compile Include="..\NExpect\Implementations\And.cs" Link="Implementations\And.cs" />
     <Compile Include="..\NExpect\Implementations\Be.cs" Link="Implementations\Be.cs" />
+    <Compile Include="..\NExpect\Implementations\CannotBeCompared.cs" Link="Implementations\CannotBeCompared.cs" />
     <Compile Include="..\NExpect\Implementations\CollectionAn.cs" Link="Implementations\CollectionAn.cs" />
     <Compile Include="..\NExpect\Implementations\CollectionAs.cs" Link="Implementations\CollectionAs.cs" />
     <Compile Include="..\NExpect\Implementations\CollectionBe.cs" Link="Implementations\CollectionBe.cs" />

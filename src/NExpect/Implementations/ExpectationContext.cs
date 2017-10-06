@@ -5,6 +5,7 @@ using NExpect.MatcherLogic;
 namespace NExpect.Implementations
 {
     internal abstract class ExpectationContext<T> :
+        CannotBeCompared,
         IExpectationContext<T>
     {
         public IExpectationContext Parent => _parent;
@@ -75,5 +76,6 @@ namespace NExpect.Implementations
         {
             (this as IExpectationContext<T>).TypedParent = parent;
         }
+
     }
 }
