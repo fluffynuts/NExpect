@@ -4,6 +4,7 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
+// ReSharper disable UnusedMethodReturnValue.Global
 
 namespace NExpect
 {
@@ -41,6 +42,117 @@ namespace NExpect
                         customMessage
                     ));
             });
+        }
+
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="not">Continuation to operate on</param>
+        /// <typeparam name="TInterface">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Implement<TInterface>(
+            this INotAfterTo<Type> not
+        )
+        {
+            return not.Implement<TInterface>(null);
+        }
+
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="not">Continuation to operate on</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="TInterface">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Implement<TInterface>(
+            this INotAfterTo<Type> not,
+            string customMessage
+        )
+        {
+            return not.AddImplementsMatcher<TInterface>(customMessage);
+        }
+
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <typeparam name="TInterface">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Implement<TInterface>(
+            this IToAfterNot<Type> to
+        )
+        {
+            return to.Implement<TInterface>(null);
+        }
+
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="TInterface">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Implement<TInterface>(
+            this IToAfterNot<Type> to,
+            string customMessage
+        )
+        {
+            return to.AddImplementsMatcher<TInterface>(customMessage);
+        }
+
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <typeparam name="TInterface">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Implement<TInterface>(
+            this ITo<Type> to
+        )
+        {
+            return to.Implement<TInterface>(null);
+        }
+
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="TInterface">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Implement<TInterface>(
+            this ITo<Type> to,
+            string customMessage
+        )
+        {
+            return to.AddImplementsMatcher<TInterface>(customMessage);
+        }
+
+        private static IMore<Type> AddImplementsMatcher<TInterface>(
+            this ICanAddMatcher<Type> addTo,
+            string customMessage
+        )
+        {
+            addTo.AddMatcher(actual =>
+            {
+                var interfaces = actual?.GetAllImplementedInterfaces() ?? new Type[0];
+                var expected = typeof(TInterface);
+                var passed = interfaces.Contains(expected);
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        $"Expected {actual} {passed.AsNot()}to implement {expected}",
+                        customMessage
+                    )
+                );
+            });
+            return addTo.More();
         }
 
         //TODO: find a better home for this method
