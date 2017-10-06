@@ -143,11 +143,129 @@ namespace NExpect
             {
                 var interfaces = actual?.GetAllImplementedInterfaces() ?? new Type[0];
                 var expected = typeof(TInterface);
+                if (!expected.IsInterface()) {
+                    return new MatcherResult(false, 
+                        FinalMessageFor($"{actual} is not an interface.", customMessage));
+                }
                 var passed = interfaces.Contains(expected);
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
                         $"Expected {actual} {passed.AsNot()}to implement {expected}",
+                        customMessage
+                    )
+                );
+            });
+            return addTo.More();
+        }
+
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="not">Continuation to operate on</param>
+        /// <typeparam name="TBase">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Inherit<TBase>(
+            this INotAfterTo<Type> not
+        )
+        {
+            return not.Inherit<TBase>(null);
+        }
+
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="not">Continuation to operate on</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="TBase">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Inherit<TBase>(
+            this INotAfterTo<Type> not,
+            string customMessage
+        )
+        {
+            return not.AddInheritsMatcher<TBase>(customMessage);
+        }
+
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <typeparam name="TBase">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Inherit<TBase>(
+            this IToAfterNot<Type> to
+        )
+        {
+            return to.Inherit<TBase>(null);
+        }
+
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="TBase">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Inherit<TBase>(
+            this IToAfterNot<Type> to,
+            string customMessage
+        )
+        {
+            return to.AddInheritsMatcher<TBase>(customMessage);
+        }
+
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <typeparam name="TBase">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Inherit<TBase>(
+            this ITo<Type> to
+        )
+        {
+            return to.Inherit<TBase>(null);
+        }
+
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="TBase">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Inherit<TBase>(
+            this ITo<Type> to,
+            string customMessage
+        )
+        {
+            return to.AddInheritsMatcher<TBase>(customMessage);
+        }
+
+        private static IMore<Type> AddInheritsMatcher<TBase>(
+            this ICanAddMatcher<Type> addTo,
+            string customMessage
+        )
+        {
+            addTo.AddMatcher(actual =>
+            {
+                var expected = typeof(TBase);
+                if (expected.IsInterface()) {
+                    return new MatcherResult(false, 
+                        FinalMessageFor($"{actual} is not a class.", customMessage));
+                }
+                var passed = expected.IsAssignableFrom(actual);
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        $"Expected {actual} {passed.AsNot()}to inherit {expected}",
                         customMessage
                     )
                 );
