@@ -1,10 +1,11 @@
 const
   gulp = requireModule("gulp-with-help"),
   gutil = require("gulp-util"),
-  editXml = require("gulp-edit-xml");
+  editXml = require("gulp-edit-xml"),
+  containingFolder = "src/NExpect";
 
 gulp.task("increment-package-version", () => {
-  gulp.src("Package.nuspec")
+  gulp.src(`${containingFolder}/Package.nuspec`)
     .pipe(editXml(xml => {
       const 
         node = xml.package.metadata[0].version,
@@ -19,7 +20,7 @@ gulp.task("increment-package-version", () => {
       gutil.log(gutil.colors.yellow(`Package version incremented to: ${newVersion}`));
       return xml;
     }, { builderOptions: { renderOpts: { pretty: true } } }))
-    .pipe(gulp.dest("."));
+    .pipe(gulp.dest(containingFolder));
 });
 
 function testNaN(version) {

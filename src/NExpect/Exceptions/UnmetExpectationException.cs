@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using StackTrace = System.Diagnostics.StackTrace;
+using StackFrame = System.Diagnostics.StackFrame;
 
 // ReSharper disable InheritdocConsiderUsage
 
@@ -23,7 +24,8 @@ namespace NExpect.Exceptions
             var reverseFrames = stackTrace.GetFrames()?.Reverse() ?? new StackFrame[0];
             var hitThisAssembly = false;
             var interestingFrames = reverseFrames.Aggregate(
-                new List<StackFrame>(), (acc, cur) =>
+                new List<StackFrame>(),
+                (acc, cur) =>
                 {
                     if (hitThisAssembly)
                     {
@@ -40,11 +42,7 @@ namespace NExpect.Exceptions
             return string.Join("",
                 interestingFrames
                     .Select(f =>
-#if NETSTANDARD1_6
-                    f
-#else
-                    new StackTrace(f)
-#endif
+                        new StackTrace(f)
                     )
                     .Select(f => f.ToString())
                     .Reverse()
@@ -57,7 +55,8 @@ namespace NExpect.Exceptions
         /// <param name="message">Message to display</param>
         internal UnmetExpectationException(
             string message
-        ) : base(message)
+        )
+            : base(message)
         {
         }
     }

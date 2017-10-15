@@ -3,13 +3,13 @@ const
   packageDir = require("./config").packageDir,
   spawn = requireModule("spawn");
 
-gulp.task("pack", () => {
+gulp.task("pack", [ "build-for-release" ], () => {
   return doPack();
 });
 
 function doPack() {
   return spawn(
     "tools/nuget.exe",
-    ["pack", "Package.nuspec", "-OutputDirectory", packageDir]
+    ["pack", "src/NExpect/Package.nuspec", "-OutputDirectory", packageDir]
   );
 }

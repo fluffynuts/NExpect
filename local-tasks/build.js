@@ -22,3 +22,20 @@ gulp.task("build",
       nologo: false
     }));
   });
+
+gulp.task("build-for-release",
+  "Builds all Visual Studio solutions in tree",
+  ["nuget-restore"],
+  () => {
+    return gulp.src([
+      "src/NExpect.sln"
+    ]).pipe(msbuild({
+      toolsVersion: "auto",
+      targets: ["Clean", "Build"],
+      configuration: "BuildForRelease",
+      stdout: true,
+      verbosity: "minimal",
+      errorOnFail: true,
+      nologo: false
+    }));
+  });
