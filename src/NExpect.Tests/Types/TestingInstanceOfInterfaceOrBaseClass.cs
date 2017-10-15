@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using NExpect.Exceptions;
 using NUnit.Framework;
-using PeanutButter.TestUtils.Generic;
 using static NExpect.Expectations;
+using PeanutButter.Utils;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Tests.Types
