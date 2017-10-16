@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using NExpect.Implementations;
 using NExpect.Interfaces;
+using NExpect.Shims;
+
 // ReSharper disable UnusedMember.Global
 
 namespace NExpect
@@ -322,7 +325,22 @@ namespace NExpect
         public static ICollectionExpectation<KeyValuePair<TKey, TValue>>
             Expect<TKey, TValue>(IDictionary<TKey, TValue> dictionary)
         {
-            return new CollectionExpectation<KeyValuePair<TKey, TValue>>(dictionary);
+            return new CollectionExpectation<KeyValuePair<TKey, TValue>>(
+                dictionary
+            );
+        }
+
+        /// <summary>
+        /// Starts an expectation on a NameValueCollection
+        /// <param name="collection">NameValueCollection to start with</param>
+        /// </summary>
+        /// <returns></returns>
+        public static ICollectionExpectation<KeyValuePair<string, string>>
+            Expect(NameValueCollection collection)
+        {
+            return new CollectionExpectation<KeyValuePair<string, string>>(
+                new DictionaryShim(collection)
+            );
         }
     }
 
