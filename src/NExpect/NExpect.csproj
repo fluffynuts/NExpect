@@ -12,6 +12,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='BuildForRelease|netstandard2.0|AnyCPU'">
     <DocumentationFile>bin\BuildForRelease\netstandard2.0\NExpect.xml</DocumentationFile>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\NExpect.xml</DocumentationFile>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ArrayExtensions.cs" Link="Imported\ArrayExtensions.cs" />
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\AutoLocker.cs" Link="Imported\AutoLocker.cs" />

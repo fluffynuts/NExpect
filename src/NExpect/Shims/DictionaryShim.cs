@@ -5,10 +5,15 @@ using System.Linq;
 
 namespace NExpect.Shims
 {
+    /// <summary>
+    /// Provides a shimming dictionary around a NameValueCollection
+    /// - used for Expectations around NameValueCollections
+    /// </summary>
     public class DictionaryShim : IDictionary<string, string>
     {
         private readonly NameValueCollection _actual;
 
+        /// <inheritdoc />
         public DictionaryShim(
             NameValueCollection actual
         )
@@ -16,6 +21,7 @@ namespace NExpect.Shims
             _actual = actual;
         }
 
+        /// <inheritdoc />
         public IEnumerator<KeyValuePair<string, string>> GetEnumerator()
         {
             return new DictionaryShimEnumerator(this);
@@ -26,16 +32,19 @@ namespace NExpect.Shims
             return GetEnumerator();
         }
 
+        /// <inheritdoc />
         public void Add(KeyValuePair<string, string> item)
         {
             Add(item.Key, item.Value);
         }
 
+        /// <inheritdoc />
         public void Clear()
         {
             _actual.Clear();
         }
 
+        /// <inheritdoc />
         public bool Contains(KeyValuePair<string, string> item)
         {
             if (!ContainsKey(item.Key))
@@ -44,6 +53,7 @@ namespace NExpect.Shims
             return existing == item.Value;
         }
 
+        /// <inheritdoc />
         public void CopyTo(KeyValuePair<string, string>[] array, int arrayIndex)
         {
             foreach (var kvp in this)
@@ -52,6 +62,7 @@ namespace NExpect.Shims
             }
         }
 
+        /// <inheritdoc />
         public bool Remove(KeyValuePair<string, string> item)
         {
             if (!Contains(item))
@@ -60,7 +71,10 @@ namespace NExpect.Shims
             return true;
         }
 
+        /// <inheritdoc />
         public int Count => _actual.Count;
+
+        /// <inheritdoc />
         public bool IsReadOnly => false;
 
         public void Add(string key, string value)
@@ -68,11 +82,13 @@ namespace NExpect.Shims
             _actual.Add(key, value);
         }
 
+        /// <inheritdoc />
         public bool ContainsKey(string key)
         {
             return _actual.AllKeys.Contains(key);
         }
 
+        /// <inheritdoc />
         public bool Remove(string key)
         {
             if (!ContainsKey(key))
@@ -81,6 +97,7 @@ namespace NExpect.Shims
             return true;
         }
 
+        /// <inheritdoc />
         public bool TryGetValue(string key, out string value)
         {
             return ContainsKey(key)
@@ -100,13 +117,17 @@ namespace NExpect.Shims
             return false;
         }
 
+        /// <inheritdoc />
         public string this[string key]
         {
             get => _actual[key];
             set => _actual[key] = value;
         }
 
+        /// <inheritdoc />
         public ICollection<string> Keys => _actual.AllKeys;
+
+        /// <inheritdoc />
         public ICollection<string> Values => GetValues();
 
         private ICollection<string> GetValues()
