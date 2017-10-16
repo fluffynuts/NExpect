@@ -161,8 +161,7 @@ namespace NExpect.MatcherLogic
             object continuation,
             Func<T, IMatcherResult> matcher)
         {
-            var type = typeof(T);
-            System.Diagnostics.Debug.WriteLine($"Adding matcher for type {type}");
+            System.Diagnostics.Debug.WriteLine($"Adding matcher for type {typeof(T)}");
             var asContext = continuation as IExpectationContext<T>;
             if (asContext == null)
             {
