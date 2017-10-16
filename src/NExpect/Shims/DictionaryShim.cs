@@ -77,6 +77,7 @@ namespace NExpect.Shims
         /// <inheritdoc />
         public bool IsReadOnly => false;
 
+        /// <inheritdoc />
         public void Add(string key, string value)
         {
             _actual.Add(key, value);

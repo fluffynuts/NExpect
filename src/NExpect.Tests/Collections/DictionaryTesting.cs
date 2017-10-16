@@ -4,6 +4,7 @@ using static PeanutButter.RandomGenerators.RandomValueGen;
 using NExpect.Exceptions;
 using NExpect.Implementations;
 using static NExpect.Expectations;
+
 // ReSharper disable InconsistentNaming
 // ReSharper disable ExpressionIsAlwaysNull
 
@@ -12,6 +13,83 @@ namespace NExpect.Tests.Collections
     [TestFixture]
     public class DictionaryTesting
     {
+        [TestFixture]
+        public class ShortContain
+        {
+            [Test]
+            public void WhenDoesContainSoughtValue_ShouldNotThrow()
+            {
+                // Arrange
+                var kvp = GetRandom<KeyValuePair<string, string>>();
+                var src = new Dictionary<string, string>()
+                {
+                    [kvp.Key] = kvp.Value
+                };
+                var dict = src as IDictionary<string, string>;
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(dict).To.Contain(kvp);
+                        foreach (var item in dict)
+                            Expect(dict).To.Contain(item);
+                    },
+                    Throws.Nothing);
+
+                // Assert
+            }
+
+            [Test]
+            public void PositiveAssertion_WhenDoesNotContainSoughtValue_ShouldThrow()
+            {
+                // Arrange
+                var missed = GetRandom<KeyValuePair<string, string>>();
+                var have = GetAnother(missed);
+                var dict = new Dictionary<string, string>()
+                {
+                    [have.Key] = have.Value
+                };
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(dict).To.Contain(missed);
+                }, Throws.Exception
+                    .InstanceOf<UnmetExpectationException>()
+                    .With.Message.Contains($"Expected {dict.Stringify()} to contain {missed.Stringify()}"));
+
+                // Assert
+            }
+
+            [Test]
+            public void NegativeAssertion_WhenDoesContainSoughtValue_ShouldThrow()
+            {
+                // Arrange
+                var have = GetRandom<KeyValuePair<string, string>>();
+                var dict = new Dictionary<string, string>()
+                {
+                    [have.Key] = have.Value
+                };
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(dict).Not.To.Contain(have);
+                }, Throws.Exception
+                    .InstanceOf<UnmetExpectationException>()
+                    .With.Message.Contains($"Expected {dict.Stringify()} not to contain {have.Stringify()}"));
+
+                // Assert
+            }
+
+        }
+
         [TestFixture]
         public class Expect_Dictionary_To_Contain
         {
@@ -89,7 +167,7 @@ namespace NExpect.Tests.Collections
 
                         // Assert
                     }
-                    
+
                     [TestFixture]
                     public class WithValue
                     {
@@ -273,7 +351,7 @@ namespace NExpect.Tests.Collections
                             {
                                 // Arrange
                                 var key = GetRandomString(2);
-                                var value = new List<int> {GetRandomInt(2,9), GetRandomInt(2, 9) , GetRandomInt(2, 9) };
+                                var value = new List<int> {GetRandomInt(2, 9), GetRandomInt(2, 9), GetRandomInt(2, 9)};
                                 var src = new Dictionary<string, List<int>>()
                                 {
                                     [key] = value
@@ -282,9 +360,9 @@ namespace NExpect.Tests.Collections
 
                                 // Act
                                 Assert.That(() =>
-                                {
-                                    Expect(src).To.Contain.Key(key).With.Value(value);
-                                },
+                                    {
+                                        Expect(src).To.Contain.Key(key).With.Value(value);
+                                    },
                                     Throws.Nothing);
 
                                 // Assert
@@ -295,21 +373,27 @@ namespace NExpect.Tests.Collections
                             {
                                 // Arrange
                                 var key = GetRandomString(2);
-                                var value = new List<int> { GetRandomInt(2, 9), GetRandomInt(2, 9), GetRandomInt(2, 9) };
+                                var value = new List<int> {GetRandomInt(2, 9), GetRandomInt(2, 9), GetRandomInt(2, 9)};
                                 var src = new Dictionary<string, List<int>>()
                                 {
                                     [key] = value
                                 };
-                                var testingValue = new List<int> { GetRandomInt(10, 19), GetRandomInt(10, 19), GetRandomInt(10, 19) };
+                                var testingValue = new List<int>
+                                {
+                                    GetRandomInt(10, 19),
+                                    GetRandomInt(10, 19),
+                                    GetRandomInt(10, 19)
+                                };
                                 // Pre-Assert
-                                
+
                                 // Act
                                 Assert.That(() =>
-                                {
-                                    Expect(src).To.Contain.Key(key).With.Value(testingValue);
-                                },
+                                    {
+                                        Expect(src).To.Contain.Key(key).With.Value(testingValue);
+                                    },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                        .With.Message.Contains($"Expected {testingValue.Stringify()} but got {value.Stringify()}"));
+                                        .With.Message
+                                        .Contains($"Expected {testingValue.Stringify()} but got {value.Stringify()}"));
 
                                 // Assert
                             }
@@ -323,19 +407,19 @@ namespace NExpect.Tests.Collections
                             {
                                 // Arrange
                                 var key = GetRandomString(2);
-                                var value = (sbyte)GetRandomInt(2);
+                                var value = (sbyte) GetRandomInt(2);
                                 var src = new Dictionary<string, sbyte>()
                                 {
                                     [key] = value
                                 };
-                                var expected = (int)value;
+                                var expected = (int) value;
                                 // Pre-Assert
 
                                 // Act
                                 Assert.That(() =>
-                                {
-                                    Expect(src).To.Contain.Key(key).With.Value(expected);
-                                },
+                                    {
+                                        Expect(src).To.Contain.Key(key).With.Value(expected);
+                                    },
                                     Throws.Nothing);
 
                                 // Assert
@@ -346,12 +430,12 @@ namespace NExpect.Tests.Collections
                             {
                                 // Arrange
                                 var key = GetRandomString(2);
-                                var value = (sbyte)GetRandomInt(2);
+                                var value = (sbyte) GetRandomInt(2);
                                 var src = new Dictionary<string, sbyte>()
                                 {
                                     [key] = value
                                 };
-                                var expected = (int)GetAnother(value);
+                                var expected = (int) GetAnother(value);
                                 // Pre-Assert
 
                                 // Act
@@ -360,7 +444,7 @@ namespace NExpect.Tests.Collections
                                         Expect(src).To.Contain.Key(key).With.Value(expected);
                                     },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                    );
+                                );
                                 // Assert
                             }
 
@@ -369,19 +453,19 @@ namespace NExpect.Tests.Collections
                             {
                                 // Arrange
                                 var key = GetRandomString(2);
-                                var value = (short)GetRandomInt(2);
+                                var value = (short) GetRandomInt(2);
                                 var src = new Dictionary<string, short>()
                                 {
                                     [key] = value
                                 };
-                                var expected = (int)value;
+                                var expected = (int) value;
                                 // Pre-Assert
 
                                 // Act
                                 Assert.That(() =>
-                                {
-                                    Expect(src).To.Contain.Key(key).With.Value(expected);
-                                },
+                                    {
+                                        Expect(src).To.Contain.Key(key).With.Value(expected);
+                                    },
                                     Throws.Nothing);
 
                                 // Assert
@@ -392,21 +476,21 @@ namespace NExpect.Tests.Collections
                             {
                                 // Arrange
                                 var key = GetRandomString(2);
-                                var value = (short)GetRandomInt(2);
+                                var value = (short) GetRandomInt(2);
                                 var src = new Dictionary<string, short>()
                                 {
                                     [key] = value
                                 };
-                                var expected = (int)GetAnother(value);
+                                var expected = (int) GetAnother(value);
                                 // Pre-Assert
 
                                 // Act
                                 Assert.That(() =>
-                                {
-                                    Expect(src).To.Contain.Key(key).With.Value(expected);
-                                },
+                                    {
+                                        Expect(src).To.Contain.Key(key).With.Value(expected);
+                                    },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                    );
+                                );
                                 // Assert
                             }
 
@@ -420,14 +504,14 @@ namespace NExpect.Tests.Collections
                                 {
                                     [key] = value
                                 };
-                                var expected = (long)value;
+                                var expected = (long) value;
                                 // Pre-Assert
 
                                 // Act
                                 Assert.That(() =>
-                                {
-                                    Expect(src).To.Contain.Key(key).With.Value(expected);
-                                },
+                                    {
+                                        Expect(src).To.Contain.Key(key).With.Value(expected);
+                                    },
                                     Throws.Nothing);
 
                                 // Assert
@@ -443,16 +527,16 @@ namespace NExpect.Tests.Collections
                                 {
                                     [key] = value
                                 };
-                                var expected = (long)GetAnother(value);
+                                var expected = (long) GetAnother(value);
                                 // Pre-Assert
 
                                 // Act
                                 Assert.That(() =>
-                                {
-                                    Expect(src).To.Contain.Key(key).With.Value(expected);
-                                },
+                                    {
+                                        Expect(src).To.Contain.Key(key).With.Value(expected);
+                                    },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                    );
+                                );
                                 // Assert
                             }
 
@@ -461,19 +545,19 @@ namespace NExpect.Tests.Collections
                             {
                                 // Arrange
                                 var key = GetRandomString(2);
-                                var value = (byte)GetRandomInt(2);
+                                var value = (byte) GetRandomInt(2);
                                 var src = new Dictionary<string, byte>()
                                 {
                                     [key] = value
                                 };
-                                var expected = (int)value;
+                                var expected = (int) value;
                                 // Pre-Assert
 
                                 // Act
                                 Assert.That(() =>
-                                {
-                                    Expect(src).To.Contain.Key(key).With.Value(expected);
-                                },
+                                    {
+                                        Expect(src).To.Contain.Key(key).With.Value(expected);
+                                    },
                                     Throws.Nothing);
 
                                 // Assert
@@ -484,21 +568,21 @@ namespace NExpect.Tests.Collections
                             {
                                 // Arrange
                                 var key = GetRandomString(2);
-                                var value = (byte)GetRandomInt(2);
+                                var value = (byte) GetRandomInt(2);
                                 var src = new Dictionary<string, byte>()
                                 {
                                     [key] = value
                                 };
-                                var expected = (int)GetAnother(value);
+                                var expected = (int) GetAnother(value);
                                 // Pre-Assert
 
                                 // Act
                                 Assert.That(() =>
-                                {
-                                    Expect(src).To.Contain.Key(key).With.Value(expected);
-                                },
+                                    {
+                                        Expect(src).To.Contain.Key(key).With.Value(expected);
+                                    },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                    );
+                                );
                                 // Assert
                             }
 
@@ -507,19 +591,19 @@ namespace NExpect.Tests.Collections
                             {
                                 // Arrange
                                 var key = GetRandomString(2);
-                                var value = (ushort)GetRandomInt(2);
+                                var value = (ushort) GetRandomInt(2);
                                 var src = new Dictionary<string, ushort>()
                                 {
                                     [key] = value
                                 };
-                                var expected = (int)value;
+                                var expected = (int) value;
                                 // Pre-Assert
 
                                 // Act
                                 Assert.That(() =>
-                                {
-                                    Expect(src).To.Contain.Key(key).With.Value(expected);
-                                },
+                                    {
+                                        Expect(src).To.Contain.Key(key).With.Value(expected);
+                                    },
                                     Throws.Nothing);
 
                                 // Assert
@@ -530,21 +614,21 @@ namespace NExpect.Tests.Collections
                             {
                                 // Arrange
                                 var key = GetRandomString(2);
-                                var value = (ushort)GetRandomInt(2);
+                                var value = (ushort) GetRandomInt(2);
                                 var src = new Dictionary<string, ushort>()
                                 {
                                     [key] = value
                                 };
-                                var expected = (int)GetAnother(value);
+                                var expected = (int) GetAnother(value);
                                 // Pre-Assert
 
                                 // Act
                                 Assert.That(() =>
-                                {
-                                    Expect(src).To.Contain.Key(key).With.Value(expected);
-                                },
+                                    {
+                                        Expect(src).To.Contain.Key(key).With.Value(expected);
+                                    },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                    );
+                                );
                                 // Assert
                             }
 
@@ -553,19 +637,19 @@ namespace NExpect.Tests.Collections
                             {
                                 // Arrange
                                 var key = GetRandomString(2);
-                                var value = (uint)GetRandomInt(2);
+                                var value = (uint) GetRandomInt(2);
                                 var src = new Dictionary<string, uint>()
                                 {
                                     [key] = value
                                 };
-                                var expected = (long)value;
+                                var expected = (long) value;
                                 // Pre-Assert
 
                                 // Act
                                 Assert.That(() =>
-                                {
-                                    Expect(src).To.Contain.Key(key).With.Value(expected);
-                                },
+                                    {
+                                        Expect(src).To.Contain.Key(key).With.Value(expected);
+                                    },
                                     Throws.Nothing);
 
                                 // Assert
@@ -576,21 +660,21 @@ namespace NExpect.Tests.Collections
                             {
                                 // Arrange
                                 var key = GetRandomString(2);
-                                var value = (uint)GetRandomInt(2);
+                                var value = (uint) GetRandomInt(2);
                                 var src = new Dictionary<string, uint>()
                                 {
                                     [key] = value
                                 };
-                                var expected = (long)GetAnother(value);
+                                var expected = (long) GetAnother(value);
                                 // Pre-Assert
 
                                 // Act
                                 Assert.That(() =>
-                                {
-                                    Expect(src).To.Contain.Key(key).With.Value(expected);
-                                },
+                                    {
+                                        Expect(src).To.Contain.Key(key).With.Value(expected);
+                                    },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                    );
+                                );
                                 // Assert
                             }
 
@@ -609,9 +693,9 @@ namespace NExpect.Tests.Collections
 
                                 // Act
                                 Assert.That(() =>
-                                {
-                                    Expect(src).To.Contain.Key(key).With.Value(expected);
-                                },
+                                    {
+                                        Expect(src).To.Contain.Key(key).With.Value(expected);
+                                    },
                                     Throws.Nothing);
 
                                 // Assert
@@ -632,11 +716,11 @@ namespace NExpect.Tests.Collections
 
                                 // Act
                                 Assert.That(() =>
-                                {
-                                    Expect(src).To.Contain.Key(key).With.Value(expected);
-                                },
+                                    {
+                                        Expect(src).To.Contain.Key(key).With.Value(expected);
+                                    },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                    );
+                                );
                                 // Assert
                             }
                         }

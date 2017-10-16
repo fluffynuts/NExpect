@@ -327,7 +327,7 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     MessageHelpers.FinalMessageFor(
-                        $"Expected {collection.PrettyPrint()} {passed.AsNot()}to contain key {key?.Stringify()}",
+                        $"Expected {collection.LimitedPrint()} {passed.AsNot()}to contain key {key?.Stringify()}",
                         customMessage
                     )
                 );

@@ -20,7 +20,7 @@ namespace NExpect
         {
             return (collection == null)
                 // ReSharper disable once ExpressionIsAlwaysNull
-                ? throw new ArgumentNullException(nameof(collection), $"Expected IEnumerable<{typeof(T).Name}>, but found {collection.PrettyPrint()}")
+                ? throw new ArgumentNullException(nameof(collection), $"Expected IEnumerable<{typeof(T).Name}>, but found {collection.LimitedPrint()}")
                 : collection.Distinct().Count() == collection.Count();
         }
     }

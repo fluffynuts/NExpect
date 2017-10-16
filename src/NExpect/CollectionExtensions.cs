@@ -49,12 +49,9 @@ namespace NExpect
             continuation.AddMatcher(collection =>
             {
                 var passed = collection.Contains(search);
-                var notPart = passed
-                    ? ""
-                    : "not ";
                 return new MatcherResult(
                     passed,
-                    $"Expected {collection} {notPart}to contain {search}"
+                    $"Expected {collection.Stringify()} {passed.AsNot()}to contain {search.Stringify()}"
                 );
             });
             continuation.AddMatcher(
@@ -141,7 +138,7 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {collection} {passed.AsNot()}to contain {search}",
+                        $"Expected {collection.LimitedPrint()} {passed.AsNot()}to contain {search.Stringify()}",
                         customMessage
                     )
                 );
@@ -435,7 +432,7 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {collection.PrettyPrint()} {passed.AsNot()}to be an empty collection",
+                        $"Expected {collection.LimitedPrint()} {passed.AsNot()}to be an empty collection",
                         customMessage
                     )
                 );
@@ -510,7 +507,7 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {collection.PrettyPrint()} {passed.AsNot()}to be equivalent to {other.PrettyPrint()}",
+                        $"Expected {collection.LimitedPrint()} {passed.AsNot()}to be equivalent to {other.LimitedPrint()}",
                         customMessage
                     )
                 );
@@ -579,7 +576,7 @@ namespace NExpect
                 var passed = collection == null;
                 return new MatcherResult(
                     passed,
-                    FinalMessageFor($"Expected {collection.PrettyPrint()} {passed.AsNot()}to be null",
+                    FinalMessageFor($"Expected {collection.LimitedPrint()} {passed.AsNot()}to be null",
                         customMessage)
                 );
             });
@@ -1147,7 +1144,7 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected collection:\n{actual.PrettyPrint()}\n{passed.AsNot()}to match:\n{expected.PrettyPrint()}",
+                        $"Expected collection:\n{actual.LimitedPrint()}\n{passed.AsNot()}to match:\n{expected.LimitedPrint()}",
                         customMessage)
                 );
             };
@@ -1247,7 +1244,7 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(CreateCheckDistinctMessageFor(
-                            collection.PrettyPrint(),
+                            collection.LimitedPrint(),
                             passed,
                             collection.IsEmpty()
                         ),

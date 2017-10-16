@@ -345,7 +345,7 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected \n{collection.PrettyPrint()}\n{passed.AsNot()} to be deep equivalent to\n{expected.PrettyPrint()}",
+                        $"Expected \n{collection.LimitedPrint()}\n{passed.AsNot()} to be deep equivalent to\n{expected.LimitedPrint()}",
                         customMessage
                     ));
             });
@@ -384,7 +384,7 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected\n{collection.PrettyPrint()}\n{passed.AsNot()} to be intersection equivalent to\n{expected.PrettyPrint()}",
+                        $"Expected\n{collection.LimitedPrint()}\n{passed.AsNot()} to be intersection equivalent to\n{expected.LimitedPrint()}",
                         customMessage
                     )
                 );
@@ -437,7 +437,7 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected\n{collection.PrettyPrint()}\n{passed.AsNot()} to intersect equal\n{expected.PrettyPrint()}",
+                        $"Expected\n{collection.LimitedPrint()}\n{passed.AsNot()} to intersect equal\n{expected.LimitedPrint()}",
                         customMessage
                     )
                 );

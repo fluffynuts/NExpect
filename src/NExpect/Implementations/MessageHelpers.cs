@@ -104,8 +104,8 @@ namespace NExpect.Implementations
         public static string Stringify<T>(this IEnumerable<T> collection)
         {
             return collection == null 
-                    ? Null : 
-                    string.Join(", ", collection.Select(Quote));
+                    ? Null 
+                    : $"[ {string.Join(", ", collection.Select(Quote))} ]";
         }
 
         internal const string Null = "(null)";
@@ -116,7 +116,7 @@ namespace NExpect.Implementations
         /// <param name="collection">Collection to inspect</param>
         /// <typeparam name="T">Item type of collection</typeparam>
         /// <returns>Something like `[ "a", "b", "c" ]`</returns>
-        public static string PrettyPrint<T>(this IEnumerable<T> collection)
+        public static string LimitedPrint<T>(this IEnumerable<T> collection)
         {
             if (collection == null)
                 return Null;
@@ -124,7 +124,7 @@ namespace NExpect.Implementations
             var ellipsis = asArray.Length > 10
                 ? " ..."
                 : "";
-            return $"[ {asArray.Take(10).Stringify()}{ellipsis} ]";
+            return $"[ {asArray.Take(10).Select(o => o.Stringify()).JoinWith(", ")}{ellipsis} ]";
         }
 
         /// <summary>

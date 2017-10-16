@@ -90,7 +90,7 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected\n{collection.PrettyPrint()}\n{passed.AsNot()}to deep equal\n{expected.PrettyPrint()}",
+                        $"Expected\n{collection.LimitedPrint()}\n{passed.AsNot()}to deep equal\n{expected.LimitedPrint()}",
                         customMessage
                     )
                 );
