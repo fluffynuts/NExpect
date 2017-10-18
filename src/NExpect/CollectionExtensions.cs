@@ -186,7 +186,7 @@ namespace NExpect
                 howMany
             );
         }
-        
+
         /// <summary>
         /// Match at least N elements with following matchers
         /// </summary>
@@ -289,7 +289,26 @@ namespace NExpect
         /// <exception cref="ArgumentNullException">Thrown if the countMatch is null -- mainly to keep the library sane and testable</exception>
         public static void To<T>(
             this ICountMatchEqual<IEnumerable<T>> countMatch,
-            T search)
+            T search
+        )
+        {
+            countMatch.To(search, null);
+        }
+
+        /// <summary>
+        /// Performs the equality match with the provided limit (exactly, min, max)
+        /// on the collection, using {T}.Equals()
+        /// </summary>
+        /// <param name="countMatch">Count matcher continuation</param>
+        /// <param name="search">Thing to search for</param>
+        /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <typeparam name="T">Type of underlying continuation</typeparam>
+        /// <exception cref="ArgumentNullException">Thrown if the countMatch is null -- mainly to keep the library sane and testable</exception>
+        public static void To<T>(
+            this ICountMatchEqual<IEnumerable<T>> countMatch,
+            T search,
+            string customMessage
+        )
         {
             if (countMatch == null)
                 throw new ArgumentNullException(nameof(countMatch),
@@ -315,7 +334,7 @@ namespace NExpect
 
                 return new MatcherResult(
                     passed,
-                    message
+                    FinalMessageFor(message, customMessage)
                 );
             });
         }
@@ -391,7 +410,7 @@ namespace NExpect
             countMatch.Continuation.AddMatcher(collection =>
             {
                 var idx = 0;
-                var have = collection.Select(o => new { o, idx = idx++ })
+                var have = collection.Select(o => new {o, idx = idx++})
                     .Count(o => test(o.idx, o.o));
                 var compare = countMatch.Method == CountMatchMethods.All
                     ? collection.Count()
@@ -1227,7 +1246,8 @@ namespace NExpect
         private static void CheckOnly<T>(ICanAddMatcher<IEnumerable<T>> contain, int howMany)
         {
             var itemInCollection = contain.GetActual().Count();
-            if (itemInCollection == howMany) return;
+            if (itemInCollection == howMany)
+                return;
             var s = howMany == 1 ? "" : "s";
             throw new UnmetExpectationException(
                 $"Expected to find only {howMany} item{s} in collection, but found {itemInCollection}");

@@ -156,6 +156,7 @@ namespace NExpect.Tests.Collections
                         var search = GetRandomString(3);
                         var other1 = GetAnother(search);
                         var other2 = GetAnother<string>(new[] {search, other1});
+                        var customMessage = GetRandomString(2);
                         var collection = new[]
                         {
                             search,
@@ -163,18 +164,17 @@ namespace NExpect.Tests.Collections
                             other2,
                             search
                         }.Randomize();
+                        var standardMessage = $"to find exactly 1 occurrence of \"{search}\" but found 2";
 
                         // Pre-Assert
                         // Act
                         Assert.That(() =>
                             {
-                                Expect(collection).To.Contain.Exactly(1).Equal.To(search);
+                                Expect(collection).To.Contain.Exactly(1).Equal.To(search, customMessage);
                             },
                             Throws.Exception
                                 .InstanceOf<UnmetExpectationException>()
-                                .With.Message
-                                .Contains($"to find exactly 1 occurrence of \"{search}\" but found 2"));
-
+                                .With.Message.Matches($"{customMessage}.*\\s*.*{standardMessage}"));
                         // Assert
                     }
 
