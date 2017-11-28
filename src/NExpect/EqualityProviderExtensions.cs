@@ -504,8 +504,17 @@ namespace NExpect
 
         private static bool ValuesAreEqual<T>(T expected, T actual)
         {
-            return actual != null && (actual.Equals(expected));
+            var result = actual != null &&
+                actual.Equals(expected);
+            if (!result)
+                return false;
+            if (expected is DateTime expectedDateTime &&
+                actual is DateTime actualDateTime) {
+                return expectedDateTime.Kind == actualDateTime.Kind;
+            }
+            return true;
         }
+
 
         private static bool BothAreNull<T>(T expected, T actual)
         {

@@ -92,7 +92,7 @@ namespace NExpect.Implementations
         /// <returns>String representation of object</returns>
         public static string Quote<T>(T o)
         {
-            return Stringifier.Stringify(o, Null);
+            return Stringifier.Stringify(o, NULL);
         }
 
         /// <summary>
@@ -104,11 +104,11 @@ namespace NExpect.Implementations
         public static string Stringify<T>(this IEnumerable<T> collection)
         {
             return collection == null 
-                    ? Null 
+                    ? NULL 
                     : $"[ {string.Join(", ", collection.Select(Quote))} ]";
         }
 
-        internal const string Null = "(null)";
+        internal const string NULL = "(null)";
 
         /// <summary>
         /// Returns string with up to 10 elements from a collection with ellipsis if required
@@ -119,7 +119,7 @@ namespace NExpect.Implementations
         public static string LimitedPrint<T>(this IEnumerable<T> collection)
         {
             if (collection == null)
-                return Null;
+                return NULL;
             var asArray = collection.ToArray();
             var ellipsis = asArray.Length > 10
                 ? " ..."
@@ -135,7 +135,7 @@ namespace NExpect.Implementations
         /// <returns></returns>
         public static string Stringify<T>(this T item)
         {
-            return Stringifier.Stringify(item, Null);
+            return Stringifier.Stringify(item, NULL);
         }
 
     }

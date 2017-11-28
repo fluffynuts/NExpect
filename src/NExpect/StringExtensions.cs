@@ -78,7 +78,7 @@ namespace NExpect
         )
         {
             var result = new StringContainContinuation(continuation);
-            continuation.SetMetadata(SearchOffset, 0); // And will reset the offset -- it's not ordered
+            continuation.SetMetadata(SEARCH_OFFSET, 0); // And will reset the offset -- it's not ordered
             AddContainsMatcherTo(continuation, search, customMessage, result);
             return result;
         }
@@ -281,7 +281,7 @@ namespace NExpect
         }
 
 
-        private const string SearchOffset = "SearchOffset";
+        private const string SEARCH_OFFSET = "SearchOffset";
 
         private static void AddContainsMatcherTo(
             ICanAddMatcher<string> continuation,
@@ -292,10 +292,10 @@ namespace NExpect
         {
             continuation.AddMatcher(s =>
             {
-                var priorOffset = continuation.GetMetadata<int>(SearchOffset);
+                var priorOffset = continuation.GetMetadata<int>(SEARCH_OFFSET);
                 var nextOffset = GetNextOffsetOf(search, s, priorOffset);
 
-                next.SetMetadata(SearchOffset, nextOffset);
+                next.SetMetadata(SEARCH_OFFSET, nextOffset);
 
                 var passed = nextOffset > -1;
                 var offsetMessage = priorOffset > 0

@@ -127,7 +127,7 @@ namespace NExpect
                 var nextOffset = s?.IndexOf(search) ?? -1;
                 if (nextOffset > -1)
                     nextOffset += search?.Length ?? 0;
-                result.SetMetadata(SearchOffset, nextOffset);
+                result.SetMetadata(SEARCH_OFFSET, nextOffset);
 
                 var passed = nextOffset > -1;
                 return new MatcherResult(
@@ -140,7 +140,7 @@ namespace NExpect
             return result;
         }
 
-        private const string SearchOffset = "SearchOffset";
+        private const string SEARCH_OFFSET = "SearchOffset";
 
         /// <summary>
         /// Used to test exception messages
