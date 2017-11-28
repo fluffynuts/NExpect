@@ -8,7 +8,6 @@ const
 
 gulp.task("release", [ "test-dotnet" ], (done) => {
   runSequence(
-    "increment-package-version",
     "pack",
     "push",
     done

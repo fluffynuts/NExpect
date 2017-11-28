@@ -17,10 +17,18 @@
     <DocumentationFile>bin\Debug\netstandard2.0\NExpect.xml</DocumentationFile>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='BuildForRelease|netstandard2.0|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\NExpect.xml</DocumentationFile>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.0|AnyCPU'">
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net452|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\NExpect.xml</DocumentationFile>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='BuildForRelease|net452|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard2.0\NExpect.xml</DocumentationFile>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
