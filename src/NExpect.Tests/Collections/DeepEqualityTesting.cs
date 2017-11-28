@@ -2,11 +2,11 @@
 using NUnit.Framework;
 using NExpect.Exceptions;
 using static NExpect.Expectations;
+using static PeanutButter.RandomGenerators.RandomValueGen;
 // ReSharper disable MemberHidesStaticFromOuterClass
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnusedMember.Global
-
 // ReSharper disable InconsistentNaming
 
 namespace NExpect.Tests.Collections
@@ -166,6 +166,28 @@ namespace NExpect.Tests.Collections
                                 Expect(first).To.Deep.Equal(second);
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+
+                    [Test]
+                    public void ShouldNotTreatDateTimesWithDifferentKindsAsEqual()
+                    {
+                        // Arrange
+                        var src = GetRandomDate();
+                        var local = new
+                        {
+                            Date = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, src.Second, DateTimeKind.Local)
+                        };
+                        var utc = new
+                        {
+                            Date = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, src.Second, DateTimeKind.Utc)
+                        };
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(local).To.Deep.Equal(utc);
+                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
                         // Assert
                     }
                 }

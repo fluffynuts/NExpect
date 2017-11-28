@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PeanutButter.Utils;
+using Imported.PeanutButter.Utils;
 
 namespace NExpect
 {

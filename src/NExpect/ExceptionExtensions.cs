@@ -2,7 +2,7 @@
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
-using PeanutButter.Utils;
+using Imported.PeanutButter.Utils;
 
 // ReSharper disable UnusedMethodReturnValue.Global
 

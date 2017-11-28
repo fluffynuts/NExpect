@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using PeanutButter.Utils;
+using Imported.PeanutButter.Utils;
 
 namespace NExpect.Exceptions
 {

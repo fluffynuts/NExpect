@@ -4,7 +4,7 @@ using NExpect.Exceptions;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
-using PeanutButter.Utils;
+using Imported.PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
 // ReSharper disable MemberCanBePrivate.Global
 
