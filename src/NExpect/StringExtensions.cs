@@ -225,6 +225,192 @@ namespace NExpect
         /// </summary>
         /// <param name="matched">Continuation to operate on</param>
         /// <param name="regex">Regex instance to match with</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this ITo<string> matched,
+            Regex regex
+        )
+        {
+            return matched.Match(regex, null);
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matched">Continuation to operate on</param>
+        /// <param name="regex">Regex instance to match with</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this ITo<string> matched,
+            Regex regex,
+            string customMessage
+        )
+        {
+            AddRegexMatcher(matched, regex, customMessage);
+            return matched.More();
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matched">Continuation to operate on</param>
+        /// <param name="regex">Regex string to match with</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this ITo<string> matched,
+            string regex
+        )
+        {
+            return matched.Match(regex, null);
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matched">Continuation to operate on</param>
+        /// <param name="regex">Regex string to match with</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this ITo<string> matched,
+            string regex,
+            string customMessage
+        )
+        {
+            AddRegexMatcher(matched, regex, customMessage);
+            return matched.More();
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matcher">Continuation to operate on</param>
+        /// <param name="regex">Regex instance to match with</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this IToAfterNot<string> matcher,
+            Regex regex
+        )
+        {
+            return matcher.Match(regex, null);
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matcher">Continuation to operate on</param>
+        /// <param name="regex">Regex instance to match with</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this IToAfterNot<string> matcher,
+            Regex regex,
+            string customMessage
+        )
+        {
+            AddRegexMatcher(matcher, regex, customMessage);
+            return matcher.More();
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matcher">Continuation to operate on</param>
+        /// <param name="regex">Regex string to match with</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this IToAfterNot<string> matcher,
+            string regex
+        )
+        {
+            return matcher.Match(regex, null);
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matcher">Continuation to operate on</param>
+        /// <param name="regex">Regex string to match with</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this IToAfterNot<string> matcher,
+            string regex,
+            string customMessage
+        )
+        {
+            AddRegexMatcher(matcher, regex, customMessage);
+            return matcher.More();
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matcher">Continuation to operate on</param>
+        /// <param name="regex">Regex instance to match with</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this INotAfterTo<string> matcher,
+            Regex regex
+        )
+        {
+            return matcher.Match(regex, null);
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matcher">Continuation to operate on</param>
+        /// <param name="regex">Regex instance to match with</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this INotAfterTo<string> matcher,
+            Regex regex,
+            string customMessage
+        )
+        {
+            AddRegexMatcher(matcher, regex, customMessage);
+            return matcher.More();
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matcher">Continuation to operate on</param>
+        /// <param name="regex">Regex string to match with</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this INotAfterTo<string> matcher,
+            string regex
+        )
+        {
+            return matcher.Match(regex, null);
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matcher">Continuation to operate on</param>
+        /// <param name="regex">Regex string to match with</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this INotAfterTo<string> matcher,
+            string regex,
+            string customMessage
+        )
+        {
+            AddRegexMatcher(matcher, regex, customMessage);
+            return matcher.More();
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matched">Continuation to operate on</param>
+        /// <param name="regex">Regex instance to match with</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
         /// <returns>More continuation for Actual string</returns>
         public static IStringMore By(
@@ -233,7 +419,26 @@ namespace NExpect
             string customMessage
         )
         {
-            matched.AddMatcher(actual =>
+            AddRegexMatcher(matched, regex, customMessage);
+            return matched.More();
+        }
+
+        private static void AddRegexMatcher(
+            ICanAddMatcher<string> matcher,
+            string regex,
+            string customMessage
+        )
+        {
+            AddRegexMatcher(matcher, CompileRegexFor(regex), customMessage);
+        }
+
+        private static void AddRegexMatcher(
+            ICanAddMatcher<string> matcher,
+            Regex regex,
+            string customMessage
+        )
+        {
+            matcher.AddMatcher(actual =>
             {
                 var passed = regex.IsMatch(actual);
                 return new MatcherResult(
@@ -250,7 +455,6 @@ namespace NExpect
                     )
                 );
             });
-            return matched.More();
         }
 
         /// <summary>

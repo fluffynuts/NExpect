@@ -40,6 +40,12 @@ namespace NExpect.Tests.ObjectEquality.Strings
                                         Expect(input).To.Be.Matched.By(regex);
                                     },
                                     Throws.Nothing);
+                                // shorter variant
+                                Assert.That(() =>
+                                    {
+                                        Expect(input).To.Match(regex);
+                                    },
+                                    Throws.Nothing);
 
                                 // Assert
                             }
@@ -60,6 +66,12 @@ namespace NExpect.Tests.ObjectEquality.Strings
                                         Expect(input).Not.To.Be.Matched.By(regex);
                                     },
                                     Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                // shorter variant
+                                Assert.That(() =>
+                                    {
+                                        Expect(input).Not.To.Match(regex);
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                                 // Assert
                             }
@@ -78,6 +90,12 @@ namespace NExpect.Tests.ObjectEquality.Strings
                                 Assert.That(() =>
                                     {
                                         Expect(input).To.Not.Be.Matched.By(regex);
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+
+                                Assert.That(() =>
+                                    {
+                                        Expect(input).To.Not.Match(regex);
                                     },
                                     Throws.Exception.InstanceOf<UnmetExpectationException>());
 
@@ -118,6 +136,11 @@ namespace NExpect.Tests.ObjectEquality.Strings
                                         Expect(input).To.Be.Matched.By(regex);
                                     },
                                     Throws.Nothing);
+                                Assert.That(() =>
+                                    {
+                                        Expect(input).To.Match(regex);
+                                    },
+                                    Throws.Nothing);
 
                                 // Assert
                             }
@@ -137,6 +160,11 @@ namespace NExpect.Tests.ObjectEquality.Strings
                                         Expect(input).Not.To.Be.Matched.By(regex);
                                     },
                                     Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                Assert.That(() =>
+                                    {
+                                        Expect(input).Not.To.Match(regex);
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                                 // Assert
                             }
@@ -154,6 +182,12 @@ namespace NExpect.Tests.ObjectEquality.Strings
                                 Assert.That(() =>
                                     {
                                         Expect(input).To.Not.Be.Matched.By(regex);
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+
+                                Assert.That(() =>
+                                    {
+                                        Expect(input).To.Not.Match(regex);
                                     },
                                     Throws.Exception.InstanceOf<UnmetExpectationException>());
 
