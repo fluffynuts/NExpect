@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Imported.PeanutButter.Utils;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -75,7 +76,7 @@ namespace NExpect
         public static void Equal<T>(
             this ITo<T> continuation,
             T? expected
-        ) where T: struct
+        ) where T : struct
         {
             continuation.Equal(expected, null);
         }
@@ -91,7 +92,7 @@ namespace NExpect
             this ITo<T> continuation,
             T? expected,
             string customMessage
-        ) where T: struct
+        ) where T : struct
         {
             continuation.AddMatcher(
                 GenerateNullableEqualityMatcherFor(expected, customMessage)
@@ -139,7 +140,7 @@ namespace NExpect
         public static void Equal<T>(
             this IToAfterNot<T> continuation,
             T? expected
-        ) where T: struct
+        ) where T : struct
         {
             continuation.Equal(expected, null);
         }
@@ -203,7 +204,7 @@ namespace NExpect
         public static void Equal<T>(
             this INotAfterTo<T> continuation,
             T? expected
-        ) where T: struct
+        ) where T : struct
         {
             continuation.Equal(expected, null);
         }
@@ -219,7 +220,7 @@ namespace NExpect
             this INotAfterTo<T> continuation,
             T? expected,
             string customMessage
-        ) where T: struct
+        ) where T : struct
         {
             continuation.AddMatcher(
                 GenerateNullableEqualityMatcherFor(expected, customMessage)
@@ -345,7 +346,13 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected \n{collection.LimitedPrint()}\n{passed.AsNot()} to be deep equivalent to\n{expected.LimitedPrint()}",
+                        new[]
+                        {
+                            "Expected",
+                            collection.LimitedPrint(),
+                            $"{passed.AsNot()} to be deep equivalent to",
+                            expected.LimitedPrint()
+                        },
                         customMessage
                     ));
             });
@@ -384,7 +391,13 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected\n{collection.LimitedPrint()}\n{passed.AsNot()} to be intersection equivalent to\n{expected.LimitedPrint()}",
+                        new[]
+                        {
+                            "Expected",
+                            collection.LimitedPrint(),
+                            $"{passed.AsNot()} to be intersection equivalent to",
+                            expected.LimitedPrint()
+                        },
                         customMessage
                     )
                 );
@@ -417,7 +430,7 @@ namespace NExpect
         private static Func<T, IMatcherResult> GenerateNullableEqualityMatcherFor<T>(
             T? expected,
             string customMessage
-        ) where T: struct
+        ) where T : struct
         {
             return actual =>
             {
@@ -437,7 +450,13 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected\n{collection.LimitedPrint()}\n{passed.AsNot()} to intersect equal\n{expected.LimitedPrint()}",
+                        new[]
+                        {
+                            "Expected",
+                            collection.LimitedPrint(),
+                            $"{passed.AsNot()} to intersect equal",
+                            expected.LimitedPrint()
+                        },
                         customMessage
                     )
                 );
@@ -483,21 +502,38 @@ namespace NExpect
 
 
         internal static Func<T, IMatcherResult> GenerateEqualityMatcherFor<T>(
-            T expected, 
+            T expected,
             string customMessage
         )
         {
             return actual => CompareForEquality(actual, expected, customMessage);
         }
 
+
         private static IMatcherResult CompareForEquality<T>(T actual, T expected, string customMessage)
         {
             if (ValuesAreEqual(expected, actual) ||
                 BothAreNull(expected, actual))
-                return new MatcherResult(true, $"Did not expect {Quote(expected)}, but got exactly that");
+            {
+                return new MatcherResult(
+                    true,
+                    FinalMessageFor(new[]
+                    {
+                        "Did not expect",
+                        Quote(expected),
+                        "but got exactly that"
+                    }, customMessage)
+                );
+            }
             return new MatcherResult(false,
                 FinalMessageFor(
-                    $"Expected {Quote(expected)} but got {Quote(actual)}",
+                    new[]
+                    {
+                        "Expected",
+                        Quote(expected),
+                        "but got",
+                        Quote(actual)
+                    },
                     customMessage
                 ));
         }
@@ -505,11 +541,12 @@ namespace NExpect
         private static bool ValuesAreEqual<T>(T expected, T actual)
         {
             var result = actual != null &&
-                actual.Equals(expected);
+                         actual.Equals(expected);
             if (!result)
                 return false;
             if (expected is DateTime expectedDateTime &&
-                actual is DateTime actualDateTime) {
+                actual is DateTime actualDateTime)
+            {
                 return expectedDateTime.Kind == actualDateTime.Kind;
             }
             return true;
@@ -528,19 +565,20 @@ namespace NExpect
         /// <param name="customMessage">Custom message to include when failing</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
         public static IMore<T> Null<T>(
-            this IBe<T> continuation, 
+            this IBe<T> continuation,
             string customMessage
         )
         {
             continuation.AddMatcher(actual =>
             {
                 var passed = actual == null;
+                var message = passed
+                    ? new[] {"Expected not to get null"}
+                    : new[] {"Expected null but got", Quote(actual)};
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        passed
-                            ? "Expected not to get null"
-                            : $"Expected null but got {Quote(actual)}",
+                        message,
                         customMessage)
                 );
             });
@@ -588,7 +626,13 @@ namespace NExpect
             {
                 var passed = actual.Equals(expected);
                 var message = FinalMessageFor(
-                    $"Expected {Quote(actual)} {passed.AsNot()}to equal {Quote(expected)}",
+                    new[]
+                    {
+                        "Expected",
+                        Quote(actual),
+                        $"{passed.AsNot()}to equal",
+                        Quote(expected)
+                    },
                     customMessage
                 );
                 return new MatcherResult(passed, message);
@@ -605,12 +649,13 @@ namespace NExpect
             continuation.AddMatcher(actual =>
             {
                 var passed = actual == "";
+                var message = passed
+                    ? new[] {"Expected not to be empty"}
+                    : new[] {"Expected empty string but got", Quote(actual)};
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        passed
-                            ? "Expected not to be empty"
-                            : $"Expected empty string but got {Quote(actual)}",
+                        message,
                         customMessage)
                 );
             });

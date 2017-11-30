@@ -118,8 +118,8 @@ namespace NExpect
             {
                 var passed = test(actual);
                 var message = passed
-                    ? $"Expected {actual} not to be matched"
-                    : $"Expected {actual} to be matched";
+                    ? new[] { "Expected", actual.Stringify(), "not to be matched" }
+                    : new[] { "Expected", actual.Stringify(), "to be matched" };
                 return new MatcherResult(
                     passed,
                     MessageHelpers.FinalMessageFor(message, customMessage)

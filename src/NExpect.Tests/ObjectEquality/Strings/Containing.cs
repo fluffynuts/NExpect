@@ -46,7 +46,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                             Expect(actual).To.Contain(search);
                         },
                         Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains("Expected \"cow-moo-cow\" to contain \"foo\""));
+                            .With.Message.Contains("Expected\n\"cow-moo-cow\"\nto contain\n\"foo\""));
 
                     // Assert
                 }
@@ -105,7 +105,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                                 Expect(actual).To.Contain(first).And(second);
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                .With.Message.Contains("\"a-b-c\" to contain \"d\""));
+                                .With.Message.Contains("\"a-b-c\"\nto contain\n\"d\""));
                         // Assert
                     }
 
@@ -123,7 +123,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                                 Expect(actual).To.Contain(first).And(second);
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                .With.Message.Contains("\"a-b-c\" to contain \"f\""));
+                                .With.Message.Contains("\"a-b-c\"\nto contain\n\"f\""));
                         // Assert
                     }
 

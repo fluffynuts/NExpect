@@ -46,7 +46,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                                 Expect(actual).To.End.With(start);
                             }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                                 .With.Message
-                                .Contains($"Expected \"{actual}\" to end with \"{start}\"")
+                                .Contains($"Expected\n\"{actual}\"\nto end with\n\"{start}\"")
                         );
                         // Assert
                     }
@@ -84,7 +84,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         {
                             Expect(actual).Not.To.End.With(end);
                         }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"\"{actual}\" not to end with \"{end}\""));
+                            .With.Message.Contains($"\"{actual}\"\nnot to end with\n\"{end}\""));
                         // Assert
                     }
 
@@ -101,7 +101,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         {
                             Expect(actual).To.Not.End.With(end);
                         }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"\"{actual}\" not to end with \"{end}\""));
+                            .With.Message.Contains($"\"{actual}\"\nnot to end with\n\"{end}\""));
                         // Assert
                     }
                 }

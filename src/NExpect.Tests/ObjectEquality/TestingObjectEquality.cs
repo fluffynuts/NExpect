@@ -4,6 +4,9 @@ using NExpect.Exceptions;
 using NUnit.Framework;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMember.Global
 
 // ReSharper disable MemberHidesStaticFromOuterClass
 // ReSharper disable InconsistentNaming
@@ -48,7 +51,7 @@ namespace NExpect.Tests.ObjectEquality
                     Assert.That(
                         () => Expect(actual).To.Equal(expected),
                         Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"Expected {expected} but got {actual}")
+                            .With.Message.Contains($"Expected\n{expected}\nbut got\n{actual}")
                     );
                     // Assert
                 }
@@ -67,7 +70,7 @@ namespace NExpect.Tests.ObjectEquality
                     Assert.That(
                         () => Expect(actual).To.Equal(expected, custom),
                         Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"Expected {expected} but got {actual}")
+                            .With.Message.Contains($"Expected\n{expected}\nbut got\n{actual}")
                     );
                     Assert.That(
                         () => Expect(actual).To.Equal(expected, custom),
@@ -235,7 +238,7 @@ namespace NExpect.Tests.ObjectEquality
                             () => Expect(actual).To.Equal(expected),
                             Throws.Exception
                                 .InstanceOf<UnmetExpectationException>()
-                                .With.Message.Contains($"Expected \"{expected}\" but got {actual}")
+                                .With.Message.Contains($"Expected\n\"{expected}\"\nbut got\n{actual}")
                         );
                         // Assert
                     }
@@ -253,7 +256,7 @@ namespace NExpect.Tests.ObjectEquality
                             () => Expect(actual).To.Equal(expected),
                             Throws.Exception
                                 .InstanceOf<UnmetExpectationException>()
-                                .With.Message.Contains($"Expected (null) but got \"{actual}\"")
+                                .With.Message.Contains($"Expected\n(null)\nbut got\n\"{actual}\"")
                         );
                         // Assert
                     }
@@ -272,6 +275,76 @@ namespace NExpect.Tests.ObjectEquality
                             Throws.Nothing
                         );
                         // Assert
+                    }
+                }
+
+                [TestFixture]
+                public class LongStuff {
+                    [Test]
+                    public void ShouldSplitLongStringsForEasierComparison()
+                    {
+                        // Arrange
+                        var left = GetRandomString(72, 128);
+                        var right = GetRandomString(72, 128);
+                        // Pre-Assert
+                        // Act
+                        var ex = Assert.Throws<UnmetExpectationException>(
+                            () => Expect(left).To.Equal(right)
+                        );
+                        // Assert
+                        Expect(ex.Message)
+                            .To.Start.With("Expected")
+                            .And.Contain("\n")
+                            .Then(right)
+                            .Then("\n")
+                            .Then("but got")
+                            .Then("\n")
+                            .Then(left);
+                    }
+
+                    [Test]
+                    public void ShouldSplitLongObjectsToo()
+                    {
+                        // Arrange
+                        var left = new
+                        {
+                            SomeLongProperty = GetRandomString(64)
+                        };
+                        var right = new
+                        {
+                            SomeLongProperty = GetAnother(left.SomeLongProperty)
+                        };
+                        // Pre-Assert
+                        // Act
+                        var ex = Assert.Throws<UnmetExpectationException>(
+                            () => Expect(left).To.Equal(right)
+                        );
+                        // Assert
+                        var parts = ex.Message.Split('\n');
+                        Expect(parts).To.Contain.Exactly(8).Items();
+                    }
+
+                    [Test]
+                    public void ShouldSplitLongObjectsForDeepEqualityToo()
+                    {
+                        // Arrange
+                        var left = new
+                        {
+                            SomeLongProperty = GetRandomString(64)
+                        };
+                        var right = new
+                        {
+                            SomeLongProperty = GetAnother(left.SomeLongProperty)
+                        };
+                        // Pre-Assert
+                        // Act
+                        var ex = Assert.Throws<UnmetExpectationException>(
+                            () => Expect(left).To.Deep.Equal(right)
+                        );
+                        // Assert
+                        var parts = ex.Message.Split('\n');
+                        Console.WriteLine(ex.Message);
+                        Expect(parts).To.Contain.Exactly(8).Items();
                     }
                 }
             }
@@ -2079,7 +2152,7 @@ namespace NExpect.Tests.ObjectEquality
                     () => Expect(actual).To.Equal(expected),
                     Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected {expected} but got {actual}")
+                        .With.Message.Contains($"Expected\n{expected}\nbut got\n{actual}")
                 );
                 // Assert
             }
@@ -2113,7 +2186,7 @@ namespace NExpect.Tests.ObjectEquality
                     () => Expect(actual).To.Equal(expected),
                     Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected {expected} but got {actual}")
+                        .With.Message.Contains($"Expected\n{expected}\nbut got\n{actual}")
                 );
                 // Assert
             }
@@ -2147,7 +2220,7 @@ namespace NExpect.Tests.ObjectEquality
                     () => Expect(actual).To.Equal(expected),
                     Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected {expected} but got {actual}")
+                        .With.Message.Contains($"Expected\n{expected}\nbut got\n{actual}")
                 );
                 // Assert
             }
@@ -2181,7 +2254,7 @@ namespace NExpect.Tests.ObjectEquality
                     () => Expect(actual).To.Equal(expected),
                     Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected {expected} but got {actual}")
+                        .With.Message.Contains($"Expected\n{expected}\nbut got\n{actual}")
                 );
                 // Assert
             }
@@ -2323,7 +2396,7 @@ namespace NExpect.Tests.ObjectEquality
                         Expect(actual).To.Equal(expected);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected \"{expected}\" but got \"{actual}\"")
+                        .With.Message.Contains($"Expected\n\"{expected}\"\nbut got\n\"{actual}\"")
                 );
                 // Assert
             }
@@ -2340,7 +2413,7 @@ namespace NExpect.Tests.ObjectEquality
                         Expect(value).To.Not.Equal(value);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Did not expect \"{value}\", but got exactly that")
+                        .With.Message.Contains($"Did not expect\n\"{value}\"\nbut got exactly that")
                 );
                 // Assert
             }
@@ -2358,7 +2431,7 @@ namespace NExpect.Tests.ObjectEquality
                         Expect(actual).To.Equal(expected);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected \"{expected}\" but got (null)")
+                        .With.Message.Contains($"Expected\n\"{expected}\"\nbut got\n(null)")
                 );
                 // Assert
             }
@@ -2376,7 +2449,7 @@ namespace NExpect.Tests.ObjectEquality
                         Expect(actual).To.Equal(expected);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains("Expected {} but got (null)")
+                        .With.Message.Contains("Expected\n{}\nbut got\n(null)")
                 );
                 // Assert
             }
@@ -2394,7 +2467,7 @@ namespace NExpect.Tests.ObjectEquality
                         Expect(actual).To.Equal(expected);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected {expected} but got {actual}")
+                        .With.Message.Contains($"Expected\n{expected}\nbut got\n{actual}")
                 );
                 // Assert
             }
@@ -2412,7 +2485,7 @@ namespace NExpect.Tests.ObjectEquality
                         Expect(actual).To.Equal(expected);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains("Expected {} but got {}")
+                        .With.Message.Contains("Expected\n{}\nbut got\n{}")
                 );
                 // Assert
             }

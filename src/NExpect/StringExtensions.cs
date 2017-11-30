@@ -6,6 +6,7 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
+
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect
@@ -146,7 +147,13 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {actual.Stringify()} {passed.AsNot()}to start with {expected.Stringify()}",
+                        new[]
+                        {
+                            "Expected",
+                            actual.Stringify(),
+                            $"{passed.AsNot()}to start with",
+                            expected.Stringify()
+                        },
                         customMessage
                     )
                 );
@@ -185,7 +192,13 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {actual.Stringify()} {passed.AsNot()}to end with {expected.Stringify()}",
+                        new[]
+                        {
+                            "Expected",
+                            actual.Stringify(),
+                            $"{passed.AsNot()}to end with",
+                            expected.Stringify()
+                        },
                         customMessage
                     )
                 );
@@ -226,7 +239,13 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {actual.Stringify()} {passed.AsNot()}to match regex \"{regex}\"",
+                        new[]
+                        {
+                            "Expected",
+                            actual.Stringify(),
+                            $"{passed.AsNot()}to match regex",
+                            $"\"{regex}\""
+                        },
                         customMessage
                     )
                 );
@@ -272,7 +291,8 @@ namespace NExpect
             }
             catch (Exception e)
             {
-                throw new UnmetExpectationException(new[] {
+                throw new UnmetExpectationException(new[]
+                {
                     $"Unable to compile {regex.Stringify()} as a Regex",
                     "Specifically:",
                     e.Message
@@ -304,7 +324,14 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {s.Stringify()} {passed.AsNot()}to contain {search.Stringify()}{offsetMessage}",
+                        new[]
+                        {
+                            "Expected",
+                            s.Stringify(),
+                            $"{passed.AsNot()}to contain",
+                            search.Stringify(),
+                            offsetMessage
+                        },
                         customMessage
                     )
                 );

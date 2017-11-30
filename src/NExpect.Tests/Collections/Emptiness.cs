@@ -8,7 +8,7 @@ using static PeanutButter.RandomGenerators.RandomValueGen;
 namespace NExpect.Tests.Collections
 {
     [TestFixture]
-    class Emptiness
+    public class Emptiness
     {
         [TestFixture]
         public class OperatingOnCollection
@@ -46,7 +46,7 @@ namespace NExpect.Tests.Collections
                     },
                     Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
-                        .With.Message.EqualTo("Expected [  ] not to be an empty collection"));
+                        .With.Message.EqualTo("Expected\n[  ]\nnot to be an empty collection"));
 
                 // Assert
             }
@@ -66,7 +66,7 @@ namespace NExpect.Tests.Collections
                     },
                     Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains("] to be an empty collection"));
+                        .With.Message.Contains("]\nto be an empty collection"));
 
                 // Assert
             }
@@ -149,7 +149,7 @@ namespace NExpect.Tests.Collections
                     },
                     Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
-                        .With.Message.EqualTo("Expected [  ] not to be an empty collection"));
+                        .With.Message.EqualTo("Expected\n[  ]\nnot to be an empty collection"));
 
                 // Assert
             }
@@ -169,7 +169,7 @@ namespace NExpect.Tests.Collections
                     },
                     Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains("] to be an empty collection"));
+                        .With.Message.Contains("]\nto be an empty collection"));
 
                 // Assert
             }

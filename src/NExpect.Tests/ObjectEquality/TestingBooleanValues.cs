@@ -1,4 +1,5 @@
 using NExpect.Exceptions;
+using NExpect.Implementations;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
 
@@ -6,6 +7,7 @@ using PeanutButter.RandomGenerators;
 
 namespace NExpect.Tests.ObjectEquality
 {
+    [TestFixture]
     public class TestingBooleanValues
     {
         public class TrueEquality
@@ -50,7 +52,7 @@ namespace NExpect.Tests.ObjectEquality
                 Assert.That(
                     () => Expectations.Expect(value).To.Be.True(),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected True but got {value}")
+                        .With.Message.Contains($"Expected\ntrue\nbut got\n{value.Stringify()}")
                 );
 
                 // Assert
@@ -69,7 +71,7 @@ namespace NExpect.Tests.ObjectEquality
                 Assert.That(
                     () => Expectations.Expect(value).To.Be.True(message),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected True but got {value}")
+                        .With.Message.Contains($"Expected\ntrue\nbut got\n{value.Stringify()}")
                 );
 
                 Assert.That(
@@ -198,7 +200,7 @@ namespace NExpect.Tests.ObjectEquality
                 Assert.That(
                     () => Expectations.Expect(value).To.Be.False(),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected False but got {value}")
+                        .With.Message.Contains($"Expected\nfalse\nbut got\n{value.Stringify()}")
                 );
 
                 // Assert
@@ -217,7 +219,7 @@ namespace NExpect.Tests.ObjectEquality
                 Assert.That(
                     () => Expectations.Expect(value).To.Be.False(message),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected False but got {value}")
+                        .With.Message.Contains($"Expected\nfalse\nbut got\n{value.Stringify()}")
                 );
 
                 Assert.That(

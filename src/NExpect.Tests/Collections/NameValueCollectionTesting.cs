@@ -58,7 +58,7 @@ namespace NExpect.Tests.Collections
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>()
                                 .With.Message.Contains(
-                                    $"not to contain key {key.Stringify()}"
+                                    $"not to contain key\n{key.Stringify()}"
                                 ));
 
                         // Assert
@@ -82,7 +82,7 @@ namespace NExpect.Tests.Collections
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>()
                                 .With.Message.Contains(
-                                    $"not to contain key {key.Stringify()}"
+                                    $"not to contain key\n{key.Stringify()}"
                                 ));
 
                         // Assert
@@ -135,7 +135,7 @@ namespace NExpect.Tests.Collections
                                         Expect(src).To.Contain.Key(testingValue).With.Value(value);
                                     },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                        .With.Message.Contains($"to contain key \"{testingValue}\""));
+                                        .With.Message.Contains($"to contain key\n\"{testingValue}\""));
 
                                 // Assert
                             }
@@ -159,7 +159,7 @@ namespace NExpect.Tests.Collections
                                         Expect(src).To.Contain.Key(key).With.Value(testingValue);
                                     },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                        .With.Message.Contains($"Expected \"{testingValue}\" but got \"{value}\""));
+                                        .With.Message.Contains($"Expected\n\"{testingValue}\"\nbut got\n\"{value}\""));
 
                                 // Assert
                             }

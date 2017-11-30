@@ -49,7 +49,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                                 Expect(actual).To.Start.With(end);
                             }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                                 .With.Message
-                                .Contains($"Expected \"{actual}\" to start with \"{end}\"")
+                                .Contains($"Expected\n\"{actual}\"\nto start with\n\"{end}\"")
                         );
                         // Assert
                     }
@@ -87,7 +87,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         {
                             Expect(actual).Not.To.Start.With(start);
                         }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"\"{actual}\" not to start with \"{start}\""));
+                            .With.Message.Contains($"\"{actual}\"\nnot to start with\n\"{start}\""));
                         // Assert
                     }
 
@@ -104,7 +104,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         {
                             Expect(actual).To.Not.Start.With(start);
                         }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"\"{actual}\" not to start with \"{start}\""));
+                            .With.Message.Contains($"\"{actual}\"\nnot to start with\n\"{start}\""));
                         // Assert
                     }
                 }

@@ -95,7 +95,7 @@ namespace NExpect.Tests.Collections
                 },
                 Throws.Exception
                     .InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("] to be equivalent to ["));
+                    .With.Message.Contains("]\nto be equivalent to\n["));
 
             // Assert
         }
@@ -173,7 +173,7 @@ namespace NExpect.Tests.Collections
                 },
                 Throws.Exception
                     .InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("] to be equivalent to ["));
+                    .With.Message.Contains("]\nto be equivalent to\n["));
 
             // Assert
         }
@@ -195,7 +195,7 @@ namespace NExpect.Tests.Collections
                 },
                 Throws.Exception
                     .InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("] not to be equivalent to ["));
+                    .With.Message.Contains("]\nnot to be equivalent to\n["));
 
             // Assert
         }
@@ -296,7 +296,7 @@ namespace NExpect.Tests.Collections
                     Expect(collection).To.Be.Null();
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("] to be null"));
+                    .With.Message.Contains("]\nto be null"));
             // Assert
         }
 

@@ -44,13 +44,18 @@ namespace NExpect
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
-                            $"Expected {actual.Stringify()}\n{passed.AsNot()}to intersection equal\n{expected.Stringify()}",
+                            new[]
+                            {
+                                "Expected",
+                                actual.Stringify(),
+                                $"{passed.AsNot()}to intersection equal",
+                                expected.Stringify()
+                            },
                             customMessage
                         )
                     );
                 }
             );
         }
-
     }
 }

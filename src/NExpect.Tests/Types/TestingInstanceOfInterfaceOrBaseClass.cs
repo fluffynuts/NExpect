@@ -438,7 +438,7 @@ namespace NExpect.Tests.Types
                                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                                     .With.Message
                                     .EqualTo(
-                                        "Expected <TestingInstanceOfInterfaceOrBaseClass+GenericTestClass<NExpect.Tests.Types.TestingInstanceOfInterfaceOrBaseClass+TestClass>> to be an instance of <NExpect.Tests.Types.TestingInstanceOfInterfaceOrBaseClass+AnotherTestClass>"
+                                        "Expected\n<TestingInstanceOfInterfaceOrBaseClass+GenericTestClass<NExpect.Tests.Types.TestingInstanceOfInterfaceOrBaseClass+TestClass>>\nto be an instance of\n<NExpect.Tests.Types.TestingInstanceOfInterfaceOrBaseClass+AnotherTestClass>"
                                     ));
                                 // Assert
                             }

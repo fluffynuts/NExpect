@@ -2,6 +2,7 @@
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
+
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect
@@ -45,13 +46,18 @@ namespace NExpect
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
-                            $"Expected {actual.Stringify()}\n{passed.AsNot()}to deep equal\n{expected.Stringify()}",
+                            new[]
+                            {
+                                "Expected",
+                                actual.Stringify(),
+                                $"{passed.AsNot()}to deep equal",
+                                expected.Stringify()
+                            },
                             customMessage
                         )
                     );
                 }
             );
         }
-
     }
 }

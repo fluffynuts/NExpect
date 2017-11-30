@@ -2,6 +2,7 @@ using System;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+
 // ReSharper disable UnusedMember.Global
 
 namespace NExpect
@@ -111,7 +112,13 @@ namespace NExpect
                 return new MatcherResult(
                     false,
                     MessageHelpers.FinalMessageFor(
-                        $"Expected {expected} but got {actual}",
+                        new[]
+                        {
+                            "Expected",
+                            expected.Stringify(),
+                            "but got",
+                            actual.Stringify()
+                        },
                         message
                     ));
             };

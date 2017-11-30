@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Imported.PeanutButter.Utils;
 
@@ -27,6 +28,48 @@ namespace NExpect.Implementations
             return string.IsNullOrWhiteSpace(customMessage) 
                 ? standardMessage 
                 : $"{customMessage}\n\n{standardMessage}";
+        }
+
+        /// <summary>
+        /// Creates a final message, given standard message parts and
+        /// a custom message. When the parts, concatenated with a space,
+        /// are longer than the expected max line length, they are split across lines.
+        /// </summary>
+        /// <param name="standardMessageParts"></param>
+        /// <param name="customMessage"></param>
+        /// <returns></returns>
+        public static string FinalMessageFor(
+            string[] standardMessageParts,
+            string customMessage
+        )
+        {
+            return FinalMessageFor(MakeMessage(standardMessageParts), customMessage);
+        }
+
+        private static string MakeMessage(params string[] templateParts)
+        {
+            var firstPass = templateParts.JoinWith(" ");
+            return firstPass.Length > DetermineMaxLineLength()
+                ? templateParts.JoinWith("\n")
+                : firstPass;
+        }
+
+
+        /// <summary>
+        /// Default max-width for an equality failure message line.
+        /// When the message would run over this length, it will be split
+        /// onto multiple lines for easier reading
+        /// </summary>
+        public const int DEFAULT_MAX_LINE_LENGTH = 72;
+
+        private static int DetermineMaxLineLength()
+        {
+            var value = Environment.GetEnvironmentVariable("COLS") ??
+                        Environment.GetEnvironmentVariable("MAX_LINE_LENGTH") ??
+                        DEFAULT_MAX_LINE_LENGTH.ToString();
+            return int.TryParse(value, out var result)
+                ? result
+                : DEFAULT_MAX_LINE_LENGTH;
         }
 
         /// <summary>

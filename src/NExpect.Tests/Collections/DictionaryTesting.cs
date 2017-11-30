@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using NExpect.Exceptions;
@@ -83,11 +84,9 @@ namespace NExpect.Tests.Collections
                     Expect(dict).Not.To.Contain(have);
                 }, Throws.Exception
                     .InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains($"Expected {dict.Stringify()} not to contain {have.Stringify()}"));
-
+                    .With.Message.Contains($"Expected\n{dict.Stringify()}\nnot to contain\n{have.Stringify()}"));
                 // Assert
             }
-
         }
 
         [TestFixture]
@@ -138,7 +137,7 @@ namespace NExpect.Tests.Collections
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>()
                                 .With.Message.Contains(
-                                    $"not to contain key {key.Stringify()}"
+                                    $"not to contain key\n{key.Stringify()}"
                                 ));
 
                         // Assert
@@ -162,7 +161,7 @@ namespace NExpect.Tests.Collections
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>()
                                 .With.Message.Contains(
-                                    $"not to contain key {key.Stringify()}"
+                                    $"not to contain key\n{key.Stringify()}"
                                 ));
 
                         // Assert
@@ -210,12 +209,15 @@ namespace NExpect.Tests.Collections
                                 // Pre-Assert
 
                                 // Act
-                                Assert.That(() =>
-                                    {
-                                        Expect(src).To.Contain.Key(testingValue).With.Value(value);
-                                    },
-                                    Throws.Exception.TypeOf<UnmetExpectationException>()
-                                        .With.Message.Contains($"to contain key \"{testingValue}\""));
+                                TestUtils.WithNoLineBreaks(() =>
+                                {
+                                    Assert.That(() =>
+                                        {
+                                            Expect(src).To.Contain.Key(testingValue).With.Value(value);
+                                        },
+                                        Throws.Exception.TypeOf<UnmetExpectationException>()
+                                            .With.Message.Contains($"to contain key\n\"{testingValue}\""));
+                                });
 
                                 // Assert
                             }
@@ -239,7 +241,7 @@ namespace NExpect.Tests.Collections
                                         Expect(src).To.Contain.Key(key).With.Value(testingValue);
                                     },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                        .With.Message.Contains($"Expected {testingValue} but got {value}"));
+                                        .With.Message.Contains($"Expected\n{testingValue}\nbut got\n{value}"));
 
                                 // Assert
                             }
@@ -289,7 +291,7 @@ namespace NExpect.Tests.Collections
                                         Expect(src).To.Contain.Key(key).With.Value(testingValue);
                                     },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                        .With.Message.Contains($"Expected {testingValue} but got {value}"));
+                                        .With.Message.Contains($"Expected\n{testingValue}\nbut got\n{value}"));
 
                                 // Assert
                             }
@@ -308,13 +310,15 @@ namespace NExpect.Tests.Collections
                                 // Pre-Assert
 
                                 // Act
-                                Assert.That(() =>
-                                    {
-                                        Expect(src).To.Contain.Key(key).With.Value(testingValue);
-                                    },
-                                    Throws.Exception.TypeOf<UnmetExpectationException>()
-                                        .With.Message.Contains($"Expected {testingValue} but got (null)"));
-
+                                TestUtils.WithNoLineBreaks(() =>
+                                {
+                                    Assert.That(() =>
+                                        {
+                                            Expect(src).To.Contain.Key(key).With.Value(testingValue);
+                                        },
+                                        Throws.Exception.TypeOf<UnmetExpectationException>()
+                                            .With.Message.Contains($"Expected\n{testingValue}\nbut got\n(null)"));
+                                });
                                 // Assert
                             }
 
@@ -337,7 +341,7 @@ namespace NExpect.Tests.Collections
                                         Expect(src).To.Contain.Key(key).With.Value(testingValue);
                                     },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                        .With.Message.Contains($"Expected (null) but got {value}"));
+                                        .With.Message.Contains($"Expected\n(null)\nbut got\n{value}"));
 
                                 // Assert
                             }
@@ -393,7 +397,7 @@ namespace NExpect.Tests.Collections
                                     },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
                                         .With.Message
-                                        .Contains($"Expected {testingValue.Stringify()} but got {value.Stringify()}"));
+                                        .Contains($"Expected\n{testingValue.Stringify()}\nbut got\n{value.Stringify()}"));
 
                                 // Assert
                             }

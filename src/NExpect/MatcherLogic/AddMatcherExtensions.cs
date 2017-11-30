@@ -98,7 +98,7 @@ namespace NExpect.MatcherLogic
                 {
                     return new MatcherResult(false, 
                         FinalMessageFor(
-                            $"Specifically: {e.Message}",
+                            new[] { "Specifically:", e.Message },
                             messageGenerator?.Invoke(actual, false)
                         )
                     );
@@ -148,7 +148,7 @@ namespace NExpect.MatcherLogic
                 {
                     return new MatcherResult(false, 
                         FinalMessageFor(
-                            $"Specifically: {e.Message}",
+                            new[] { "Specifically:", e.Message },
                             messageGenerator?.Invoke(actual, false)
                         )
                     );

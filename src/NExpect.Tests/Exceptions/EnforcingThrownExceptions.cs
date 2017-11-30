@@ -482,7 +482,7 @@ namespace NExpect.Tests.Exceptions
                         .With.Message.Equal.To(expected);
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains($"Expected \"{unexpected}\" to equal \"{expected}\""));
+                    .With.Message.Contains($"Expected\n\"{unexpected}\"\nto equal\n\"{expected}\""));
 
             // Assert
         }
@@ -530,7 +530,7 @@ namespace NExpect.Tests.Exceptions
                             .Equal.To(expected);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected \"{unexpected}\" to equal \"{expected}\""));
+                        .With.Message.Contains($"Expected\n\"{unexpected}\"\nto equal\n\"{expected}\""));
 
                 // Assert
             }
@@ -662,7 +662,7 @@ namespace NExpect.Tests.Exceptions
                                     .Equal.To(expected);
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                .With.Message.Contains($"Expected \"{unexpected}\" to equal \"{expected}\""));
+                                .With.Message.Contains($"Expected\n\"{unexpected}\"\nto equal\n\"{expected}\""));
 
                         // Assert
                     }

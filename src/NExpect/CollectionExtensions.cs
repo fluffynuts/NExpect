@@ -138,7 +138,13 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {collection.LimitedPrint()} {passed.AsNot()}to contain {search.Stringify()}",
+                        new[]
+                        {
+                            "Expected",
+                            collection.LimitedPrint(),
+                            $"{passed.AsNot()}to contain",
+                            search.Stringify()
+                        },
                         customMessage
                     )
                 );
@@ -451,7 +457,12 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {collection.LimitedPrint()} {passed.AsNot()}to be an empty collection",
+                        new[]
+                        {
+                            "Expected",
+                            collection.LimitedPrint(),
+                            $"{passed.AsNot()}to be an empty collection"
+                        },
                         customMessage
                     )
                 );
@@ -526,7 +537,13 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {collection.LimitedPrint()} {passed.AsNot()}to be equivalent to {other.LimitedPrint()}",
+                        new[]
+                        {
+                            "Expected",
+                            collection.LimitedPrint(),
+                            $"{passed.AsNot()}to be equivalent to",
+                            other.LimitedPrint()
+                        },
                         customMessage
                     )
                 );
@@ -595,7 +612,13 @@ namespace NExpect
                 var passed = collection == null;
                 return new MatcherResult(
                     passed,
-                    FinalMessageFor($"Expected {collection.LimitedPrint()} {passed.AsNot()}to be null",
+                    FinalMessageFor(
+                        new[]
+                        {
+                            "Expected",
+                            collection.LimitedPrint(),
+                            $"{passed.AsNot()}to be null"
+                        },
                         customMessage)
                 );
             });
@@ -711,8 +734,10 @@ namespace NExpect
                 var passed = actual == expected;
                 return new MatcherResult(
                     passed,
-                    FinalMessageFor($"Expected {passed.AsNot()}to find {expected} items but actually found {actual}",
-                        customMessage)
+                    FinalMessageFor(
+                        $"Expected {passed.AsNot()}to find {expected} items but actually found {actual}",
+                        customMessage
+                    )
                 );
             });
         }
@@ -752,7 +777,12 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {passed.AsNot()}to find {expectedCount} items matching\n{expected.Stringify()}\n but actually found {actualCount}",
+                        new[]
+                        {
+                            $"Expected {passed.AsNot()}to find {expectedCount} items matching",
+                            expected.Stringify(),
+                            $"but actually found {actualCount}"
+                        },
                         customMessage
                     )
                 );
@@ -796,7 +826,12 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {passed.AsNot()}to find {expectedCount} items matching\n{expected.Stringify()}\n but actually found {actualCount}",
+                        new[]
+                        {
+                            $"Expected {passed.AsNot()}to find {expectedCount} items matching",
+                            expected.Stringify(),
+                            $"but actually found {actualCount}"
+                        },
                         customMessage
                     )
                 );
@@ -1163,7 +1198,13 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected collection:\n{actual.LimitedPrint()}\n{passed.AsNot()}to match:\n{expected.LimitedPrint()}",
+                        new[]
+                        {
+                            "Expected collection",
+                            actual.LimitedPrint(),
+                            $"{passed.AsNot()}to match:",
+                            expected.LimitedPrint()
+                        },
                         customMessage)
                 );
             };

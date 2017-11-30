@@ -4,6 +4,7 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
+
 // ReSharper disable UnusedMethodReturnValue.Global
 
 namespace NExpect
@@ -38,7 +39,13 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected <{instance.Actual.PrettyName()}> to {passed.AsNot()}be an instance of <{theExpectedType.PrettyName()}>",
+                        new[]
+                        {
+                            "Expected",
+                            $"<{instance.Actual.PrettyName()}>",
+                            $"to {passed.AsNot()}be an instance of",
+                            $"<{theExpectedType.PrettyName()}>"
+                        },
                         customMessage
                     ));
             });
@@ -143,15 +150,27 @@ namespace NExpect
             {
                 var interfaces = actual?.GetAllImplementedInterfaces() ?? new Type[0];
                 var expected = typeof(TInterface);
-                if (!expected.IsInterface()) {
-                    return new MatcherResult(false, 
-                        FinalMessageFor($"{actual} is not an interface.", customMessage));
+                if (!expected.IsInterface())
+                {
+                    return new MatcherResult(false,
+                        FinalMessageFor(
+                            new[]
+                            {
+                                actual.Stringify(),
+                                "is not an interface."
+                            }, customMessage));
                 }
                 var passed = interfaces.Contains(expected);
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {actual} {passed.AsNot()}to implement {expected}",
+                        new[]
+                        {
+                            "Expected",
+                            actual.Stringify(),
+                            $"{passed.AsNot()}to implement",
+                            expected.Stringify()
+                        },
                         customMessage
                     )
                 );
@@ -257,15 +276,27 @@ namespace NExpect
             addTo.AddMatcher(actual =>
             {
                 var expected = typeof(TBase);
-                if (expected.IsInterface()) {
-                    return new MatcherResult(false, 
-                        FinalMessageFor($"{actual} is not a class.", customMessage));
+                if (expected.IsInterface())
+                {
+                    return new MatcherResult(false,
+                        FinalMessageFor(
+                            new[]
+                            {
+                                actual.Stringify(),
+                                "is not a class."
+                            }, customMessage));
                 }
                 var passed = expected.IsAssignableFrom(actual);
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected {actual} {passed.AsNot()}to inherit {expected}",
+                        new[]
+                        {
+                            "Expected",
+                            actual.Stringify(),
+                            $"{passed.AsNot()}to inherit",
+                            expected.Stringify()
+                        },
                         customMessage
                     )
                 );

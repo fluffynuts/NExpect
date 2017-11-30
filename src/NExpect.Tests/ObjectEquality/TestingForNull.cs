@@ -97,7 +97,7 @@ namespace NExpect.Tests.ObjectEquality
                                 Expect(input).To.Be.Null();
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                .With.Message.Contains($"Expected null but got \"{input}\""));
+                                .With.Message.Contains($"Expected null but got\n\"{input}\""));
                         // Assert
                     }
 

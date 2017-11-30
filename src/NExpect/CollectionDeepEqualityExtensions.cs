@@ -90,7 +90,13 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        $"Expected\n{collection.LimitedPrint()}\n{passed.AsNot()}to deep equal\n{expected.LimitedPrint()}",
+                        new[] 
+                        {
+                            "Expected",
+                            collection.LimitedPrint(),
+                            $"{passed.AsNot()}to deep equal",
+                            expected.LimitedPrint()
+                        },
                         customMessage
                     )
                 );
@@ -105,7 +111,7 @@ namespace NExpect
             return CollectionCompare(
                 collection,
                 expected,
-                (master, compare) => master.Zip(compare, (o1, o2) => Tuple.Create(o1, o2))
+                (master, compare) => master.Zip(compare, Tuple.Create)
                     .Aggregate(
                         true,
                         (acc, cur) => acc && AreDeepEqual(cur.Item1, cur.Item2)
