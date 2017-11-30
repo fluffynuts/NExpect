@@ -343,7 +343,6 @@ namespace NExpect.Tests.ObjectEquality
                         );
                         // Assert
                         var parts = ex.Message.Split('\n');
-                        Console.WriteLine(ex.Message);
                         Expect(parts).To.Contain.Exactly(8).Items();
                     }
                 }
