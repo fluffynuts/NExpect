@@ -771,15 +771,20 @@ namespace NExpect
         {
             continuation.AddMatcher(collection =>
             {
-                var expectedCount = continuation.ExpectedCount;
-                var actualCount = collection?.Count(o => DeepTestHelpers.AreDeepEqual(o, expected)) ?? 0;
-                var passed = actualCount == expectedCount;
+                var actualCount = collection?.Count(
+                    o => DeepTestHelpers.AreDeepEqual(o, expected)
+                ) ?? 0;
+                var passed = _countPassStrategies[continuation.Method](
+                    actualCount, 
+                    continuation.ExpectedCount, 
+                    collection?.Count() ?? 0
+                );
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
                         new[]
                         {
-                            $"Expected {passed.AsNot()}to find {expectedCount} items matching",
+                            $"Expected {passed.AsNot()}to find {continuation.ExpectedCount} items matching",
                             expected.Stringify(),
                             $"but actually found {actualCount}"
                         },
@@ -820,15 +825,20 @@ namespace NExpect
             //  extension above, but no (as yet) common interface between the two
             continuation.AddMatcher(collection =>
             {
-                var expectedCount = continuation.ExpectedCount;
-                var actualCount = collection?.Count(o => DeepTestHelpers.AreIntersectionEqual(o, expected)) ?? 0;
-                var passed = actualCount == expectedCount;
+                var actualCount = collection?.Count(
+                    o => DeepTestHelpers.AreIntersectionEqual(o, expected)
+                ) ?? 0;
+                var passed = _countPassStrategies[continuation.Method](
+                    actualCount, 
+                    continuation.ExpectedCount, 
+                    collection?.Count() ?? 0
+                );
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
                         new[]
                         {
-                            $"Expected {passed.AsNot()}to find {expectedCount} items matching",
+                            $"Expected {passed.AsNot()}to find {continuation.ExpectedCount} items matching",
                             expected.Stringify(),
                             $"but actually found {actualCount}"
                         },
@@ -838,8 +848,18 @@ namespace NExpect
             });
         }
 
+        private static readonly Dictionary<CountMatchMethods, Func<int, int, int, bool>> _countPassStrategies =
+            new Dictionary<CountMatchMethods, Func<int, int, int, bool>>
+            {
+                [CountMatchMethods.All] = (actual, expected, total) => actual == total,
+                [CountMatchMethods.Any] = (actual, expected, total) => actual > 0,
+                [CountMatchMethods.Exactly] = (actual, expected, total) => actual == expected,
+                [CountMatchMethods.Maximum] = (actual, expected, total) => actual <= expected,
+                [CountMatchMethods.Minimum] = (actual, expected, total) => actual >= expected,
+                [CountMatchMethods.Only] = (actual, expected, total) => actual == expected && actual == total
+            };
 
-        //----------------
+
         /// <summary>
         /// Performs equality checking -- the end of .To.Equal()
         /// </summary>

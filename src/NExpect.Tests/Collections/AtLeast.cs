@@ -74,6 +74,78 @@ namespace NExpect.Tests.Collections
             }
 
             [Test]
+            public void Contain_Any_Negated_WhenCollectionHas1_ShouldThrow()
+            {
+                // Arrange
+                var search = GetRandomString();
+                var item1 = GetAnother(search);
+                var item2 = GetAnother<string>(new[] {item1, search});
+                var collection = new[] {item1, item2, search}.Randomize();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(collection).Not.To.Contain.Any().Equal.To(search);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+
+            [Test]
+            public void Contain_Any_Negated_WhenCollectionHas1DeepEqual_ShouldThrow()
+            {
+                // Arrange
+                var search = new
+                {
+                    Name = GetRandomString()
+                };
+                var item1 = new
+                {
+                    Name = search.Name
+                };
+                var item2 = new
+                {
+                    Name = GetAnother<string>(new[] { search.Name, item1.Name })
+                };
+                var collection = new[] {item1, item2 }.Randomize();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(collection).Not.To.Contain.Any().Deep.Equal.To(search);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+
+            [Test]
+            public void Contain_Any_Negated_WhenCollectionHas1IntersectionEqual_ShouldThrow()
+            {
+                // Arrange
+                var search = new
+                {
+                    Name = GetRandomString()
+                };
+                var item1 = new
+                {
+                    Name = search.Name
+                };
+                var item2 = new
+                {
+                    Name = GetAnother<string>(new[] { search.Name, item1.Name })
+                };
+                var collection = new[] {item1, item2 }.Randomize();
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(collection).Not.To.Contain.Any().Intersection.Equal.To(search);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+
+            [Test]
             public void Contain_All_WhenCollectionHasMismatches_ShouldThrow()
             {
                 // Arrange
