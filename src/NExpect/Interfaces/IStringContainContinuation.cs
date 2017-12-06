@@ -4,8 +4,13 @@ namespace NExpect.Interfaces
     /// <summary>
     /// Provides the Contain hook point specifically for strings
     /// </summary>
-    public interface IStringContainContinuation 
+    public interface IStringContainContinuation
         : IStringMore, ICanAddMatcher<string>
     {
+        /// <summary>
+        /// Provides the .In continuation for expecting string fragments
+        /// in order
+        /// </summary>
+        IStringIn In { get; }
     }
 }

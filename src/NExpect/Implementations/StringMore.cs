@@ -7,7 +7,8 @@ namespace NExpect.Implementations
     internal class StringMore :
         ExpectationContext<string>,
         IHasActual<string>,
-        IStringMore
+        IStringMore,
+        ICanAddMatcher<string>
     {
         public string Actual { get; }
 

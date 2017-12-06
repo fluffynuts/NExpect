@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using NExpect.Exceptions;
 using NExpect.Implementations;
@@ -6,6 +8,9 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
+// ReSharper disable UnusedMethodReturnValue.Global
+
+// ReSharper disable PossibleMultipleEnumeration
 
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -113,6 +118,39 @@ namespace NExpect
         {
             var result = new StringContainContinuation(continuation);
             AddContainsMatcherTo(continuation, search, customMessage, result);
+            return result;
+        }
+
+        /// <summary>
+        /// Provides the .Then(...) extension on already extended string
+        /// continuations.
+        /// </summary>
+        /// <param name="more">Continuation to operate on</param>
+        /// <param name="search">String to search for</param>
+        /// <returns></returns>
+        public static IStringContainContinuation Then(
+            this IStringMore more,
+            string search
+        ) {
+            return more.Then(search, null);
+        }
+
+        /// <summary>
+        /// Provides the .Then(...) extension on already extended string
+        /// continuations.
+        /// </summary>
+        /// <param name="more">Continuation to operate on</param>
+        /// <param name="search">String to search for</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns></returns>
+        public static IStringContainContinuation Then(
+            this IStringMore more,
+            string search,
+            string customMessage
+        ) {
+            var canAddMatcher = more as ICanAddMatcher<string>;
+            var result = new StringContainContinuation(canAddMatcher);
+            AddContainsMatcherTo(canAddMatcher, search, customMessage, result);
             return result;
         }
 
@@ -502,6 +540,47 @@ namespace NExpect
                     e.Message
                 }.JoinWith("\n"));
             }
+        }
+
+        /// <summary>
+        /// Checks for fragments in order in the string being expected upon
+        /// </summary>
+        /// <param name="stringIn">Continuation to operate on</param>
+        /// <param name="firstFragment">First fragment to look for</param>
+        /// <param name="fragments">Subsequent fragments to look for</param>
+        /// <returns></returns>
+        public static IStringMore Order(
+            this IStringIn stringIn,
+            string firstFragment,
+            params string[] fragments
+        )
+        {
+            return stringIn.Order(new[] {firstFragment}.Concat(fragments), null);
+        }
+
+        /// <summary>
+        /// Checks for fragments in order in the string being expected upon
+        /// </summary>
+        /// <param name="stringIn">Continuation to operate on</param>
+        /// <param name="fragments">Fragments to look for</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns></returns>
+        public static IStringMore Order(
+            this IStringIn stringIn,
+            IEnumerable<string> fragments,
+            string customMessage
+        )
+        {
+            if (!fragments.Any())
+                throw new InvalidOperationException(".In.Order(...) requires at least one fragment");
+            var first = fragments.First();
+            var canAddMatcher = stringIn as ICanAddMatcher<string>;
+            fragments.Skip(1)
+                .Aggregate(
+                    canAddMatcher.Contain(first, customMessage),
+                    (acc, cur) => acc.Then(cur, customMessage)
+                );
+            return canAddMatcher.More();
         }
 
 

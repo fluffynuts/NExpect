@@ -24,5 +24,10 @@
         /// Adds the string-specific .Be syntax
         /// </summary>
         new IStringBe Be { get; }
+
+        /// <summary>
+        /// Provides the .Contain of .To.Contain.In.Order(...)
+        /// </summary>
+        IStringContain Contain { get; }
     }
 }

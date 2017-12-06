@@ -3,7 +3,7 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations
 {
-    internal class StringTo: 
+    internal class StringTo :
         To<string>,
         IStringTo
     {
@@ -18,6 +18,9 @@ namespace NExpect.Implementations
 
         public new IStringBe Be =>
             Factory.Create<string, StringBe>(Actual, this);
+
+        public IStringContain Contain =>
+            Factory.Create<string, StringContain>(Actual, this);
 
         public StringTo(string actual) : base(actual)
         {

@@ -6,6 +6,7 @@ using PeanutButter.Utils;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
 // ReSharper disable InconsistentNaming
+// ReSharper disable RedundantAnonymousTypePropertyName
 
 namespace NExpect.Tests.Collections
 {

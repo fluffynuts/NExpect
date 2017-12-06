@@ -46,5 +46,8 @@ namespace NExpect.Implementations
 
         public IStringAnd And =>
             Factory.Create<string, StringAnd>(Actual, this);
+
+        public IStringIn In =>
+            Factory.Create<string, StringIn>(Actual, this);
     }
 }

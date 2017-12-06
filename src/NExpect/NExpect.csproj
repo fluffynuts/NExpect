@@ -16,6 +16,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard2.0\NExpect.xml</DocumentationFile>
     <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='BuildForRelease|netstandard2.0|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard2.0\NExpect.xml</DocumentationFile>

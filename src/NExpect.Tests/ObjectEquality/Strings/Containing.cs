@@ -1,5 +1,6 @@
 using NExpect.Exceptions;
 using NUnit.Framework;
+using PeanutButter.Utils;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
 
@@ -177,6 +178,140 @@ namespace NExpect.Tests.ObjectEquality.Strings
                                 },
                                 Throws.Exception.InstanceOf<UnmetExpectationException>()
                                     .With.Message.Contains("\"d\""));
+                            // Assert
+                        }
+                    }
+
+                    [TestFixture]
+                    public class FragmentsInOrder
+                    {
+                        [Test]
+                        public void WhenHaveAllFragmentsInOrder_ShouldNotThrow()
+                        {
+                            // Arrange
+                            var src = new[]
+                            {
+                                "Line the first",
+                                "This is the second line",
+                                "Another line here",
+                                "And the final line"
+                            }.JoinWith("\n");
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(src)
+                                    .To.Contain.In.Order(
+                                        "the first",
+                                        "line here",
+                                        "final line"
+                                    );
+                            }, Throws.Nothing);
+                            // Assert
+                        }
+
+                        [Test]
+                        public void WhenHaveAllFragmentsInOrder_ShouldAllowMore()
+                        {
+                            // Arrange
+                            var src = new[]
+                            {
+                                "Line the first",
+                                "This is the second line",
+                                "Another line here",
+                                "And the final line"
+                            }.JoinWith("\n");
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(src)
+                                    .To.Contain.In.Order(
+                                        "the first",
+                                        "line here"
+                                    ).Then("final line");
+                            }, Throws.Nothing);
+                            // Assert
+                        }
+
+                        [Test]
+                        public void WhenHaveAllFragmentsOutOfOrder_ShouldThrow()
+                        {
+                            // Arrange
+                            var src = new[]
+                            {
+                                "Line the first",
+                                "This is the second line",
+                                "Another line here",
+                                "And the final line"
+                            }.JoinWith("\n");
+
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(src)
+                                    .To.Contain.In.Order(
+                                        "line here",
+                                        "the first",
+                                        "final line"
+                                    );
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
+
+                        [Test]
+                        public void WhenHaveMissingFragment_ShouldThrow()
+                        {
+                            // Arrange
+                            var src = new[]
+                            {
+                                "Line the first",
+                                "This is the second line",
+                                "Another line here",
+                                "And the final line"
+                            }.JoinWith("\n");
+
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(src)
+                                    .To.Contain.In.Order(
+                                        "the first",
+                                        "moo, said the cow",
+                                        "final line"
+                                    );
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
+
+                        [Test]
+                        public void WhenHaveMissingFragment_ShouldThrow_IncludingCustomMessage()
+                        {
+                            // Arrange
+                            var src = new[]
+                            {
+                                "Line the first",
+                                "This is the second line",
+                                "Another line here",
+                                "And the final line"
+                            }.JoinWith("\n");
+
+                            var expected = GetRandomString(10);
+                            // Pre-Assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(src)
+                                    .To.Contain.In.Order(new[]
+                                    {
+                                        "the first",
+                                        "moo, said the cow",
+                                        "final line"
+                                    }, expected);
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains(expected));
                             // Assert
                         }
                     }
