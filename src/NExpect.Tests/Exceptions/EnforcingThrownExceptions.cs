@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using NExpect.Exceptions;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
@@ -667,6 +668,62 @@ namespace NExpect.Tests.Exceptions
                         // Assert
                     }
                 }
+            }
+        }
+
+        [TestFixture]
+        public class AsyncFunctions
+        {
+            private async Task ThrowStuffAction()
+            {
+                await Task.Run(() => { });
+                throw new InvalidOperationException("moo cows");
+            }
+
+            private async Task<int> ThrowStuffFunc()
+            {
+                await Task.Run(() => { });
+                throw new InvalidOperationException("moo cows");
+            }
+
+            [Test]
+            public void ShouldHandleAsyncActions()
+            {
+                // Arrange
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(ThrowStuffAction)
+                    .To.Throw<InvalidOperationException>()
+                    .With.Message.Containing("moo cows");
+                }, Throws.Nothing);
+
+                Assert.That(() =>
+                {
+                    Expect(ThrowStuffAction)
+                    .To.Throw();
+                }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void ShouldHandleAsyncFuncs()
+            {
+                // Arrange
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(ThrowStuffFunc)
+                    .To.Throw<InvalidOperationException>();
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(ThrowStuffFunc)
+                    .To.Throw();
+                }, Throws.Nothing);
+                // Assert
             }
         }
     }

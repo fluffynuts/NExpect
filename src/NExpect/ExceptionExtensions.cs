@@ -18,7 +18,6 @@ namespace NExpect
         /// </summary>
         /// <param name="src">Action to run</param>
         /// <returns>Continuation which can be used to test exception messages</returns>
-        
         public static IThrowContinuation<Exception> Throw(
             this ICanAddMatcher<Action> src
         )

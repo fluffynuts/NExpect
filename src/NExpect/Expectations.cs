@@ -3,6 +3,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading.Tasks;
+using Imported.PeanutButter.Utils;
+using NExpect.Exceptions;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.Shims;
@@ -136,9 +139,44 @@ namespace NExpect
         /// <returns>IExpectation&lt;Action&gt;</returns>
         public static IExpectation<Action> Expect<T>(Func<T> func)
         {
-            return new Expectation<Action>(() => { 
-                func();
+            return new Expectation<Action>(() =>
+            {
+                var result = func();
+                if (!(result is Task taskResult))
+                    return;
+                taskResult.ConfigureAwait(false);
+                try
+                {
+                    var maxWait = GetMaxTaskWait();
+                    var waitCompleted = taskResult.Wait(maxWait);
+                    if (!waitCompleted)
+                    {
+                        throw new UnmetExpectationException(new[]
+                        {
+                            $"Waited {maxWait}ms for task to complete.",
+                            "If this is too short, consider adjusing environment ",
+                            $"variable {TASK_TIMEOUT_ENV_VAR} to suit your needs. ",
+                            "If this doesn't help, please log a bug: async/await can",
+                            "be fickle"
+                        }.JoinWith(" "));
+                    }
+                }
+                catch (AggregateException ex)
+                {
+                    throw ex.InnerExceptions.First();
+                }
             });
+        }
+
+        private const int TASK_TIMEOUT_MS = 5000;
+        private const string TASK_TIMEOUT_ENV_VAR = "NEXPECT_TASK_TIMEOUT_MS";
+
+        private static int GetMaxTaskWait()
+        {
+            var env = Environment.GetEnvironmentVariable(TASK_TIMEOUT_ENV_VAR) ?? "";
+            return int.TryParse(env, out var result)
+                ? result
+                : TASK_TIMEOUT_MS;
         }
 
         /// <summary>
@@ -256,7 +294,7 @@ namespace NExpect
         /// <typeparam name="TValue">Value type of the dictionary</typeparam>
         /// <returns>ICollectionExpectation&lt;T&gt;</returns>
         public static ICollectionExpectation<TKey> Expect<TKey, TValue>(
-            Dictionary<TKey,TValue>.KeyCollection keys
+            Dictionary<TKey, TValue>.KeyCollection keys
         )
         {
             return new CollectionExpectation<TKey>(keys.ToArray());
@@ -270,7 +308,7 @@ namespace NExpect
         /// <typeparam name="TValue">Value type of the dictionary</typeparam>
         /// <returns>ICollectionExpectation&lt;T&gt;</returns>
         public static ICollectionExpectation<TValue> Expect<TKey, TValue>(
-            Dictionary<TKey,TValue>.ValueCollection values
+            Dictionary<TKey, TValue>.ValueCollection values
         )
         {
             return new CollectionExpectation<TValue>(values.ToArray());
@@ -343,5 +381,4 @@ namespace NExpect
             );
         }
     }
-
 }
