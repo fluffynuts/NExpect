@@ -7,7 +7,7 @@ namespace NExpect.Interfaces
     /// </summary>
     /// <typeparam name="T"></typeparam>
     // ReSharper disable once InheritdocConsiderUsage
-    public interface ICollectionDeep<T>: 
+    public interface ICollectionDeep<T> :
         ICanAddMatcher<IEnumerable<T>>
     {
         /// <summary>

@@ -3,6 +3,9 @@ using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
+using static NExpect.Implementations.MessageHelpers;
+
+// ReSharper disable MemberCanBePrivate.Global
 
 // ReSharper disable UnusedMethodReturnValue.Global
 
@@ -22,6 +25,20 @@ namespace NExpect
             this ICanAddMatcher<Action> src
         )
         {
+            return src.Throw(null);
+        }
+
+        /// <summary>
+        /// Expects the Action to throw any kind of exception
+        /// </summary>
+        /// <param name="src">Action to run</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns>Continuation which can be used to test exception messages</returns>
+        public static IThrowContinuation<Exception> Throw(
+            this ICanAddMatcher<Action> src,
+            string customMessage
+        )
+        {
             var continuation = new ThrowContinuation<Exception>();
             src.AddMatcher(fn =>
             {
@@ -29,12 +46,22 @@ namespace NExpect
                 try
                 {
                     fn();
-                    result = new MatcherResult(false, "Expected to throw an exception but none was thrown");
+                    result = new MatcherResult(
+                        false,
+                        FinalMessageFor(
+                            "Expected to throw an exception but none was thrown",
+                            customMessage)
+                    );
                 }
                 catch (Exception ex)
                 {
                     continuation.Exception = ex;
-                    result = new MatcherResult(true, $"Exception thrown:\n${ex.Message}\n${ex.StackTrace}");
+                    result = new MatcherResult(
+                        true,
+                        FinalMessageFor(
+                            $"Exception thrown:\n${ex.Message}\n${ex.StackTrace}",
+                            customMessage
+                        ));
                 }
                 return result;
             });
@@ -51,16 +78,17 @@ namespace NExpect
         /// <returns>Throw continuation, used to continue with testing the property you just selected</returns>
         /// <exception cref="ArgumentException">Thrown if the continuation is not a known ThrowContinuation. Userland implementation of IThrowContinuation is not supported - yet. Make a request if you need it!</exception>
         public static IExceptionPropertyContinuation<TValue> With<T, TValue>(
-            this IThrowContinuation<T> continuation, 
+            this IThrowContinuation<T> continuation,
             Func<T, TValue> fetcher
-        ) where T: Exception
+        ) where T : Exception
         {
             var moo = continuation as ThrowContinuation<T>;
             var actual = moo?.Exception ?? moo.TryGetPropertyValue<T>("Exception");
             if (actual == null)
             {
                 // TODO: can we kinda-duck this to work on user-generated implementations of IThrowContinuation<T>? And do we care to?
-                throw new ArgumentException("With should operate on a ThrowContinuation<T> or at least something with an Exception property that is an Exception.");
+                throw new ArgumentException(
+                    "With should operate on a ThrowContinuation<T> or at least something with an Exception property that is an Exception.");
             }
             var exceptionPropertyValue = fetcher(actual);
 
@@ -82,6 +110,21 @@ namespace NExpect
             this ICanAddMatcher<Action> src
         ) where T : Exception
         {
+            return src.Throw<T>(null);
+        }
+
+        /// <summary>
+        /// Expects the action to throw an exception of type T
+        /// </summary>
+        /// <param name="src">Action to test</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of exception which is expected</typeparam>
+        /// <returns>Continuation which can be used to test exception messages</returns>
+        public static IThrowContinuation<T> Throw<T>(
+            this ICanAddMatcher<Action> src,
+            string customMessage
+        ) where T : Exception
+        {
             var continuation = new ThrowContinuation<T>();
             var expectedType = typeof(T);
             src.AddMatcher(fn =>
@@ -91,7 +134,10 @@ namespace NExpect
                 {
                     fn();
                     result = new MatcherResult(false,
-                        $"Expected to throw an exception of type {expectedType.Name} but none was thrown");
+                        FinalMessageFor(
+                            $"Expected to throw an exception of type {expectedType.Name} but none was thrown",
+                            customMessage
+                        ));
                 }
                 catch (Exception ex)
                 {
@@ -99,7 +145,7 @@ namespace NExpect
                     var message = passed
                         ? $"Expected not to throw an exception of type {expectedType.Name}"
                         : $"Expected to throw an exception of type {expectedType.Name} but {ex.GetType().Name} was thrown instead ({ex.Message})";
-                    result = new MatcherResult(passed, message);
+                    result = new MatcherResult(passed, FinalMessageFor(message, customMessage));
                     continuation.Exception = ex as T;
                 }
                 return result;
@@ -131,7 +177,7 @@ namespace NExpect
                 var passed = nextOffset > -1;
                 return new MatcherResult(
                     passed,
-                    MessageHelpers.MessageForContainsResult(
+                    MessageForContainsResult(
                         passed, s, search
                     )
                 );
@@ -160,7 +206,7 @@ namespace NExpect
                 var passed = test(s);
                 return new MatcherResult(
                     passed,
-                    MessageHelpers.MessageForMatchResult(
+                    MessageForMatchResult(
                         passed, s
                     )
                 );
@@ -188,7 +234,7 @@ namespace NExpect
                 var passed = !s?.Contains(search) ?? true;
                 return new MatcherResult(
                     passed,
-                    MessageHelpers.MessageForNotContainsResult(
+                    MessageForNotContainsResult(
                         passed, s, search
                     )
                 );
@@ -216,7 +262,7 @@ namespace NExpect
                 var passed = !test(s);
                 return new MatcherResult(
                     passed,
-                    MessageHelpers.MessageForNotMatchResult(
+                    MessageForNotMatchResult(
                         passed, s
                     )
                 );

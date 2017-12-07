@@ -6,6 +6,7 @@ using NUnit.Framework;
 using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
 using static NExpect.Expectations;
+using static PeanutButter.RandomGenerators.RandomValueGen;
 
 // ReSharper disable ConvertToLambdaExpression
 
@@ -25,7 +26,7 @@ namespace NExpect.Tests.Exceptions
                 {
                     Expect(() =>
                         {
-                            throw new Exception(RandomValueGen.GetRandomString());
+                            throw new Exception(GetRandomString());
                         })
                         .To.Throw();
                 }
@@ -62,7 +63,7 @@ namespace NExpect.Tests.Exceptions
                         {
                             if (MakeFalse())
                                 return 1;
-                            throw new Exception(RandomValueGen.GetRandomString());
+                            throw new Exception(GetRandomString());
                         })
                         .To.Throw();
                 }
@@ -98,7 +99,7 @@ namespace NExpect.Tests.Exceptions
             public void Throw_WithNoGenericType_WhenThrows_ShouldBeAbleToContinueWith_WithMessage_HappyPath()
             {
                 // Arrange
-                var expected = RandomValueGen.GetRandomString();
+                var expected = GetRandomString();
                 // Pre-Assert
                 // Act
                 Assert.DoesNotThrow(() =>
@@ -117,8 +118,8 @@ namespace NExpect.Tests.Exceptions
             public void Throw_WithNoGenericType_AllowsMultipleSubStringContainingOnMessage_HappyPath()
             {
                 // Arrange
-                var e1 = RandomValueGen.GetRandomString();
-                var e2 = RandomValueGen.GetRandomString();
+                var e1 = GetRandomString();
+                var e2 = GetRandomString();
                 var message = new[] {e1, e2}.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
@@ -140,8 +141,8 @@ namespace NExpect.Tests.Exceptions
             public void Throw_WithNoGenericType_WhenThrows_ShouldBeAbleToContinueWith_WithMessage_SadPath()
             {
                 // Arrange
-                var expected = RandomValueGen.GetRandomString();
-                var other = RandomValueGen.GetAnother(expected);
+                var expected = GetRandomString();
+                var other = GetAnother(expected);
                 // Pre-Assert
                 // Act
                 Assert.That(() =>
@@ -162,9 +163,9 @@ namespace NExpect.Tests.Exceptions
             public void Throw_WithNoGenericType_AllowsMultipleSubStringContainingOnMessage_SadPath()
             {
                 // Arrange
-                var e1 = RandomValueGen.GetRandomString();
-                var e2 = RandomValueGen.GetRandomString();
-                var e3 = RandomValueGen.GetRandomString();
+                var e1 = GetRandomString();
+                var e2 = GetRandomString();
+                var e3 = GetRandomString();
                 var message = new[] {e1, e2}.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
@@ -187,9 +188,9 @@ namespace NExpect.Tests.Exceptions
             public void Throw_WithNoGenericType_AllowsMultipleSubStringContainingOnMessage_SadPathNegated()
             {
                 // Arrange
-                var e1 = RandomValueGen.GetRandomString();
-                var e2 = RandomValueGen.GetRandomString();
-                var e3 = RandomValueGen.GetRandomString();
+                var e1 = GetRandomString();
+                var e2 = GetRandomString();
+                var e3 = GetRandomString();
                 var message = new[] {e1, e2}.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
@@ -211,8 +212,8 @@ namespace NExpect.Tests.Exceptions
             public void Throw_WithNoGenericType_AllowsMultipleSubStringContainingOnMessage_HappyPathNegated()
             {
                 // Arrange
-                var e1 = RandomValueGen.GetRandomString();
-                var e2 = RandomValueGen.GetRandomString();
+                var e1 = GetRandomString();
+                var e2 = GetRandomString();
                 var message = new[] {e1, e2}.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
@@ -237,7 +238,7 @@ namespace NExpect.Tests.Exceptions
             public void WhenMessageMatches_ShouldNotThrow()
             {
                 // Arrange
-                var msg = RandomValueGen.GetRandomString();
+                var msg = GetRandomString();
                 // Pre-Assert
 
                 // Act
@@ -259,7 +260,7 @@ namespace NExpect.Tests.Exceptions
             public void WhenMessageDoesNotMatch_ShouldThrow()
             {
                 // Arrange
-                var msg = RandomValueGen.GetRandomString();
+                var msg = GetRandomString();
                 // Pre-Assert
 
                 // Act
@@ -267,7 +268,7 @@ namespace NExpect.Tests.Exceptions
                     {
                         Expect(() =>
                             {
-                                throw new Exception(RandomValueGen.GetAnother(msg));
+                                throw new Exception(GetAnother(msg));
                             })
                             .To.Throw()
                             .With.Message.Matching(s => s == msg);
@@ -281,7 +282,7 @@ namespace NExpect.Tests.Exceptions
             public void Negated_WhenMessageDoesNotMatch_ShouldThrow()
             {
                 // Arrange
-                var msg = RandomValueGen.GetRandomString();
+                var msg = GetRandomString();
                 // Pre-Assert
 
                 // Act
@@ -289,7 +290,7 @@ namespace NExpect.Tests.Exceptions
                     {
                         Expect(() =>
                             {
-                                throw new Exception(RandomValueGen.GetAnother(msg));
+                                throw new Exception(GetAnother(msg));
                             })
                             .To.Throw()
                             .With.Message.Not.Matching(s => s == msg);
@@ -312,6 +313,12 @@ namespace NExpect.Tests.Exceptions
                         .To.Throw<InvalidOperationException>();
                 },
                 Throws.Nothing);
+            Assert.That(() =>
+                {
+                    Expect(() => throw new InvalidOperationException("moo"))
+                        .To.Throw<InvalidOperationException>("Custom message");
+                },
+                Throws.Nothing);
             // Assert
         }
 
@@ -321,9 +328,9 @@ namespace NExpect.Tests.Exceptions
             public void Throw_WithGenericType_AllowsMultipleSubStringContainingOnMessage_SadPath()
             {
                 // Arrange
-                var e1 = RandomValueGen.GetRandomString();
-                var e2 = RandomValueGen.GetRandomString();
-                var e3 = RandomValueGen.GetRandomString();
+                var e1 = GetRandomString();
+                var e2 = GetRandomString();
+                var e3 = GetRandomString();
                 var message = new[] {e1, e2}.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
@@ -339,6 +346,30 @@ namespace NExpect.Tests.Exceptions
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains(e3));
+
+                // Assert
+            }
+
+            [Test]
+            public void ShouldIncludeCustomMessage()
+            {
+                // Arrange
+                var e1 = GetRandomString();
+                var e2 = GetRandomString();
+                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
+                var customMessage = $"{GetRandomString()} (custom message)";
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(() =>
+                            {
+                                throw new InvalidOperationException(message);
+                            })
+                            .To.Throw<ArgumentException>(customMessage);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains(customMessage));
                 // Assert
             }
 
@@ -346,9 +377,9 @@ namespace NExpect.Tests.Exceptions
             public void Throw_WithGenericType_AllowsMultipleSubStringContainingOnMessage_SadPathNegated()
             {
                 // Arrange
-                var e1 = RandomValueGen.GetRandomString();
-                var e2 = RandomValueGen.GetRandomString();
-                var e3 = RandomValueGen.GetRandomString();
+                var e1 = GetRandomString();
+                var e2 = GetRandomString();
+                var e3 = GetRandomString();
                 var message = new[] {e1, e2}.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
@@ -370,8 +401,8 @@ namespace NExpect.Tests.Exceptions
             public void Throw_WithGenericType_AllowsMultipleSubStringContainingOnMessage_HappyPathNegated()
             {
                 // Arrange
-                var e1 = RandomValueGen.GetRandomString();
-                var e2 = RandomValueGen.GetRandomString();
+                var e1 = GetRandomString();
+                var e2 = GetRandomString();
                 var message = new[] {e1, e2}.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
@@ -430,7 +461,7 @@ namespace NExpect.Tests.Exceptions
             public void Throw_WithGenericType_ShouldContinueOnToMessageTest_HappyPath()
             {
                 // Arrange
-                var expected = RandomValueGen.GetRandomString();
+                var expected = GetRandomString();
 
                 // Pre-Assert
 
@@ -451,7 +482,7 @@ namespace NExpect.Tests.Exceptions
         public void Throw_WithGenericType_ShouldContinueOnToMessageTest_HappyPath_TestingEqualTo()
         {
             // Arrange
-            var expected = RandomValueGen.GetRandomString();
+            var expected = GetRandomString();
 
             // Pre-Assert
 
@@ -471,8 +502,8 @@ namespace NExpect.Tests.Exceptions
         public void Throw_WithGenericType_ShouldContinueOnToMessageTest_SadPath_TestingEqualTo()
         {
             // Arrange
-            var expected = RandomValueGen.GetRandomString();
-            var unexpected = RandomValueGen.GetAnother(expected);
+            var expected = GetRandomString();
+            var unexpected = GetAnother(expected);
             // Pre-Assert
 
             // Act
@@ -495,7 +526,7 @@ namespace NExpect.Tests.Exceptions
                 Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_HappyPath_TestingEqualTo()
             {
                 // Arrange
-                var expected = RandomValueGen.GetRandomString();
+                var expected = GetRandomString();
 
                 // Pre-Assert
 
@@ -517,8 +548,8 @@ namespace NExpect.Tests.Exceptions
                 Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_SadPath_TestingEqualTo()
             {
                 // Arrange
-                var expected = RandomValueGen.GetRandomString();
-                var unexpected = RandomValueGen.GetAnother(expected);
+                var expected = GetRandomString();
+                var unexpected = GetAnother(expected);
 
                 // Pre-Assert
 
@@ -541,7 +572,7 @@ namespace NExpect.Tests.Exceptions
                 Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_HappyPath_TestingContains()
             {
                 // Arrange
-                var expected = RandomValueGen.GetRandomString(8, 8);
+                var expected = GetRandomString(8, 8);
                 var expectedSubstring = expected.Substring(2, 4);
 
                 // Pre-Assert
@@ -564,9 +595,9 @@ namespace NExpect.Tests.Exceptions
                 Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_SadPath_TestingContains()
             {
                 // Arrange
-                var expected = RandomValueGen.GetRandomString();
-                var unexpected = RandomValueGen.GetAnother(expected);
-                var unexpectedSubstring = RandomValueGen.GetRandomString(4, 4);
+                var expected = GetRandomString();
+                var unexpected = GetAnother(expected);
+                var unexpectedSubstring = GetRandomString(4, 4);
 
                 // Pre-Assert
 
@@ -628,7 +659,7 @@ namespace NExpect.Tests.Exceptions
                     public void Throw_ShouldContinueOnToPropertyTest_HappyPath_TestingEqualTo()
                     {
                         // Arrange
-                        var expected = RandomValueGen.GetRandomString();
+                        var expected = GetRandomString();
 
                         // Pre-Assert
 
@@ -649,8 +680,8 @@ namespace NExpect.Tests.Exceptions
                     public void Throw_ShouldContinueOnToPropertyTest_SadPath_TestingEqualTo()
                     {
                         // Arrange
-                        var expected = RandomValueGen.GetRandomString();
-                        var unexpected = RandomValueGen.GetAnother(expected);
+                        var expected = GetRandomString();
+                        var unexpected = GetAnother(expected);
 
                         // Pre-Assert
 

@@ -27,7 +27,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
             }, Throws.Nothing);
             // Assert
         }
-        
+
         [Test]
         public void PositiveAssertion_Reversed_WhenShouldPass_ShouldNotThrow()
         {
@@ -66,7 +66,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
         }
-        
+
         [Test]
         public void NegativeAssertion2_WhenShouldPass_ShouldThrow()
         {
@@ -86,7 +86,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
         }
-        
+
         [Test]
         public void NegativeAssertion3_WhenShouldPass_ShouldThrow()
         {
@@ -106,7 +106,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
         }
-        
+
         [Test]
         public void PositiveAssertion_ShorterSyntax_WhenShouldPass_ShouldNotThrow()
         {
@@ -126,7 +126,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
             }, Throws.Nothing);
             // Assert
         }
-        
+
         [Test]
         public void PositiveAssertion_ShorterSyntaxFlipped_WhenShouldPass_ShouldNotThrow()
         {
@@ -146,7 +146,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
             }, Throws.Nothing);
             // Assert
         }
-        
+
         [Test]
         public void PositiveAssertion_ShorterSyntax_WhenShouldFail_ShouldThrow()
         {
@@ -166,7 +166,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
         }
-        
+
         [Test]
         public void PositiveAssertion_ShorterSyntaxFlipped_WhenShouldFail_ShouldThrow()
         {
@@ -186,7 +186,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
         }
-        
+
         [Test]
         public void NegativeAssertion_ShorterSyntax_WhenShouldPass_ShouldNotThrow()
         {
@@ -206,7 +206,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
             }, Throws.Nothing);
             // Assert
         }
-        
+
         [Test]
         public void NegativeAssertion_ShorterSyntax_WhenShouldFail_ShouldThrow()
         {
@@ -226,6 +226,5 @@ namespace NExpect.Tests.ObjectEquality.Strings
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
         }
-        
     }
 }

@@ -4,6 +4,7 @@ using static PeanutButter.RandomGenerators.RandomValueGen;
 using NExpect.Exceptions;
 using NExpect.Implementations;
 using static NExpect.Expectations;
+
 // ReSharper disable InconsistentNaming
 // ReSharper disable ExpressionIsAlwaysNull
 
@@ -87,7 +88,7 @@ namespace NExpect.Tests.Collections
 
                         // Assert
                     }
-                    
+
                     [TestFixture]
                     public class WithValue
                     {
@@ -164,8 +165,6 @@ namespace NExpect.Tests.Collections
                                 // Assert
                             }
                         }
-
-
                     }
                 }
             }

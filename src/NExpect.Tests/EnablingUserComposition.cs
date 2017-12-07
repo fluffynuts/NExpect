@@ -4,6 +4,7 @@ using NExpect.MatcherLogic;
 using NUnit.Framework;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+
 // ReSharper disable ExpressionIsAlwaysNull
 
 namespace NExpect.Tests
@@ -167,8 +168,8 @@ namespace NExpect.Tests
                         .And.Not.To.Be.A.Benny();
                 }, Throws.Nothing);
                 // Assert
-            }            
-            
+            }
+
             [Test]
             public void MorePractical_WhenFirstPartFails_ShouldThrowThere()
             {
