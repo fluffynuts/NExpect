@@ -7,7 +7,7 @@ using NExpect.Implementations;
 namespace CoreTests
 {
     [TestFixture]
-    public class Issues
+    public class Issue12
     {
         [Test]
         public void ComparingTypes_ShouldNotStall()
