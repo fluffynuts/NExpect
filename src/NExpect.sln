@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NExpect.Tests", "NExpect.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreConsumer", "CoreConsumer\CoreConsumer.csproj", "{941EC838-F3B0-4674-B428-EF2DC388BE17}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreTests", "CoreTests\CoreTests.csproj", "{0F91FB49-F2CF-4775-B86D-13038E4789CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		BuildForRelease|Any CPU = BuildForRelease|Any CPU
@@ -34,6 +36,12 @@ Global
 		{941EC838-F3B0-4674-B428-EF2DC388BE17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{941EC838-F3B0-4674-B428-EF2DC388BE17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{941EC838-F3B0-4674-B428-EF2DC388BE17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F91FB49-F2CF-4775-B86D-13038E4789CD}.BuildForRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{0F91FB49-F2CF-4775-B86D-13038E4789CD}.BuildForRelease|Any CPU.Build.0 = Release|Any CPU
+		{0F91FB49-F2CF-4775-B86D-13038E4789CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F91FB49-F2CF-4775-B86D-13038E4789CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F91FB49-F2CF-4775-B86D-13038E4789CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F91FB49-F2CF-4775-B86D-13038E4789CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
