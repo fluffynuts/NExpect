@@ -25,8 +25,8 @@ namespace NExpect.Implementations
             string customMessage
         )
         {
-            return string.IsNullOrWhiteSpace(customMessage) 
-                ? standardMessage 
+            return string.IsNullOrWhiteSpace(customMessage)
+                ? standardMessage
                 : $"{customMessage}\n\n{standardMessage}";
         }
 
@@ -146,9 +146,9 @@ namespace NExpect.Implementations
         /// <returns>Comma-separated list representing the collection</returns>
         public static string Stringify<T>(this IEnumerable<T> collection)
         {
-            return collection == null 
-                    ? NULL 
-                    : $"[ {string.Join(", ", collection.Select(Quote))} ]";
+            return collection == null
+                ? NULL
+                : $"[ {string.Join(", ", collection.Select(Quote))} ]";
         }
 
         internal const string NULL = "(null)";
@@ -180,6 +180,5 @@ namespace NExpect.Implementations
         {
             return Stringifier.Stringify(item, NULL);
         }
-
     }
 }

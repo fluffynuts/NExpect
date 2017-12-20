@@ -176,11 +176,11 @@ namespace NExpect.Tests.Collections
                         var src = GetRandomDate();
                         var local = new
                         {
-                            Date = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, src.Second, DateTimeKind.Local)
+                            Date = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, src.Second, src.Millisecond, DateTimeKind.Local)
                         };
                         var utc = new
                         {
-                            Date = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, src.Second, DateTimeKind.Utc)
+                            Date = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, src.Second, src.Millisecond, DateTimeKind.Utc)
                         };
                         // Pre-Assert
                         // Act
