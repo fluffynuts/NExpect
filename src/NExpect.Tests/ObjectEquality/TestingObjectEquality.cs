@@ -544,6 +544,40 @@ namespace NExpect.Tests.ObjectEquality
                         // Assert
                     }
                 }
+
+                [TestFixture]
+                public class Issues
+                {
+                    [Test]
+                    public void DeepEqualityTestingBetweenShorts_ShouldNotFailWhenTheyAreEqual()
+                    {
+                        // Arrange
+                        var left = new {x = (short) 1};
+                        var right = new {x = (short) 1};
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(left).To.Deep.Equal(right);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void IntersectionEqualityTestingBetweenShortAndIntProperty_ShouldNotFailWhenTheyAreEqual()
+                    {
+                        // Arrange
+                        var left = new {x = short.MaxValue};
+                        var right = new {x = (int) short.MaxValue};
+                        // Pre-Assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(left).To.Intersection.Equal(right);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+                }
             }
         }
 

@@ -1,6 +1,6 @@
 [submodule "gulp-tasks"]
 	path = gulp-tasks
-	url = https://github.com/fluffynuts/gulp-tasks
+	url = ssh://git@github.com/fluffynuts/gulp-tasks
 [submodule "src/PeanutButter"]
 	path = src/PeanutButter
-	url = https://github.com/fluffynuts/PeanutButter
+	url = ssh://git@github.com/fluffynuts/PeanutButter
