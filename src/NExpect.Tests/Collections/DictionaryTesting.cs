@@ -258,6 +258,31 @@ namespace NExpect.Tests.Collections
                             }
 
                             [Test]
+                            public void WhenCaseInsensitiveDictionaryHasKey_AndValueMatches_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var key = GetRandomString(2);
+                                var value = GetRandomInt(2);
+                                var src = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
+                                {
+                                    [key] = value
+                                };
+                                var recased = key.ToUpperInvariant();
+                                if (recased == key)
+                                    recased = key.ToLowerInvariant();
+                                // Pre-Assert
+
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(src).To.Contain.Key(recased).With.Value(value);
+                                    },
+                                    Throws.Nothing);
+
+                                // Assert
+                            }
+
+                            [Test]
                             public void WhenDictionaryDoesNotHaveKey_ShouldThrowForThatReason()
                             {
                                 // Arrange

@@ -148,7 +148,6 @@ namespace NExpect
         )
         {
             AddKeyMatcher(continuation, key, customMessage);
-
             return CreateValueContinuation(continuation, key);
         }
 
@@ -284,7 +283,6 @@ namespace NExpect
         )
         {
             AddKeyMatcher(continuation, key, customMessage);
-
             return CreateValueContinuation(continuation, key);
         }
 
@@ -320,27 +318,13 @@ namespace NExpect
             );
         }
 
-        private static void AddKeyMatcher<TKey, TValue>(IContain<IEnumerable<KeyValuePair<TKey, TValue>>> continuation,
+        private static void AddKeyMatcher<TKey, TValue>(
+            IContain<IEnumerable<KeyValuePair<TKey, TValue>>> continuation,
             TKey key, string customMessage)
         {
             continuation.AddMatcher(collection =>
             {
-                var passed = collection != null;
-                if (passed)
-                {
-                    if (key is string stringKey && typeof(TKey) == typeof(string))
-                    {
-                        var comparer = collection.HasMetadata<StringComparer>(Expectations.KEY_COMPARER)
-                            ? collection.GetMetadata<StringComparer>(Expectations.KEY_COMPARER)
-                            : StringComparer.Ordinal;
-                        passed = collection.Select(kvp => kvp.Key as string)
-                            .Any(k => comparer.Compare(k, stringKey) == 0);
-                    }
-                    else
-                    {
-                        passed = collection.Any(kvp => kvp.Key.Equals(key));
-                    }
-                }
+                var passed = collection != null && TryFindValueForKey(collection, key, out var _);
 
                 return new MatcherResult(
                     passed,
@@ -356,6 +340,36 @@ namespace NExpect
                     )
                 );
             });
+        }
+
+        private static bool TryFindValueForKey<TKey, TValue>(
+            IEnumerable<KeyValuePair<TKey, TValue>> collection,
+            TKey key,
+            out TValue value
+        )
+        {
+            if (key is string stringKey && typeof(TKey) == typeof(string))
+            {
+                var comparer = collection.HasMetadata<StringComparer>(Expectations.KEY_COMPARER)
+                    ? collection.GetMetadata<StringComparer>(Expectations.KEY_COMPARER)
+                    : StringComparer.Ordinal;
+                var keyMatches = collection.Select(kvp => kvp.Key as string)
+                    .Where(k => comparer.Compare(k, stringKey) == 0);
+                var hasMatch = keyMatches.Any();
+                value = hasMatch
+                    ? collection.First(kvp => comparer.Compare(kvp.Key as string, stringKey) == 0).Value
+                    : default;
+                return hasMatch;
+            }
+            else
+            {
+                var matches = collection.Where(kvp => kvp.Key.Equals(key));
+                var hasMatch = matches.Any();
+                value = hasMatch
+                    ? matches.First().Value
+                    : default;
+                return hasMatch;
+            }
         }
 
         private static IDictionaryValueContinuation<TValue> CreateValueContinuation<TKey, TValue>(
@@ -465,10 +479,10 @@ namespace NExpect
         private static TValue GetValueForKey<TKey, TValue>(
             ICanAddMatcher<IEnumerable<KeyValuePair<TKey, TValue>>> continuation, TKey key)
         {
-            return continuation
-                .GetActual()
-                .FirstOrDefault(kvp => kvp.Key.Equals(key))
-                .Value;
+            var collection = continuation.GetActual();
+            return TryFindValueForKey(collection, key, out var result)
+                ? result
+                : throw new KeyNotFoundException($"{key}");
         }
     }
 }
