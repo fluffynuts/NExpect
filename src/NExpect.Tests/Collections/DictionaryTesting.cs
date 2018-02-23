@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using NExpect.Exceptions;
@@ -115,6 +116,68 @@ namespace NExpect.Tests.Collections
                             },
                             Throws.Nothing);
 
+                        // Assert
+                    }
+
+                    public static IEnumerable<StringComparer> CaseInsensitiveComparers()
+                    {
+                        return new[]
+                        {
+                            StringComparer.OrdinalIgnoreCase,
+//                            StringComparer.CurrentCultureIgnoreCase, 
+//                            StringComparer.InvariantCultureIgnoreCase
+                        };
+                    }
+
+                    [TestCaseSource(nameof(CaseInsensitiveComparers))]
+                    public void WhenDictionaryIsCaseInsentive_ShouldNotThrowForIncorrectCasing(StringComparer comparer)
+                    {
+                        // Arrange
+                        var key = GetRandomString(2);
+                        var recased = key.ToUpperInvariant();
+                        if (recased == key)
+                            recased = key.ToLowerInvariant();
+                        var src = new Dictionary<string, int>(comparer)
+                        {
+                            [key] = GetRandomInt()
+                        };
+                        // Pre-assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(src).To.Contain.Key(recased);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    public static IEnumerable<StringComparer> CaseSensitiveComparers()
+                    {
+                        return new[]
+                        {
+                            StringComparer.CurrentCulture,
+                            StringComparer.InvariantCulture, 
+                            StringComparer.Ordinal
+                        };
+                    }
+
+                    [TestCaseSource(nameof(CaseSensitiveComparers))]
+                    public void WhenDictionaryIsCaseSentive_ShouldThrowForIncorrectCasing(StringComparer comparer)
+                    {
+                        // Arrange
+                        var key = GetRandomString(2);
+                        var recased = key.ToUpperInvariant();
+                        if (recased == key)
+                            recased = key.ToLowerInvariant();
+                        var src = new Dictionary<string, int>(comparer)
+                        {
+                            [key] = GetRandomInt()
+                        };
+                        // Pre-assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(src).To.Contain.Key(recased);
+                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
                         // Assert
                     }
 

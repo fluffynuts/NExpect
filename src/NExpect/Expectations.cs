@@ -324,8 +324,11 @@ namespace NExpect
         public static ICollectionExpectation<KeyValuePair<TKey, TValue>>
             Expect<TKey, TValue>(Dictionary<TKey, TValue> dictionary)
         {
+            dictionary.SetMetadata(KEY_COMPARER, dictionary.Comparer);
             return new CollectionExpectation<KeyValuePair<TKey, TValue>>(dictionary);
         }
+
+        internal const string KEY_COMPARER = "key-comparer";
 
         /// <summary>
         /// Starts an expectation on a concrete Dictionary

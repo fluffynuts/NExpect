@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Imported.PeanutButter.Utils;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -323,7 +325,23 @@ namespace NExpect
         {
             continuation.AddMatcher(collection =>
             {
-                var passed = collection?.Any(kvp => kvp.Key.Equals(key)) ?? false;
+                var passed = collection != null;
+                if (passed)
+                {
+                    if (key is string stringKey && typeof(TKey) == typeof(string))
+                    {
+                        var comparer = collection.HasMetadata<StringComparer>(Expectations.KEY_COMPARER)
+                            ? collection.GetMetadata<StringComparer>(Expectations.KEY_COMPARER)
+                            : StringComparer.Ordinal;
+                        passed = collection.Select(kvp => kvp.Key as string)
+                            .Any(k => comparer.Compare(k, stringKey) == 0);
+                    }
+                    else
+                    {
+                        passed = collection.Any(kvp => kvp.Key.Equals(key));
+                    }
+                }
+
                 return new MatcherResult(
                     passed,
                     MessageHelpers.FinalMessageFor(
