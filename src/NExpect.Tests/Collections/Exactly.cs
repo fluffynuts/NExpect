@@ -1,4 +1,5 @@
-﻿using NExpect.Exceptions;
+﻿using System;
+using NExpect.Exceptions;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
 using static PeanutButter.RandomGenerators.RandomValueGen;
@@ -122,6 +123,134 @@ namespace NExpect.Tests.Collections
                             // Assert
                         }
                     }
+
+                    [TestFixture]
+                    public class StringCollectionContainingStringContaining
+                    {
+                        [Test]
+                        public void WhenCollectionContains1StringContainingTestValueWith1Required_ShouldNotThrow()
+                        {
+                            // Arrange
+                            var collection = new[]
+                            {
+                                "moo cows",
+                                "bovine",
+                                "beef-witted"
+                            };
+                            // Pre-assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(1).Containing("cow");
+                            }, Throws.Nothing);
+                            // Assert
+                        }
+
+                        [Test]
+                        public void WhenCollectionContains2StringsContainingTestValueWith2Required_ShouldNotThrow()
+                        {
+                            // Arrange
+                            var collection = new[]
+                            {
+                                "moo cows",
+                                "bovine",
+                                "beef-witted",
+                                "cows moo"
+                            };
+                            // Pre-assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(2).Containing("cow");
+                            }, Throws.Nothing);
+                            // Assert
+                        }
+
+                        [Test]
+                        public void WhenCollectionContainsTooManyMatchingStrings_ShouldThrow()
+                        {
+                            // Arrange
+                            var collection = new[]
+                            {
+                                "moo cows",
+                                "bovine",
+                                "beef-witted",
+                                "cows moo"
+                            };
+                            // Pre-assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(1).Containing("cow");
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Assert
+                        }
+
+                        [Test]
+                        public void WhenThrowing_ShouldIncludeCustomMessageIfSet()
+                        {
+                            // Arrange
+                            var collection = new[]
+                            {
+                                "moo cows",
+                                "bovine",
+                                "beef-witted",
+                                "cows moo"
+                            };
+                            var expected = GetRandomString(10);
+                            // Pre-assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(1).Containing("cow", expected);
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains(expected));
+                            // Assert
+                        }
+
+                        [Test]
+                        public void ShouldUseProvidedStringComparison()
+                        {
+                            // Arrange
+                            var collection = new[]
+                            {
+                                "bovine",
+                                "beef-witted",
+                                "cows moo"
+                            };
+                            // Pre-assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(1).Containing("Cow", StringComparison.OrdinalIgnoreCase);
+                            }, Throws.Nothing);
+                            // Assert
+                        }
+
+                        [Test]
+                        public void ShouldUseProvidedStringComparisonAndCustomMessage()
+                        {
+                            // Arrange
+                            var collection = new[]
+                            {
+                                "bovine",
+                                "beef-witted",
+                                "Cows moo"
+                            };
+                            var expected = GetRandomString(10);
+                            // Pre-assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(1).Containing(
+                                    "cow", StringComparison.Ordinal, expected);
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains(expected));
+                            // Assert
+                        }
+
+                    }
+
 
                     [Test]
                     public void WhenSeeking2AndDoesContain2_ShouldNotThrow()

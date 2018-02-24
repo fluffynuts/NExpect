@@ -416,7 +416,11 @@ namespace NExpect
             countMatch.Continuation.AddMatcher(collection =>
             {
                 var idx = 0;
-                var have = collection.Select(o => new {o, idx = idx++})
+                var have = collection.Select(o => new
+                    {
+                        o,
+                        idx = idx++
+                    })
                     .Count(o => test(o.idx, o.o));
                 var compare = countMatch.Method == CountMatchMethods.All
                     ? collection.Count()
@@ -772,11 +776,11 @@ namespace NExpect
             continuation.AddMatcher(collection =>
             {
                 var actualCount = collection?.Count(
-                    o => DeepTestHelpers.AreDeepEqual(o, expected)
-                ) ?? 0;
+                                      o => DeepTestHelpers.AreDeepEqual(o, expected)
+                                  ) ?? 0;
                 var passed = _countPassStrategies[continuation.Method](
-                    actualCount, 
-                    continuation.ExpectedCount, 
+                    actualCount,
+                    continuation.ExpectedCount,
                     collection?.Count() ?? 0
                 );
                 return new MatcherResult(
@@ -826,11 +830,11 @@ namespace NExpect
             continuation.AddMatcher(collection =>
             {
                 var actualCount = collection?.Count(
-                    o => DeepTestHelpers.AreIntersectionEqual(o, expected)
-                ) ?? 0;
+                                      o => DeepTestHelpers.AreIntersectionEqual(o, expected)
+                                  ) ?? 0;
                 var passed = _countPassStrategies[continuation.Method](
-                    actualCount, 
-                    continuation.ExpectedCount, 
+                    actualCount,
+                    continuation.ExpectedCount,
                     collection?.Count() ?? 0
                 );
                 return new MatcherResult(
@@ -1189,7 +1193,8 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Performs in-order equality testing on items in two collections
+        /// Performs in-order equality testing on items in two collections, using
+        /// the Ordinal StringComparison
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected collection to match against</param>
@@ -1206,6 +1211,75 @@ namespace NExpect
                 null,
                 customMessage
             ));
+        }
+
+        /// <summary>
+        /// Tests a collection of strings for the required number of
+        /// string items containing the provided substring
+        /// </summary>
+        /// <param name="continuation">continuation to act upon</param>
+        /// <param name="search">substring to search for</param>
+        public static void Containing(
+            this ICountMatchContinuation<IEnumerable<string>> continuation,
+            string search
+        )
+        {
+            continuation.Containing(search, StringComparison.Ordinal);
+        }
+
+        /// <summary>
+        /// Tests a collection of strings for the required number of
+        /// string items containing the provided substring, using the
+        /// provided StringComparison
+        /// </summary>
+        /// <param name="continuation">continuation to act upon</param>
+        /// <param name="search">substring to search for</param>
+        /// <param name="comparison">StringComparer to use for locating matches</param>
+        public static void Containing(
+            this ICountMatchContinuation<IEnumerable<string>> continuation,
+            string search,
+            StringComparison comparison
+        )
+        {
+            continuation.Containing(search, comparison, null);
+        }
+
+        /// <summary>
+        /// Tests a collection of strings for the required number of
+        /// string items containing the provided substring, using the
+        /// Ordinal StringComparison
+        /// </summary>
+        /// <param name="continuation">continuation to act upon</param>
+        /// <param name="search">substring to search for</param>
+        /// <param name="customMessage">Custom message to add when failing</param>
+        public static void Containing(
+            this ICountMatchContinuation<IEnumerable<string>> continuation,
+            string search,
+            string customMessage
+        )
+        {
+            continuation.Containing(search, StringComparison.Ordinal, customMessage);
+        }
+
+        /// <summary>
+        /// Tests a collection of strings for the required number of
+        /// string items containing the provided substring, using the
+        /// provided StringComparison
+        /// </summary>
+        /// <param name="continuation">continuation to act upon</param>
+        /// <param name="search">substring to search for</param>
+        /// <param name="comparison">StringComparer to use for locating matches</param>
+        /// <param name="customMessage">Custom message to add when failing</param>
+        public static void Containing(
+            this ICountMatchContinuation<IEnumerable<string>> continuation,
+            string search,
+            StringComparison comparison,
+            string customMessage
+        )
+        {
+            continuation.Matched.By(
+                s => s.IndexOf(search, comparison) > -1, customMessage
+            );
         }
 
         private static Func<IEnumerable<T>, IMatcherResult> GenerateEqualityMatcherFor<T>(
@@ -1309,7 +1383,9 @@ namespace NExpect
             var itemInCollection = contain.GetActual().Count();
             if (itemInCollection == howMany)
                 return;
-            var s = howMany == 1 ? "" : "s";
+            var s = howMany == 1
+                ? ""
+                : "s";
             throw new UnmetExpectationException(
                 $"Expected to find only {howMany} item{s} in collection, but found {itemInCollection}");
         }
