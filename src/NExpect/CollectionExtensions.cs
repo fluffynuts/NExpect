@@ -172,6 +172,24 @@ namespace NExpect
         }
 
         /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="contain"></param>
+        /// <param name="howMany"></param>
+        /// <returns></returns>
+        public static ICountMatchContinuationOfStringCollection Exactly(
+            this IContain<IEnumerable<string>> contain,
+            int howMany)
+        {
+            CheckContain(contain);
+            return new CountMatchContinuationOfStringCollection(
+                contain,
+                CountMatchMethods.Exactly,
+                howMany
+            );
+        }
+
+        /// <summary>
         /// Checks that collection only contains N number of items.
         /// Continues with ICountMatchContinuation if it does
         /// </summary>
@@ -778,7 +796,7 @@ namespace NExpect
                 var actualCount = collection?.Count(
                                       o => DeepTestHelpers.AreDeepEqual(o, expected)
                                   ) ?? 0;
-                var passed = _countPassStrategies[continuation.Method](
+                var passed = CountPassStrategies[continuation.Method](
                     actualCount,
                     continuation.ExpectedCount,
                     collection?.Count() ?? 0
@@ -832,7 +850,7 @@ namespace NExpect
                 var actualCount = collection?.Count(
                                       o => DeepTestHelpers.AreIntersectionEqual(o, expected)
                                   ) ?? 0;
-                var passed = _countPassStrategies[continuation.Method](
+                var passed = CountPassStrategies[continuation.Method](
                     actualCount,
                     continuation.ExpectedCount,
                     collection?.Count() ?? 0
@@ -852,7 +870,7 @@ namespace NExpect
             });
         }
 
-        private static readonly Dictionary<CountMatchMethods, Func<int, int, int, bool>> _countPassStrategies =
+        private static readonly Dictionary<CountMatchMethods, Func<int, int, int, bool>> CountPassStrategies =
             new Dictionary<CountMatchMethods, Func<int, int, int, bool>>
             {
                 [CountMatchMethods.All] = (actual, expected, total) => actual == total,
@@ -1217,10 +1235,10 @@ namespace NExpect
         /// Tests a collection of strings for the required number of
         /// string items containing the provided substring
         /// </summary>
-        /// <param name="continuation">continuation to act upon</param>
-        /// <param name="search">substring to search for</param>
+        /// <param name="continuation">Continuation to act upon</param>
+        /// <param name="search">Substring to search for</param>
         public static void Containing(
-            this ICountMatchContinuation<IEnumerable<string>> continuation,
+            this ICountMatchContinuationOfStringCollection continuation,
             string search
         )
         {
@@ -1232,11 +1250,11 @@ namespace NExpect
         /// string items containing the provided substring, using the
         /// provided StringComparison
         /// </summary>
-        /// <param name="continuation">continuation to act upon</param>
-        /// <param name="search">substring to search for</param>
+        /// <param name="continuation">Continuation to act upon</param>
+        /// <param name="search">Substring to search for</param>
         /// <param name="comparison">StringComparer to use for locating matches</param>
         public static void Containing(
-            this ICountMatchContinuation<IEnumerable<string>> continuation,
+            this ICountMatchContinuationOfStringCollection continuation,
             string search,
             StringComparison comparison
         )
@@ -1249,11 +1267,11 @@ namespace NExpect
         /// string items containing the provided substring, using the
         /// Ordinal StringComparison
         /// </summary>
-        /// <param name="continuation">continuation to act upon</param>
-        /// <param name="search">substring to search for</param>
+        /// <param name="continuation">Continuation to act upon</param>
+        /// <param name="search">Substring to search for</param>
         /// <param name="customMessage">Custom message to add when failing</param>
         public static void Containing(
-            this ICountMatchContinuation<IEnumerable<string>> continuation,
+            this ICountMatchContinuationOfStringCollection continuation,
             string search,
             string customMessage
         )
@@ -1266,12 +1284,12 @@ namespace NExpect
         /// string items containing the provided substring, using the
         /// provided StringComparison
         /// </summary>
-        /// <param name="continuation">continuation to act upon</param>
-        /// <param name="search">substring to search for</param>
+        /// <param name="continuation">Continuation to act upon</param>
+        /// <param name="search">Substring to search for</param>
         /// <param name="comparison">StringComparer to use for locating matches</param>
         /// <param name="customMessage">Custom message to add when failing</param>
         public static void Containing(
-            this ICountMatchContinuation<IEnumerable<string>> continuation,
+            this ICountMatchContinuationOfStringCollection continuation,
             string search,
             StringComparison comparison,
             string customMessage
@@ -1279,6 +1297,167 @@ namespace NExpect
         {
             continuation.Matched.By(
                 s => s.IndexOf(search, comparison) > -1, customMessage
+            );
+        }
+
+        /// <summary>
+        /// Searches for strings ending with the provided
+        /// search, using the provided comparison, and including
+        /// the provided customMessage for failure
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="search">Substring to search for</param>
+        public static void With(
+            this ICountMatchContinuationOfStringCollectionEnding continuation,
+            string search
+        )
+        {
+            continuation.With(search, StringComparison.Ordinal);
+        }
+
+        /// <summary>
+        /// Searches for strings ending with the provided
+        /// search, using the provided comparison
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="search">Substring to search for</param>
+        /// <param name="comparison">Method of string comparison</param>
+        public static void With(
+            this ICountMatchContinuationOfStringCollectionEnding continuation,
+            string search,
+            StringComparison comparison
+        )
+        {
+            continuation.With(
+                search,
+                comparison,
+                null
+            );
+        }
+
+        /// <summary>
+        /// Searches for strings ending with the provided
+        /// search, using the Ordinal StringComparison, and including
+        /// the provided customMessage for failure
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="search">Substring to search for</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        public static void With(
+            this ICountMatchContinuationOfStringCollectionEnding continuation,
+            string search,
+            string customMessage
+        )
+        {
+            continuation.With(
+                search,
+                StringComparison.Ordinal,
+                customMessage
+            );
+        }
+
+        /// <summary>
+        /// Searches for strings ending with the provided
+        /// search, using the provided comparison, and including
+        /// the provided customMessage for failure
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="search">Substring to search for</param>
+        /// <param name="comparison">Method of string comparison</param>
+        /// <param name="customMessage">Custom message</param>
+        public static void With(
+            this ICountMatchContinuationOfStringCollectionEnding continuation,
+            string search,
+            StringComparison comparison,
+            string customMessage
+        )
+        {
+            if (!(continuation is CountMatchContinuationOfStringCollectionVerb concrete))
+                throw new InvalidOperationException($".With() for collections of strings only supported where the concrete continuation is of type {typeof(CountMatchContinuationOfStringCollection)}");
+            concrete.Wrapped.Matched.By(
+                s => s.EndsWith(search, comparison),
+                customMessage
+            );
+        }
+
+
+        /// <summary>
+        /// Searches for strings starting with the provided
+        /// search, using the provided comparison, and including
+        /// the provided customMessage for failure
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="search">Substring to search for</param>
+        public static void With(
+            this ICountMatchContinuationOfStringCollectionStarting continuation,
+            string search
+        )
+        {
+            continuation.With(search, StringComparison.Ordinal);
+        }
+
+        /// <summary>
+        /// Searches for strings starting with the provided
+        /// search, using the provided comparison
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="search">Substring to search for</param>
+        /// <param name="comparison">Method of string comparison</param>
+        public static void With(
+            this ICountMatchContinuationOfStringCollectionStarting continuation,
+            string search,
+            StringComparison comparison
+        )
+        {
+            continuation.With(
+                search,
+                comparison,
+                null
+            );
+        }
+
+        /// <summary>
+        /// Searches for strings starting with the provided
+        /// search, using the Ordinal StringComparison, and including
+        /// the provided customMessage for failure
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="search">Substring to search for</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        public static void With(
+            this ICountMatchContinuationOfStringCollectionStarting continuation,
+            string search,
+            string customMessage
+        )
+        {
+            continuation.With(
+                search,
+                StringComparison.Ordinal,
+                customMessage
+            );
+        }
+
+        /// <summary>
+        /// Searches for strings starting with the provided
+        /// search, using the provided comparison, and including
+        /// the provided customMessage for failure
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="search">Substring to search for</param>
+        /// <param name="comparison">Method of string comparison</param>
+        /// <param name="customMessage">Custom message</param>
+        public static void With(
+            this ICountMatchContinuationOfStringCollectionStarting continuation,
+            string search,
+            StringComparison comparison,
+            string customMessage
+        )
+        {
+            if (!(continuation is CountMatchContinuationOfStringCollectionVerb concrete))
+                throw new InvalidOperationException($".With() for collections of strings only supported where the concrete continuation is of type {typeof(CountMatchContinuationOfStringCollection)}");
+            concrete.Wrapped.Matched.By(
+                s => s.StartsWith(search, comparison),
+                customMessage
             );
         }
 

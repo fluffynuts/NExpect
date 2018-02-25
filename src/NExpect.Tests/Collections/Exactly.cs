@@ -161,7 +161,8 @@ namespace NExpect.Tests.Collections
                             // Act
                             Assert.That(() =>
                             {
-                                Expect(collection).To.Contain.Exactly(2).Containing("cow");
+                                Expect(collection)
+                                    .To.Contain.Exactly(2).Containing("cow");
                             }, Throws.Nothing);
                             // Assert
                         }
@@ -249,6 +250,174 @@ namespace NExpect.Tests.Collections
                             // Assert
                         }
 
+                    }
+
+                    [TestFixture]
+                    public class StringCollectionContainingItemEndingWith
+                    {
+                        [Test]
+                        public void WhenShouldPassWithOneOrdinalMatch_ShouldNotThrow()
+                        {
+                            // Arrange
+                            var collection = new[]
+                            {
+                                "cow says moo",
+                                "foo bar"
+                            };
+                            // Pre-assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(1)
+                                    .Ending.With("moo");
+                            }, Throws.Nothing);
+                            // Assert
+                        }
+
+                        [Test]
+                        public void ShouldUseProvidedComparer()
+                        {
+                            // Arrange
+                            var collection = new[]
+                            {
+                                "cow says Moo",
+                                "foo bar"
+                            };
+                            // Pre-assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(1)
+                                    .Ending.With("moo", StringComparison.OrdinalIgnoreCase);
+                            }, Throws.Nothing);
+                            // Assert
+                        }
+
+                        [Test]
+                        public void ShouldUseProvidedCustomMessageForFailure()
+                        {
+                            // Arrange
+                            var collection = new[]
+                            {
+                                "cow says Moo",
+                                "foo bar"
+                            };
+                            var expected = GetRandomString(10);
+                            // Pre-assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(1)
+                                    .Ending.With("moo", expected);
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains(expected));
+                            // Assert
+                        }
+
+                        [Test]
+                        public void ShouldUseProvidedStringComparerAndCustomMessageForFailure()
+                        {
+                            // Arrange
+                            var collection = new[]
+                            {
+                                "cow says Moo",
+                                "foo bar"
+                            };
+                            var expected = GetRandomString(10);
+                            // Pre-assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(1)
+                                    .Ending.With("moo", StringComparison.InvariantCulture, expected);
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains(expected));
+                            // Assert
+                        }
+                    }
+
+                    [TestFixture]
+                    public class StringCollectionContainingItemStartingWith
+                    {
+                        [Test]
+                        public void WhenShouldPassWithOneOrdinalMatch_ShouldNotThrow()
+                        {
+                            // Arrange
+                            var collection = new[]
+                            {
+                                "moo, said the cow",
+                                "foo bar"
+                            };
+                            // Pre-assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(1)
+                                    .Starting.With("moo");
+                            }, Throws.Nothing);
+                            // Assert
+                        }
+
+                        [Test]
+                        public void ShouldUseProvidedComparer()
+                        {
+                            // Arrange
+                            var collection = new[]
+                            {
+                                "Moo said the cow",
+                                "foo bar"
+                            };
+                            // Pre-assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(1)
+                                    .Starting.With("moo", StringComparison.OrdinalIgnoreCase);
+                            }, Throws.Nothing);
+                            // Assert
+                        }
+
+                        [Test]
+                        public void ShouldUseProvidedCustomMessageForFailure()
+                        {
+                            // Arrange
+                            var collection = new[]
+                            {
+                                "Moo said the cow",
+                                "foo bar"
+                            };
+                            var expected = GetRandomString(10);
+                            // Pre-assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(1)
+                                    .Starting.With("moo", expected);
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains(expected));
+                            // Assert
+                        }
+
+                        [Test]
+                        public void ShouldUseProvidedStringComparerAndCustomMessageForFailure()
+                        {
+                            // Arrange
+                            var collection = new[]
+                            {
+                                "Moo, said the cow",
+                                "foo bar"
+                            };
+                            var expected = GetRandomString(10);
+                            // Pre-assert
+                            // Act
+                            Assert.That(() =>
+                            {
+                                Expect(collection).To.Contain.Exactly(1)
+                                    .Starting.With("moo", StringComparison.InvariantCulture, expected);
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains(expected));
+                            // Assert
+                        }
                     }
 
 

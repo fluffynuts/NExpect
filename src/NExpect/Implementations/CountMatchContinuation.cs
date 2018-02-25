@@ -3,17 +3,29 @@ using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations
 {
-    internal class CountMatchContinuation<T>: 
-        ExpectationContext<T>,
-        IHasActual<T>,
-        ICountMatchContinuation<T>
+    internal class CountMatchContinuation<T>
+        : ExpectationContext<T>,
+            IHasActual<T>,
+            ICountMatchContinuation<T>
     {
         public int ExpectedCount => _expectedCount;
         public CountMatchMethods Method => _method;
 
-        private readonly int _expectedCount;
-        private readonly CountMatchMethods _method;
-        private readonly ICanAddMatcher<T> _wrapped;
+        protected readonly int _expectedCount;
+        protected readonly CountMatchMethods _method;
+        protected readonly ICanAddMatcher<T> _wrapped;
+
+        public CountMatchContinuation(
+            ICanAddMatcher<T> wrapped,
+            CountMatchMethods method,
+            int expectedCount
+        )
+        {
+            _wrapped = wrapped;
+            _method = method;
+            _expectedCount = expectedCount;
+            SetParent(wrapped as IExpectationContext<T>);
+        }
 
         public ICountMatchEqual<T> Equal =>
             new CountMatchEqual<T>(
@@ -58,17 +70,5 @@ namespace NExpect.Implementations
         }
 
         public T Actual => _wrapped.GetActual();
-
-        public CountMatchContinuation(
-            ICanAddMatcher<T> wrapped,
-            CountMatchMethods method,
-            int expectedCount
-        )
-        {
-            _wrapped = wrapped;
-            _method = method;
-            _expectedCount = expectedCount;
-            SetParent(wrapped as IExpectationContext<T>);
-        }
     }
 }
