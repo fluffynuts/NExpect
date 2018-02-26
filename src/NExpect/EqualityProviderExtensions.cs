@@ -623,7 +623,8 @@ namespace NExpect
         {
             continuation.AddMatcher(actual =>
             {
-                var passed = actual.Equals(expected);
+                var passed = (actual == null && expected == null) ||
+                             (actual?.Equals(expected) ?? false);
                 var message = FinalMessageFor(
                     new[]
                     {

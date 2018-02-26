@@ -677,6 +677,23 @@ namespace NExpect.Tests.Exceptions
                     }
 
                     [Test]
+                    public void ContinuingOnToPropertyTestWithNullPropertyValue_ShouldThrowForCorrectReason()
+                    {
+                        // Arrange
+                        // Pre-assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(() => throw new ArgumentException("message, forgetting paramName"))
+                                .To.Throw<ArgumentException>()
+                                .With.Property(e => e.ParamName)
+                                .Equal.To("expectedParameter");
+                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Not.Contains("Object reference not set to an instance of an object"));
+                        // Assert
+                    }
+
+                    [Test]
                     public void Throw_ShouldContinueOnToPropertyTest_SadPath_TestingEqualTo()
                     {
                         // Arrange
