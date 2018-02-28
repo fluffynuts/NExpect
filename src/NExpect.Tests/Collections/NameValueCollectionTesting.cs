@@ -66,6 +66,21 @@ namespace NExpect.Tests.Collections
                     }
 
                     [Test]
+                    public void Negated_WhenDoesNotHaveKey_ShouldNotThrow()
+                    {
+                        // Arrange
+                        var src = new NameValueCollection();
+                        var key = GetRandomString();
+                        // Pre-assert
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(src).Not.To.Contain.Key(key);
+                        }, Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
                     public void Negated_Alt_WhenHasKey_ShouldThrow()
                     {
                         // Arrange

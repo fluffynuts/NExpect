@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Imported.PeanutButter.Utils;
 using NExpect.Implementations;
 using NExpect.Interfaces;
@@ -47,7 +48,9 @@ namespace NExpect
         {
             AddKeyMatcher(continuation, key, customMessage);
 
-            return CreateValueContinuation(continuation, key);
+            return CreateValueContinuationFor<TKey, TValue, TValue>(
+                continuation, key
+            );
         }
 
         /// <summary>
@@ -81,7 +84,9 @@ namespace NExpect
         {
             AddKeyMatcher(continuation, key, customMessage);
 
-            return CreateValueContinuation(continuation, key);
+            return CreateValueContinuationFor<TKey, sbyte, long>(
+                continuation, key
+            );
         }
 
         /// <summary>
@@ -115,7 +120,9 @@ namespace NExpect
         {
             AddKeyMatcher(continuation, key, customMessage);
 
-            return CreateValueContinuation(continuation, key);
+            return CreateValueContinuationFor<TKey, short, long>(
+                continuation, key
+            );
         }
 
         /// <summary>
@@ -148,7 +155,9 @@ namespace NExpect
         )
         {
             AddKeyMatcher(continuation, key, customMessage);
-            return CreateValueContinuation(continuation, key);
+            return CreateValueContinuationFor<TKey, int, long>(
+                continuation, key
+            );
         }
 
         /// <summary>
@@ -182,7 +191,9 @@ namespace NExpect
         {
             AddKeyMatcher(continuation, key, customMessage);
 
-            return CreateValueContinuation(continuation, key);
+            return CreateValueContinuationFor<TKey, byte, long>(
+                continuation, key
+            );
         }
 
         /// <summary>
@@ -216,7 +227,9 @@ namespace NExpect
         {
             AddKeyMatcher(continuation, key, customMessage);
 
-            return CreateValueContinuation(continuation, key);
+            return CreateValueContinuationFor<TKey, ushort, long>(
+                continuation, key
+            );
         }
 
         /// <summary>
@@ -250,7 +263,9 @@ namespace NExpect
         {
             AddKeyMatcher(continuation, key, customMessage);
 
-            return CreateValueContinuation(continuation, key);
+            return CreateValueContinuationFor<TKey, uint, long>(
+                continuation, key
+            );
         }
 
         /// <summary>
@@ -283,7 +298,9 @@ namespace NExpect
         )
         {
             AddKeyMatcher(continuation, key, customMessage);
-            return CreateValueContinuation(continuation, key);
+            return CreateValueContinuationFor<TKey, float, double>(
+                continuation, key
+            );
         }
 
         /// <summary>
@@ -320,7 +337,8 @@ namespace NExpect
 
         private static void AddKeyMatcher<TKey, TValue>(
             IContain<IEnumerable<KeyValuePair<TKey, TValue>>> continuation,
-            TKey key, string customMessage)
+            TKey key,
+            string customMessage)
         {
             continuation.AddMatcher(collection =>
             {
@@ -372,112 +390,49 @@ namespace NExpect
             }
         }
 
-        private static IDictionaryValueContinuation<TValue> CreateValueContinuation<TKey, TValue>(
-            IContain<IEnumerable<KeyValuePair<TKey, TValue>>> continuation, TKey key)
+        private static IDictionaryValueContinuation<TTo> CreateValueContinuationFor<TKey, TFrom, TTo>(
+            IContain<IEnumerable<KeyValuePair<TKey, TFrom>>> continuation,
+            TKey key
+        )
         {
-            var continuationValue = GetValueForKey(continuation, key);
-            return Factory.Create<TValue, DictionaryValueContinuation<TValue>>(
-                continuationValue,
-                new WrappingContinuation<IEnumerable<KeyValuePair<TKey, TValue>>, TValue>(
-                    continuation as IHasActual<IEnumerable<KeyValuePair<TKey, TValue>>>,
-                    c => continuationValue
-                )
-            );
+            try
+            {
+                var specificMethod = GenericUpcast.MakeGenericMethod(typeof(TTo));
+                var continuationValue =
+                    (TTo) (specificMethod.Invoke(null, new object[] {GetValueForKey(continuation, key)}));
+                return Factory.Create<TTo, DictionaryValueContinuation<TTo>>(
+                    continuationValue,
+                    new WrappingContinuation<IEnumerable<KeyValuePair<TKey, TFrom>>, TTo>(
+                        continuation as IHasActual<IEnumerable<KeyValuePair<TKey, TFrom>>>,
+                        c => continuationValue
+                    )
+                );
+            }
+            catch (KeyNotFoundException)
+            {
+                return new KeyNotFoundContinuation<TKey, TTo>(key);
+            }
         }
 
-        private static IDictionaryValueContinuation<long> CreateValueContinuation<TKey>(
-            IContain<IEnumerable<KeyValuePair<TKey, sbyte>>> continuation, TKey key)
-        {
-            var continuationValue = GetValueForKey(continuation, key);
-            return Factory.Create<long, DictionaryValueContinuation<long>>(
-                continuationValue,
-                new WrappingContinuation<IEnumerable<KeyValuePair<TKey, sbyte>>, long>(
-                    continuation as IHasActual<IEnumerable<KeyValuePair<TKey, sbyte>>>,
-                    c => continuationValue
-                )
+        private static readonly MethodInfo GenericUpcast =
+            typeof(DictionaryExtensions).GetMethod(
+                nameof(Upcast),
+                BindingFlags.Static | BindingFlags.NonPublic
             );
-        }
 
-        private static IDictionaryValueContinuation<long> CreateValueContinuation<TKey>(
-            IContain<IEnumerable<KeyValuePair<TKey, short>>> continuation, TKey key)
+        private static T2 Upcast<T2>(
+            T2 value)
         {
-            var continuationValue = GetValueForKey(continuation, key);
-            return Factory.Create<long, DictionaryValueContinuation<long>>(
-                continuationValue,
-                new WrappingContinuation<IEnumerable<KeyValuePair<TKey, short>>, long>(
-                    continuation as IHasActual<IEnumerable<KeyValuePair<TKey, short>>>,
-                    c => continuationValue
-                )
-            );
-        }
-
-        private static IDictionaryValueContinuation<long> CreateValueContinuation<TKey>(
-            IContain<IEnumerable<KeyValuePair<TKey, int>>> continuation, TKey key)
-        {
-            var continuationValue = GetValueForKey(continuation, key);
-            return Factory.Create<long, DictionaryValueContinuation<long>>(
-                continuationValue,
-                new WrappingContinuation<IEnumerable<KeyValuePair<TKey, int>>, long>(
-                    continuation as IHasActual<IEnumerable<KeyValuePair<TKey, int>>>,
-                    c => continuationValue
-                )
-            );
-        }
-
-        private static IDictionaryValueContinuation<long> CreateValueContinuation<TKey>(
-            IContain<IEnumerable<KeyValuePair<TKey, byte>>> continuation, TKey key)
-        {
-            var continuationValue = GetValueForKey(continuation, key);
-            return Factory.Create<long, DictionaryValueContinuation<long>>(
-                continuationValue,
-                new WrappingContinuation<IEnumerable<KeyValuePair<TKey, byte>>, long>(
-                    continuation as IHasActual<IEnumerable<KeyValuePair<TKey, byte>>>,
-                    c => continuationValue
-                )
-            );
-        }
-
-        private static IDictionaryValueContinuation<long> CreateValueContinuation<TKey>(
-            IContain<IEnumerable<KeyValuePair<TKey, ushort>>> continuation, TKey key)
-        {
-            var continuationValue = GetValueForKey(continuation, key);
-            return Factory.Create<long, DictionaryValueContinuation<long>>(
-                continuationValue,
-                new WrappingContinuation<IEnumerable<KeyValuePair<TKey, ushort>>, long>(
-                    continuation as IHasActual<IEnumerable<KeyValuePair<TKey, ushort>>>,
-                    c => continuationValue
-                )
-            );
-        }
-
-        private static IDictionaryValueContinuation<long> CreateValueContinuation<TKey>(
-            IContain<IEnumerable<KeyValuePair<TKey, uint>>> continuation, TKey key)
-        {
-            var continuationValue = GetValueForKey(continuation, key);
-            return Factory.Create<long, DictionaryValueContinuation<long>>(
-                continuationValue,
-                new WrappingContinuation<IEnumerable<KeyValuePair<TKey, uint>>, long>(
-                    continuation as IHasActual<IEnumerable<KeyValuePair<TKey, uint>>>,
-                    c => continuationValue
-                )
-            );
-        }
-
-        private static IDictionaryValueContinuation<double> CreateValueContinuation<TKey>(
-            IContain<IEnumerable<KeyValuePair<TKey, float>>> continuation, TKey key)
-        {
-            var continuationValue = GetValueForKey(continuation, key);
-            return Factory.Create<double, DictionaryValueContinuation<double>>(
-                continuationValue,
-                new WrappingContinuation<IEnumerable<KeyValuePair<TKey, float>>, double>(
-                    continuation as IHasActual<IEnumerable<KeyValuePair<TKey, float>>>,
-                    c => continuationValue
-                )
-            );
+            // takes advantage of automatic casting of method parameters
+            //  - by expecting a 'T2', any value which can be auto-cast to 'T2'
+            //    is just spat out again as a value of type 'T2' (eg, feed in an int
+            //    with T2 being 'long', and you'll get a long.
+            return value;
         }
 
         private static TValue GetValueForKey<TKey, TValue>(
-            ICanAddMatcher<IEnumerable<KeyValuePair<TKey, TValue>>> continuation, TKey key)
+            ICanAddMatcher<IEnumerable<KeyValuePair<TKey, TValue>>> continuation,
+            TKey key)
         {
             var collection = continuation.GetActual();
             return TryFindValueForKey(collection, key, out var result)
