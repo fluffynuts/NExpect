@@ -89,7 +89,7 @@ namespace NExpect
                 var passed = CollectionsAreDeepEqual(collection, expected);
                 return new MatcherResult(
                     passed,
-                    FinalMessageFor(
+                    () => FinalMessageFor(
                         new[] 
                         {
                             "Expected",

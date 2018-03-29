@@ -1,5 +1,8 @@
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
+
+using System;
+
 namespace NExpect.MatcherLogic
 {
     /// <summary>
@@ -8,18 +11,14 @@ namespace NExpect.MatcherLogic
     /// </summary>
     public class MatcherResult: IMatcherResult
     {
+        private readonly Func<string> _messageGenerator;
+        private string _message;
+
         /// <inheritdoc />
         public bool Passed { get; set; }
 
         /// <inheritdoc />
-        public string Message { get; set; }
-
-        /// <summary>
-        /// Empty constructor -- allows setting properties later
-        /// </summary>
-        public MatcherResult()
-        {
-        }
+        public string Message => _message ?? (_message = _messageGenerator());
 
         /// <summary>
         /// Constructor with just pased value -- set message later
@@ -31,14 +30,29 @@ namespace NExpect.MatcherLogic
         }
 
         /// <summary>
-        /// Constructor with all parameters
+        /// Constructor with static message
+        /// Consider rather using the constructor with the Func&lt;string&gt;
+        /// since that message will only be evaluated late, once, meaning that
+        /// if there is any costly work to be done (eg deep .Stringify()) calls,
+        /// then that work will only be done when the message is read to display
+        /// to the user, instead of every time the assertion is made.
         /// </summary>
         /// <param name="passed">Did the matcher pass?</param>
-        /// <param name="message">Message about the pass/fail</param>
-        public MatcherResult(bool passed, string message)
+        /// <param name="message">Message about the pass / fail</param>
+        public MatcherResult(bool passed, string message): 
+            this(passed, () => message)
         {
+        }
+
+        /// <summary>
+        /// Cosntructor with message generator
+        /// </summary>
+        /// <param name="passed">Did the matcher pass?</param>
+        /// <param name="messageGenerator">Generator about the pass / fail</param>
+        public MatcherResult(bool passed, Func<string> messageGenerator)
+        {
+            _messageGenerator = messageGenerator;
             Passed = passed;
-            Message = message;
         }
     }
 }

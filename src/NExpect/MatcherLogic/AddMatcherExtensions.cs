@@ -92,12 +92,12 @@ namespace NExpect.MatcherLogic
                 try
                 {
                     expectationsRunner(actual);
-                    return new MatcherResult(true, messageGenerator(actual, true));
+                    return new MatcherResult(true, () => messageGenerator(actual, true));
                 }
                 catch (UnmetExpectationException e)
                 {
                     return new MatcherResult(false, 
-                        FinalMessageFor(
+                        () => FinalMessageFor(
                             new[] { "Specifically:", e.Message },
                             messageGenerator?.Invoke(actual, false)
                         )
@@ -142,12 +142,12 @@ namespace NExpect.MatcherLogic
                 try
                 {
                     expectationsRunner(actual);
-                    return new MatcherResult(true, messageGenerator(actual, true));
+                    return new MatcherResult(true, () => messageGenerator(actual, true));
                 }
                 catch (UnmetExpectationException e)
                 {
                     return new MatcherResult(false, 
-                        FinalMessageFor(
+                        () => FinalMessageFor(
                             new[] { "Specifically:", e.Message },
                             messageGenerator?.Invoke(actual, false)
                         )

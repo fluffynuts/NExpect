@@ -25,9 +25,26 @@ namespace NExpect
         /// <param name="be">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
         /// <typeparam name="T">Type of the object being tested</typeparam>
-        public static void Be<T>(this ITo<T> be, object expected)
+        public static void Be<T>(
+            this ITo<T> be,
+            object expected)
         {
-            be.AddMatcher(CreateRefEqualMatcherFor<T>(expected));
+            be.Be(expected, null);
+        }
+
+        /// <summary>
+        /// Performs reference equality checking between your actual and the provided expected value
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessage"></param>
+        /// <typeparam name="T">Type of the object being tested</typeparam>
+        public static void Be<T>(
+            this ITo<T> be,
+            object expected,
+            string customMessage)
+        {
+            be.AddMatcher(CreateRefEqualMatcherFor<T>(expected, () => customMessage));
         }
 
         /// <summary>
@@ -38,7 +55,22 @@ namespace NExpect
         /// <typeparam name="T">Type of the object being tested</typeparam>
         public static void Be<T>(this IToAfterNot<T> be, object expected)
         {
-            be.AddMatcher(CreateRefEqualMatcherFor<T>(expected));
+            be.Be(expected, null);
+        }
+
+        /// <summary>
+        /// Performs reference equality checking between your actual and the provided expected value
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of the object being tested</typeparam>
+        public static void Be<T>(
+            this IToAfterNot<T> be,
+            object expected,
+            string customMessage)
+        {
+            be.AddMatcher(CreateRefEqualMatcherFor<T>(expected, () => customMessage));
         }
 
         /// <summary>
@@ -47,9 +79,41 @@ namespace NExpect
         /// <param name="be">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
         /// <typeparam name="T">Type of the object being tested</typeparam>
-        public static void Be<T>(this ICollectionTo<T> be, object expected)
+        public static void Be<T>(
+            this ICollectionTo<T> be,
+            object expected)
         {
-            be.AddMatcher(CreateCollectionRefEqualMatcherFor<T>(expected));
+            be.Be(expected, NULL);
+        }
+
+        /// <summary>
+        /// Performs reference equality checking between your actual and the provided expected value
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessage"></param>
+        /// <typeparam name="T">Type of the object being tested</typeparam>
+        public static void Be<T>(
+            this ICollectionTo<T> be,
+            object expected,
+            string customMessage)
+        {
+            be.Be(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs reference equality checking between your actual and the provided expected value
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessageGenerator"></param>
+        /// <typeparam name="T">Type of the object being tested</typeparam>
+        public static void Be<T>(
+            this ICollectionTo<T> be,
+            object expected,
+            Func<string> customMessageGenerator)
+        {
+            be.AddMatcher(CreateCollectionRefEqualMatcherFor<T>(expected, customMessageGenerator));
         }
 
         /// <summary>
@@ -339,22 +403,23 @@ namespace NExpect
             string customMessage
         )
         {
-            continuation.AddMatcher(collection =>
-            {
-                var passed = CollectionsAreDeepEquivalent(collection, expected);
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        new[]
-                        {
-                            "Expected",
-                            collection.LimitedPrint(),
-                            $"{passed.AsNot()} to be deep equivalent to",
-                            expected.LimitedPrint()
-                        },
-                        customMessage
-                    ));
-            });
+            continuation.AddMatcher(
+                collection =>
+                {
+                    var passed = CollectionsAreDeepEquivalent(collection, expected);
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            new[]
+                            {
+                                "Expected",
+                                collection.LimitedPrint(),
+                                $"{passed.AsNot()} to be deep equivalent to",
+                                expected.LimitedPrint()
+                            },
+                            customMessage
+                        ));
+                });
         }
 
         /// <summary>
@@ -384,23 +449,24 @@ namespace NExpect
             string customMessage
         )
         {
-            continuation.AddMatcher(collection =>
-            {
-                var passed = CollectionsAreIntersectionEquivalent(collection, expected);
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        new[]
-                        {
-                            "Expected",
-                            collection.LimitedPrint(),
-                            $"{passed.AsNot()} to be intersection equivalent to",
-                            expected.LimitedPrint()
-                        },
-                        customMessage
-                    )
-                );
-            });
+            continuation.AddMatcher(
+                collection =>
+                {
+                    var passed = CollectionsAreIntersectionEquivalent(collection, expected);
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            new[]
+                            {
+                                "Expected",
+                                collection.LimitedPrint(),
+                                $"{passed.AsNot()} to be intersection equivalent to",
+                                expected.LimitedPrint()
+                            },
+                            customMessage
+                        )
+                    );
+                });
         }
 
         private static bool CollectionsAreIntersectionEquivalent<T>(
@@ -408,7 +474,8 @@ namespace NExpect
             IEnumerable<T> expected
         )
         {
-            return CollectionCompare(collection,
+            return CollectionCompare(
+                collection,
                 expected,
                 (master, compare) =>
                 {
@@ -422,6 +489,7 @@ namespace NExpect
                         master.Remove(currentMaster);
                         compare.Remove(compareMatch);
                     }
+
                     return true;
                 });
         }
@@ -448,7 +516,7 @@ namespace NExpect
                 var passed = CollectionsAreIntersectionEqual(collection, expected);
                 return new MatcherResult(
                     passed,
-                    FinalMessageFor(
+                    () => FinalMessageFor(
                         new[]
                         {
                             "Expected",
@@ -466,7 +534,8 @@ namespace NExpect
             IEnumerable<T> collection,
             IEnumerable<T> expected)
         {
-            return CollectionCompare(collection,
+            return CollectionCompare(
+                collection,
                 expected,
                 (master, compare) =>
                 {
@@ -479,6 +548,7 @@ namespace NExpect
                         master.Remove(currentMaster);
                         compare.Remove(compareMatch);
                     }
+
                     return true;
                 });
         }
@@ -516,16 +586,20 @@ namespace NExpect
             {
                 return new MatcherResult(
                     true,
-                    FinalMessageFor(new[]
-                    {
-                        "Did not expect",
-                        Quote(expected),
-                        "but got exactly that"
-                    }, customMessage)
+                    () => FinalMessageFor(
+                        new[]
+                        {
+                            "Did not expect",
+                            Quote(expected),
+                            "but got exactly that"
+                        },
+                        customMessage)
                 );
             }
-            return new MatcherResult(false,
-                FinalMessageFor(
+
+            return new MatcherResult(
+                false,
+                () => FinalMessageFor(
                     new[]
                     {
                         "Expected",
@@ -548,6 +622,7 @@ namespace NExpect
             {
                 return expectedDateTime.Kind == actualDateTime.Kind;
             }
+
             return true;
         }
 
@@ -568,19 +643,19 @@ namespace NExpect
             string customMessage
         )
         {
-            continuation.AddMatcher(actual =>
-            {
-                var passed = actual == null;
-                var message = passed
-                    ? new[] {"Expected not to get null"}
-                    : new[] {"Expected null but got", Quote(actual)};
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        message,
-                        customMessage)
-                );
-            });
+            continuation.AddMatcher(
+                actual =>
+                {
+                    var passed = actual == null;
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            passed
+                                ? new[] {"Expected not to get null"}
+                                : new[] {"Expected null but got", Quote(actual)},
+                            customMessage)
+                    );
+                });
             return continuation.More();
         }
 
@@ -621,22 +696,24 @@ namespace NExpect
             string customMessage
         )
         {
-            continuation.AddMatcher(actual =>
-            {
-                var passed = (actual == null && expected == null) ||
-                             (actual?.Equals(expected) ?? false);
-                var message = FinalMessageFor(
-                    new[]
-                    {
-                        "Expected",
-                        Quote(actual),
-                        $"{passed.AsNot()}to equal",
-                        Quote(expected)
-                    },
-                    customMessage
-                );
-                return new MatcherResult(passed, message);
-            });
+            continuation.AddMatcher(
+                actual =>
+                {
+                    var passed = (actual == null && expected == null) ||
+                                 (actual?.Equals(expected) ?? false);
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            new[]
+                            {
+                                "Expected",
+                                Quote(actual),
+                                $"{passed.AsNot()}to equal",
+                                Quote(expected)
+                            },
+                            customMessage
+                        ));
+                });
         }
 
         /// <summary>
@@ -646,19 +723,20 @@ namespace NExpect
         /// <param name="customMessage">Custom message to include when failing</param>
         public static void Empty(this IBe<string> continuation, string customMessage)
         {
-            continuation.AddMatcher(actual =>
-            {
-                var passed = actual == "";
-                var message = passed
-                    ? new[] {"Expected not to be empty"}
-                    : new[] {"Expected empty string but got", Quote(actual)};
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        message,
-                        customMessage)
-                );
-            });
+            continuation.AddMatcher(
+                actual =>
+                {
+                    var passed = actual == "";
+                    var message = passed
+                        ? new[] {"Expected not to be empty"}
+                        : new[] {"Expected empty string but got", Quote(actual)};
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            message,
+                            customMessage)
+                    );
+                });
         }
 
         /// <summary>
@@ -678,14 +756,31 @@ namespace NExpect
             this INullOr<string> nullOr
         )
         {
-            nullOr.AddMatcher(actual =>
-            {
-                var passed = string.IsNullOrEmpty(actual);
-                return new MatcherResult(
-                    passed,
-                    $"Expected {actual} {passed.AsNot()}to be null or empty"
-                );
-            });
+            nullOr.Empty(null);
+        }
+
+        /// <summary>
+        /// Tests if a string is null or empty
+        /// </summary>
+        /// <param name="nullOr"></param>
+        /// <param name="customMessage">Custom message to add to the final failure message</param>
+        public static void Empty(
+            this INullOr<string> nullOr,
+            string customMessage
+        )
+        {
+            nullOr.AddMatcher(
+                actual =>
+                {
+                    var passed = string.IsNullOrEmpty(actual);
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            $"Expected {actual} {passed.AsNot()}to be null or empty",
+                            customMessage
+                        )
+                    );
+                });
         }
 
         /// <summary>
@@ -696,32 +791,56 @@ namespace NExpect
             this INullOr<string> nullOr
         )
         {
-            nullOr.AddMatcher(actual =>
-            {
-                var passed = string.IsNullOrWhiteSpace(actual);
-                return new MatcherResult(
-                    passed,
-                    $"Expected {actual} {passed.AsNot()}to be null or whitespace"
-                );
-            });
+            nullOr.Whitespace(null);
         }
 
-        private static Func<T, IMatcherResult> CreateRefEqualMatcherFor<T>(object other)
+        /// <summary>
+        /// Test if string is null or whitespace
+        /// </summary>
+        /// <param name="nullOr"></param>
+        /// <param name="customMessage">Custom message to add to the final failure message</param>
+        public static void Whitespace(
+            this INullOr<string> nullOr,
+            string customMessage
+        )
         {
-            return actual => RefCompare(actual, other);
+            nullOr.AddMatcher(
+                actual =>
+                {
+                    var passed = string.IsNullOrWhiteSpace(actual);
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            $"Expected {actual} {passed.AsNot()}to be null or whitespace",
+                            customMessage
+                        )
+                    );
+                });
         }
 
-        private static Func<IEnumerable<T>, IMatcherResult> CreateCollectionRefEqualMatcherFor<T>(object other)
+        private static Func<T, IMatcherResult> CreateRefEqualMatcherFor<T>(
+            object other,
+            Func<string> customMessageGenerator)
         {
-            return actual => RefCompare(actual, other);
+            return actual => RefCompare(actual, other, customMessageGenerator);
         }
 
-        private static IMatcherResult RefCompare(object actual, object other)
+        private static Func<IEnumerable<T>, IMatcherResult> CreateCollectionRefEqualMatcherFor<T>(
+            object other,
+            Func<string> customMessageGenerator)
+        {
+            return actual => RefCompare(actual, other, customMessageGenerator);
+        }
+
+        private static IMatcherResult RefCompare(object actual, object other, Func<string> customMessageGenerator)
         {
             var passed = ReferenceEquals(actual, other);
             return new MatcherResult(
                 passed,
-                $"Expected {actual} {passed.AsNot()}to be the same reference as {other}"
+                () => FinalMessageFor(
+                    $"Expected {actual} {passed.AsNot()}to be the same reference as {other}",
+                    customMessageGenerator()
+                )
             );
         }
     }

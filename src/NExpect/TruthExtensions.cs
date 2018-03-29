@@ -2,6 +2,7 @@ using System;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+using static NExpect.Implementations.MessageHelpers;
 
 // ReSharper disable UnusedMember.Global
 
@@ -108,10 +109,10 @@ namespace NExpect
             return actual =>
             {
                 if (actual.Equals(expected))
-                    return new MatcherResult(true, $"Did not expect {true}");
+                    return new MatcherResult(true, () => $"Did not expect {true}");
                 return new MatcherResult(
                     false,
-                    MessageHelpers.FinalMessageFor(
+                    () => FinalMessageFor(
                         new[]
                         {
                             "Expected",

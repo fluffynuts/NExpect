@@ -45,7 +45,7 @@ namespace NExpect
                     var passed = DeepTestHelpers.AreDeepEqual(actual, expected);
                     return new MatcherResult(
                         passed,
-                        FinalMessageFor(
+                        () => FinalMessageFor(
                             new[]
                             {
                                 "Expected",

@@ -8,6 +8,7 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
+
 // ReSharper disable UnusedMethodReturnValue.Global
 
 // ReSharper disable PossibleMultipleEnumeration
@@ -131,7 +132,8 @@ namespace NExpect
         public static IStringContainContinuation Then(
             this IStringMore more,
             string search
-        ) {
+        )
+        {
             return more.Then(search, null);
         }
 
@@ -147,7 +149,8 @@ namespace NExpect
             this IStringMore more,
             string search,
             string customMessage
-        ) {
+        )
+        {
             var canAddMatcher = more as ICanAddMatcher<string>;
             var result = new StringContainContinuation(canAddMatcher);
             AddContainsMatcherTo(canAddMatcher, search, customMessage, result);
@@ -179,23 +182,24 @@ namespace NExpect
             string customMessage
         )
         {
-            start.AddMatcher(actual =>
-            {
-                var passed = actual?.StartsWith(expected) ?? false;
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        new[]
-                        {
-                            "Expected",
-                            actual.Stringify(),
-                            $"{passed.AsNot()}to start with",
-                            expected.Stringify()
-                        },
-                        customMessage
-                    )
-                );
-            });
+            start.AddMatcher(
+                actual =>
+                {
+                    var passed = actual?.StartsWith(expected) ?? false;
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            new[]
+                            {
+                                "Expected",
+                                actual.Stringify(),
+                                $"{passed.AsNot()}to start with",
+                                expected.Stringify()
+                            },
+                            customMessage
+                        )
+                    );
+                });
             return start.More();
         }
 
@@ -224,23 +228,24 @@ namespace NExpect
             string customMessage
         )
         {
-            end.AddMatcher(actual =>
-            {
-                var passed = actual?.EndsWith(expected) ?? false;
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        new[]
-                        {
-                            "Expected",
-                            actual.Stringify(),
-                            $"{passed.AsNot()}to end with",
-                            expected.Stringify()
-                        },
-                        customMessage
-                    )
-                );
-            });
+            end.AddMatcher(
+                actual =>
+                {
+                    var passed = actual?.EndsWith(expected) ?? false;
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            new[]
+                            {
+                                "Expected",
+                                actual.Stringify(),
+                                $"{passed.AsNot()}to end with",
+                                expected.Stringify()
+                            },
+                            customMessage
+                        )
+                    );
+                });
             return end.More();
         }
 
@@ -476,23 +481,24 @@ namespace NExpect
             string customMessage
         )
         {
-            matcher.AddMatcher(actual =>
-            {
-                var passed = regex.IsMatch(actual);
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        new[]
-                        {
-                            "Expected",
-                            actual.Stringify(),
-                            $"{passed.AsNot()}to match regex",
-                            $"\"{regex}\""
-                        },
-                        customMessage
-                    )
-                );
-            });
+            matcher.AddMatcher(
+                actual =>
+                {
+                    var passed = regex.IsMatch(actual);
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            new[]
+                            {
+                                "Expected",
+                                actual.Stringify(),
+                                $"{passed.AsNot()}to match regex",
+                                $"\"{regex}\""
+                            },
+                            customMessage
+                        )
+                    );
+                });
         }
 
         /// <summary>
@@ -533,12 +539,13 @@ namespace NExpect
             }
             catch (Exception e)
             {
-                throw new UnmetExpectationException(new[]
-                {
-                    $"Unable to compile {regex.Stringify()} as a Regex",
-                    "Specifically:",
-                    e.Message
-                }.JoinWith("\n"));
+                throw new UnmetExpectationException(
+                    new[]
+                    {
+                        $"Unable to compile {regex.Stringify()} as a Regex",
+                        "Specifically:",
+                        e.Message
+                    }.JoinWith("\n"));
             }
         }
 
@@ -593,32 +600,36 @@ namespace NExpect
             StringContainContinuation next
         )
         {
-            continuation.AddMatcher(s =>
-            {
-                var priorOffset = continuation.GetMetadata<int>(SEARCH_OFFSET);
-                var nextOffset = GetNextOffsetOf(search, s, priorOffset);
+            continuation.AddMatcher(
+                s =>
+                {
+                    var priorOffset = continuation.GetMetadata<int>(SEARCH_OFFSET);
+                    var nextOffset = GetNextOffsetOf(search, s, priorOffset);
 
-                next.SetMetadata(SEARCH_OFFSET, nextOffset);
+                    next.SetMetadata(SEARCH_OFFSET, nextOffset);
 
-                var passed = nextOffset > -1;
-                var offsetMessage = priorOffset > 0
-                    ? $" after index {priorOffset}"
-                    : "";
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        new[]
+                    var passed = nextOffset > -1;
+                    return new MatcherResult(
+                        passed,
+                        () =>
                         {
-                            "Expected",
-                            s.Stringify(),
-                            $"{passed.AsNot()}to contain",
-                            search.Stringify(),
-                            offsetMessage
-                        },
-                        customMessage
-                    )
-                );
-            });
+                            var offsetMessage = priorOffset > 0
+                                ? $" after index {priorOffset}"
+                                : "";
+                            return FinalMessageFor(
+                                new[]
+                                {
+                                    "Expected",
+                                    s.Stringify(),
+                                    $"{passed.AsNot()}to contain",
+                                    search.Stringify(),
+                                    offsetMessage
+                                },
+                                customMessage
+                            );
+                        }
+                    );
+                });
         }
 
         private static int GetNextOffsetOf(

@@ -6,6 +6,7 @@ using Imported.PeanutButter.Utils;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+using static NExpect.Implementations.MessageHelpers;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable PossibleMultipleEnumeration
@@ -346,7 +347,7 @@ namespace NExpect
 
                 return new MatcherResult(
                     passed,
-                    MessageHelpers.FinalMessageFor(
+                    () => FinalMessageFor(
                         new[]
                         {
                             "Expected",

@@ -2,6 +2,8 @@ using System;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+using static NExpect.Implementations.MessageHelpers;
+
 // ReSharper disable UnusedMember.Global
 
 namespace NExpect
@@ -117,12 +119,13 @@ namespace NExpect
             return actual =>
             {
                 var passed = test(actual);
-                var message = passed
-                    ? new[] { "Expected", actual.Stringify(), "not to be matched" }
-                    : new[] { "Expected", actual.Stringify(), "to be matched" };
                 return new MatcherResult(
                     passed,
-                    MessageHelpers.FinalMessageFor(message, customMessage)
+                    () => FinalMessageFor(
+                        passed
+                            ? new[] {"Expected", actual.Stringify(), "not to be matched"}
+                            : new[] {"Expected", actual.Stringify(), "to be matched"},
+                        customMessage)
                 );
             };
         }

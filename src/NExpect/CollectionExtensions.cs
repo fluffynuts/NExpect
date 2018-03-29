@@ -46,14 +46,15 @@ namespace NExpect
             string customMessage
         )
         {
-            continuation.AddMatcher(collection =>
-            {
-                var passed = collection.Contains(search);
-                return new MatcherResult(
-                    passed,
-                    $"Expected {collection.Stringify()} {passed.AsNot()}to contain {search.Stringify()}"
-                );
-            });
+            continuation.AddMatcher(
+                collection =>
+                {
+                    var passed = collection.Contains(search);
+                    return new MatcherResult(
+                        passed,
+                        () => $"Expected {collection.Stringify()} {passed.AsNot()}to contain {search.Stringify()}"
+                    );
+                });
             continuation.AddMatcher(
                 CreateShortContainMatcherFor(search, customMessage)
             );
@@ -137,7 +138,7 @@ namespace NExpect
                 var passed = collection.Contains(search);
                 return new MatcherResult(
                     passed,
-                    FinalMessageFor(
+                    () => FinalMessageFor(
                         new[]
                         {
                             "Expected",
@@ -335,32 +336,34 @@ namespace NExpect
         )
         {
             if (countMatch == null)
-                throw new ArgumentNullException(nameof(countMatch),
+                throw new ArgumentNullException(
+                    nameof(countMatch),
                     $"EqualTo<T> cannot extend null ICanAddMatcher<IEnumerable<{typeof(T)}>>");
-            countMatch.Continuation.AddMatcher(collection =>
-            {
-                var asArray = collection.ToArray();
-                var have = countMatch.Method == CountMatchMethods.Any
-                    ? (asArray.Any(o => o.Equals(search))
-                        ? 1
-                        : 0)
-                    : asArray.Count(o => o.Equals(search));
-                var passed = _collectionCountMatchStrategies[countMatch.Method](have,
-                    countMatch.Method == CountMatchMethods.All
-                        ? asArray.Length
-                        : countMatch.ExpectedCount
-                );
-                var message =
-                    _collectionCountMessageStrategies[countMatch.Method](passed,
-                        search,
+            countMatch.Continuation.AddMatcher(
+                collection =>
+                {
+                    var asArray = collection.ToArray();
+                    var have = countMatch.Method == CountMatchMethods.Any
+                        ? (asArray.Any(o => o.Equals(search))
+                            ? 1
+                            : 0)
+                        : asArray.Count(o => o.Equals(search));
+                    var passed = _collectionCountMatchStrategies[countMatch.Method](
                         have,
-                        countMatch.ExpectedCount);
+                        countMatch.Method == CountMatchMethods.All
+                            ? asArray.Length
+                            : countMatch.ExpectedCount
+                    );
 
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(message, customMessage)
-                );
-            });
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(_collectionCountMessageStrategies[countMatch.Method](
+                                                  passed,
+                                                  search,
+                                                  have,
+                                                  countMatch.ExpectedCount), customMessage)
+                    );
+                });
         }
 
 
@@ -391,17 +394,20 @@ namespace NExpect
             string customMessage
         )
         {
-            countMatch.Continuation.AddMatcher(collection =>
-            {
-                var have = collection.Where(test).Count();
-                var compare = countMatch.Method == CountMatchMethods.All
-                    ? collection.Count()
-                    : countMatch.Compare;
-                var passed = _collectionCountMatchStrategies[countMatch.Method](have, compare);
-                var message =
-                    _collectionCountMatchMessageStrategies[countMatch.Method](passed, have, countMatch.Compare);
-                return new MatcherResult(passed, FinalMessageFor(message, customMessage));
-            });
+            countMatch.Continuation.AddMatcher(
+                collection =>
+                {
+                    var have = collection.Where(test).Count();
+                    var compare = countMatch.Method == CountMatchMethods.All
+                        ? collection.Count()
+                        : countMatch.Compare;
+                    var passed = _collectionCountMatchStrategies[countMatch.Method](have, compare);
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            _collectionCountMatchMessageStrategies[countMatch.Method](passed, have, countMatch.Compare),
+                            customMessage));
+                });
         }
 
         /// <summary>
@@ -431,23 +437,27 @@ namespace NExpect
             string customMessage
         )
         {
-            countMatch.Continuation.AddMatcher(collection =>
-            {
-                var idx = 0;
-                var have = collection.Select(o => new
-                    {
-                        o,
-                        idx = idx++
-                    })
-                    .Count(o => test(o.idx, o.o));
-                var compare = countMatch.Method == CountMatchMethods.All
-                    ? collection.Count()
-                    : countMatch.Compare;
-                var passed = _collectionCountMatchStrategies[countMatch.Method](have, compare);
-                var message =
-                    _collectionCountMatchMessageStrategies[countMatch.Method](passed, have, countMatch.Compare);
-                return new MatcherResult(passed, FinalMessageFor(message, customMessage));
-            });
+            countMatch.Continuation.AddMatcher(
+                collection =>
+                {
+                    var idx = 0;
+                    var have = collection.Select(
+                            o => new
+                            {
+                                o,
+                                idx = idx++
+                            })
+                        .Count(o => test(o.idx, o.o));
+                    var compare = countMatch.Method == CountMatchMethods.All
+                        ? collection.Count()
+                        : countMatch.Compare;
+                    var passed = _collectionCountMatchStrategies[countMatch.Method](have, compare);
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            _collectionCountMatchMessageStrategies[countMatch.Method](passed, have, countMatch.Compare),
+                            customMessage));
+                });
         }
 
         /// <summary>
@@ -473,22 +483,23 @@ namespace NExpect
             string customMessage
         )
         {
-            be.AddMatcher(collection =>
-            {
-                var passed = collection != null && !collection.Any();
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        new[]
-                        {
-                            "Expected",
-                            collection.LimitedPrint(),
-                            $"{passed.AsNot()}to be an empty collection"
-                        },
-                        customMessage
-                    )
-                );
-            });
+            be.AddMatcher(
+                collection =>
+                {
+                    var passed = collection != null && !collection.Any();
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            new[]
+                            {
+                                "Expected",
+                                collection.LimitedPrint(),
+                                $"{passed.AsNot()}to be an empty collection"
+                            },
+                            customMessage
+                        )
+                    );
+                });
         }
 
 
@@ -553,23 +564,24 @@ namespace NExpect
             string customMessage
         )
         {
-            equivalent.AddMatcher(collection =>
-            {
-                var passed = TestEquivalenceOf(collection, other, comparer ?? new DefaultEqualityComparer<T>());
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        new[]
-                        {
-                            "Expected",
-                            collection.LimitedPrint(),
-                            $"{passed.AsNot()}to be equivalent to",
-                            other.LimitedPrint()
-                        },
-                        customMessage
-                    )
-                );
-            });
+            equivalent.AddMatcher(
+                collection =>
+                {
+                    var passed = TestEquivalenceOf(collection, other, comparer ?? new DefaultEqualityComparer<T>());
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            new[]
+                            {
+                                "Expected",
+                                collection.LimitedPrint(),
+                                $"{passed.AsNot()}to be equivalent to",
+                                other.LimitedPrint()
+                            },
+                            customMessage
+                        )
+                    );
+                });
         }
 
         /// <summary>
@@ -629,21 +641,22 @@ namespace NExpect
             string customMessage
         )
         {
-            be.AddMatcher(collection =>
-            {
-                var passed = collection == null;
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        new[]
-                        {
-                            "Expected",
-                            collection.LimitedPrint(),
-                            $"{passed.AsNot()}to be null"
-                        },
-                        customMessage)
-                );
-            });
+            be.AddMatcher(
+                collection =>
+                {
+                    var passed = collection == null;
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            new[]
+                            {
+                                "Expected",
+                                collection.LimitedPrint(),
+                                $"{passed.AsNot()}to be null"
+                            },
+                            customMessage)
+                    );
+                });
         }
 
         /// <summary>
@@ -749,19 +762,20 @@ namespace NExpect
             string customMessage
         )
         {
-            contain.AddMatcher(collection =>
-            {
-                var expected = contain.ExpectedCount;
-                var actual = collection?.Count() ?? 0;
-                var passed = actual == expected;
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        $"Expected {passed.AsNot()}to find {expected} items but actually found {actual}",
-                        customMessage
-                    )
-                );
-            });
+            contain.AddMatcher(
+                collection =>
+                {
+                    var expected = contain.ExpectedCount;
+                    var actual = collection?.Count() ?? 0;
+                    var passed = actual == expected;
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            $"Expected {passed.AsNot()}to find {expected} items but actually found {actual}",
+                            customMessage
+                        )
+                    );
+                });
         }
 
         /// <summary>
@@ -791,29 +805,30 @@ namespace NExpect
             string customMessage
         )
         {
-            continuation.AddMatcher(collection =>
-            {
-                var actualCount = collection?.Count(
-                                      o => DeepTestHelpers.AreDeepEqual(o, expected)
-                                  ) ?? 0;
-                var passed = CountPassStrategies[continuation.Method](
-                    actualCount,
-                    continuation.ExpectedCount,
-                    collection?.Count() ?? 0
-                );
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        new[]
-                        {
-                            $"Expected {passed.AsNot()}to find {continuation.ExpectedCount} items matching",
-                            expected.Stringify(),
-                            $"but actually found {actualCount}"
-                        },
-                        customMessage
-                    )
-                );
-            });
+            continuation.AddMatcher(
+                collection =>
+                {
+                    var actualCount = collection?.Count(
+                                          o => DeepTestHelpers.AreDeepEqual(o, expected)
+                                      ) ?? 0;
+                    var passed = CountPassStrategies[continuation.Method](
+                        actualCount,
+                        continuation.ExpectedCount,
+                        collection?.Count() ?? 0
+                    );
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            new[]
+                            {
+                                $"Expected {passed.AsNot()}to find {continuation.ExpectedCount} items matching",
+                                expected.Stringify(),
+                                $"but actually found {actualCount}"
+                            },
+                            customMessage
+                        )
+                    );
+                });
         }
 
         /// <summary>
@@ -845,29 +860,30 @@ namespace NExpect
         {
             // TODO: Please refactor me -- there's a lot here in common with the .Deep.Equal.To
             //  extension above, but no (as yet) common interface between the two
-            continuation.AddMatcher(collection =>
-            {
-                var actualCount = collection?.Count(
-                                      o => DeepTestHelpers.AreIntersectionEqual(o, expected)
-                                  ) ?? 0;
-                var passed = CountPassStrategies[continuation.Method](
-                    actualCount,
-                    continuation.ExpectedCount,
-                    collection?.Count() ?? 0
-                );
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        new[]
-                        {
-                            $"Expected {passed.AsNot()}to find {continuation.ExpectedCount} items matching",
-                            expected.Stringify(),
-                            $"but actually found {actualCount}"
-                        },
-                        customMessage
-                    )
-                );
-            });
+            continuation.AddMatcher(
+                collection =>
+                {
+                    var actualCount = collection?.Count(
+                                          o => DeepTestHelpers.AreIntersectionEqual(o, expected)
+                                      ) ?? 0;
+                    var passed = CountPassStrategies[continuation.Method](
+                        actualCount,
+                        continuation.ExpectedCount,
+                        collection?.Count() ?? 0
+                    );
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            new[]
+                            {
+                                $"Expected {passed.AsNot()}to find {continuation.ExpectedCount} items matching",
+                                expected.Stringify(),
+                                $"but actually found {actualCount}"
+                            },
+                            customMessage
+                        )
+                    );
+                });
         }
 
         private static readonly Dictionary<CountMatchMethods, Func<int, int, int, bool>> CountPassStrategies =
@@ -1224,11 +1240,12 @@ namespace NExpect
             string customMessage
         )
         {
-            continuation.AddMatcher(GenerateEqualityMatcherFor(
-                expected,
-                null,
-                customMessage
-            ));
+            continuation.AddMatcher(
+                GenerateEqualityMatcherFor(
+                    expected,
+                    null,
+                    customMessage
+                ));
         }
 
         /// <summary>
@@ -1296,7 +1313,8 @@ namespace NExpect
         )
         {
             continuation.Matched.By(
-                s => s.IndexOf(search, comparison) > -1, customMessage
+                s => s.IndexOf(search, comparison) > -1,
+                customMessage
             );
         }
 
@@ -1373,7 +1391,8 @@ namespace NExpect
         )
         {
             if (!(continuation is CountMatchContinuationOfStringCollectionVerb concrete))
-                throw new InvalidOperationException($".With() for collections of strings only supported where the concrete continuation is of type {typeof(CountMatchContinuationOfStringCollection)}");
+                throw new InvalidOperationException(
+                    $".With() for collections of strings only supported where the concrete continuation is of type {typeof(CountMatchContinuationOfStringCollection)}");
             concrete.Wrapped.Matched.By(
                 s => s.EndsWith(search, comparison),
                 customMessage
@@ -1454,7 +1473,8 @@ namespace NExpect
         )
         {
             if (!(continuation is CountMatchContinuationOfStringCollectionVerb concrete))
-                throw new InvalidOperationException($".With() for collections of strings only supported where the concrete continuation is of type {typeof(CountMatchContinuationOfStringCollection)}");
+                throw new InvalidOperationException(
+                    $".With() for collections of strings only supported where the concrete continuation is of type {typeof(CountMatchContinuationOfStringCollection)}");
             concrete.Wrapped.Matched.By(
                 s => s.StartsWith(search, comparison),
                 customMessage
@@ -1462,7 +1482,9 @@ namespace NExpect
         }
 
         private static Func<IEnumerable<T>, IMatcherResult> GenerateEqualityMatcherFor<T>(
-            IEnumerable<T> expected, IEqualityComparer<T> comparer, string customMessage
+            IEnumerable<T> expected,
+            IEqualityComparer<T> comparer,
+            string customMessage
         )
         {
             return actual =>
@@ -1470,7 +1492,7 @@ namespace NExpect
                 var passed = AllItemsMatchInOrder(actual, expected, comparer ?? new DefaultEqualityComparer<T>());
                 return new MatcherResult(
                     passed,
-                    FinalMessageFor(
+                    () => FinalMessageFor(
                         new[]
                         {
                             "Expected collection",
@@ -1522,7 +1544,8 @@ namespace NExpect
                 return false;
             var countsA = GetCounts(distinctA, collectionA.ToArray());
             var countsB = GetCounts(distinctB, collectionB.ToArray());
-            return countsA.Aggregate(true,
+            return countsA.Aggregate(
+                true,
                 (acc, cur) =>
                 {
                     if (!acc)
@@ -1553,7 +1576,8 @@ namespace NExpect
         private static void CheckContain<T>(ICanAddMatcher<IEnumerable<T>> contain)
         {
             if (contain == null)
-                throw new ArgumentNullException(nameof(contain),
+                throw new ArgumentNullException(
+                    nameof(contain),
                     $"Exactly<T>() cannot extend null IContain<IEnumerable<{typeof(T).Name}>>");
         }
 
@@ -1571,22 +1595,25 @@ namespace NExpect
 
         private static void CheckDistinct<T>(
             ICanAddMatcher<IEnumerable<T>>
-                distinct, string customMessage
+                distinct,
+            string customMessage
         )
         {
-            distinct.AddMatcher(collection =>
-            {
-                var passed = collection.IsDistinct();
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(CreateCheckDistinctMessageFor(
-                            collection.LimitedPrint(),
-                            passed,
-                            collection.IsEmpty()
-                        ),
-                        customMessage)
-                );
-            });
+            distinct.AddMatcher(
+                collection =>
+                {
+                    var passed = collection.IsDistinct();
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            CreateCheckDistinctMessageFor(
+                                collection.LimitedPrint(),
+                                passed,
+                                collection.IsEmpty()
+                            ),
+                            customMessage)
+                    );
+                });
         }
 
         private static readonly Dictionary<CountMatchMethods,

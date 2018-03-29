@@ -16,15 +16,19 @@ namespace NExpect.Tests.DanglingPrepositions
             // Pre-Assert
 
             // Act
-            Assert.That(() =>
-            {
-                Expectations.Expect(new Frog() as object).To.Be.A.Frog();
-            }, Throws.Nothing);
-            Assert.That(() =>
-            {
-                Expectations.Expect(new Frog() as object).Not.To.Be.A.Frog();
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                .With.Message.Contains("Expected not to get a frog"));
+            Assert.That(
+                () =>
+                {
+                    Expectations.Expect(new Frog() as object).To.Be.A.Frog();
+                },
+                Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expectations.Expect(new Frog() as object).Not.To.Be.A.Frog();
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    .With.Message.Contains("Expected not to get a frog"));
 
             // Assert
         }
@@ -38,12 +42,16 @@ namespace NExpect.Tests.DanglingPrepositions
     {
         public static void Frog(this IA<object> continuation)
         {
-            continuation.AddMatcher(o =>
-            {
-                var passed = o is Frog;
-                var message = passed ? "Expected not to get a frog": "Expected to get a frog";
-                return new MatcherResult(passed, message);
-            });
+            continuation.AddMatcher(
+                o =>
+                {
+                    var passed = o is Frog;
+                    return new MatcherResult(
+                        passed,
+                        () => passed
+                            ? "Expected not to get a frog"
+                            : "Expected to get a frog");
+                });
         }
     }
 }

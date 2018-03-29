@@ -32,23 +32,24 @@ namespace NExpect
         /// <typeparam name="TExpected">Expected Type of the Instance</typeparam>
         public static void Of<TExpected>(this IInstanceContinuation instance, string customMessage)
         {
-            instance.AddMatcher(expected =>
-            {
-                var theExpectedType = typeof(TExpected);
-                var passed = theExpectedType.IsAssignableFrom(instance.Actual);
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        new[]
-                        {
-                            "Expected",
-                            $"<{instance.Actual.PrettyName()}>",
-                            $"to {passed.AsNot()}be an instance of",
-                            $"<{theExpectedType.PrettyName()}>"
-                        },
-                        customMessage
-                    ));
-            });
+            instance.AddMatcher(
+                expected =>
+                {
+                    var theExpectedType = typeof(TExpected);
+                    var passed = theExpectedType.IsAssignableFrom(instance.Actual);
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
+                            new[]
+                            {
+                                "Expected",
+                                $"<{instance.Actual.PrettyName()}>",
+                                $"to {passed.AsNot()}be an instance of",
+                                $"<{theExpectedType.PrettyName()}>"
+                            },
+                            customMessage
+                        ));
+                });
         }
 
         /// <summary>
@@ -146,35 +147,39 @@ namespace NExpect
             string customMessage
         )
         {
-            addTo.AddMatcher(actual =>
-            {
-                var interfaces = actual?.GetAllImplementedInterfaces() ?? new Type[0];
-                var expected = typeof(TInterface);
-                if (!expected.IsInterface())
+            addTo.AddMatcher(
+                actual =>
                 {
-                    return new MatcherResult(false,
-                        FinalMessageFor(
+                    var interfaces = actual?.GetAllImplementedInterfaces() ?? new Type[0];
+                    var expected = typeof(TInterface);
+                    if (!expected.IsInterface())
+                    {
+                        return new MatcherResult(
+                            false,
+                            () => FinalMessageFor(
+                                new[]
+                                {
+                                    actual.Stringify(),
+                                    "is not an interface."
+                                },
+                                customMessage));
+                    }
+
+                    var passed = interfaces.Contains(expected);
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
                             new[]
                             {
+                                "Expected",
                                 actual.Stringify(),
-                                "is not an interface."
-                            }, customMessage));
-                }
-                var passed = interfaces.Contains(expected);
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        new[]
-                        {
-                            "Expected",
-                            actual.Stringify(),
-                            $"{passed.AsNot()}to implement",
-                            expected.Stringify()
-                        },
-                        customMessage
-                    )
-                );
-            });
+                                $"{passed.AsNot()}to implement",
+                                expected.Stringify()
+                            },
+                            customMessage
+                        )
+                    );
+                });
             return addTo.More();
         }
 
@@ -273,34 +278,38 @@ namespace NExpect
             string customMessage
         )
         {
-            addTo.AddMatcher(actual =>
-            {
-                var expected = typeof(TBase);
-                if (expected.IsInterface())
+            addTo.AddMatcher(
+                actual =>
                 {
-                    return new MatcherResult(false,
-                        FinalMessageFor(
+                    var expected = typeof(TBase);
+                    if (expected.IsInterface())
+                    {
+                        return new MatcherResult(
+                            false,
+                            () => FinalMessageFor(
+                                new[]
+                                {
+                                    actual.Stringify(),
+                                    "is not a class."
+                                },
+                                customMessage));
+                    }
+
+                    var passed = expected.IsAssignableFrom(actual);
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(
                             new[]
                             {
+                                "Expected",
                                 actual.Stringify(),
-                                "is not a class."
-                            }, customMessage));
-                }
-                var passed = expected.IsAssignableFrom(actual);
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        new[]
-                        {
-                            "Expected",
-                            actual.Stringify(),
-                            $"{passed.AsNot()}to inherit",
-                            expected.Stringify()
-                        },
-                        customMessage
-                    )
-                );
-            });
+                                $"{passed.AsNot()}to inherit",
+                                expected.Stringify()
+                            },
+                            customMessage
+                        )
+                    );
+                });
             return addTo.More();
         }
 
@@ -316,6 +325,7 @@ namespace NExpect
                     var underlyingType = type.GetGenericArguments()[0];
                     return $"{PrettyName(underlyingType)}?";
                 }
+
                 var typeFyllName = type.FullName ?? string.Empty;
                 var baseName = typeFyllName.Substring(0, typeFyllName.IndexOf("`", StringComparison.Ordinal));
                 var parts = baseName.Split('.');

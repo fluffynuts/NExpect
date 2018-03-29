@@ -43,7 +43,7 @@ namespace NExpect
                     var passed = DeepTestHelpers.AreIntersectionEqual(actual, expected);
                     return new MatcherResult(
                         passed,
-                        FinalMessageFor(
+                        () => FinalMessageFor(
                             new[]
                             {
                                 "Expected",

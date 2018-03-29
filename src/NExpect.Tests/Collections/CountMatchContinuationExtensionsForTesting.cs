@@ -23,7 +23,7 @@ namespace NExpect.Tests.Collections
                 var passed = _strategies[method](total, count, expectedCount);
                 return new MatcherResult(
                     passed,
-                    $"Expected {collection.LimitedPrint()} {passed.AsNot()}to be only odd numbers"
+                    () => $"Expected {collection.LimitedPrint()} {passed.AsNot()}to be only odd numbers"
                 );
             });
         }

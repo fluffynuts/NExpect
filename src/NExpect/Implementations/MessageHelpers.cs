@@ -13,6 +13,19 @@ namespace NExpect.Implementations
     public static class MessageHelpers
     {
         /// <summary>
+        /// Provides an easy access to a null string value
+        /// - use to disambiguate calls between the version which
+        /// takes a static string and the version which takes a Func&lt;string&gt;
+        /// </summary>
+        internal const string NULL = null;
+        
+        /// <summary>
+        /// Not to be confused with NULL, this is the string
+        /// put in place of nulls within stringified messages
+        /// </summary>
+        internal const string NULL_REPLACER = "(null)";
+
+        /// <summary>
         /// Provides a final message, given a standard message and
         /// a custom message - if the custom message is null, the standard
         /// message alone is returned
@@ -135,7 +148,7 @@ namespace NExpect.Implementations
         /// <returns>String representation of object</returns>
         public static string Quote<T>(T o)
         {
-            return Stringifier.Stringify(o, NULL);
+            return Stringifier.Stringify(o, NULL_REPLACER);
         }
 
         /// <summary>
@@ -147,11 +160,9 @@ namespace NExpect.Implementations
         public static string Stringify<T>(this IEnumerable<T> collection)
         {
             return collection == null
-                ? NULL
+                ? NULL_REPLACER
                 : $"[ {string.Join(", ", collection.Select(Quote))} ]";
         }
-
-        internal const string NULL = "(null)";
 
         /// <summary>
         /// Returns string with up to 10 elements from a collection with ellipsis if required
@@ -162,7 +173,7 @@ namespace NExpect.Implementations
         public static string LimitedPrint<T>(this IEnumerable<T> collection)
         {
             if (collection == null)
-                return NULL;
+                return NULL_REPLACER;
             var asArray = collection.ToArray();
             var ellipsis = asArray.Length > 10
                 ? " ..."

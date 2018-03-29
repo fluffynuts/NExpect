@@ -41,31 +41,33 @@ namespace NExpect
         )
         {
             var continuation = new ThrowContinuation<Exception>();
-            src.AddMatcher(fn =>
-            {
-                MatcherResult result;
-                try
+            src.AddMatcher(
+                fn =>
                 {
-                    fn();
-                    result = new MatcherResult(
-                        false,
-                        FinalMessageFor(
-                            "Expected to throw an exception but none was thrown",
-                            customMessage)
-                    );
-                }
-                catch (Exception ex)
-                {
-                    continuation.Exception = ex;
-                    result = new MatcherResult(
-                        true,
-                        FinalMessageFor(
-                            $"Exception thrown:\n${ex.Message}\n${ex.StackTrace}",
-                            customMessage
-                        ));
-                }
-                return result;
-            });
+                    MatcherResult result;
+                    try
+                    {
+                        fn();
+                        result = new MatcherResult(
+                            false,
+                            () => FinalMessageFor(
+                                "Expected to throw an exception but none was thrown",
+                                customMessage)
+                        );
+                    }
+                    catch (Exception ex)
+                    {
+                        continuation.Exception = ex;
+                        result = new MatcherResult(
+                            true,
+                            () => FinalMessageFor(
+                                $"Exception thrown:\n${ex.Message}\n${ex.StackTrace}",
+                                customMessage
+                            ));
+                    }
+
+                    return result;
+                });
             return continuation;
         }
 
@@ -91,12 +93,14 @@ namespace NExpect
                 throw new ArgumentException(
                     "With should operate on a ThrowContinuation<T> or at least something with an Exception property that is an Exception.");
             }
+
             var exceptionPropertyValue = fetcher(actual);
 
             return Factory.Create<TValue, ExceptionPropertyContinuation<TValue>>(
                 exceptionPropertyValue,
                 new WrappingContinuation<T, TValue>(
-                    moo, c => exceptionPropertyValue
+                    moo,
+                    c => exceptionPropertyValue
                 )
             );
         }
@@ -128,29 +132,33 @@ namespace NExpect
         {
             var continuation = new ThrowContinuation<T>();
             var expectedType = typeof(T);
-            src.AddMatcher(fn =>
-            {
-                MatcherResult result;
-                try
+            src.AddMatcher(
+                fn =>
                 {
-                    fn();
-                    result = new MatcherResult(false,
-                        FinalMessageFor(
-                            $"Expected to throw an exception of type {expectedType.Name} but none was thrown",
-                            customMessage
-                        ));
-                }
-                catch (Exception ex)
-                {
-                    var passed = ex is T;
-                    var message = passed
-                        ? $"Expected not to throw an exception of type {expectedType.Name}"
-                        : $"Expected to throw an exception of type {expectedType.Name} but {ex.GetType().Name} was thrown instead ({ex.Message})";
-                    result = new MatcherResult(passed, FinalMessageFor(message, customMessage));
-                    continuation.Exception = ex as T;
-                }
-                return result;
-            });
+                    MatcherResult result;
+                    try
+                    {
+                        fn();
+                        result = new MatcherResult(
+                            false,
+                            () => FinalMessageFor(
+                                $"Expected to throw an exception of type {expectedType.Name} but none was thrown",
+                                customMessage
+                            ));
+                    }
+                    catch (Exception ex)
+                    {
+                        var passed = ex is T;
+                        result = new MatcherResult(
+                            passed,
+                            () => FinalMessageFor(passed
+                                                      ? $"Expected not to throw an exception of type {expectedType.Name}"
+                                                      : $"Expected to throw an exception of type {expectedType.Name} but {ex.GetType().Name} was thrown instead ({ex.Message})", customMessage));
+                        continuation.Exception = ex as T;
+                    }
+
+                    return result;
+                });
             return continuation;
         }
 
@@ -165,24 +173,28 @@ namespace NExpect
             string search)
         {
             var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
-                null, src as IExpectationContext<string>
+                null,
+                src as IExpectationContext<string>
             );
-            src.AddMatcher(s =>
-            {
-                result.Actual = s;
-                var nextOffset = s?.IndexOf(search) ?? -1;
-                if (nextOffset > -1)
-                    nextOffset += search?.Length ?? 0;
-                result.SetMetadata(SEARCH_OFFSET, nextOffset);
+            src.AddMatcher(
+                s =>
+                {
+                    result.Actual = s;
+                    var nextOffset = s?.IndexOf(search) ?? -1;
+                    if (nextOffset > -1)
+                        nextOffset += search?.Length ?? 0;
+                    result.SetMetadata(SEARCH_OFFSET, nextOffset);
 
-                var passed = nextOffset > -1;
-                return new MatcherResult(
-                    passed,
-                    MessageForContainsResult(
-                        passed, s, search
-                    )
-                );
-            });
+                    var passed = nextOffset > -1;
+                    return new MatcherResult(
+                        passed,
+                        () => MessageForContainsResult(
+                            passed,
+                            s,
+                            search
+                        )
+                    );
+                });
             return result;
         }
 
@@ -199,19 +211,22 @@ namespace NExpect
             Func<string, bool> test)
         {
             var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
-                null, src as IExpectationContext<string>
+                null,
+                src as IExpectationContext<string>
             );
-            src.AddMatcher(s =>
-            {
-                result.Actual = s;
-                var passed = test(s);
-                return new MatcherResult(
-                    passed,
-                    MessageForMatchResult(
-                        passed, s
-                    )
-                );
-            });
+            src.AddMatcher(
+                s =>
+                {
+                    result.Actual = s;
+                    var passed = test(s);
+                    return new MatcherResult(
+                        passed,
+                        () => MessageForMatchResult(
+                            passed,
+                            s
+                        )
+                    );
+                });
             return result;
         }
 
@@ -227,19 +242,23 @@ namespace NExpect
         )
         {
             var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
-                null, continuation as IExpectationContext<string>
+                null,
+                continuation as IExpectationContext<string>
             );
-            continuation.AddMatcher(s =>
-            {
-                result.Actual = s;
-                var passed = !s?.Contains(search) ?? true;
-                return new MatcherResult(
-                    passed,
-                    MessageForNotContainsResult(
-                        passed, s, search
-                    )
-                );
-            });
+            continuation.AddMatcher(
+                s =>
+                {
+                    result.Actual = s;
+                    var passed = !s?.Contains(search) ?? true;
+                    return new MatcherResult(
+                        passed,
+                        () => MessageForNotContainsResult(
+                            passed,
+                            s,
+                            search
+                        )
+                    );
+                });
             return result;
         }
 
@@ -255,19 +274,22 @@ namespace NExpect
         )
         {
             var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
-                null, continuation as IExpectationContext<string>
+                null,
+                continuation as IExpectationContext<string>
             );
-            continuation.AddMatcher(s =>
-            {
-                result.Actual = s;
-                var passed = !test(s);
-                return new MatcherResult(
-                    passed,
-                    MessageForNotMatchResult(
-                        passed, s
-                    )
-                );
-            });
+            continuation.AddMatcher(
+                s =>
+                {
+                    result.Actual = s;
+                    var passed = !test(s);
+                    return new MatcherResult(
+                        passed,
+                        () => MessageForNotMatchResult(
+                            passed,
+                            s
+                        )
+                    );
+                });
             return result;
         }
     }

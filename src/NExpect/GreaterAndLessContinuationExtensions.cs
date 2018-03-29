@@ -3,6 +3,7 @@ using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
+
 // ReSharper disable UnusedMethodReturnValue.Global
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -878,10 +879,11 @@ namespace NExpect
                     var compare = continuation is IGreaterContinuation<T1>
                         ? "greater"
                         : "less";
-                    var message = passed
-                        ? $"Expected {actual} not to be {compare} than {expected}"
-                        : $"Expected {actual} to be {compare} than {expected}";
-                    return new MatcherResult(passed, FinalMessageFor(message, customMessage));
+                    return new MatcherResult(
+                        passed,
+                        () => FinalMessageFor(passed
+                                                  ? $"Expected {actual} not to be {compare} than {expected}"
+                                                  : $"Expected {actual} to be {compare} than {expected}", customMessage));
                 });
         }
     }
