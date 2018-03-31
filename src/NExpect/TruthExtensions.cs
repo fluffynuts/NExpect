@@ -1,8 +1,11 @@
 using System;
+using System.Reflection;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
+
+// ReSharper disable HeapView.BoxingAllocation
 
 // ReSharper disable UnusedMember.Global
 
@@ -17,9 +20,10 @@ namespace NExpect
         /// Tests if a boolean value is True
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
-        public static void True(this IBe<bool> continuation)
+        public static void True(
+            this IBe<bool> continuation)
         {
-            continuation.True(null);
+            continuation.True(NULL_STRING);
         }
 
         /// <summary>
@@ -27,9 +31,24 @@ namespace NExpect
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="message">Custom message to include on failure</param>
-        public static void True(this IBe<bool> continuation, string message)
+        public static void True(
+            this IBe<bool> continuation,
+            string message)
         {
-            TestBoolean(continuation, true, message);
+            continuation.True(() => message);
+        }
+
+        /// <summary>
+        /// Tests if a boolean value is True
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include on failure</param>
+        public static void True(
+            this IBe<bool> continuation,
+            Func<string> customMessageGenerator
+        )
+        {
+            TestBoolean(continuation, true, customMessageGenerator);
         }
 
         /// <summary>
@@ -49,8 +68,21 @@ namespace NExpect
         /// <param name="message">Custom message to include on failure</param>
         public static void True(this IBe<bool?> continuation, string message)
         {
+            continuation.True(() => message);
+        }
+
+        /// <summary>
+        /// Tests if a boolean value is True
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include on failure</param>
+        public static void True(
+            this IBe<bool?> continuation,
+            Func<string> customMessageGenerator
+        )
+        {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            continuation.AddMatcher(TruthTestFor(true as bool?, message));
+            continuation.AddMatcher(TruthTestFor(true as bool?, customMessageGenerator));
         }
 
         /// <summary>
@@ -67,9 +99,23 @@ namespace NExpect
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="message">Custom message to include on failure</param>
-        public static void False(this IBe<bool> continuation, string message)
+        public static void False(
+            this IBe<bool> continuation,
+            string message)
         {
-            continuation.AddMatcher(TruthTestFor(false, message));
+            continuation.False(() => message);
+        }
+
+        /// <summary>
+        /// Tests if a boolean value is False
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="customMessageGenerator">Generats a custom message to include on failure</param>
+        public static void False(
+            this IBe<bool> continuation,
+            Func<string> customMessageGenerator)
+        {
+            continuation.AddMatcher(TruthTestFor(false, customMessageGenerator));
         }
 
         /// <summary>
@@ -89,21 +135,35 @@ namespace NExpect
         /// <param name="message">Custom message to include on failure</param>
         public static void False(this IBe<bool?> continuation, string message)
         {
+            continuation.False(() => message);
+        }
+
+        /// <summary>
+        /// Tests if a boolean value is False
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include on failure</param>
+        public static void False(
+            this IBe<bool?> continuation,
+            Func<string> customMessageGenerator
+        )
+        {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            continuation.AddMatcher(TruthTestFor(false as bool?, message));
+            continuation.AddMatcher(TruthTestFor(false as bool?, customMessageGenerator));
         }
 
         private static void TestBoolean(
             IBe<bool> expectation,
             bool expected,
-            string message
+            Func<string> message
         )
         {
             expectation.AddMatcher(TruthTestFor(expected, message));
         }
 
         private static Func<T, MatcherResult> TruthTestFor<T>(
-            T expected, string message
+            T expected,
+            Func<string> message
         )
         {
             return actual =>
@@ -112,8 +172,8 @@ namespace NExpect
                     return new MatcherResult(true, () => $"Did not expect {true}");
                 return new MatcherResult(
                     false,
-                    () => FinalMessageFor(
-                        new[]
+                    FinalMessageFor(
+                        () => new[]
                         {
                             "Expected",
                             expected.Stringify(),

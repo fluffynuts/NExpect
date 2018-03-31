@@ -59,11 +59,23 @@ namespace NExpect.Implementations
         {
             return () =>
             {
-                var customMessage = customMessageFunc();
+                var customMessage = TryGetCustomMessage(customMessageFunc);
                 return string.IsNullOrWhiteSpace(customMessage)
                     ? standardMessage()
                     : $"{customMessage}\n\n{standardMessage()}";
             };
+        }
+
+        private static string TryGetCustomMessage(Func<string> customMessageFunc)
+        {
+            try
+            {
+                return customMessageFunc?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                return $"Unable to evaluate custom message expression: {ex.Message}";
+            }
         }
 
         /// <summary>
