@@ -9,16 +9,20 @@ namespace NExpect.MatcherLogic
     /// Implements the IMatcher result, use to contain your
     /// matcher result
     /// </summary>
-    public class MatcherResult: IMatcherResult
+    public class MatcherResult : IMatcherResult
     {
-        private readonly Func<string> _messageGenerator;
+        private Func<string> _messageGenerator;
         private string _message;
+        private Func<Func<string>> _messageGeneratorGenerator;
 
         /// <inheritdoc />
         public bool Passed { get; set; }
 
         /// <inheritdoc />
-        public string Message => _message ?? (_message = _messageGenerator());
+        public string Message => _message ?? (_message = MessageGenerator?.Invoke());
+
+        private Func<string> MessageGenerator => _messageGenerator ??
+                                                 (_messageGenerator = _messageGeneratorGenerator?.Invoke());
 
         /// <summary>
         /// Constructor with just pased value -- set message later
@@ -39,7 +43,7 @@ namespace NExpect.MatcherLogic
         /// </summary>
         /// <param name="passed">Did the matcher pass?</param>
         /// <param name="message">Message about the pass / fail</param>
-        public MatcherResult(bool passed, string message): 
+        public MatcherResult(bool passed, string message) :
             this(passed, () => message)
         {
         }
@@ -52,6 +56,20 @@ namespace NExpect.MatcherLogic
         public MatcherResult(bool passed, Func<string> messageGenerator)
         {
             _messageGenerator = messageGenerator;
+            Passed = passed;
+        }
+
+        /// <summary>
+        /// Constructor with delayed message generator generator
+        /// </summary>
+        /// <param name="passed"></param>
+        /// <param name="messageGeneratorGenerator"></param>
+        public MatcherResult(
+            bool passed,
+            Func<Func<string>> messageGeneratorGenerator
+        )
+        {
+            _messageGeneratorGenerator = messageGeneratorGenerator;
             Passed = passed;
         }
     }

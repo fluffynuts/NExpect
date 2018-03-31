@@ -9,10 +9,9 @@ using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
 
+// ReSharper disable HeapView.BoxingAllocation
 // ReSharper disable UnusedMethodReturnValue.Global
-
 // ReSharper disable PossibleMultipleEnumeration
-
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect
@@ -34,7 +33,7 @@ namespace NExpect
             string search
         )
         {
-            return continuation.Contain(search, null);
+            return continuation.Contain(search, NULL_STRING);
         }
 
         /// <summary>
@@ -51,11 +50,27 @@ namespace NExpect
             string customMessage
         )
         {
+            return continuation.Contain(search, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if the value under test contains a given string. May be continued
+        /// with ".And"
+        /// </summary>
+        /// <param name="continuation">Continuation to act on</param>
+        /// <param name="search">String value to search for</param>
+        /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <returns>IStringContainContinuation onto which you can chain .And</returns>
+        public static IStringContainContinuation Contain(
+            this ICanAddMatcher<string> continuation,
+            string search,
+            Func<string> customMessage
+        )
+        {
             var result = new StringContainContinuation(continuation);
             AddContainsMatcherTo(continuation, search, customMessage, result);
             return result;
         }
-
 
         /// <summary>
         /// Continue testing a string for another substring
@@ -68,7 +83,7 @@ namespace NExpect
             string search
         )
         {
-            return continuation.And(search, null);
+            return continuation.And(search, NULL_STRING);
         }
 
         /// <summary>
@@ -84,9 +99,25 @@ namespace NExpect
             string customMessage
         )
         {
+            return continuation.And(search, () => customMessage);
+        }
+
+        /// <summary>
+        /// Continue testing a string for another substring
+        /// </summary>
+        /// <param name="continuation">Existing continuation fron a Contain()</param>
+        /// <param name="search">string to search for</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        /// <returns>IStringContainContinuation onto which you can chain .And</returns>
+        public static IStringContainContinuation And(
+            this IStringContainContinuation continuation,
+            string search,
+            Func<string> customMessageGenerator
+        )
+        {
             var result = new StringContainContinuation(continuation);
             continuation.SetMetadata(SEARCH_OFFSET, 0); // And will reset the offset -- it's not ordered
-            AddContainsMatcherTo(continuation, search, customMessage, result);
+            AddContainsMatcherTo(continuation, search, customMessageGenerator, result);
             return result;
         }
 
@@ -101,7 +132,7 @@ namespace NExpect
             string search
         )
         {
-            return continuation.Then(search, null);
+            return continuation.Then(search, NULL_STRING);
         }
 
         /// <summary>
@@ -117,8 +148,24 @@ namespace NExpect
             string customMessage
         )
         {
+            return continuation.Then(search, () => customMessage);
+        }
+
+        /// <summary>
+        /// Continue testing a string for another substring from beyond the end of the last match
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="search">String to search for</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        /// <returns></returns>
+        public static IStringContainContinuation Then(
+            this IStringContainContinuation continuation,
+            string search,
+            Func<string> customMessageGenerator
+        )
+        {
             var result = new StringContainContinuation(continuation);
-            AddContainsMatcherTo(continuation, search, customMessage, result);
+            AddContainsMatcherTo(continuation, search, customMessageGenerator, result);
             return result;
         }
 
@@ -134,7 +181,25 @@ namespace NExpect
             string search
         )
         {
-            return more.Then(search, null);
+            return more.Then(search, NULL_STRING);
+        }
+
+
+        /// <summary>
+        /// Provides the .Then(...) extension on already extended string
+        /// continuations.
+        /// </summary>
+        /// <param name="more">Continuation to operate on</param>
+        /// <param name="search">String to search for</param>
+        /// <param name="customMessage">Generates a custom message to add to failure messages</param>
+        /// <returns></returns>
+        public static IStringContainContinuation Then(
+            this IStringMore more,
+            string search,
+            string customMessage
+        )
+        {
+            return more.Then(search, () => customMessage);
         }
 
         /// <summary>
@@ -143,17 +208,17 @@ namespace NExpect
         /// </summary>
         /// <param name="more">Continuation to operate on</param>
         /// <param name="search">String to search for</param>
-        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
         /// <returns></returns>
         public static IStringContainContinuation Then(
             this IStringMore more,
             string search,
-            string customMessage
+            Func<string> customMessageGenerator
         )
         {
             var canAddMatcher = more as ICanAddMatcher<string>;
             var result = new StringContainContinuation(canAddMatcher);
-            AddContainsMatcherTo(canAddMatcher, search, customMessage, result);
+            AddContainsMatcherTo(canAddMatcher, search, customMessageGenerator, result);
             return result;
         }
 
@@ -213,8 +278,9 @@ namespace NExpect
             string expected
         )
         {
-            return end.With(expected, null);
+            return end.With(expected, NULL_STRING);
         }
+
 
         /// <summary>
         /// Tests if a string ends with an expected value
@@ -228,14 +294,30 @@ namespace NExpect
             string customMessage
         )
         {
+            return end.With(expected, () => customMessage);
+        }
+
+
+        /// <summary>
+        /// Tests if a string ends with an expected value
+        /// </summary>
+        /// <param name="end">Continuation to operate on</param>
+        /// <param name="expected">String that is expected at the start of the Actual</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        public static IStringMore With(
+            this IStringEnd end,
+            string expected,
+            Func<string> customMessage
+        )
+        {
             end.AddMatcher(
                 actual =>
                 {
                     var passed = actual?.EndsWith(expected) ?? false;
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(
-                            new[]
+                        FinalMessageFor(
+                            () => new[]
                             {
                                 "Expected",
                                 actual.Stringify(),
@@ -260,7 +342,7 @@ namespace NExpect
             Regex regex
         )
         {
-            return matched.By(regex, null);
+            return matched.By(regex, NULL_STRING);
         }
 
         /// <summary>
@@ -274,7 +356,7 @@ namespace NExpect
             Regex regex
         )
         {
-            return matched.Match(regex, null);
+            return matched.Match(regex, NULL_STRING);
         }
 
         /// <summary>
@@ -290,7 +372,23 @@ namespace NExpect
             string customMessage
         )
         {
-            AddRegexMatcher(matched, regex, customMessage);
+            return matched.Match(regex, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matched">Continuation to operate on</param>
+        /// <param name="regex">Regex instance to match with</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this ITo<string> matched,
+            Regex regex,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddRegexMatcher(matched, regex, customMessageGenerator);
             return matched.More();
         }
 
@@ -305,7 +403,7 @@ namespace NExpect
             string regex
         )
         {
-            return matched.Match(regex, null);
+            return matched.Match(regex, NULL_STRING);
         }
 
         /// <summary>
@@ -321,10 +419,25 @@ namespace NExpect
             string customMessage
         )
         {
-            AddRegexMatcher(matched, regex, customMessage);
+            return matched.Match(regex, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matched">Continuation to operate on</param>
+        /// <param name="regex">Regex string to match with</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this ITo<string> matched,
+            string regex,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddRegexMatcher(matched, regex, customMessageGenerator);
             return matched.More();
         }
-
         /// <summary>
         /// Tests whether the Actual string is matched by the given Regex
         /// </summary>
@@ -336,7 +449,7 @@ namespace NExpect
             Regex regex
         )
         {
-            return matcher.Match(regex, null);
+            return matcher.Match(regex, NULL_STRING);
         }
 
         /// <summary>
@@ -352,7 +465,23 @@ namespace NExpect
             string customMessage
         )
         {
-            AddRegexMatcher(matcher, regex, customMessage);
+            return matcher.Match(regex, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matcher">Continuation to operate on</param>
+        /// <param name="regex">Regex instance to match with</param>
+        /// <param name="customMessageGenerator">Custom message to add to failure messages</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this IToAfterNot<string> matcher,
+            Regex regex,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddRegexMatcher(matcher, regex, customMessageGenerator);
             return matcher.More();
         }
 
@@ -367,7 +496,7 @@ namespace NExpect
             string regex
         )
         {
-            return matcher.Match(regex, null);
+            return matcher.Match(regex, NULL_STRING);
         }
 
         /// <summary>
@@ -383,10 +512,25 @@ namespace NExpect
             string customMessage
         )
         {
-            AddRegexMatcher(matcher, regex, customMessage);
-            return matcher.More();
+            return matcher.Match(regex, () => customMessage);
         }
 
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matcher">Continuation to operate on</param>
+        /// <param name="regex">Regex string to match with</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this IToAfterNot<string> matcher,
+            string regex,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddRegexMatcher(matcher, regex, customMessageGenerator);
+            return matcher.More();
+        }
         /// <summary>
         /// Tests whether the Actual string is matched by the given Regex
         /// </summary>
@@ -398,7 +542,7 @@ namespace NExpect
             Regex regex
         )
         {
-            return matcher.Match(regex, null);
+            return matcher.Match(regex, NULL_STRING);
         }
 
         /// <summary>
@@ -414,9 +558,27 @@ namespace NExpect
             string customMessage
         )
         {
-            AddRegexMatcher(matcher, regex, customMessage);
+            return matcher.Match(regex, () => customMessage);
+        }
+
+
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matcher">Continuation to operate on</param>
+        /// <param name="regex">Regex instance to match with</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this INotAfterTo<string> matcher,
+            Regex regex,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddRegexMatcher(matcher, regex, customMessageGenerator);
             return matcher.More();
         }
+
 
         /// <summary>
         /// Tests whether the Actual string is matched by the given Regex
@@ -429,7 +591,7 @@ namespace NExpect
             string regex
         )
         {
-            return matcher.Match(regex, null);
+            return matcher.Match(regex, NULL_STRING);
         }
 
         /// <summary>
@@ -445,10 +607,26 @@ namespace NExpect
             string customMessage
         )
         {
-            AddRegexMatcher(matcher, regex, customMessage);
-            return matcher.More();
+            return matcher.Match(regex, () => customMessage);
         }
 
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matcher">Continuation to operate on</param>
+        /// <param name="regex">Regex string to match with</param>
+        /// <param name="customMessageGenerator">Custom message to add to failure messages</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore Match(
+            this INotAfterTo<string> matcher,
+            string regex,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddRegexMatcher(matcher, regex, customMessageGenerator);
+            return matcher.More();
+        }
+        
         /// <summary>
         /// Tests whether the Actual string is matched by the given Regex
         /// </summary>
@@ -462,14 +640,30 @@ namespace NExpect
             string customMessage
         )
         {
-            AddRegexMatcher(matched, regex, customMessage);
+            return matched.By(regex, () => customMessage);
+        }
+        
+        /// <summary>
+        /// Tests whether the Actual string is matched by the given Regex
+        /// </summary>
+        /// <param name="matched">Continuation to operate on</param>
+        /// <param name="regex">Regex instance to match with</param>
+        /// <param name="customMessageGenerator">Custom message to add to failure messages</param>
+        /// <returns>More continuation for Actual string</returns>
+        public static IStringMore By(
+            this IStringMatched matched,
+            Regex regex,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddRegexMatcher(matched, regex, customMessageGenerator);
             return matched.More();
         }
 
         private static void AddRegexMatcher(
             ICanAddMatcher<string> matcher,
             string regex,
-            string customMessage
+            Func<string> customMessage
         )
         {
             AddRegexMatcher(matcher, CompileRegexFor(regex), customMessage);
@@ -478,7 +672,7 @@ namespace NExpect
         private static void AddRegexMatcher(
             ICanAddMatcher<string> matcher,
             Regex regex,
-            string customMessage
+            Func<string> customMessageGenerator
         )
         {
             matcher.AddMatcher(
@@ -487,15 +681,15 @@ namespace NExpect
                     var passed = regex.IsMatch(actual);
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(
-                            new[]
+                        FinalMessageFor(
+                            () => new[]
                             {
                                 "Expected",
                                 actual.Stringify(),
                                 $"{passed.AsNot()}to match regex",
                                 $"\"{regex}\""
                             },
-                            customMessage
+                            customMessageGenerator
                         )
                     );
                 });
@@ -596,7 +790,7 @@ namespace NExpect
         private static void AddContainsMatcherTo(
             ICanAddMatcher<string> continuation,
             string search,
-            string customMessage,
+            Func<string> customMessage,
             StringContainContinuation next
         )
         {
@@ -617,7 +811,7 @@ namespace NExpect
                                 ? $" after index {priorOffset}"
                                 : "";
                             return FinalMessageFor(
-                                new[]
+                                () => new[]
                                 {
                                     "Expected",
                                     s.Stringify(),
