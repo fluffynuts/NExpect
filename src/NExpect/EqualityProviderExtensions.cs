@@ -83,7 +83,7 @@ namespace NExpect
             this ICollectionTo<T> be,
             object expected)
         {
-            be.Be(expected, NULL);
+            be.Be(expected, NULL_STRING);
         }
 
         /// <summary>

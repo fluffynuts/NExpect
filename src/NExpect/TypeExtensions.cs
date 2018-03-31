@@ -21,7 +21,7 @@ namespace NExpect
         /// <typeparam name="TExpected">Expected Type of the Instance</typeparam>
         public static void Of<TExpected>(this IInstanceContinuation instance)
         {
-            Of<TExpected>(instance, null);
+            Of<TExpected>(instance, NULL_STRING);
         }
 
         /// <summary>
@@ -30,8 +30,24 @@ namespace NExpect
         /// <param name="instance">Instance to operate on</param>
         /// <param name="customMessage">Custom error message</param>
         /// <typeparam name="TExpected">Expected Type of the Instance</typeparam>
-        public static void Of<TExpected>(this IInstanceContinuation instance, string customMessage)
+        public static void Of<TExpected>(
+            this IInstanceContinuation instance,
+            string customMessage)
         {
+            instance.Of<TExpected>(() => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if actual is an instance of TExpected
+        /// </summary>
+        /// <param name="instance">Instance to operate on</param>
+        /// <param name="customMessageGenerator">Custom error message</param>
+        /// <typeparam name="TExpected">Expected Type of the Instance</typeparam>
+        public static void Of<TExpected>(
+            this IInstanceContinuation instance,
+            Func<string> customMessageGenerator)
+        {
+            
             instance.AddMatcher(
                 expected =>
                 {
@@ -39,7 +55,7 @@ namespace NExpect
                     var passed = theExpectedType.IsAssignableFrom(instance.Actual);
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(
+                        FinalMessageFor(
                             new[]
                             {
                                 "Expected",
@@ -47,7 +63,7 @@ namespace NExpect
                                 $"to {passed.AsNot()}be an instance of",
                                 $"<{theExpectedType.PrettyName()}>"
                             },
-                            customMessage
+                            customMessageGenerator
                         ));
                 });
         }
@@ -63,7 +79,7 @@ namespace NExpect
             this INotAfterTo<Type> not
         )
         {
-            return not.Implement<TInterface>(null);
+            return not.Implement<TInterface>(NULL_STRING);
         }
 
         /// <summary>
@@ -79,7 +95,23 @@ namespace NExpect
             string customMessage
         )
         {
-            return not.AddImplementsMatcher<TInterface>(customMessage);
+            return not.Implement<TInterface>(() => customMessage);
+        }
+
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="not">Continuation to operate on</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="TInterface">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Implement<TInterface>(
+            this INotAfterTo<Type> not,
+            Func<string> customMessageGenerator
+        )
+        {
+            return not.AddImplementsMatcher<TInterface>(customMessageGenerator);
         }
 
         /// <summary>
@@ -93,7 +125,7 @@ namespace NExpect
             this IToAfterNot<Type> to
         )
         {
-            return to.Implement<TInterface>(null);
+            return to.Implement<TInterface>(NULL_STRING);
         }
 
         /// <summary>
@@ -109,9 +141,24 @@ namespace NExpect
             string customMessage
         )
         {
-            return to.AddImplementsMatcher<TInterface>(customMessage);
+            return to.Implement<TInterface>(() => customMessage);
         }
 
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <param name="customMessageGenerator">Custom message to add to failure messages</param>
+        /// <typeparam name="TInterface">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Implement<TInterface>(
+            this IToAfterNot<Type> to,
+            Func<string> customMessageGenerator
+        )
+        {
+            return to.AddImplementsMatcher<TInterface>(customMessageGenerator);
+        }
         /// <summary>
         /// Expectes that the Actual type implements the interface provided
         /// as a generic parameter
@@ -139,12 +186,12 @@ namespace NExpect
             string customMessage
         )
         {
-            return to.AddImplementsMatcher<TInterface>(customMessage);
+            return to.AddImplementsMatcher<TInterface>(() => customMessage);
         }
 
         private static IMore<Type> AddImplementsMatcher<TInterface>(
             this ICanAddMatcher<Type> addTo,
-            string customMessage
+            Func<string> customMessage
         )
         {
             addTo.AddMatcher(
@@ -156,8 +203,8 @@ namespace NExpect
                     {
                         return new MatcherResult(
                             false,
-                            () => FinalMessageFor(
-                                new[]
+                            FinalMessageFor(
+                                () => new[]
                                 {
                                     actual.Stringify(),
                                     "is not an interface."
@@ -168,8 +215,8 @@ namespace NExpect
                     var passed = interfaces.Contains(expected);
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(
-                            new[]
+                        FinalMessageFor(
+                            () => new[]
                             {
                                 "Expected",
                                 actual.Stringify(),
@@ -194,7 +241,7 @@ namespace NExpect
             this INotAfterTo<Type> not
         )
         {
-            return not.Inherit<TBase>(null);
+            return not.Inherit<TBase>(NULL_STRING);
         }
 
         /// <summary>
@@ -210,7 +257,24 @@ namespace NExpect
             string customMessage
         )
         {
-            return not.AddInheritsMatcher<TBase>(customMessage);
+            return not.AddInheritsMatcher<TBase>(() => customMessage);
+        }
+
+
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="not">Continuation to operate on</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="TBase">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Inherit<TBase>(
+            this INotAfterTo<Type> not,
+            Func<string> customMessageGenerator
+        )
+        {
+            return not.AddInheritsMatcher<TBase>(customMessageGenerator);
         }
 
         /// <summary>
@@ -224,7 +288,7 @@ namespace NExpect
             this IToAfterNot<Type> to
         )
         {
-            return to.Inherit<TBase>(null);
+            return to.Inherit<TBase>(NULL_STRING);
         }
 
         /// <summary>
@@ -240,9 +304,24 @@ namespace NExpect
             string customMessage
         )
         {
-            return to.AddInheritsMatcher<TBase>(customMessage);
+            return to.AddInheritsMatcher<TBase>(() => customMessage);
         }
 
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="TBase">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Inherit<TBase>(
+            this IToAfterNot<Type> to,
+            Func<string> customMessageGenerator
+        )
+        {
+            return to.AddInheritsMatcher<TBase>(customMessageGenerator);
+        }
         /// <summary>
         /// Expectes that the Actual type implements the interface provided
         /// as a generic parameter
@@ -254,7 +333,7 @@ namespace NExpect
             this ITo<Type> to
         )
         {
-            return to.Inherit<TBase>(null);
+            return to.Inherit<TBase>(NULL_STRING);
         }
 
         /// <summary>
@@ -270,12 +349,28 @@ namespace NExpect
             string customMessage
         )
         {
-            return to.AddInheritsMatcher<TBase>(customMessage);
+            return to.AddInheritsMatcher<TBase>(() => customMessage);
+        }
+        
+        /// <summary>
+        /// Expectes that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="TBase">Interface type to look for</typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Inherit<TBase>(
+            this ITo<Type> to,
+            Func<string> customMessageGenerator
+        )
+        {
+            return to.AddInheritsMatcher<TBase>(customMessageGenerator);
         }
 
         private static IMore<Type> AddInheritsMatcher<TBase>(
             this ICanAddMatcher<Type> addTo,
-            string customMessage
+            Func<string> customMessageGenerator
         )
         {
             addTo.AddMatcher(
@@ -286,27 +381,27 @@ namespace NExpect
                     {
                         return new MatcherResult(
                             false,
-                            () => FinalMessageFor(
-                                new[]
+                            FinalMessageFor(
+                                () => new[]
                                 {
                                     actual.Stringify(),
                                     "is not a class."
                                 },
-                                customMessage));
+                                customMessageGenerator));
                     }
 
                     var passed = expected.IsAssignableFrom(actual);
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(
-                            new[]
+                        FinalMessageFor(
+                            () => new[]
                             {
                                 "Expected",
                                 actual.Stringify(),
                                 $"{passed.AsNot()}to inherit",
                                 expected.Stringify()
                             },
-                            customMessage
+                            customMessageGenerator
                         )
                     );
                 });

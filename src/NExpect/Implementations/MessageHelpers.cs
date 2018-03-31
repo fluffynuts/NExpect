@@ -17,8 +17,8 @@ namespace NExpect.Implementations
         /// - use to disambiguate calls between the version which
         /// takes a static string and the version which takes a Func&lt;string&gt;
         /// </summary>
-        internal const string NULL = null;
-        
+        internal const string NULL_STRING = null;
+
         /// <summary>
         /// Not to be confused with NULL, this is the string
         /// put in place of nulls within stringified messages
@@ -44,6 +44,29 @@ namespace NExpect.Implementations
         }
 
         /// <summary>
+        /// Procides a final message, given a standard message generator
+        /// and a custom message generator. If the custom message generator
+        /// return null or whitespace, the standard message alone is returned
+        /// from the result func.
+        /// </summary>
+        /// <param name="standardMessage"></param>
+        /// <param name="customMessageFunc"></param>
+        /// <returns></returns>
+        public static Func<string> FinalMessageFor(
+            Func<string> standardMessage,
+            Func<string> customMessageFunc
+        )
+        {
+            return () =>
+            {
+                var customMessage = customMessageFunc();
+                return string.IsNullOrWhiteSpace(customMessage)
+                    ? standardMessage()
+                    : $"{customMessage}\n\n{standardMessage()}";
+            };
+        }
+
+        /// <summary>
         /// Creates a final message, given standard message parts and
         /// a custom message. When the parts, concatenated with a space,
         /// are longer than the expected max line length, they are split across lines.
@@ -59,12 +82,61 @@ namespace NExpect.Implementations
             return FinalMessageFor(MakeMessage(standardMessageParts), customMessage);
         }
 
+        /// <summary>
+        /// Creates a final message, given standard message parts and
+        /// a custom message generator. When the parts, concatenated with a space,
+        /// are longer than the expected max line length, they are split across lines.
+        /// </summary>
+        /// <param name="standardMessageParts"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <returns></returns>
+        public static Func<string> FinalMessageFor(
+            string[] standardMessageParts,
+            Func<string> customMessageGenerator)
+
+        {
+            return FinalMessageFor(
+                () => MakeMessage(standardMessageParts),
+                customMessageGenerator);
+        }
+
+        /// <summary>
+        /// Creates a final message, given standard message parts generator and
+        /// a custom message generator. When the parts, concatenated with a space,
+        /// are longer than the expected max line length, they are split across lines.
+        /// </summary>
+        /// <param name="standardMessagePartsGenerator"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <returns></returns>
+        public static Func<string> FinalMessageFor(
+            Func<string[]> standardMessagePartsGenerator,
+            Func<string> customMessageGenerator
+        )
+        {
+            return FinalMessageFor(
+                MakeMessage(standardMessagePartsGenerator),
+                customMessageGenerator
+            );
+        }
+
         private static string MakeMessage(params string[] templateParts)
         {
             var firstPass = templateParts.JoinWith(" ");
             return firstPass.Length > DetermineMaxLineLength()
                 ? templateParts.JoinWith("\n")
                 : firstPass;
+        }
+
+        private static Func<string> MakeMessage(Func<string[]> templatePartsGenerator)
+        {
+            return () =>
+            {
+                var templateParts = templatePartsGenerator();
+                var firstPass = templateParts.JoinWith(" ");
+                return firstPass.Length > DetermineMaxLineLength()
+                    ? templateParts.JoinWith("\n")
+                    : firstPass;
+            };
         }
 
 
@@ -94,7 +166,9 @@ namespace NExpect.Implementations
         /// <returns></returns>
         public static string AsNot(this bool passed)
         {
-            return passed ? "not " : "";
+            return passed
+                ? "not "
+                : "";
         }
 
         internal static string MessageForContainsResult(
@@ -189,7 +263,7 @@ namespace NExpect.Implementations
         /// <returns></returns>
         public static string Stringify<T>(this T item)
         {
-            return Stringifier.Stringify(item, NULL);
+            return Stringifier.Stringify(item, NULL_STRING);
         }
     }
 }
