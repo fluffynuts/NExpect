@@ -6,6 +6,7 @@ using Imported.PeanutButter.Utils;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+using static NExpect.EqualityProviderExtensions;
 using static NExpect.Implementations.MessageHelpers;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -30,7 +31,7 @@ namespace NExpect
             TKey key
         )
         {
-            return continuation.Key(key, null);
+            return continuation.Key(key, NULL_STRING);
         }
 
         /// <summary>
@@ -47,10 +48,28 @@ namespace NExpect
             string customMessage
         )
         {
-            AddKeyMatcher(continuation, key, customMessage);
+            return continuation.Key<TKey, TValue>(key, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if the provided collection contains the required key.
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="key">Key to look for</param>
+        /// <param name="customMessageGenerator">Custom message to add to failure messages</param>
+        /// <typeparam name="TKey">Type of the dictionary keys</typeparam>
+        /// <typeparam name="TValue">Type of the dictionary values</typeparam>
+        public static IDictionaryValueContinuation<TValue> Key<TKey, TValue>(
+            this IContain<IEnumerable<KeyValuePair<TKey, TValue>>> continuation,
+            TKey key,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddKeyMatcher(continuation, key, customMessageGenerator);
 
             return CreateValueContinuationFor<TKey, TValue, TValue>(
-                continuation, key
+                continuation,
+                key
             );
         }
 
@@ -66,7 +85,7 @@ namespace NExpect
             TKey key
         )
         {
-            return continuation.Key(key, null);
+            return continuation.Key(key, NULL_STRING);
         }
 
         /// <summary>
@@ -83,10 +102,28 @@ namespace NExpect
             string customMessage
         )
         {
-            AddKeyMatcher(continuation, key, customMessage);
+            return continuation.Key(key, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if the provided collection contains the required key.
+        /// Upcast from sbyte to long for convenience
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="key">Key to look for</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="TKey">Type of the dictionary keys</typeparam>
+        public static IDictionaryValueContinuation<long> Key<TKey>(
+            this IContain<IEnumerable<KeyValuePair<TKey, sbyte>>> continuation,
+            TKey key,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddKeyMatcher(continuation, key, customMessageGenerator);
 
             return CreateValueContinuationFor<TKey, sbyte, long>(
-                continuation, key
+                continuation,
+                key
             );
         }
 
@@ -102,7 +139,7 @@ namespace NExpect
             TKey key
         )
         {
-            return continuation.Key(key, null);
+            return continuation.Key(key, NULL_STRING);
         }
 
         /// <summary>
@@ -119,10 +156,28 @@ namespace NExpect
             string customMessage
         )
         {
-            AddKeyMatcher(continuation, key, customMessage);
+            return continuation.Key(key, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if the provided collection contains the required key.
+        /// Upcast from short to long for convenience
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="key">Key to look for</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="TKey">Type of the dictionary keys</typeparam>
+        public static IDictionaryValueContinuation<long> Key<TKey>(
+            this IContain<IEnumerable<KeyValuePair<TKey, short>>> continuation,
+            TKey key,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddKeyMatcher(continuation, key, customMessageGenerator);
 
             return CreateValueContinuationFor<TKey, short, long>(
-                continuation, key
+                continuation,
+                key
             );
         }
 
@@ -138,7 +193,7 @@ namespace NExpect
             TKey key
         )
         {
-            return continuation.Key(key, null);
+            return continuation.Key(key, NULL_STRING);
         }
 
         /// <summary>
@@ -155,9 +210,27 @@ namespace NExpect
             string customMessage
         )
         {
-            AddKeyMatcher(continuation, key, customMessage);
+            return continuation.Key(key, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if the provided collection contains the required key.
+        /// Upcast from int to long for convenience
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="key">Key to look for</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="TKey">Type of the dictionary keys</typeparam>
+        public static IDictionaryValueContinuation<long> Key<TKey>(
+            this IContain<IEnumerable<KeyValuePair<TKey, int>>> continuation,
+            TKey key,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddKeyMatcher(continuation, key, customMessageGenerator);
             return CreateValueContinuationFor<TKey, int, long>(
-                continuation, key
+                continuation,
+                key
             );
         }
 
@@ -173,7 +246,7 @@ namespace NExpect
             TKey key
         )
         {
-            return continuation.Key(key, null);
+            return continuation.Key(key, NULL_STRING);
         }
 
         /// <summary>
@@ -190,10 +263,28 @@ namespace NExpect
             string customMessage
         )
         {
-            AddKeyMatcher(continuation, key, customMessage);
+            return continuation.Key(key, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if the provided collection contains the required key.
+        /// Upcast from byte to long for convenience
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="key">Key to look for</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="TKey">Type of the dictionary keys</typeparam>
+        public static IDictionaryValueContinuation<long> Key<TKey>(
+            this IContain<IEnumerable<KeyValuePair<TKey, byte>>> continuation,
+            TKey key,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddKeyMatcher(continuation, key, customMessageGenerator);
 
             return CreateValueContinuationFor<TKey, byte, long>(
-                continuation, key
+                continuation,
+                key
             );
         }
 
@@ -209,7 +300,7 @@ namespace NExpect
             TKey key
         )
         {
-            return continuation.Key(key, null);
+            return continuation.Key(key, NULL_STRING);
         }
 
         /// <summary>
@@ -226,10 +317,28 @@ namespace NExpect
             string customMessage
         )
         {
-            AddKeyMatcher(continuation, key, customMessage);
+            return continuation.Key(key, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if the provided collection contains the required key.
+        /// Upcast from ushort to long for convenience
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="key">Key to look for</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="TKey">Type of the dictionary keys</typeparam>
+        public static IDictionaryValueContinuation<long> Key<TKey>(
+            this IContain<IEnumerable<KeyValuePair<TKey, ushort>>> continuation,
+            TKey key,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddKeyMatcher(continuation, key, customMessageGenerator);
 
             return CreateValueContinuationFor<TKey, ushort, long>(
-                continuation, key
+                continuation,
+                key
             );
         }
 
@@ -245,7 +354,7 @@ namespace NExpect
             TKey key
         )
         {
-            return continuation.Key(key, null);
+            return continuation.Key(key, NULL_STRING);
         }
 
         /// <summary>
@@ -262,10 +371,28 @@ namespace NExpect
             string customMessage
         )
         {
-            AddKeyMatcher(continuation, key, customMessage);
+            return continuation.Key(key, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if the provided collection contains the required key.
+        /// Upcast from uint to long for convenience
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="key">Key to look for</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="TKey">Type of the dictionary keys</typeparam>
+        public static IDictionaryValueContinuation<long> Key<TKey>(
+            this IContain<IEnumerable<KeyValuePair<TKey, uint>>> continuation,
+            TKey key,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddKeyMatcher(continuation, key, customMessageGenerator);
 
             return CreateValueContinuationFor<TKey, uint, long>(
-                continuation, key
+                continuation,
+                key
             );
         }
 
@@ -281,7 +408,7 @@ namespace NExpect
             TKey key
         )
         {
-            return continuation.Key(key, null);
+            return continuation.Key(key, NULL_STRING);
         }
 
         /// <summary>
@@ -298,9 +425,27 @@ namespace NExpect
             string customMessage
         )
         {
-            AddKeyMatcher(continuation, key, customMessage);
+            return continuation.Key(key, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if the provided collection contains the required key.
+        /// Upcast from float to double for convenience
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="key">Key to look for</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="TKey">Type of the dictionary keys</typeparam>
+        public static IDictionaryValueContinuation<double> Key<TKey>(
+            this IContain<IEnumerable<KeyValuePair<TKey, float>>> continuation,
+            TKey key,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddKeyMatcher(continuation, key, customMessageGenerator);
             return CreateValueContinuationFor<TKey, float, double>(
-                continuation, key
+                continuation,
+                key
             );
         }
 
@@ -315,7 +460,7 @@ namespace NExpect
             T expected
         )
         {
-            continuation.Value(expected, null);
+            continuation.Value(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -331,34 +476,51 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.Value(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if the provided key value matches the expected value
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Value to match on</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of the values</typeparam>
+        public static void Value<T>(
+            this IDictionaryValueWith<T> continuation,
+            T expected,
+            Func<string> customMessage
+        )
+        {
             continuation.AddMatcher(
-                EqualityProviderExtensions.GenerateEqualityMatcherFor(expected, customMessage)
+                GenerateEqualityMatcherFor(expected, customMessage)
             );
         }
 
         private static void AddKeyMatcher<TKey, TValue>(
             IContain<IEnumerable<KeyValuePair<TKey, TValue>>> continuation,
             TKey key,
-            string customMessage)
+            Func<string> customMessage)
         {
-            continuation.AddMatcher(collection =>
-            {
-                var passed = collection != null && TryFindValueForKey(collection, key, out var _);
+            continuation.AddMatcher(
+                collection =>
+                {
+                    var passed = collection != null && TryFindValueForKey(collection, key, out var _);
 
-                return new MatcherResult(
-                    passed,
-                    () => FinalMessageFor(
-                        new[]
-                        {
-                            "Expected",
-                            collection.LimitedPrint(),
-                            $"{passed.AsNot()}to contain key",
-                            key?.Stringify()
-                        },
-                        customMessage
-                    )
-                );
-            });
+                    return new MatcherResult(
+                        passed,
+                        FinalMessageFor(
+                            () => new[]
+                            {
+                                "Expected",
+                                collection.LimitedPrint(),
+                                $"{passed.AsNot()}to contain key",
+                                key?.Stringify()
+                            },
+                            customMessage
+                        )
+                    );
+                });
         }
 
         private static bool TryFindValueForKey<TKey, TValue>(

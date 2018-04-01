@@ -76,7 +76,7 @@ namespace NExpect
             IEnumerable<T> expected
         )
         {
-            continuation.To(expected, null);
+            continuation.To(expected, NULL_STRING);
         }
 
         private static Func<IEnumerable<T>, IMatcherResult> MakeCollectionDeepEqualMatcherFor<T>(
