@@ -1,4 +1,6 @@
-﻿using NExpect.Implementations;
+﻿using System;
+using NExpect.Helpers;
+using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
@@ -23,7 +25,7 @@ namespace NExpect
             object expected
         )
         {
-            continuation.Equal(expected, null);
+            continuation.Equal(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -39,21 +41,37 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.Equal(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs deep equality testing on two objects
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object</typeparam>
+        public static void Equal<T>(
+            this IDeep<T> continuation,
+            object expected,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
                 actual =>
                 {
                     var passed = DeepTestHelpers.AreDeepEqual(actual, expected);
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(
-                            new[]
+                        FinalMessageFor(
+                            () => new[]
                             {
                                 "Expected",
                                 actual.Stringify(),
                                 $"{passed.AsNot()}to deep equal",
                                 expected.Stringify()
                             },
-                            customMessage
+                            customMessageGenerator
                         )
                     );
                 }

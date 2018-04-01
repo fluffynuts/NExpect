@@ -1,4 +1,5 @@
 ﻿using System;
+using NExpect.Helpers;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;

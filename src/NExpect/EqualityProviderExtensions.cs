@@ -6,7 +6,7 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
 using static PeanutButter.Utils.PyLike;
-using static NExpect.DeepTestHelpers;
+using static NExpect.Helpers.DeepTestHelpers;
 
 // ReSharper disable PossibleMultipleEnumeration
 

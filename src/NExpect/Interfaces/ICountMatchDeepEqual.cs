@@ -5,7 +5,7 @@ namespace NExpect.Interfaces
     /// Provides the .Deep grammar for .Deep.Equal for collection count-matching
     /// </summary>
     /// <typeparam name="T">Type of collection item</typeparam>
-    public interface ICountMatchDeepEqual<T>: ICanAddMatcher<T>, ICountMatch
+    public interface ICountMatchDeepEqual<T>: ICountMatch<T>
     {
     }
 }

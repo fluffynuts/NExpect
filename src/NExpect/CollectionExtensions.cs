@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using NExpect.Exceptions;
+using NExpect.Helpers;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -29,7 +31,7 @@ namespace NExpect
             T search
         )
         {
-            continuation.Contain(search, null);
+            continuation.Contain(search, NULL_STRING);
         }
 
         /// <summary>
@@ -46,17 +48,34 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.Contain(search, () => customMessage);
+        }
+
+        /// <summary>
+        /// Short contain, equivalent to .Contain.At.Least.One.Equal.To(x)
+        /// -> less expressive, but shorter to type (:
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T"></typeparam>
+        public static void Contain<T>(
+            this ICollectionTo<T> continuation,
+            T search,
+            Func<string> customMessageGenerator
+        )
+        {
+//            continuation.AddMatcher(
+//                collection =>
+//                {
+//                    var passed = collection.Contains(search);
+//                    return new MatcherResult(
+//                        passed,
+//                        () => $"Expected {collection.Stringify()} {passed.AsNot()}to contain {search.Stringify()}"
+//                    );
+//                });
             continuation.AddMatcher(
-                collection =>
-                {
-                    var passed = collection.Contains(search);
-                    return new MatcherResult(
-                        passed,
-                        () => $"Expected {collection.Stringify()} {passed.AsNot()}to contain {search.Stringify()}"
-                    );
-                });
-            continuation.AddMatcher(
-                CreateShortContainMatcherFor(search, customMessage)
+                CreateShortContainMatcherFor(search, customMessageGenerator)
             );
         }
 
@@ -72,7 +91,7 @@ namespace NExpect
             T search
         )
         {
-            continuation.Contain(search, null);
+            continuation.Contain(search, NULL_STRING);
         }
 
         /// <summary>
@@ -89,8 +108,25 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.Contain(search, () => customMessage);
+        }
+
+        /// <summary>
+        /// Short contain, equivalent to .Contain.At.Least.One.Equal.To(x)
+        /// -> less expressive, but shorter to type (:
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T"></typeparam>
+        public static void Contain<T>(
+            this ICollectionToAfterNot<T> continuation,
+            T search,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
-                CreateShortContainMatcherFor(search, customMessage)
+                CreateShortContainMatcherFor(search, customMessageGenerator)
             );
         }
 
@@ -106,7 +142,7 @@ namespace NExpect
             T search
         )
         {
-            continuation.Contain(search, null);
+            continuation.Contain(search, NULL_STRING);
         }
 
         /// <summary>
@@ -123,14 +159,31 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.Contain(search, () => customMessage);
+        }
+
+        /// <summary>
+        /// Short contain, equivalent to .Contain.At.Least.One.Equal.To(x)
+        /// -> less expressive, but shorter to type (:
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <param name="customMessageGenerator">Generats a custom message to add to failure messages</param>
+        /// <typeparam name="T"></typeparam>
+        public static void Contain<T>(
+            this ICollectionNotAfterTo<T> continuation,
+            T search,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
-                CreateShortContainMatcherFor(search, customMessage)
+                CreateShortContainMatcherFor(search, customMessageGenerator)
             );
         }
 
         private static Func<IEnumerable<T>, IMatcherResult> CreateShortContainMatcherFor<T>(
             T search,
-            string customMessage
+            Func<string> customMessageGenerator
         )
         {
             return collection =>
@@ -138,15 +191,15 @@ namespace NExpect
                 var passed = collection.Contains(search);
                 return new MatcherResult(
                     passed,
-                    () => FinalMessageFor(
-                        new[]
+                    FinalMessageFor(
+                        () => new[]
                         {
                             "Expected",
                             collection.LimitedPrint(),
                             $"{passed.AsNot()}to contain",
                             search.Stringify()
                         },
-                        customMessage
+                        customMessageGenerator
                     )
                 );
             };
@@ -357,11 +410,13 @@ namespace NExpect
 
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(_collectionCountMessageStrategies[countMatch.Method](
-                                                  passed,
-                                                  search,
-                                                  have,
-                                                  countMatch.ExpectedCount), customMessage)
+                        () => FinalMessageFor(
+                            _collectionCountMessageStrategies[countMatch.Method](
+                                passed,
+                                search,
+                                have,
+                                countMatch.ExpectedCount),
+                            customMessage)
                     );
                 });
         }
@@ -378,7 +433,7 @@ namespace NExpect
             Func<T, bool> test
         )
         {
-            countMatch.By(test, null);
+            countMatch.By(test, NULL_STRING);
         }
 
         /// <summary>
@@ -394,6 +449,22 @@ namespace NExpect
             string customMessage
         )
         {
+            countMatch.By(test, () => customMessage);
+        }
+
+        /// <summary>
+        /// Continuation for Matched, allowing testing the artifact with a simple func
+        /// </summary>
+        /// <param name="countMatch">Matched continuation</param>
+        /// <param name="test">Func to test Actual value with; return true for match, false for non-match</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        /// <typeparam name="T">Type of artifact being tested</typeparam>
+        public static void By<T>(
+            this ICountMatchMatched<IEnumerable<T>> countMatch,
+            Func<T, bool> test,
+            Func<string> customMessageGenerator
+        )
+        {
             countMatch.Continuation.AddMatcher(
                 collection =>
                 {
@@ -404,9 +475,12 @@ namespace NExpect
                     var passed = _collectionCountMatchStrategies[countMatch.Method](have, compare);
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(
-                            _collectionCountMatchMessageStrategies[countMatch.Method](passed, have, countMatch.Compare),
-                            customMessage));
+                        FinalMessageFor(
+                            () => _collectionCountMatchMessageStrategies[countMatch.Method](
+                                passed,
+                                have,
+                                countMatch.Compare),
+                            customMessageGenerator));
                 });
         }
 
@@ -421,7 +495,7 @@ namespace NExpect
             Func<int, T, bool> test
         )
         {
-            countMatch.By(test, null);
+            countMatch.By(test, NULL_STRING);
         }
 
         /// <summary>
@@ -435,6 +509,22 @@ namespace NExpect
             this ICountMatchMatched<IEnumerable<T>> countMatch,
             Func<int, T, bool> test,
             string customMessage
+        )
+        {
+            countMatch.By(test, () => customMessage);
+        }
+
+        /// <summary>
+        /// Continuation for Matched, allowing testing the artifact with a simple func
+        /// </summary>
+        /// <param name="countMatch">Matched continuation</param>
+        /// <param name="test">Func to test Actual value with; return true for match, false for non-match</param>
+        /// <param name="customMessageGenerator">Custom message to include in failure messages</param>
+        /// <typeparam name="T">Type of artifact being tested</typeparam>
+        public static void By<T>(
+            this ICountMatchMatched<IEnumerable<T>> countMatch,
+            Func<int, T, bool> test,
+            Func<string> customMessageGenerator
         )
         {
             countMatch.Continuation.AddMatcher(
@@ -454,9 +544,12 @@ namespace NExpect
                     var passed = _collectionCountMatchStrategies[countMatch.Method](have, compare);
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(
-                            _collectionCountMatchMessageStrategies[countMatch.Method](passed, have, countMatch.Compare),
-                            customMessage));
+                        FinalMessageFor(
+                            () => _collectionCountMatchMessageStrategies[countMatch.Method](
+                                passed,
+                                have,
+                                countMatch.Compare),
+                            customMessageGenerator));
                 });
         }
 
@@ -469,18 +562,32 @@ namespace NExpect
             this ICollectionBe<T> be
         )
         {
-            be.Empty(null);
+            be.Empty(NULL_STRING);
         }
 
         /// <summary>
         /// Tests if a collection is empty from the continuation
         /// </summary>
         /// <param name="be">ICollectionBe&lt;T&gt; continuation</param>
-        /// <param name="customMessage"></param>
+        /// <param name="customMessage">Custom message to include in failure messages</param>
         /// <typeparam name="T">Item type of the collection being tested</typeparam>
         public static void Empty<T>(
             this ICollectionBe<T> be,
             string customMessage
+        )
+        {
+            be.Empty(() => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if a collection is empty from the continuation
+        /// </summary>
+        /// <param name="be">ICollectionBe&lt;T&gt; continuation</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        /// <typeparam name="T">Item type of the collection being tested</typeparam>
+        public static void Empty<T>(
+            this ICollectionBe<T> be,
+            Func<string> customMessageGenerator
         )
         {
             be.AddMatcher(
@@ -489,14 +596,14 @@ namespace NExpect
                     var passed = collection != null && !collection.Any();
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(
-                            new[]
+                        FinalMessageFor(
+                            () => new[]
                             {
                                 "Expected",
                                 collection.LimitedPrint(),
                                 $"{passed.AsNot()}to be an empty collection"
                             },
-                            customMessage
+                            customMessageGenerator
                         )
                     );
                 });
@@ -514,7 +621,7 @@ namespace NExpect
             IEnumerable<T> other
         )
         {
-            equivalent.To(other, null as string);
+            equivalent.To(other, NULL_STRING);
         }
 
         /// <summary>
@@ -530,7 +637,23 @@ namespace NExpect
             string customMessage
         )
         {
-            equivalent.To(other, null as IEqualityComparer<T>, customMessage);
+            equivalent.To(other, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests equivalence with another collection
+        /// </summary>
+        /// <param name="equivalent">continuation for test</param>
+        /// <param name="other">collection to test against</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        /// <typeparam name="T"></typeparam>
+        public static void To<T>(
+            this ICollectionEquivalent<T> equivalent,
+            IEnumerable<T> other,
+            Func<string> customMessageGenerator
+        )
+        {
+            equivalent.To(other, null as IEqualityComparer<T>, customMessageGenerator);
         }
 
         /// <summary>
@@ -546,7 +669,7 @@ namespace NExpect
             IEqualityComparer<T> comparer
         )
         {
-            equivalent.To(other, comparer, null);
+            equivalent.To(other, comparer, NULL_STRING);
         }
 
         /// <summary>
@@ -564,21 +687,39 @@ namespace NExpect
             string customMessage
         )
         {
+            equivalent.To(other, comparer, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests equivalence with another collection
+        /// </summary>
+        /// <param name="equivalent">continuation for test</param>
+        /// <param name="other">collection to test against</param>
+        /// <param name="comparer">Custom equality comparer for each item</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        /// <typeparam name="T"></typeparam>
+        public static void To<T>(
+            this ICollectionEquivalent<T> equivalent,
+            IEnumerable<T> other,
+            IEqualityComparer<T> comparer,
+            Func<string> customMessageGenerator
+        )
+        {
             equivalent.AddMatcher(
                 collection =>
                 {
                     var passed = TestEquivalenceOf(collection, other, comparer ?? new DefaultEqualityComparer<T>());
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(
-                            new[]
+                        FinalMessageFor(
+                            () => new[]
                             {
                                 "Expected",
                                 collection.LimitedPrint(),
                                 $"{passed.AsNot()}to be equivalent to",
                                 other.LimitedPrint()
                             },
-                            customMessage
+                            customMessageGenerator
                         )
                     );
                 });
@@ -597,7 +738,10 @@ namespace NExpect
             Func<T, T, bool> comparer
         )
         {
-            equivalent.To(other, comparer, null);
+            equivalent.To(
+                other,
+                comparer,
+                NULL_STRING);
         }
 
         /// <summary>
@@ -615,7 +759,31 @@ namespace NExpect
             string customMessage
         )
         {
-            equivalent.To(other, new FuncComparer<T>(comparer), customMessage);
+            equivalent.To(
+                other,
+                comparer,
+                () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests equivalence with another collection
+        /// </summary>
+        /// <param name="equivalent">continuation for test</param>
+        /// <param name="other">collection to test against</param>
+        /// <param name="comparer">Custom equality comparer function for each item</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        /// <typeparam name="T"></typeparam>
+        public static void To<T>(
+            this ICollectionEquivalent<T> equivalent,
+            IEnumerable<T> other,
+            Func<T, T, bool> comparer,
+            Func<string> customMessageGenerator
+        )
+        {
+            equivalent.To(
+                other,
+                new FuncComparer<T>(comparer),
+                customMessageGenerator);
         }
 
         /// <summary>
@@ -627,7 +795,7 @@ namespace NExpect
             this ICollectionBe<T> be
         )
         {
-            be.Null(null);
+            be.Null(NULL_STRING);
         }
 
         /// <summary>
@@ -641,20 +809,34 @@ namespace NExpect
             string customMessage
         )
         {
+            be.Null(() => customMessage);
+        }
+
+        /// <summary>
+        /// Tests whether or not a collection is null
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="customMessageGenerator">Provide a custom message to include when the matcher fails</param>
+        /// <typeparam name="T">Collection item type</typeparam>
+        public static void Null<T>(
+            this ICollectionBe<T> be,
+            Func<string> customMessageGenerator
+        )
+        {
             be.AddMatcher(
                 collection =>
                 {
                     var passed = collection == null;
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(
-                            new[]
+                        FinalMessageFor(
+                            () => new[]
                             {
                                 "Expected",
                                 collection.LimitedPrint(),
                                 $"{passed.AsNot()}to be null"
                             },
-                            customMessage)
+                            customMessageGenerator)
                     );
                 });
         }
@@ -668,8 +850,9 @@ namespace NExpect
             this ICollectionUnique<T> unique
         )
         {
-            unique.Items(null);
+            unique.Items(NULL_STRING);
         }
+
 
         /// <summary>
         /// Tests whether or not a collection contains unique items
@@ -682,7 +865,21 @@ namespace NExpect
             string customMessage
         )
         {
-            CheckDistinct(unique, customMessage);
+            unique.Items(() => customMessage);
+        }
+
+        /// <summary>
+        /// Tests whether or not a collection contains unique items
+        /// </summary>
+        /// <param name="unique">Continuation to operate on</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include when the matcher fails</param>
+        /// <typeparam name="T">Collection item type</typeparam>
+        public static void Items<T>(
+            this ICollectionUnique<T> unique,
+            Func<string> customMessageGenerator
+        )
+        {
+            CheckDistinct(unique, customMessageGenerator);
         }
 
         /// <summary>
@@ -694,7 +891,7 @@ namespace NExpect
             this ICollectionBe<T> be
         )
         {
-            be.Distinct(null);
+            be.Distinct(NULL_STRING);
         }
 
         /// <summary>
@@ -708,7 +905,21 @@ namespace NExpect
             string customMessage
         )
         {
-            CheckDistinct(be, customMessage);
+            be.Distinct(() => customMessage);
+        }
+
+        /// <summary>
+        /// Tests whether or not a collection contains unique items
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include when the matcher fails</param>
+        /// <typeparam name="T">Collection item type</typeparam>
+        public static void Distinct<T>(
+            this ICollectionBe<T> be,
+            Func<string> customMessageGenerator
+        )
+        {
+            CheckDistinct(be, customMessageGenerator);
         }
 
         /// <summary>
@@ -720,7 +931,7 @@ namespace NExpect
             this ICountMatchContinuation<IEnumerable<T>> contain
         )
         {
-            contain.Items(null);
+            contain.Items(NULL_STRING);
         }
 
         /// <summary>
@@ -732,9 +943,8 @@ namespace NExpect
             this ICountMatchContinuation<IEnumerable<T>> contain
         )
         {
-            contain.Item(null);
+            contain.Item(NULL_STRING);
         }
-
 
         /// <summary>
         /// Tests for the presence of any items, using the count matcher that preceded
@@ -747,19 +957,46 @@ namespace NExpect
             string customMessage
         )
         {
-            contain.Items(customMessage);
+            contain.Item(() => customMessage);
         }
-
 
         /// <summary>
         /// Tests for the presence of any items, using the count matcher that preceded
         /// </summary>
         /// <param name="contain">Collection to test</param>
-        /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <param name="customMessageGenerator">Custom message to include in failure messages</param>
+        /// <typeparam name="T">Item type of the collection</typeparam>
+        public static void Item<T>(
+            this ICountMatchContinuation<IEnumerable<T>> contain,
+            Func<string> customMessageGenerator
+        )
+        {
+            contain.Items(customMessageGenerator);
+        }
+
+        /// <summary>
+        /// Tests for the presence of any items, using the count matcher that preceded
+        /// </summary>
+        /// <param name="contain">Collection to test</param>
+        /// <param name="customMessage">Generates a custom message to include in failure messages</param>
         /// <typeparam name="T">Item type of the collection</typeparam>
         public static void Items<T>(
             this ICountMatchContinuation<IEnumerable<T>> contain,
             string customMessage
+        )
+        {
+            contain.Items(() => customMessage);
+        }
+
+        /// <summary>
+        /// Tests for the presence of any items, using the count matcher that preceded
+        /// </summary>
+        /// <param name="contain">Collection to test</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        /// <typeparam name="T">Item type of the collection</typeparam>
+        public static void Items<T>(
+            this ICountMatchContinuation<IEnumerable<T>> contain,
+            Func<string> customMessageGenerator
         )
         {
             contain.AddMatcher(
@@ -770,9 +1007,9 @@ namespace NExpect
                     var passed = actual == expected;
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(
-                            $"Expected {passed.AsNot()}to find {expected} items but actually found {actual}",
-                            customMessage
+                        FinalMessageFor(
+                            () => $"Expected {passed.AsNot()}to find {expected} items but actually found {actual}",
+                            customMessageGenerator
                         )
                     );
                 });
@@ -789,7 +1026,7 @@ namespace NExpect
             object expected
         )
         {
-            continuation.To(expected, null);
+            continuation.To(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -805,30 +1042,47 @@ namespace NExpect
             string customMessage
         )
         {
-            continuation.AddMatcher(
-                collection =>
-                {
-                    var actualCount = collection?.Count(
-                                          o => DeepTestHelpers.AreDeepEqual(o, expected)
-                                      ) ?? 0;
-                    var passed = CountPassStrategies[continuation.Method](
-                        actualCount,
-                        continuation.ExpectedCount,
-                        collection?.Count() ?? 0
-                    );
-                    return new MatcherResult(
-                        passed,
-                        () => FinalMessageFor(
-                            new[]
-                            {
-                                $"Expected {passed.AsNot()}to find {continuation.ExpectedCount} items matching",
-                                expected.Stringify(),
-                                $"but actually found {actualCount}"
-                            },
-                            customMessage
-                        )
-                    );
-                });
+            continuation.To(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs count-based deep-equality testing on collections
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Object to match</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        /// <typeparam name="T">Type of collection item</typeparam>
+        public static void To<T>(
+            this ICountMatchDeepEqual<IEnumerable<T>> continuation,
+            object expected,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddEqualityMatcher(
+                continuation,
+                expected,
+                customMessageGenerator,
+                DeepTestHelpers.AreDeepEqual);
+        }
+
+        /// <summary>
+        /// Performs count-based intersection-equality testing on collections
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Object to match</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        /// <typeparam name="T">Type of collection item</typeparam>
+        public static void To<T>(
+            this ICountMatchIntersectionEqual<IEnumerable<T>> continuation,
+            object expected,
+            Func<string> customMessageGenerator
+        )
+        {
+            AddEqualityMatcher(
+                continuation,
+                expected,
+                customMessageGenerator,
+                DeepTestHelpers.AreIntersectionEqual);
         }
 
         /// <summary>
@@ -842,7 +1096,7 @@ namespace NExpect
             object expected
         )
         {
-            continuation.To(expected, null);
+            continuation.To(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -858,13 +1112,20 @@ namespace NExpect
             string customMessage
         )
         {
-            // TODO: Please refactor me -- there's a lot here in common with the .Deep.Equal.To
-            //  extension above, but no (as yet) common interface between the two
+            continuation.To(expected, () => customMessage);
+        }
+
+        private static void AddEqualityMatcher<T>(
+            ICountMatch<IEnumerable<T>> continuation,
+            object expected,
+            Func<string> customMessageGenerator,
+            Func<object, object, bool> mooCakes)
+        {
             continuation.AddMatcher(
                 collection =>
                 {
                     var actualCount = collection?.Count(
-                                          o => DeepTestHelpers.AreIntersectionEqual(o, expected)
+                                          o => mooCakes(o, expected)
                                       ) ?? 0;
                     var passed = CountPassStrategies[continuation.Method](
                         actualCount,
@@ -873,14 +1134,14 @@ namespace NExpect
                     );
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(
-                            new[]
+                        FinalMessageFor(
+                            () => new[]
                             {
                                 $"Expected {passed.AsNot()}to find {continuation.ExpectedCount} items matching",
                                 expected.Stringify(),
                                 $"but actually found {actualCount}"
                             },
-                            customMessage
+                            customMessageGenerator
                         )
                     );
                 });
@@ -909,7 +1170,10 @@ namespace NExpect
             IEnumerable<T> expected
         )
         {
-            continuation.Equal(expected, null as IEqualityComparer<T>, null);
+            continuation.Equal(
+                expected,
+                null as IEqualityComparer<T>,
+                NULL_STRING);
         }
 
         /// <summary>
@@ -923,7 +1187,10 @@ namespace NExpect
             IEnumerable<T> expected
         )
         {
-            continuation.Equal(expected, null as IEqualityComparer<T>, null);
+            continuation.Equal(
+                expected,
+                null as IEqualityComparer<T>,
+                NULL_STRING);
         }
 
         /// <summary>
@@ -939,8 +1206,24 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.Equal(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICollectionToAfterNot<T> continuation,
+            IEnumerable<T> expected,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
-                GenerateEqualityMatcherFor(expected, null, customMessage)
+                GenerateEqualityMatcherFor(expected, null, customMessageGenerator)
             );
         }
 
@@ -957,7 +1240,7 @@ namespace NExpect
             IEqualityComparer<T> comparer
         )
         {
-            continuation.Equal(expected, comparer, null);
+            continuation.Equal(expected, comparer, NULL_STRING);
         }
 
         /// <summary>
@@ -975,8 +1258,26 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.Equal(expected, comparer, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="comparer">Custom item equality comparer</param>
+        /// <param name="customMessageGenerator">Generate a custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICollectionToAfterNot<T> continuation,
+            IEnumerable<T> expected,
+            IEqualityComparer<T> comparer,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
-                GenerateEqualityMatcherFor(expected, comparer, customMessage)
+                GenerateEqualityMatcherFor(expected, comparer, customMessageGenerator)
             );
         }
 
@@ -993,7 +1294,10 @@ namespace NExpect
             Func<T, T, bool> comparer
         )
         {
-            continuation.Equal(expected, comparer, null);
+            continuation.Equal(
+                expected,
+                comparer,
+                NULL_STRING);
         }
 
         /// <summary>
@@ -1011,8 +1315,30 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.Equal(
+                expected,
+                comparer,
+                () => customMessage
+            );
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="comparer">Custom item equality comparer function</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICollectionToAfterNot<T> continuation,
+            IEnumerable<T> expected,
+            Func<T, T, bool> comparer,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
-                GenerateEqualityMatcherFor(expected, new FuncComparer<T>(comparer), customMessage)
+                GenerateEqualityMatcherFor(expected, new FuncComparer<T>(comparer), customMessageGenerator)
             );
         }
 
@@ -1027,7 +1353,10 @@ namespace NExpect
             IEnumerable<T> expected
         )
         {
-            continuation.Equal(expected, null as IEqualityComparer<T>, null);
+            continuation.Equal(
+                expected,
+                null as IEqualityComparer<T>,
+                NULL_STRING);
         }
 
         /// <summary>
@@ -1043,8 +1372,27 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.Equal(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICollectionNotAfterTo<T> continuation,
+            IEnumerable<T> expected,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
-                GenerateEqualityMatcherFor(expected, null, customMessage)
+                GenerateEqualityMatcherFor(
+                    expected,
+                    null,
+                    customMessageGenerator)
             );
         }
 
@@ -1061,7 +1409,10 @@ namespace NExpect
             IEqualityComparer<T> comparer
         )
         {
-            continuation.Equal(expected, comparer, null);
+            continuation.Equal(
+                expected,
+                comparer,
+                NULL_STRING);
         }
 
         /// <summary>
@@ -1079,8 +1430,26 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.Equal(expected, comparer, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="comparer">Custom comparer to use on items</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICollectionNotAfterTo<T> continuation,
+            IEnumerable<T> expected,
+            IEqualityComparer<T> comparer,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
-                GenerateEqualityMatcherFor(expected, comparer, customMessage)
+                GenerateEqualityMatcherFor(expected, comparer, customMessageGenerator)
             );
         }
 
@@ -1097,7 +1466,7 @@ namespace NExpect
             Func<T, T, bool> comparer
         )
         {
-            continuation.Equal(expected, comparer, null);
+            continuation.Equal(expected, comparer, NULL_STRING);
         }
 
         /// <summary>
@@ -1115,8 +1484,29 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.Equal(expected, comparer, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="comparer">Custom comparer function to use on items</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICollectionNotAfterTo<T> continuation,
+            IEnumerable<T> expected,
+            Func<T, T, bool> comparer,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
-                GenerateEqualityMatcherFor(expected, new FuncComparer<T>(comparer), customMessage)
+                GenerateEqualityMatcherFor(
+                    expected,
+                    new FuncComparer<T>(comparer),
+                    customMessageGenerator)
             );
         }
 
@@ -1133,8 +1523,27 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.Equal(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include when failing</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICollectionTo<T> continuation,
+            IEnumerable<T> expected,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
-                GenerateEqualityMatcherFor(expected, null, customMessage)
+                GenerateEqualityMatcherFor(
+                    expected,
+                    null,
+                    customMessageGenerator)
             );
         }
 
@@ -1151,7 +1560,7 @@ namespace NExpect
             IEqualityComparer<T> comparer
         )
         {
-            continuation.Equal(expected, comparer, null);
+            continuation.Equal(expected, comparer, NULL_STRING);
         }
 
         /// <summary>
@@ -1169,7 +1578,25 @@ namespace NExpect
             string customMessage
         )
         {
-            continuation.AddMatcher(GenerateEqualityMatcherFor(expected, comparer, customMessage));
+            continuation.Equal(expected, comparer, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="comparer">Custom item comparer</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICollectionTo<T> continuation,
+            IEnumerable<T> expected,
+            IEqualityComparer<T> comparer,
+            Func<string> customMessageGenerator
+        )
+        {
+            continuation.AddMatcher(GenerateEqualityMatcherFor(expected, comparer, customMessageGenerator));
         }
 
         /// <summary>
@@ -1185,7 +1612,7 @@ namespace NExpect
             Func<T, T, bool> comparer
         )
         {
-            continuation.Equal(expected, comparer, null);
+            continuation.Equal(expected, comparer, NULL_STRING);
         }
 
         /// <summary>
@@ -1203,11 +1630,29 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.Equal(expected, comparer, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="comparer">Custom item comparer Func</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ICollectionTo<T> continuation,
+            IEnumerable<T> expected,
+            Func<T, T, bool> comparer,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
                 GenerateEqualityMatcherFor(
                     expected,
                     new FuncComparer<T>(comparer),
-                    customMessage
+                    customMessageGenerator
                 )
             );
         }
@@ -1223,7 +1668,7 @@ namespace NExpect
             IEnumerable<T> expected
         )
         {
-            continuation.To(expected, null);
+            continuation.To(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -1240,11 +1685,28 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.To(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs in-order equality testing on items in two collections, using
+        /// the Ordinal StringComparison
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected collection to match against</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T">Collection item type</typeparam>
+        public static void To<T>(
+            this ICollectionEqual<T> continuation,
+            IEnumerable<T> expected,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
                 GenerateEqualityMatcherFor(
                     expected,
                     null,
-                    customMessage
+                    customMessageGenerator
                 ));
         }
 
@@ -1254,12 +1716,34 @@ namespace NExpect
         /// </summary>
         /// <param name="continuation">Continuation to act upon</param>
         /// <param name="search">Substring to search for</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        public static void Containing(
+            this ICountMatchContinuationOfStringCollection continuation,
+            string search,
+            Func<string> customMessageGenerator
+        )
+        {
+            continuation.Containing(
+                search,
+                StringComparison.Ordinal,
+                customMessageGenerator);
+        }
+
+        /// <summary>
+        /// Tests a collection of strings for the required number of
+        /// string items containing the provided substring, using the
+        /// Ordinal StringComparison
+        /// </summary>
+        /// <param name="continuation">Continuation to act upon</param>
+        /// <param name="search">Substring to search for</param>
         public static void Containing(
             this ICountMatchContinuationOfStringCollection continuation,
             string search
         )
         {
-            continuation.Containing(search, StringComparison.Ordinal);
+            continuation.Containing(
+                search,
+                StringComparison.Ordinal);
         }
 
         /// <summary>
@@ -1276,7 +1760,10 @@ namespace NExpect
             StringComparison comparison
         )
         {
-            continuation.Containing(search, comparison, null);
+            continuation.Containing(
+                search,
+                comparison,
+                NULL_STRING);
         }
 
         /// <summary>
@@ -1293,7 +1780,10 @@ namespace NExpect
             string customMessage
         )
         {
-            continuation.Containing(search, StringComparison.Ordinal, customMessage);
+            continuation.Containing(
+                search,
+                StringComparison.Ordinal,
+                customMessage);
         }
 
         /// <summary>
@@ -1312,9 +1802,31 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.Containing(
+                search,
+                comparison,
+                () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests a collection of strings for the required number of
+        /// string items containing the provided substring, using the
+        /// provided StringComparison
+        /// </summary>
+        /// <param name="continuation">Continuation to act upon</param>
+        /// <param name="search">Substring to search for</param>
+        /// <param name="comparison">StringComparer to use for locating matches</param>
+        /// <param name="customMessageGenerator">Custom message to add when failing</param>
+        public static void Containing(
+            this ICountMatchContinuationOfStringCollection continuation,
+            string search,
+            StringComparison comparison,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.Matched.By(
                 s => s.IndexOf(search, comparison) > -1,
-                customMessage
+                customMessageGenerator
             );
         }
 
@@ -1330,7 +1842,9 @@ namespace NExpect
             string search
         )
         {
-            continuation.With(search, StringComparison.Ordinal);
+            continuation.With(
+                search,
+                StringComparison.Ordinal);
         }
 
         /// <summary>
@@ -1349,7 +1863,7 @@ namespace NExpect
             continuation.With(
                 search,
                 comparison,
-                null
+                NULL_STRING
             );
         }
 
@@ -1367,10 +1881,27 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.With(search, () => customMessage);
+        }
+
+        /// <summary>
+        /// Searches for strings ending with the provided
+        /// search, using the Ordinal StringComparison, and including
+        /// the provided customMessage for failure
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="search">Substring to search for</param>
+        /// <param name="customMessageGenerator">Custom message to add to failure messages</param>
+        public static void With(
+            this ICountMatchContinuationOfStringCollectionEnding continuation,
+            string search,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.With(
                 search,
                 StringComparison.Ordinal,
-                customMessage
+                customMessageGenerator
             );
         }
 
@@ -1388,6 +1919,28 @@ namespace NExpect
             string search,
             StringComparison comparison,
             string customMessage
+        )
+        {
+            continuation.With(
+                search,
+                comparison,
+                () => customMessage);
+        }
+
+        /// <summary>
+        /// Searches for strings ending with the provided
+        /// search, using the provided comparison, and including
+        /// the provided customMessage for failure
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="search">Substring to search for</param>
+        /// <param name="comparison">Method of string comparison</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        public static void With(
+            this ICountMatchContinuationOfStringCollectionEnding continuation,
+            string search,
+            StringComparison comparison,
+            Func<string> customMessageGenerator
         )
         {
             if (!(continuation is CountMatchContinuationOfStringCollectionVerb concrete))
@@ -1395,7 +1948,7 @@ namespace NExpect
                     $".With() for collections of strings only supported where the concrete continuation is of type {typeof(CountMatchContinuationOfStringCollection)}");
             concrete.Wrapped.Matched.By(
                 s => s.EndsWith(search, comparison),
-                customMessage
+                customMessageGenerator
             );
         }
 
@@ -1412,7 +1965,9 @@ namespace NExpect
             string search
         )
         {
-            continuation.With(search, StringComparison.Ordinal);
+            continuation.With(
+                search,
+                StringComparison.Ordinal);
         }
 
         /// <summary>
@@ -1431,7 +1986,7 @@ namespace NExpect
             continuation.With(
                 search,
                 comparison,
-                null
+                NULL_STRING
             );
         }
 
@@ -1449,10 +2004,27 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.With(search, () => customMessage);
+        }
+
+        /// <summary>
+        /// Searches for strings starting with the provided
+        /// search, using the Ordinal StringComparison, and including
+        /// the provided customMessage for failure
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="search">Substring to search for</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        public static void With(
+            this ICountMatchContinuationOfStringCollectionStarting continuation,
+            string search,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.With(
                 search,
                 StringComparison.Ordinal,
-                customMessage
+                customMessageGenerator
             );
         }
 
@@ -1472,19 +2044,38 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.With(search, comparison, () => customMessage);
+        }
+
+        /// <summary>
+        /// Searches for strings starting with the provided
+        /// search, using the provided comparison, and including
+        /// the provided customMessage for failure
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="search">Substring to search for</param>
+        /// <param name="comparison">Method of string comparison</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        public static void With(
+            this ICountMatchContinuationOfStringCollectionStarting continuation,
+            string search,
+            StringComparison comparison,
+            Func<string> customMessageGenerator
+        )
+        {
             if (!(continuation is CountMatchContinuationOfStringCollectionVerb concrete))
                 throw new InvalidOperationException(
                     $".With() for collections of strings only supported where the concrete continuation is of type {typeof(CountMatchContinuationOfStringCollection)}");
             concrete.Wrapped.Matched.By(
                 s => s.StartsWith(search, comparison),
-                customMessage
+                customMessageGenerator
             );
         }
 
         private static Func<IEnumerable<T>, IMatcherResult> GenerateEqualityMatcherFor<T>(
             IEnumerable<T> expected,
             IEqualityComparer<T> comparer,
-            string customMessage
+            Func<string> customMessageGenerator
         )
         {
             return actual =>
@@ -1492,15 +2083,15 @@ namespace NExpect
                 var passed = AllItemsMatchInOrder(actual, expected, comparer ?? new DefaultEqualityComparer<T>());
                 return new MatcherResult(
                     passed,
-                    () => FinalMessageFor(
-                        new[]
+                    FinalMessageFor(
+                        () => new[]
                         {
                             "Expected collection",
                             actual.LimitedPrint(),
                             $"{passed.AsNot()}to match:",
                             expected.LimitedPrint()
                         },
-                        customMessage)
+                        customMessageGenerator)
                 );
             };
         }
@@ -1596,7 +2187,7 @@ namespace NExpect
         private static void CheckDistinct<T>(
             ICanAddMatcher<IEnumerable<T>>
                 distinct,
-            string customMessage
+            Func<string> customMessageGenerator
         )
         {
             distinct.AddMatcher(
@@ -1605,13 +2196,13 @@ namespace NExpect
                     var passed = collection.IsDistinct();
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(
-                            CreateCheckDistinctMessageFor(
+                        FinalMessageFor(
+                            () => CreateCheckDistinctMessageFor(
                                 collection.LimitedPrint(),
                                 passed,
                                 collection.IsEmpty()
                             ),
-                            customMessage)
+                            customMessageGenerator)
                     );
                 });
         }

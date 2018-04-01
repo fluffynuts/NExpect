@@ -19,4 +19,12 @@ namespace NExpect.Interfaces
         /// </summary>
         int ExpectedCount { get; }
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface ICountMatch<T> : ICountMatch, ICanAddMatcher<T>
+    {
+    }
 }

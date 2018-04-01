@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NExpect.Implementations;
+
 // ReSharper disable PossibleMultipleEnumeration
 
-namespace NExpect
+namespace NExpect.Helpers
 {
     internal static class CollectionFluencyExtensions
     {

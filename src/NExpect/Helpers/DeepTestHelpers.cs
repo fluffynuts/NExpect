@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Imported.PeanutButter.Utils;
 
-namespace NExpect
+namespace NExpect.Helpers
 {
     internal static class DeepTestHelpers
     {

@@ -5,7 +5,7 @@ using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
-using static NExpect.DeepTestHelpers;
+using static NExpect.Helpers.DeepTestHelpers;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable PossibleMultipleEnumeration
 

@@ -5,7 +5,7 @@ namespace NExpect.Interfaces
     /// Provides the .Intersection part of .Intersection.Equal for collection count-matching
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ICountMatchIntersection<T>: ICanAddMatcher<T>
+    public interface ICountMatchIntersection<T>: ICountMatch<T>
     {
         /// <summary>
         /// Provides the .Intersection.Equal grammar for collection-count matching
