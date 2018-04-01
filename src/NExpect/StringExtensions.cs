@@ -232,7 +232,7 @@ namespace NExpect
             string expected
         )
         {
-            return start.With(expected, null);
+            return start.With(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -247,21 +247,36 @@ namespace NExpect
             string customMessage
         )
         {
+            return start.With(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if a string starts with an expected value
+        /// </summary>
+        /// <param name="start">Continuation to operate on</param>
+        /// <param name="expected">String that is expected at the start of the Actual</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        public static IStringMore With(
+            this IStringStart start,
+            string expected,
+            Func<string> customMessageGenerator
+        )
+        {
             start.AddMatcher(
                 actual =>
                 {
                     var passed = actual?.StartsWith(expected) ?? false;
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(
-                            new[]
+                        FinalMessageFor(
+                            () => new[]
                             {
                                 "Expected",
                                 actual.Stringify(),
                                 $"{passed.AsNot()}to start with",
                                 expected.Stringify()
                             },
-                            customMessage
+                            customMessageGenerator
                         )
                     );
                 });
