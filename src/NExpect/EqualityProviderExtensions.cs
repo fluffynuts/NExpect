@@ -29,7 +29,7 @@ namespace NExpect
             this ITo<T> be,
             object expected)
         {
-            be.Be(expected, null);
+            be.Be(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -37,14 +37,29 @@ namespace NExpect
         /// </summary>
         /// <param name="be">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
-        /// <param name="customMessage"></param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
         /// <typeparam name="T">Type of the object being tested</typeparam>
         public static void Be<T>(
             this ITo<T> be,
             object expected,
             string customMessage)
         {
-            be.AddMatcher(CreateRefEqualMatcherFor<T>(expected, () => customMessage));
+            be.Be(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs reference equality checking between your actual and the provided expected value
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of the object being tested</typeparam>
+        public static void Be<T>(
+            this ITo<T> be,
+            object expected,
+            Func<string> customMessageGenerator)
+        {
+            be.AddMatcher(CreateRefEqualMatcherFor<T>(expected, customMessageGenerator));
         }
 
         /// <summary>
@@ -55,7 +70,7 @@ namespace NExpect
         /// <typeparam name="T">Type of the object being tested</typeparam>
         public static void Be<T>(this IToAfterNot<T> be, object expected)
         {
-            be.Be(expected, null);
+            be.Be(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -70,7 +85,22 @@ namespace NExpect
             object expected,
             string customMessage)
         {
-            be.AddMatcher(CreateRefEqualMatcherFor<T>(expected, () => customMessage));
+            be.Be(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs reference equality checking between your actual and the provided expected value
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of the object being tested</typeparam>
+        public static void Be<T>(
+            this IToAfterNot<T> be,
+            object expected,
+            Func<string> customMessageGenerator)
+        {
+            be.AddMatcher(CreateRefEqualMatcherFor<T>(expected, customMessageGenerator));
         }
 
         /// <summary>
@@ -121,13 +151,29 @@ namespace NExpect
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ITo<T> continuation,
+            T expected,
+            string customMessage
+        )
+        {
+            continuation.Equal(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
         public static void Equal<T>(
             this ITo<T> continuation,
             T expected
         )
         {
-            continuation.Equal(expected, null);
+            continuation.Equal(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -141,7 +187,7 @@ namespace NExpect
             T? expected
         ) where T : struct
         {
-            continuation.Equal(expected, null);
+            continuation.Equal(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -157,8 +203,24 @@ namespace NExpect
             string customMessage
         ) where T : struct
         {
+            continuation.Equal(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessageGenerator">Custom message to add into failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ITo<T> continuation,
+            T? expected,
+            Func<string> customMessageGenerator
+        ) where T : struct
+        {
             continuation.AddMatcher(
-                GenerateNullableEqualityMatcherFor(expected, customMessage)
+                GenerateNullableEqualityMatcherFor(expected, customMessageGenerator)
             );
         }
 
@@ -173,7 +235,7 @@ namespace NExpect
             T expected
         )
         {
-            continuation.Equal(expected, null);
+            continuation.Equal(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -189,8 +251,24 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.Equal(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this IToAfterNot<T> continuation,
+            T expected,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
-                GenerateEqualityMatcherFor(expected, customMessage)
+                GenerateEqualityMatcherFor(expected, customMessageGenerator)
             );
         }
 
@@ -205,7 +283,7 @@ namespace NExpect
             T? expected
         ) where T : struct
         {
-            continuation.Equal(expected, null);
+            continuation.Equal(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -221,8 +299,24 @@ namespace NExpect
             string customMessage
         ) where T : struct
         {
+            continuation.Equal(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this IToAfterNot<T> continuation,
+            T? expected,
+            Func<string> customMessageGenerator
+        ) where T : struct
+        {
             continuation.AddMatcher(
-                GenerateNullableEqualityMatcherFor(expected, customMessage)
+                GenerateNullableEqualityMatcherFor(expected, customMessageGenerator)
             );
         }
 
@@ -237,7 +331,7 @@ namespace NExpect
             T expected
         )
         {
-            continuation.Equal(expected, null);
+            continuation.Equal(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -253,8 +347,25 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.Equal(expected, () => customMessage);
+        }
+        
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this INotAfterTo<T> continuation,
+            T expected,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
-                GenerateEqualityMatcherFor(expected, customMessage)
+                GenerateEqualityMatcherFor(expected, customMessageGenerator)
             );
         }
 
@@ -269,7 +380,7 @@ namespace NExpect
             T? expected
         ) where T : struct
         {
-            continuation.Equal(expected, null);
+            continuation.Equal(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -285,8 +396,24 @@ namespace NExpect
             string customMessage
         ) where T : struct
         {
+            continuation.Equal(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this INotAfterTo<T> continuation,
+            T? expected,
+            Func<string> customMessageGenerator
+        ) where T : struct
+        {
             continuation.AddMatcher(
-                GenerateNullableEqualityMatcherFor(expected, customMessage)
+                GenerateNullableEqualityMatcherFor(expected, customMessageGenerator)
             );
         }
 
@@ -295,16 +422,16 @@ namespace NExpect
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
-        /// <param name="customMessage">Custom message to include when failing</param>
+        /// <param name="customMessageGenerator">Custom message to include when failing</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
         public static void Equal<T>(
             this ITo<T> continuation,
             T expected,
-            string customMessage
+            Func<string> customMessageGenerator
         )
         {
             continuation.AddMatcher(
-                GenerateEqualityMatcherFor(expected, customMessage)
+                GenerateEqualityMatcherFor(expected, customMessageGenerator)
             );
         }
 
@@ -332,7 +459,7 @@ namespace NExpect
         public static void Equal<T>(
             this ICollectionIntersection<T> continuation,
             IEnumerable<T> expected,
-            string customMessage
+            Func<string> customMessage
         )
         {
             continuation.AddMatcher(
@@ -367,8 +494,24 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.To(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs intersection-equality testing on two collections
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected collection values</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of collection item</typeparam>
+        public static void To<T>(
+            this ICollectionIntersectionEqual<T> continuation,
+            IEnumerable<T> expected,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
-                MakeCollectionIntersectionEqualMatcherFor(expected, customMessage)
+                MakeCollectionIntersectionEqualMatcherFor(expected, customMessageGenerator)
             );
         }
 
@@ -385,7 +528,7 @@ namespace NExpect
             IEnumerable<T> expected
         )
         {
-            continuation.To(expected, null);
+            continuation.To(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -403,6 +546,24 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.To(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Does deep-equivalence testing on two collections, ignoring complex item referencing.
+        /// Two collections are deep-equivalent when their object data matches, but not necessarily
+        /// in order.
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Collection to match</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add when failing</param>
+        /// <typeparam name="T">Collection item type</typeparam>
+        public static void To<T>(
+            this ICollectionDeepEquivalent<T> continuation,
+            IEnumerable<T> expected,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
                 collection =>
                 {
@@ -417,7 +578,7 @@ namespace NExpect
                                 $"{passed.AsNot()} to be deep equivalent to",
                                 expected.LimitedPrint()
                             },
-                            customMessage
+                            customMessageGenerator
                         ));
                 });
         }
@@ -433,7 +594,7 @@ namespace NExpect
             IEnumerable<T> expected
         )
         {
-            continuation.To(expected, null);
+            continuation.To(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -449,21 +610,37 @@ namespace NExpect
             string customMessage
         )
         {
+            continuation.To(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Provides deep intersection-equality testing for two collections
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected values</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T">Original type of collection</typeparam>
+        public static void To<T>(
+            this ICollectionIntersectionEquivalent<T> continuation,
+            IEnumerable<T> expected,
+            Func<string> customMessageGenerator
+        )
+        {
             continuation.AddMatcher(
                 collection =>
                 {
                     var passed = CollectionsAreIntersectionEquivalent(collection, expected);
                     return new MatcherResult(
                         passed,
-                        () => FinalMessageFor(
-                            new[]
+                        FinalMessageFor(
+                            () => new[]
                             {
                                 "Expected",
                                 collection.LimitedPrint(),
                                 $"{passed.AsNot()} to be intersection equivalent to",
                                 expected.LimitedPrint()
                             },
-                            customMessage
+                            customMessageGenerator
                         )
                     );
                 });
@@ -496,7 +673,7 @@ namespace NExpect
 
         private static Func<T, IMatcherResult> GenerateNullableEqualityMatcherFor<T>(
             T? expected,
-            string customMessage
+            Func<string> customMessage
         ) where T : struct
         {
             return actual =>
@@ -508,7 +685,7 @@ namespace NExpect
 
         private static Func<IEnumerable<T>, IMatcherResult> MakeCollectionIntersectionEqualMatcherFor<T>(
             IEnumerable<T> expected,
-            string customMessage
+            Func<string> customMessage
         )
         {
             return collection =>
@@ -516,8 +693,8 @@ namespace NExpect
                 var passed = CollectionsAreIntersectionEqual(collection, expected);
                 return new MatcherResult(
                     passed,
-                    () => FinalMessageFor(
-                        new[]
+                    FinalMessageFor(
+                        () => new[]
                         {
                             "Expected",
                             collection.LimitedPrint(),
@@ -572,42 +749,45 @@ namespace NExpect
 
         internal static Func<T, IMatcherResult> GenerateEqualityMatcherFor<T>(
             T expected,
-            string customMessage
+            Func<string> customMessageGenerator
         )
         {
-            return actual => CompareForEquality(actual, expected, customMessage);
+            return actual => CompareForEquality(actual, expected, customMessageGenerator);
         }
 
 
-        private static IMatcherResult CompareForEquality<T>(T actual, T expected, string customMessage)
+        private static IMatcherResult CompareForEquality<T>(
+            T actual,
+            T expected,
+            Func<string> customMessageGenerator)
         {
             if (ValuesAreEqual(expected, actual) ||
                 BothAreNull(expected, actual))
             {
                 return new MatcherResult(
                     true,
-                    () => FinalMessageFor(
-                        new[]
+                    FinalMessageFor(
+                        () => new[]
                         {
                             "Did not expect",
                             Quote(expected),
                             "but got exactly that"
                         },
-                        customMessage)
+                        customMessageGenerator)
                 );
             }
 
             return new MatcherResult(
                 false,
-                () => FinalMessageFor(
-                    new[]
+                FinalMessageFor(
+                    () => new[]
                     {
                         "Expected",
                         Quote(expected),
                         "but got",
                         Quote(actual)
                     },
-                    customMessage
+                    customMessageGenerator
                 ));
         }
 

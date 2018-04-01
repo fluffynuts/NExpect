@@ -1,9 +1,8 @@
-using NExpect.Implementations;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
 
-namespace NExpect
+namespace NExpect.Implementations
 {
     internal class ExceptionMessageContainuationToStringContainContinuation
         : ExpectationContext<string>, IStringContainContinuation

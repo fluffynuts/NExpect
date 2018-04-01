@@ -26,7 +26,7 @@ namespace NExpect
             this ICanAddMatcher<Action> src
         )
         {
-            return src.Throw(null);
+            return src.Throw(NULL_STRING);
         }
 
         /// <summary>
@@ -40,6 +40,20 @@ namespace NExpect
             string customMessage
         )
         {
+            return src.Throw(() => customMessage);
+        }
+
+        /// <summary>
+        /// Expects the Action to throw any kind of exception
+        /// </summary>
+        /// <param name="src">Action to run</param>
+        /// <param name="customMessageGenerator">Custom message to add to failure messages</param>
+        /// <returns>Continuation which can be used to test exception messages</returns>
+        public static IThrowContinuation<Exception> Throw(
+            this ICanAddMatcher<Action> src,
+            Func<string> customMessageGenerator
+        )
+        {
             var continuation = new ThrowContinuation<Exception>();
             src.AddMatcher(
                 fn =>
@@ -50,9 +64,9 @@ namespace NExpect
                         fn();
                         result = new MatcherResult(
                             false,
-                            () => FinalMessageFor(
-                                "Expected to throw an exception but none was thrown",
-                                customMessage)
+                            FinalMessageFor(
+                                () => "Expected to throw an exception but none was thrown",
+                                customMessageGenerator)
                         );
                     }
                     catch (Exception ex)
@@ -60,9 +74,9 @@ namespace NExpect
                         continuation.Exception = ex;
                         result = new MatcherResult(
                             true,
-                            () => FinalMessageFor(
-                                $"Exception thrown:\n${ex.Message}\n${ex.StackTrace}",
-                                customMessage
+                            FinalMessageFor(
+                                () => $"Exception thrown:\n${ex.Message}\n${ex.StackTrace}",
+                                customMessageGenerator
                             ));
                     }
 
@@ -115,7 +129,7 @@ namespace NExpect
             this ICanAddMatcher<Action> src
         ) where T : Exception
         {
-            return src.Throw<T>(null);
+            return src.Throw<T>(NULL_STRING);
         }
 
         /// <summary>
@@ -130,6 +144,21 @@ namespace NExpect
             string customMessage
         ) where T : Exception
         {
+            return src.Throw<T>(() => customMessage);
+        }
+
+        /// <summary>
+        /// Expects the action to throw an exception of type T
+        /// </summary>
+        /// <param name="src">Action to test</param>
+        /// <param name="customMessageGenerator">Custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of exception which is expected</typeparam>
+        /// <returns>Continuation which can be used to test exception messages</returns>
+        public static IThrowContinuation<T> Throw<T>(
+            this ICanAddMatcher<Action> src,
+            Func<string> customMessageGenerator
+        ) where T : Exception
+        {
             var continuation = new ThrowContinuation<T>();
             var expectedType = typeof(T);
             src.AddMatcher(
@@ -141,9 +170,9 @@ namespace NExpect
                         fn();
                         result = new MatcherResult(
                             false,
-                            () => FinalMessageFor(
-                                $"Expected to throw an exception of type {expectedType.Name} but none was thrown",
-                                customMessage
+                            FinalMessageFor(
+                                () => $"Expected to throw an exception of type {expectedType.Name} but none was thrown",
+                                customMessageGenerator
                             ));
                     }
                     catch (Exception ex)
@@ -151,9 +180,11 @@ namespace NExpect
                         var passed = ex is T;
                         result = new MatcherResult(
                             passed,
-                            () => FinalMessageFor(passed
-                                                      ? $"Expected not to throw an exception of type {expectedType.Name}"
-                                                      : $"Expected to throw an exception of type {expectedType.Name} but {ex.GetType().Name} was thrown instead ({ex.Message})", customMessage));
+                            FinalMessageFor(
+                                () => passed
+                                    ? $"Expected not to throw an exception of type {expectedType.Name}"
+                                    : $"Expected to throw an exception of type {expectedType.Name} but {ex.GetType().Name} was thrown instead ({ex.Message})",
+                                customMessageGenerator));
                         continuation.Exception = ex as T;
                     }
 
@@ -172,6 +203,37 @@ namespace NExpect
             this IExceptionPropertyContinuation<string> src,
             string search)
         {
+            return src.Containing(search, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Used to test exception messages
+        /// </summary>
+        /// <param name="src">Continuation carrying an exception message</param>
+        /// <param name="search">String to look for in the message</param>
+        /// <param name="customMessage">Custom message to add to a failure message</param>
+        /// <returns>Another continuation so you can do .And() on it</returns>
+        public static IStringContainContinuation Containing(
+            this IExceptionPropertyContinuation<string> src,
+            string search,
+            string customMessage)
+        {
+            return src.Containing(search, () => customMessage);
+        }
+
+
+        /// <summary>
+        /// Used to test exception messages
+        /// </summary>
+        /// <param name="src">Continuation carrying an exception message</param>
+        /// <param name="search">String to look for in the message</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to a failure message</param>
+        /// <returns>Another continuation so you can do .And() on it</returns>
+        public static IStringContainContinuation Containing(
+            this IExceptionPropertyContinuation<string> src,
+            string search,
+            Func<string> customMessageGenerator)
+        {
             var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
                 null,
                 src as IExpectationContext<string>
@@ -188,10 +250,11 @@ namespace NExpect
                     var passed = nextOffset > -1;
                     return new MatcherResult(
                         passed,
-                        () => MessageForContainsResult(
+                        MessageForContainsResult(
                             passed,
                             s,
-                            search
+                            search,
+                            customMessageGenerator
                         )
                     );
                 });
@@ -208,7 +271,38 @@ namespace NExpect
         /// <returns>Another continuation so you can do .And()</returns>
         public static IStringContainContinuation Matching(
             this IExceptionPropertyContinuation<string> src,
-            Func<string, bool> test)
+            Func<string, bool> test
+        )
+        {
+            return src.Matching(test, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Used to test exception messages
+        /// </summary>
+        /// <param name="src">Continuation containing exception message to test</param>
+        /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns>Another continuation so you can do .And()</returns>
+        public static IStringContainContinuation Matching(
+            this IExceptionPropertyContinuation<string> src,
+            Func<string, bool> test,
+            string customMessage)
+        {
+            return src.Matching(test, () => customMessage);
+        }
+
+        /// <summary>
+        /// Used to test exception messages
+        /// </summary>
+        /// <param name="src">Continuation containing exception message to test</param>
+        /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <returns>Another continuation so you can do .And()</returns>
+        public static IStringContainContinuation Matching(
+            this IExceptionPropertyContinuation<string> src,
+            Func<string, bool> test,
+            Func<string> customMessageGenerator)
         {
             var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
                 null,
@@ -221,9 +315,10 @@ namespace NExpect
                     var passed = test(s);
                     return new MatcherResult(
                         passed,
-                        () => MessageForMatchResult(
+                        MessageForMatchResult(
                             passed,
-                            s
+                            s,
+                            customMessageGenerator
                         )
                     );
                 });
@@ -241,6 +336,38 @@ namespace NExpect
             string search
         )
         {
+            return continuation.Containing(search, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Used to test exception messages in the negative
+        /// </summary>
+        /// <param name="continuation">Continuation containing the exception message</param>
+        /// <param name="search">String to search for</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns>Continuation so you can perform more tests on the message</returns>
+        public static IStringContainContinuation Containing(
+            this INot<string> continuation,
+            string search,
+            string customMessage
+        )
+        {
+            return continuation.Containing(search, () => customMessage);
+        }
+
+        /// <summary>
+        /// Used to test exception messages in the negative
+        /// </summary>
+        /// <param name="continuation">Continuation containing the exception message</param>
+        /// <param name="search">String to search for</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <returns>Continuation so you can perform more tests on the message</returns>
+        public static IStringContainContinuation Containing(
+            this INot<string> continuation,
+            string search,
+            Func<string> customMessageGenerator
+        )
+        {
             var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
                 null,
                 continuation as IExpectationContext<string>
@@ -252,10 +379,11 @@ namespace NExpect
                     var passed = !s?.Contains(search) ?? true;
                     return new MatcherResult(
                         passed,
-                        () => MessageForNotContainsResult(
+                        MessageForNotContainsResult(
                             passed,
                             s,
-                            search
+                            search,
+                            customMessageGenerator
                         )
                     );
                 });
@@ -273,6 +401,38 @@ namespace NExpect
             Func<string, bool> test
         )
         {
+            return continuation.Matching(test, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Used to test exception messages in the negative
+        /// </summary>
+        /// <param name="continuation">Continuation containing exception message to test</param>
+        /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns>Another continuation so you can do .And()</returns>
+        public static IStringContainContinuation Matching(
+            this INot<string> continuation,
+            Func<string, bool> test,
+            string customMessage
+        )
+        {
+            return continuation.Matching(test, () => customMessage);
+        }
+
+        /// <summary>
+        /// Used to test exception messages in the negative
+        /// </summary>
+        /// <param name="continuation">Continuation containing exception message to test</param>
+        /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <returns>Another continuation so you can do .And()</returns>
+        public static IStringContainContinuation Matching(
+            this INot<string> continuation,
+            Func<string, bool> test,
+            Func<string> customMessageGenerator
+        )
+        {
             var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
                 null,
                 continuation as IExpectationContext<string>
@@ -284,9 +444,10 @@ namespace NExpect
                     var passed = !test(s);
                     return new MatcherResult(
                         passed,
-                        () => MessageForNotMatchResult(
+                        MessageForNotMatchResult(
                             passed,
-                            s
+                            s,
+                            customMessageGenerator
                         )
                     );
                 });

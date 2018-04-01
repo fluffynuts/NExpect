@@ -183,46 +183,62 @@ namespace NExpect.Implementations
                 : "";
         }
 
-        internal static string MessageForContainsResult(
+        internal static Func<string> MessageForContainsResult(
             bool passed,
             string src,
-            string search
+            string search,
+            Func<string> customMessageGenerator
         )
         {
-            return passed
-                ? $"Expected {Quote(src)} not to contain {Quote(search)}"
-                : $"Expected {Quote(src)} to contain {Quote(search)}";
+            return FinalMessageFor(
+                () => passed
+                    ? $"Expected {Quote(src)} not to contain {Quote(search)}"
+                    : $"Expected {Quote(src)} to contain {Quote(search)}",
+                customMessageGenerator
+            );
         }
 
-        internal static string MessageForMatchResult(
-            bool passed,
-            string src
-        )
-        {
-            return passed
-                ? $"Expected {Quote(src)} not to be matched"
-                : $"Expected {Quote(src)} to be matched";
-        }
-
-        internal static string MessageForNotMatchResult(
-            bool passed,
-            string src
-        )
-        {
-            return passed
-                ? $"Expected {Quote(src)} to be matched"
-                : $"Expected {Quote(src)} not to be matched";
-        }
-
-        internal static string MessageForNotContainsResult(
+        internal static Func<string> MessageForMatchResult(
             bool passed,
             string src,
-            string search
+            Func<string> customMessageGenerator
         )
         {
-            return passed
-                ? $"Expected {Quote(src)} to contain {Quote(search)}"
-                : $"Expected {Quote(src)} not to contain {Quote(search)}";
+            return FinalMessageFor(
+                () => passed
+                    ? $"Expected {Quote(src)} not to be matched"
+                    : $"Expected {Quote(src)} to be matched",
+                customMessageGenerator
+            );
+        }
+
+        internal static Func<string> MessageForNotMatchResult(
+            bool passed,
+            string src,
+            Func<string> customMessageGenerator
+        )
+        {
+            return FinalMessageFor(
+                () => passed
+                    ? $"Expected {Quote(src)} to be matched"
+                    : $"Expected {Quote(src)} not to be matched",
+                customMessageGenerator
+            );
+        }
+
+        internal static Func<string> MessageForNotContainsResult(
+            bool passed,
+            string src,
+            string search,
+            Func<string> customMessageGenerator
+        )
+        {
+            return FinalMessageFor(
+                () => passed
+                    ? $"Expected {Quote(src)} to contain {Quote(search)}"
+                    : $"Expected {Quote(src)} not to contain {Quote(search)}",
+                customMessageGenerator
+            );
         }
 
         /// <summary>
