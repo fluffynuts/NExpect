@@ -468,20 +468,6 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Does deep-equality testing on two collections, ignoring complex item referencing
-        /// </summary>
-        /// <param name="continuation">Continuation to operate on</param>
-        /// <param name="expected">Collection to match</param>
-        /// <typeparam name="T">Collection item type</typeparam>
-        public static void To<T>(
-            this ICollectionDeepEqual<T> continuation,
-            IEnumerable<T> expected
-        )
-        {
-            continuation.To(expected, null);
-        }
-
-        /// <summary>
         /// Performs intersection-equality testing on two collections
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
