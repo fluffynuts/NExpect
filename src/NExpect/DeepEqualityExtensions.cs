@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using Imported.PeanutButter.Utils;
 using NExpect.Helpers;
 using NExpect.Implementations;
 using NExpect.Interfaces;
@@ -19,13 +22,16 @@ namespace NExpect
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
+        /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
+        /// for customising equality testing for properties of type TProperty</param>
         /// <typeparam name="T">Type of object</typeparam>
         public static void Equal<T>(
             this IDeep<T> continuation,
-            object expected
+            object expected,
+            params object[] customEqualityComparers
         )
         {
-            continuation.Equal(expected, NULL_STRING);
+            continuation.Equal(expected, NULL_STRING, customEqualityComparers);
         }
 
         /// <summary>
@@ -34,14 +40,17 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
+        /// for customising equality testing for properties of type TProperty</param>
         /// <typeparam name="T">Type of object</typeparam>
         public static void Equal<T>(
             this IDeep<T> continuation,
             object expected,
-            string customMessage
+            string customMessage,
+            params object[] customEqualityComparers
         )
         {
-            continuation.Equal(expected, () => customMessage);
+            continuation.Equal(expected, () => customMessage, customEqualityComparers);
         }
 
         /// <summary>
@@ -50,17 +59,23 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
+        /// for customising equality testing for properties of type TProperty</param>
         /// <typeparam name="T">Type of object</typeparam>
         public static void Equal<T>(
             this IDeep<T> continuation,
             object expected,
-            Func<string> customMessageGenerator
+            Func<string> customMessageGenerator,
+            params object[] customEqualityComparers
         )
         {
             continuation.AddMatcher(
                 actual =>
                 {
-                    var passed = DeepTestHelpers.AreDeepEqual(actual, expected);
+                    var passed = DeepTestHelpers.AreDeepEqual(
+                        actual,
+                        expected,
+                        customEqualityComparers);
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
@@ -69,7 +84,7 @@ namespace NExpect
                                 "Expected",
                                 actual.Stringify(),
                                 $"{passed.AsNot()}to deep equal",
-                                expected.Stringify()
+                                MessageHelpers.Stringify(expected)
                             },
                             customMessageGenerator
                         )

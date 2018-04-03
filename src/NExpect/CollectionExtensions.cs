@@ -1020,13 +1020,16 @@ namespace NExpect
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Object to match</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Type of collection item</typeparam>
         public static void To<T>(
             this ICountMatchDeepEqual<IEnumerable<T>> continuation,
-            object expected
+            object expected,
+            params object[] customEqualityComparers
         )
         {
-            continuation.To(expected, NULL_STRING);
+            continuation.To(expected, NULL_STRING, customEqualityComparers);
         }
 
         /// <summary>
@@ -1035,14 +1038,17 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Object to match</param>
         /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Type of collection item</typeparam>
         public static void To<T>(
             this ICountMatchDeepEqual<IEnumerable<T>> continuation,
             object expected,
-            string customMessage
+            string customMessage,
+            params object[] customEqualityComparers
         )
         {
-            continuation.To(expected, () => customMessage);
+            continuation.To(expected, () => customMessage, customEqualityComparers);
         }
 
         /// <summary>
@@ -1051,18 +1057,21 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Object to match</param>
         /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Type of collection item</typeparam>
         public static void To<T>(
             this ICountMatchDeepEqual<IEnumerable<T>> continuation,
             object expected,
-            Func<string> customMessageGenerator
+            Func<string> customMessageGenerator,
+            params object[] customEqualityComparers
         )
         {
             AddEqualityMatcher(
                 continuation,
                 expected,
                 customMessageGenerator,
-                DeepTestHelpers.AreDeepEqual);
+                (o1, o2) => DeepTestHelpers.AreDeepEqual(o1, o2, customEqualityComparers));
         }
 
         /// <summary>
@@ -1071,18 +1080,24 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Object to match</param>
         /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Type of collection item</typeparam>
         public static void To<T>(
             this ICountMatchIntersectionEqual<IEnumerable<T>> continuation,
             object expected,
-            Func<string> customMessageGenerator
+            Func<string> customMessageGenerator,
+            params object[] customEqualityComparers
         )
         {
             AddEqualityMatcher(
                 continuation,
                 expected,
                 customMessageGenerator,
-                DeepTestHelpers.AreIntersectionEqual);
+                (item1, item2) => DeepTestHelpers.AreIntersectionEqual(
+                    item1,
+                    item2,
+                    customEqualityComparers));
         }
 
         /// <summary>
@@ -1090,13 +1105,16 @@ namespace NExpect
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Object to match</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Type of collection item</typeparam>
         public static void To<T>(
             this ICountMatchIntersectionEqual<IEnumerable<T>> continuation,
-            object expected
+            object expected,
+            params object[] customEqualityComparers
         )
         {
-            continuation.To(expected, NULL_STRING);
+            continuation.To(expected, NULL_STRING, customEqualityComparers);
         }
 
         /// <summary>
@@ -1105,27 +1123,30 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Object to match</param>
         /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Type of collection item</typeparam>
         public static void To<T>(
             this ICountMatchIntersectionEqual<IEnumerable<T>> continuation,
             object expected,
-            string customMessage
+            string customMessage,
+            params object[] customEqualityComparers
         )
         {
-            continuation.To(expected, () => customMessage);
+            continuation.To(expected, () => customMessage, customEqualityComparers);
         }
 
         private static void AddEqualityMatcher<T>(
             ICountMatch<IEnumerable<T>> continuation,
             object expected,
             Func<string> customMessageGenerator,
-            Func<object, object, bool> mooCakes)
+            Func<object, object, bool> matcher)
         {
             continuation.AddMatcher(
                 collection =>
                 {
                     var actualCount = collection?.Count(
-                                          o => mooCakes(o, expected)
+                                          o => matcher(o, expected)
                                       ) ?? 0;
                     var passed = CountPassStrategies[continuation.Method](
                         actualCount,

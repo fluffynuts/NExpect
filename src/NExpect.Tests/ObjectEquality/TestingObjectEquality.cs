@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using NExpect.Exceptions;
+using NExpect.Tests.Collections;
 using NUnit.Framework;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
@@ -125,7 +127,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(value).To.Be.Equal.To(value);
                         },
@@ -143,7 +146,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(value).To.Be.Equal.To(expected);
                         },
@@ -161,7 +165,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(value).Not.To.Be.Equal.To(unexpected);
                         },
@@ -178,7 +183,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(value).Not.To.Be.Equal.To(value);
                         },
@@ -196,7 +202,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(value).To.Not.Be.Equal.To(unexpected);
                         },
@@ -213,7 +220,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(value).To.Not.Be.Equal.To(value);
                         },
@@ -279,7 +287,8 @@ namespace NExpect.Tests.ObjectEquality
                 }
 
                 [TestFixture]
-                public class LongStuff {
+                public class LongStuff
+                {
                     [Test]
                     public void ShouldSplitLongStringsForEasierComparison()
                     {
@@ -388,10 +397,12 @@ namespace NExpect.Tests.ObjectEquality
                         // Pre-Assert
 
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(left).To.Intersection.Equal(right);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(left).To.Intersection.Equal(right);
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
 
@@ -405,10 +416,12 @@ namespace NExpect.Tests.ObjectEquality
                         var right = new {cow = "cake"};
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(left).To.Intersection.Equal(right);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(left).To.Intersection.Equal(right);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                         // Assert
                     }
 
@@ -421,10 +434,12 @@ namespace NExpect.Tests.ObjectEquality
                         // Pre-Assert
 
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(left).To.Intersection.Equal(right);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(left).To.Intersection.Equal(right);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                         // Assert
                     }
 
@@ -437,10 +452,12 @@ namespace NExpect.Tests.ObjectEquality
                         // Pre-Assert
 
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(left).Not.To.Intersection.Equal(right);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(left).Not.To.Intersection.Equal(right);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                         // Assert
                     }
 
@@ -453,10 +470,30 @@ namespace NExpect.Tests.ObjectEquality
                         // Pre-Assert
 
                         // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(left).To.Not.Intersection.Equal(right);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+
+                    [Test]
+                    public void WithCustomEqualityComparer()
+                    {
+                        // Arrange
+                        var left = new { Date = DateTime.Now };
+                        var right = new { Date = DateTime.Now.AddSeconds(-1) };
+                        // Pre-assert
+                        // Act
                         Assert.That(() =>
                         {
-                            Expect(left).To.Not.Intersection.Equal(right);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            Expect(left).To.Intersection.Equal(
+                                right,
+                                new DriftingDateTimeEqualityComparer()
+                            );
+                        }, Throws.Nothing);
                         // Assert
                     }
                 }
@@ -489,10 +526,12 @@ namespace NExpect.Tests.ObjectEquality
                         // Pre-Assert
 
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(left).To.Deep.Equal(right);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(left).To.Deep.Equal(right);
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
 
@@ -505,10 +544,12 @@ namespace NExpect.Tests.ObjectEquality
                         // Pre-Assert
 
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(left).To.Deep.Equal(right);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(left).To.Deep.Equal(right);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                         // Assert
                     }
 
@@ -521,10 +562,12 @@ namespace NExpect.Tests.ObjectEquality
                         // Pre-Assert
 
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(left).Not.To.Deep.Equal(right);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(left).Not.To.Deep.Equal(right);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                         // Assert
                     }
 
@@ -537,10 +580,28 @@ namespace NExpect.Tests.ObjectEquality
                         // Pre-Assert
 
                         // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(left).To.Not.Deep.Equal(right);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+
+                    [Test]
+                    public void WithCustomEqualityComparer()
+                    {
+                        // Arrange
+                        var left = new {Date = DateTime.Now};
+                        var right = new {Date = DateTime.Now.AddSeconds(-1)};
+                        // Pre-assert
+                        // Act
                         Assert.That(() =>
                         {
-                            Expect(left).To.Not.Deep.Equal(right);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            Expect(left).To.Deep.Equal(
+                                right, new DriftingDateTimeEqualityComparer());
+                        }, Throws.Nothing);
                         // Assert
                     }
                 }
@@ -556,10 +617,12 @@ namespace NExpect.Tests.ObjectEquality
                         var right = new {x = (short) 1};
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(left).To.Deep.Equal(right);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(left).To.Deep.Equal(right);
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
 
@@ -571,10 +634,12 @@ namespace NExpect.Tests.ObjectEquality
                         var right = new {x = (int) short.MaxValue};
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(left).To.Intersection.Equal(right);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(left).To.Intersection.Equal(right);
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
                 }
@@ -591,10 +656,12 @@ namespace NExpect.Tests.ObjectEquality
                 // Pre-Assert
 
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(str).To.Match(s => s == str, "looking for: " + str);
-                }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        Expect(str).To.Match(s => s == str, "looking for: " + str);
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -607,10 +674,12 @@ namespace NExpect.Tests.ObjectEquality
                 // Pre-Assert
 
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(str).To.Match(s => s != str, "looking for: !" + str);
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Assert.That(
+                    () =>
+                    {
+                        Expect(str).To.Match(s => s != str, "looking for: !" + str);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
 
                 // Assert
             }
@@ -623,10 +692,12 @@ namespace NExpect.Tests.ObjectEquality
                 // Pre-Assert
 
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(str).Not.To.Match(s => s != str, "looking for: !" + str);
-                }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        Expect(str).Not.To.Match(s => s != str, "looking for: !" + str);
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -639,10 +710,12 @@ namespace NExpect.Tests.ObjectEquality
                 // Pre-Assert
 
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(str).To.Not.Match(s => s != str, "looking for: !" + str);
-                }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        Expect(str).To.Not.Match(s => s != str, "looking for: !" + str);
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
@@ -665,11 +738,13 @@ namespace NExpect.Tests.ObjectEquality
                         var expected = 8;
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(actual).To.Be.Greater.Than(expected);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains("8 to be greater than 8"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Greater.Than(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("8 to be greater than 8"));
                         // Assert
                     }
 
@@ -681,11 +756,13 @@ namespace NExpect.Tests.ObjectEquality
                         var expected = 8;
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(actual).To.Be.Greater.Than(expected);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains("7 to be greater than 8"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Greater.Than(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("7 to be greater than 8"));
                         // Assert
                     }
 
@@ -699,7 +776,8 @@ namespace NExpect.Tests.ObjectEquality
                         // Pre-Assert
 
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(actual).To.Be.Greater.Than(expected);
                             },
@@ -716,10 +794,12 @@ namespace NExpect.Tests.ObjectEquality
                         decimal test = 0.5M;
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(start).To.Be.Greater.Than(test);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(start).To.Be.Greater.Than(test);
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
 
@@ -731,10 +811,12 @@ namespace NExpect.Tests.ObjectEquality
                         double test = 0.5;
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(start).To.Be.Greater.Than(test);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(start).To.Be.Greater.Than(test);
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
 
@@ -746,10 +828,12 @@ namespace NExpect.Tests.ObjectEquality
                         decimal test = 0.5M;
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(start).To.Be.Greater.Than(test);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(start).To.Be.Greater.Than(test);
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
 
@@ -761,10 +845,12 @@ namespace NExpect.Tests.ObjectEquality
                         float test = 0.5F;
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(start).To.Be.Greater.Than(test);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(start).To.Be.Greater.Than(test);
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
 
@@ -776,10 +862,12 @@ namespace NExpect.Tests.ObjectEquality
                         long test = -1;
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(start).To.Be.Greater.Than(test);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(start).To.Be.Greater.Than(test);
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
 
@@ -791,10 +879,12 @@ namespace NExpect.Tests.ObjectEquality
                         decimal test = 0.5M;
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(start).To.Be.Greater.Than(test);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(start).To.Be.Greater.Than(test);
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
 
@@ -806,10 +896,12 @@ namespace NExpect.Tests.ObjectEquality
                         long test = 0;
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(start).To.Be.Greater.Than(test);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(start).To.Be.Greater.Than(test);
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
 
@@ -821,10 +913,12 @@ namespace NExpect.Tests.ObjectEquality
                         decimal test = 0;
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(start).To.Be.Greater.Than(test);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(start).To.Be.Greater.Than(test);
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
 
@@ -836,10 +930,12 @@ namespace NExpect.Tests.ObjectEquality
                         double test = 0;
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(start).To.Be.Greater.Than(test);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(start).To.Be.Greater.Than(test);
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
 
@@ -851,10 +947,12 @@ namespace NExpect.Tests.ObjectEquality
                         float test = 0.5F;
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(start).To.Be.Greater.Than(test);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(start).To.Be.Greater.Than(test);
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
 
@@ -866,10 +964,12 @@ namespace NExpect.Tests.ObjectEquality
                         int test = 0;
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(start).To.Be.Greater.Than(test);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(start).To.Be.Greater.Than(test);
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
 
@@ -881,10 +981,12 @@ namespace NExpect.Tests.ObjectEquality
                         long test = 0;
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(start).To.Be.Greater.Than(test);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(start).To.Be.Greater.Than(test);
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
 
@@ -897,7 +999,8 @@ namespace NExpect.Tests.ObjectEquality
                         // Pre-Assert
 
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(actual).To.Be.Greater.Than(actual);
                             },
@@ -916,7 +1019,8 @@ namespace NExpect.Tests.ObjectEquality
                         // Pre-Assert
 
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(actual).To.Be.Greater.Than(expected);
                             },
@@ -933,7 +1037,8 @@ namespace NExpect.Tests.ObjectEquality
                         var expected = GetRandomInt(1, 4);
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(actual).Not.To.Be.Greater.Than(expected);
                             },
@@ -949,7 +1054,8 @@ namespace NExpect.Tests.ObjectEquality
                         var expected = GetRandomInt(1, 4);
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(actual).To.Not.Be.Greater.Than(expected);
                             },
@@ -988,12 +1094,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .To.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Nothing);
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Nothing);
                                         // Assert
                                     }
 
@@ -1004,12 +1112,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .Not.To.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .Not.To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                                         // Assert
                                     }
 
@@ -1020,12 +1130,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .To.Not.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Not.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                                         // Assert
                                     }
                                 }
@@ -1048,12 +1160,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .To.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Nothing);
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Nothing);
                                         // Assert
                                     }
 
@@ -1064,12 +1178,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .Not.To.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .Not.To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                                         // Assert
                                     }
 
@@ -1080,12 +1196,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .To.Not.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Not.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                                         // Assert
                                     }
                                 }
@@ -1108,12 +1226,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .To.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Nothing);
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Nothing);
                                         // Assert
                                     }
 
@@ -1124,12 +1244,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .Not.To.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .Not.To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                                         // Assert
                                     }
 
@@ -1140,12 +1262,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .To.Not.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Not.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                                         // Assert
                                     }
                                 }
@@ -1168,12 +1292,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .To.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Nothing);
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Nothing);
                                         // Assert
                                     }
 
@@ -1184,12 +1310,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .Not.To.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .Not.To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                                         // Assert
                                     }
 
@@ -1200,12 +1328,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .To.Not.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Not.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                                         // Assert
                                     }
                                 }
@@ -1228,12 +1358,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .To.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Nothing);
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Nothing);
                                         // Assert
                                     }
 
@@ -1244,12 +1376,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .Not.To.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .Not.To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                                         // Assert
                                     }
 
@@ -1260,12 +1394,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .To.Not.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Not.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                                         // Assert
                                     }
                                 }
@@ -1291,12 +1427,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .To.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Nothing);
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Nothing);
                                         // Assert
                                     }
 
@@ -1307,12 +1445,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .Not.To.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .Not.To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                                         // Assert
                                     }
 
@@ -1323,12 +1463,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .To.Not.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Not.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                                         // Assert
                                     }
 
@@ -1338,17 +1480,31 @@ namespace NExpect.Tests.ObjectEquality
                                         // Arrange
                                         var src = GetRandomDate();
                                         var local =
-                                            new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, src.Second,
+                                            new DateTime(
+                                                src.Year,
+                                                src.Month,
+                                                src.Day,
+                                                src.Hour,
+                                                src.Minute,
+                                                src.Second,
                                                 DateTimeKind.Local);
                                         var utc =
-                                            new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, src.Second,
+                                            new DateTime(
+                                                src.Year,
+                                                src.Month,
+                                                src.Day,
+                                                src.Hour,
+                                                src.Minute,
+                                                src.Second,
                                                 DateTimeKind.Utc);
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(local).To.Equal(utc);
-                                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(local).To.Equal(utc);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                                         // Assert
                                     }
                                 }
@@ -1375,12 +1531,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .To.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Nothing);
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Nothing);
                                         // Assert
                                     }
 
@@ -1391,12 +1549,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .Not.To.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .Not.To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                                         // Assert
                                     }
 
@@ -1407,12 +1567,14 @@ namespace NExpect.Tests.ObjectEquality
                                         var (min, max, actual) = Source();
                                         // Pre-Assert
                                         // Act
-                                        Assert.That(() =>
-                                        {
-                                            Expect(actual)
-                                                .To.Not.Be.Greater.Than(min)
-                                                .And.Less.Than(max);
-                                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Not.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                                         // Assert
                                     }
                                 }
@@ -1433,7 +1595,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = GetRandomInt(6, 12);
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -1449,7 +1612,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = actual;
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -1467,7 +1631,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = GetRandomInt(-5, 0);
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -1485,7 +1650,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = GetRandomInt(-5, 0);
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).Not.To.Be.Less.Than(expected);
                         },
@@ -1511,7 +1677,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
                         },
@@ -1529,7 +1696,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Greater.Than(actual);
                         },
@@ -1548,7 +1716,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
                         },
@@ -1565,7 +1734,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = GetRandomDecimal(-5, 0);
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).Not.To.Be.Less.Than(expected);
                         },
@@ -1585,7 +1755,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = GetRandomDecimal(6, 12);
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -1601,7 +1772,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = actual;
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -1619,7 +1791,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = GetRandomDecimal(-5, 0);
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -1647,7 +1820,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
                         },
@@ -1665,7 +1839,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Greater.Than(actual);
                         },
@@ -1684,7 +1859,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
                         },
@@ -1705,7 +1881,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = GetRandomDouble(6, 12);
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -1721,7 +1898,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = actual;
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -1739,7 +1917,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = GetRandomDouble(-5, 0);
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -1767,7 +1946,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
                         },
@@ -1785,7 +1965,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Greater.Than(actual);
                         },
@@ -1804,7 +1985,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
                         },
@@ -1825,7 +2007,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = GetRandomFloat(6, 12);
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -1841,7 +2024,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = actual;
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -1859,7 +2043,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = GetRandomFloat(-5, 0);
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -1887,7 +2072,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
                         },
@@ -1905,7 +2091,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Greater.Than(actual);
                         },
@@ -1924,7 +2111,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
                         },
@@ -1941,7 +2129,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = GetRandomDate(actual.AddTicks(1), null);
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).Not.To.Be.Greater.Than(expected);
                         },
@@ -1961,7 +2150,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = GetRandomDate(actual.AddTicks(1), null);
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -1977,7 +2167,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = actual;
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -1995,7 +2186,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = GetRandomDate(null, actual.AddTicks(-1));
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -2013,7 +2205,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = GetRandomDate(null, actual.AddTicks(-1));
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).Not.To.Be.Less.Than(expected);
                         },
@@ -2049,7 +2242,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
                         },
@@ -2067,7 +2261,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Greater.Than(actual);
                         },
@@ -2086,7 +2281,8 @@ namespace NExpect.Tests.ObjectEquality
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Greater.Than(expected);
                         },
@@ -2107,7 +2303,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = GetRandomInt(6, 12);
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -2123,7 +2320,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = actual;
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -2141,7 +2339,8 @@ namespace NExpect.Tests.ObjectEquality
                     var expected = GetRandomInt(-5, 0);
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(actual).To.Be.Less.Than(expected);
                         },
@@ -2328,10 +2527,12 @@ namespace NExpect.Tests.ObjectEquality
                 var instance = new Coordinate(2, 3);
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(instance).To.Be(instance);
-                }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        Expect(instance).To.Be(instance);
+                    },
+                    Throws.Nothing);
                 // Assert
             }
 
@@ -2344,11 +2545,13 @@ namespace NExpect.Tests.ObjectEquality
                 // Pre-Assert
                 Assert.That(instance, Is.EqualTo(other));
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(instance).To.Be(other);
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.EqualTo($"Expected {instance} to be the same reference as {other}"));
+                Assert.That(
+                    () =>
+                    {
+                        Expect(instance).To.Be(other);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.EqualTo($"Expected {instance} to be the same reference as {other}"));
                 // Assert
             }
 
@@ -2359,11 +2562,13 @@ namespace NExpect.Tests.ObjectEquality
                 var instance = new Coordinate(2, 3);
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(instance).Not.To.Be(instance);
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.EqualTo($"Expected {instance} not to be the same reference as {instance}"));
+                Assert.That(
+                    () =>
+                    {
+                        Expect(instance).Not.To.Be(instance);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.EqualTo($"Expected {instance} not to be the same reference as {instance}"));
                 // Assert
             }
 
@@ -2376,10 +2581,12 @@ namespace NExpect.Tests.ObjectEquality
                 // Pre-Assert
                 Assert.That(instance, Is.EqualTo(other));
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(instance).Not.To.Be(other);
-                }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        Expect(instance).Not.To.Be(other);
+                    },
+                    Throws.Nothing);
                 // Assert
             }
 
@@ -2390,10 +2597,12 @@ namespace NExpect.Tests.ObjectEquality
                 var collection = new List<int>();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(collection).To.Be(collection);
-                }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        Expect(collection).To.Be(collection);
+                    },
+                    Throws.Nothing);
                 // Assert
             }
 
@@ -2405,10 +2614,12 @@ namespace NExpect.Tests.ObjectEquality
                 var other = new List<int>();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(collection).To.Be(other);
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Assert.That(
+                    () =>
+                    {
+                        Expect(collection).To.Be(other);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
             }
         }
@@ -2424,7 +2635,8 @@ namespace NExpect.Tests.ObjectEquality
                 var expected = GetAnother(actual);
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(actual).To.Equal(expected);
                     },
@@ -2441,7 +2653,8 @@ namespace NExpect.Tests.ObjectEquality
                 var value = GetRandomString();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(value).To.Not.Equal(value);
                     },
@@ -2459,7 +2672,8 @@ namespace NExpect.Tests.ObjectEquality
                 var expected = GetRandomString();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(actual).To.Equal(expected);
                     },
@@ -2477,7 +2691,8 @@ namespace NExpect.Tests.ObjectEquality
                 var expected = new object();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(actual).To.Equal(expected);
                     },
@@ -2495,7 +2710,8 @@ namespace NExpect.Tests.ObjectEquality
                 var expected = GetAnother(actual);
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(actual).To.Equal(expected);
                     },
@@ -2513,7 +2729,8 @@ namespace NExpect.Tests.ObjectEquality
                 var expected = new object();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(actual).To.Equal(expected);
                     },

@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Imported.PeanutButter.Utils;
 
 namespace NExpect.Helpers
 {
     internal static class DeepTestHelpers
     {
-        internal static bool AreIntersectionEqual<T>(T item1, T item2)
+        internal static bool AreIntersectionEqual<T>(
+            T item1,
+            T item2,
+            params object[] customEqualityComparers)
         {
             var tester = new DeepEqualityTester(item1, item2)
             {
@@ -16,10 +20,22 @@ namespace NExpect.Helpers
                 FailOnMissingProperties = false,
                 IncludeFields = true
             };
+            AddCustomComparerersTo(tester, customEqualityComparers);
             return tester.AreDeepEqual();
         }
 
-        internal static bool AreDeepEqual(object item1, object item2)
+        internal static bool AreDeepEqual(
+            object item1,
+            object item2
+        )
+        {
+            return AreDeepEqual(item1, item2, null);
+        }
+
+        internal static bool AreDeepEqual(
+            object item1,
+            object item2,
+            object[] customEqualityComparers)
         {
             var tester = new DeepEqualityTester(item1, item2)
             {
@@ -28,7 +44,40 @@ namespace NExpect.Helpers
                 IncludeFields = true,
                 OnlyTestIntersectingProperties = false
             };
+            AddCustomComparerersTo(tester, customEqualityComparers);
             return tester.AreDeepEqual();
+        }
+
+        private static void AddCustomComparerersTo(
+            DeepEqualityTester tester,
+            params object[] customEqualityComparers)
+        {
+            ValidateAreComparers(customEqualityComparers);
+            customEqualityComparers.ForEach(o => tester.AddCustomComparer(o));
+        }
+
+        private static readonly MethodInfo AddComparerMethod =
+            typeof(DeepEqualityTester).GetMethods()
+                .FirstOrDefault(
+                    mi => mi.Name == nameof(DeepEqualityTester.AddCustomComparer) &&
+                          !mi.IsGenericMethod);
+
+        private static void ValidateAreComparers(object[] customEqualityComparers)
+        {
+            var invalid = customEqualityComparers.Where(
+                o =>
+                {
+                    var implemented = o.GetType().GetTypeInfo().ImplementedInterfaces;
+                    var match = implemented.FirstOrDefault(i => i.IsGenericOf(typeof(IEqualityComparer<>)));
+                    return match == null;
+                }).ToArray();
+            if (invalid.Any())
+            {
+                var names = invalid.Select(t => t.GetType().PrettyName()).JoinWith(",");
+                throw new ArgumentException(
+                    $"Custom equality comparers must implement IEqualityComparer<T>. The following do not: {names}"
+                );
+            }
         }
 
         internal static bool CollectionCompare<T>(

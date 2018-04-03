@@ -21,13 +21,16 @@ namespace NExpect
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Collection to match</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Collection item type</typeparam>
         public static void To<T>(
             this ICollectionDeepEquivalent<T> continuation,
-            IEnumerable<T> expected
+            IEnumerable<T> expected,
+            params object[] customEqualityComparers
         )
         {
-            continuation.To(expected, NULL_STRING);
+            continuation.To(expected, NULL_STRING, customEqualityComparers);
         }
 
         /// <summary>
@@ -38,14 +41,17 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Collection to match</param>
         /// <param name="customMessage">Custom message to add when failing</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Collection item type</typeparam>
         public static void To<T>(
             this ICollectionDeepEquivalent<T> continuation,
             IEnumerable<T> expected,
-            string customMessage
+            string customMessage,
+            params object[] customEqualityComparers
         )
         {
-            continuation.To(expected, () => customMessage);
+            continuation.To(expected, () => customMessage, customEqualityComparers);
         }
 
         /// <summary>
@@ -56,17 +62,21 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Collection to match</param>
         /// <param name="customMessageGenerator">Generates a custom message to add when failing</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Collection item type</typeparam>
         public static void To<T>(
             this ICollectionDeepEquivalent<T> continuation,
             IEnumerable<T> expected,
-            Func<string> customMessageGenerator
+            Func<string> customMessageGenerator,
+            params object[] customEqualityComparers
         )
         {
             continuation.AddMatcher(
                 collection =>
                 {
-                    var passed = CollectionsAreDeepEquivalent(collection, expected);
+                    var passed = CollectionsAreDeepEquivalent(
+                        collection, expected, customEqualityComparers);
                     return new MatcherResult(
                         passed,
                         () => FinalMessageFor(
@@ -84,7 +94,8 @@ namespace NExpect
 
         private static bool CollectionsAreDeepEquivalent<T>(
             IEnumerable<T> collection,
-            IEnumerable<T> expected)
+            IEnumerable<T> expected,
+            object[] customEqualityComparers)
         {
             return CollectionCompare(
                 collection,
@@ -95,7 +106,7 @@ namespace NExpect
                     {
                         var currentMaster = master.First();
                         var compareMatch = compare.FirstOrDefault(
-                            c => AreDeepEqual(currentMaster, c));
+                            c => AreDeepEqual(currentMaster, c, customEqualityComparers));
                         if (compareMatch == null)
                             return false;
                         master.Remove(currentMaster);

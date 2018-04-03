@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections;
 using NUnit.Framework;
 using NExpect.Exceptions;
+using PeanutButter.Utils;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+
 // ReSharper disable MemberHidesStaticFromOuterClass
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
@@ -65,7 +68,8 @@ namespace NExpect.Tests.Collections
                         var second = new[] {o2(1, "bob"), o2(2, "janet")};
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(first).As.Objects.To.Deep.Equal(second);
                             },
@@ -81,7 +85,8 @@ namespace NExpect.Tests.Collections
                         var second = new[] {o1(1, "bob"), o1(2, "janet")};
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(first).Not.To.Deep.Equal(second);
                             },
@@ -97,7 +102,8 @@ namespace NExpect.Tests.Collections
                         var second = new[] {o1(1, "bob"), o1(2, "janet")};
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(first).To.Not.Deep.Equal(second);
                             },
@@ -113,9 +119,29 @@ namespace NExpect.Tests.Collections
                         var second = new[] {o1(1, "bob"), o1(2, "janet")};
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(first).To.Be.Deep.Equal.To(second);
+                            },
+                            Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void WithCustomComparer()
+                    {
+                        // Arrange
+                        var first = new[] {new {Date = DateTime.Now}};
+                        var second = new[] {new {Date = DateTime.Now.AddSeconds(-1)}};
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(first).To.Be.Deep.Equal.To(
+                                    second,
+                                    new DriftingDateTimeEqualityComparer());
                             },
                             Throws.Nothing);
                         // Assert
@@ -129,7 +155,8 @@ namespace NExpect.Tests.Collections
                         var second = new[] {o1(1, "bob"), o1(2, "janet")};
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(first).Not.To.Be.Deep.Equal.To(second);
                             },
@@ -145,7 +172,8 @@ namespace NExpect.Tests.Collections
                         var second = new[] {o1(1, "bobby"), o1(2, "janet"), o1(3, "paddy")};
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(first).To.Deep.Equal(second);
                             },
@@ -161,7 +189,8 @@ namespace NExpect.Tests.Collections
                         var second = new[] {o1(1, "bob"), o1(2, "janet"), o1(3, "mcgee")};
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(first).To.Deep.Equal(second);
                             },
@@ -176,19 +205,61 @@ namespace NExpect.Tests.Collections
                         var src = GetRandomDate();
                         var local = new
                         {
-                            Date = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, src.Second, src.Millisecond, DateTimeKind.Local)
+                            Date = new DateTime(
+                                src.Year,
+                                src.Month,
+                                src.Day,
+                                src.Hour,
+                                src.Minute,
+                                src.Second,
+                                src.Millisecond,
+                                DateTimeKind.Local)
                         };
                         var utc = new
                         {
-                            Date = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, src.Second, src.Millisecond, DateTimeKind.Utc)
+                            Date = new DateTime(
+                                src.Year,
+                                src.Month,
+                                src.Day,
+                                src.Hour,
+                                src.Minute,
+                                src.Second,
+                                src.Millisecond,
+                                DateTimeKind.Utc)
                         };
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(local).To.Deep.Equal(utc);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(local).To.Deep.Equal(utc);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>());
                         // Assert
+                    }
+
+                    [TestFixture]
+                    public class UsingCustomEqualityComparers
+                    {
+                        [Test]
+                        public void AllowingDateTimeDrift()
+                        {
+                            // Arrange
+                            var left = new {Date = DateTime.Now};
+                            var right = new {Date = left.Date.AddSeconds(1)};
+
+                            // Pre-assert
+                            // Act
+                            Assert.That(
+                                () =>
+                                {
+                                    Expect(left).To.Deep.Equal(
+                                        right,
+                                        new DriftingDateTimeEqualityComparer());
+                                },
+                                Throws.Nothing);
+                            // Assert
+                        }
                     }
                 }
             }
@@ -246,7 +317,8 @@ namespace NExpect.Tests.Collections
                         var second = new[] {o2(2, "cow"), o2(1, "moo")};
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(first).As.Objects.To.Be.Intersection.Equivalent.To(second);
                             },
@@ -262,7 +334,8 @@ namespace NExpect.Tests.Collections
                         var second = new[] {o2(2, "cow"), o2(1, "moo")};
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(first).As.Objects.Not.To.Be.Intersection.Equivalent.To(second);
                             },
@@ -278,7 +351,8 @@ namespace NExpect.Tests.Collections
                         var second = new[] {o2(2, "cow"), o2(1, "moo")};
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(first).As.Objects.To.Not.Be.Intersection.Equivalent.To(second);
                             },
@@ -294,12 +368,37 @@ namespace NExpect.Tests.Collections
                         var second = new[] {o2(1, "bobby"), o2(2, "janet")};
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(first).As.Objects.To.Be.Intersection.Equivalent.To(second);
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>());
                         // Assert
+                    }
+
+                    [TestFixture]
+                    public class UsingCustomEqualityComparers
+                    {
+                        [Test]
+                        public void AllowingDateTimeDrift()
+                        {
+                            // Arrange
+                            var left = new {Date = DateTime.Now}.AsArray();
+                            var right = new {Date = left[0].Date.AddSeconds(1)}.AsArray();
+
+                            // Pre-assert
+                            // Act
+                            Assert.That(
+                                () =>
+                                {
+                                    Expect(left).As.Objects.To.Be.Intersection.Equivalent.To(
+                                        right,
+                                        new DriftingDateTimeEqualityComparer());
+                                },
+                                Throws.Nothing);
+                            // Assert
+                        }
                     }
                 }
             }
@@ -315,7 +414,8 @@ namespace NExpect.Tests.Collections
                     var second = new[] {o2(1, "bob"), o2(2, "janet")};
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(first).As.Objects.To.Intersection.Equal(second);
                         },
@@ -331,7 +431,8 @@ namespace NExpect.Tests.Collections
                     var second = new[] {o2(1, "bob"), o2(2, "janet")};
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(first).As.Objects.Not.To.Intersection.Equal(second);
                         },
@@ -347,7 +448,8 @@ namespace NExpect.Tests.Collections
                     var second = new[] {o2(1, "bob"), o2(2, "janet")};
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(first).As.Objects.To.Not.Intersection.Equal(second);
                         },
@@ -363,7 +465,8 @@ namespace NExpect.Tests.Collections
                     var second = new[] {o2(1, "bob"), o2(2, "janet")};
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(first).As.Objects.To.Be.Intersection.Equal.To(second);
                         },
@@ -379,7 +482,8 @@ namespace NExpect.Tests.Collections
                     var second = new[] {o2(1, "bob"), o2(2, "janet")};
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(first).As.Objects.Not.To.Be.Intersection.Equal.To(second);
                         },
@@ -395,7 +499,8 @@ namespace NExpect.Tests.Collections
                     var second = new[] {o2(1, "bobby"), o2(2, "janet"), o2(3, "paddy")};
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(first).As.Objects.To.Intersection.Equal(second);
                         },
@@ -411,11 +516,35 @@ namespace NExpect.Tests.Collections
                     var second = new[] {o2(1, "bob"), o2(2, "janet"), o2(3, "mcgee")};
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(first).As.Objects.To.Intersection.Equal(second);
                         },
                         Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    // Assert
+                }
+
+                [Test]
+                public void AllowingDateTimeDrift()
+                {
+                    // Arrange
+                    var left = new {Date = DateTime.Now}.AsArray();
+                    var right = new {Date = left[0].Date.AddSeconds(1)}.AsArray();
+
+                    // Pre-assert
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(left).As.Objects.To.Intersection.Equal(
+                                right,
+                                new DriftingDateTimeEqualityComparer());
+                            Expect(left).As.Objects.To.Be.Intersection.Equal.To(
+                                right,
+                                new DriftingDateTimeEqualityComparer());
+                        },
+                        Throws.Nothing);
                     // Assert
                 }
             }
@@ -455,38 +584,61 @@ namespace NExpect.Tests.Collections
                                 // Arrange
                                 var src = new[]
                                 {
-                                    new Item1 {Id = 1, Name = "moo"},
-                                    new Item1 {Id = 2, Name = "Cake"}
+                                    new Item1
+                                    {
+                                        Id = 1,
+                                        Name = "moo"
+                                    },
+                                    new Item1
+                                    {
+                                        Id = 2,
+                                        Name = "Cake"
+                                    }
                                 };
                                 // Pre-Assert
                                 // Act
                                 // FIXME: this is lazy -- should have a separate test fixture
                                 //  for At.Least and At.Most; I'm just in a bit of a hurry and
                                 //  need to prove the syntax
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(src)
                                             .To.Contain.Exactly(1)
                                             .Intersection.Equal.To(
-                                                new Item2 {Id = 1, Name = "moo"}
+                                                new Item2
+                                                {
+                                                    Id = 1,
+                                                    Name = "moo"
+                                                }
                                             );
                                     },
                                     Throws.Nothing);
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(src)
                                             .To.Contain.At.Least(1)
                                             .Intersection.Equal.To(
-                                                new Item2 {Id = 1, Name = "moo"}
+                                                new Item2
+                                                {
+                                                    Id = 1,
+                                                    Name = "moo"
+                                                }
                                             );
                                     },
                                     Throws.Nothing);
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(src)
                                             .To.Contain.At.Most(1)
                                             .Intersection.Equal.To(
-                                                new Item2 {Id = 1, Name = "moo"}
+                                                new Item2
+                                                {
+                                                    Id = 1,
+                                                    Name = "moo"
+                                                }
                                             );
                                     },
                                     Throws.Nothing);
@@ -499,20 +651,54 @@ namespace NExpect.Tests.Collections
                                 // Arrange
                                 var src = new[]
                                 {
-                                    new Item1 {Id = 1, Name = "moo"},
-                                    new Item1 {Id = 2, Name = "Cake"}
+                                    new Item1
+                                    {
+                                        Id = 1,
+                                        Name = "moo"
+                                    },
+                                    new Item1
+                                    {
+                                        Id = 2,
+                                        Name = "Cake"
+                                    }
                                 };
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(src)
                                             .Not.To.Contain.Exactly(1)
                                             .Intersection.Equal.To(
-                                                new Item2 {Id = 1, Name = "moo"}
+                                                new Item2
+                                                {
+                                                    Id = 1,
+                                                    Name = "moo"
+                                                }
                                             );
                                     },
                                     Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                // Assert
+                            }
+
+                            [Test]
+                            public void CountMatchWithCustomComparer()
+                            {
+                                // Arrange
+                                var left = new[] {new {Date = DateTime.Now}};
+                                var search = new {Date = DateTime.Now.AddSeconds(-1)};
+                                // Pre-assert
+                                // Act
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(left).To.Contain.Only(1)
+                                            .Intersection.Equal.To(
+                                                search,
+                                                new DriftingDateTimeEqualityComparer()
+                                            );
+                                    },
+                                    Throws.Nothing);
                                 // Assert
                             }
 
@@ -522,17 +708,30 @@ namespace NExpect.Tests.Collections
                                 // Arrange
                                 var src = new[]
                                 {
-                                    new Item1 {Id = 1, Name = "moo"},
-                                    new Item1 {Id = 2, Name = "Cake"}
+                                    new Item1
+                                    {
+                                        Id = 1,
+                                        Name = "moo"
+                                    },
+                                    new Item1
+                                    {
+                                        Id = 2,
+                                        Name = "Cake"
+                                    }
                                 };
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(src)
                                             .To.Not.Contain.Exactly(1)
                                             .Intersection.Equal.To(
-                                                new Item2 {Id = 1, Name = "moo"}
+                                                new Item2
+                                                {
+                                                    Id = 1,
+                                                    Name = "moo"
+                                                }
                                             );
                                     },
                                     Throws.Exception.InstanceOf<UnmetExpectationException>());
@@ -545,17 +744,30 @@ namespace NExpect.Tests.Collections
                                 // Arrange
                                 var src = new[]
                                 {
-                                    new Item1 {Id = 1, Name = "moo"},
-                                    new Item1 {Id = 2, Name = "Cake"}
+                                    new Item1
+                                    {
+                                        Id = 1,
+                                        Name = "moo"
+                                    },
+                                    new Item1
+                                    {
+                                        Id = 2,
+                                        Name = "Cake"
+                                    }
                                 };
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(src)
                                             .To.Contain.Exactly(1)
                                             .Intersection.Equal.To(
-                                                new Item2 {Id = 1, Name = "bar"}
+                                                new Item2
+                                                {
+                                                    Id = 1,
+                                                    Name = "bar"
+                                                }
                                             );
                                     },
                                     Throws.Exception.InstanceOf<UnmetExpectationException>());
@@ -568,17 +780,30 @@ namespace NExpect.Tests.Collections
                                 // Arrange
                                 var src = new[]
                                 {
-                                    new Item1 {Id = 1, Name = "moo"},
-                                    new Item1 {Id = 2, Name = "Cake"}
+                                    new Item1
+                                    {
+                                        Id = 1,
+                                        Name = "moo"
+                                    },
+                                    new Item1
+                                    {
+                                        Id = 2,
+                                        Name = "Cake"
+                                    }
                                 };
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(src)
                                             .To.Contain.At.Least(2)
                                             .Intersection.Equal.To(
-                                                new Item2 {Id = 1, Name = "Cake"}
+                                                new Item2
+                                                {
+                                                    Id = 1,
+                                                    Name = "Cake"
+                                                }
                                             );
                                     },
                                     Throws.Exception.InstanceOf<UnmetExpectationException>());
@@ -603,17 +828,30 @@ namespace NExpect.Tests.Collections
                                 // Arrange
                                 var src = new[]
                                 {
-                                    new {Id = 1, Name = "moo"},
-                                    new {Id = 2, Name = "Cake"}
+                                    new
+                                    {
+                                        Id = 1,
+                                        Name = "moo"
+                                    },
+                                    new
+                                    {
+                                        Id = 2,
+                                        Name = "Cake"
+                                    }
                                 };
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(src)
                                             .To.Contain.Exactly(1)
                                             .Deep.Equal.To(
-                                                new {Id = 1, Name = "moo"}
+                                                new
+                                                {
+                                                    Id = 1,
+                                                    Name = "moo"
+                                                }
                                             );
                                     },
                                     Throws.Nothing);
@@ -626,17 +864,30 @@ namespace NExpect.Tests.Collections
                                 // Arrange
                                 var src = new[]
                                 {
-                                    new {Id = 1, Name = "moo"},
-                                    new {Id = 2, Name = "Cake"}
+                                    new
+                                    {
+                                        Id = 1,
+                                        Name = "moo"
+                                    },
+                                    new
+                                    {
+                                        Id = 2,
+                                        Name = "Cake"
+                                    }
                                 };
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(src)
                                             .Not.To.Contain.Exactly(1)
                                             .Deep.Equal.To(
-                                                new {Id = 1, Name = "moo"}
+                                                new
+                                                {
+                                                    Id = 1,
+                                                    Name = "moo"
+                                                }
                                             );
                                     },
                                     Throws.Exception.InstanceOf<UnmetExpectationException>());
@@ -649,17 +900,30 @@ namespace NExpect.Tests.Collections
                                 // Arrange
                                 var src = new[]
                                 {
-                                    new {Id = 1, Name = "moo"},
-                                    new {Id = 2, Name = "Cake"}
+                                    new
+                                    {
+                                        Id = 1,
+                                        Name = "moo"
+                                    },
+                                    new
+                                    {
+                                        Id = 2,
+                                        Name = "Cake"
+                                    }
                                 };
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(src)
                                             .To.Not.Contain.Exactly(1)
                                             .Deep.Equal.To(
-                                                new {Id = 1, Name = "moo"}
+                                                new
+                                                {
+                                                    Id = 1,
+                                                    Name = "moo"
+                                                }
                                             );
                                     },
                                     Throws.Exception.InstanceOf<UnmetExpectationException>());
@@ -672,17 +936,30 @@ namespace NExpect.Tests.Collections
                                 // Arrange
                                 var src = new[]
                                 {
-                                    new {Id = 1, Name = "moo"},
-                                    new {Id = 2, Name = "Cake"}
+                                    new
+                                    {
+                                        Id = 1,
+                                        Name = "moo"
+                                    },
+                                    new
+                                    {
+                                        Id = 2,
+                                        Name = "Cake"
+                                    }
                                 };
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(src)
                                             .To.Contain.Exactly(1)
                                             .Deep.Equal.To(
-                                                new {Id = 1, Name = "bar"}
+                                                new
+                                                {
+                                                    Id = 1,
+                                                    Name = "bar"
+                                                }
                                             );
                                     },
                                     Throws.Exception.InstanceOf<UnmetExpectationException>());
@@ -695,20 +972,52 @@ namespace NExpect.Tests.Collections
                                 // Arrange
                                 var src = new[]
                                 {
-                                    new {Id = 1, Name = "moo"},
-                                    new {Id = 2, Name = "Cake"}
+                                    new
+                                    {
+                                        Id = 1,
+                                        Name = "moo"
+                                    },
+                                    new
+                                    {
+                                        Id = 2,
+                                        Name = "Cake"
+                                    }
                                 };
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(src)
                                             .To.Contain.Exactly(2)
                                             .Deep.Equal.To(
-                                                new {Id = 1, Name = "Cake"}
+                                                new
+                                                {
+                                                    Id = 1,
+                                                    Name = "Cake"
+                                                }
                                             );
                                     },
                                     Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                // Assert
+                            }
+
+                            [Test]
+                            public void UsingCustomEqualityComparer()
+                            {
+                                // Arrange
+                                var src = new[] {new {Date = DateTime.Now}};
+                                var search = new {Date = DateTime.Now.AddSeconds(-1)};
+                                // Pre-assert
+                                // Act
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(src)
+                                            .To.Contain.Exactly(1)
+                                            .Deep.Equal.To(search, new DriftingDateTimeEqualityComparer());
+                                    },
+                                    Throws.Nothing);
                                 // Assert
                             }
                         }
@@ -757,7 +1066,8 @@ namespace NExpect.Tests.Collections
                                 var second = new[] {o1(2, "cow"), o1(1, "moo")};
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(first).To.Be.Deep.Equivalent.To(second);
                                     },
@@ -773,7 +1083,8 @@ namespace NExpect.Tests.Collections
                                 var second = new[] {o1(2, "cow"), o1(1, "moo")};
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(first).Not.To.Be.Deep.Equivalent.To(second);
                                     },
@@ -789,7 +1100,8 @@ namespace NExpect.Tests.Collections
                                 var second = new[] {o1(2, "cow"), o1(1, "moo")};
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(first).To.Not.Be.Deep.Equivalent.To(second);
                                     },
@@ -805,11 +1117,31 @@ namespace NExpect.Tests.Collections
                                 var second = new[] {o1(1, "bobby"), o1(2, "janet")};
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(first).To.Be.Deep.Equivalent.To(second);
                                     },
                                     Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                // Assert
+                            }
+
+                            [Test]
+                            public void WithCustomEqualityComparer()
+                            {
+                                // Arrange
+                                var first = new[] {new {Date = DateTime.Now}};
+                                var second = new[] {new {Date = DateTime.Now.AddSeconds(-1)}};
+                                // Pre-assert
+                                // Act
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(first).To.Be.Deep.Equivalent.To(
+                                            second,
+                                            new DriftingDateTimeEqualityComparer());
+                                    },
+                                    Throws.Nothing);
                                 // Assert
                             }
                         }

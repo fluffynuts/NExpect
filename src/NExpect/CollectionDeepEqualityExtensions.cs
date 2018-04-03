@@ -6,6 +6,7 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
 using static NExpect.Helpers.DeepTestHelpers;
+
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable PossibleMultipleEnumeration
 
@@ -63,19 +64,22 @@ namespace NExpect
                 MakeCollectionDeepEqualMatcherFor(expected, customMessageGenerator)
             );
         }
-        
+
         /// <summary>
         /// Does deep-equality testing on two collections, ignoring complex item referencing
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Collection to match</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Collection item type</typeparam>
         public static void To<T>(
             this ICollectionDeepEqual<T> continuation,
-            IEnumerable<T> expected
+            IEnumerable<T> expected,
+            params object[] customEqualityComparers
         )
         {
-            continuation.To(expected, NULL_STRING);
+            continuation.To(expected, NULL_STRING, customEqualityComparers);
         }
 
         /// <summary>
@@ -84,14 +88,17 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Collection to match</param>
         /// <param name="customMessage">Custom message to add when failing</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Collection item type</typeparam>
         public static void To<T>(
             this ICollectionDeepEqual<T> continuation,
             IEnumerable<T> expected,
-            string customMessage
+            string customMessage,
+            params object[] customEqualityComparers
         )
         {
-            continuation.To(expected, () => customMessage);
+            continuation.To(expected, () => customMessage, customEqualityComparers);
         }
 
         /// <summary>
@@ -100,28 +107,35 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Collection to match</param>
         /// <param name="customMessage">Generates a custom message to add when failing</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Collection item type</typeparam>
         public static void To<T>(
             this ICollectionDeepEqual<T> continuation,
             IEnumerable<T> expected,
-            Func<string> customMessage
+            Func<string> customMessage,
+            params object[] customEqualityComparers
         )
         {
-            continuation.AddMatcher(MakeCollectionDeepEqualMatcherFor(expected, customMessage));
+            continuation.AddMatcher(
+                MakeCollectionDeepEqualMatcherFor(
+                    expected,
+                    customMessage,
+                    customEqualityComparers));
         }
 
         private static Func<IEnumerable<T>, IMatcherResult> MakeCollectionDeepEqualMatcherFor<T>(
             IEnumerable<T> expected,
-            Func<string> customMessage
-        )
+            Func<string> customMessage,
+            params object[] customEqualityComparers)
         {
             return collection =>
             {
-                var passed = CollectionsAreDeepEqual(collection, expected);
+                var passed = CollectionsAreDeepEqual(collection, expected, customEqualityComparers);
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        () => new[] 
+                        () => new[]
                         {
                             "Expected",
                             collection.LimitedPrint(),
@@ -136,7 +150,8 @@ namespace NExpect
 
         private static bool CollectionsAreDeepEqual<T>(
             IEnumerable<T> collection,
-            IEnumerable<T> expected
+            IEnumerable<T> expected,
+            object[] customEqualityComparers
         )
         {
             return CollectionCompare(
@@ -145,10 +160,12 @@ namespace NExpect
                 (master, compare) => master.Zip(compare, Tuple.Create)
                     .Aggregate(
                         true,
-                        (acc, cur) => acc && AreDeepEqual(cur.Item1, cur.Item2)
+                        (acc, cur) => acc && AreDeepEqual(
+                                          cur.Item1,
+                                          cur.Item2,
+                                          customEqualityComparers)
                     )
             );
         }
-
     }
 }

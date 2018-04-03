@@ -14,19 +14,21 @@ namespace NExpect
     /// </summary>
     public static class CollectionIntersectionEqualityExtensions
     {
-        
         /// <summary>
         /// Does intersection-equality testing on two collections, ignoring complex item referencing
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Collection to match</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Collection item type</typeparam>
         public static void Equal<T>(
             this ICollectionIntersection<T> continuation,
-            IEnumerable<T> expected
+            IEnumerable<T> expected,
+            params object[] customEqualityComparers
         )
         {
-            continuation.Equal(expected, NULL_STRING);
+            continuation.Equal(expected, NULL_STRING, customEqualityComparers);
         }
 
         /// <summary>
@@ -35,14 +37,17 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Collection to match</param>
         /// <param name="customMessage">Custom message to add when failing</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Collection item type</typeparam>
         public static void Equal<T>(
             this ICollectionIntersection<T> continuation,
             IEnumerable<T> expected,
-            string customMessage
+            string customMessage,
+            params object[] customEqualityComparers
         )
         {
-            continuation.Equal(expected, () => customMessage);
+            continuation.Equal(expected, () => customMessage, customEqualityComparers);
         }
 
         /// <summary>
@@ -51,30 +56,39 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Collection to match</param>
         /// <param name="customMessageGenerator">Generates a custom message to add when failing</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Collection item type</typeparam>
         public static void Equal<T>(
             this ICollectionIntersection<T> continuation,
             IEnumerable<T> expected,
-            Func<string> customMessageGenerator
+            Func<string> customMessageGenerator,
+            params object[] customEqualityComparers
         )
         {
             continuation.AddMatcher(
-                MakeCollectionIntersectionEqualMatcherFor(expected, customMessageGenerator)
+                MakeCollectionIntersectionEqualMatcherFor(
+                    expected,
+                    customMessageGenerator,
+                    customEqualityComparers)
             );
         }
-        
+
         /// <summary>
         /// Performs intersection-equality testing on two collections
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected collection values</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Type of collection item</typeparam>
         public static void To<T>(
             this ICollectionIntersectionEqual<T> continuation,
-            IEnumerable<T> expected
+            IEnumerable<T> expected,
+            params object[] customEqualityComparers
         )
         {
-            continuation.To(expected, NULL_STRING);
+            continuation.To(expected, NULL_STRING, customEqualityComparers);
         }
 
         /// <summary>
@@ -83,14 +97,17 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected collection values</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Type of collection item</typeparam>
         public static void To<T>(
             this ICollectionIntersectionEqual<T> continuation,
             IEnumerable<T> expected,
-            string customMessage
+            string customMessage,
+            params object[] customEqualityComparers
         )
         {
-            continuation.To(expected, () => customMessage);
+            continuation.To(expected, () => customMessage, customEqualityComparers);
         }
 
         /// <summary>
@@ -99,27 +116,37 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected collection values</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Type of collection item</typeparam>
         public static void To<T>(
             this ICollectionIntersectionEqual<T> continuation,
             IEnumerable<T> expected,
-            Func<string> customMessageGenerator
+            Func<string> customMessageGenerator,
+            params object[] customEqualityComparers
         )
         {
             continuation.AddMatcher(
-                MakeCollectionIntersectionEqualMatcherFor(expected, customMessageGenerator)
+                MakeCollectionIntersectionEqualMatcherFor(
+                    expected,
+                    customMessageGenerator,
+                    customEqualityComparers)
             );
         }
 
-        
+
         private static Func<IEnumerable<T>, IMatcherResult> MakeCollectionIntersectionEqualMatcherFor<T>(
             IEnumerable<T> expected,
-            Func<string> customMessage
+            Func<string> customMessage,
+            params object[] customEqualityComparers
         )
         {
             return collection =>
             {
-                var passed = CollectionsAreIntersectionEqual(collection, expected);
+                var passed = CollectionsAreIntersectionEqual(
+                    collection,
+                    expected,
+                    customEqualityComparers);
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
@@ -135,11 +162,11 @@ namespace NExpect
                 );
             };
         }
-        
+
         private static bool CollectionsAreIntersectionEqual<T>(
             IEnumerable<T> collection,
-            IEnumerable<T> expected
-        )
+            IEnumerable<T> expected,
+            params object[] customEqualityComparers)
         {
             return CollectionCompare(
                 collection,
@@ -147,13 +174,12 @@ namespace NExpect
                 (master, compare) => Zip(master, compare)
                     .Aggregate(
                         true,
-                        (acc, cur) => acc && AreIntersectionEqual(cur.Item1, cur.Item2)
+                        (acc, cur) => acc && AreIntersectionEqual(
+                                          cur.Item1,
+                                          cur.Item2,
+                                          customEqualityComparers)
                     )
             );
         }
-
-
-
-
     }
 }

@@ -6,6 +6,7 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
 using static NExpect.Helpers.DeepTestHelpers;
+
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect
@@ -15,19 +16,21 @@ namespace NExpect
     /// </summary>
     public static class CollectionIntersectionEquivalenceExtensions
     {
-        
         /// <summary>
         /// Provides deep intersection-equality testing for two collections
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected values</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Original type of collection</typeparam>
         public static void To<T>(
             this ICollectionIntersectionEquivalent<T> continuation,
-            IEnumerable<T> expected
+            IEnumerable<T> expected,
+            params object[] customEqualityComparers
         )
         {
-            continuation.To(expected, NULL_STRING);
+            continuation.To(expected, NULL_STRING, customEqualityComparers);
         }
 
         /// <summary>
@@ -36,14 +39,17 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected values</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Original type of collection</typeparam>
         public static void To<T>(
             this ICollectionIntersectionEquivalent<T> continuation,
             IEnumerable<T> expected,
-            string customMessage
+            string customMessage,
+            params object[] customEqualityComparers
         )
         {
-            continuation.To(expected, () => customMessage);
+            continuation.To(expected, () => customMessage, customEqualityComparers);
         }
 
         /// <summary>
@@ -52,11 +58,14 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected values</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
+        /// to use when comparing properties of type TProperty</param>
         /// <typeparam name="T">Original type of collection</typeparam>
         public static void To<T>(
             this ICollectionIntersectionEquivalent<T> continuation,
             IEnumerable<T> expected,
-            Func<string> customMessageGenerator
+            Func<string> customMessageGenerator,
+            params object[] customEqualityComparers
         )
         {
             continuation.AddMatcher(
@@ -64,7 +73,10 @@ namespace NExpect
                 {
                     var actualArray = collection as T[] ?? collection.ToArray();
                     var expectedArray = expected as T[] ?? expected.ToArray();
-                    var passed = CollectionsAreIntersectionEquivalent(actualArray, expectedArray);
+                    var passed = CollectionsAreIntersectionEquivalent(
+                        actualArray,
+                        expectedArray,
+                        customEqualityComparers);
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
@@ -83,8 +95,8 @@ namespace NExpect
 
         private static bool CollectionsAreIntersectionEquivalent<T>(
             IEnumerable<T> collection,
-            IEnumerable<T> expected
-        )
+            IEnumerable<T> expected,
+            object[] customEqualityMatchers)
         {
             return CollectionCompare(
                 collection,
@@ -95,7 +107,11 @@ namespace NExpect
                     {
                         var currentMaster = master.First();
                         var compareMatch =
-                            compare.FirstOrDefault(c => AreIntersectionEqual(currentMaster, c));
+                            compare.FirstOrDefault(
+                                c => AreIntersectionEqual(
+                                    currentMaster,
+                                    c,
+                                    customEqualityMatchers));
                         if (compareMatch == null)
                             return false;
                         master.Remove(currentMaster);
@@ -105,7 +121,5 @@ namespace NExpect
                     return true;
                 });
         }
-
-        
     }
 }
