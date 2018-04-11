@@ -16,17 +16,44 @@ namespace NExpect
         /// <typeparam name="T">Type of exception</typeparam>
         public static void RegisterAssertionsFactory<T>(Func<string, T> generator) where T : Exception
         {
-            _assertionsGenerator = generator ?? throw new ArgumentNullException(nameof(generator));
+            _assertionsGenerator = (s, e) => generator(GenerateMessageFor(e, s)) 
+                                             ?? throw new ArgumentNullException(nameof(generator));
+            
         }
 
-        private static Func<string, Exception> _assertionsGenerator;
+        private static string GenerateMessageFor(Exception exception, string s)
+        {
+            return $"{s}\n{exception.Message}\n{exception.StackTrace}";
+        }
+
+        /// <summary>
+        /// Register your own factory for generating assertion exceptions
+        /// where you assertion can also take an inner exception
+        /// </summary>
+        /// <param name="generator"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void RegisterAssertionsFactory<T>(Func<string, Exception, T> generator) where T : Exception
+        {
+        }
+
+        private static Func<string, Exception, Exception> _assertionsGenerator;
 
         internal static void Throw(
             string message
         )
         {
-            throw _assertionsGenerator?.Invoke(message) ?? new UnmetExpectationException(message);
+            Throw(message, null);
         }
+
+        internal static void Throw(
+            string message,
+            Exception innerException
+        )
+        {
+            throw _assertionsGenerator?.Invoke(message, null) 
+                  ?? new UnmetExpectationException(message, innerException);
+        }
+
 
     }
 }

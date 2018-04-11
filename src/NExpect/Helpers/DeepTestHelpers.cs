@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Imported.PeanutButter.Utils;
+// ReSharper disable IntroduceOptionalParameters.Global
 
 namespace NExpect.Helpers
 {
@@ -53,14 +54,8 @@ namespace NExpect.Helpers
             params object[] customEqualityComparers)
         {
             ValidateAreComparers(customEqualityComparers);
-            customEqualityComparers.ForEach(o => tester.AddCustomComparer(o));
+            customEqualityComparers.ForEach(tester.AddCustomComparer);
         }
-
-        private static readonly MethodInfo AddComparerMethod =
-            typeof(DeepEqualityTester).GetMethods()
-                .FirstOrDefault(
-                    mi => mi.Name == nameof(DeepEqualityTester.AddCustomComparer) &&
-                          !mi.IsGenericMethod);
 
         private static void ValidateAreComparers(object[] customEqualityComparers)
         {
@@ -71,13 +66,12 @@ namespace NExpect.Helpers
                     var match = implemented.FirstOrDefault(i => i.IsGenericOf(typeof(IEqualityComparer<>)));
                     return match == null;
                 }).ToArray();
-            if (invalid.Any())
-            {
-                var names = invalid.Select(t => t.GetType().PrettyName()).JoinWith(",");
-                throw new ArgumentException(
-                    $"Custom equality comparers must implement IEqualityComparer<T>. The following do not: {names}"
-                );
-            }
+            if (!invalid.Any())
+                return;
+            var names = invalid.Select(t => t.GetType().PrettyName()).JoinWith(",");
+            throw new ArgumentException(
+                $"Custom equality comparers must implement IEqualityComparer<T>. The following do not: {names}"
+            );
         }
 
         internal static bool CollectionCompare<T>(

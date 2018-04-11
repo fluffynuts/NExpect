@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using Imported.PeanutButter.Utils;
 using NExpect.Helpers;
 using NExpect.Implementations;
 using NExpect.Interfaces;
@@ -84,7 +81,7 @@ namespace NExpect
                                 "Expected",
                                 actual.Stringify(),
                                 $"{passed.AsNot()}to deep equal",
-                                MessageHelpers.Stringify(expected)
+                                expected.Stringify()
                             },
                             customMessageGenerator
                         )

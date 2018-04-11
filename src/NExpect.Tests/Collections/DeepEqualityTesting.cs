@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using NUnit.Framework;
 using NExpect.Exceptions;
 using PeanutButter.Utils;

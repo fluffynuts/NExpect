@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using NExpect.Exceptions;
 using NExpect.Helpers;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
-
+// ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable PossibleMultipleEnumeration
 
@@ -401,7 +400,7 @@ namespace NExpect
                             ? 1
                             : 0)
                         : asArray.Count(o => o.Equals(search));
-                    var passed = _collectionCountMatchStrategies[countMatch.Method](
+                    var passed = CollectionCountMatchStrategies[countMatch.Method](
                         have,
                         countMatch.Method == CountMatchMethods.All
                             ? asArray.Length
@@ -411,7 +410,7 @@ namespace NExpect
                     return new MatcherResult(
                         passed,
                         () => FinalMessageFor(
-                            _collectionCountMessageStrategies[countMatch.Method](
+                            CollectionCountMessageStrategies[countMatch.Method](
                                 passed,
                                 search,
                                 have,
@@ -472,11 +471,11 @@ namespace NExpect
                     var compare = countMatch.Method == CountMatchMethods.All
                         ? collection.Count()
                         : countMatch.Compare;
-                    var passed = _collectionCountMatchStrategies[countMatch.Method](have, compare);
+                    var passed = CollectionCountMatchStrategies[countMatch.Method](have, compare);
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
-                            () => _collectionCountMatchMessageStrategies[countMatch.Method](
+                            () => CollectionCountMatchMessageStrategies[countMatch.Method](
                                 passed,
                                 have,
                                 countMatch.Compare),
@@ -541,11 +540,11 @@ namespace NExpect
                     var compare = countMatch.Method == CountMatchMethods.All
                         ? collection.Count()
                         : countMatch.Compare;
-                    var passed = _collectionCountMatchStrategies[countMatch.Method](have, compare);
+                    var passed = CollectionCountMatchStrategies[countMatch.Method](have, compare);
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
-                            () => _collectionCountMatchMessageStrategies[countMatch.Method](
+                            () => CollectionCountMatchMessageStrategies[countMatch.Method](
                                 passed,
                                 have,
                                 countMatch.Compare),
@@ -2229,7 +2228,7 @@ namespace NExpect
         }
 
         private static readonly Dictionary<CountMatchMethods,
-            Func<bool, object, int, int, string>> _collectionCountMessageStrategies =
+            Func<bool, object, int, int, string>> CollectionCountMessageStrategies =
             new Dictionary<CountMatchMethods, Func<bool, object, int, int, string>>()
             {
                 [CountMatchMethods.Exactly] = CreateMessageFor("exactly"),
@@ -2255,7 +2254,7 @@ namespace NExpect
         }
 
         private static readonly Dictionary<CountMatchMethods,
-            Func<bool, int, int, string>> _collectionCountMatchMessageStrategies =
+            Func<bool, int, int, string>> CollectionCountMatchMessageStrategies =
             new Dictionary<CountMatchMethods, Func<bool, int, int, string>>()
             {
                 [CountMatchMethods.Exactly] = CreateMatchMessageFor("exactly"),
@@ -2278,7 +2277,7 @@ namespace NExpect
         }
 
         private static readonly Dictionary<CountMatchMethods,
-            Func<int, int, bool>> _collectionCountMatchStrategies =
+            Func<int, int, bool>> CollectionCountMatchStrategies =
             new Dictionary<CountMatchMethods, Func<int, int, bool>>()
             {
                 [CountMatchMethods.Exactly] = (have, want) => have == want,

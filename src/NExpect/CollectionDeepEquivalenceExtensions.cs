@@ -6,6 +6,7 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
 using static NExpect.Helpers.DeepTestHelpers;
+// ReSharper disable PossibleMultipleEnumeration
 
 namespace NExpect
 {

@@ -17,7 +17,7 @@ namespace NExpect.Implementations
             {
                 result = matcher(actual);
             }
-            catch(UnmetExpectationException)
+            catch (UnmetExpectationException)
             {
                 throw;
             }
@@ -35,7 +35,9 @@ namespace NExpect.Implementations
         )
         {
             // TODO: make this better, ie, include the exception as an inner
-            Assertions.Throw(matcherException.Message);
+            Assertions.Throw(
+                $"Exception whilst running matcher: {matcherException}",
+                matcherException);
         }
 
         public static void ProcessMatcherResult(
@@ -43,7 +45,9 @@ namespace NExpect.Implementations
             IMatcherResult result
         )
         {
-            var isPass = negated ? !result.Passed : result.Passed;
+            var isPass = negated
+                ? !result.Passed
+                : result.Passed;
             if (isPass)
                 return;
             Assertions.Throw(result.Message);

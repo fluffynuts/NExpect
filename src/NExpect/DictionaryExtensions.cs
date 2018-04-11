@@ -48,7 +48,7 @@ namespace NExpect
             string customMessage
         )
         {
-            return continuation.Key<TKey, TValue>(key, () => customMessage);
+            return continuation.Key(key, () => customMessage);
         }
 
         /// <summary>

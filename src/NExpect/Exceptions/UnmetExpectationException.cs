@@ -59,5 +59,17 @@ namespace NExpect.Exceptions
             : base(message)
         {
         }
+
+        /// <summary>
+        /// Constructs the exception
+        /// </summary>
+        /// <param name="message">Message to display</param>
+        /// <param name="inner">Inner exception</param>
+        internal UnmetExpectationException(
+            string message,
+            Exception inner
+        ) : base(message, inner)
+        {
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace NExpect.Exceptions
 {
     internal static class StackFrameExtensions
     {
-        private static readonly Assembly _thisAssembly =
+        private static readonly Assembly ThisAssembly =
             typeof(UnmetExpectationException).GetAssembly();
 
 
@@ -16,11 +16,11 @@ namespace NExpect.Exceptions
         )
         {
             var methodInfo = frame.GetMethod();
-            if (Equals(methodInfo?.DeclaringType?.GetAssembly(), _thisAssembly))
+            if (Equals(methodInfo?.DeclaringType?.GetAssembly(), ThisAssembly))
                 return true;
             var parameters = methodInfo?.GetParameters() ?? new ParameterInfo[0];
             return parameters.Any(
-                p => Equals(p.ParameterType.GetAssembly(), _thisAssembly)
+                p => Equals(p.ParameterType.GetAssembly(), ThisAssembly)
             );
         }
     }
