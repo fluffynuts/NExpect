@@ -258,6 +258,27 @@ namespace NExpect.Tests.Collections
                                 },
                                 Throws.Nothing);
                             // Assert
+                        }                        
+                        
+                        [Test]
+                        public void MessageWhenCustomEqualityComparerSaysNotEqual()
+                        {
+                            // Arrange
+                            var left = new {Date = DateTime.Now};
+                            var right = new {Date = left.Date.AddSeconds(1)};
+
+                            // Pre-assert
+                            // Act
+                            Assert.That(
+                                () =>
+                                {
+                                    Expect(left).To.Deep.Equal(
+                                        right,
+                                        new NeverEqualEqualityComparer());
+                                },
+                                Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contain(nameof(NeverEqualEqualityComparer)));
+                            // Assert
                         }
                     }
                 }

@@ -147,6 +147,20 @@ namespace NExpect
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
+        /// <typeparam name="T">Type of object being tested</typeparam>
+        public static void Equal<T>(
+            this ITo<T> continuation,
+            T expected
+        )
+        {
+            continuation.Equal(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Performs equality checking -- the end of .To.Equal()
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
         public static void Equal<T>(
@@ -156,20 +170,6 @@ namespace NExpect
         )
         {
             continuation.Equal(expected, () => customMessage);
-        }
-
-        /// <summary>
-        /// Performs equality checking -- the end of .To.Equal()
-        /// </summary>
-        /// <param name="continuation">Continuation to operate on</param>
-        /// <param name="expected">Expected value</param>
-        /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
-            this ITo<T> continuation,
-            T expected
-        )
-        {
-            continuation.Equal(expected, NULL_STRING);
         }
 
         /// <summary>

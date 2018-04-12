@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Linq;
 using NExpect.Helpers;
-using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
-using static NExpect.Implementations.MessageHelpers;
+using Imported.PeanutButter.Utils;
+using MH = NExpect.Implementations.MessageHelpers;
 
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -28,7 +29,7 @@ namespace NExpect
             params object[] customEqualityComparers
         )
         {
-            continuation.Equal(expected, NULL_STRING, customEqualityComparers);
+            continuation.Equal(expected, MH.NULL_STRING, customEqualityComparers);
         }
 
         /// <summary>
@@ -75,13 +76,21 @@ namespace NExpect
                         customEqualityComparers);
                     return new MatcherResult(
                         passed,
-                        FinalMessageFor(
-                            () => new[]
+                        MH.FinalMessageFor(
+                            () =>
                             {
-                                "Expected",
-                                actual.Stringify(),
-                                $"{passed.AsNot()}to deep equal",
-                                expected.Stringify()
+                                var result = new[]
+                                {
+                                    "Expected",
+                                    actual.Stringify(),
+                                    $"{MH.AsNot(passed)}to deep equal",
+                                    expected.Stringify()
+                                };
+                                return customEqualityComparers.Any()
+                                    ? result
+                                        .And("Using custom equality comparers:")
+                                        .And(customEqualityComparers.Select(o => o.GetType()).Stringify())
+                                    : result;
                             },
                             customMessageGenerator
                         )
