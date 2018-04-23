@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using NExpect.Exceptions;
 using NExpect.Helpers;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
+
 // ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable PossibleMultipleEnumeration
@@ -1147,18 +1149,22 @@ namespace NExpect
                     var actualCount = collection?.Count(
                                           o => matcher(o, expected)
                                       ) ?? 0;
+                    var total = collection?.Count() ?? 0;
                     var passed = CountPassStrategies[continuation.Method](
                         actualCount,
                         continuation.ExpectedCount,
-                        collection?.Count() ?? 0
+                        total
                     );
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
                             () => new[]
                             {
-                                $"Expected {passed.AsNot()}to find {continuation.ExpectedCount} items matching",
-                                expected.Stringify(),
+                                CollectionCountMessageStrategies[continuation.Method](
+                                    passed,
+                                    $"\n{expected.Stringify()}\n",
+                                    actualCount,
+                                    0),
                                 $"but actually found {actualCount}"
                             },
                             customMessageGenerator

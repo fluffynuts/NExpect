@@ -5,6 +5,7 @@ using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
+
 // ReSharper disable InconsistentNaming
 // ReSharper disable RedundantAnonymousTypePropertyName
 
@@ -26,7 +27,8 @@ namespace NExpect.Tests.Collections
                 var collection = new[] {item1, item2}.Randomize();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(collection).To.Contain.At.Least(1).Equal.To(search);
                     },
@@ -46,7 +48,8 @@ namespace NExpect.Tests.Collections
                 var collection = new[] {item1, item2}.Randomize();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(collection).To.Contain.Any().Equal.To(search);
                     },
@@ -66,7 +69,8 @@ namespace NExpect.Tests.Collections
                 var collection = new[] {item1, item2, search}.Randomize();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(collection).To.Contain.Any().Equal.To(search);
                     },
@@ -84,7 +88,8 @@ namespace NExpect.Tests.Collections
                 var collection = new[] {item1, item2, search}.Randomize();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(collection).Not.To.Contain.Any().Equal.To(search);
                     },
@@ -106,12 +111,13 @@ namespace NExpect.Tests.Collections
                 };
                 var item2 = new
                 {
-                    Name = GetAnother<string>(new[] { search.Name, item1.Name })
+                    Name = GetAnother<string>(new[] {search.Name, item1.Name})
                 };
-                var collection = new[] {item1, item2 }.Randomize();
+                var collection = new[] {item1, item2}.Randomize();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(collection).Not.To.Contain.Any().Deep.Equal.To(search);
                     },
@@ -133,16 +139,20 @@ namespace NExpect.Tests.Collections
                 };
                 var item2 = new
                 {
-                    Name = GetAnother<string>(new[] { search.Name, item1.Name })
+                    Name = GetAnother<string>(new[] {search.Name, item1.Name})
                 };
-                var collection = new[] {item1, item2 }.Randomize();
+                var collection = new[] {item1, item2}.Randomize();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
-                        Expect(collection).Not.To.Contain.Any().Intersection.Equal.To(search);
+                        Expect(collection).Not.To.Contain.Any()
+                            .Intersection.Equal.To(search);
                     },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.Not.Contain("0"));
                 // Assert
             }
 
@@ -156,7 +166,8 @@ namespace NExpect.Tests.Collections
                 var collection = new[] {item1, item2, search}.Randomize();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(collection).To.Contain.All().Equal.To(search);
                     },
@@ -176,7 +187,8 @@ namespace NExpect.Tests.Collections
                 var collection = new[] {item1, item2, search, null}.Randomize();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(collection).To.Contain.All().Matched.By(s => s == null);
                     },
@@ -196,7 +208,8 @@ namespace NExpect.Tests.Collections
                 var collection = new[] {item1, item2, search}.Randomize();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(collection).To.Contain.Any().Matched.By(s => s == null);
                     },
@@ -213,7 +226,8 @@ namespace NExpect.Tests.Collections
                 var items = PyLike.Range(10).Select(i => i + 1).ToArray();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(items).To.Contain.Any().Matched.By((idx, item) => item == idx);
                     },
@@ -230,7 +244,8 @@ namespace NExpect.Tests.Collections
                 var items = PyLike.Range(10).Select(i => i).ToArray();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(items).To.Contain.All().Matched.By((idx, item) => item == idx);
                     },
@@ -247,7 +262,8 @@ namespace NExpect.Tests.Collections
                 var collection = PyLike.Range(2, 4).Select(i => search);
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(collection).To.Contain.All().Equal.To(search);
                     },
@@ -265,7 +281,8 @@ namespace NExpect.Tests.Collections
                 var collection = new[] {search, item1, item2}.Randomize();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(collection).To.Contain.At.Least(1).Equal.To(search);
                     },
@@ -283,7 +300,8 @@ namespace NExpect.Tests.Collections
                 var collection = new[] {search, item1, search, item2}.Randomize();
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(collection).To.Contain.At.Least(1).Equal.To(search);
                     },
@@ -307,7 +325,8 @@ namespace NExpect.Tests.Collections
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(collection)
                                 .To.Contain
@@ -329,7 +348,8 @@ namespace NExpect.Tests.Collections
                     // Pre-Assert
                     Assert.That(collection.Count(s => s == search), Is.EqualTo(2));
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(collection)
                                 .To.Contain
@@ -349,7 +369,8 @@ namespace NExpect.Tests.Collections
                     var search = collection.Randomize().First();
                     // Pre-Assert
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(collection)
                                 .To.Contain
@@ -370,7 +391,8 @@ namespace NExpect.Tests.Collections
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(collection)
                                 .Not.To.Contain
@@ -391,7 +413,8 @@ namespace NExpect.Tests.Collections
                     // Pre-Assert
 
                     // Act
-                    Assert.That(() =>
+                    Assert.That(
+                        () =>
                         {
                             Expect(collection)
                                 .To.Not.Contain

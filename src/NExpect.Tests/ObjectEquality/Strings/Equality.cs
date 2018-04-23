@@ -29,6 +29,12 @@ namespace NExpect.Tests.ObjectEquality.Strings
                             Expect(test).To.Equal(nonMatch, expected);
                         },
                         Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains(expected));                    
+                    Assert.That(() =>
+                        {
+                            Expect(test).To.Equal(nonMatch, () => expected);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains(expected));
                     // Assert
                 }
