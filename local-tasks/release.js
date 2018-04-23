@@ -1,4 +1,4 @@
-const 
+const
   gulp = requireModule("gulp-with-help"),
   packageDir = require("./config").packageDir,
   path = require("path"),
@@ -6,7 +6,7 @@ const
   runSequence = require("run-sequence"),
   spawn = requireModule("spawn");
 
-gulp.task("release", [ "test-dotnet" ], (done) => {
+gulp.task("release", [ "build-cover-report" ], (done) => {
   runSequence(
     "pack",
     "push",

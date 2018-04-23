@@ -1,9 +1,8 @@
 {
   "name": "nexpect",
   "scripts": {
-    "test": "gulp test-dotnet",
+    "test": "gulp build-cover-report",
     "gulp": "gulp",
-    "cover": "gulp cover-dotnet",
     "release": "gulp release"
   },
   "devDependencies": {

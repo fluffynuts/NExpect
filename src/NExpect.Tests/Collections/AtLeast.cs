@@ -152,7 +152,7 @@ namespace NExpect.Tests.Collections
                     },
                     Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
-                        .With.Message.Not.Contain("0"));
+                        .With.Message.Not.Contain("find 0 items"));
                 // Assert
             }
 
