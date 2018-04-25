@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using NExpect.Exceptions;
 using NExpect.Helpers;
 using NExpect.Implementations;
@@ -1158,15 +1157,12 @@ namespace NExpect
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
-                            () => new[]
-                            {
+                            () => 
                                 CollectionCountMessageStrategies[continuation.Method](
                                     passed,
                                     $"\n{expected.Stringify()}\n",
                                     actualCount,
-                                    0),
-                                $"but actually found {actualCount}"
-                            },
+                                    continuation.ExpectedCount),
                             customMessageGenerator
                         )
                     );

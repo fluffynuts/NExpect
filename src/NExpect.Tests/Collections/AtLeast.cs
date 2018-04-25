@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NExpect.Exceptions;
+using NExpect.Implementations;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
@@ -122,6 +123,25 @@ namespace NExpect.Tests.Collections
                         Expect(collection).Not.To.Contain.Any().Deep.Equal.To(search);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+
+            [Test]
+            public void Contain_Exactly_WhenFails_ShouldProvideGoodMessage()
+            {
+                // Arrange
+                var search = new {id = 1};
+                var collection = new[] {new {id = 2}, new {id = 3}};
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection).To.Contain.Exactly(1)
+                        .Deep.Equal.To(search);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    .With.Message.Contain("to find exactly 1 occurrence of")
+                    .And.Message.Contain(search.Stringify())
+                    .And.Message.Contain(" but found 0"));
                 // Assert
             }
 
