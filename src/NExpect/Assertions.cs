@@ -1,5 +1,6 @@
 using System;
 using NExpect.Exceptions;
+
 // ReSharper disable UnusedMember.Global
 
 namespace NExpect
@@ -16,14 +17,8 @@ namespace NExpect
         /// <typeparam name="T">Type of exception</typeparam>
         public static void RegisterAssertionsFactory<T>(Func<string, T> generator) where T : Exception
         {
-            _assertionsGenerator = (s, e) => generator(GenerateMessageFor(e, s)) 
+            _assertionsGenerator = (s, e) => generator(GenerateMessageFor(e, s))
                                              ?? throw new ArgumentNullException(nameof(generator));
-            
-        }
-
-        private static string GenerateMessageFor(Exception exception, string s)
-        {
-            return $"{s}\n{exception.Message}\n{exception.StackTrace}";
         }
 
         /// <summary>
@@ -32,8 +27,25 @@ namespace NExpect
         /// </summary>
         /// <param name="generator"></param>
         /// <typeparam name="T"></typeparam>
-        public static void RegisterAssertionsFactory<T>(Func<string, Exception, T> generator) where T : Exception
+        public static void RegisterAssertionsFactory<T>(
+            Func<string, Exception, T> generator) where T : Exception
         {
+            _assertionsGenerator = (s, e) => generator(GenerateMessageFor(e, s), e)
+                                             ?? throw new ArgumentNullException(nameof(generator));
+        }
+
+        /// <summary>
+        /// Resets the factory for generating assertion exceptions to the default
+        /// (ie, throws UnmetExpectationException instances)
+        /// </summary>
+        public static void UseDefaultAssertionsFactory()
+        {
+            _assertionsGenerator = null;
+        }
+
+        private static string GenerateMessageFor(Exception exception, string s)
+        {
+            return exception == null ? s : $"{s}\n{exception.Message}\n{exception.StackTrace}";
         }
 
         private static Func<string, Exception, Exception> _assertionsGenerator;
@@ -50,10 +62,8 @@ namespace NExpect
             Exception innerException
         )
         {
-            throw _assertionsGenerator?.Invoke(message, null) 
+            throw _assertionsGenerator?.Invoke(message, innerException)
                   ?? new UnmetExpectationException(message, innerException);
         }
-
-
     }
 }
