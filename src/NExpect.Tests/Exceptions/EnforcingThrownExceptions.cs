@@ -11,6 +11,7 @@ using static PeanutButter.RandomGenerators.RandomValueGen;
 // ReSharper disable NotResolvedInText
 // ReSharper disable UnassignedGetOnlyAutoProperty
 // ReSharper disable UnusedParameter.Local
+// ReSharper disable NonReadonlyMemberInGetHashCode
 
 // ReSharper disable ConvertToLambdaExpression
 
@@ -647,6 +648,103 @@ namespace NExpect.Tests.Exceptions
                         .Equal.To(expected);
                 }, Throws.Nothing);
                 // Assert
+            }
+
+            public class SomeNode
+            {
+                public int Id { get; set; }
+                public string Name { get; set; }
+                public override bool Equals(object obj)
+                {
+                    var other = obj as SomeNode;
+                    if (other == null)
+                        return false;
+                    return Id == other.Id &&
+                           Name == other.Name;
+                }
+
+                protected bool Equals(SomeNode other)
+                {
+                    return Id == other.Id && 
+                           string.Equals(Name, other.Name);
+                }
+
+                public override int GetHashCode()
+                {
+                    unchecked
+                    {
+                        return (Id * 397) ^ (Name != null
+                                   ? Name.GetHashCode()
+                                   : 0);
+                    }
+                }
+            }
+
+            public class SomeExtendedNode : SomeNode
+            {
+                public DateTime Created { get; set; }
+            }
+
+            public class ExceptionWithNode : Exception
+            {
+                public SomeNode[] Nodes { get; set; }
+
+                public ExceptionWithNode(params SomeNode[] nodes) 
+                    : base($"{nodes[0].Id} / {nodes[0].Name}")
+                {
+                    Nodes = nodes;
+                }
+            }
+
+            [Test]
+            public void ExceptionPropertyCollectionDeepEqualityTesting()
+            {
+                // Arrange
+                var expected = new SomeNode() { Id = 1, Name = "Moo" };
+                var test = new[] { new SomeNode() { Id = 1, Name = "Moo" } };
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(() => throw new ExceptionWithNode(expected))
+                        .To.Throw<ExceptionWithNode>()
+                        .With.CollectionProperty(e => e.Nodes)
+                        .Deep.Equal.To(test);
+                }, Throws.Nothing);
+            }
+
+            [Test]
+            public void ExceptionPropertyCollectionEquivalenceTesting()
+            {
+                // Arrange
+                var expected = new SomeNode() { Id = 1, Name = "Moo" };
+                var test = new[] { new SomeNode() { Id = 1, Name = "Moo" } };
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(() => throw new ExceptionWithNode(expected))
+                        .To.Throw<ExceptionWithNode>()
+                        .With.CollectionProperty(e => e.Nodes)
+                        .Equivalent.To(test);
+                }, Throws.Nothing);
+            }
+
+            [Test]
+            public void ExceptionPropertyIntersectionEqualityTesting()
+            {
+                // Arrange
+                var expected = new SomeExtendedNode() { Id = 1, Name = "Moo", Created = DateTime.Now };
+                var test = new[] { new SomeNode() { Id = 1, Name = "Moo" } };
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(() => throw new ExceptionWithNode(expected))
+                        .To.Throw<ExceptionWithNode>()
+                        .With.CollectionProperty(e => e.Nodes)
+                        .Intersection.Equal.To(test);
+                }, Throws.Nothing);
             }
         }
 

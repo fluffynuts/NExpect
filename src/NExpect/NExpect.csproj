@@ -56,7 +56,6 @@
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.6'">
     <Reference Include="System.Diagnostics.StackTrace">
-      <HintPath>..\..\..\..\Users\davyd\.nuget\packages\system.diagnostics.stacktrace\4.3.0\ref\netstandard1.3\System.Diagnostics.StackTrace.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

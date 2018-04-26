@@ -305,7 +305,7 @@ namespace NExpect.Tests
                     Expect(p).To.Be.A.Benny();
                 });
             }, (collection, passed) =>
-                $"Expected {collection.Stringify()} {passed.AsNot()}to all be Bennies");
+                $"Expected {MessageHelpers.Stringify(collection)} {passed.AsNot()}to all be Bennies");
         }
 
         internal static void Bennies2(this ICollectionBe<Person> be)
