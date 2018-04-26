@@ -723,6 +723,36 @@ namespace NExpect.Tests.Collections
                             }
 
                             [Test]
+                            public void GivenInvalidComparers_ShouldThrowArgumentException()
+                            {
+                                // Arrange
+                                var left = new[] {new {Date = DateTime.Now}};
+                                var search = new {Date = DateTime.Now.AddSeconds(-1)};
+                                // Pre-assert
+                                // Act
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(left).To.Contain.Only(1)
+                                            .Intersection.Equal.To(
+                                                search,
+                                                new NotAnEqualityComparer()
+                                            );
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.InnerException.InstanceOf<ArgumentException>()
+                                        .With.Message.Contains("must implement IEqualityComparer"));
+                                // Assert
+                            }
+
+                            public class NotAnEqualityComparer : IDisposable
+                            {
+                                public void Dispose()
+                                {
+                                }
+                            }
+
+                            [Test]
                             public void NegativeAssertion_AltGrammer_WhenShouldFail_ShouldThrow()
                             {
                                 // Arrange

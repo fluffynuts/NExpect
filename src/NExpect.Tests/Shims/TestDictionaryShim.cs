@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using NUnit.Framework;
@@ -8,6 +9,7 @@ using PeanutButter.Utils;
 using static NExpect.Expectations;
 // ReSharper disable UnusedVariable
 // ReSharper disable PossibleMultipleEnumeration
+// ReSharper disable InconsistentNaming
 
 namespace NExpect.Tests.Shims
 {
@@ -216,6 +218,20 @@ namespace NExpect.Tests.Shims
                 // Assert
                 Expect(result).To.Be.False();
             }
+
+            [Test]
+            public void Add_ShouldAddKeyValuePair()
+            {
+                // Arrange
+                var actual = new NameValueCollection();
+                var sut = Create(actual);
+                var kvp = GetRandom<KeyValuePair<string, string>>();
+                // Pre-assert
+                // Act
+                sut.Add(kvp);
+                // Assert
+                Expect(actual[kvp.Key]).To.Equal(kvp.Value);
+            }
         }
 
 
@@ -243,6 +259,31 @@ namespace NExpect.Tests.Shims
                 Expect(collector).To.Contain.Only(2).Items();
                 Expect(collector).To.Contain(new KeyValuePair<string, string>(k1, v1));
                 Expect(collector).To.Contain(new KeyValuePair<string, string>(k2, v2));
+            }
+
+            [Test]
+            public void IEnumerableInterface()
+            {
+                // Arrange
+                var k1 = GetRandomString(2);
+                var v1 = GetRandomString(2);
+                var k2 = GetAnother(k1);
+                var v2 = GetAnother(v1);
+                var actual = new NameValueCollection();
+                actual[k1] = v1;
+                actual[k2] = v2;
+                var collector = new List<KeyValuePair<string, string>>();
+                var sut = Create(actual);
+                // Pre-assert
+                // Act
+                var expected = sut.GetEnumerator();
+                var result = (sut as IEnumerable).GetEnumerator();
+                // Assert
+                Expect(result).To.Deep.Equal(expected);
+                Expect(expected.GetType().Name).To.Equal("DictionaryShimEnumerator");
+                Expect(result.GetType().Name).To.Equal("DictionaryShimEnumerator");
+                Expect(result.GetPropertyValue("Subject"))
+                    .To.Equal(expected.GetPropertyValue("Subject"));
             }
         }
 

@@ -98,8 +98,9 @@ namespace NExpect
             Func<T, TValue> fetcher
         ) where T : Exception
         {
-            var moo = continuation as ThrowContinuation<T>;
-            var actual = moo?.Exception ?? moo.TryGetPropertyValue<T>("Exception");
+            var throwContinuation = continuation as ThrowContinuation<T>;
+            var actual = throwContinuation?.Exception ?? 
+                         continuation.TryGetPropertyValue<T>("Exception");
             if (actual == null)
             {
                 // TODO: can we kinda-duck this to work on user-generated implementations of IThrowContinuation<T>? And do we care to?
@@ -112,7 +113,7 @@ namespace NExpect
             return Factory.Create<TValue, ExceptionPropertyContinuation<TValue>>(
                 exceptionPropertyValue,
                 new WrappingContinuation<T, TValue>(
-                    moo,
+                    throwContinuation,
                     c => exceptionPropertyValue
                 )
             );
@@ -375,7 +376,7 @@ namespace NExpect
                 s =>
                 {
                     result.Actual = s;
-                    var passed = !s?.Contains(search) ?? true;
+                    var passed = s?.Contains(search) ?? true;
                     return new MatcherResult(
                         passed,
                         MessageForNotContainsResult(

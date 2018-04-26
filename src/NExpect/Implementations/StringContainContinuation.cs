@@ -5,7 +5,7 @@ using NExpect.MatcherLogic;
 namespace NExpect.Implementations
 {
     internal class StringContainContinuation :
-        IStringContainContinuation,
+        IStringMore, 
         IHasActual<string>,
         IExpectationContext<string>
     {
@@ -46,8 +46,5 @@ namespace NExpect.Implementations
 
         public IStringAnd And =>
             Factory.Create<string, StringAnd>(Actual, this);
-
-        public IStringIn In =>
-            Factory.Create<string, StringIn>(Actual, this);
     }
 }

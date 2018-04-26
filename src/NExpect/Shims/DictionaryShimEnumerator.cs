@@ -6,6 +6,7 @@ namespace NExpect.Shims
 {
     internal class DictionaryShimEnumerator : IEnumerator<KeyValuePair<string, string>>
     {
+        public DictionaryShim Subject => _dictionaryShim;
         private readonly DictionaryShim _dictionaryShim;
         private int _currentOffset;
 

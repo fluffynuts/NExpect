@@ -1,6 +1,8 @@
-﻿using NUnit.Framework;
+﻿using NExpect.Exceptions;
+using NUnit.Framework;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+// ReSharper disable ExpressionIsAlwaysNull
 
 namespace NExpect.Tests.Collections
 {
@@ -45,6 +47,60 @@ namespace NExpect.Tests.Collections
                     },
                     Throws.Nothing);
 
+                // Assert
+            }
+
+            [Test]
+            public void ShouldFindTwoNullCollectionsEquivalent()
+            {
+                // Arrange
+                var left = null as int[];
+                var right = null as int[];
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(left).To.Be.Deep.Equivalent.To(right);
+                    Expect(left).To.Be.Equivalent.To(right);
+                }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void ShouldNeverFindEquivalenceIfOneIsNull()
+            {
+                // Arrange
+                var left = new[] { 1 };
+                var right = null as int[];
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(left).To.Be.Deep.Equivalent.To(right);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Assert.That(() =>
+                {
+                    Expect(left).To.Be.Equivalent.To(right);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+
+            [Test]
+            public void ShouldFindTwoCollectionsOfDifferentSizesNonEquivalent()
+            {
+                // Arrange
+                var left = new[] { 1 };
+                var right = new[] { 1, 2 };
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(left).To.Be.Deep.Equivalent.To(right);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Assert.That(() =>
+                {
+                    Expect(left).To.Be.Equivalent.To(right);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
             }
 

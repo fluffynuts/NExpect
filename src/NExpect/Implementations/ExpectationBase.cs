@@ -5,7 +5,7 @@ using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations
 {
-    internal abstract class ExpectationBase
+    internal abstract class ExpectationBase: CannotBeCompared
     {
         public bool IsNegated { get; protected set; }
     }

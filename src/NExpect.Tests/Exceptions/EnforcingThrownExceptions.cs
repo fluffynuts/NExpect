@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NExpect.Exceptions;
+using NExpect.Interfaces;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+// ReSharper disable NotResolvedInText
+// ReSharper disable UnassignedGetOnlyAutoProperty
+// ReSharper disable UnusedParameter.Local
 
 // ReSharper disable ConvertToLambdaExpression
 
@@ -201,8 +205,8 @@ namespace NExpect.Tests.Exceptions
                                 throw new Exception(message);
                             })
                             .To.Throw()
-                            .With.Message.Not.Containing(e1)
-                            .And(e3);
+                            .With.Message.Containing(e1)
+                            .And.Not.Containing(e3);
                     },
                     Throws.Nothing);
                 // Assert
@@ -390,8 +394,8 @@ namespace NExpect.Tests.Exceptions
                                 throw new ArgumentNullException(message);
                             })
                             .To.Throw<ArgumentNullException>()
-                            .With.Message.Not.Containing(e1)
-                            .And(e3);
+                            .With.Message.Containing(e1)
+                            .And.Not.Containing(e3);
                     },
                     Throws.Nothing);
                 // Assert
@@ -773,6 +777,90 @@ namespace NExpect.Tests.Exceptions
                 }, Throws.Nothing);
                 // Assert
             }
+        }
+    }
+
+    [TestFixture]
+    public class UserSpaceImplmentations
+    {
+        [Test]
+        public void ShouldPullExceptionPropertyWhenExists()
+        {
+            // Arrange
+            var ex = new ArgumentNullException("moo");
+            var subject = new MyContinuationWithExceptionProperty<ArgumentNullException>(ex);
+            // Pre-assert
+            // Act
+            var result = subject.With(e => e.ParamName);
+            // Assert
+            var actual = result.GetPropertyValue("Actual");
+            Expect(actual).To.Equal("moo");
+        }
+
+        [Test]
+        public void WhenNoExceptionProperty()
+        {
+            // Arrange
+            var ex = new ArgumentNullException("moo");
+            var subject = new MyContinuationWithoutExceptionProperty<ArgumentNullException>(ex);
+            // Pre-assert
+            // Act
+            Assert.That(() =>
+            {
+                subject.With(e => e.ParamName);
+            }, Throws.Exception.InstanceOf<ArgumentException>()
+                .With.Message.Contain("something with an Exception property"));
+            // Assert
+        }
+
+        [Test]
+        public void WhenExceptionPropertyThrows()
+        {
+            // Arrange
+            var ex = new ArgumentNullException("moo");
+            var subject = new MyContinuationWithBrokenExceptionProperty<ArgumentNullException>(ex);
+            // Pre-assert
+            // Act
+            Assert.That(() =>
+            {
+                subject.With(e => e.ParamName);
+            }, Throws.Exception.InstanceOf<ArgumentException>()
+                .With.Message.Contain("something with an Exception property"));
+            // Assert
+        }
+
+        public class MyContinuationWithExceptionProperty<T> : IThrowContinuation<T> where T : Exception
+        {
+            public MyContinuationWithExceptionProperty(T exception)
+            {
+                Exception = exception;
+                Id = Guid.NewGuid();
+            }
+
+            public IWithAfterThrowContinuation<T> With { get; }
+            public T Exception { get; }
+            public Guid Id { get; }
+        }
+
+        public class MyContinuationWithBrokenExceptionProperty<T> : IThrowContinuation<T> where T : Exception
+        {
+            public MyContinuationWithBrokenExceptionProperty(T exception)
+            {
+                Id = Guid.NewGuid();
+            }
+
+            public IWithAfterThrowContinuation<T> With { get; }
+            public T Exception => throw new NotImplementedException();
+            public Guid Id { get; }
+        }
+
+        public class MyContinuationWithoutExceptionProperty<T> : IThrowContinuation<T> where T : Exception
+        {
+            public MyContinuationWithoutExceptionProperty(T ex)
+            {
+            }
+
+            public IWithAfterThrowContinuation<T> With { get; }
         }
     }
 }

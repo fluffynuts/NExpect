@@ -191,9 +191,7 @@ namespace NExpect.Implementations
         )
         {
             return FinalMessageFor(
-                () => passed
-                    ? $"Expected {Quote(src)} not to contain {Quote(search)}"
-                    : $"Expected {Quote(src)} to contain {Quote(search)}",
+                () => $"Expected {Quote(src)} {passed.AsNot()}to contain {Quote(search)}",
                 customMessageGenerator
             );
         }
@@ -205,9 +203,7 @@ namespace NExpect.Implementations
         )
         {
             return FinalMessageFor(
-                () => passed
-                    ? $"Expected {Quote(src)} not to be matched"
-                    : $"Expected {Quote(src)} to be matched",
+                () => $"Expected {Quote(src)} {passed.AsNot()}to be matched",
                 customMessageGenerator
             );
         }
@@ -219,9 +215,7 @@ namespace NExpect.Implementations
         )
         {
             return FinalMessageFor(
-                () => passed
-                    ? $"Expected {Quote(src)} to be matched"
-                    : $"Expected {Quote(src)} not to be matched",
+                () => $"Expected {Quote(src)} {passed.AsNot()}to be matched",
                 customMessageGenerator
             );
         }
@@ -234,9 +228,7 @@ namespace NExpect.Implementations
         )
         {
             return FinalMessageFor(
-                () => passed
-                    ? $"Expected {Quote(src)} to contain {Quote(search)}"
-                    : $"Expected {Quote(src)} not to contain {Quote(search)}",
+                () => $"Expected {Quote(src)} {passed.AsNot()}to contain {Quote(search)}",
                 customMessageGenerator
             );
         }

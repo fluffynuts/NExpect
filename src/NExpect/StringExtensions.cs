@@ -28,7 +28,7 @@ namespace NExpect
         /// <param name="continuation">Continuation to act on</param>
         /// <param name="search">String value to search for</param>
         /// <returns>IStringContainContinuation onto which you can chain .And</returns>
-        public static IStringContainContinuation Contain(
+        public static IStringMore Contain(
             this ICanAddMatcher<string> continuation,
             string search
         )
@@ -44,7 +44,7 @@ namespace NExpect
         /// <param name="search">String value to search for</param>
         /// <param name="customMessage">Custom message to include in failure messages</param>
         /// <returns>IStringContainContinuation onto which you can chain .And</returns>
-        public static IStringContainContinuation Contain(
+        public static IStringMore Contain(
             this ICanAddMatcher<string> continuation,
             string search,
             string customMessage
@@ -61,7 +61,7 @@ namespace NExpect
         /// <param name="search">String value to search for</param>
         /// <param name="customMessage">Custom message to include in failure messages</param>
         /// <returns>IStringContainContinuation onto which you can chain .And</returns>
-        public static IStringContainContinuation Contain(
+        public static IStringMore Contain(
             this ICanAddMatcher<string> continuation,
             string search,
             Func<string> customMessage
@@ -78,7 +78,7 @@ namespace NExpect
         /// <param name="continuation">Existing continuation fron a Contain()</param>
         /// <param name="search">string to search for</param>
         /// <returns>IStringContainContinuation onto which you can chain .And</returns>
-        public static IStringContainContinuation And(
+        public static IStringMore And(
             this IStringContainContinuation continuation,
             string search
         )
@@ -93,7 +93,7 @@ namespace NExpect
         /// <param name="search">string to search for</param>
         /// <param name="customMessage">Custom message to include in failure messages</param>
         /// <returns>IStringContainContinuation onto which you can chain .And</returns>
-        public static IStringContainContinuation And(
+        public static IStringMore And(
             this IStringContainContinuation continuation,
             string search,
             string customMessage
@@ -109,8 +109,57 @@ namespace NExpect
         /// <param name="search">string to search for</param>
         /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
         /// <returns>IStringContainContinuation onto which you can chain .And</returns>
-        public static IStringContainContinuation And(
+        public static IStringMore And(
             this IStringContainContinuation continuation,
+            string search,
+            Func<string> customMessageGenerator
+        )
+        {
+            var result = new StringContainContinuation(continuation);
+            continuation.SetMetadata(SEARCH_OFFSET, 0); // And will reset the offset -- it's not ordered
+            AddContainsMatcherTo(continuation, search, customMessageGenerator, result);
+            return result;
+        }
+
+        /// <summary>
+        /// Continue testing a string for another substring
+        /// </summary>
+        /// <param name="continuation">Existing continuation fron a Contain()</param>
+        /// <param name="search">string to search for</param>
+        /// <returns>IStringContainContinuation onto which you can chain .And</returns>
+        public static IStringMore And(
+            this IStringMore continuation,
+            string search
+        )
+        {
+            return continuation.And(search, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Continue testing a string for another substring
+        /// </summary>
+        /// <param name="continuation">Existing continuation fron a Contain()</param>
+        /// <param name="search">string to search for</param>
+        /// <param name="customMessage">Custom message to include in failure messages</param>
+        /// <returns>IStringContainContinuation onto which you can chain .And</returns>
+        public static IStringMore And(
+            this IStringMore continuation,
+            string search,
+            string customMessage
+        )
+        {
+            return continuation.And(search, () => customMessage);
+        }
+
+        /// <summary>
+        /// Continue testing a string for another substring
+        /// </summary>
+        /// <param name="continuation">Existing continuation fron a Contain()</param>
+        /// <param name="search">string to search for</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+        /// <returns>IStringContainContinuation onto which you can chain .And</returns>
+        public static IStringMore And(
+            this IStringMore continuation,
             string search,
             Func<string> customMessageGenerator
         )
@@ -127,7 +176,7 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="search">String to search for</param>
         /// <returns></returns>
-        public static IStringContainContinuation Then(
+        public static IStringMore Then(
             this IStringContainContinuation continuation,
             string search
         )
@@ -142,7 +191,7 @@ namespace NExpect
         /// <param name="search">String to search for</param>
         /// <param name="customMessage"></param>
         /// <returns></returns>
-        public static IStringContainContinuation Then(
+        public static IStringMore Then(
             this IStringContainContinuation continuation,
             string search,
             string customMessage
@@ -158,7 +207,7 @@ namespace NExpect
         /// <param name="search">String to search for</param>
         /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
         /// <returns></returns>
-        public static IStringContainContinuation Then(
+        public static IStringMore Then(
             this IStringContainContinuation continuation,
             string search,
             Func<string> customMessageGenerator
@@ -176,7 +225,7 @@ namespace NExpect
         /// <param name="more">Continuation to operate on</param>
         /// <param name="search">String to search for</param>
         /// <returns></returns>
-        public static IStringContainContinuation Then(
+        public static IStringMore Then(
             this IStringMore more,
             string search
         )
@@ -193,7 +242,7 @@ namespace NExpect
         /// <param name="search">String to search for</param>
         /// <param name="customMessage">Generates a custom message to add to failure messages</param>
         /// <returns></returns>
-        public static IStringContainContinuation Then(
+        public static IStringMore Then(
             this IStringMore more,
             string search,
             string customMessage
@@ -210,7 +259,7 @@ namespace NExpect
         /// <param name="search">String to search for</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
         /// <returns></returns>
-        public static IStringContainContinuation Then(
+        public static IStringMore Then(
             this IStringMore more,
             string search,
             Func<string> customMessageGenerator

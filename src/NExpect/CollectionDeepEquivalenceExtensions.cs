@@ -106,6 +106,27 @@ namespace NExpect
                     while (master.Any())
                     {
                         var currentMaster = master.First();
+                        // ReSharper disable once RedundantNameQualifier
+                        if (object.Equals(default(T), currentMaster))
+                        {
+                            var foundNullMatch = false;
+                            for (var i = 0; i < compare.Count; i++)
+                            {
+                                var item = compare[i] as object;
+                                // ReSharper disable once RedundantNameQualifier
+                                if (object.Equals(default(T), item))
+                                {
+                                    compare.RemoveAt(i);
+                                    master.Remove(default);
+                                    foundNullMatch = true;
+                                    break;
+                                }
+                            }
+                            if (foundNullMatch)
+                                continue;
+                            return false;
+                        }
+
                         var compareMatch = compare.FirstOrDefault(
                             c => AreDeepEqual(currentMaster, c, customEqualityComparers));
                         if (compareMatch == null)

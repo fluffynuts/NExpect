@@ -1,6 +1,7 @@
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
+// ReSharper disable InconsistentNaming
 namespace NExpect.Implementations
 {
     internal class CountMatchContinuation<T>

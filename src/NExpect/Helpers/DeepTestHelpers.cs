@@ -27,14 +27,6 @@ namespace NExpect.Helpers
 
         internal static bool AreDeepEqual(
             object item1,
-            object item2
-        )
-        {
-            return AreDeepEqual(item1, item2, null);
-        }
-
-        internal static bool AreDeepEqual(
-            object item1,
             object item2,
             object[] customEqualityComparers)
         {

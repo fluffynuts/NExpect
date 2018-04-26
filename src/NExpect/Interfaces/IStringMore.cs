@@ -4,7 +4,7 @@
     /// Provides chaining of expectations with extra string-specific
     /// grammar
     /// </summary>
-    public interface IStringMore
+    public interface IStringMore: ICanAddMatcher<string>
     {
         /// <summary>
         /// Starts .And for more continuations for strings
