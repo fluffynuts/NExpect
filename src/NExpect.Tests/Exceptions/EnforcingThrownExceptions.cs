@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NExpect.Exceptions;
-using NExpect.Interfaces;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
@@ -401,7 +400,7 @@ namespace NExpect.Tests.Exceptions
                     Throws.Nothing);
                 // Assert
             }
-
+            
             [Test]
             public void Throw_WithGenericType_AllowsMultipleSubStringContainingOnMessage_HappyPathNegated()
             {
@@ -650,50 +649,9 @@ namespace NExpect.Tests.Exceptions
                 // Assert
             }
 
-            public class SomeNode
-            {
-                public int Id { get; set; }
-                public string Name { get; set; }
-                public override bool Equals(object obj)
-                {
-                    var other = obj as SomeNode;
-                    if (other == null)
-                        return false;
-                    return Id == other.Id &&
-                           Name == other.Name;
-                }
-
-                protected bool Equals(SomeNode other)
-                {
-                    return Id == other.Id && 
-                           string.Equals(Name, other.Name);
-                }
-
-                public override int GetHashCode()
-                {
-                    unchecked
-                    {
-                        return (Id * 397) ^ (Name != null
-                                   ? Name.GetHashCode()
-                                   : 0);
-                    }
-                }
-            }
-
             public class SomeExtendedNode : SomeNode
             {
                 public DateTime Created { get; set; }
-            }
-
-            public class ExceptionWithNode : Exception
-            {
-                public SomeNode[] Nodes { get; set; }
-
-                public ExceptionWithNode(params SomeNode[] nodes) 
-                    : base($"{nodes[0].Id} / {nodes[0].Name}")
-                {
-                    Nodes = nodes;
-                }
             }
 
             [Test]
@@ -729,7 +687,7 @@ namespace NExpect.Tests.Exceptions
                         .Equivalent.To(test);
                 }, Throws.Nothing);
             }
-
+            
             [Test]
             public void ExceptionPropertyIntersectionEqualityTesting()
             {
@@ -878,87 +836,44 @@ namespace NExpect.Tests.Exceptions
         }
     }
 
-    [TestFixture]
-    public class UserSpaceImplmentations
+    public class ExceptionWithNode : Exception
     {
-        [Test]
-        public void ShouldPullExceptionPropertyWhenExists()
+        public SomeNode[] Nodes { get; set; }
+
+        public ExceptionWithNode(params SomeNode[] nodes) 
+            : base($"{nodes[0].Id} / {nodes[0].Name}")
         {
-            // Arrange
-            var ex = new ArgumentNullException("moo");
-            var subject = new MyContinuationWithExceptionProperty<ArgumentNullException>(ex);
-            // Pre-assert
-            // Act
-            var result = subject.With(e => e.ParamName);
-            // Assert
-            var actual = result.GetPropertyValue("Actual");
-            Expect(actual).To.Equal("moo");
+            Nodes = nodes;
+        }
+    }
+
+    public class SomeNode
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public override bool Equals(object obj)
+        {
+            var other = obj as SomeNode;
+            if (other == null)
+                return false;
+            return Id == other.Id &&
+                   Name == other.Name;
         }
 
-        [Test]
-        public void WhenNoExceptionProperty()
+        protected bool Equals(SomeNode other)
         {
-            // Arrange
-            var ex = new ArgumentNullException("moo");
-            var subject = new MyContinuationWithoutExceptionProperty<ArgumentNullException>(ex);
-            // Pre-assert
-            // Act
-            Assert.That(() =>
-            {
-                subject.With(e => e.ParamName);
-            }, Throws.Exception.InstanceOf<ArgumentException>()
-                .With.Message.Contain("something with an Exception property"));
-            // Assert
+            return Id == other.Id && 
+                   String.Equals(Name, other.Name);
         }
 
-        [Test]
-        public void WhenExceptionPropertyThrows()
+        public override int GetHashCode()
         {
-            // Arrange
-            var ex = new ArgumentNullException("moo");
-            var subject = new MyContinuationWithBrokenExceptionProperty<ArgumentNullException>(ex);
-            // Pre-assert
-            // Act
-            Assert.That(() =>
+            unchecked
             {
-                subject.With(e => e.ParamName);
-            }, Throws.Exception.InstanceOf<ArgumentException>()
-                .With.Message.Contain("something with an Exception property"));
-            // Assert
-        }
-
-        public class MyContinuationWithExceptionProperty<T> : IThrowContinuation<T> where T : Exception
-        {
-            public MyContinuationWithExceptionProperty(T exception)
-            {
-                Exception = exception;
-                Id = Guid.NewGuid();
+                return (Id * 397) ^ (Name != null
+                           ? Name.GetHashCode()
+                           : 0);
             }
-
-            public IWithAfterThrowContinuation<T> With { get; }
-            public T Exception { get; }
-            public Guid Id { get; }
-        }
-
-        public class MyContinuationWithBrokenExceptionProperty<T> : IThrowContinuation<T> where T : Exception
-        {
-            public MyContinuationWithBrokenExceptionProperty(T exception)
-            {
-                Id = Guid.NewGuid();
-            }
-
-            public IWithAfterThrowContinuation<T> With { get; }
-            public T Exception => throw new NotImplementedException();
-            public Guid Id { get; }
-        }
-
-        public class MyContinuationWithoutExceptionProperty<T> : IThrowContinuation<T> where T : Exception
-        {
-            public MyContinuationWithoutExceptionProperty(T ex)
-            {
-            }
-
-            public IWithAfterThrowContinuation<T> With { get; }
         }
     }
 }

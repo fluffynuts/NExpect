@@ -130,8 +130,8 @@ namespace NExpect.Tests.Collections
                         return new[]
                         {
                             StringComparer.OrdinalIgnoreCase,
-//                            StringComparer.CurrentCultureIgnoreCase, 
-//                            StringComparer.InvariantCultureIgnoreCase
+                            StringComparer.CurrentCultureIgnoreCase, 
+                            StringComparer.InvariantCultureIgnoreCase
                         };
                     }
 
@@ -139,7 +139,7 @@ namespace NExpect.Tests.Collections
                     public void WhenDictionaryIsCaseInsentive_ShouldNotThrowForIncorrectCasing(StringComparer comparer)
                     {
                         // Arrange
-                        var key = GetRandomString(2);
+                        var key = GetRandomAlphaString(2);
                         var recased = key.ToUpperInvariant();
                         if (recased == key)
                             recased = key.ToLowerInvariant();
@@ -172,7 +172,7 @@ namespace NExpect.Tests.Collections
                     public void WhenDictionaryIsCaseSentive_ShouldThrowForIncorrectCasing(StringComparer comparer)
                     {
                         // Arrange
-                        var key = GetRandomString(2);
+                        var key = GetRandomAlphaString(2);
                         var recased = key.ToUpperInvariant();
                         if (recased == key)
                             recased = key.ToLowerInvariant();

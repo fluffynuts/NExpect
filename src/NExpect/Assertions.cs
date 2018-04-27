@@ -45,7 +45,9 @@ namespace NExpect
 
         private static string GenerateMessageFor(Exception exception, string s)
         {
-            return exception == null ? s : $"{s}\n{exception.Message}\n{exception.StackTrace}";
+            return exception == null
+                ? s
+                : $"{s}\n{exception.Message}\n{exception.StackTrace}";
         }
 
         private static Func<string, Exception, Exception> _assertionsGenerator;
