@@ -15,102 +15,6 @@ namespace NExpect
     /// </summary>
     public static class GreaterAndLessContinuationExtensions
     {
-        /// <summary>
-        /// Compares two values
-        /// </summary>
-        /// <param name="continuation">.Greater or .Less</param>
-        /// <param name="expected">value to compare with</param>
-        public static void Than(
-            this ILessContinuation<int> continuation,
-            int expected
-        )
-        {
-            continuation.Than(expected, NULL_STRING);
-        }
-
-        /// <summary>
-        /// Compares two values
-        /// </summary>
-        /// <param name="continuation">.Greater or .Less</param>
-        /// <param name="expected">value to compare with</param>
-        /// <param name="customMessage">Custom message to add to failure messages</param>
-        public static void Than(
-            this ILessContinuation<int> continuation,
-            int expected,
-            string customMessage
-        )
-        {
-            continuation.Than(expected, () => customMessage);
-        }
-        
-        /// <summary>
-        /// Compares two values
-        /// </summary>
-        /// <param name="continuation">.Greater or .Less</param>
-        /// <param name="expected">value to compare with</param>
-        /// <param name="customMessageGenerator">Custom message to add to failure messages</param>
-        public static void Than(
-            this ILessContinuation<int> continuation,
-            int expected,
-            Func<string> customMessageGenerator
-        )
-        {
-            AddMatcher(continuation, expected, (a, e) => a < e, customMessageGenerator);
-        }
-
-        /// <summary>
-        /// Tests if a value is greater than an expected value, allowing continuation
-        /// to test if it is also less than another value
-        /// </summary>
-        /// <param name="continuation"></param>
-        /// <param name="expected"></param>
-        /// <returns></returns>
-        public static IGreaterThan<int> Than(
-            this IGreaterContinuation<int> continuation,
-            int expected)
-        {
-            return continuation.Than(expected, NULL_STRING);
-        }
-
-        /// <summary>
-        /// Tests if a value is greater than an expected value, allowing continuation
-        /// to test if it is also less than another value
-        /// </summary>
-        /// <param name="continuation"></param>
-        /// <param name="expected"></param>
-        /// <param name="customMessage">Custom message to add to failure messages</param>
-        /// <returns></returns>
-        public static IGreaterThan<int> Than(
-            this IGreaterContinuation<int> continuation,
-            int expected,
-            string customMessage
-        )
-        {
-            return continuation.Than(expected, () => customMessage);
-        }
-        
-        /// <summary>
-        /// Tests if a value is greater than an expected value, allowing continuation
-        /// to test if it is also less than another value
-        /// </summary>
-        /// <param name="continuation"></param>
-        /// <param name="expected"></param>
-        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
-        /// <returns></returns>
-        public static IGreaterThan<int> Than(
-            this IGreaterContinuation<int> continuation,
-            int expected,
-            Func<string> customMessageGenerator
-        )
-        {
-            AddMatcher(
-                continuation,
-                expected,
-                (a, e) => a > e,
-                customMessageGenerator);
-            return continuation.Continue();
-        }
-
         private static IGreaterThan<T> Continue<T>(
             this IGreaterContinuation<T> continuation
         )
@@ -148,6 +52,7 @@ namespace NExpect
         {
             continuation.Than(expected, () => customMessage);
         }
+        
         /// <summary>
         /// Compares two values
         /// </summary>
