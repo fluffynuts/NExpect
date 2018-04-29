@@ -12,7 +12,15 @@ namespace NExpect.Interfaces
         /// </summary>
         IBe<T> Be { get; }
         /// <summary>
-        /// Starts a deep equality test
+        /// Starts a test for contains on arbitrary objects
+        /// </summary>
+        IContain<T> Contain { get; }
+        /// <summary>
+        /// Starts a property expectation
+        /// </summary>
+        IHave<T> Have { get; }
+        /// <summary>
+        /// Starts a deep equality test expectation
         /// </summary>
         IDeep<T> Deep { get; }
         /// <summary>

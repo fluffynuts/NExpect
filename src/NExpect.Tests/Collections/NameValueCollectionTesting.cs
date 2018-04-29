@@ -77,6 +77,11 @@ namespace NExpect.Tests.Collections
                         {
                             Expect(src).Not.To.Contain.Key(key);
                         }, Throws.Nothing);
+                        
+                        Assert.That(() =>
+                        {
+                            Expect(src).To.Not.Contain.Key(key);
+                        }, Throws.Nothing);
                         // Assert
                     }
 

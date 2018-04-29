@@ -19,7 +19,7 @@ namespace NExpect.Implementations
         public new IStringBe Be =>
             Factory.Create<string, StringBe>(Actual, this);
 
-        public IStringContain Contain =>
+        public new IStringContain Contain =>
             Factory.Create<string, StringContain>(Actual, this);
 
         public StringTo(string actual) : base(actual)

@@ -509,6 +509,66 @@ namespace NExpect.Tests
                 // Assert
                 Expect(sut.GetActual()).To.Be(src);
             }
+
+            [Test]
+            public void Intersection()
+            {
+                // Arrange
+                var expected = GetRandom<SomeNode>();
+                // Pre-assert
+                // Act
+                var sut = Expect(expected).To.Intersection;
+                // Assert
+                Expect(sut.GetActual()).To.Equal(expected);
+            }
+
+            [Test]
+            public void NotNullOr()
+            {
+                // Arrange
+                var expected = GetRandomString(10);
+                // Pre-assert
+                // Act
+                var sut = Expect(expected).Not.To.Be.Null.Or;
+                // Assert
+                Expect(sut.GetActual()).To.Be(expected);
+            }
+            
+            [Test]
+            public void LessContinuation()
+            {
+                // Arrange
+                var expected = GetRandomInt();
+                // Pre-assert
+                // Act
+                var sut = Expect(expected).To.Be.Less;
+                // Assert
+                Expect(sut.GetActual()).To.Equal(expected);
+            }
+
+            [Test]
+            public void ThrowContinuationOfT()
+            {
+                // Arrange
+                var expected = new InvalidOperationException(GetRandomString(10));
+                // Pre-assert
+                // Act
+                var sut = Expect(() => throw expected).To.Throw<InvalidOperationException>();
+                // Assert
+                Expect(sut.GetActual()).To.Equal(expected);
+            }
+
+            [Test]
+            public void ThrowContinuation()
+            {
+                // Arrange
+                var expected = new InvalidOperationException(GetRandomString(10));
+                // Pre-assert
+                // Act
+                var sut = Expect(() => throw expected).To.Throw();
+                // Assert
+                Expect(sut.GetActual()).To.Equal(expected);
+            }
         }
 
         [Test]
@@ -576,21 +636,34 @@ namespace NExpect.Tests
                     // Assert
                 }
             }
-            
+
             [Test]
             public void ExceptionPropertyCollectionEquivalenceTesting_Danglers()
             {
                 // Arrange
-                var expected = new SomeNode() { Id = 1, Name = "Moo" };
-                var test = new[] { new SomeNode() { Id = 1, Name = "Moo" } };
+                var expected = new SomeNode()
+                {
+                    Id = 1,
+                    Name = "Moo"
+                };
+                var test = new[]
+                {
+                    new SomeNode()
+                    {
+                        Id = 1,
+                        Name = "Moo"
+                    }
+                };
                 // Pre-assert
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(() => throw new ExceptionWithNode(expected))
-                        .To.Throw<ExceptionWithNode>()
-                        .With.CollectionProperty(e => e.Nodes).For.Moo();
-                }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        Expect(() => throw new ExceptionWithNode(expected))
+                            .To.Throw<ExceptionWithNode>()
+                            .With.CollectionProperty(e => e.Nodes).For.Moo();
+                    },
+                    Throws.Nothing);
             }
 
             [Test]
@@ -602,12 +675,14 @@ namespace NExpect.Tests
                 var message = new[] {e1, e2}.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
-                        Expect(() =>
-                            {
-                                throw new ArgumentNullException(message);
-                            })
+                        Expect(
+                                () =>
+                                {
+                                    throw new ArgumentNullException(message);
+                                })
                             .To.Throw<ArgumentNullException>()
                             .With.Message.Containing(e1)
                             .In.English();
@@ -653,6 +728,7 @@ namespace NExpect.Tests
                 Expect(lines[0]).To.Contain.CurrentFilePath();
             }
         }
+
     }
 
     public static class MatcherThrowingUnmentExpectationException
@@ -661,40 +737,44 @@ namespace NExpect.Tests
             this IStringContain contain,
             [CallerFilePath] string path = null)
         {
-            contain.AddMatcher(actual =>
-            {
-                var passed = actual.Contains(path);
-                return new MatcherResult(
-                    passed,
-                    () => $"Expected {actual} to contain {path}");
-            });
+            contain.AddMatcher(
+                actual =>
+                {
+                    var passed = actual.Contains(path);
+                    return new MatcherResult(
+                        passed,
+                        () => $"Expected {actual} to contain {path}");
+                });
         }
 
         public static void Falsey(this IBe<long> be)
         {
-            be.AddMatcher(actual =>
-            {
-                var passed = actual == 0;
-                return new MatcherResult(
-                    passed,
-                    () => $"Expected {actual} {passed.AsNot()}to be falsey");
-            });
+            be.AddMatcher(
+                actual =>
+                {
+                    var passed = actual == 0;
+                    return new MatcherResult(
+                        passed,
+                        () => $"Expected {actual} {passed.AsNot()}to be falsey");
+                });
         }
 
         public static void English(this IStringIn continuation)
         {
-            continuation.Compose(actual =>
-            {
-                Expect(actual).To.Contain("Value cannot be null");
-            });
+            continuation.Compose(
+                actual =>
+                {
+                    Expect(actual).To.Contain("Value cannot be null");
+                });
         }
 
         public static void Moo(this ICollectionFor<SomeNode> continuation)
         {
-            continuation.Compose(actual =>
-            {
-                Expect(actual).To.Contain.Exactly(1).Matched.By(n => n.Name == "Moo");
-            });
+            continuation.Compose(
+                actual =>
+                {
+                    Expect(actual).To.Contain.Exactly(1).Matched.By(n => n.Name == "Moo");
+                });
         }
 
         public static void Moo(

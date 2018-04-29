@@ -1,0 +1,59 @@
+﻿using System.Linq;
+using NExpect.Exceptions;
+using NExpect.Implementations;
+using NExpect.Interfaces;
+using NExpect.MatcherLogic;
+using NUnit.Framework;
+using PeanutButter.RandomGenerators;
+
+namespace NExpect.Tests.DanglingPrepositions
+{
+    [TestFixture]
+    public class Have
+    {
+        [Test]
+        public void DanglingHave()
+        {
+            // Arrange
+            var parent = new Container()
+            {
+                Subs = RandomValueGen.GetRandomArray<Sub>(2)
+            };
+            var search = RandomValueGen.GetRandomFrom(parent.Subs);
+            // Pre-assert
+            // Act
+            Assert.That(() =>
+            {
+                Expectations.Expect(parent).Not.To.Have.Child(search);
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            
+            Assert.That(() =>
+            {
+                Expectations.Expect(parent).To.Not.Have.Child(search);
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            
+            Assert.That(() =>
+            {
+                Expectations.Expect(parent).To.Have.Child(search);
+            }, Throws.Nothing);
+            // Assert
+        }
+    }
+        
+    public static class ObjectHaveMatchers
+    {
+        public static void Child(
+            this IHave<Container> contain,
+            Sub sub)
+        {
+            contain.AddMatcher(actual =>
+            {
+                var passed = (actual?.Subs ?? new Sub[0])
+                    .Any(c => c.Name == sub.Name);
+                return new MatcherResult(
+                    passed,
+                    $"Expected {actual.Stringify()} {passed.AsNot()}to contain sub {sub.Name}");
+            });
+        }
+    }
+}

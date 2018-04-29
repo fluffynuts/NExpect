@@ -15,6 +15,10 @@ namespace NExpect.Interfaces
         /// Starts an expectation some kind of similarity
         /// </summary>
         IBe<T> Be { get; }
+        /// <summary>        
+        /// Starts a test for contains on arbitrary objects
+        /// </summary>
+        IContain<T> Contain { get; }
         /// <summary>
         /// Starts an expectation for some property
         /// </summary>

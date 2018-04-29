@@ -19,5 +19,6 @@
         /// Not continuation, ie, Expect(value).Not...
         /// </summary>
         INot<T> Not { get; }
+        
     }
 }

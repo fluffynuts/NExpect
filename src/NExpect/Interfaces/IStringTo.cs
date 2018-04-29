@@ -28,6 +28,6 @@
         /// <summary>
         /// Provides the .Contain of .To.Contain.In.Order(...)
         /// </summary>
-        IStringContain Contain { get; }
+        new IStringContain Contain { get; }
     }
 }

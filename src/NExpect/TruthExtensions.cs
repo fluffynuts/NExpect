@@ -3,6 +3,7 @@ using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
+// ReSharper disable MemberCanBePrivate.Global
 
 // ReSharper disable HeapView.BoxingAllocation
 
@@ -57,7 +58,7 @@ namespace NExpect
         public static void True(this IBe<bool?> continuation)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            continuation.AddMatcher(TruthTestFor(true as bool?, null));
+            continuation.True(null as string);
         }
 
         /// <summary>
@@ -124,7 +125,7 @@ namespace NExpect
         public static void False(this IBe<bool?> continuation)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            continuation.AddMatcher(TruthTestFor(false as bool?, null));
+            continuation.False(null as string);
         }
 
         /// <summary>

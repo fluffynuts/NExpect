@@ -2,6 +2,7 @@ using NExpect.Exceptions;
 using NExpect.Implementations;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
+using static NExpect.Expectations;
 
 // ReSharper disable ConditionIsAlwaysTrueOrFalse
 
@@ -22,22 +23,26 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Act
                 Assert.That(
-                    () => Expectations.Expect(value).To.Be.True(),
+                    () => Expect(value).To.Be.True(),
                     Throws.Nothing
                 );
 
                 // Assert
             }
-
+            
             [Test]
-            [Explicit("Shows that UnmetExpectationException smashes the stack trace properly")]
-            public void MooCakes()
+            public void ToBeTrue_WhenValueIsNullableTrue_ShouldNotThrow()
             {
                 // Arrange
-                // Pre-Assert
+                bool? value = null;
+                value = true;
+                // Pre-assert
                 // Act
+                Assert.That(() =>
+                {
+                    Expect(value).To.Be.True();
+                }, Throws.Nothing);
                 // Assert
-                Expectations.Expect(true).To.Be.False();
             }
 
             [Test]
@@ -50,7 +55,7 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Act
                 Assert.That(
-                    () => Expectations.Expect(value).To.Be.True(),
+                    () => Expect(value).To.Be.True(),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains($"Expected\ntrue\nbut got\n{value.Stringify()}")
                 );
@@ -69,13 +74,13 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Act
                 Assert.That(
-                    () => Expectations.Expect(value).To.Be.True(message),
+                    () => Expect(value).To.Be.True(message),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains($"Expected\ntrue\nbut got\n{value.Stringify()}")
                 );
 
                 Assert.That(
-                    () => Expectations.Expect(value).To.Be.True(message),
+                    () => Expect(value).To.Be.True(message),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains(message)
                 );
@@ -93,7 +98,7 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Act
                 Assert.That(
-                    () => Expectations.Expect(value).Not.To.Be.True(),
+                    () => Expect(value).Not.To.Be.True(),
                     Throws.Nothing
                 );
 
@@ -110,7 +115,7 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Act
                 Assert.That(
-                    () => Expectations.Expect(value).To.Be.Not.True(),
+                    () => Expect(value).To.Be.Not.True(),
                     Throws.Nothing
                 );
 
@@ -127,7 +132,7 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Act
                 Assert.That(
-                    () => Expectations.Expect(value).Not.To.Be.True(),
+                    () => Expect(value).Not.To.Be.True(),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                 );
 
@@ -144,7 +149,7 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Act
                 Assert.That(
-                    () => Expectations.Expect(value).To.Be.Not.True(),
+                    () => Expect(value).To.Be.Not.True(),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                 );
 
@@ -161,7 +166,7 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Act
                 Assert.That(
-                    () => Expectations.Expect(value).To.Be.True(),
+                    () => Expect(value).To.Be.True(),
                     Throws.Nothing
                 );
 
@@ -181,10 +186,25 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Act
                 Assert.That(
-                    () => Expectations.Expect(value).To.Be.False(),
+                    () => Expect(value).To.Be.False(),
                     Throws.Nothing
                 );
 
+                // Assert
+            }
+
+            [Test]
+            public void ToBeFalse_WhenValueIsNullableFalse_ShouldNotThrow()
+            {
+                // Arrange
+                bool? value = null;
+                value = false;
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(value).To.Be.False();
+                }, Throws.Nothing);
                 // Assert
             }
 
@@ -198,7 +218,7 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Act
                 Assert.That(
-                    () => Expectations.Expect(value).To.Be.False(),
+                    () => Expect(value).To.Be.False(),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains($"Expected\nfalse\nbut got\n{value.Stringify()}")
                 );
@@ -217,13 +237,13 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Act
                 Assert.That(
-                    () => Expectations.Expect(value).To.Be.False(message),
+                    () => Expect(value).To.Be.False(message),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains($"Expected\nfalse\nbut got\n{value.Stringify()}")
                 );
 
                 Assert.That(
-                    () => Expectations.Expect(value).To.Be.False(message),
+                    () => Expect(value).To.Be.False(message),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains(message)
                 );
@@ -241,7 +261,7 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Act
                 Assert.That(
-                    () => Expectations.Expect(value).Not.To.Be.False(),
+                    () => Expect(value).Not.To.Be.False(),
                     Throws.Nothing
                 );
 
@@ -258,7 +278,7 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Act
                 Assert.That(
-                    () => Expectations.Expect(value).To.Be.Not.False(),
+                    () => Expect(value).To.Be.Not.False(),
                     Throws.Nothing
                 );
 
@@ -275,7 +295,7 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Act
                 Assert.That(
-                    () => Expectations.Expect(value).Not.To.Be.False(),
+                    () => Expect(value).Not.To.Be.False(),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                 );
 
@@ -292,7 +312,7 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Act
                 Assert.That(
-                    () => Expectations.Expect(value).To.Be.Not.False(),
+                    () => Expect(value).To.Be.Not.False(),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                 );
 
@@ -309,7 +329,7 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Act
                 Assert.That(
-                    () => Expectations.Expect(value).To.Be.False(),
+                    () => Expect(value).To.Be.False(),
                     Throws.Nothing
                 );
 

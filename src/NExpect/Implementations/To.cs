@@ -12,7 +12,8 @@ namespace NExpect.Implementations
     {
         public T Actual { get; }
         public IBe<T> Be => Factory.Create<T, Be<T>>(Actual, this);
-
+        public IContain<T> Contain =>
+            Factory.Create<T, Contain<T>>(Actual, this);
         public INotAfterTo<T> Not => 
             Factory.Create<T, NotAfterTo<T>>(Actual, this);
         public IHave<T> Have => 

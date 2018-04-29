@@ -664,6 +664,12 @@ namespace NExpect.Tests.ObjectEquality
                 Assert.That(
                     () =>
                     {
+                        Expect(str).To.Match(s => s == str);
+                    },
+                    Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
                         Expect(str).To.Match(s => s == str, "looking for: " + str);
                     },
                     Throws.Nothing);
@@ -700,6 +706,12 @@ namespace NExpect.Tests.ObjectEquality
                 Assert.That(
                     () =>
                     {
+                        Expect(str).Not.To.Match(s => s != str);
+                    },
+                    Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
                         Expect(str).Not.To.Match(s => s != str, "looking for: !" + str);
                     },
                     Throws.Nothing);
@@ -715,6 +727,12 @@ namespace NExpect.Tests.ObjectEquality
                 // Pre-Assert
 
                 // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(str).To.Not.Match(s => s != str);
+                    },
+                    Throws.Nothing);
                 Assert.That(
                     () =>
                     {
