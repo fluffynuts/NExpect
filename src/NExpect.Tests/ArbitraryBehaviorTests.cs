@@ -5,6 +5,8 @@ using NExpect.Exceptions;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using NExpect.Implementations;
 using NExpect.Tests.Exceptions;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
@@ -628,11 +630,57 @@ namespace NExpect.Tests
                 // Assert
             }
 
+            [Test]
+            public void UnmetExpectationStackTraces_ShouldOmitTraversalThroughNExpect()
+            {
+                // Arrange
+                // Pre-assert
+                // Act
+                UnmetExpectationException captured = null;
+                try
+                {
+                    Expect(1).To.Be.Falsey();
+                }
+                catch (UnmetExpectationException ex)
+                {
+                    captured = ex;
+                }
+
+                // Assert
+                Expect(captured).Not.To.Be.Null();
+                var lines = captured.StackTrace.Split(new[] {"\r", "\n"}, StringSplitOptions.RemoveEmptyEntries);
+                Expect(lines).To.Contain.Only(1).Item();
+                Expect(lines[0]).To.Contain.CurrentFilePath();
+            }
         }
     }
 
     public static class MatcherThrowingUnmentExpectationException
     {
+        public static void CurrentFilePath(
+            this IStringContain contain,
+            [CallerFilePath] string path = null)
+        {
+            contain.AddMatcher(actual =>
+            {
+                var passed = actual.Contains(path);
+                return new MatcherResult(
+                    passed,
+                    () => $"Expected {actual} to contain {path}");
+            });
+        }
+
+        public static void Falsey(this IBe<long> be)
+        {
+            be.AddMatcher(actual =>
+            {
+                var passed = actual == 0;
+                return new MatcherResult(
+                    passed,
+                    () => $"Expected {actual} {passed.AsNot()}to be falsey");
+            });
+        }
+
         public static void English(this IStringIn continuation)
         {
             continuation.Compose(actual =>

@@ -483,17 +483,19 @@ namespace NExpect.Tests.ObjectEquality
                     public void WithCustomEqualityComparer()
                     {
                         // Arrange
-                        var left = new { Date = DateTime.Now };
-                        var right = new { Date = DateTime.Now.AddSeconds(-1) };
+                        var left = new {Date = DateTime.Now};
+                        var right = new {Date = DateTime.Now.AddSeconds(-1)};
                         // Pre-assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(left).To.Intersection.Equal(
-                                right,
-                                new DriftingDateTimeEqualityComparer()
-                            );
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(left).To.Intersection.Equal(
+                                    right,
+                                    new DriftingDateTimeEqualityComparer()
+                                );
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
                 }
@@ -597,11 +599,14 @@ namespace NExpect.Tests.ObjectEquality
                         var right = new {Date = DateTime.Now.AddSeconds(-1)};
                         // Pre-assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(left).To.Deep.Equal(
-                                right, new DriftingDateTimeEqualityComparer());
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(left).To.Deep.Equal(
+                                    right,
+                                    new DriftingDateTimeEqualityComparer());
+                            },
+                            Throws.Nothing);
                         // Assert
                     }
                 }
@@ -1513,6 +1518,402 @@ namespace NExpect.Tests.ObjectEquality
                             [TestFixture]
                             public class HeteroGeneousTypes
                             {
+                                [TestFixture]
+                                public class DoubleDoubleDecimal
+                                {
+                                    private (double min, double max, decimal actual) Source()
+                                    {
+                                        var min = GetRandomInt(1, 5);
+                                        var max = GetRandomInt(10, 15);
+                                        var actual = GetRandomInt(min + 1, max - 1);
+                                        return (min, max, actual);
+                                    }
+
+                                    [Test]
+                                    public void PositiveExpectation_WhenIntsWithinRange_ShouldNotThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Nothing);
+                                        // Assert
+                                    }
+
+                                    [Test]
+                                    public void NegativeExpectation_WhenIntsWithinRange_ShouldThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .Not.To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        // Assert
+                                    }
+
+                                    [Test]
+                                    public void NegativeExpectation_AltSyntax_WhenIntsWithinRange_ShouldThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Not.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        // Assert
+                                    }
+                                }
+
+                                [TestFixture]
+                                public class LongLongDecimal
+                                {
+                                    private (long min, long max, decimal actual) Source()
+                                    {
+                                        var min = GetRandomInt(1, 5);
+                                        var max = GetRandomInt(10, 15);
+                                        var actual = GetRandomInt(min + 1, max - 1);
+                                        return (min, max, actual);
+                                    }
+
+                                    [Test]
+                                    public void PositiveExpectation_WhenIntsWithinRange_ShouldNotThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Nothing);
+                                        // Assert
+                                    }
+
+                                    [Test]
+                                    public void NegativeExpectation_WhenIntsWithinRange_ShouldThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .Not.To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        // Assert
+                                    }
+
+                                    [Test]
+                                    public void NegativeExpectation_AltSyntax_WhenIntsWithinRange_ShouldThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Not.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        // Assert
+                                    }
+                                }
+
+                                [TestFixture]
+                                public class DecimalDecimalLong
+                                {
+                                    private (decimal min, decimal max, long actual) Source()
+                                    {
+                                        var min = GetRandomInt(1, 5);
+                                        var max = GetRandomInt(10, 15);
+                                        var actual = GetRandomInt(min + 1, max - 1);
+                                        return (min, max, actual);
+                                    }
+
+                                    [Test]
+                                    public void PositiveExpectation_WhenIntsWithinRange_ShouldNotThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Nothing);
+                                        // Assert
+                                    }
+
+                                    [Test]
+                                    public void NegativeExpectation_WhenIntsWithinRange_ShouldThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .Not.To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        // Assert
+                                    }
+
+                                    [Test]
+                                    public void NegativeExpectation_AltSyntax_WhenIntsWithinRange_ShouldThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Not.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        // Assert
+                                    }
+                                }
+
+                                [TestFixture]
+                                public class DoubleDoubleLong
+                                {
+                                    private (double min, double max, long actual) Source()
+                                    {
+                                        var min = GetRandomInt(1, 5);
+                                        var max = GetRandomInt(10, 15);
+                                        var actual = GetRandomInt(min + 1, max - 1);
+                                        return (min, max, actual);
+                                    }
+
+                                    [Test]
+                                    public void PositiveExpectation_WhenIntsWithinRange_ShouldNotThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Nothing);
+                                        // Assert
+                                    }
+
+                                    [Test]
+                                    public void NegativeExpectation_WhenIntsWithinRange_ShouldThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .Not.To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        // Assert
+                                    }
+
+                                    [Test]
+                                    public void NegativeExpectation_AltSyntax_WhenIntsWithinRange_ShouldThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Not.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        // Assert
+                                    }
+                                }
+
+                                [TestFixture]
+                                public class DecimalDecinalDouble
+                                {
+                                    private (decimal min, decimal max, double actual) Source()
+                                    {
+                                        var min = GetRandomInt(1, 5);
+                                        var max = GetRandomInt(10, 15);
+                                        var actual = GetRandomInt(min + 1, max - 1);
+                                        return (min, max, actual);
+                                    }
+
+                                    [Test]
+                                    public void PositiveExpectation_WhenIntsWithinRange_ShouldNotThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Nothing);
+                                        // Assert
+                                    }
+
+                                    [Test]
+                                    public void NegativeExpectation_WhenIntsWithinRange_ShouldThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .Not.To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        // Assert
+                                    }
+
+                                    [Test]
+                                    public void NegativeExpectation_AltSyntax_WhenIntsWithinRange_ShouldThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Not.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        // Assert
+                                    }
+                                }
+
+                                [TestFixture]
+                                public class LongLongDouble
+                                {
+                                    private (long min, long max, double actual) Source()
+                                    {
+                                        var min = GetRandomInt(1, 5);
+                                        var max = GetRandomInt(10, 15);
+                                        var actual = GetRandomInt(min + 1, max - 1);
+                                        return (min, max, actual);
+                                    }
+
+                                    [Test]
+                                    public void PositiveExpectation_WhenIntsWithinRange_ShouldNotThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Nothing);
+                                        // Assert
+                                    }
+
+                                    [Test]
+                                    public void NegativeExpectation_WhenIntsWithinRange_ShouldThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .Not.To.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        // Assert
+                                    }
+
+                                    [Test]
+                                    public void NegativeExpectation_AltSyntax_WhenIntsWithinRange_ShouldThrow()
+                                    {
+                                        // Arrange
+                                        var (min, max, actual) = Source();
+                                        // Pre-Assert
+                                        // Act
+                                        Assert.That(
+                                            () =>
+                                            {
+                                                Expect(actual)
+                                                    .To.Not.Be.Greater.Than(min)
+                                                    .And.Less.Than(max);
+                                            },
+                                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                        // Assert
+                                    }
+                                }
+
                                 [TestFixture]
                                 public class IntDoubleFloat
                                 {
