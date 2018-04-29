@@ -40,6 +40,32 @@ namespace NExpect.Tests.DanglingPrepositions
         }
     }
         
+    public class Container
+    {
+        public Sub[] Subs { get; set; }
+    }
+
+    public class Sub
+    {
+        public string Name { get; set; }
+    }
+
+    public static class ObjectContainMatchers
+    {
+        public static void Child(
+            this IContain<Container> contain,
+            Sub sub)
+        {
+            contain.AddMatcher(actual =>
+            {
+                var passed = (actual?.Subs ?? new Sub[0])
+                    .Any(c => c.Name == sub.Name);
+                return new MatcherResult(
+                    passed,
+                    $"Expected {actual.Stringify()} {passed.AsNot()}to contain sub {sub.Name}");
+            });
+        }
+    }    
     public static class ObjectHaveMatchers
     {
         public static void Child(

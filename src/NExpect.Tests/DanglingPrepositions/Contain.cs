@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Drawing;
+using System.Linq;
 using NExpect.Exceptions;
 using NUnit.Framework;
 using static PeanutButter.RandomGenerators.RandomValueGen;
@@ -17,55 +18,45 @@ namespace NExpect.Tests.DanglingPrepositions
         public void DanglingContain()
         {
             // Arrange
-            var parent = new Container()
-            {
-                Subs = GetRandomArray<Sub>(2)
-            };
-            var search = GetRandomFrom(parent.Subs);
+            var outer = new Rectangle(0, 0, 100, 100);
+            var inner = new Rectangle(10, 10, 10, 10);
             // Pre-assert
             // Act
             Assert.That(() =>
             {
-                Expect(parent).Not.To.Contain.Child(search);
+                Expect(outer).Not.To.Contain.Shape(inner);
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             
             Assert.That(() =>
             {
-                Expect(parent).To.Not.Contain.Child(search);
+                Expect(outer).To.Not.Contain.Shape(inner);
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             
             Assert.That(() =>
             {
-                Expect(parent).To.Contain.Child(search);
+                Expect(outer).To.Contain.Shape(inner);
             }, Throws.Nothing);
             // Assert
         }
     }
 
-    public class Container
+    public static class ShapeMatchers
     {
-        public Sub[] Subs { get; set; }
-    }
-
-    public class Sub
-    {
-        public string Name { get; set; }
-    }
-
-    public static class ObjectContainMatchers
-    {
-        public static void Child(
-            this IContain<Container> contain,
-            Sub sub)
+        public static void Shape(
+            this IContain<Rectangle> contain,
+            Rectangle other
+        )
         {
             contain.AddMatcher(actual =>
             {
-                var passed = (actual?.Subs ?? new Sub[0])
-                    .Any(c => c.Name == sub.Name);
+                var passed = actual.Left <= other.Left &&
+                             actual.Right >= other.Right &&
+                             actual.Top <= other.Top &&
+                             actual.Bottom >= other.Bottom;
                 return new MatcherResult(
                     passed,
-                    $"Expected {actual.Stringify()} {passed.AsNot()}to contain sub {sub.Name}");
+                    () => $"Expected {actual.Stringify()} {passed.AsNot()}to contain {other.Stringify()}");
             });
         }
-    }    
+    }
 }
