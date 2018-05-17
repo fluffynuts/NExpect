@@ -40,6 +40,36 @@ namespace NExpect.Tests.Collections
             }
 
             [Test]
+            public void Contain_GivenAtLeast2Items_WhenHave16Items_ShouldNotThrow()
+            {
+                // Arrange
+                var src = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+                // Pre-assert
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(src).To.Contain.At.Least(2).Items();
+                    }, Throws.Nothing);
+                // Assert
+            }
+            
+            [Test]
+            public void Contain_GivenAtMost2Items_WhenHave1Item_ShouldNotThrow()
+            {
+                // Arrange
+                var src = new[] { 1 };
+                // Pre-assert
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(src).To.Contain.At.Most(2).Items();
+                    }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
             public void Contain_Any_WhenCollectionHasNone_ShouldThrow()
             {
                 // Arrange

@@ -1004,15 +1004,28 @@ namespace NExpect
                 {
                     var expected = contain.ExpectedCount;
                     var actual = collection?.Count() ?? 0;
-                    var passed = actual == expected;
+                    var passed = CountPassStrategies[contain.Method](actual, expected, actual);
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
-                            () => $"Expected {passed.AsNot()}to find {expected} items but actually found {actual}",
+                            () => CollectionCountMessageStrategies[contain.Method](
+                                passed,
+                                new StringifyHackForAnyItem(),
+                                actual,
+                                expected),
                             customMessageGenerator
                         )
                     );
                 });
+        }
+
+        private class StringifyHackForAnyItem
+        {
+            public int Id => throw new Exception("force .ToString()");
+            public override string ToString()
+            {
+                return "any item";
+            }
         }
 
         /// <summary>

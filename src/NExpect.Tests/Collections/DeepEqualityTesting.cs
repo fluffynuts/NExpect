@@ -637,7 +637,11 @@ namespace NExpect.Tests.Collections
                                 Assert.That(
                                     () =>
                                     {
-                                        Expect(src)
+                                        Expect(src.And(new Item1
+                                            {
+                                                Id = 1,
+                                                Name = "moo"
+                                            }))
                                             .To.Contain.At.Least(1)
                                             .Intersection.Equal.To(
                                                 new Item2
@@ -656,8 +660,8 @@ namespace NExpect.Tests.Collections
                                             .Intersection.Equal.To(
                                                 new Item2
                                                 {
-                                                    Id = 1,
-                                                    Name = "moo"
+                                                    Id = 2,
+                                                    Name = "Cake"
                                                 }
                                             );
                                     },
