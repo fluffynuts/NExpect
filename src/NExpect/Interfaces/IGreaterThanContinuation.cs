@@ -4,7 +4,7 @@ namespace NExpect.Interfaces
     /// Provides the .And on .Greater.Than
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IGreaterThan<T> 
+    public interface IGreaterThanContinuation<T> 
     {
         /// <summary>
         /// Prepares to test for more than just greatness

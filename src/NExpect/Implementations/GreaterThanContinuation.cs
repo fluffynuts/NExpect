@@ -4,17 +4,17 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations
 {
-    internal class GreaterThan<T> :
+    internal class GreaterThanContinuation<T> :
         ExpectationContext<T>,
         IHasActual<T>,
-        IGreaterThan<T>
+        IGreaterThanContinuation<T>
     {
         public T Actual { get; }
 
         public IGreaterThanAnd<T> And =>
             Factory.Create<T, GreaterThanAnd<T>>(Actual, this);
 
-        public GreaterThan(T actual)
+        public GreaterThanContinuation(T actual)
         {
             Actual = actual;
         }
