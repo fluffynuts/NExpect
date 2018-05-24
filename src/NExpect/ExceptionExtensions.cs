@@ -76,7 +76,8 @@ namespace NExpect
                             FinalMessageFor(
                                 () => $"Exception thrown:\n${ex.Message}\n${ex.StackTrace}",
                                 customMessageGenerator
-                            ));
+                            ), 
+                            ex);
                     }
 
                     return result;

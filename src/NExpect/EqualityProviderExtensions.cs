@@ -706,7 +706,7 @@ namespace NExpect
             return new MatcherResult(
                 passed,
                 () => FinalMessageFor(
-                    $"Expected {actual} {passed.AsNot()}to be the same reference as {other}",
+                    $"Expected {actual?.ToString() ?? NULL_REPLACER} {passed.AsNot()}to be the same reference as {other?.ToString() ?? NULL_REPLACER}",
                     customMessageGenerator()
                 )
             );

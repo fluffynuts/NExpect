@@ -2981,11 +2981,11 @@ namespace NExpect.Tests.ObjectEquality
                         }
 
                         [Test]
-                        public void GreaterThanOrEqualTo_NegativeResult()
+                        public void LessThanOrEqualTo_NegativeResult()
                         {
                             // Arrange
                             var actual = GetRandomLong(5, 10);
-                            var expected = 5;
+                            var expected = 4;
                             // Pre-assert
                             // Act
                             Assert.That(

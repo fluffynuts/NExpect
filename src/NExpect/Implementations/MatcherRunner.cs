@@ -50,7 +50,7 @@ namespace NExpect.Implementations
                 : result.Passed;
             if (isPass)
                 return;
-            Assertions.Throw(result.Message);
+            Assertions.Throw(result.Message, result.LocalException);
         }
     }
 }

@@ -1,3 +1,5 @@
+using System;
+
 namespace NExpect.MatcherLogic
 {
     /// <summary>
@@ -19,5 +21,11 @@ namespace NExpect.MatcherLogic
         /// "expected value not to equal 1"
         /// </summary>
         string Message { get; }
+
+        /// <summary>
+        /// Exception from the area where the matcher result occurred, if any.
+        /// Used by .Throw();{}{}{{{}
+        /// </summary>
+        Exception LocalException { get; }
     }
 }

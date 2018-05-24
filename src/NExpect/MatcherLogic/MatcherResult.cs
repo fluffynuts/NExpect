@@ -2,6 +2,7 @@
 // ReSharper disable UnusedMember.Global
 
 using System;
+// ReSharper disable IntroduceOptionalParameters.Global
 
 namespace NExpect.MatcherLogic
 {
@@ -13,13 +14,16 @@ namespace NExpect.MatcherLogic
     {
         private Func<string> _messageGenerator;
         private string _message;
-        private Func<Func<string>> _messageGeneratorGenerator;
+        private readonly Func<Func<string>> _messageGeneratorGenerator;
 
         /// <inheritdoc />
         public bool Passed { get; set; }
 
         /// <inheritdoc />
         public string Message => _message ?? (_message = MessageGenerator?.Invoke());
+
+        /// <inheritdoc />
+        public Exception LocalException { get; }
 
         private Func<string> MessageGenerator => _messageGenerator ??
                                                  (_messageGenerator = _messageGeneratorGenerator?.Invoke());
@@ -28,9 +32,8 @@ namespace NExpect.MatcherLogic
         /// Constructor with just pased value -- set message later
         /// </summary>
         /// <param name="passed">Whether or not the matcher passed</param>
-        public MatcherResult(bool passed)
+        public MatcherResult(bool passed): this(passed, () => "")
         {
-            Passed = passed;
         }
 
         /// <summary>
@@ -49,14 +52,40 @@ namespace NExpect.MatcherLogic
         }
 
         /// <summary>
-        /// Cosntructor with message generator
+        /// Constructor with message generator
         /// </summary>
         /// <param name="passed">Did the matcher pass?</param>
         /// <param name="messageGenerator">Generator about the pass / fail</param>
-        public MatcherResult(bool passed, Func<string> messageGenerator)
+        public MatcherResult(
+            bool passed, 
+            Func<string> messageGenerator)
+            : this(passed, () => messageGenerator, null)
         {
-            _messageGenerator = messageGenerator;
-            Passed = passed;
+        }
+
+        /// <summary>
+        /// Constructor with message generator generator
+        /// </summary>
+        /// <param name="passed"></param>
+        /// <param name="messageGeneratorGenerator"></param>
+        public MatcherResult(
+            bool passed, 
+            Func<Func<string>> messageGeneratorGenerator)
+            : this(passed, messageGeneratorGenerator, null)
+        {
+        }
+
+        /// <summary>
+        /// Constructor with message generator generator and local exception
+        /// </summary>
+        /// <param name="passed"></param>
+        /// <param name="messageGenerator"></param>
+        /// <param name="localException"></param>
+        public MatcherResult(
+            bool passed, 
+            Func<string> messageGenerator, 
+            Exception localException): this(passed, () => messageGenerator, localException)
+        {
         }
 
         /// <summary>
@@ -64,13 +93,16 @@ namespace NExpect.MatcherLogic
         /// </summary>
         /// <param name="passed"></param>
         /// <param name="messageGeneratorGenerator"></param>
+        /// <param name="localException"></param>
         public MatcherResult(
             bool passed,
-            Func<Func<string>> messageGeneratorGenerator
+            Func<Func<string>> messageGeneratorGenerator,
+            Exception localException
         )
         {
             _messageGeneratorGenerator = messageGeneratorGenerator;
             Passed = passed;
+            LocalException = localException;
         }
     }
 }

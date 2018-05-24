@@ -355,6 +355,7 @@ namespace NExpect.Tests
             var result = new MatcherResult(expected);
             // Assert
             Expect(result.Passed).To.Equal(expected);
+            Expect(result.Message).To.Be.Empty();
         }
 
         [Test]
