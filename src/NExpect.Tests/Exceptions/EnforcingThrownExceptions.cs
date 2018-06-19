@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NExpect.Exceptions;
+using NSubstitute.Exceptions;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable UnusedMember.Global
 
 // ReSharper disable NotResolvedInText
 // ReSharper disable UnassignedGetOnlyAutoProperty
@@ -608,6 +613,29 @@ namespace NExpect.Tests.Exceptions
 
                 // Assert
             }
+            
+            [Test]
+            public void
+                Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_Negated()
+            {
+                // Arrange
+                var expected = GetRandomString();
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(() => throw new ArgumentNullException(expected))
+                            .To.Throw<ArgumentNullException>()
+                            .With.Property(ex => ex.ParamName)
+                            .Not.Equal.To(GetAnother(expected));
+                    },
+                    Throws.Nothing);
+
+                // Assert
+            }
 
             [Test]
             public void
@@ -958,6 +986,140 @@ namespace NExpect.Tests.Exceptions
                     },
                     Throws.Nothing);
                 // Assert
+            }
+        }
+
+        [TestFixture]
+        public class RippingOffComplexPropertiesOnExceptions
+        {
+            [Test]
+            public void ShouldBeAbleToDoAIntersectionEqual()
+            {
+                // Arrange
+                var expected = GetRandom<Complex>();
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(() => throw new ExceptionWithComplex(
+                               GetRandomString(1), expected))
+                        .To.Throw<ExceptionWithComplex>()
+                        .With.Property(e => e.Complex)
+                        .Intersection.Equal.To(expected);
+                }, Throws.Nothing);
+                // Assert
+            }
+            
+            [Test]
+            public void ShouldBeAbleToDoAIntersectionEqual_Fail()
+            {
+                // Arrange
+                var expected = GetRandom<Complex>();
+                var unexpected = GetRandom<Complex>();
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(() => throw new ExceptionWithComplex(
+                               GetRandomString(1), expected))
+                        .To.Throw<ExceptionWithComplex>()
+                        .With.Property(e => e.Complex)
+                        .Intersection.Equal.To(unexpected);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+
+            [Test]
+            public void ShouldBeAbleToDoAIntersectionEqual_Negated()
+            {
+                // Arrange
+                var expected = GetRandom<Complex>();
+                var unexpected = GetRandom<Complex>();
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(() => throw new ExceptionWithComplex(
+                               GetRandomString(1), expected))
+                        .To.Throw<ExceptionWithComplex>()
+                        .With.Property(e => e.Complex)
+                        .Not.Intersection.Equal.To(unexpected);
+                }, Throws.Nothing);
+                // Assert
+            }
+            
+            [Test]
+            public void ShouldBeAbleToDoADeepEqual()
+            {
+                // Arrange
+                var expected = GetRandom<Complex>();
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(() => throw new ExceptionWithComplex(
+                               GetRandomString(1), expected))
+                        .To.Throw<ExceptionWithComplex>()
+                        .With.Property(e => e.Complex)
+                        .Deep.Equal.To(expected);
+                }, Throws.Nothing);
+                // Assert
+            }
+            
+            [Test]
+            public void ShouldBeAbleToDoADeepEqual_Fail()
+            {
+                // Arrange
+                var expected = GetRandom<Complex>();
+                var unexpected = GetRandom<Complex>();
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(() => throw new ExceptionWithComplex(
+                               GetRandomString(1), expected))
+                        .To.Throw<ExceptionWithComplex>()
+                        .With.Property(e => e.Complex)
+                        .Deep.Equal.To(unexpected);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+
+            [Test]
+            public void ShouldBeAbleToDoADeepEqual_Negated()
+            {
+                // Arrange
+                var expected = GetRandom<Complex>();
+                var unexpected = GetRandom<Complex>();
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(() => throw new ExceptionWithComplex(
+                               GetRandomString(1), expected))
+                        .To.Throw<ExceptionWithComplex>()
+                        .With.Property(e => e.Complex)
+                        .Not.Deep.Equal.To(unexpected);
+                }, Throws.Nothing);
+                // Assert
+            }
+
+            public class Complex
+            {
+                public int Id { get; set; }
+                public string Name { get; set; }
+            }
+
+            public class ExceptionWithComplex : Exception
+            {
+                public Complex Complex { get; set; }
+
+                public ExceptionWithComplex(
+                    string message,
+                    Complex complex) : base(message)
+                {
+                    Complex = complex;
+                }
             }
         }
     }

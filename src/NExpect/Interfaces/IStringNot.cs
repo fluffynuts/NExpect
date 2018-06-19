@@ -3,7 +3,7 @@
     /// <summary>
     /// Starts a negated expectation for a string Actual
     /// </summary>
-    public interface IStringNot: INot<string>
+    public interface IStringNot: IPropertyNot<string>
     {
         /// <summary>
         /// Starts a string-specific .To

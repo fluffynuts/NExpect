@@ -7,7 +7,7 @@ namespace NExpect.Implementations
     internal class Not<T>: 
         ExpectationContext<T>, 
         IHasActual<T>,
-        INot<T>
+        IPropertyNot<T>
     {
         public T Actual { get; }
         public IToAfterNot<T> To => Factory.Create<T, ToAfterNot<T>>(Actual, this);

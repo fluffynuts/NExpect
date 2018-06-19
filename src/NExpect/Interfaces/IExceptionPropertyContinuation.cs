@@ -12,15 +12,6 @@ namespace NExpect.Interfaces
         /// <summary>
         /// Negates the expectation
         /// </summary>
-        INot<TValue> Not { get; }
-    }
-
-    /// <summary>
-    /// Provides the extension point for exception messages
-    /// </summary>
-    // ReSharper disable once InheritdocConsiderUsage
-    public interface IExceptionCollectionPropertyContinuation<TValue>
-        : ICollectionBe<TValue>
-    {
+        IPropertyNot<TValue> Not { get; }
     }
 }

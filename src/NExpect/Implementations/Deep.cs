@@ -11,6 +11,9 @@ namespace NExpect.Implementations
     {
         public T Actual { get; }
 
+        public IDeepEqual<T> Equal 
+            => Factory.Create<T, DeepEqual<T>>(Actual, this);
+
         public Deep(T actual)
         {
             Actual = actual;

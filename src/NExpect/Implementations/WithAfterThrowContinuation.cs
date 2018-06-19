@@ -12,22 +12,22 @@ namespace NExpect.Implementations
         IHasActual<T>
         where T : Exception
     {
-        public IExceptionPropertyContinuation<string> Message =>
-            Factory.Create<string, ExceptionPropertyContinuation<string>>(
+        public IStringPropertyContinuation Message =>
+            Factory.Create<string, ExceptionStringPropertyContinuation>(
                 Actual.Message,
                 new WrappingContinuation<Exception, string>(
                     this, c => c.Actual?.Message
                 )
             );
 
-        public IExceptionPropertyContinuation<TValue> Property<TValue>(
+        public IBe<TValue> Property<TValue>(
             Func<T, TValue> propertyValueFetcher
         )
         {
             return CreateFor(propertyValueFetcher);
         }
 
-        public IExceptionCollectionPropertyContinuation<TItem> CollectionProperty<TItem>(
+        public ICollectionBe<TItem> CollectionProperty<TItem>(
             Func<T, IEnumerable<TItem>> propertyValueFetcher
         )
         {

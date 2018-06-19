@@ -76,7 +76,7 @@ namespace NExpect
                             FinalMessageFor(
                                 () => $"Exception thrown:\n${ex.Message}\n${ex.StackTrace}",
                                 customMessageGenerator
-                            ), 
+                            ),
                             ex);
                     }
 
@@ -100,7 +100,7 @@ namespace NExpect
         ) where T : Exception
         {
             var throwContinuation = continuation as ThrowContinuation<T>;
-            var actual = throwContinuation?.Exception ?? 
+            var actual = throwContinuation?.Exception ??
                          continuation.TryGetPropertyValue<T>("Exception");
             if (actual == null)
             {
@@ -200,7 +200,7 @@ namespace NExpect
         /// <param name="src">Continuation carrying an exception message</param>
         /// <param name="search">String to look for in the message</param>
         /// <returns>Another continuation so you can do .And() on it</returns>
-        public static IStringContainContinuation Containing(
+        public static IStringPropertyContinuation Containing(
             this IExceptionPropertyContinuation<string> src,
             string search)
         {
@@ -214,7 +214,7 @@ namespace NExpect
         /// <param name="search">String to look for in the message</param>
         /// <param name="customMessage">Custom message to add to a failure message</param>
         /// <returns>Another continuation so you can do .And() on it</returns>
-        public static IStringContainContinuation Containing(
+        public static IStringPropertyContinuation Containing(
             this IExceptionPropertyContinuation<string> src,
             string search,
             string customMessage)
@@ -230,7 +230,7 @@ namespace NExpect
         /// <param name="search">String to look for in the message</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to a failure message</param>
         /// <returns>Another continuation so you can do .And() on it</returns>
-        public static IStringContainContinuation Containing(
+        public static IStringPropertyContinuation Containing(
             this IExceptionPropertyContinuation<string> src,
             string search,
             Func<string> customMessageGenerator)
@@ -270,7 +270,7 @@ namespace NExpect
         /// <param name="src">Continuation containing exception message to test</param>
         /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
         /// <returns>Another continuation so you can do .And()</returns>
-        public static IStringContainContinuation Matching(
+        public static IStringPropertyContinuation Matching(
             this IExceptionPropertyContinuation<string> src,
             Func<string, bool> test
         )
@@ -285,7 +285,7 @@ namespace NExpect
         /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
         /// <returns>Another continuation so you can do .And()</returns>
-        public static IStringContainContinuation Matching(
+        public static IStringPropertyContinuation Matching(
             this IExceptionPropertyContinuation<string> src,
             Func<string, bool> test,
             string customMessage)
@@ -300,8 +300,70 @@ namespace NExpect
         /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
         /// <returns>Another continuation so you can do .And()</returns>
-        public static IStringContainContinuation Matching(
+        public static IStringPropertyContinuation Matching(
             this IExceptionPropertyContinuation<string> src,
+            Func<string, bool> test,
+            Func<string> customMessageGenerator)
+        {
+            var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
+                null,
+                src as IExpectationContext<string>
+            );
+            src.AddMatcher(
+                s =>
+                {
+                    result.Actual = s;
+                    var passed = test(s);
+                    return new MatcherResult(
+                        passed,
+                        MessageForMatchResult(
+                            passed,
+                            s,
+                            customMessageGenerator
+                        )
+                    );
+                });
+            return result;
+        }
+
+        /// <summary>
+        /// Used to test exception messages
+        /// </summary>
+        /// <param name="src">Continuation containing exception message to test</param>
+        /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
+        /// <returns>Another continuation so you can do .And()</returns>
+        public static IStringPropertyContinuation Matching(
+            this IStringPropertyContinuation src,
+            Func<string, bool> test
+        )
+        {
+            return src.Matching(test, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Used to test exception messages
+        /// </summary>
+        /// <param name="src">Continuation containing exception message to test</param>
+        /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns>Another continuation so you can do .And()</returns>
+        public static IStringPropertyContinuation Matching(
+            this IStringPropertyContinuation src,
+            Func<string, bool> test,
+            string customMessage)
+        {
+            return src.Matching(test, () => customMessage);
+        }
+
+        /// <summary>
+        /// Used to test exception messages
+        /// </summary>
+        /// <param name="src">Continuation containing exception message to test</param>
+        /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <returns>Another continuation so you can do .And()</returns>
+        public static IStringPropertyContinuation Matching(
+            this IStringPropertyContinuation src,
             Func<string, bool> test,
             Func<string> customMessageGenerator)
         {
@@ -332,8 +394,201 @@ namespace NExpect
         /// <param name="continuation">Continuation containing the exception message</param>
         /// <param name="search">String to search for</param>
         /// <returns>Continuation so you can perform more tests on the message</returns>
-        public static IStringContainContinuation Containing(
-            this INot<string> continuation,
+        public static IStringPropertyContinuation Containing(
+            this IStringPropertyContinuation continuation,
+            string search
+        )
+        {
+            return continuation.Containing(search, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Continues to search for another string after a previous .Contains()
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation And(
+            this IStringPropertyContinuation continuation,
+            string other)
+        {
+            return continuation.Containing(other);
+        }
+
+        /// <summary>
+        /// Continues to search for another string after a previous .Contains()
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation Then(
+            this IStringPropertyContinuation continuation,
+            string other
+        )
+        {
+            return continuation.Then(other, null as string);
+        }
+
+        /// <summary>
+        /// Continues to search for another string after a previous .Contains()
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="other"></param>
+        /// <param name="customMessage"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation Then(
+            this IStringPropertyContinuation continuation,
+            string other,
+            string customMessage)
+        {
+            return continuation.Then(other, () => customMessage);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="other"></param>
+        /// <param name="messageGenerator"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation Then(
+            this IStringPropertyContinuation continuation,
+            string other,
+            Func<string> messageGenerator
+        )
+        {
+            return RunContainFor(
+                continuation,
+                other,
+                messageGenerator,
+                other?.GetMetadata<int>(SEARCH_OFFSET) ?? 0);
+        }
+
+
+        /// <summary>
+        /// Used to test exception messages in the negative
+        /// </summary>
+        /// <param name="continuation">Continuation containing the exception message</param>
+        /// <param name="search">String to search for</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns>Continuation so you can perform more tests on the message</returns>
+        public static IStringPropertyContinuation Containing(
+            this IStringPropertyContinuation continuation,
+            string search,
+            string customMessage
+        )
+        {
+            return continuation.Containing(search, () => customMessage);
+        }
+        
+        /// <summary>
+        /// Used to test exception messages in the negative
+        /// </summary>
+        /// <param name="continuation">Continuation containing the exception message</param>
+        /// <param name="search">String to search for</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <returns>Continuation so you can perform more tests on the message</returns>
+        public static IStringPropertyContinuation Containing(
+            this IStringPropertyContinuation continuation,
+            string search,
+            Func<string> customMessageGenerator
+        )
+        {
+            return RunContainFor(continuation, search, customMessageGenerator, 0);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static IStringPropertyContinuation Containing(
+            this IBe<string> continuation,
+            string search
+        )
+        {
+            return continuation.Containing(search, null as string);
+        }
+
+        /// <summary>
+        /// Searchs for a string within an Exception's string property
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <param name="customMessage"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation Containing(
+            this IBe<string> continuation,
+            string search,
+            string customMessage
+        )
+        {
+            return continuation.Containing(search, () => customMessage);
+        }
+
+        /// <summary>
+        /// Searchs for a string within an Exception's string property
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <param name="messageGenerator"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation Containing(
+            this IBe<string> continuation,
+            string search,
+            Func<string> messageGenerator
+        )
+        {
+            return RunContainFor(continuation, search, messageGenerator, -1);
+        }
+
+        private static IStringPropertyContinuation RunContainFor(
+            ICanAddMatcher<string> continuation,
+            string search,
+            Func<string> customMessageGenerator,
+            int offset)
+        {
+            var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
+                null,
+                continuation as IExpectationContext<string>
+            );
+            continuation.AddMatcher(
+                s =>
+                {
+                    if (search == null)
+                    {
+                        throw new InvalidOperationException("Cannot search for NULL in a string");
+                    }
+
+                    result.Actual = s;
+                    var foundAt = s?.IndexOf(search, StringComparison.InvariantCulture) ?? -1;
+                    var passed = offset == -1 ? foundAt > 0 : foundAt >= offset;
+                    s?.SetMetadata(SEARCH_OFFSET, foundAt + search.Length);
+
+                    return new MatcherResult(
+                        passed,
+                        MessageForNotContainsResult(
+                            passed,
+                            s,
+                            search,
+                            customMessageGenerator
+                        )
+                    );
+                });
+            return result;
+        }
+
+
+        /// <summary>
+        /// Used to test exception messages in the negative
+        /// </summary>
+        /// <param name="continuation">Continuation containing the exception message</param>
+        /// <param name="search">String to search for</param>
+        /// <returns>Continuation so you can perform more tests on the message</returns>
+        public static IStringPropertyContinuation Containing(
+            this IStringPropertyNot continuation,
             string search
         )
         {
@@ -347,8 +602,8 @@ namespace NExpect
         /// <param name="search">String to search for</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
         /// <returns>Continuation so you can perform more tests on the message</returns>
-        public static IStringContainContinuation Containing(
-            this INot<string> continuation,
+        public static IStringPropertyContinuation Containing(
+            this IStringPropertyNot continuation,
             string search,
             string customMessage
         )
@@ -363,8 +618,8 @@ namespace NExpect
         /// <param name="search">String to search for</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
         /// <returns>Continuation so you can perform more tests on the message</returns>
-        public static IStringContainContinuation Containing(
-            this INot<string> continuation,
+        public static IStringPropertyContinuation Containing(
+            this IStringPropertyNot continuation,
             string search,
             Func<string> customMessageGenerator
         )
@@ -397,8 +652,8 @@ namespace NExpect
         /// <param name="continuation">Continuation containing exception message to test</param>
         /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
         /// <returns>Another continuation so you can do .And()</returns>
-        public static IStringContainContinuation Matching(
-            this INot<string> continuation,
+        public static IStringPropertyContinuation Matching(
+            this IPropertyNot<string> continuation,
             Func<string, bool> test
         )
         {
@@ -412,8 +667,8 @@ namespace NExpect
         /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
         /// <returns>Another continuation so you can do .And()</returns>
-        public static IStringContainContinuation Matching(
-            this INot<string> continuation,
+        public static IStringPropertyContinuation Matching(
+            this IPropertyNot<string> continuation,
             Func<string, bool> test,
             string customMessage
         )
@@ -428,8 +683,8 @@ namespace NExpect
         /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
         /// <returns>Another continuation so you can do .And()</returns>
-        public static IStringContainContinuation Matching(
-            this INot<string> continuation,
+        public static IStringPropertyContinuation Matching(
+            this IPropertyNot<string> continuation,
             Func<string, bool> test,
             Func<string> customMessageGenerator
         )

@@ -1,4 +1,5 @@
-﻿namespace NExpect.Interfaces
+﻿// ReSharper disable UnusedMemberInSuper.Global
+namespace NExpect.Interfaces
 {
     /// <summary>
     /// An Expectation, for a type T
@@ -18,7 +19,7 @@
         /// <summary>
         /// Not continuation, ie, Expect(value).Not...
         /// </summary>
-        INot<T> Not { get; }
+        IPropertyNot<T> Not { get; }
         
     }
 }

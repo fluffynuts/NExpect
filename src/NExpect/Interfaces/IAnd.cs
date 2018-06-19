@@ -22,7 +22,7 @@ namespace NExpect.Interfaces
         /// <summary>
         /// Provides the .And.Not extension point
         /// </summary>
-        INot<T> Not { get; }
+        IPropertyNot<T> Not { get; }
         /// <summary>
         /// Provides the .And.To extension point
         /// </summary>

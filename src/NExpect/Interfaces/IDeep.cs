@@ -6,5 +6,9 @@
     /// <typeparam name="T"></typeparam>
     public interface IDeep<T>: ICanAddMatcher<T>
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        IDeepEqual<T> Equal { get; }
     }
 }

@@ -67,6 +67,78 @@ namespace NExpect
             params object[] customEqualityComparers
         )
         {
+            DoDeepEqualityTesting(
+                continuation,
+                expected,
+                customMessageGenerator,
+                customEqualityComparers);
+        }
+        /// <summary>
+        /// Performs deep equality testing on two objects
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
+        /// for customising equality testing for properties of type TProperty</param>
+        /// <typeparam name="T">Type of object</typeparam>
+        public static void To<T>(
+            this IDeepEqual<T> continuation,
+            object expected,
+            params object[] customEqualityComparers
+        )
+        {
+            continuation.To(expected, MH.NULL_STRING, customEqualityComparers);
+        }
+
+        /// <summary>
+        /// Performs deep equality testing on two objects
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
+        /// for customising equality testing for properties of type TProperty</param>
+        /// <typeparam name="T">Type of object</typeparam>
+        public static void To<T>(
+            this IDeepEqual<T> continuation,
+            object expected,
+            string customMessage,
+            params object[] customEqualityComparers
+        )
+        {
+            continuation.To(expected, () => customMessage, customEqualityComparers);
+        }
+
+        /// <summary>
+        /// Performs deep equality testing on two objects
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
+        /// for customising equality testing for properties of type TProperty</param>
+        /// <typeparam name="T">Type of object</typeparam>
+        public static void To<T>(
+            this IDeepEqual<T> continuation,
+            object expected,
+            Func<string> customMessageGenerator,
+            params object[] customEqualityComparers
+        )
+        {
+            DoDeepEqualityTesting(
+                continuation,
+                expected,
+                customMessageGenerator,
+                customEqualityComparers);
+        }
+
+        private static void DoDeepEqualityTesting<T>(
+            this ICanAddMatcher<T> continuation,
+            object expected,
+            Func<string> customMessageGenerator,
+            params object[] customEqualityComparers
+        )
+        {
             continuation.AddMatcher(
                 actual =>
                 {

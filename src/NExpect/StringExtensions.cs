@@ -8,6 +8,7 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
+// ReSharper disable UnusedMember.Global
 
 // ReSharper disable HeapView.BoxingAllocation
 // ReSharper disable UnusedMethodReturnValue.Global
@@ -52,6 +53,7 @@ namespace NExpect
         {
             return continuation.Contain(search, () => customMessage);
         }
+        
 
         /// <summary>
         /// Tests if the value under test contains a given string. May be continued

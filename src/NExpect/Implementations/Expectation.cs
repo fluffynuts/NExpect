@@ -15,7 +15,7 @@ namespace NExpect.Implementations
 
         public T Actual { get; }
         public ITo<T> To => Factory.Create<T, To<T>>(Actual, this);
-        public INot<T> Not => Factory.Create<T, Not<T>>(Actual, this);
+        public IPropertyNot<T> Not => Factory.Create<T, Not<T>>(Actual, this);
 
 
         public Expectation(T actual)

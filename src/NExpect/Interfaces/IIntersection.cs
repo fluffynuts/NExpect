@@ -6,5 +6,9 @@
     /// <typeparam name="T">Type of thec ontinuation</typeparam>
     public interface IIntersection<T>: ICanAddMatcher<T>
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        IIntersectionEqual<T> Equal { get; }
     }
 }

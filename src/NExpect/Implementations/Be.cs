@@ -30,19 +30,15 @@ namespace NExpect.Implementations
         public IAn<T> An => Factory.Create<T, An<T>>(Actual, this);
         public INull<T> Null => Factory.Create<T, Null<T>>(Actual, this);
         public IFor<T> For => Factory.Create<T, For<T>>(Actual, this);
+        
+        public IDeep<T> Deep =>
+            Factory.Create<T, Deep<T>>(Actual, this);
+
+        public IIntersection<T> Intersection =>
+            Factory.Create<T, Intersection<T>>(Actual, this);
+
 
         public Be(T actual)
-        {
-            Actual = actual;
-        }
-    }
-
-    internal class For<T>:
-        ExpectationContext<T>,
-        IFor<T>
-    {
-        public T Actual { get; }
-        public For(T actual)
         {
             Actual = actual;
         }

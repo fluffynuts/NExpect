@@ -5,7 +5,7 @@ namespace NExpect.Interfaces
     /// Provides the ".Not" negation, to come before a ".To"
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface INot<T>: ICanAddMatcher<T>
+    public interface IPropertyNot<T>: ICanAddMatcher<T>
     {
         /// <summary>
         /// Provides the ".To" after ".Not"

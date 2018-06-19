@@ -13,6 +13,8 @@ using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedMethodReturnValue.Global
 
 // ReSharper disable PossibleNullReferenceException
 
@@ -647,14 +649,6 @@ namespace NExpect.Tests
                     Id = 1,
                     Name = "Moo"
                 };
-                var test = new[]
-                {
-                    new SomeNode()
-                    {
-                        Id = 1,
-                        Name = "Moo"
-                    }
-                };
                 // Pre-assert
                 // Act
                 Assert.That(
@@ -680,13 +674,9 @@ namespace NExpect.Tests
                     () =>
                     {
                         Expect(
-                                () =>
-                                {
-                                    throw new ArgumentNullException(message);
-                                })
+                                () => throw new ArgumentNullException(message))
                             .To.Throw<ArgumentNullException>()
-                            .With.Message.Containing(e1)
-                            .In.English();
+                            .With.Message.Containing(e1);
                     },
                     Throws.Nothing);
                 // Assert
@@ -741,6 +731,7 @@ namespace NExpect.Tests
             contain.AddMatcher(
                 actual =>
                 {
+                    // ReSharper disable once AssignNullToNotNullAttribute
                     var passed = actual.Contains(path);
                     return new MatcherResult(
                         passed,
@@ -757,15 +748,6 @@ namespace NExpect.Tests
                     return new MatcherResult(
                         passed,
                         () => $"Expected {actual} {passed.AsNot()}to be falsey");
-                });
-        }
-
-        public static void English(this IStringIn continuation)
-        {
-            continuation.Compose(
-                actual =>
-                {
-                    Expect(actual).To.Contain("Value cannot be null");
                 });
         }
 

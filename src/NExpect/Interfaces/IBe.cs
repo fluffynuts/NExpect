@@ -47,5 +47,14 @@ namespace NExpect.Interfaces
         /// Provides the .For continuation extension point
         /// </summary>
         IFor<T> For { get; }
+        
+        /// <summary>
+        /// Starts deep equality testing on the extracted property
+        /// </summary>
+        IDeep<T> Deep { get; }
+        /// <summary>
+        /// Starts intersection equality testing on the extracted property
+        /// </summary>
+        IIntersection<T> Intersection { get; }
     }
 }

@@ -225,6 +225,26 @@ namespace NExpect.Tests.ObjectEquality.Strings
                     .And.Not.End.With(end);
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
+        }        
+        
+        [Test]
+        public void TestingEndWith_PositiveResult()
+        {
+            // Arrange
+            var start = GetRandomString(2);
+            var middle = GetRandomString();
+            var end = GetRandomString(2);
+            var actual = $"{start}{middle}{end}";
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(actual)
+                    .To.Start.With(start)
+                    .And.Contain(middle)
+                    .And.End.With(end);
+            }, Throws.Nothing);
+            // Assert
         }
     }
 }
