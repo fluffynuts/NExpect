@@ -1,19 +1,16 @@
 using NExpect.Interfaces;
 // ReSharper disable MemberCanBePrivate.Global
-
 // ReSharper disable ClassNeverInstantiated.Global
 
 namespace NExpect.Implementations
 {
-    internal class ExceptionMessageContainuationToStringContainContinuation
-        : ExpectationContext<string>, IStringPropertyContinuation
+    internal class StringPropertyContinuation
+        : ExpectationContext<string>, 
+            IStringPropertyContinuation,
+            IStringPropertyStartingContinuation,
+            IStringPropertyEndingContinuation
     {
         public string Actual { get; set; }
-
-        public ExceptionMessageContainuationToStringContainContinuation(string actual)
-        {
-            Actual = actual;
-        }
 
         public IStringPropertyContinuation And =>
             Factory.Create<string, StringPropertyAnd>(Actual, this);
@@ -26,5 +23,16 @@ namespace NExpect.Implementations
 
         public IStringPropertyNot Not 
             => Factory.Create<string, StringPropertyNot>(Actual, this);
+        
+        public IStringPropertyEndingContinuation Ending
+            => Factory.Create<string, StringPropertyContinuation>(Actual, this);
+
+        public IStringPropertyStartingContinuation Starting 
+            => Factory.Create<string, StringPropertyContinuation>(Actual, this);
+
+        public StringPropertyContinuation(string actual)
+        {
+            Actual = actual;
+        }
     }
 }

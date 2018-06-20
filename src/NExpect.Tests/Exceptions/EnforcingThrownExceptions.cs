@@ -8,6 +8,7 @@ using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
@@ -546,54 +547,59 @@ namespace NExpect.Tests.Exceptions
             }
         }
 
-        [Test]
-        public void Throw_WithGenericType_ShouldContinueOnToMessageTest_HappyPath_TestingEqualTo()
+        [TestFixture]
+        public class ExceptionMessages
         {
-            // Arrange
-            var expected = GetRandomString();
+            [Test]
+            public void ShouldNotThrowWhenMessageIsExactMatch()
+            {
+                // Arrange
+                var expected = GetRandomString();
 
-            // Pre-Assert
+                // Pre-Assert
 
-            // Act
-            Assert.That(
-                () =>
-                {
-                    Expect(() => throw new AccessViolationException(expected))
-                        .To.Throw<AccessViolationException>()
-                        .With.Message.Equal.To(expected);
-                },
-                Throws.Nothing);
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(() => throw new AccessViolationException(expected))
+                            .To.Throw<AccessViolationException>()
+                            .With.Message.Equal.To(expected);
+                    },
+                    Throws.Nothing);
 
-            // Assert
+                // Assert
+            }
+
+            [Test]
+            public void ShouldThrowWhenMessageIsNotExactMatch()
+            {
+                // Arrange
+                var expected = GetRandomString();
+                var unexpected = GetAnother(expected);
+                // Pre-Assert
+
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(() => throw new AccessViolationException(unexpected))
+                            .To.Throw<AccessViolationException>()
+                            .With.Message.Equal.To(expected);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains($"Expected\n\"{unexpected}\"\nto equal\n\"{expected}\""));
+
+                // Assert
+            }
         }
 
-        [Test]
-        public void Throw_WithGenericType_ShouldContinueOnToMessageTest_SadPath_TestingEqualTo()
-        {
-            // Arrange
-            var expected = GetRandomString();
-            var unexpected = GetAnother(expected);
-            // Pre-Assert
 
-            // Act
-            Assert.That(
-                () =>
-                {
-                    Expect(() => throw new AccessViolationException(unexpected))
-                        .To.Throw<AccessViolationException>()
-                        .With.Message.Equal.To(expected);
-                },
-                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains($"Expected\n\"{unexpected}\"\nto equal\n\"{expected}\""));
-
-            // Assert
-        }
-
+        [TestFixture]
         public class GenericProperty
         {
             [Test]
-            public void
-                Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_HappyPath_TestingEqualTo()
+            public void ShouldContinueOnToEqualTo()
             {
                 // Arrange
                 var expected = GetRandomString();
@@ -613,10 +619,9 @@ namespace NExpect.Tests.Exceptions
 
                 // Assert
             }
-            
+
             [Test]
-            public void
-                Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_Negated()
+            public void ShouldContinueToNegatedEqualTo()
             {
                 // Arrange
                 var expected = GetRandomString();
@@ -638,8 +643,7 @@ namespace NExpect.Tests.Exceptions
             }
 
             [Test]
-            public void
-                Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_SadPath_TestingEqualTo()
+            public void ShouldThrowWhenExtractedPropertyDoesNotMatch()
             {
                 // Arrange
                 var expected = GetRandomString();
@@ -663,8 +667,7 @@ namespace NExpect.Tests.Exceptions
             }
 
             [Test]
-            public void
-                Throw_WithArgumentNullType_GivenParamNameProperty_ShouldContinueOnToPropertyTest_HappyPath_TestingContains()
+            public void ShouldNotThrowWhenExtractedPropertyContainsExpectedSubstring()
             {
                 // Arrange
                 var expected = GetRandomString(8, 8);
@@ -684,6 +687,159 @@ namespace NExpect.Tests.Exceptions
                     Throws.Nothing);
 
                 // Assert
+            }
+
+            [Test]
+            public void ShouldNotThrowWhenExtractedPropertyContainsExpectedSubstrings()
+            {
+                // Arrange
+                var expected = GetRandomString(10, 20);
+                var expectedSubstring = expected.Substring(2, 4);
+                var next = expected.Substring(6, 4);
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(() => throw new ArgumentNullException(expected))
+                            .To.Throw<ArgumentNullException>()
+                            .With.Property(ex => ex.ParamName)
+                            .Containing(expectedSubstring)
+                            .Then(next);
+                    },
+                    Throws.Nothing);
+
+                // Assert
+            }
+
+            [TestFixture]
+            public class EndingWith
+            {
+                [Test]
+                public void HappyPath()
+                {
+                    // Arrange
+                    var message = GetRandomString(10, 20);
+                    var search = message.Substring(10);
+                    // Pre-assert
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(() => throw new InvalidOperationException(message))
+                                .To.Throw<InvalidOperationException>()
+                                .With.Message.Ending.With(search);
+                        },
+                        Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void SadPath()
+                {
+                    // Arrange
+                    var message = GetRandomString(10, 20);
+                    var search = GetAnother(message.Substring(10));
+                    // Pre-assert
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(() => throw new InvalidOperationException(message))
+                                .To.Throw<InvalidOperationException>()
+                                .With.Message.Ending.With(search);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains(
+                                $"\"{message}\" to end with \"{search}\""
+                            ));
+                    // Assert
+                }
+
+                [Test]
+                public void Negated_HappyPath()
+                {
+                    // Arrange
+                    var message = GetRandomString(10, 20);
+                    var search = GetAnother(message.Substring(10));
+                    // Pre-assert
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(() => throw new InvalidOperationException(message))
+                                .To.Throw<InvalidOperationException>()
+                                .With.Message.Not.Ending.With(search);
+                        },
+                        Throws.Nothing);
+                    // Assert
+                }
+            }
+
+            [TestFixture]
+            public class StartingWith
+            {
+                [Test]
+                public void HappyPath()
+                {
+                    // Arrange
+                    var message = GetRandomString(10, 20);
+                    var search = message.Substring(0, 5);
+                    // Pre-assert
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(() => throw new OverflowException(message))
+                                .To.Throw<OverflowException>()
+                                .With.Message.Starting.With(search);
+                        },
+                        Throws.Nothing);
+                    // Assert
+                }
+                
+                [Test]
+                public void SadPath()
+                {
+                    // Arrange
+                    var message = GetRandomString(10, 20);
+                    var search = GetAnother(message.Substring(0, 10));
+                    // Pre-assert
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(() => throw new InvalidOperationException(message))
+                                .To.Throw<InvalidOperationException>()
+                                .With.Message.Starting.With(search);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains(
+                                $"\"{message}\" to start with \"{search}\""
+                            ));
+                    // Assert
+                }
+
+                [Test]
+                public void Negated_HappyPath()
+                {
+                    // Arrange
+                    var message = GetRandomString(10, 20);
+                    var search = GetAnother(message.Substring(0, 10));
+                    // Pre-assert
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(() => throw new InvalidOperationException(message))
+                                .To.Throw<InvalidOperationException>()
+                                .With.Message.Not.Starting.With(search);
+                        },
+                        Throws.Nothing);
+                    // Assert
+                }
             }
 
             [Test]
@@ -999,17 +1155,21 @@ namespace NExpect.Tests.Exceptions
                 var expected = GetRandom<Complex>();
                 // Pre-assert
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(() => throw new ExceptionWithComplex(
-                               GetRandomString(1), expected))
-                        .To.Throw<ExceptionWithComplex>()
-                        .With.Property(e => e.Complex)
-                        .Intersection.Equal.To(expected);
-                }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        Expect(
+                                () => throw new ExceptionWithComplex(
+                                    GetRandomString(1),
+                                    expected))
+                            .To.Throw<ExceptionWithComplex>()
+                            .With.Property(e => e.Complex)
+                            .Intersection.Equal.To(expected);
+                    },
+                    Throws.Nothing);
                 // Assert
             }
-            
+
             [Test]
             public void ShouldBeAbleToDoAIntersectionEqual_Fail()
             {
@@ -1018,14 +1178,18 @@ namespace NExpect.Tests.Exceptions
                 var unexpected = GetRandom<Complex>();
                 // Pre-assert
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(() => throw new ExceptionWithComplex(
-                               GetRandomString(1), expected))
-                        .To.Throw<ExceptionWithComplex>()
-                        .With.Property(e => e.Complex)
-                        .Intersection.Equal.To(unexpected);
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Assert.That(
+                    () =>
+                    {
+                        Expect(
+                                () => throw new ExceptionWithComplex(
+                                    GetRandomString(1),
+                                    expected))
+                            .To.Throw<ExceptionWithComplex>()
+                            .With.Property(e => e.Complex)
+                            .Intersection.Equal.To(unexpected);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
             }
 
@@ -1037,17 +1201,21 @@ namespace NExpect.Tests.Exceptions
                 var unexpected = GetRandom<Complex>();
                 // Pre-assert
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(() => throw new ExceptionWithComplex(
-                               GetRandomString(1), expected))
-                        .To.Throw<ExceptionWithComplex>()
-                        .With.Property(e => e.Complex)
-                        .Not.Intersection.Equal.To(unexpected);
-                }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        Expect(
+                                () => throw new ExceptionWithComplex(
+                                    GetRandomString(1),
+                                    expected))
+                            .To.Throw<ExceptionWithComplex>()
+                            .With.Property(e => e.Complex)
+                            .Not.Intersection.Equal.To(unexpected);
+                    },
+                    Throws.Nothing);
                 // Assert
             }
-            
+
             [Test]
             public void ShouldBeAbleToDoADeepEqual()
             {
@@ -1055,17 +1223,21 @@ namespace NExpect.Tests.Exceptions
                 var expected = GetRandom<Complex>();
                 // Pre-assert
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(() => throw new ExceptionWithComplex(
-                               GetRandomString(1), expected))
-                        .To.Throw<ExceptionWithComplex>()
-                        .With.Property(e => e.Complex)
-                        .Deep.Equal.To(expected);
-                }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        Expect(
+                                () => throw new ExceptionWithComplex(
+                                    GetRandomString(1),
+                                    expected))
+                            .To.Throw<ExceptionWithComplex>()
+                            .With.Property(e => e.Complex)
+                            .Deep.Equal.To(expected);
+                    },
+                    Throws.Nothing);
                 // Assert
             }
-            
+
             [Test]
             public void ShouldBeAbleToDoADeepEqual_Fail()
             {
@@ -1074,14 +1246,18 @@ namespace NExpect.Tests.Exceptions
                 var unexpected = GetRandom<Complex>();
                 // Pre-assert
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(() => throw new ExceptionWithComplex(
-                               GetRandomString(1), expected))
-                        .To.Throw<ExceptionWithComplex>()
-                        .With.Property(e => e.Complex)
-                        .Deep.Equal.To(unexpected);
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Assert.That(
+                    () =>
+                    {
+                        Expect(
+                                () => throw new ExceptionWithComplex(
+                                    GetRandomString(1),
+                                    expected))
+                            .To.Throw<ExceptionWithComplex>()
+                            .With.Property(e => e.Complex)
+                            .Deep.Equal.To(unexpected);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
             }
 
@@ -1093,14 +1269,18 @@ namespace NExpect.Tests.Exceptions
                 var unexpected = GetRandom<Complex>();
                 // Pre-assert
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(() => throw new ExceptionWithComplex(
-                               GetRandomString(1), expected))
-                        .To.Throw<ExceptionWithComplex>()
-                        .With.Property(e => e.Complex)
-                        .Not.Deep.Equal.To(unexpected);
-                }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        Expect(
+                                () => throw new ExceptionWithComplex(
+                                    GetRandomString(1),
+                                    expected))
+                            .To.Throw<ExceptionWithComplex>()
+                            .With.Property(e => e.Complex)
+                            .Not.Deep.Equal.To(unexpected);
+                    },
+                    Throws.Nothing);
                 // Assert
             }
 

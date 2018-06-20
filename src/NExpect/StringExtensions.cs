@@ -8,9 +8,6 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
-// ReSharper disable UnusedMember.Global
-
-// ReSharper disable HeapView.BoxingAllocation
 // ReSharper disable UnusedMethodReturnValue.Global
 // ReSharper disable PossibleMultipleEnumeration
 // ReSharper disable MemberCanBePrivate.Global

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -235,7 +236,7 @@ namespace NExpect
             string search,
             Func<string> customMessageGenerator)
         {
-            var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
+            var result = Factory.Create<string, StringPropertyContinuation>(
                 null,
                 src as IExpectationContext<string>
             );
@@ -305,7 +306,7 @@ namespace NExpect
             Func<string, bool> test,
             Func<string> customMessageGenerator)
         {
-            var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
+            var result = Factory.Create<string, StringPropertyContinuation>(
                 null,
                 src as IExpectationContext<string>
             );
@@ -367,7 +368,7 @@ namespace NExpect
             Func<string, bool> test,
             Func<string> customMessageGenerator)
         {
-            var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
+            var result = Factory.Create<string, StringPropertyContinuation>(
                 null,
                 src as IExpectationContext<string>
             );
@@ -480,7 +481,7 @@ namespace NExpect
         {
             return continuation.Containing(search, () => customMessage);
         }
-        
+
         /// <summary>
         /// Used to test exception messages in the negative
         /// </summary>
@@ -550,7 +551,7 @@ namespace NExpect
             Func<string> customMessageGenerator,
             int offset)
         {
-            var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
+            var result = Factory.Create<string, StringPropertyContinuation>(
                 null,
                 continuation as IExpectationContext<string>
             );
@@ -564,7 +565,9 @@ namespace NExpect
 
                     result.Actual = s;
                     var foundAt = s?.IndexOf(search, StringComparison.InvariantCulture) ?? -1;
-                    var passed = offset == -1 ? foundAt > 0 : foundAt >= offset;
+                    var passed = offset == -1
+                        ? foundAt > 0
+                        : foundAt >= offset;
                     s?.SetMetadata(SEARCH_OFFSET, foundAt + search.Length);
 
                     return new MatcherResult(
@@ -624,7 +627,7 @@ namespace NExpect
             Func<string> customMessageGenerator
         )
         {
-            var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
+            var result = Factory.Create<string, StringPropertyContinuation>(
                 null,
                 continuation as IExpectationContext<string>
             );
@@ -689,14 +692,9 @@ namespace NExpect
             Func<string> customMessageGenerator
         )
         {
-            var result = Factory.Create<string, ExceptionMessageContainuationToStringContainContinuation>(
-                null,
-                continuation as IExpectationContext<string>
-            );
             continuation.AddMatcher(
                 s =>
                 {
-                    result.Actual = s;
                     var passed = !test(s);
                     return new MatcherResult(
                         passed,
@@ -707,7 +705,173 @@ namespace NExpect
                         )
                     );
                 });
-            return result;
+            return continuation.More();
+        }
+
+        /// <summary>
+        /// Facilitates testing an exception message to end with another substring
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation With(
+            this IStringPropertyEndingContinuation continuation,
+            string search
+        )
+        {
+            return continuation.With(search, null as string);
+        }
+
+        /// <summary>
+        /// Facilitates testing an exception message to end with another substring
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <param name="customMessage"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation With(
+            this IStringPropertyEndingContinuation continuation,
+            string search,
+            string customMessage
+        )
+        {
+            return continuation.With(search, () => customMessage);
+        }
+
+        /// <summary>
+        /// Facilitates testing an exception message to end with another substring
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <param name="messageGenerator"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation With(
+            this IStringPropertyEndingContinuation continuation,
+            string search,
+            Func<string> messageGenerator
+        )
+        {
+            continuation.AddMatcher(
+                actual =>
+                {
+                    var passed =
+                        actual?.EndsWith(search, StringComparison.InvariantCultureIgnoreCase)
+                        ?? false;
+                    return new MatcherResult(
+                        passed,
+                        FinalMessageFor(
+                            () => $"Expected {actual.Stringify()} {passed.AsNot()}to end with {search.Stringify()}",
+                            messageGenerator
+                        )
+                    );
+                });
+            return continuation.More();
+        }
+        
+        /// <summary>
+        /// Facilitates testing an exception message to start with another substring
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation With(
+            this IStringPropertyStartingContinuation continuation,
+            string search
+        )
+        {
+            return continuation.With(search, null as string);
+        }
+
+        /// <summary>
+        /// Facilitates testing an exception message to start with another substring
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <param name="customMessage"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation With(
+            this IStringPropertyStartingContinuation continuation,
+            string search,
+            string customMessage
+        )
+        {
+            return continuation.With(search, () => customMessage);
+        }
+
+        /// <summary>
+        /// Facilitates testing an exception message to start with another substring
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="search"></param>
+        /// <param name="messageGenerator"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation With(
+            this IStringPropertyStartingContinuation continuation,
+            string search,
+            Func<string> messageGenerator
+        )
+        {
+            continuation.AddMatcher(
+                actual =>
+                {
+                    var passed =
+                        actual?.StartsWith(search, StringComparison.InvariantCultureIgnoreCase)
+                        ?? false;
+                    return new MatcherResult(
+                        passed,
+                        FinalMessageFor(
+                            () => $"Expected {actual.Stringify()} {passed.AsNot()}to start with {search.Stringify()}",
+                            messageGenerator
+                        )
+                    );
+                });
+            return continuation.More();
+        }
+
+        /// <summary>
+        /// Facilitates chained expectations on the existing .Ending
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation More(
+            this IStringPropertyEndingContinuation continuation
+        )
+        {
+            return (continuation as IExpectationContext<string>).More();
+        }
+        
+        /// <summary>
+        /// Facilitates chained expectations on the existing .Starting
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation More(
+            this IStringPropertyStartingContinuation continuation
+        )
+        {
+            return (continuation as IExpectationContext<string>).More();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation More(
+            this IPropertyNot<string> continuation
+        )
+        {
+            return (continuation as IExpectationContext<string>).More();
+        }
+
+        private static IStringPropertyContinuation More(
+            this IExpectationContext<string> context
+        )
+        {
+            return Factory.Create<string, StringPropertyContinuation>(
+                (context as ICanAddMatcher<string>).GetActual(),
+                context
+            );
         }
     }
 }
