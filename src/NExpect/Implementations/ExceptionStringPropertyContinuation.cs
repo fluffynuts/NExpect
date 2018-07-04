@@ -8,16 +8,16 @@ namespace NExpect.Implementations
         IStringPropertyContinuation
     {
         public new IStringPropertyNot Not 
-            => Factory.Create<string, StringPropertyNot>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyNot>(Actual, this);
 
         public IStringPropertyContinuation And 
-            => Factory.Create<string, StringPropertyAnd>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyAnd>(Actual, this);
 
         public IStringPropertyStartingContinuation Starting 
-            => Factory.Create<string, StringPropertyContinuation>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyContinuation>(Actual, this);
         
         public IStringPropertyEndingContinuation Ending 
-            => Factory.Create<string, StringPropertyContinuation>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyContinuation>(Actual, this);
 
         public ExceptionStringPropertyContinuation(string actual) : base(actual)
         {

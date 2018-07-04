@@ -12,7 +12,7 @@ namespace NExpect.Implementations
         ICollectionHave<T>
     {
         public ICollectionUnique<T> Unique =>
-            Factory.Create<IEnumerable<T>, CollectionUnique<T>>(Actual, this);
+            ContinuationFactory.Create<IEnumerable<T>, CollectionUnique<T>>(Actual, this);
 
         public IEnumerable<T> Actual { get; }
 

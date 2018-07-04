@@ -13,22 +13,22 @@ namespace NExpect.Implementations
         public IEnumerable<T> Actual { get; }
 
         public ICollectionEquivalent<T> Equivalent =>
-            Factory.Create<IEnumerable<T>, CollectionEquivalent<T>>(Actual, this);
+            ContinuationFactory.Create<IEnumerable<T>, CollectionEquivalent<T>>(Actual, this);
 
         public ICollectionEqual<T> Equal =>
-            Factory.Create<IEnumerable<T>, CollectionEqual<T>>(Actual, this);
+            ContinuationFactory.Create<IEnumerable<T>, CollectionEqual<T>>(Actual, this);
 
         public ICollectionDeep<T> Deep =>
-            Factory.Create<IEnumerable<T>, CollectionDeep<T>>(Actual, this);
+            ContinuationFactory.Create<IEnumerable<T>, CollectionDeep<T>>(Actual, this);
 
         public ICollectionIntersection<T> Intersection =>
-            Factory.Create<IEnumerable<T>, CollectionIntersection<T>>(Actual, this);
+            ContinuationFactory.Create<IEnumerable<T>, CollectionIntersection<T>>(Actual, this);
 
         public ICollectionAn<T> An =>
-            Factory.Create<IEnumerable<T>, CollectionAn<T>>(Actual, this);
+            ContinuationFactory.Create<IEnumerable<T>, CollectionAn<T>>(Actual, this);
 
         public ICollectionFor<T> For =>
-            Factory.Create<IEnumerable<T>, CollectionFor<T>>(Actual, this);
+            ContinuationFactory.Create<IEnumerable<T>, CollectionFor<T>>(Actual, this);
 
         public ExceptionCollectionPropertyContinuation(IEnumerable<T> value)
         {

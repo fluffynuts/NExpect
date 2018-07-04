@@ -12,7 +12,7 @@ namespace NExpect.Implementations
         public T Actual { get; }
 
         public IIntersectionEqual<T> Equal
-            => Factory.Create<T, IntersectionEqual<T>>(Actual, this);
+            => ContinuationFactory.Create<T, IntersectionEqual<T>>(Actual, this);
 
         public Intersection(T actual)
         {

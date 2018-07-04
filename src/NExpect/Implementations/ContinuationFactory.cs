@@ -3,7 +3,10 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations
 {
-    internal static class Factory
+    /// <summary>
+    /// Factory to create continuations where the continuation is an IExpectationContext&lt;T&gt;
+    /// </summary>
+    public static class ContinuationFactory
     {
         internal static T2 Create<T1, T2>(
             T1 actual,

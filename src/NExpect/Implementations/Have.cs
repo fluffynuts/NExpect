@@ -10,8 +10,8 @@ namespace NExpect.Implementations
         IHave<T>
     {
         public T Actual { get; }
-        public IA<T> A => Factory.Create<T, A<T>>(Actual, this);
-        public IAn<T> An => Factory.Create<T, An<T>>(Actual, this);
+        public IA<T> A => ContinuationFactory.Create<T, A<T>>(Actual, this);
+        public IAn<T> An => ContinuationFactory.Create<T, An<T>>(Actual, this);
 
         public Have(T actual)
         {

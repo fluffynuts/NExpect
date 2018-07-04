@@ -11,7 +11,7 @@ namespace NExpect.Implementations
         public T Actual { get; }
 
         public ILessContinuation<T> Less =>
-            Factory.Create<T, LessContinuation<T>>(Actual, this);
+            ContinuationFactory.Create<T, LessContinuation<T>>(Actual, this);
 
         public GreaterThanAnd(T actual)
         {

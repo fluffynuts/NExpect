@@ -13,22 +13,22 @@ namespace NExpect.Implementations
         public string Actual { get; set; }
 
         public IStringPropertyContinuation And =>
-            Factory.Create<string, StringPropertyAnd>(Actual, this);
+            ContinuationFactory.Create<string, StringPropertyAnd>(Actual, this);
 
         public IEqualityContinuation<string> Equal 
-            => Factory.Create<string, EqualityContinuation<string>>(Actual, this);
+            => ContinuationFactory.Create<string, EqualityContinuation<string>>(Actual, this);
 
         public IStringIn In =>
-            Factory.Create<string, StringIn>(Actual, this);
+            ContinuationFactory.Create<string, StringIn>(Actual, this);
 
         public IStringPropertyNot Not 
-            => Factory.Create<string, StringPropertyNot>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyNot>(Actual, this);
         
         public IStringPropertyEndingContinuation Ending
-            => Factory.Create<string, StringPropertyContinuation>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyContinuation>(Actual, this);
 
         public IStringPropertyStartingContinuation Starting 
-            => Factory.Create<string, StringPropertyContinuation>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyContinuation>(Actual, this);
 
         public StringPropertyContinuation(string actual)
         {

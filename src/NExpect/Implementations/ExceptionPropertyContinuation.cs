@@ -8,7 +8,7 @@ namespace NExpect.Implementations
         IExceptionPropertyContinuation<TValue>
     {
         public new IPropertyNot<TValue> Not
-            => Factory.Create<TValue, PropertyNot<TValue>>(Actual, this);
+            => ContinuationFactory.Create<TValue, PropertyNot<TValue>>(Actual, this);
         
         public ExceptionPropertyContinuation(TValue value): base(value)
         {

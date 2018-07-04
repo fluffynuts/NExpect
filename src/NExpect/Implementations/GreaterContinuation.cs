@@ -17,7 +17,7 @@ namespace NExpect.Implementations
         }
 
         public IGreaterThan<T> Than
-            => Factory.Create<T, GreaterThan<T>>(Actual, this);
+            => ContinuationFactory.Create<T, GreaterThan<T>>(Actual, this);
     }
 
     internal class GreaterThan<T>
@@ -26,7 +26,7 @@ namespace NExpect.Implementations
     {
         public T Actual { get; }
         public IGreaterThanOr<T> Or 
-        => Factory.Create<T, GreaterThanOr<T>>(Actual, this);
+        => ContinuationFactory.Create<T, GreaterThanOr<T>>(Actual, this);
 
         public GreaterThan(T actual)
         {
@@ -39,7 +39,7 @@ namespace NExpect.Implementations
             IGreaterThanOr<T>
     {
         public IGreaterThanOrEqual<T> Equal 
-            => Factory.Create<T, GreaterThanOrEqual<T>>(Actual, this);
+            => ContinuationFactory.Create<T, GreaterThanOrEqual<T>>(Actual, this);
         public T Actual { get; }
 
         public GreaterThanOr(T actual)

@@ -20,7 +20,7 @@ namespace NExpect.MatcherLogic
             this ICanAddMatcher<T> continuation
         )
         {
-            return Factory.Create<T, More<T>>(
+            return ContinuationFactory.Create<T, More<T>>(
                 continuation.GetActual(), 
                 continuation as IExpectationContext<T>
             );
@@ -36,7 +36,7 @@ namespace NExpect.MatcherLogic
             this ICanAddMatcher<string> continuation
         )
         {
-            return Factory.Create<string, StringMore>(
+            return ContinuationFactory.Create<string, StringMore>(
                 continuation.GetActual(), 
                 continuation as IExpectationContext<string>
             );

@@ -13,7 +13,7 @@ namespace NExpect.Implementations
         where T : Exception
     {
         public IStringPropertyContinuation Message =>
-            Factory.Create<string, ExceptionStringPropertyContinuation>(
+            ContinuationFactory.Create<string, ExceptionStringPropertyContinuation>(
                 Actual.Message,
                 new WrappingContinuation<Exception, string>(
                     this, c => c.Actual?.Message
@@ -32,7 +32,7 @@ namespace NExpect.Implementations
         )
         {
             var continuationValue = propertyValueFetcher(Actual);
-            return Factory.Create<IEnumerable<TItem>,
+            return ContinuationFactory.Create<IEnumerable<TItem>,
                 ExceptionCollectionPropertyContinuation<TItem>>(
                 continuationValue,
                 new WrappingContinuation<Exception, IEnumerable<TItem>>(
@@ -46,7 +46,7 @@ namespace NExpect.Implementations
         )
         {
             var continuationValue = propertyValueFetcher(Actual);
-            return Factory.Create<TContinuationValue, ExceptionPropertyContinuation<TContinuationValue>>(
+            return ContinuationFactory.Create<TContinuationValue, ExceptionPropertyContinuation<TContinuationValue>>(
                 continuationValue,
                 new WrappingContinuation<Exception, TContinuationValue>(
                     this, c => continuationValue

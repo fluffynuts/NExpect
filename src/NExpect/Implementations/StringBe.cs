@@ -9,7 +9,7 @@ namespace NExpect.Implementations
         IStringBe
     {
         public IStringMatched Matched =>
-            Factory.Create<string, StringMatched>(Actual, this);
+            ContinuationFactory.Create<string, StringMatched>(Actual, this);
 
         public StringBe(string actual)
             : base(actual)

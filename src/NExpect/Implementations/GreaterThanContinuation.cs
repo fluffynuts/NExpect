@@ -12,7 +12,7 @@ namespace NExpect.Implementations
         public T Actual { get; }
 
         public IGreaterThanAnd<T> And =>
-            Factory.Create<T, GreaterThanAnd<T>>(Actual, this);
+            ContinuationFactory.Create<T, GreaterThanAnd<T>>(Actual, this);
 
         public GreaterThanContinuation(T actual)
         {

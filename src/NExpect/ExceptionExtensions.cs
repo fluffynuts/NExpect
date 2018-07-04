@@ -112,7 +112,7 @@ namespace NExpect
 
             var exceptionPropertyValue = fetcher(actual);
 
-            return Factory.Create<TValue, ExceptionPropertyContinuation<TValue>>(
+            return ContinuationFactory.Create<TValue, ExceptionPropertyContinuation<TValue>>(
                 exceptionPropertyValue,
                 new WrappingContinuation<T, TValue>(
                     throwContinuation,
@@ -236,7 +236,7 @@ namespace NExpect
             string search,
             Func<string> customMessageGenerator)
         {
-            var result = Factory.Create<string, StringPropertyContinuation>(
+            var result = ContinuationFactory.Create<string, StringPropertyContinuation>(
                 null,
                 src as IExpectationContext<string>
             );
@@ -306,7 +306,7 @@ namespace NExpect
             Func<string, bool> test,
             Func<string> customMessageGenerator)
         {
-            var result = Factory.Create<string, StringPropertyContinuation>(
+            var result = ContinuationFactory.Create<string, StringPropertyContinuation>(
                 null,
                 src as IExpectationContext<string>
             );
@@ -368,7 +368,7 @@ namespace NExpect
             Func<string, bool> test,
             Func<string> customMessageGenerator)
         {
-            var result = Factory.Create<string, StringPropertyContinuation>(
+            var result = ContinuationFactory.Create<string, StringPropertyContinuation>(
                 null,
                 src as IExpectationContext<string>
             );
@@ -551,7 +551,7 @@ namespace NExpect
             Func<string> customMessageGenerator,
             int offset)
         {
-            var result = Factory.Create<string, StringPropertyContinuation>(
+            var result = ContinuationFactory.Create<string, StringPropertyContinuation>(
                 null,
                 continuation as IExpectationContext<string>
             );
@@ -627,7 +627,7 @@ namespace NExpect
             Func<string> customMessageGenerator
         )
         {
-            var result = Factory.Create<string, StringPropertyContinuation>(
+            var result = ContinuationFactory.Create<string, StringPropertyContinuation>(
                 null,
                 continuation as IExpectationContext<string>
             );
@@ -868,7 +868,7 @@ namespace NExpect
             this IExpectationContext<string> context
         )
         {
-            return Factory.Create<string, StringPropertyContinuation>(
+            return ContinuationFactory.Create<string, StringPropertyContinuation>(
                 (context as ICanAddMatcher<string>).GetActual(),
                 context
             );

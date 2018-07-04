@@ -19,7 +19,7 @@ namespace NExpect
             this IGreaterContinuation<T> continuation
         )
         {
-            return Factory.Create<T, GreaterThanContinuation<T>>(
+            return ContinuationFactory.Create<T, GreaterThanContinuation<T>>(
                 continuation.GetActual(),
                 continuation as IExpectationContext<T>
             );
@@ -29,7 +29,7 @@ namespace NExpect
             this IGreaterThanOrEqual<T> continuation
         )
         {
-            return Factory.Create<T, GreaterThanContinuation<T>>(
+            return ContinuationFactory.Create<T, GreaterThanContinuation<T>>(
                 continuation.GetActual(),
                 continuation as IExpectationContext<T>
             );

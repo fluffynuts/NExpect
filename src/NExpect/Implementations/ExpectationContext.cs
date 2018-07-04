@@ -4,10 +4,17 @@ using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations
 {
-    internal abstract class ExpectationContext<T> :
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public abstract class ExpectationContext<T> :
         CannotBeCompared,
         IExpectationContext<T>
     {
+        /// <summary>
+        /// Parent context for this expectation
+        /// </summary>
         public IExpectationContext Parent => _parent;
         private IExpectationContext<T> _parent;
 
@@ -27,12 +34,18 @@ namespace NExpect.Implementations
         private Func<T, IMatcherResult> _storedExpectation;
 
 
+        /// <summary>
+        /// Negates the current expectation
+        /// </summary>
         public virtual void Negate()
         {
             _storedNegation = true;
             RunNegations();
         }
 
+        /// <summary>
+        /// Resets expectation negatin
+        /// </summary>
         public void ResetNegation()
         {
             _storedNegation = false;
@@ -47,6 +60,11 @@ namespace NExpect.Implementations
             _parent.ResetNegation();
         }
 
+        /// <summary>
+        /// Runs an expectation by pushing it up the ancestry to be
+        /// run within NExpect.
+        /// </summary>
+        /// <param name="matcher"></param>
         public virtual void RunMatcher(Func<T, IMatcherResult> matcher)
         {
             _storedExpectation = matcher;

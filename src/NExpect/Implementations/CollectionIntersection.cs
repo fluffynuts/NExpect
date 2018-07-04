@@ -14,10 +14,10 @@ namespace NExpect.Implementations
         public IEnumerable<T> Actual { get; }
 
         public ICollectionIntersectionEquivalent<T> Equivalent =>
-            Factory.Create<IEnumerable<T>, CollectionIntersectionEquivalent<T>>(Actual, this);
+            ContinuationFactory.Create<IEnumerable<T>, CollectionIntersectionEquivalent<T>>(Actual, this);
 
         public ICollectionIntersectionEqual<T> Equal =>
-            Factory.Create<IEnumerable<T>, CollectionIntersectionEqual<T>>(Actual, this);
+            ContinuationFactory.Create<IEnumerable<T>, CollectionIntersectionEqual<T>>(Actual, this);
 
         public CollectionIntersection(IEnumerable<T> actual)
         {

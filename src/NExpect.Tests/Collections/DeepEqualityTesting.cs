@@ -1057,7 +1057,7 @@ namespace NExpect.Tests.Collections
                             }
 
                             [Test]
-                            public void UsingCustomEqualityComparer()
+                            public void UsingCustomEqualityComparer_ForDateTime()
                             {
                                 // Arrange
                                 var src = new[] {new {Date = DateTime.Now}};
@@ -1071,9 +1071,45 @@ namespace NExpect.Tests.Collections
                                             .To.Contain.Exactly(1)
                                             .Deep.Equal.To(search, new DriftingDateTimeEqualityComparer());
                                     },
+                                    Throws.Nothing);                                
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(src)
+                                            .To.Contain.Exactly(1)
+                                            .Intersection.Equal.To(search, new DriftingDateTimeEqualityComparer());
+                                    },
                                     Throws.Nothing);
                                 // Assert
                             }
+                            
+                            [Test]
+                            public void UsingCustomEqualityComparer_ForDouble()
+                            {
+                                // Arrange
+                                var src = new[] {new {Date = DateTime.Now}};
+                                var search = new {Date = DateTime.Now.AddSeconds(-1)};
+                                // Pre-assert
+                                // Act
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(src)
+                                            .To.Contain.Exactly(1)
+                                            .Deep.Equal.To(search, new DriftingDateTimeEqualityComparer());
+                                    },
+                                    Throws.Nothing);                                
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(src)
+                                            .To.Contain.Exactly(1)
+                                            .Intersection.Equal.To(search, new DriftingDateTimeEqualityComparer());
+                                    },
+                                    Throws.Nothing);
+                                // Assert
+                            }
+                            
                         }
                     }
 

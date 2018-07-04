@@ -10,13 +10,13 @@ namespace NExpect.Implementations
         public string Actual { get; set; }
 
         public IToAfterNot<string> To 
-            => Factory.Create<string, ToAfterNot<string>>(Actual, this);
+            => ContinuationFactory.Create<string, ToAfterNot<string>>(Actual, this);
         
         public IStringPropertyEndingContinuation Ending
-            => Factory.Create<string, StringPropertyContinuation>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyContinuation>(Actual, this);
 
         public IStringPropertyEndingContinuation Starting 
-            => Factory.Create<string, StringPropertyContinuation>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyContinuation>(Actual, this);
 
         public StringPropertyNot(string actual)
         {

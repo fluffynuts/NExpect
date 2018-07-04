@@ -10,7 +10,7 @@ namespace NExpect.Implementations
         public T Actual { get; }
 
         public IContainAt<T> At =>
-            Factory.Create<T, ContainAt<T>>(Actual, this);
+            ContinuationFactory.Create<T, ContainAt<T>>(Actual, this);
 
         public Contain(T actual)
         {

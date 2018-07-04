@@ -12,15 +12,15 @@ namespace NExpect.Implementations
     {
         public T Actual { get; }
         public IBe<T> Be => 
-            Factory.Create<T, Be<T>>(Actual, this);
+            ContinuationFactory.Create<T, Be<T>>(Actual, this);
         public IContain<T> Contain => 
-            Factory.Create<T, Contain<T>>(Actual, this);
+            ContinuationFactory.Create<T, Contain<T>>(Actual, this);
         public IHave<T> Have => 
-            Factory.Create<T, Have<T>>(Actual, this);
+            ContinuationFactory.Create<T, Have<T>>(Actual, this);
         public IDeep<T> Deep => 
-            Factory.Create<T, Deep<T>>(Actual, this);
+            ContinuationFactory.Create<T, Deep<T>>(Actual, this);
         public IIntersection<T> Intersection => 
-            Factory.Create<T, Intersection<T>>(Actual, this);
+            ContinuationFactory.Create<T, Intersection<T>>(Actual, this);
 
         public ToAfterNot(T actual)
         {

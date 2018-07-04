@@ -563,7 +563,7 @@ namespace NExpect
                 var specificMethod = GenericUpcast.MakeGenericMethod(typeof(TTo));
                 var continuationValue =
                     (TTo) (specificMethod.Invoke(null, new object[] {GetValueForKey(continuation, key)}));
-                return Factory.Create<TTo, DictionaryValueContinuation<TTo>>(
+                return ContinuationFactory.Create<TTo, DictionaryValueContinuation<TTo>>(
                     continuationValue,
                     new WrappingContinuation<IEnumerable<KeyValuePair<TKey, TFrom>>, TTo>(
                         continuation as IHasActual<IEnumerable<KeyValuePair<TKey, TFrom>>>,

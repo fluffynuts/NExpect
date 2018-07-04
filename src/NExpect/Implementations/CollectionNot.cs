@@ -20,7 +20,7 @@ namespace NExpect.Implementations
         }
 
         public ICollectionToAfterNot<T> To =>
-            Factory.Create<IEnumerable<T>, CollectionToAfterNot<T>>(Actual, this);
+            ContinuationFactory.Create<IEnumerable<T>, CollectionToAfterNot<T>>(Actual, this);
 
     }
 }

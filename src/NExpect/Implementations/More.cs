@@ -12,7 +12,7 @@ namespace NExpect.Implementations
         public T Actual { get; }
 
         public IAnd<T> And =>
-            Factory.Create<T, And<T>>(Actual, this);
+            ContinuationFactory.Create<T, And<T>>(Actual, this);
 
         public More(T actual)
         {

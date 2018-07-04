@@ -17,7 +17,7 @@ namespace NExpect.Implementations
         }
 
         public ILessThan<T> Than =>
-            Factory.Create<T, LessThan<T>>(Actual, this);
+            ContinuationFactory.Create<T, LessThan<T>>(Actual, this);
     }
 
     internal class LessThan<T>
@@ -26,7 +26,7 @@ namespace NExpect.Implementations
     {
         public T Actual { get; }
         public ILessThanOr<T> Or 
-            => Factory.Create<T, LessThanOr<T>>(Actual, this);
+            => ContinuationFactory.Create<T, LessThanOr<T>>(Actual, this);
 
         public LessThan(T actual)
         {
@@ -40,7 +40,7 @@ namespace NExpect.Implementations
     {
         public T Actual { get; }
         public ILessThanOrEqual<T> Equal 
-            => Factory.Create<T, LessThanOrEqual<T>>(Actual, this);
+            => ContinuationFactory.Create<T, LessThanOrEqual<T>>(Actual, this);
 
         public LessThanOr(T actual)
         {

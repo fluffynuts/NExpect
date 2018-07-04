@@ -12,7 +12,7 @@ namespace NExpect.Implementations
         public string Actual { get; }
 
         public IStringAnd And =>
-            Factory.Create<string, StringAnd>(Actual, this);
+            ContinuationFactory.Create<string, StringAnd>(Actual, this);
 
         public StringMore(string actual)
         {

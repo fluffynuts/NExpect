@@ -45,6 +45,6 @@ namespace NExpect.Implementations
         }
 
         public IStringAnd And =>
-            Factory.Create<string, StringAnd>(Actual, this);
+            ContinuationFactory.Create<string, StringAnd>(Actual, this);
     }
 }

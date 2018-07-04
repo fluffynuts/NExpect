@@ -14,12 +14,12 @@ namespace NExpect.Implementations
         }
 
         public IStringStart Start =>
-            Factory.Create<string, StringStart>(Actual, this);
+            ContinuationFactory.Create<string, StringStart>(Actual, this);
 
         public IStringEnd End =>
-            Factory.Create<string, StringEnd>(Actual, this);
+            ContinuationFactory.Create<string, StringEnd>(Actual, this);
 
         public new IStringToAfterNot To =>
-            Factory.Create<string, StringToAfterNot>(Actual, this);
+            ContinuationFactory.Create<string, StringToAfterNot>(Actual, this);
     }
 }

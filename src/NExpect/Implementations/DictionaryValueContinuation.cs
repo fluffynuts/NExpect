@@ -13,7 +13,7 @@ namespace NExpect.Implementations
         public TValue Actual { get; }
 
         public IDictionaryValueWith<TValue> With =>
-            Factory.Create<TValue, DictionaryValueWith<TValue>>(Actual, this);
+            ContinuationFactory.Create<TValue, DictionaryValueWith<TValue>>(Actual, this);
 
         public DictionaryValueContinuation(TValue value)
         {

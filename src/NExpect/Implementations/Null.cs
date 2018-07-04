@@ -16,6 +16,6 @@ namespace NExpect.Implementations
             Actual = actual;
         }
 
-        public INullOr<T> Or => Factory.Create<T, NullOr<T>>(Actual, this);
+        public INullOr<T> Or => ContinuationFactory.Create<T, NullOr<T>>(Actual, this);
     }
 }

@@ -7,10 +7,10 @@ namespace NExpect.Implementations
         IStringExpectation
     {
         public new IStringTo To =>
-            Factory.Create<string, StringTo>(Actual, this);
+            ContinuationFactory.Create<string, StringTo>(Actual, this);
 
         public new IStringNot Not =>
-            Factory.Create<string, StringNot>(Actual, this);
+            ContinuationFactory.Create<string, StringNot>(Actual, this);
 
         public StringExpectation(string actual)
             : base(actual)

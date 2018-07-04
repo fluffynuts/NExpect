@@ -8,19 +8,19 @@ namespace NExpect.Implementations
         IStringTo
     {
         public IStringStart Start =>
-            Factory.Create<string, StringStart>(Actual, this);
+            ContinuationFactory.Create<string, StringStart>(Actual, this);
 
         public IStringEnd End =>
-            Factory.Create<string, StringEnd>(Actual, this);
+            ContinuationFactory.Create<string, StringEnd>(Actual, this);
 
         public new IStringNotAfterTo Not =>
-            Factory.Create<string, StringNotAfterTo>(Actual, this);
+            ContinuationFactory.Create<string, StringNotAfterTo>(Actual, this);
 
         public new IStringBe Be =>
-            Factory.Create<string, StringBe>(Actual, this);
+            ContinuationFactory.Create<string, StringBe>(Actual, this);
 
         public new IStringContain Contain =>
-            Factory.Create<string, StringContain>(Actual, this);
+            ContinuationFactory.Create<string, StringContain>(Actual, this);
 
         public StringTo(string actual) : base(actual)
         {
