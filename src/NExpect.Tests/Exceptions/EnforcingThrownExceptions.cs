@@ -155,6 +155,24 @@ namespace NExpect.Tests.Exceptions
             }
 
             [Test]
+            public void Throw_WhenGettingMessageViaProperty_ShouldNotFailWhenHaveSoughtStringAtStartOfMessage()
+            {
+                // Arrange
+                var message = "LOOKFORME could not moo";
+                var seek = "LOOKFORME";
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                                    {
+                                        Expect(() => throw new Exception(message))
+                                            .To.Throw<Exception>()
+                                            .With.Property(e => e.Message)
+                                            .Containing(seek);
+                                    }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
             public void Throw_WithNoGenericType_AllowsMultipleSubStringContainingOnMessage_HappyPath()
             {
                 // Arrange

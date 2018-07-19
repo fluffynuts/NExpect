@@ -565,8 +565,8 @@ namespace NExpect
 
                     result.Actual = s;
                     var foundAt = s?.IndexOf(search, StringComparison.InvariantCulture) ?? -1;
-                    var passed = offset == -1
-                        ? foundAt > 0
+                    var passed = offset < 0
+                        ? foundAt >= 0
                         : foundAt >= offset;
                     s?.SetMetadata(SEARCH_OFFSET, foundAt + search.Length);
 
