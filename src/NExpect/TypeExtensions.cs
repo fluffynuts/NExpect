@@ -23,7 +23,7 @@ namespace NExpect
         {
             Of<TExpected>(instance, NULL_STRING);
         }
-
+        
         /// <summary>
         /// Tests if actual is an instance of TExpected
         /// </summary>
@@ -48,11 +48,68 @@ namespace NExpect
             Func<string> customMessageGenerator)
         {
             
+            instance.Of(typeof(TExpected), customMessageGenerator);
+//            instance.AddMatcher(
+//                expected =>
+//                {
+//                    var theExpectedType = typeof(TExpected);
+//                    var passed = theExpectedType.IsAssignableFrom(instance.Actual);
+//                    return new MatcherResult(
+//                        passed,
+//                        FinalMessageFor(
+//                            new[]
+//                            {
+//                                "Expected",
+//                                $"<{instance.Actual.PrettyName()}>",
+//                                $"to {passed.AsNot()}be an instance of",
+//                                $"<{theExpectedType.PrettyName()}>"
+//                            },
+//                            customMessageGenerator
+//                        ));
+//                });
+        }
+
+        /// <summary>
+        /// Tests if actual is an instance of expected
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="expected"></param>
+        public static void Of(
+            this IInstanceContinuation instance,
+            Type expected)
+        {
+            instance.Of(expected, null as string);
+        }
+
+        /// <summary>
+        /// Tests if actual is an instance of expected
+        /// </summary>
+        /// <param name="instance"></param>
+        /// <param name="expected"></param>
+        /// <param name="customMessage"></param>
+        public static void Of(
+            this IInstanceContinuation instance,
+            Type expected,
+            string customMessage)
+        {
+            instance.Of(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if actual is an instance of expected
+        /// </summary>
+        /// <param name="instance">Instance to operate on</param>
+        /// <param name="expected">Expected Type of the Instance</param>
+        /// <param name="customMessageGenerator">Custom error message</param>
+        public static void Of(
+            this IInstanceContinuation instance,
+            Type expected,
+            Func<string> customMessageGenerator)
+        {
             instance.AddMatcher(
-                expected =>
+                actual =>
                 {
-                    var theExpectedType = typeof(TExpected);
-                    var passed = theExpectedType.IsAssignableFrom(instance.Actual);
+                    var passed = expected.IsAssignableFrom(instance.Actual);
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
@@ -61,7 +118,7 @@ namespace NExpect
                                 "Expected",
                                 $"<{instance.Actual.PrettyName()}>",
                                 $"to {passed.AsNot()}be an instance of",
-                                $"<{theExpectedType.PrettyName()}>"
+                                $"<{expected.PrettyName()}>"
                             },
                             customMessageGenerator
                         ));

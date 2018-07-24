@@ -371,6 +371,7 @@ namespace NExpect.Tests.Types
                             public void Negated_WhenIsInstance_ShouldThrow()
                             {
                                 // Arrange
+                                var customMessage = GetRandomString(10);
                                 var sut = new TestClass();
                                 // Pre-Assert
                                 // Act
@@ -379,6 +380,38 @@ namespace NExpect.Tests.Types
                                     Expect(sut).Not.To.Be.An.Instance.Of<TestClass>();
                                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                                     .With.Message.Contains("to not be an instance of"));
+                                
+                                Assert.That(() =>
+                                {
+                                    Expect(sut).Not.To.Be.An.Instance.Of<TestClass>(customMessage);
+                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    .With.Message.Contains(customMessage));
+                                
+                                Assert.That(() =>
+                                {
+                                    Expect(sut).Not.To.Be.An.Instance.Of<TestClass>(() => customMessage);
+                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    .With.Message.Contains("to not be an instance of"));
+                                
+                                Assert.That(() =>
+                                {
+                                    Expect(sut).Not.To.Be.An.Instance.Of(typeof(TestClass));
+                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    .With.Message.Contains("to not be an instance of"));
+
+                                Assert.That(() =>
+                                {
+                                    Expect(sut).Not.To.Be.An.Instance.Of(typeof(TestClass), customMessage);
+                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    .With.Message.Contains(customMessage));
+                                
+                                Assert.That(() =>
+                                {
+                                    Expect(sut).Not.To.Be.An.Instance.Of(typeof(TestClass), () => customMessage);
+                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    .With.Message.Contains(customMessage));
+
+
                                 // Assert
                             }
 
@@ -392,6 +425,11 @@ namespace NExpect.Tests.Types
                                 Assert.That(() =>
                                 {
                                     Expect(sut).To.Be.An.Instance.Of<TestClass>();
+                                }, Throws.Nothing);
+                                
+                                Assert.That(() =>
+                                {
+                                    Expect(sut).To.Be.An.Instance.Of(typeof(TestClass));
                                 }, Throws.Nothing);
                                 // Assert
                             }
