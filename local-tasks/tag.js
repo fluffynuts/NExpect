@@ -5,7 +5,7 @@ const gulp = requireModule("gulp-with-help"),
   git = new Git(),
   containingFolder = "src/NExpect";
 
-gulp.task("tag", () => {
+gulp.task("tag-and-push", () => {
   return new Promise((resolve, reject) => {
     gulp.src(`${containingFolder}/Package.nuspec`).pipe(
       editXml(xml => {

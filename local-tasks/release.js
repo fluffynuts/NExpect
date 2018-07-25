@@ -10,7 +10,8 @@ gulp.task("release", [ "build-cover-report" ], (done) => {
   runSequence(
     "pack",
     "push",
-    "tag",
+    "commit-release",
+    "tag-and-push",
     done
   );
 });
