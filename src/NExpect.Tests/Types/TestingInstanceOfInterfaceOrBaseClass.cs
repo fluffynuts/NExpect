@@ -431,7 +431,7 @@ namespace NExpect.Tests.Types
                                 {
                                     Expect(sut).To.Be.An.Instance.Of(typeof(TestClass));
                                 }, Throws.Nothing);
-                                // Assert
+                                // AsserEt
                             }
 
                             [Test]
