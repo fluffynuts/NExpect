@@ -32,5 +32,10 @@ namespace NExpect.Interfaces
         /// -> only tests properties and fields with the same name and type
         /// </summary>
         IIntersection<T> Intersection { get; }
+
+        /// <summary>
+        /// Starts an expectation for approximate equality
+        /// </summary>
+        IApproximately<T> Approximately { get; }
     }
 }
