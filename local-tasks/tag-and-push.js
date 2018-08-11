@@ -13,23 +13,59 @@ gulp.task("tag-and-push", () => {
           version = node[0].trim();
 
         gutil.log(gutil.colors.cyan(`Tagging at: "v${version}"`));
-        git.addAnnotatedTag(
-          `v${version}`,
-          `chore(release): ${version}`,
-          err => {
-            if (err) {
-              return reject(`Unable to create tag: ${err}`);
-            }
-            git.pushTags("origin", err => {
-              if (err) {
-                return reject(`Unable to push tag: ${err}`);
-              }
-              return resolve();
-            });
-          }
-        );
+        gitTag(`v${version}`, `chore(release): ${version}`)
+          .then(() => gitPushTags())
+          .then(() => gitPush())
+          .then(() => {
+            gutil.log(gutil.colors.green("-> all commits and tags pushed!"));
+            resolve();
+          })
+          .catch(err => reject(err));
         return xml;
       })
     );
   });
 });
+
+gulp.task("push", "Pushes tags and commits", () => {
+  return gitPushTags()
+    .then(() => gitPush())
+    .then(() =>
+      gutil.log(gutil.colors.green("-> all commits and tags pushed!"))
+    );
+});
+
+function gitTag(tag, comment) {
+  return new Promise((resolve, reject) => {
+    git.addAnnotatedTag(tag, comment, err => {
+      if (err) {
+        return reject(err);
+      }
+      resolve();
+    });
+  });
+}
+
+function gitPushTags() {
+  return new Promise((resolve, reject) => {
+    gutil.log(gutil.colors.green("pushing tags..."));
+    git.pushTags("origin", err => {
+      if (err) {
+        return reject(err);
+      }
+      resolve();
+    });
+  });
+}
+
+function gitPush() {
+  return new Promise((resolve, reject) => {
+    gutil.log(gutil.colors.green("pushing local commits..."));
+    git.push("origin", "master", err => {
+      if (err) {
+        return reject(err);
+      }
+      resolve();
+    });
+  });
+}
