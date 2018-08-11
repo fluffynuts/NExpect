@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using NExpect.EqualityComparers;
+using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
@@ -17,11 +20,11 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
         /// <returns></returns>
-        public static IMore<DateTime> Equal(this IApproximately<DateTime> continuation,
+        public static IMore<DateTime> Equal(
+            this IApproximately<DateTime> continuation,
             DateTime expected)
         {
-            return continuation.Equal(expected,
-                NULL_STRING);
+            return continuation.Equal(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -33,13 +36,12 @@ namespace NExpect
         /// <param name="allowedDrift">How much the actual value may drift from the expected
         /// value</param>
         /// <returns></returns>
-        public static IMore<DateTime> Equal(this IApproximately<DateTime> continuation,
+        public static IMore<DateTime> Equal(
+            this IApproximately<DateTime> continuation,
             DateTime expected,
             TimeSpan allowedDrift)
         {
-            return continuation.Equal(expected,
-                allowedDrift,
-                NULL_STRING);
+            return continuation.Equal(expected, allowedDrift, NULL_STRING);
         }
 
         /// <summary>
@@ -51,12 +53,12 @@ namespace NExpect
         /// <param name="customMessage">Custom message to include when
         /// this expectation fails</param>
         /// <returns></returns>
-        public static IMore<DateTime> Equal(this IApproximately<DateTime> continuation,
+        public static IMore<DateTime> Equal(
+            this IApproximately<DateTime> continuation,
             DateTime expected,
             string customMessage)
         {
-            return continuation.Equal(expected,
-                () => customMessage);
+            return continuation.Equal(expected, () => customMessage);
         }
 
         /// <summary>
@@ -68,7 +70,8 @@ namespace NExpect
         /// <param name="customMessageGenerator">Generates a custom message to include when
         /// this expectation fails</param>
         /// <returns></returns>
-        public static IMore<DateTime> Equal(this IApproximately<DateTime> continuation,
+        public static IMore<DateTime> Equal(
+            this IApproximately<DateTime> continuation,
             DateTime expected,
             Func<string> customMessageGenerator)
         {
@@ -88,7 +91,8 @@ namespace NExpect
         /// <param name="customMessage">Custom message to include when
         /// this expectation fails</param>
         /// <returns></returns>
-        public static IMore<DateTime> Equal(this IApproximately<DateTime> continuation,
+        public static IMore<DateTime> Equal(
+            this IApproximately<DateTime> continuation,
             DateTime expected,
             TimeSpan allowedDrift,
             string customMessage)
@@ -109,26 +113,57 @@ namespace NExpect
         /// <param name="customMessageGenerator">Generates a custom message to include when
         /// this expectation fails</param>
         /// <returns></returns>
-        public static IMore<DateTime> Equal(this IApproximately<DateTime> continuation,
+        public static IMore<DateTime> Equal(
+            this IApproximately<DateTime> continuation,
             DateTime expected,
             TimeSpan allowedDrift,
             Func<string> customMessageGenerator)
         {
+            return continuation.Equal(expected,
+                new EqualWithinTimespan(allowedDrift),
+                customMessageGenerator);
+        }
+
+        /// <summary>
+        /// Tests if the actual DateTime is approximately equal to the
+        /// expected value within the provided allowed drift value
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="comparer"></param>
+        /// <param name="customMessageGenerator">Generates a custom message to include when
+        /// this expectation fails</param>
+        /// <returns></returns>
+        public static IMore<DateTime> Equal(
+            this IApproximately<DateTime> continuation,
+            DateTime expected,
+            IEqualityComparer<DateTime> comparer,
+            Func<string> customMessageGenerator)
+        {
             continuation.AddMatcher(actual =>
             {
-                var delta = Math.Abs((actual - expected).TotalMilliseconds);
-                var allowed = Math.Abs(allowedDrift.TotalMilliseconds);
-                var passed = delta <= allowed;
+                var passed = comparer.Equals(actual, expected);
+
                 return new MatcherResult(passed,
-                    () => FinalMessageFor(()
-                            => $@"Expected {
+                    () =>
+                    {
+                        var allowed =
+                            comparer.TryGetPropertyValue<TimeSpan?>(
+                                nameof(EqualWithinTimespan.AllowedDrift));
+                        var message =
+                            $@"Expected {
                                     actual.Stringify()
                                 } to approximately equal {
                                     expected.Stringify()
-                                } within a timespan of {
-                                    allowedDrift.Stringify()
-                                }",
-                        customMessageGenerator));
+                                }";
+                        if (allowed.HasValue)
+                        {
+                            message += $" within a timespan of {allowed}";
+                        }
+
+                        return FinalMessageFor(() => message,
+                            customMessageGenerator);
+                    });
             });
             return continuation.More();
         }

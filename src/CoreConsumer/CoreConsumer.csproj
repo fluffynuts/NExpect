@@ -1,15 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <Configurations>Debug;Release;BuildForRelease</Configurations>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="microsoft.net.test.sdk" Version="15.3.0" />
-    <PackageReference Include="nexpect" Version="1.0.97" />
+    <PackageReference Include="NExpect" Version="1.0.131" />
     <PackageReference Include="nunit" Version="3.8.1" />
     <PackageReference Include="nunit3testadapter" Version="3.8.0" />
   </ItemGroup>
-
 </Project>

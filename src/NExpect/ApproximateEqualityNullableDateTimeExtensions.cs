@@ -17,11 +17,11 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
         /// <returns></returns>
-        public static IMore<DateTime?> Equal(this IApproximately<DateTime?> continuation,
+        public static IMore<DateTime?> Equal(
+            this IApproximately<DateTime?> continuation,
             DateTime expected)
         {
-            return continuation.Equal(expected,
-                MessageHelpers.NULL_STRING);
+            return continuation.Equal(expected, MessageHelpers.NULL_STRING);
         }
 
         /// <summary>
@@ -33,7 +33,8 @@ namespace NExpect
         /// <param name="allowedDrift">How much the actual value may drift from the expected
         /// value</param>
         /// <returns></returns>
-        public static IMore<DateTime?> Equal(this IApproximately<DateTime?> continuation,
+        public static IMore<DateTime?> Equal(
+            this IApproximately<DateTime?> continuation,
             DateTime expected,
             TimeSpan allowedDrift)
         {
@@ -51,12 +52,12 @@ namespace NExpect
         /// <param name="customMessage">Custom message to include when
         /// this expectation fails</param>
         /// <returns></returns>
-        public static IMore<DateTime?> Equal(this IApproximately<DateTime?> continuation,
+        public static IMore<DateTime?> Equal(
+            this IApproximately<DateTime?> continuation,
             DateTime expected,
             string customMessage)
         {
-            return continuation.Equal(expected,
-                () => customMessage);
+            return continuation.Equal(expected, () => customMessage);
         }
 
         /// <summary>
@@ -68,7 +69,8 @@ namespace NExpect
         /// <param name="customMessageGenerator">Generates a custom message to include when
         /// this expectation fails</param>
         /// <returns></returns>
-        public static IMore<DateTime?> Equal(this IApproximately<DateTime?> continuation,
+        public static IMore<DateTime?> Equal(
+            this IApproximately<DateTime?> continuation,
             DateTime expected,
             Func<string> customMessageGenerator)
         {
@@ -88,7 +90,8 @@ namespace NExpect
         /// <param name="customMessage">Custom message to include when
         /// this expectation fails</param>
         /// <returns></returns>
-        public static IMore<DateTime?> Equal(this IApproximately<DateTime?> continuation,
+        public static IMore<DateTime?> Equal(
+            this IApproximately<DateTime?> continuation,
             DateTime expected,
             TimeSpan allowedDrift,
             string customMessage)
@@ -109,7 +112,8 @@ namespace NExpect
         /// <param name="customMessageGenerator">Generates a custom message to include when
         /// this expectation fails</param>
         /// <returns></returns>
-        public static IMore<DateTime?> Equal(this IApproximately<DateTime?> continuation,
+        public static IMore<DateTime?> Equal(
+            this IApproximately<DateTime?> continuation,
             DateTime expected,
             TimeSpan allowedDrift,
             Func<string> customMessageGenerator)
@@ -118,7 +122,8 @@ namespace NExpect
             {
                 var delta = actual == null
                                 ? allowedDrift.TotalMilliseconds + 1
-                                : Math.Abs((actual.Value - expected).TotalMilliseconds);
+                                : Math.Abs((actual.Value - expected)
+                                    .TotalMilliseconds);
                 var allowed = Math.Abs(allowedDrift.TotalMilliseconds);
                 var passed = delta <= allowed;
                 return new MatcherResult(passed,

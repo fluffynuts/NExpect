@@ -20,7 +20,9 @@ namespace NExpect.Implementations
             return t.GetProperties(_findPublicPropertyAnywhereInInheritenceChain);
         }
 
-        internal static T TryGetPropertyValue<T>(this object o, string prop)
+        internal static T TryGetPropertyValue<T>(
+            this object o, 
+            string prop)
         {
             var propInfo = o.GetType().GetPublicInstanceProperty(prop);
             if (propInfo == null)
