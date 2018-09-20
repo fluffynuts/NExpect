@@ -16,29 +16,61 @@ An assertions framework for .NET with a BDD-like feel, inspired by Chai and Jasm
 using static NExpect.Expectations;
 ```
 3. `Expect` inside your tests, with fluent syntax:
-```
+```csharp
+// simple equality checks
+Expect(1).To.Equal(1);
+Expect(true).To.Not.Be.False(); // alt. grammar
+Expect(null).To.Be.Null();
+// - with negation, order doesn't matter
+Expect("moo").Not.To.Equal("cow");
+Expect("moo").To.Not.Equal("cow");
+Expect(true).Not.To.Be.False();
+Expect(false).To.Not.Be.True();
+
+// exceptions
 Expect(() => { }).Not.To.Throw();
 Expect(() => { throw new ArgumentException("moo", "moo cow"); })
   .To.Throw<ArgumentException>().With.Message.Containing("moo").And.("cow");
-Expect(true).Not.To.Be.False();
-Expect(true).To.Not.Be.False(); // alt. grammar
-Expect(null).To.Be.Null();
+
+// smarter string tests, with fluency
 Expect(someString).To.Contain("moo").And("cow");
-Expect(someCollection).To.Contain.Exactly(2).Matched.By(item => item.IsWhatWeWant());
-Expect(someFlags).To.Contain.At.Least(3).Equal.To(true);
-Expect(someObject).To.Be.An.Instance.Of<Cow>();
+Expect("moo, said the cow")
+    .To.Start.With("moo")
+    .And.Contain("said")
+    .Then("the")
+    .And.End.With("cow");
+
+// collection tests
+Expect(someCollection).To.Contain.Exactly(2)
+  .Matched.By(item => item.IsWhatWeWant());
+Expect(someCollection).To.Contain.Only(1)
+  .Deep.Equal.To(new { id = 42, name = "Douglas" });
+Expect(someFlags).To.Contain.At.Least(3)
+  .Equal.To(true);
+Expect(someObject).To.Be
+  .An.Instance.Of<Cow>();
+
+// deep and intersection equality testing
+var person = new {
+  id = 1,
+  name = "bob"
+};
+Expect(person)
+  .To.Deep.Equal(new { id = 1, name = "bob" });
+Expect(person)
+  .To.Intersection.Equal(new { name = "bob" });
 ```
 
 ## Extending
-Mostly, you can extend by adding extension methods for ICanAddMatcher<T> where T is the 
+Mostly, you can extend by adding extension methods for ICanAddMatcher<T> where T is the
 type you want. You can also extend at any point in the grammar -- some of the "better"
 points are ITo<T>, IBe<T> and IHave<T>. You will need another namespace import:
-```
+```csharp
 using NExpect.MatcherLogic
 ```
 And your extension methods can be like:
 
-```
+```csharp
 public static class MyMatchers
 {
   public static void Five(this IBe<int> continuation)
@@ -55,7 +87,7 @@ public static class MyMatchers
 }
 ```
 
-```
+```csharp
 // somewhere else...
 [Test]
 public void FifteenDividedByThree_ShouldEqual_Five()
