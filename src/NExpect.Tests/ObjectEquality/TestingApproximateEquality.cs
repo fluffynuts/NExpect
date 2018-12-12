@@ -139,7 +139,10 @@ namespace NExpect.Tests.ObjectEquality
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains(message));
-
+                
+                var d1String = d1.Stringify();
+                var d2String = d2.Stringify();
+                
                 Assert.That(() =>
                     {
                         Expect(d1)
@@ -148,7 +151,7 @@ namespace NExpect.Tests.ObjectEquality
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message
                         .Contains(
-                            $"Expected {d1.Stringify()} to approximately equal {d2.Stringify()}"));
+                            $"Expected {d1String} to approximately equal {d2String}"));
                 // Assert
             }
         }
@@ -424,14 +427,14 @@ namespace NExpect.Tests.ObjectEquality
             yield return (1.123M, 1.129M, 2, true);
             yield return (1.111M, 1.199M, 1, true);
             yield return (1.1234M, 1.1243M, 3, false);
-            
         }
 
         [TestCaseSource(nameof(Generator))]
-        public void ShouldReturnFor_((decimal x,
-            decimal y,
-            int places,
-            bool expected) testCase)
+        public void ShouldReturnFor_(
+            (decimal x,
+                decimal y,
+                int places,
+                bool expected) testCase)
         {
             // Arrange
             var sut = Create(testCase.places);
@@ -442,12 +445,13 @@ namespace NExpect.Tests.ObjectEquality
             Expect(result).To.Equal(testCase.expected);
         }
 
-        private DecimalsEqualToDecimalPlacesTruncated Create(int places)
+        private DecimalsEqualToDecimalPlacesTruncated Create(
+            int places)
         {
             return new DecimalsEqualToDecimalPlacesTruncated(places);
         }
     }
-    
+
     [TestFixture]
     public class TestDoublesEqualToDecimalPlacesTruncated
     {
@@ -458,14 +462,14 @@ namespace NExpect.Tests.ObjectEquality
             yield return (1.123D, 1.129D, 2, true);
             yield return (1.111D, 1.199D, 1, true);
             yield return (1.1234D, 1.1243D, 3, false);
-            
         }
 
         [TestCaseSource(nameof(Generator))]
-        public void ShouldReturnFor_((double x,
-            double y,
-            int places,
-            bool expected) testCase)
+        public void ShouldReturnFor_(
+            (double x,
+                double y,
+                int places,
+                bool expected) testCase)
         {
             // Arrange
             var sut = Create(testCase.places);
@@ -476,7 +480,8 @@ namespace NExpect.Tests.ObjectEquality
             Expect(result).To.Equal(testCase.expected);
         }
 
-        private DoublesEqualToDecimalPlacesTruncated Create(int places)
+        private DoublesEqualToDecimalPlacesTruncated Create(
+            int places)
         {
             return new DoublesEqualToDecimalPlacesTruncated(places);
         }
