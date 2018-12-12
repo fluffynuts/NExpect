@@ -791,7 +791,8 @@ namespace NExpect
             return matched.By(CompileRegexFor(regex), customMessage);
         }
 
-        private static Regex CompileRegexFor(string regex)
+        private static Regex CompileRegexFor(
+            string regex)
         {
             try
             {
@@ -845,7 +846,9 @@ namespace NExpect
             fragments.Skip(1)
                 .Aggregate(
                     canAddMatcher.Contain(first, customMessage),
-                    (acc, cur) => acc.Then(cur, customMessage)
+                    (
+                        acc,
+                        cur) => acc.Then(cur, customMessage)
                 );
             return canAddMatcher.More();
         }
@@ -912,20 +915,197 @@ namespace NExpect
         /// </summary>
         /// <param name="have">Continuation to operate on</param>
         /// <param name="expected">Expected string length</param>
+        /// <param name="customMessageGenerator">Custom message generator</param>
         /// <returns>More continuation -- continue with more assertions!</returns>
         public static IStringMore Length(
             this IHave<string> have,
-            int expected)
+            int expected,
+            Func<string> customMessageGenerator)
         {
             have.AddMatcher(actual =>
             {
                 var passed = actual != null && actual.Length == expected;
                 return new MatcherResult(
                     passed,
-                    () => $"Expected {actual.Stringify()} {passed.AsNot()}to have length {expected}"
+                    FinalMessageFor(
+                        () => $"Expected {actual.Stringify()} {passed.AsNot()}to have length {expected}",
+                        customMessageGenerator)
                 );
             });
             return have.More();
+        }
+
+        /// <summary>
+        /// Tests the string's length against the expected value
+        /// </summary>
+        /// <param name="have">Continuation to operate on</param>
+        /// <param name="expected">Expected string length</param>
+        /// <param name="customMessage">Custom message generator</param>
+        /// <returns>More continuation -- continue with more assertions!</returns>
+        public static IStringMore Length(
+            this IHave<string> have,
+            int expected,
+            string customMessage)
+        {
+            return have.Length(expected, () => customMessage);
+        }
+
+
+        /// <summary>
+        /// Tests the string's length against the expected value
+        /// </summary>
+        /// <param name="have">Continuation to operate on</param>
+        /// <param name="expected">Expected string length</param>
+        /// <returns>More continuation -- continue with more assertions!</returns>
+        public static IStringMore Length(
+            this IHave<string> have,
+            int expected)
+        {
+            return have.Length(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Asserts that a string is alpha-numeric
+        /// </summary>
+        /// <param name="be"></param>
+        /// <returns></returns>
+        public static IStringMore Alphanumeric(
+            this IBe<string> be)
+        {
+            return be.Alphanumeric(NULL_STRING);
+        }
+
+        /// <summary>
+        /// Asserts that a string is alpha-numeric
+        /// </summary>
+        /// <param name="be"></param>
+        /// <param name="customMessage"></param>
+        /// <returns></returns>
+        public static IStringMore Alphanumeric(
+            this IBe<string> be,
+            string customMessage)
+        {
+            return be.Alphanumeric(() => customMessage);
+        }
+
+        /// <summary>
+        /// Asserts that a string is alpha-numeric
+        /// </summary>
+        /// <param name="be"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <returns></returns>
+        public static IStringMore Alphanumeric(
+            this IBe<string> be,
+            Func<string> customMessageGenerator)
+        {
+            be.AddMatcher(actual =>
+            {
+                var passed = actual != null &&
+                             actual.All(c => c.IsNumeric() || c.IsAlpha());
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected {actual.Stringify()} {passed.AsNot()}to be alpha-numeric",
+                        customMessageGenerator)
+                );
+            });
+            return be.More();
+        }
+        
+        /// <summary>
+        /// Asserts that a string is numeric
+        /// </summary>
+        /// <param name="be"></param>
+        /// <returns></returns>
+        public static IStringMore Numeric(
+            this IBe<string> be)
+        {
+            return be.Numeric(NULL_STRING);
+        }
+
+        /// <summary>
+        /// Asserts that a string is numeric
+        /// </summary>
+        /// <param name="be"></param>
+        /// <param name="customMessage"></param>
+        /// <returns></returns>
+        public static IStringMore Numeric(
+            this IBe<string> be,
+            string customMessage)
+        {
+            return be.Numeric(() => customMessage);
+        }
+
+        /// <summary>
+        /// Asserts that a string is numeric
+        /// </summary>
+        /// <param name="be"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <returns></returns>
+        public static IStringMore Numeric(
+            this IBe<string> be,
+            Func<string> customMessageGenerator)
+        {
+            be.AddMatcher(actual =>
+            {
+                var passed = actual != null &&
+                             actual.All(c => c.IsNumeric());
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected {actual.Stringify()} {passed.AsNot()}to be numeric",
+                        customMessageGenerator)
+                );
+            });
+            return be.More();
+        }
+        
+        /// <summary>
+        /// Asserts that a string is alpha
+        /// </summary>
+        /// <param name="be"></param>
+        /// <returns></returns>
+        public static IStringMore Alpha(
+            this IBe<string> be)
+        {
+            return be.Alpha(NULL_STRING);
+        }
+
+        /// <summary>
+        /// Asserts that a string is alpha
+        /// </summary>
+        /// <param name="be"></param>
+        /// <param name="customMessage"></param>
+        /// <returns></returns>
+        public static IStringMore Alpha(
+            this IBe<string> be,
+            string customMessage)
+        {
+            return be.Alpha(() => customMessage);
+        }
+
+        /// <summary>
+        /// Asserts that a string is alpha
+        /// </summary>
+        /// <param name="be"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <returns></returns>
+        public static IStringMore Alpha(
+            this IBe<string> be,
+            Func<string> customMessageGenerator)
+        {
+            be.AddMatcher(actual =>
+            {
+                var passed = actual != null &&
+                             actual.All(c => c.IsAlpha());
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected {actual.Stringify()} {passed.AsNot()}to be alpha",
+                        customMessageGenerator)
+                );
+            });
+            return be.More();
         }
     }
 }

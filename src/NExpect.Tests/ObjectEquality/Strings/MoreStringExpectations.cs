@@ -1,7 +1,11 @@
-﻿using NExpect.Exceptions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using NExpect.Exceptions;
 using NUnit.Framework;
+using PeanutButter.Utils;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
+using static PeanutButter.Utils.PyLike;
 
 namespace NExpect.Tests.ObjectEquality.Strings
 {
@@ -314,6 +318,232 @@ namespace NExpect.Tests.ObjectEquality.Strings
                 );
                 // Assert
             }
+        }
+
+        [TestFixture]
+        public class Alphanumeric: MoreStringExpectations
+        {
+            [Test]
+            public void PositiveAssertion_WithPass()
+            {
+                // Arrange
+                var alphaNumeric = GetRandomAlphaNumericString();
+                var alphaOnly = GetRandomAlphaString();
+                var numericOnly = GetRandomInt(10000, 200000).ToString();
+                // Pre-assert
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(alphaNumeric).To.Be.Alphanumeric();
+                        Expect(alphaOnly).To.Be.Alphanumeric();
+                        Expect(numericOnly).To.Be.Alphanumeric();
+                    },
+                    Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void PositiveAssertion_WithFail()
+            {
+                // Arrange
+                var s = GetRandomNonAlphaNumericString();
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(s).To.Be.Alphanumeric();
+                    }, Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.EqualTo($"Expected \"{s}\" to be alpha-numeric")
+                );
+                // Assert
+            }
+
+            [Test]
+            public void NegativeAssertion_WithPass()
+            {
+                // Arrange
+                var s = GetRandomNonAlphaNumericString();
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(s).Not.To.Be.Alphanumeric();
+                    }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void NegativeAssertion_WithFail()
+            {
+                // Arrange
+                var s = GetRandomAlphaNumericString();
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(s).Not.To.Be.Alphanumeric();
+                    }, Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.EqualTo($"Expected \"{s}\" not to be alpha-numeric")
+                );
+                // Assert
+            }
+        }
+        
+        [TestFixture]
+        public class Alpha: MoreStringExpectations
+        {
+            [Test]
+            public void PositiveAssertion_WithPass()
+            {
+                // Arrange
+                var alphaOnly = GetRandomAlphaString();
+                // Pre-assert
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(alphaOnly).To.Be.Alpha();
+                    },
+                    Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void PositiveAssertion_WithFail()
+            {
+                // Arrange
+                var s = GetRandomNonAlphaNumericString();
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(s).To.Be.Alpha();
+                    }, Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.EqualTo($"Expected \"{s}\" to be alpha")
+                );
+                // Assert
+            }
+
+            [Test]
+            public void NegativeAssertion_WithPass()
+            {
+                // Arrange
+                var s = GetRandomNonAlphaNumericString();
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(s).Not.To.Be.Alpha();
+                    }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void NegativeAssertion_WithFail()
+            {
+                // Arrange
+                var s = GetRandomAlphaString();
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(s).Not.To.Be.Alpha();
+                    }, Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.EqualTo($"Expected \"{s}\" not to be alpha")
+                );
+                // Assert
+            }
+        }
+
+        [TestFixture]
+        public class Numeric: MoreStringExpectations
+        {
+            [Test]
+            public void PositiveAssertion_WithPass()
+            {
+                // Arrange
+                var numericOnly = GetRandomInt(10000, 200000).ToString();
+                // Pre-assert
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(numericOnly).To.Be.Numeric();
+                    },
+                    Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void PositiveAssertion_WithFail()
+            {
+                // Arrange
+                var alpha = GetRandomAlphaString();
+                var nonAlpha = GetRandomNonAlphaNumericString();
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(alpha).To.Be.Numeric();
+                    }, Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.EqualTo($"Expected \"{alpha}\" to be numeric")
+                );
+                Assert.That(() =>
+                    {
+                        Expect(nonAlpha).To.Be.Numeric();
+                    }, Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.EqualTo($"Expected \"{nonAlpha}\" to be numeric")
+                );
+                // Assert
+            }
+
+            [Test]
+            public void NegativeAssertion_WithPass()
+            {
+                // Arrange
+                var s = GetRandomAlphaString();
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(s).Not.To.Be.Numeric();
+                    }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void NegativeAssertion_WithFail()
+            {
+                // Arrange
+                var s = GetRandomInt(1, 10000).ToString();
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(s).Not.To.Be.Numeric();
+                    }, Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.EqualTo($"Expected \"{s}\" not to be numeric")
+                );
+                // Assert
+            }
+
+        }
+
+        private string GetRandomNonAlphaNumericString(int minChars = 0, int maxChars = 10)
+        {
+            return Range(0, GetRandomInt(1, 10))
+                .Select(i => 
+                    GetRandom(c => c < 'A' || c > 'z', 
+                        () => (char)GetRandomInt(32, 255)))
+                .JoinWith("");
         }
     }
 }
