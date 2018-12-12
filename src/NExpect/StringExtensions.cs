@@ -8,6 +8,7 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
+
 // ReSharper disable UnusedMethodReturnValue.Global
 // ReSharper disable PossibleMultipleEnumeration
 // ReSharper disable MemberCanBePrivate.Global
@@ -50,7 +51,7 @@ namespace NExpect
         {
             return continuation.Contain(search, () => customMessage);
         }
-        
+
 
         /// <summary>
         /// Tests if the value under test contains a given string. May be continued
@@ -501,6 +502,7 @@ namespace NExpect
             AddRegexMatcher(matched, regex, customMessageGenerator);
             return matched.More();
         }
+
         /// <summary>
         /// Tests whether the Actual string is matched by the given Regex
         /// </summary>
@@ -594,6 +596,7 @@ namespace NExpect
             AddRegexMatcher(matcher, regex, customMessageGenerator);
             return matcher.More();
         }
+
         /// <summary>
         /// Tests whether the Actual string is matched by the given Regex
         /// </summary>
@@ -689,7 +692,7 @@ namespace NExpect
             AddRegexMatcher(matcher, regex, customMessageGenerator);
             return matcher.More();
         }
-        
+
         /// <summary>
         /// Tests whether the Actual string is matched by the given Regex
         /// </summary>
@@ -705,7 +708,7 @@ namespace NExpect
         {
             return matched.By(regex, () => customMessage);
         }
-        
+
         /// <summary>
         /// Tests whether the Actual string is matched by the given Regex
         /// </summary>
@@ -902,6 +905,27 @@ namespace NExpect
             if (nextOffset > -1)
                 nextOffset += needle?.Length ?? 0;
             return nextOffset;
+        }
+
+        /// <summary>
+        /// Tests the string's length against the expected value
+        /// </summary>
+        /// <param name="have">Continuation to operate on</param>
+        /// <param name="expected">Expected string length</param>
+        /// <returns>More continuation -- continue with more assertions!</returns>
+        public static IStringMore Length(
+            this IHave<string> have,
+            int expected)
+        {
+            have.AddMatcher(actual =>
+            {
+                var passed = actual != null && actual.Length == expected;
+                return new MatcherResult(
+                    passed,
+                    () => $"Expected {actual.Stringify()} {passed.AsNot()}to have length {expected}"
+                );
+            });
+            return have.More();
         }
     }
 }

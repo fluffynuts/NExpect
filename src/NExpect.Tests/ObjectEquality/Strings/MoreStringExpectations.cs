@@ -225,8 +225,8 @@ namespace NExpect.Tests.ObjectEquality.Strings
                     .And.Not.End.With(end);
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
-        }        
-        
+        }
+
         [Test]
         public void TestingEndWith_PositiveResult()
         {
@@ -245,6 +245,75 @@ namespace NExpect.Tests.ObjectEquality.Strings
                     .And.End.With(end);
             }, Throws.Nothing);
             // Assert
+        }
+
+        [TestFixture]
+        public class StringLength
+        {
+            [Test]
+            public void PositiveAssertion_WithPass()
+            {
+                // Arrange
+                var s = GetRandomString(5, 10);
+                var expected = s.Length;
+                // Pre-assert
+                // Act
+                Assert.That(
+                    () => Expect(s).To.Have.Length(expected),
+                    Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void PositiveAssertion_WithFail()
+            {
+                // Arrange
+                var s = GetRandomString();
+                var test = GetRandom<int>(i => i != s.Length);
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(s).To.Have.Length(test);
+                    }, Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.EqualTo($"Expected \"{s}\" to have length {test}")
+                );
+                // Assert
+            }
+
+            [Test]
+            public void NegativeAssertion_WithPass()
+            {
+                // Arrange
+                var s = GetRandomString();
+                var test = GetRandom<int>(i => i != s.Length);
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(s).Not.To.Have.Length(test);
+                    }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void NegativeAssertion_WithFail()
+            {
+                // Arrange
+                var s = GetRandomString();
+                var test = s.Length;
+                // Pre-assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(s).Not.To.Have.Length(test);
+                    }, Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.EqualTo($"Expected \"{s}\" not to have length {test}")
+                );
+                // Assert
+            }
         }
     }
 }
