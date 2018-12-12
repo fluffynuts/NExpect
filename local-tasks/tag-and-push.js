@@ -27,7 +27,7 @@ gulp.task("tag-and-push", () => {
   });
 });
 
-gulp.task("push", "Pushes tags and commits", () => {
+gulp.task("push-tags", "Pushes tags and commits", () => {
   return gitPushTags()
     .then(() => gitPush())
     .then(() =>
