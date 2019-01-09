@@ -15,6 +15,26 @@ namespace NExpect.Tests.Collections
     public class DictionaryTesting
     {
         [TestFixture]
+        public class Issues
+        {
+            [Test]
+            public void NullDictionaryAssertion()
+            {
+                // Arrange
+                var dict = null as Dictionary<string, string>;
+                // Pre-assert
+                // Act
+                Assert.That(
+                    () => Expect(dict).To.Be.Null(),
+                    Throws.Nothing);
+                Assert.That(
+                    () => Expect(dict).Not.To.Be.Null(),
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+        }
+
+        [TestFixture]
         public class ShortContain
         {
             [Test]
