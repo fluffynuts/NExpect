@@ -2,19 +2,19 @@
 <package>
   <metadata>
     <id>NExpect</id>
-    <version>1.0.136</version>
+    <version>1.0.137</version>
     <title>NExpect</title>
     <authors>Davyd McColl</authors>
     <owners>Davyd McColl</owners>
-    <description>&#xD;&#xD;
-    Unit-test Framework-agnostic Expect-style assertions for .NET&#xD;&#xD;
+    <description>&#xD;&#xD;&#xD;
+    Unit-test Framework-agnostic Expect-style assertions for .NET&#xD;&#xD;&#xD;
     </description>
-    <releaseNotes>&#xD;&#xD;
+    <releaseNotes>&#xD;&#xD;&#xD;
     </releaseNotes>
-    <summary>&#xD;&#xD;
-    Provides Expect() syntax for doing assertions in .NET. Framework-agnostic, throwing&#xD;&#xD;
-    UnmetExpectationExceptions for failures. Assertion exception type can be overridden at run-time.&#xD;&#xD;
-    NExpect has grammar inspired by Chai and extensibility inspired by Jasmine.&#xD;&#xD;
+    <summary>&#xD;&#xD;&#xD;
+    Provides Expect() syntax for doing assertions in .NET. Framework-agnostic, throwing&#xD;&#xD;&#xD;
+    UnmetExpectationExceptions for failures. Assertion exception type can be overridden at run-time.&#xD;&#xD;&#xD;
+    NExpect has grammar inspired by Chai and extensibility inspired by Jasmine.&#xD;&#xD;&#xD;
     </summary>
     <language>en-US</language>
     <projectUrl>https://github.com/fluffynuts/NExpect</projectUrl>
