@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NExpect.Helpers;
 using NExpect.Implementations;
 using NExpect.Interfaces;
@@ -144,20 +145,20 @@ namespace NExpect
             continuation.AddMatcher(
                 actual =>
                 {
-                    var passed = DeepTestHelpers.AreIntersectionEqual(
+                    var result = DeepTestHelpers.AreIntersectionEqual(
                         actual,
                         expected,
                         customEqualityComparers);
                     return new MatcherResult(
-                        passed,
+                        result.AreEqual,
                         FinalMessageFor(
                             () => new[]
                             {
                                 "Expected",
                                 actual.Stringify(),
-                                $"{passed.AsNot()}to intersection equal",
+                                $"{result.AreEqual.AsNot()}to intersection equal",
                                 expected.Stringify()
-                            },
+                            }.Concat(result.Errors).ToArray(),
                             customMessageGenerator
                         )
                     );

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NExpect.Helpers;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -131,41 +132,74 @@ namespace NExpect
         {
             return collection =>
             {
-                var passed = CollectionsAreDeepEqual(collection, expected, customEqualityComparers);
+                var result = CollectionsAreDeepEqual(collection, expected, customEqualityComparers);
                 return new MatcherResult(
-                    passed,
+                    result.AreEqual,
                     FinalMessageFor(
                         () => new[]
                         {
                             "Expected",
                             collection.LimitedPrint(),
-                            $"{passed.AsNot()}to deep equal",
+                            $"{result.AreEqual.AsNot()}to deep equal",
                             expected.LimitedPrint()
-                        },
+                        }.Concat(result.Errors).ToArray(),
                         customMessage
                     )
                 );
             };
         }
 
-        private static bool CollectionsAreDeepEqual<T>(
+        private static DeepTestResult CollectionsAreDeepEqual<T>(
             IEnumerable<T> collection,
             IEnumerable<T> expected,
             object[] customEqualityComparers
         )
         {
+            if (collection == null && expected == null)
+            {
+                return DeepTestResult.Pass;
+            }
+
+            if (collection == null || expected == null)
+            {
+                return DeepTestResult.Fail(
+                    expected == null
+                        ? $"Expected collection is null but actual is not"
+                        : $"Actual collection is null but expected is not"
+                );
+            }
+
+            var expectedCount = expected.Count();
+            var collectionCount = collection.Count();
+
+            if (expectedCount != collectionCount)
+            {
+                return DeepTestResult.Fail(
+                    $"Expected collection with {expectedCount} items, but got {collectionCount}"
+                );
+            }
+
             return CollectionCompare(
-                collection,
-                expected,
-                (master, compare) => master.Zip(compare, Tuple.Create)
-                    .Aggregate(
-                        true,
-                        (acc, cur) => acc && AreDeepEqual(
-                                          cur.Item1,
-                                          cur.Item2,
-                                          customEqualityComparers)
-                    )
-            );
+                       collection,
+                       expected,
+                       (master, compare)
+                           => master.Zip(compare, Tuple.Create)
+                                    .Aggregate(
+                                        null as DeepTestResult,
+                                        (acc, cur) =>
+                                        {
+                                            if (acc != null)
+                                            {
+                                                return acc;
+                                            }
+
+                                            var result =
+                                                AreDeepEqual(
+                                                    cur.Item1, cur.Item2, customEqualityComparers);
+                                            return result.AreEqual ? null : result;
+                                        }
+                                    )
+                   ) ?? DeepTestResult.Pass;
         }
     }
 }

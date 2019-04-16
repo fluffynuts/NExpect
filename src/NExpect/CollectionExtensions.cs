@@ -1153,13 +1153,13 @@ namespace NExpect
             ICountMatch<IEnumerable<T>> continuation,
             object expected,
             Func<string> customMessageGenerator,
-            Func<object, object, bool> matcher)
+            Func<object, object, DeepTestResult> matcher)
         {
             continuation.AddMatcher(
                 collection =>
                 {
                     var actualCount = collection?.Count(
-                                          o => matcher(o, expected)
+                                          o => matcher(o, expected).AreEqual
                                       ) ?? 0;
                     var total = collection?.Count() ?? 0;
                     var passed = CountPassStrategies[continuation.Method](

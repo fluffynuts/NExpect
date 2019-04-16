@@ -711,12 +711,12 @@ namespace NExpect.Tests
                 {
                     captured = ex;
                 }
-
+                
                 // Assert
                 Expect(captured).Not.To.Be.Null();
                 var lines = captured.StackTrace.Split(new[] {"\r", "\n"}, StringSplitOptions.RemoveEmptyEntries);
                 Expect(lines).To.Contain.Only(1).Item();
-                Expect(lines[0]).To.Contain.CurrentFilePath();
+                Expect(lines[0]).To.Contain(nameof(UnmetExpectationStackTraces_ShouldOmitTraversalThroughNExpect));
             }
         }
 

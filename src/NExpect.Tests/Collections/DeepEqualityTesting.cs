@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using NExpect.Exceptions;
+using PeanutButter.DuckTyping.Extensions;
 using PeanutButter.Utils;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
@@ -63,8 +64,8 @@ namespace NExpect.Tests.Collections
                     public void PositiveExpectation_WhenCollectionsMatch_ShouldNotThrow()
                     {
                         // Arrange
-                        var first = new[] {o1(1, "bob"), o1(2, "janet")};
-                        var second = new[] {o2(1, "bob"), o2(2, "janet")};
+                        var first = new[] { o1(1, "bob"), o1(2, "janet") };
+                        var second = new[] { o2(1, "bob"), o2(2, "janet") };
                         // Pre-Assert
                         // Act
                         Assert.That(
@@ -80,8 +81,8 @@ namespace NExpect.Tests.Collections
                     public void NegativeExpectation_WhenCollectionsMatch_ShouldThrow()
                     {
                         // Arrange
-                        var first = new[] {o1(1, "bob"), o1(2, "janet")};
-                        var second = new[] {o1(1, "bob"), o1(2, "janet")};
+                        var first = new[] { o1(1, "bob"), o1(2, "janet") };
+                        var second = new[] { o1(1, "bob"), o1(2, "janet") };
                         // Pre-Assert
                         // Act
                         Assert.That(
@@ -97,8 +98,8 @@ namespace NExpect.Tests.Collections
                     public void NegativeExpectation_AltGrammar_WhenCollectionsMatch_ShouldThrow()
                     {
                         // Arrange
-                        var first = new[] {o1(1, "bob"), o1(2, "janet")};
-                        var second = new[] {o1(1, "bob"), o1(2, "janet")};
+                        var first = new[] { o1(1, "bob"), o1(2, "janet") };
+                        var second = new[] { o1(1, "bob"), o1(2, "janet") };
                         // Pre-Assert
                         // Act
                         Assert.That(
@@ -114,8 +115,8 @@ namespace NExpect.Tests.Collections
                     public void PositiveExpectation_AltGrammer_WhenCollectionsMatch_ShouldNotThrow()
                     {
                         // Arrange
-                        var first = new[] {o1(1, "bob"), o1(2, "janet")};
-                        var second = new[] {o1(1, "bob"), o1(2, "janet")};
+                        var first = new[] { o1(1, "bob"), o1(2, "janet") };
+                        var second = new[] { o1(1, "bob"), o1(2, "janet") };
                         // Pre-Assert
                         // Act
                         Assert.That(
@@ -131,8 +132,8 @@ namespace NExpect.Tests.Collections
                     public void WithCustomComparer()
                     {
                         // Arrange
-                        var first = new[] {new {Date = DateTime.Now}};
-                        var second = new[] {new {Date = DateTime.Now.AddSeconds(-1)}};
+                        var first = new[] { new { Date = DateTime.Now } };
+                        var second = new[] { new { Date = DateTime.Now.AddSeconds(-1) } };
                         // Pre-assert
                         // Act
                         Assert.That(
@@ -150,8 +151,8 @@ namespace NExpect.Tests.Collections
                     public void NegativeExpectation_AltGrammar_WhenCollectionsMatch_ShouldNotThrow()
                     {
                         // Arrange
-                        var first = new[] {o1(1, "bob"), o1(2, "janet")};
-                        var second = new[] {o1(1, "bob"), o1(2, "janet")};
+                        var first = new[] { o1(1, "bob"), o1(2, "janet") };
+                        var second = new[] { o1(1, "bob"), o1(2, "janet") };
                         // Pre-Assert
                         // Act
                         Assert.That(
@@ -167,8 +168,8 @@ namespace NExpect.Tests.Collections
                     public void PositiveExpectation_WhenCollectionsDontMatchInFirstRecord_ShouldThrow()
                     {
                         // Arrange
-                        var first = new[] {o1(1, "bob"), o1(2, "janet"), o1(3, "paddy")};
-                        var second = new[] {o1(1, "bobby"), o1(2, "janet"), o1(3, "paddy")};
+                        var first = new[] { o1(1, "bob"), o1(2, "janet"), o1(3, "paddy") };
+                        var second = new[] { o1(1, "bobby"), o1(2, "janet"), o1(3, "paddy") };
                         // Pre-Assert
                         // Act
                         Assert.That(
@@ -184,8 +185,8 @@ namespace NExpect.Tests.Collections
                     public void PositiveExpectation_WhenCollectionsDontMatchInLastRecord_ShouldThrow()
                     {
                         // Arrange
-                        var first = new[] {o1(1, "bob"), o1(2, "janet"), o1(3, "paddy")};
-                        var second = new[] {o1(1, "bob"), o1(2, "janet"), o1(3, "mcgee")};
+                        var first = new[] { o1(1, "bob"), o1(2, "janet"), o1(3, "paddy") };
+                        var second = new[] { o1(1, "bob"), o1(2, "janet"), o1(3, "mcgee") };
                         // Pre-Assert
                         // Act
                         Assert.That(
@@ -244,8 +245,8 @@ namespace NExpect.Tests.Collections
                         public void AllowingDateTimeDrift()
                         {
                             // Arrange
-                            var left = new {Date = DateTime.Now};
-                            var right = new {Date = left.Date.AddSeconds(1)};
+                            var left = new { Date = DateTime.Now };
+                            var right = new { Date = left.Date.AddSeconds(1) };
 
                             // Pre-assert
                             // Act
@@ -258,14 +259,14 @@ namespace NExpect.Tests.Collections
                                 },
                                 Throws.Nothing);
                             // Assert
-                        }                        
-                        
+                        }
+
                         [Test]
                         public void MessageWhenCustomEqualityComparerSaysNotEqual()
                         {
                             // Arrange
-                            var left = new {Date = DateTime.Now};
-                            var right = new {Date = left.Date.AddSeconds(1)};
+                            var left = new { Date = DateTime.Now };
+                            var right = new { Date = left.Date.AddSeconds(1) };
 
                             // Pre-assert
                             // Act
@@ -277,7 +278,7 @@ namespace NExpect.Tests.Collections
                                         new NeverEqualEqualityComparer());
                                 },
                                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                .With.Message.Contain(nameof(NeverEqualEqualityComparer)));
+                                      .With.Message.Contain(nameof(NeverEqualEqualityComparer)));
                             // Assert
                         }
                     }
@@ -333,8 +334,8 @@ namespace NExpect.Tests.Collections
                     public void PositiveExpectation_WhenHaveEquivalence_ShouldNotThrow()
                     {
                         // Arrange
-                        var first = new[] {o1(1, "moo"), o1(2, "cow")};
-                        var second = new[] {o2(2, "cow"), o2(1, "moo")};
+                        var first = new[] { o1(1, "moo"), o1(2, "cow") };
+                        var second = new[] { o2(2, "cow"), o2(1, "moo") };
                         // Pre-Assert
                         // Act
                         Assert.That(
@@ -350,8 +351,8 @@ namespace NExpect.Tests.Collections
                     public void NegativeExpectation_WhenHaveEquivalence_ShouldThrow()
                     {
                         // Arrange
-                        var first = new[] {o1(1, "moo"), o1(2, "cow")};
-                        var second = new[] {o2(2, "cow"), o2(1, "moo")};
+                        var first = new[] { o1(1, "moo"), o1(2, "cow") };
+                        var second = new[] { o2(2, "cow"), o2(1, "moo") };
                         // Pre-Assert
                         // Act
                         Assert.That(
@@ -367,8 +368,8 @@ namespace NExpect.Tests.Collections
                     public void NegativeExpectation_AltGrammar_WhenHaveEquivalence_ShouldThrow()
                     {
                         // Arrange
-                        var first = new[] {o1(1, "moo"), o1(2, "cow")};
-                        var second = new[] {o2(2, "cow"), o2(1, "moo")};
+                        var first = new[] { o1(1, "moo"), o1(2, "cow") };
+                        var second = new[] { o2(2, "cow"), o2(1, "moo") };
                         // Pre-Assert
                         // Act
                         Assert.That(
@@ -384,8 +385,8 @@ namespace NExpect.Tests.Collections
                     public void PositiveExpectation_WhenCollectionsDontMatch_ShouldThrow()
                     {
                         // Arrange
-                        var first = new[] {o1(1, "bob"), o1(2, "janet")};
-                        var second = new[] {o2(1, "bobby"), o2(2, "janet")};
+                        var first = new[] { o1(1, "bob"), o1(2, "janet") };
+                        var second = new[] { o2(1, "bobby"), o2(2, "janet") };
                         // Pre-Assert
                         // Act
                         Assert.That(
@@ -404,8 +405,8 @@ namespace NExpect.Tests.Collections
                         public void AllowingDateTimeDrift()
                         {
                             // Arrange
-                            var left = new {Date = DateTime.Now}.AsArray();
-                            var right = new {Date = left[0].Date.AddSeconds(1)}.AsArray();
+                            var left = new { Date = DateTime.Now }.AsArray();
+                            var right = new { Date = left[0].Date.AddSeconds(1) }.AsArray();
 
                             // Pre-assert
                             // Act
@@ -430,8 +431,8 @@ namespace NExpect.Tests.Collections
                 public void PositiveExpectation_WhenCollectionsMatch_ShouldNotThrow()
                 {
                     // Arrange
-                    var first = new[] {o1(1, "bob"), o1(2, "janet")};
-                    var second = new[] {o2(1, "bob"), o2(2, "janet")};
+                    var first = new[] { o1(1, "bob"), o1(2, "janet") };
+                    var second = new[] { o2(1, "bob"), o2(2, "janet") };
                     // Pre-Assert
                     // Act
                     Assert.That(
@@ -447,8 +448,8 @@ namespace NExpect.Tests.Collections
                 public void NegativeExpectation_WhenCollectionsMatch_ShouldThrow()
                 {
                     // Arrange
-                    var first = new[] {o1(1, "bob"), o1(2, "janet")};
-                    var second = new[] {o2(1, "bob"), o2(2, "janet")};
+                    var first = new[] { o1(1, "bob"), o1(2, "janet") };
+                    var second = new[] { o2(1, "bob"), o2(2, "janet") };
                     // Pre-Assert
                     // Act
                     Assert.That(
@@ -464,8 +465,8 @@ namespace NExpect.Tests.Collections
                 public void NegativeExpectation_AltGrammar_WhenCollectionsMatch_ShouldThrow()
                 {
                     // Arrange
-                    var first = new[] {o1(1, "bob"), o1(2, "janet")};
-                    var second = new[] {o2(1, "bob"), o2(2, "janet")};
+                    var first = new[] { o1(1, "bob"), o1(2, "janet") };
+                    var second = new[] { o2(1, "bob"), o2(2, "janet") };
                     // Pre-Assert
                     // Act
                     Assert.That(
@@ -481,8 +482,8 @@ namespace NExpect.Tests.Collections
                 public void PositiveExpectation_AltGrammer_WhenCollectionsMatch_ShouldNotThrow()
                 {
                     // Arrange
-                    var first = new[] {o1(1, "bob"), o1(2, "janet")};
-                    var second = new[] {o2(1, "bob"), o2(2, "janet")};
+                    var first = new[] { o1(1, "bob"), o1(2, "janet") };
+                    var second = new[] { o2(1, "bob"), o2(2, "janet") };
                     // Pre-Assert
                     // Act
                     Assert.That(
@@ -498,8 +499,8 @@ namespace NExpect.Tests.Collections
                 public void NegativeExpectation_AltGrammar_WhenCollectionsMatch_ShouldNotThrow()
                 {
                     // Arrange
-                    var first = new[] {o1(1, "bob"), o1(2, "janet")};
-                    var second = new[] {o2(1, "bob"), o2(2, "janet")};
+                    var first = new[] { o1(1, "bob"), o1(2, "janet") };
+                    var second = new[] { o2(1, "bob"), o2(2, "janet") };
                     // Pre-Assert
                     // Act
                     Assert.That(
@@ -515,8 +516,8 @@ namespace NExpect.Tests.Collections
                 public void PositiveExpectation_WhenCollectionsDontMatchInFirstRecord_ShouldThrow()
                 {
                     // Arrange
-                    var first = new[] {o1(1, "bob"), o1(2, "janet"), o1(3, "paddy")};
-                    var second = new[] {o2(1, "bobby"), o2(2, "janet"), o2(3, "paddy")};
+                    var first = new[] { o1(1, "bob"), o1(2, "janet"), o1(3, "paddy") };
+                    var second = new[] { o2(1, "bobby"), o2(2, "janet"), o2(3, "paddy") };
                     // Pre-Assert
                     // Act
                     Assert.That(
@@ -532,8 +533,8 @@ namespace NExpect.Tests.Collections
                 public void PositiveExpectation_WhenCollectionsDontMatchInLastRecord_ShouldThrow()
                 {
                     // Arrange
-                    var first = new[] {o1(1, "bob"), o1(2, "janet"), o1(3, "paddy")};
-                    var second = new[] {o2(1, "bob"), o2(2, "janet"), o2(3, "mcgee")};
+                    var first = new[] { o1(1, "bob"), o1(2, "janet"), o1(3, "paddy") };
+                    var second = new[] { o2(1, "bob"), o2(2, "janet"), o2(3, "mcgee") };
                     // Pre-Assert
                     // Act
                     Assert.That(
@@ -549,8 +550,8 @@ namespace NExpect.Tests.Collections
                 public void AllowingDateTimeDrift()
                 {
                     // Arrange
-                    var left = new {Date = DateTime.Now}.AsArray();
-                    var right = new {Date = left[0].Date.AddSeconds(1)}.AsArray();
+                    var left = new { Date = DateTime.Now }.AsArray();
+                    var right = new { Date = left[0].Date.AddSeconds(1) }.AsArray();
 
                     // Pre-assert
                     // Act
@@ -709,18 +710,18 @@ namespace NExpect.Tests.Collections
                             public void CountMatchWithCustomComparer()
                             {
                                 // Arrange
-                                var left = new[] {new {Date = DateTime.Now}};
-                                var search = new {Date = DateTime.Now.AddSeconds(-1)};
+                                var left = new[] { new { Date = DateTime.Now } };
+                                var search = new { Date = DateTime.Now.AddSeconds(-1) };
                                 // Pre-assert
                                 // Act
                                 Assert.That(
                                     () =>
                                     {
                                         Expect(left).To.Contain.Only(1)
-                                            .Intersection.Equal.To(
-                                                search,
-                                                new DriftingDateTimeEqualityComparer()
-                                            );
+                                                    .Intersection.Equal.To(
+                                                        search,
+                                                        new DriftingDateTimeEqualityComparer()
+                                                    );
                                     },
                                     Throws.Nothing);
                                 // Assert
@@ -730,22 +731,22 @@ namespace NExpect.Tests.Collections
                             public void GivenInvalidComparers_ShouldThrowArgumentException()
                             {
                                 // Arrange
-                                var left = new[] {new {Date = DateTime.Now}};
-                                var search = new {Date = DateTime.Now.AddSeconds(-1)};
+                                var left = new[] { new { Date = DateTime.Now } };
+                                var search = new { Date = DateTime.Now.AddSeconds(-1) };
                                 // Pre-assert
                                 // Act
                                 Assert.That(
                                     () =>
                                     {
                                         Expect(left).To.Contain.Only(1)
-                                            .Intersection.Equal.To(
-                                                search,
-                                                new NotAnEqualityComparer()
-                                            );
+                                                    .Intersection.Equal.To(
+                                                        search,
+                                                        new NotAnEqualityComparer()
+                                                    );
                                     },
                                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                        .With.InnerException.InstanceOf<ArgumentException>()
-                                        .With.Message.Contains("must implement IEqualityComparer"));
+                                          .With.InnerException.InstanceOf<ArgumentException>()
+                                          .With.Message.Contains("must implement IEqualityComparer"));
                                 // Assert
                             }
 
@@ -1060,8 +1061,8 @@ namespace NExpect.Tests.Collections
                             public void UsingCustomEqualityComparer_ForDateTime()
                             {
                                 // Arrange
-                                var src = new[] {new {Date = DateTime.Now}};
-                                var search = new {Date = DateTime.Now.AddSeconds(-1)};
+                                var src = new[] { new { Date = DateTime.Now } };
+                                var search = new { Date = DateTime.Now.AddSeconds(-1) };
                                 // Pre-assert
                                 // Act
                                 Assert.That(
@@ -1071,7 +1072,7 @@ namespace NExpect.Tests.Collections
                                             .To.Contain.Exactly(1)
                                             .Deep.Equal.To(search, new DriftingDateTimeEqualityComparer());
                                     },
-                                    Throws.Nothing);                                
+                                    Throws.Nothing);
                                 Assert.That(
                                     () =>
                                     {
@@ -1082,13 +1083,13 @@ namespace NExpect.Tests.Collections
                                     Throws.Nothing);
                                 // Assert
                             }
-                            
+
                             [Test]
                             public void UsingCustomEqualityComparer_ForDouble()
                             {
                                 // Arrange
-                                var src = new[] {new {Date = DateTime.Now}};
-                                var search = new {Date = DateTime.Now.AddSeconds(-1)};
+                                var src = new[] { new { Date = DateTime.Now } };
+                                var search = new { Date = DateTime.Now.AddSeconds(-1) };
                                 // Pre-assert
                                 // Act
                                 Assert.That(
@@ -1098,7 +1099,7 @@ namespace NExpect.Tests.Collections
                                             .To.Contain.Exactly(1)
                                             .Deep.Equal.To(search, new DriftingDateTimeEqualityComparer());
                                     },
-                                    Throws.Nothing);                                
+                                    Throws.Nothing);
                                 Assert.That(
                                     () =>
                                     {
@@ -1109,7 +1110,6 @@ namespace NExpect.Tests.Collections
                                     Throws.Nothing);
                                 // Assert
                             }
-                            
                         }
                     }
 
@@ -1152,8 +1152,8 @@ namespace NExpect.Tests.Collections
                             public void PositiveExpectation_WhenHaveEquivalence_ShouldNotThrow()
                             {
                                 // Arrange
-                                var first = new[] {o1(1, "moo"), o1(2, "cow")};
-                                var second = new[] {o1(2, "cow"), o1(1, "moo")};
+                                var first = new[] { o1(1, "moo"), o1(2, "cow") };
+                                var second = new[] { o1(2, "cow"), o1(1, "moo") };
                                 // Pre-Assert
                                 // Act
                                 Assert.That(
@@ -1169,8 +1169,8 @@ namespace NExpect.Tests.Collections
                             public void NegativeExpectation_WhenHaveEquivalence_ShouldThrow()
                             {
                                 // Arrange
-                                var first = new[] {o1(1, "moo"), o1(2, "cow")};
-                                var second = new[] {o1(2, "cow"), o1(1, "moo")};
+                                var first = new[] { o1(1, "moo"), o1(2, "cow") };
+                                var second = new[] { o1(2, "cow"), o1(1, "moo") };
                                 // Pre-Assert
                                 // Act
                                 Assert.That(
@@ -1186,8 +1186,8 @@ namespace NExpect.Tests.Collections
                             public void NegativeExpectation_AltGrammar_WhenHaveEquivalence_ShouldThrow()
                             {
                                 // Arrange
-                                var first = new[] {o1(1, "moo"), o1(2, "cow")};
-                                var second = new[] {o1(2, "cow"), o1(1, "moo")};
+                                var first = new[] { o1(1, "moo"), o1(2, "cow") };
+                                var second = new[] { o1(2, "cow"), o1(1, "moo") };
                                 // Pre-Assert
                                 // Act
                                 Assert.That(
@@ -1203,8 +1203,8 @@ namespace NExpect.Tests.Collections
                             public void PositiveExpectation_WhenCollectionsDontMatch_ShouldThrow()
                             {
                                 // Arrange
-                                var first = new[] {o1(1, "bob"), o1(2, "janet")};
-                                var second = new[] {o1(1, "bobby"), o1(2, "janet")};
+                                var first = new[] { o1(1, "bob"), o1(2, "janet") };
+                                var second = new[] { o1(1, "bobby"), o1(2, "janet") };
                                 // Pre-Assert
                                 // Act
                                 Assert.That(
@@ -1220,8 +1220,8 @@ namespace NExpect.Tests.Collections
                             public void WithCustomEqualityComparer()
                             {
                                 // Arrange
-                                var first = new[] {new {Date = DateTime.Now}};
-                                var second = new[] {new {Date = DateTime.Now.AddSeconds(-1)}};
+                                var first = new[] { new { Date = DateTime.Now } };
+                                var second = new[] { new { Date = DateTime.Now.AddSeconds(-1) } };
                                 // Pre-assert
                                 // Act
                                 Assert.That(
@@ -1237,6 +1237,108 @@ namespace NExpect.Tests.Collections
                         }
                     }
                 }
+            }
+        }
+
+        [TestFixture]
+        public class TestingIssuesFromTheWild
+        {
+            public class ChangeRequest
+            {
+                public int Id { get; set; }
+                public int ChangeRequestNumber { get; set; }
+                public Guid Uuid { get; set; }
+                public string Title { get; set; }
+                public string Detail { get; set; }
+                public string Motivation { get; set; }
+                public int CategoryId { get; set; }
+                public int CountryId { get; set; }
+                public int DistributionCenterId { get; set; }
+                public int StatusId { get; set; }
+                public int NumberOfStoresId { get; set; }
+                public string SubmittedBy { get; set; }
+                public int SubmittedByUserId { get; set; }
+                public DateTime SubmittedDate { get; set; }
+                public string AssignedTo { get; set; }
+                public int AssignedToUserId { get; set; }
+                public string ReleaseNumber { get; set; }
+                public int UpdatedDate { get; set; }
+                public int CompletedDate { get; set; }
+                public string AttachmentGuidsCsv { get; set; }
+            }
+
+            [Test]
+            public void RegularDeepEquality()
+            {
+                // Arrange
+                var left = GetRandom<ChangeRequest>();
+                var right = new ChangeRequest();
+                left.CopyPropertiesTo(right);
+                // Act
+                Assert.That(
+                    () => Expect(left).To.Deep.Equal(right), Throws.Nothing);
+                // Assert
+            }
+
+            public interface IWrapped
+            {
+                int Id { get; set; }
+                int ChangeRequestNumber { get; set; }
+            }
+
+            [Test]
+            public void WrappedDeepEquality()
+            {
+                // Arrange
+                var left = GetRandom<ChangeRequest>();
+                var right = new ChangeRequest();
+                left.CopyPropertiesTo(right);
+                left.Uuid = Guid.NewGuid(); // will end up being available through a private field!
+                var wrappedLeft = left.DuckAs<IWrapped>();
+                var wrappedRight = right.DuckAs<IWrapped>();
+                // Act
+                Assert.That(
+                    () => Expect(wrappedLeft).To.Deep.Equal(wrappedRight), Throws.Nothing);
+                // Assert
+            }
+
+            public class HasPrivates
+            {
+                public int Id { get; set; }
+                private string Name { get; set; }
+                private string _color;
+
+                public HasPrivates(int id, string name, string color)
+                {
+                    Id = id;
+                    Name = name;
+                    _color = color;
+                }
+            }
+
+            [Test]
+            public void ShouldNotComparePrivateFieldsOrProperties()
+            {
+                // Arrange
+                var left = new HasPrivates(1, "Bob", "red");
+                var right = new HasPrivates(1, "Mary", "blue");
+                // Act
+                Assert.That(() => Expect(left).To.Deep.Equal(right), Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void ShouldIncludeDebugInfoInError()
+            {
+                // Arrange
+                var left = new HasPrivates(1, "Bob", "red");
+                var right = new HasPrivates(2, "Mary", "blue");
+                // Act
+                Assert.That(
+                    () => Expect(left).To.Deep.Equal(right),
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                          .With.Message.Contains("Property value mismatch for Id"));
+                // Assert
             }
         }
     }

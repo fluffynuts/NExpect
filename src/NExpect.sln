@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreConsumer", "CoreConsume
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreTests", "CoreTests\CoreTests.csproj", "{0F91FB49-F2CF-4775-B86D-13038E4789CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NExpect.Tests.Core", "NExpect.Tests.Core\NExpect.Tests.Core.csproj", "{D2DDE3DD-EE78-4B3A-ADE7-CE7FDAE1CBDB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		BuildForRelease|Any CPU = BuildForRelease|Any CPU
@@ -42,6 +44,12 @@ Global
 		{0F91FB49-F2CF-4775-B86D-13038E4789CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F91FB49-F2CF-4775-B86D-13038E4789CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F91FB49-F2CF-4775-B86D-13038E4789CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2DDE3DD-EE78-4B3A-ADE7-CE7FDAE1CBDB}.BuildForRelease|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2DDE3DD-EE78-4B3A-ADE7-CE7FDAE1CBDB}.BuildForRelease|Any CPU.Build.0 = Debug|Any CPU
+		{D2DDE3DD-EE78-4B3A-ADE7-CE7FDAE1CBDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2DDE3DD-EE78-4B3A-ADE7-CE7FDAE1CBDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2DDE3DD-EE78-4B3A-ADE7-CE7FDAE1CBDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2DDE3DD-EE78-4B3A-ADE7-CE7FDAE1CBDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

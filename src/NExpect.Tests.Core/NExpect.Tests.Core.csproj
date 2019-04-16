@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <DefineConstants>NETSTANDARD</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="microsoft.net.test.sdk" Version="16.0.1" />
+      <PackageReference Include="nunit" Version="3.11.0" />
+      <PackageReference Include="nunit3testadapter" Version="3.13.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\NExpect\NExpect.csproj" />
+    </ItemGroup>
+
+</Project>

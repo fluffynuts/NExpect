@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NExpect.Helpers;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -76,24 +77,24 @@ namespace NExpect
             continuation.AddMatcher(
                 collection =>
                 {
-                    var passed = CollectionsAreDeepEquivalent(
+                    var result = CollectionsAreDeepEquivalent(
                         collection, expected, customEqualityComparers);
                     return new MatcherResult(
-                        passed,
+                        result.AreEqual,
                         () => FinalMessageFor(
                             new[]
                             {
                                 "Expected",
                                 collection.LimitedPrint(),
-                                $"{passed.AsNot()} to be deep equivalent to",
+                                $"{result.AreEqual.AsNot()} to be deep equivalent to",
                                 expected.LimitedPrint()
-                            },
+                            }.Concat(result.Errors).ToArray(),
                             customMessageGenerator
                         ));
                 });
         }
 
-        private static bool CollectionsAreDeepEquivalent<T>(
+        private static DeepTestResult CollectionsAreDeepEquivalent<T>(
             IEnumerable<T> collection,
             IEnumerable<T> expected,
             object[] customEqualityComparers)
@@ -124,18 +125,18 @@ namespace NExpect
                             }
                             if (foundNullMatch)
                                 continue;
-                            return false;
+                            return new DeepTestResult(false, $"no match for {default(T)}");
                         }
 
                         var compareMatch = compare.FirstOrDefault(
-                            c => AreDeepEqual(currentMaster, c, customEqualityComparers));
+                            c => AreDeepEqual(currentMaster, c, customEqualityComparers).AreEqual);
                         if (compareMatch == null)
-                            return false;
+                            return new DeepTestResult(false, $"no match for item {currentMaster.Stringify()}");
                         master.Remove(currentMaster);
                         compare.Remove(compareMatch);
                     }
 
-                    return true;
+                    return DeepTestResult.Pass;
                 });
         }
     }

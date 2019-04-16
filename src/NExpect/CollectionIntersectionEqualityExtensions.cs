@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NExpect.Helpers;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
@@ -145,27 +146,27 @@ namespace NExpect
         {
             return collection =>
             {
-                var passed = CollectionsAreIntersectionEqual(
+                var result = CollectionsAreIntersectionEqual(
                     collection,
                     expected,
                     customEqualityComparers);
                 return new MatcherResult(
-                    passed,
+                    result.AreEqual,
                     FinalMessageFor(
                         () => new[]
                         {
                             "Expected",
                             collection.LimitedPrint(),
-                            $"{passed.AsNot()} to intersect equal",
+                            $"{result.AreEqual.AsNot()} to intersect equal",
                             expected.LimitedPrint()
-                        },
+                        }.Concat(result.Errors).ToArray(),
                         customMessage
                     )
                 );
             };
         }
 
-        private static bool CollectionsAreIntersectionEqual<T>(
+        private static DeepTestResult CollectionsAreIntersectionEqual<T>(
             IEnumerable<T> collection,
             IEnumerable<T> expected,
             params object[] customEqualityComparers)
@@ -175,13 +176,21 @@ namespace NExpect
                 expected,
                 (master, compare) => Zip(master, compare)
                     .Aggregate(
-                        true,
-                        (acc, cur) => acc && AreIntersectionEqual(
-                                          cur.Item1,
-                                          cur.Item2,
-                                          customEqualityComparers)
-                    )
-            );
+                        null as DeepTestResult,
+                        (acc, cur) =>
+                        {
+                            if (acc != null)
+                            {
+                                return acc;
+                            }
+
+                            var result = AreIntersectionEqual(
+                                cur.Item1,
+                                cur.Item2,
+                                customEqualityComparers);
+                            return result.AreEqual ? null : result;
+                        })
+            ) ?? DeepTestResult.Pass;
         }
     }
 }

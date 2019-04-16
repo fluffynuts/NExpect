@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NExpect.Helpers;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -73,27 +74,27 @@ namespace NExpect
                 {
                     var actualArray = collection as T[] ?? collection.ToArray();
                     var expectedArray = expected as T[] ?? expected.ToArray();
-                    var passed = CollectionsAreIntersectionEquivalent(
+                    var result = CollectionsAreIntersectionEquivalent(
                         actualArray,
                         expectedArray,
                         customEqualityComparers);
                     return new MatcherResult(
-                        passed,
+                        result.AreEqual,
                         FinalMessageFor(
                             () => new[]
                             {
                                 "Expected",
                                 actualArray.LimitedPrint(),
-                                $"{passed.AsNot()} to be intersection equivalent to",
+                                $"{result.AreEqual.AsNot()} to be intersection equivalent to",
                                 expectedArray.LimitedPrint()
-                            },
+                            }.Concat(result.Errors).ToArray(),
                             customMessageGenerator
                         )
                     );
                 });
         }
 
-        private static bool CollectionsAreIntersectionEquivalent<T>(
+        private static DeepTestResult CollectionsAreIntersectionEquivalent<T>(
             IEnumerable<T> collection,
             IEnumerable<T> expected,
             object[] customEqualityMatchers)
@@ -111,14 +112,20 @@ namespace NExpect
                                 c => AreIntersectionEqual(
                                     currentMaster,
                                     c,
-                                    customEqualityMatchers));
+                                    customEqualityMatchers).AreEqual);
+                        // TODO: add information about mismatch
                         if (compareMatch == null)
-                            return false;
+                        {
+                            return DeepTestResult.Fail(
+                                $"Found no match for item\n{currentMaster.Stringify()}"
+                            );
+                        }
+
                         master.Remove(currentMaster);
                         compare.Remove(compareMatch);
                     }
 
-                    return true;
+                    return DeepTestResult.Pass;
                 });
         }
     }

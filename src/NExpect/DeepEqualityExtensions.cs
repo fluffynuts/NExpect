@@ -4,6 +4,7 @@ using NExpect.Helpers;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
+using NExpect.Implementations;
 using MH = NExpect.Implementations.MessageHelpers;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -142,12 +143,12 @@ namespace NExpect
             continuation.AddMatcher(
                 actual =>
                 {
-                    var passed = DeepTestHelpers.AreDeepEqual(
+                    var deepEqualResult = DeepTestHelpers.AreDeepEqual(
                         actual,
                         expected,
                         customEqualityComparers);
                     return new MatcherResult(
-                        passed,
+                        deepEqualResult.AreEqual,
                         MH.FinalMessageFor(
                             () =>
                             {
@@ -155,13 +156,13 @@ namespace NExpect
                                 {
                                     "Expected",
                                     actual.Stringify(),
-                                    $"{MH.AsNot(passed)}to deep equal",
+                                    $"{deepEqualResult.AreEqual.AsNot()}to deep equal",
                                     expected.Stringify()
-                                };
+                                }.Concat(deepEqualResult.Errors).ToArray();
                                 return customEqualityComparers.Any()
                                     ? result
                                         .And("Using custom equality comparers:")
-                                        .And(customEqualityComparers.Select(o => o.GetType()).Stringify())
+                                        .And(customEqualityComparers.Select(o => o.GetType()).ToArray().Stringify())
                                     : result;
                             },
                             customMessageGenerator

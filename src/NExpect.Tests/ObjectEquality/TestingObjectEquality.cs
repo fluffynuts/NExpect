@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using NExpect.Exceptions;
 using NExpect.Implementations;
 using NExpect.Tests.Collections;
@@ -352,7 +353,19 @@ namespace NExpect.Tests.ObjectEquality
                             () => Expect(left).To.Deep.Equal(right)
                         );
                         // Assert
-                        var parts = ex.Message.Split('\n');
+                        var beforeDiagnostics = ex.Message.IndexOf(
+                            "Property value mismatch", 
+                            StringComparison.InvariantCulture
+                        );
+                        if (beforeDiagnostics == -1)
+                        {
+                            // just in case diagnostics disappear -- shouldn't break this test
+                            beforeDiagnostics = ex.Message.Length;
+                        }
+
+                        var testMessage = ex.Message.Substring(0, beforeDiagnostics).Trim();
+                        
+                        var parts = testMessage.Split('\n');
                         Expect(parts).To.Contain.Exactly(8).Items();
                     }
                 }
