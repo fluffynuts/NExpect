@@ -257,7 +257,6 @@ namespace NExpect
         )
         {
             CheckContain(contain);
-            CheckOnly(contain, howMany);
             return new CountMatchContinuation<IEnumerable<T>>(
                 contain,
                 CountMatchMethods.Only,
@@ -389,9 +388,12 @@ namespace NExpect
         )
         {
             if (countMatch == null)
+            {
                 throw new ArgumentNullException(
                     nameof(countMatch),
                     $"EqualTo<T> cannot extend null ICanAddMatcher<IEnumerable<{typeof(T)}>>");
+            }
+
             countMatch.Continuation.AddMatcher(
                 collection =>
                 {
@@ -415,7 +417,8 @@ namespace NExpect
                                 passed,
                                 search,
                                 have,
-                                countMatch.ExpectedCount),
+                                countMatch.ExpectedCount,
+                                asArray.Length),
                             customMessage)
                     );
                 });
@@ -469,8 +472,9 @@ namespace NExpect
                 collection =>
                 {
                     var have = collection.Where(test).Count();
+                    var collectionCount = collection?.Count() ?? 0;
                     var compare = countMatch.Method == CountMatchMethods.All
-                        ? collection.Count()
+                        ? collectionCount
                         : countMatch.Compare;
                     var passed = CollectionCountMatchStrategies[countMatch.Method](have, compare);
                     return new MatcherResult(
@@ -479,7 +483,8 @@ namespace NExpect
                             () => CollectionCountMatchMessageStrategies[countMatch.Method](
                                 passed,
                                 have,
-                                countMatch.Compare),
+                                countMatch.Compare,
+                                collectionCount),
                             customMessageGenerator));
                 });
         }
@@ -530,17 +535,19 @@ namespace NExpect
             countMatch.Continuation.AddMatcher(
                 collection =>
                 {
+                    var collectionCount = collection?.Count() ?? 0;
+                    var compare = countMatch.Method == CountMatchMethods.All
+                        ? collectionCount
+                        : countMatch.Compare;
+
                     var idx = 0;
                     var have = collection.Select(
-                            o => new
-                            {
-                                o,
-                                idx = idx++
-                            })
-                        .Count(o => test(o.idx, o.o));
-                    var compare = countMatch.Method == CountMatchMethods.All
-                        ? collection.Count()
-                        : countMatch.Compare;
+                                             o => new
+                                             {
+                                                 o,
+                                                 idx = idx++
+                                             })
+                                         .Count(o => test(o.idx, o.o));
                     var passed = CollectionCountMatchStrategies[countMatch.Method](have, compare);
                     return new MatcherResult(
                         passed,
@@ -548,7 +555,8 @@ namespace NExpect
                             () => CollectionCountMatchMessageStrategies[countMatch.Method](
                                 passed,
                                 have,
-                                countMatch.Compare),
+                                countMatch.Compare,
+                                collectionCount),
                             customMessageGenerator));
                 });
         }
@@ -1010,9 +1018,10 @@ namespace NExpect
                         FinalMessageFor(
                             () => CollectionCountMessageStrategies[contain.Method](
                                 passed,
-                                new StringifyHackForAnyItem(),
+                                new StringifyHackForAnyItem<T>(),
                                 actual,
-                                expected),
+                                expected,
+                                actual),
                             customMessageGenerator
                         )
                     );
@@ -1021,10 +1030,39 @@ namespace NExpect
 
         private class StringifyHackForAnyItem
         {
+            private static readonly Dictionary<Type, string> Inbuilts = new Dictionary<Type, string>()
+            {
+                [typeof(string)] = "string",
+                [typeof(int)] = "int",
+                [typeof(float)] = "float",
+                [typeof(char)] = "char",
+                [typeof(short)] = "short",
+                [typeof(long)] = "long",
+                [typeof(byte)] = "byte",
+                [typeof(bool)] = "bool"
+            };
+
+            public static string NameOf(Type type)
+            {
+                if (type == null)
+                {
+                    return "(null)";
+                }
+
+                return Inbuilts.TryGetValue(type, out var name)
+                    ? name
+                    : type.Name;
+            }
+        }
+
+        private class StringifyHackForAnyItem<T> : StringifyHackForAnyItem
+        {
             public int Id => throw new Exception("force .ToString()");
+
             public override string ToString()
             {
-                return "any item";
+                var type = typeof(T);
+                return $"any {NameOf(type)}";
             }
         }
 
@@ -1170,12 +1208,13 @@ namespace NExpect
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
-                            () => 
+                            () =>
                                 CollectionCountMessageStrategies[continuation.Method](
                                     passed,
                                     $"\n{expected.Stringify()}\n",
                                     actualCount,
-                                    continuation.ExpectedCount),
+                                    continuation.ExpectedCount,
+                                    total),
                             customMessageGenerator
                         )
                     );
@@ -2148,7 +2187,7 @@ namespace NExpect
             if (actualArray.Length != expectedArray.Length)
                 return false;
             return actualArray.Zip(expectedArray, Tuple.Create)
-                .All(o => comparer.Equals(o.Item1, o.Item2));
+                              .All(o => comparer.Equals(o.Item1, o.Item2));
         }
 
 
@@ -2184,8 +2223,8 @@ namespace NExpect
         private static Tuple<T, int>[] GetCounts<T>(T[] distinctA, T[] collectionA)
         {
             return distinctA
-                .Select(o => Tuple.Create(o, collectionA.Count(o2 => AreEqual(o2, o))))
-                .ToArray();
+                   .Select(o => Tuple.Create(o, collectionA.Count(o2 => AreEqual(o2, o))))
+                   .ToArray();
         }
 
         private static bool AreEqual<T>(T left, T right)
@@ -2243,25 +2282,25 @@ namespace NExpect
         }
 
         private static readonly Dictionary<CountMatchMethods,
-            Func<bool, object, int, int, string>> CollectionCountMessageStrategies =
-            new Dictionary<CountMatchMethods, Func<bool, object, int, int, string>>()
+            Func<bool, object, int, int, int, string>> CollectionCountMessageStrategies =
+            new Dictionary<CountMatchMethods, Func<bool, object, int, int, int, string>>()
             {
                 [CountMatchMethods.Exactly] = CreateMessageFor("exactly"),
-                [CountMatchMethods.Only] = CreateMessageFor("only"),
+                [CountMatchMethods.Only] = CreateMessageFor("only", true),
                 [CountMatchMethods.Minimum] = CreateMessageFor("at least"),
                 [CountMatchMethods.Maximum] = CreateMessageFor("at most"),
                 [CountMatchMethods.Any] = CreateAnyMessage,
                 [CountMatchMethods.All] = CreateAllMessage
             };
 
-        private static string CreateAllMessage(bool passed, object search, int have, int want)
+        private static string CreateAllMessage(bool passed, object search, int have, int want, int total)
         {
             return passed
                 ? $"Expected not to find all matching {search}"
                 : $"Expected to find all matching {search}";
         }
 
-        private static string CreateAnyMessage(bool passed, object search, int have, int want)
+        private static string CreateAnyMessage(bool passed, object search, int have, int want, int total)
         {
             return passed
                 ? $"Expected not to find any matches for {search}"
@@ -2269,8 +2308,8 @@ namespace NExpect
         }
 
         private static readonly Dictionary<CountMatchMethods,
-            Func<bool, int, int, string>> CollectionCountMatchMessageStrategies =
-            new Dictionary<CountMatchMethods, Func<bool, int, int, string>>()
+            Func<bool, int, int, int, string>> CollectionCountMatchMessageStrategies =
+            new Dictionary<CountMatchMethods, Func<bool, int, int, int, string>>()
             {
                 [CountMatchMethods.Exactly] = CreateMatchMessageFor("exactly"),
                 [CountMatchMethods.Only] = CreateMatchMessageFor("only"),
@@ -2280,9 +2319,9 @@ namespace NExpect
                 [CountMatchMethods.All] = CreateMatchAnyAllMessageFor("all")
             };
 
-        private static Func<bool, int, int, string> CreateMatchAnyAllMessageFor(string comparison)
+        private static Func<bool, int, int, int, string> CreateMatchAnyAllMessageFor(string comparison)
         {
-            return (passed, have, want) =>
+            return (passed, have, want, total) =>
             {
                 var haveWord = have > 0
                     ? have.ToString()
@@ -2303,54 +2342,81 @@ namespace NExpect
                 [CountMatchMethods.All] = (have, collectionTotal) => have == collectionTotal
             };
 
-        private static Func<bool, object, int, int, string> CreateMessageFor(
+        private static Func<bool, object, int, int, int, string> CreateMessageFor(
+            string context,
+            bool isOnlyCheck = false
+        )
+        {
+            return (passed, search, have, want, total) => passed
+                ? CreatePassMessageFor(context, search, have, want, total, isOnlyCheck)
+                : CreateFailedMessageFor(context, search, have, want, total, isOnlyCheck);
+        }
+
+        private static Func<bool, int, int, int, string> CreateMatchMessageFor(
             string context
         )
         {
-            return (passed, search, have, want) => passed
-                ? CreatePassMessageFor(context, search, have, want)
-                : CreateFailedMessageFor(context, search, have, want);
+            return (passed, have, want, total) => passed
+                ? CreatePassMatchMessageFor(context, have, want, total)
+                : CreateFailedMatchMessageFor(context, have, want, total);
         }
 
-        private static Func<bool, int, int, string> CreateMatchMessageFor(
-            string context
-        )
-        {
-            return (passed, have, want) => passed
-                ? CreatePassMatchMessageFor(context, have, want)
-                : CreateFailedMatchMessageFor(context, have, want);
-        }
-
-        private static string CreateFailedMessageFor(
-            string comparison,
+        private static string CreateFailedMessageFor(string comparison,
             object search,
             int have,
-            int want
-        )
+            int want,
+            int total,
+            bool isOnlyCheck)
         {
             var s = want == 1
                 ? ""
                 : "s";
-            return $"Expected to find {comparison} {want} occurrence{s} of {search.Stringify()} but found {have}";
+            return isOnlyCheck
+                ? CreateOnlyFailedMessageFor(comparison, s, search, want, have, total)
+                : $"Expected to find {comparison} {want} occurrence{s} of {search.Stringify()} but found {have}";
         }
 
-        private static string CreatePassMessageFor(
+        private static string CreateOnlyFailedMessageFor(
             string comparison,
+            string s,
+            object search,
+            int want,
+            int have,
+            int total)
+        {
+            var itemS = total == 1 ? "" : "s";
+            return want == total
+                ? $"Expected to find {comparison} {want} occurrence{s} of {search.Stringify()} but found {have} of {total}"
+                : $"Expected to find only {want} occurrence{s} of {search} in collection but found a total of {total} item{itemS}";
+        }
+
+        private static string CreatePassMessageFor(string comparison,
             object search,
             int have,
-            int want
-        )
+            int want,
+            int total,
+            bool isOnlyCheck)
         {
             var s = want == 1
                 ? ""
                 : "s";
-            return $"Expected not to find {comparison} {want} occurrence{s} of {search.Stringify()} but found {have}";
+            return isOnlyCheck
+                ? CreateOnlyPassedMessageFor(comparison, s, search, want, have, total)
+                : $"Expected not to find {comparison} {want} occurrence{s} of {search.Stringify()} but found {have}";
+        }
+
+        private static string CreateOnlyPassedMessageFor(string comparison, string s, object search, int want, int have, int total)
+        {
+            return want == total
+                   ? $"Expected not to find only {want} occurrence{s} of {search} in collection but found exactly that"
+                   : $"Expected not to find {comparison} {want} occurrence{s} of {search.Stringify()} but found exactly that";
         }
 
         private static string CreateFailedMatchMessageFor(
             string comparison,
             int have,
-            int want
+            int want,
+            int total
         )
         {
             var s = want == 1
@@ -2362,7 +2428,8 @@ namespace NExpect
         private static string CreatePassMatchMessageFor(
             string comparison,
             int have,
-            int want
+            int want,
+            int total
         )
         {
             var s = want == 1

@@ -813,7 +813,7 @@ namespace NExpect.Tests.Collections
                     Expect(input).To.Contain.Exactly(expected).Items();
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains($"Expected to find exactly {expected} occurrences of any item but found {actual}"));
+                    .With.Message.Contains($"Expected to find exactly {expected} occurrences of any int but found {actual}"));
             // Assert
         }
 
@@ -854,7 +854,7 @@ namespace NExpect.Tests.Collections
                     Expect(input).Not.To.Contain.Exactly(actual).Items();
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains($"Expected not to find exactly {actual} occurrences of any item but found {actual}"));
+                    .With.Message.Contains($"Expected not to find exactly {actual} occurrences of any int but found {actual}"));
             // Assert
         }
 

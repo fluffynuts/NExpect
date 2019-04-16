@@ -55,6 +55,23 @@ namespace NExpect.Tests.Collections
             }
             
             [Test]
+            public void Contain_GivenAtLeast20Items_WhenHave16Items_ShouldThrowWithCustomMessage()
+            {
+                // Arrange
+                var src = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+                var expected = GetRandomString(10);
+                // Pre-assert
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(src).To.Contain.At.Least(20).Items(expected);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                             .With.Message.Contains(expected));
+                // Assert
+            }
+            
+            [Test]
             public void Contain_GivenAtMost2Items_WhenHave1Item_ShouldNotThrow()
             {
                 // Arrange
