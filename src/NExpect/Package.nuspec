@@ -20,7 +20,7 @@
     <projectUrl>https://github.com/fluffynuts/NExpect</projectUrl>
     <iconUrl>https://nuget.org/Content/Images/packageDefaultIcon-50x50.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <licenseUrl>https://github.com/fluffynuts/NExpect/blob/master/LICENSE</licenseUrl>
+    <license type="expression">BSD-3-Clause</license>
     <copyright>Copyright 2017</copyright>
     <dependencies>
       <group targetFramework="net452"/>
