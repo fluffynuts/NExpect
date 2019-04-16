@@ -48,6 +48,7 @@ namespace NExpect.Helpers
             {
                 OnlyTestIntersectingProperties = true,
                 RecordErrors = true,
+                VerbosePropertyMismatchErrors = false,
                 FailOnMissingProperties = false,
                 IncludeFields = true
             };
@@ -65,6 +66,7 @@ namespace NExpect.Helpers
             var tester = new DeepEqualityTester(item1, item2)
             {
                 RecordErrors = true,
+                VerbosePropertyMismatchErrors = false,
                 FailOnMissingProperties = true,
                 IncludeFields = true,
                 OnlyTestIntersectingProperties = false
