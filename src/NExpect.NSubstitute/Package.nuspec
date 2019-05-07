@@ -2,34 +2,34 @@
 <package>
   <metadata>
     <id>NExpect.NSubstitute</id>
-    <version>1.0.140</version>
+    <version>1.0.141</version>
     <title>NExpect.NSubstitute</title>
     <authors>Davyd McColl</authors>
     <owners>Davyd McColl</owners>
-    <description>
-        NSubstitute extensions for NExpect so you can:
-        ```
-        Expect(foo).(Not).To.Have.Received().Method(..);
-        ```
+    <description>&#xD;
+        NSubstitute extensions for NExpect so you can:&#xD;
+        ```&#xD;
+        Expect(foo).(Not).To.Have.Received().Method(..);&#xD;
+        ```&#xD;
     </description>
-    <releaseNotes>
+    <releaseNotes>&#xD;
     </releaseNotes>
-    <summary>
-    Provides Expect() syntax for doing assertions in .NET. Framework-agnostic, throwing
-    UnmetExpectationExceptions for failures. Assertion exception type can be overridden at run-time.
-    NExpect has grammar inspired by Chai and extensibility inspired by Jasmine.
-
-    This library offers NSubistitute-specific extensions so you can have Expect-style
-    syntax for your NSubstitute assertions. For example, one may previously have done:
-    ```
-    Expect(result).To.Equal(expected);
-    someService.Received(1).SomeMethodCall();
-    ```
-    and now you can keep it consistent:
-    ```
-    Expect(result).To.Equal(expected);
-    Expect(someService).To.Have.Received(1).SomeMethodCall();
-    ```
+    <summary>&#xD;
+    Provides Expect() syntax for doing assertions in .NET. Framework-agnostic, throwing&#xD;
+    UnmetExpectationExceptions for failures. Assertion exception type can be overridden at run-time.&#xD;
+    NExpect has grammar inspired by Chai and extensibility inspired by Jasmine.&#xD;
+&#xD;
+    This library offers NSubistitute-specific extensions so you can have Expect-style&#xD;
+    syntax for your NSubstitute assertions. For example, one may previously have done:&#xD;
+    ```&#xD;
+    Expect(result).To.Equal(expected);&#xD;
+    someService.Received(1).SomeMethodCall();&#xD;
+    ```&#xD;
+    and now you can keep it consistent:&#xD;
+    ```&#xD;
+    Expect(result).To.Equal(expected);&#xD;
+    Expect(someService).To.Have.Received(1).SomeMethodCall();&#xD;
+    ```&#xD;
     </summary>
     <language>en-US</language>
     <projectUrl>https://github.com/fluffynuts/NExpect</projectUrl>
@@ -38,12 +38,12 @@
     <license type="expression">BSD-3-Clause</license>
     <copyright>Copyright 2019</copyright>
     <dependencies>
-        <group targetFramework="net452">
-            <dependency id="NSubstitute" version="4.1.0"/>
-        </group>
-        <group targetFramework="netstandard2.0">
-            <dependency id="NSubstitute" version="4.1.0"/>
-        </group>
+      <group targetFramework="net452">
+        <dependency id="NSubstitute" version="4.1.0"/>
+      </group>
+      <group targetFramework="netstandard2.0">
+        <dependency id="NSubstitute" version="4.1.0"/>
+      </group>
     </dependencies>
     <references/>
     <tags/>
