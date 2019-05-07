@@ -35,9 +35,10 @@ gulp.task("push", () => {
   if (!nexpectPackage || !nexpectNSubPackage) {
     throw new Error(`No package found in ${packageDir}`);
   }
-  return pushPackage(nexpectPackage).then(() => {
-    return pushPackage(nexpectNSubPackage);
-  });
+  return Promise.all([
+    pushPackage(nexpectPackage),
+    pushPackage(nexpectNSubPackage)
+  ]);
 });
 
 function pushPackage(package) {
