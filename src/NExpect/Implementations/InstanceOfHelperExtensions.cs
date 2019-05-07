@@ -3,9 +3,17 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations
 {
+    /// <summary>
+    /// Provides a helper extension to test if an expectation context is negated
+    /// </summary>
     internal static class InstanceOfHelperExtensions
     {
-        public static bool IsNegated(this IExpectationContext context)
+        /// <summary>
+        /// Returns the negated status for the expectation context being operated on
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        internal static bool IsNegated(this IExpectationContext context)
         {
             var current = context;
             var negated = false;

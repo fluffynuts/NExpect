@@ -59,7 +59,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                     {
                         // Arrange
                         var start = GetRandomString(2);
-                        var end = GetRandomString(2);
+                        var end = GetAnother<string>(start, () => GetRandomString(2));
                         var actual = $"{start}{end}";
                         var customMessage = GetRandomString(2);
                         // Pre-Assert

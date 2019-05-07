@@ -14,9 +14,28 @@ gulp.task("pack", [ "prepare-pack" ], () => {
   return doPack();
 });
 
+gulp.task("test-pack", ["build-for-release"], () => {
+  return doPack();
+});
+
 function doPack() {
+  return Promise.all([
+    packNExpect(),
+    packNExpectNSubstitute()
+  ]);
+}
+
+function packNExpectNSubstitute() {
+  return pack("src/NExpect.NSubstitute/Package.nuspec");
+}
+
+function packNExpect() {
+  return pack("src/NExpect/Package.nuspec");
+}
+
+function pack(nuspec) {
   return spawn(
     "tools/nuget.exe",
-    ["pack", "src/NExpect/Package.nuspec", "-OutputDirectory", packageDir]
+    [ "pack", nuspec, "-OutputDirectory", packageDir ]
   );
 }

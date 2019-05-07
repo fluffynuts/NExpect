@@ -1,4 +1,5 @@
 ﻿using System;
+using Imported.PeanutButter.Utils;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
@@ -21,6 +22,10 @@ namespace NExpect.Implementations
         public Expectation(T actual)
         {
             Actual = actual;
+            if (Actual != null)
+            {
+                Actual.SetMetadata(Expectations.METADATA_KEY, this);
+            }
         }
 
         public void RunMatcher(Func<T, IMatcherResult> matcher)
