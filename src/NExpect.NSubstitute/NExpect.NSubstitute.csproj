@@ -14,22 +14,8 @@
     <PropertyGroup>
         <DefineConstants>BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='BuildForRelease|netstandard2.0|AnyCPU'">
+    <PropertyGroup Condition="'$(Configuration)'=='BuildForRelease'">
         <DocumentationFile>bin\BuildForRelease\netstandard2.0\NExpect.NSubstitute.xml</DocumentationFile>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-        <DocumentationFile>bin\Debug\netstandard2.0\NExpect.NSubstitute.xml</DocumentationFile>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <WarningsAsErrors />
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='BuildForRelease|netstandard2.0|AnyCPU'">
-        <DocumentationFile>bin\Debug\netstandard2.0\NExpect.NSubstitute.xml</DocumentationFile>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net452|AnyCPU'">
-        <DocumentationFile>bin\Debug\netstandard2.0\NExpect.NSubstitute.xml</DocumentationFile>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='BuildForRelease|net452|AnyCPU'">
-        <DocumentationFile>bin\Debug\netstandard2.0\NExpect.NSubstitute.xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
       <ProjectReference Include="..\NExpect\NExpect.csproj" />
