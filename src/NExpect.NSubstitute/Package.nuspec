@@ -42,6 +42,7 @@
         <dependency id="NSubstitute" version="4.1.0"/>
       </group>
       <group targetFramework="netstandard2.0">
+        <dependency id="NExpect" version="1.0.141"/>
         <dependency id="NSubstitute" version="4.1.0"/>
       </group>
     </dependencies>

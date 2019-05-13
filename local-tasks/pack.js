@@ -2,7 +2,8 @@ const
   gulp = requireModule("gulp-with-help"),
   packageDir = require("./config").packageDir,
   runSequence = require("run-sequence"),
-  spawn = requireModule("spawn");
+  getToolsFolder = requireModule("get-tools-folder"),
+  nugetPack = requireModule("gulp-nuget-pack");
 
 gulp.task("prepare-pack", (done) => {
   runSequence(
@@ -18,24 +19,16 @@ gulp.task("test-pack", ["build-for-release"], () => {
   return doPack();
 });
 
+gulp.task("quick-pack", () => {
+  return doPack();
+});
+
 function doPack() {
-  return Promise.all([
-    packNExpect(),
-    packNExpectNSubstitute()
-  ]);
-}
-
-function packNExpectNSubstitute() {
-  return pack("src/NExpect.NSubstitute/Package.nuspec");
-}
-
-function packNExpect() {
-  return pack("src/NExpect/Package.nuspec");
-}
-
-function pack(nuspec) {
-  return spawn(
-    "tools/nuget.exe",
-    [ "pack", nuspec, "-OutputDirectory", packageDir ]
-  );
+  return gulp.src([
+    "**/*.nuspec",
+    "!**/PeanutButter/**/*.nuspec",
+    "!node_modules/**/*.nuspec",
+    `!${getToolsFolder()}/**/*.nuspec`])
+    .pipe(nugetPack())
+    .pipe(gulp.dest(packageDir));
 }
