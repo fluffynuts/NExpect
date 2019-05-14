@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>NExpect.NSubstitute</id>
-    <version>1.0.142</version>
+    <version>1.0.143</version>
     <title>NExpect.NSubstitute</title>
     <authors>Davyd McColl</authors>
     <owners>Davyd McColl</owners>
@@ -42,7 +42,7 @@
         <dependency id="NSubstitute" version="4.1.0"/>
       </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="NExpect" version="1.0.142"/>
+        <dependency id="NExpect" version="1.0.143"/>
         <dependency id="NSubstitute" version="4.1.0"/>
       </group>
     </dependencies>
