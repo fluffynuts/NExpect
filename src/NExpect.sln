@@ -17,9 +17,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NExpect.Matchers.NSubstitut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NExpect.NSubstitute.Tests", "NExpect.NSubstitute.Tests\NExpect.NSubstitute.Tests.csproj", "{4EA20383-2153-48DF-B620-F3C9232FCD5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NExpect.Matchers.AspNet", "NExpect.Matchers.AspNet\NExpect.Matchers.AspNet.csproj", "{1CE39EC6-A0C6-4D45-AC6B-6D7AEC0F2F5C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NExpect.Matchers.AspNetCore", "NExpect.Matchers.AspNetCore\NExpect.Matchers.AspNetCore.csproj", "{1CE39EC6-A0C6-4D45-AC6B-6D7AEC0F2F5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NExpect.Matchers.AspNet.Tests", "NExpect.Matchers.AspNet.Tests\NExpect.Matchers.AspNet.Tests.csproj", "{7D3738F9-78FA-40D8-A00B-4DA80F12A7F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NExpect.Matchers.AspNetCore.Tests", "NExpect.Matchers.AspNetCore.Tests\NExpect.Matchers.AspNetCore.Tests.csproj", "{7D3738F9-78FA-40D8-A00B-4DA80F12A7F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -20,4 +20,10 @@
     <ProjectReference Include="..\NExpect\NExpect.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Mvc.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+      <HintPath>..\..\..\..\..\Users\davyd.mccoll\.nuget\packages\microsoft.aspnetcore.mvc.core\2.2.5\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

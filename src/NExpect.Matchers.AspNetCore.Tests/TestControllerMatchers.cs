@@ -1,12 +1,10 @@
 using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
-using NUnit.Framework;
-using static NExpect.Expectations;
-using NExpect;
 using NExpect.Exceptions;
-using NExpect.Matchers.AspNet;
+using static NExpect.Expectations;
+using NUnit.Framework;
 
-namespace Tests
+namespace NExpect.Matchers.AspNet.Tests
 {
     [TestFixture]
     public class TestControllerMatchers
@@ -128,11 +126,11 @@ namespace Tests
                         .Supporting(HttpMethod.Get))
                     .Not.To.Throw();
                 Expect(() =>
-                        Expect(typeof(TestController))
-                            .To.Have.Method(nameof(TestController.DoStuff))
-                            .Supporting(HttpMethod.Get)
-                            .And(HttpMethod.Post)
-                    ).Not.To.Throw();
+                    Expect(typeof(TestController))
+                        .To.Have.Method(nameof(TestController.DoStuff))
+                        .Supporting(HttpMethod.Get)
+                        .And(HttpMethod.Post)
+                ).Not.To.Throw();
                 // Act
                 // Assert
             }
@@ -143,18 +141,17 @@ namespace Tests
             {
                 // Arrange
                 // Act
+                Expect(() => Expect(typeof(TestController))
+                    .To.Have.Method(nameof(TestController.DoStuff))
+                    .Supporting(HttpMethod.Get)
+                    .With.Route("do-stuff")
+                ).Not.To.Throw();
                 Expect(() =>
                     Expect(typeof(TestController))
                         .To.Have.Method(nameof(TestController.DoStuff))
-                        .Supporting(HttpMethod.Get)
-                        .With.Route("do-stuff")
-                    ).Not.To.Throw();
-                Expect(() =>
-                    Expect(typeof(TestController))
-                        .To.Have.Method(nameof(TestController.DoStuff))
                         .With.Route("do-stuff")
                         .Supporting(HttpMethod.Get)
-                    ).Not.To.Throw();
+                ).Not.To.Throw();
                 // Assert
             }
         }
