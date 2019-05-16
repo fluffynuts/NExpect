@@ -1,17 +1,25 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
-namespace NExpect.Matchers.AspNet
+namespace NExpect
 {
+    /// <summary>
+    /// Adds matchers for AspNetCore Controllers and Controller Actions
+    /// </summary>
     public static class Matchers
     {
+        /// <summary>
+        /// Asserts that the controller has the named method
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="method"></param>
+        /// <returns></returns>
         public static SupportingExtension Method(
             this IHave<Type> have,
             string method
@@ -31,6 +39,12 @@ namespace NExpect.Matchers.AspNet
             return result;
         }
 
+        /// <summary>
+        /// Asserts that the controller has the expected base route
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="expected"></param>
+        /// <returns></returns>
         public static IMore<Type> Route(
             this IHave<Type> have,
             string expected)
@@ -48,6 +62,13 @@ namespace NExpect.Matchers.AspNet
             return have.More();
         }
 
+        /// <summary>
+        /// Quick-n-dirty assertion that a controller's method has the required route
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="member"></param>
+        /// <param name="expected"></param>
+        /// <returns></returns>
         public static IMore<Type> Route(
             this IHave<Type> have,
             string member,
@@ -75,11 +96,20 @@ namespace NExpect.Matchers.AspNet
             return have.More();
         }
 
+        /// <summary>
+        /// Provides fluency for Supporting()
+        /// </summary>
         public class SupportingExtension
         {
-            public string Member { get; set; }
-            public IHave<Type> Continuation { get; set; }
+            internal string Member { get; set; }
+            internal IHave<Type> Continuation { get; set; }
 
+            /// <summary>
+            /// Asserts that the controller method being operated on supports
+            /// the desired HttpMethod
+            /// </summary>
+            /// <param name="method"></param>
+            /// <returns></returns>
             public AndSupportingExtension Supporting(HttpMethod method)
             {
                 Continuation.AddMatcher(
@@ -103,9 +133,21 @@ namespace NExpect.Matchers.AspNet
                 return Next();
             }
 
+            /// <summary>
+            /// Fluency extension
+            /// </summary>
             public SupportingExtension With => this;
+            
+            /// <summary>
+            /// Fluency extension
+            /// </summary>
             public SupportingExtension And => this;
 
+            /// <summary>
+            /// Asserts that the controller action being operated on has the specified route
+            /// </summary>
+            /// <param name="expected"></param>
+            /// <returns></returns>
             public SupportingExtension Route(string expected)
             {
                 Continuation.AddMatcher(
@@ -150,11 +192,17 @@ namespace NExpect.Matchers.AspNet
             }
         }
 
+        /// <summary>
+        /// Fluency extension
+        /// </summary>
         public class AndSupportingExtension
         {
             private readonly string _member;
             private readonly IHave<Type> _continuation;
 
+            /// <summary>
+            /// Fluency extension
+            /// </summary>
             public SupportingExtension With { get; }
 
             internal AndSupportingExtension(
@@ -167,6 +215,12 @@ namespace NExpect.Matchers.AspNet
                 With = supportingExtension;
             }
 
+            /// <summary>
+            /// Asserts that the controller method being operated on has an
+            /// additional supported HttpMethod
+            /// </summary>
+            /// <param name="method"></param>
+            /// <returns></returns>
             public AndSupportingExtension And(HttpMethod method)
             {
                 return (new SupportingExtension()
