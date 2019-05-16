@@ -15,7 +15,7 @@
         <DefineConstants>BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)'=='BuildForRelease'">
-        <DocumentationFile>bin\BuildForRelease\netstandard2.0\NExpect.NSubstitute.xml</DocumentationFile>
+        <DocumentationFile>bin\BuildForRelease\netstandard2.0\NExpect.Matchers.NSubstitute.xml</DocumentationFile>
     </PropertyGroup>
     <ItemGroup>
       <ProjectReference Include="..\NExpect\NExpect.csproj" />
