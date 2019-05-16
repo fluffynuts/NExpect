@@ -10,38 +10,31 @@ gulp.task("release", ["build-cover-report"], done => {
 });
 
 gulp.task("push", () => {
-  const nexpectPackage = fs
-    .readdirSync(packageDir)
-    .filter(
-      p =>
-        p.startsWith("NExpect") &&
-        p.indexOf("NSubstitute") === -1 &&
-        p.endsWith("nupkg")
-    )
-    .map(p => path.join(packageDir, p))
-    .sort()
-    .reverse()[0];
-  const nexpectNSubPackage = fs
-    .readdirSync(packageDir)
-    .filter(
-      p =>
-        p.startsWith("NExpect") &&
-        p.indexOf("NSubstitute") > -1 &&
-        p.endsWith("nupkg")
-    )
-    .map(p => path.join(packageDir, p))
-    .sort()
-    .reverse()[0];
-  if (!nexpectPackage || !nexpectNSubPackage) {
-    throw new Error(`No package found in ${packageDir}`);
-  }
-  return Promise.all([
-    pushPackage(nexpectPackage),
-    pushPackage(nexpectNSubPackage)
-  ]);
+  const
+    packages = [
+      findNupkg("NExpect"),
+      findNupkg("NExpect.Matchers.NSubstitute"),
+      findNupkg("NExpect.Matchers.AspNetCore")
+    ];
+    promises = packages.map(pushPackage);
+  return Promise.all(promsies);
 });
+
+function findNupkg(id) {
+  return fs
+    .readdirSync(packageDir)
+    .filter(p => {
+      var parts = p.split(".").filter(part =>
+        part !== "nupkg" && isNaN(parseInt(part))
+      );
+      return parts.join(".") === id;
+    })
+    .map(p => path.join(packageDir, p))
+    .sort()
+    .reverse()[0];
+}
 
 function pushPackage(package) {
   console.log(`pushing package ${package}`);
-  return spawn("tools/nuget.exe", [ "push", package, "-Source", "nuget.org" ]);
+  return spawn("tools/nuget.exe", ["push", package, "-Source", "nuget.org"]);
 }

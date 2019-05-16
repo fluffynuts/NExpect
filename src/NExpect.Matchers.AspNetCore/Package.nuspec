@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <package>
   <metadata>
-    <id>NExpect.Matchers.NSubstitute</id>
+    <id>NExpect.Matchers.AspNetCore</id>
     <version>1.0.146</version>
     <title>NExpect.Matchers.AspNetCore</title>
     <authors>Davyd McColl</authors>
