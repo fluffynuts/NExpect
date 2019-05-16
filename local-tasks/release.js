@@ -17,7 +17,7 @@ gulp.task("push", () => {
       findNupkg("NExpect.Matchers.AspNetCore")
     ];
     promises = packages.map(pushPackage);
-  return Promise.all(promsies);
+  return Promise.all(promises);
 });
 
 function findNupkg(id) {
