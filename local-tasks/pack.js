@@ -1,7 +1,7 @@
 const
   gulp = requireModule("gulp-with-help"),
   packageDir = require("./config").packageDir,
-  runSequence = require("run-sequence"),
+  runSequence = requireModule("run-sequence"),
   getToolsFolder = requireModule("get-tools-folder"),
   nugetPack = requireModule("gulp-nuget-pack");
 

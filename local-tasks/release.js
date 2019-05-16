@@ -2,7 +2,7 @@ const gulp = requireModule("gulp-with-help"),
   packageDir = require("./config").packageDir,
   path = require("path"),
   fs = require("fs"),
-  runSequence = require("run-sequence"),
+  runSequence = requireModule("run-sequence"),
   spawn = requireModule("spawn");
 
 gulp.task("release", ["build-cover-report"], done => {
