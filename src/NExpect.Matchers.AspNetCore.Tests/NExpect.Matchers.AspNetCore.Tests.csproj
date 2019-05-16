@@ -1,9 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>net462</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <RootNamespace>NExpect.Matchers.AspNet.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NExpect.Matchers.AspNet\NExpect.Matchers.AspNet.csproj" />
+    <ProjectReference Include="..\NExpect.Matchers.AspNetCore\NExpect.Matchers.AspNetCore.csproj" />
     <ProjectReference Include="..\NExpect\NExpect.csproj" />
   </ItemGroup>
 
