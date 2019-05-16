@@ -12,7 +12,7 @@ using NExpect.Interfaces;
 using NExpect.Shims;
 
 // ReSharper disable UnusedMember.Global
-[assembly:InternalsVisibleTo("NExpect.NSubstitute")]
+[assembly:InternalsVisibleTo("NExpect.Matchers.NSubstitute")]
 
 namespace NExpect
 {

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<package>
+  <metadata>
+    <id>NExpect.Matchers.NSubstitute</id>
+    <version>1.0.143</version>
+    <title>NExpect.Matchers.AspNet</title>
+    <authors>Davyd McColl</authors>
+    <owners>Davyd McColl</owners>
+    <description>
+        ASP.Net core extensions for NExpect
+    </description>
+    <releaseNotes>
+    </releaseNotes>
+    <summary>
+      NExpect Provides Expect() syntax for doing assertions in .NET. Framework-agnostic, throwing
+      UnmetExpectationExceptions for failures. Assertion exception type can be overridden at run-time.
+      NExpect has grammar inspired by Chai and extensibility inspired by Jasmine.
+      
+      This library adds ASP.Net core extensions for NExpect so you can test your
+      [Route] and [Http*] annotations like so:
+      ```
+      Expect(typeof(SomeController)
+      .To.Have.Method(nameof(SomeController.MethodName))
+      .Supporting(HttpMethod.Delete)
+      .And(HttpMethod.Post)
+      .With.Route("first-route")
+      .And.Route("second-route");
+      ```
+    </summary>
+    <language>en-US</language>
+    <projectUrl>https://github.com/fluffynuts/NExpect</projectUrl>
+    <iconUrl>https://nuget.org/Content/Images/packageDefaultIcon-50x50.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">BSD-3-Clause</license>
+    <copyright>Copyright 2019</copyright>
+    <dependencies>
+      <group targetFramework="net452">
+        <dependency id="NSubstitute" version="4.1.0"/>
+      </group>
+      <group targetFramework="netstandard2.0">
+        <dependency id="NExpect" version="1.0.143"/>
+        <dependency id="NSubstitute" version="4.1.0"/>
+      </group>
+    </dependencies>
+    <references/>
+    <tags/>
+  </metadata>
+  <files>
+    <file src="bin\BuildForRelease\net452\NExpect.Matchers.NSubstitute.dll" target="lib\net452"/>
+    <file src="bin\BuildForRelease\net452\NExpect.Matchers.NSubstitute.pdb" target="lib\net452"/>
+    <file src="bin\BuildForRelease\netstandard2.0\NExpect.Matchers.NSubstitute.xml" target="lib\net452"/>
+    <file src="bin\BuildForRelease\netstandard2.0\NExpect.Matchers.NSubstitute.dll" target="lib\netstandard2.0"/>
+    <file src="bin\BuildForRelease\netstandard2.0\NExpect.Matchers.NSubstitute.xml" target="lib\netstandard2.0"/>
+    <file src="bin\BuildForRelease\netstandard2.0\NExpect.Matchers.NSubstitute.pdb" target="lib\netstandard2.0"/>
+    <file src="bin\BuildForRelease\netstandard2.0\NExpect.Matchers.NSubstitute.deps.json" target="lib\netstandard2.0"/>
+  </files>
+</package>
