@@ -1,14 +1,11 @@
 using System;
-using NExpect.Exceptions;
 using NSubstitute;
 using NSubstitute.Exceptions;
 using NUnit.Framework;
+using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
-using static NExpect.Expectations;
-using static PeanutButter.RandomGenerators.RandomValueGen;
-using static PeanutButter.Utils.PyLike;
 
-namespace NExpect.NSubstitute.Tests
+namespace NExpect.Matchers.NSubstitute.Tests
 {
     [TestFixture]
     public class TestReceivedExtensions
@@ -30,7 +27,7 @@ namespace NExpect.NSubstitute.Tests
                 sub.Bar();
                 // Assert
                 sub.Received().Bar();
-                Expect(sub).To.Have
+                Expectations.Expect(sub).To.Have
                            .Received().Bar();
             }
 
@@ -39,11 +36,11 @@ namespace NExpect.NSubstitute.Tests
             {
                 // Arrange
                 var sub = Substitute.For<IFoo>();
-                var count = GetRandomInt(1, 5);
+                var count = RandomValueGen.GetRandomInt(1, 5);
                 // Act
-                Range(0, count).ForEach(_ => sub.Bar());
+                PyLike.Range(0, count).ForEach(_ => sub.Bar());
                 // Assert
-                Expect(sub).To.Have
+                Expectations.Expect(sub).To.Have
                            .Received(count)
                            .Bar();
             }
@@ -54,7 +51,7 @@ namespace NExpect.NSubstitute.Tests
                 // Arrange
                 var sub = Substitute.For<IFoo>();
                 // Act
-                Assert.That(() => Expect(sub).To.Have.Received().Bar(),
+                Assert.That(() => Expectations.Expect(sub).To.Have.Received().Bar(),
                     Throws.Exception.InstanceOf<ReceivedCallsException>());
                 // Assert
             }
@@ -64,10 +61,10 @@ namespace NExpect.NSubstitute.Tests
             {
                 // Arrange
                 var sub = Substitute.For<IFoo>();
-                var count = GetRandomInt(1, 10);
+                var count = RandomValueGen.GetRandomInt(1, 10);
                 // Act
-                Range(0, count).ForEach(_ => sub.Bar());
-                Assert.That(() => Expect(sub).To.Have.Received(count + GetRandomInt(1, 10)).Bar(),
+                PyLike.Range(0, count).ForEach(_ => sub.Bar());
+                Assert.That(() => Expectations.Expect(sub).To.Have.Received(count + RandomValueGen.GetRandomInt(1, 10)).Bar(),
                     Throws.Exception.InstanceOf<ReceivedCallsException>());
                 // Assert
             }
@@ -77,10 +74,10 @@ namespace NExpect.NSubstitute.Tests
             {
                 // Arrange
                 var sub = Substitute.For<IFoo>();
-                var count = GetRandomInt(1, 10);
+                var count = RandomValueGen.GetRandomInt(1, 10);
                 // Act
-                Range(0, count + GetRandomInt(1, 10)).ForEach(_ => sub.Bar());
-                Assert.That(() => Expect(sub).To.Have.Received(count).Bar(),
+                PyLike.Range(0, count + RandomValueGen.GetRandomInt(1, 10)).ForEach(_ => sub.Bar());
+                Assert.That(() => Expectations.Expect(sub).To.Have.Received(count).Bar(),
                     Throws.Exception.InstanceOf<ReceivedCallsException>());
                 // Assert
             }
@@ -96,7 +93,7 @@ namespace NExpect.NSubstitute.Tests
                 var sub = Substitute.For<IFoo>();
                 // Act
                 // Assert
-                Expect(sub).Not.To.Have.Received().Bar();
+                Expectations.Expect(sub).Not.To.Have.Received().Bar();
             }
             
             [Test]
@@ -108,7 +105,7 @@ namespace NExpect.NSubstitute.Tests
                 sub.Bar();
                 // Assert
                 Assert.That(() =>
-                Expect(sub).Not.To.Have.Received().Bar(),
+                Expectations.Expect(sub).Not.To.Have.Received().Bar(),
                     Throws.Exception.InstanceOf<ReceivedCallsException>());
             }
 
@@ -122,7 +119,7 @@ namespace NExpect.NSubstitute.Tests
                 sub.Bar();
                 // Assert
                 Assert.That(() =>
-                    Expect(sub).Not.To.Have.Received(2).Bar(),
+                    Expectations.Expect(sub).Not.To.Have.Received(2).Bar(),
                     Throws.Exception.InstanceOf<NotSupportedException>());
             }
         }

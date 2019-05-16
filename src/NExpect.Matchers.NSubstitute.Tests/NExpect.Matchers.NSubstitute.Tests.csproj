@@ -4,6 +4,8 @@
         <TargetFramework>net452</TargetFramework>
 
         <IsPackable>false</IsPackable>
+
+        <RootNamespace>NExpect.Matchers.NSubstitute.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
