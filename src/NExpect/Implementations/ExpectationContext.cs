@@ -56,7 +56,10 @@ namespace NExpect.Implementations
         {
             if (_parent == null ||
                 !_shouldResetNegation)
+            {
                 return;
+            }
+
             _parent.ResetNegation();
         }
 
@@ -75,7 +78,9 @@ namespace NExpect.Implementations
         {
             if (_parent == null ||
                 !_storedNegation)
+            {
                 return;
+            }
 
             _parent.Negate();
             _shouldResetNegation = false;
@@ -85,7 +90,10 @@ namespace NExpect.Implementations
         {
             if (_parent == null ||
                 _storedExpectation == null)
+            {
                 return;
+            }
+
             _parent.RunMatcher(_storedExpectation);
             _storedExpectation = null;
         }

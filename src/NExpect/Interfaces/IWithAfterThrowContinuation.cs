@@ -34,4 +34,5 @@ namespace NExpect.Interfaces
             Func<T, IEnumerable<TItem>> propertyValueFetcher
         );
     }
+    
 }

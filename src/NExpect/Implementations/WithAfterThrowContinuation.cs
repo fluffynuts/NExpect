@@ -6,6 +6,16 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations
 {
     // ReSharper disable once ClassNeverInstantiated.Global
+    internal class AndAfterWithAfterThrowContinuation<T>
+        : WithAfterThrowContinuation<T>,
+          IAndAfterWithAfterThrowContinuation<T> where T: Exception
+    {
+        public AndAfterWithAfterThrowContinuation(T ex) : base(ex)
+        {
+        }
+    }
+
+    // ReSharper disable once ClassNeverInstantiated.Global
     internal class WithAfterThrowContinuation<T> :
         ExpectationContext<T>,
         IWithAfterThrowContinuation<T>,

@@ -12,4 +12,14 @@ namespace NExpect.Interfaces
         /// </summary>
         IWithAfterThrowContinuation<T> With { get; }
     }
+
+    public interface IThrowAndContinuation<T> : ICanAddMatcher<T> where T : Exception
+    {
+        IAndAfterWithAfterThrowContinuation<T> And { get; }
+    }
+
+    public interface IAndAfterWithAfterThrowContinuation<T>
+        : IWithAfterThrowContinuation<T> where T: Exception
+    {
+    }
 }

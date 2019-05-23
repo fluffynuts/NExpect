@@ -566,6 +566,82 @@ namespace NExpect.Tests.Exceptions
         }
 
         [TestFixture]
+        public class ShouldBeAbleToTestAgainstExceptionTypeArgument
+        {
+            [Test]
+            public void ShouldNotFailWhenDoesThrow()
+            {
+                // Arrange
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        var message = GetRandomString();
+                        Expect(() => throw new LocalException(message))
+                            .To.Throw()
+                            .With.Type(typeof(LocalException))
+                            .And.Message.Equal.To(message);
+                    }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        var message = GetRandomString();
+                        Expect(() => throw new LocalException(message))
+                            .To.Throw()
+                            .With.Type(typeof(LocalException))
+                            .And.Property(e => (e as LocalException).MyMessage == message);
+                    }, Throws.Nothing);
+                // Assert
+            }
+            
+            [Test]
+            public void ShouldFailWhenDoesNotThrowCorrectType()
+            {
+                // Arrange
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        var message = GetRandomString();
+                        Expect(() => throw new Exception(message))
+                            .To.Throw()
+                            .With.Type(typeof(LocalException))
+                            .And.Message.Equal.To(message);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+            
+            [Test]
+            public void ShouldFailWhenDoesNotThrow()
+            {
+                // Arrange
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        var message = GetRandomString();
+                        Expect(() =>
+                            {
+                            })
+                            .To.Throw()
+                            .With.Type(typeof(LocalException))
+                            .And.Message.Equal.To(message);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+
+            public class LocalException : InvalidOperationException
+            {
+                public string MyMessage { get; }
+
+                public LocalException(string message) : base(message)
+                {
+                    MyMessage = message;
+                }
+            }
+        }
+
+        [TestFixture]
         public class ExceptionMessages
         {
             [Test]

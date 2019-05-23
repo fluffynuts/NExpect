@@ -86,6 +86,42 @@ namespace NExpect
             return continuation;
         }
 
+        public static IThrowAndContinuation<Exception> Type(
+            this IWithAfterThrowContinuation<Exception> continuation,
+            Type expected)
+        {
+            return continuation.Type(expected, null as string);
+        }
+
+        public static IThrowAndContinuation<Exception> Type(
+            this IWithAfterThrowContinuation<Exception> continuation,
+            Type expected,
+            string customMessage)
+        {
+            return continuation.Type(expected, () => customMessage);
+        }
+
+        public static IThrowAndContinuation<Exception> Type(
+            this IWithAfterThrowContinuation<Exception> continuation,
+            Type expected,
+            Func<string> customMessageGenerator)
+        {
+            var result = new ThrowAndContinuation<Exception>();
+            result.SetParent(continuation as IExpectationContext<Exception>);
+            continuation.AddMatcher(actual =>
+            {
+                result.Exception = actual;
+                var passed = actual.GetType() == expected;
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected to throw an exception of type {expected} but received {actual}",
+                        customMessageGenerator)
+                    );
+            });
+            return result;
+        }
+
         /// <summary>
         /// Allows testing a specific property on the thrown exception
         /// </summary>
