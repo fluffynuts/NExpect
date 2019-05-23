@@ -3,7 +3,7 @@
 ## Why
 The _why_ of [NExpect](https://github.com/fluffynuts/NExpect) is covered in a
 [blog post](https://github.com/fluffynuts/blog/blob/master/20170918_IntroducingNExpect.md).
-Basically, after working with Javascript assertion frameworks 
+Basically, after working with Javascript assertion frameworks
 ([Chai](http://chaijs.com/) and [Jasmine](https://jasmine.github.io/)), I wasn't satisfied
 with [NUnit](https://github.com/nunit/nunit) assertions. I wanted something:
 - more expressive
