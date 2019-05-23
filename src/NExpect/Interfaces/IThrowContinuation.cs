@@ -13,11 +13,22 @@ namespace NExpect.Interfaces
         IWithAfterThrowContinuation<T> With { get; }
     }
 
+    /// <summary>
+    /// Fluency continuation for Throw, after a Type() expectation
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public interface IThrowAndContinuation<T> : ICanAddMatcher<T> where T : Exception
     {
+        /// <summary>
+        /// Continuation to facilitate testing of properties or message on the exception
+        /// </summary>
         IAndAfterWithAfterThrowContinuation<T> And { get; }
     }
 
+    /// <summary>
+    /// Fluency continuation for Throw() after a Type() expectation and a prior .With
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public interface IAndAfterWithAfterThrowContinuation<T>
         : IWithAfterThrowContinuation<T> where T: Exception
     {

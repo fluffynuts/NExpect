@@ -86,6 +86,12 @@ namespace NExpect
             return continuation;
         }
 
+        /// <summary>
+        /// Assert that the provided code throws an exception of the given type
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected exception type</param>
+        /// <returns>Fluency extension</returns>
         public static IThrowAndContinuation<Exception> Type(
             this IWithAfterThrowContinuation<Exception> continuation,
             Type expected)
@@ -93,6 +99,13 @@ namespace NExpect
             return continuation.Type(expected, null as string);
         }
 
+        /// <summary>
+        /// Assert that the provided code throws an exception of the given type
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected exception type</param>
+        /// <param name="customMessage">Custom message to include when this expectation fails</param>
+        /// <returns>Fluency extension</returns>
         public static IThrowAndContinuation<Exception> Type(
             this IWithAfterThrowContinuation<Exception> continuation,
             Type expected,
@@ -101,6 +114,13 @@ namespace NExpect
             return continuation.Type(expected, () => customMessage);
         }
 
+        /// <summary>
+        /// Assert that the provided code throws an exception of the given type
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="expected">Expected exception type</param>
+        /// <param name="customMessageGenerator">Generates a custom message to include when this expectation fails</param>
+        /// <returns>Fluency extension</returns>
         public static IThrowAndContinuation<Exception> Type(
             this IWithAfterThrowContinuation<Exception> continuation,
             Type expected,
