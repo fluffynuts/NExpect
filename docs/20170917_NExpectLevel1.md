@@ -4,9 +4,10 @@ I [recently introduced](20170917_IntroducingNExpect.md)
 NExpect is available for .NET Framework 4.5.2 and above as well as
 anything which can target .NET Standard 1.6 (tested with .NET Core 2.0)
 
-So here goes, level 1: testing objects and values.<br />
+So here goes, level 1: testing objects and values.
 
-NExpect facilitates assertions (or, as I like to call them: expectations) against basic value types in a fairly unsurprising way:
+NExpect facilitates assertions (or, as I like to call them: expectations) against basic 
+value types in a fairly unsurprising way:
 ```csharp
 [Test]
 public void SimplePositiveExpectations
@@ -24,7 +25,7 @@ public void SimplePositiveExpectations
   Expect(falseValue).To.Be.False();
 }
 ```
-So far, nothing too exciting or unexpected there. NExpect also caters for negative expectations:<br />
+So far, nothing too exciting or unexpected there. NExpect also caters for negative expectations:
 ```csharp
 [Test]
 public void SimpleNegativeExpectations
@@ -45,17 +46,19 @@ public void SimpleNegativeExpectations
   Expect(intValue).To.Be.Less.Than(10);
 }
 ```
-(Though, in the above, I'm sure we all agree that the boolean expectations are neater without the .Not).
+(Though, in the above, I'm sure we all agree that the boolean expectations are neater without 
+the .Not).
 
 Expectations carry type forward, so you won't be able to, for example:
 ```csharp
-  [Test]
-  public void ExpectationsCarryType
-  {
-    Expect(1).To.Equal(<span style="text-decoration: underline wavy red;">"a"</span>);  // does not compile!
-  }
+[Test]
+public void ExpectationsCarryType
+{
+  Expect(1).To.Equal("a");  // does not compile!
+}
 ```
-However, expectations around numeric values perform upcasts in much the same way that you'd expect in live code, such that you can:<br />
+However, expectations around numeric values perform upcasts in much the same way that you'd expect 
+in live code, such that you can:
 ```csharp
 [Test]
 public void ShouldUpcastAsRequired()
@@ -72,9 +75,11 @@ public void ShouldUpcastAsRequired()
   Expect(d).To.Be.Greater.Than(a);
 }
 ```
-All good and well, but often we need to check that a more complex object has a bunch of expected properties.
+All good and well, but often we need to check that a more complex object has a bunch of expected 
+properties.
 
-`.Equal` is obviously going to do reference-equality testing for `class` types and value equality testing for `struct` types. We could:
+`.Equal` is obviously going to do reference-equality testing for `class` types and value 
+equality testing for `struct` types. We could:
 ```csharp
 [Test]
 public void TestingPropertiesOneByOne()
@@ -92,8 +97,9 @@ public void TestingPropertiesOneByOne()
   Expect(person.Alive).To.Be.True();
 }
 ```
-But that kind of test, whilst perfectly accurate, comes at a cognitive overhead for the reader. Ok, perhaps not much overhead in this
-example, but imagine if that `person` had come from another method:
+But that kind of test, whilst perfectly accurate, comes at a cognitive overhead for the reader. 
+Ok, perhaps not much overhead in this example, but imagine if that `person` had come from 
+another method:
 ```csharp
 [Test]
 public void TestingPropertiesOneByOne()
@@ -112,8 +118,8 @@ public void TestingPropertiesOneByOne()
 }
 ```
 
-In this case, we'd expect the result to also have a defined type, not some anonymous type. It would be super-convenient if we could do
-deep equality testing. Which we can:
+In this case, we'd expect the result to also have a defined type, not some anonymous type. 
+It would be super-convenient if we could do deep equality testing. Which we can:
 ```csharp
 [Test]
 public void DeepEqualityTesting()
@@ -132,9 +138,10 @@ public void DeepEqualityTesting()
   });
  }
 ```
-This exposes our test for what it's really doing: when searching for the person with the Id of 1, we should get back an object
-which describes Jane in our system. Our test is speaking about _intent_, not just confirming value equality. Notice that the type
-of the object used for comparison doesn't matter, and this holds for properties too.
+This exposes our test for what it's really doing: when searching for the person with the Id of 
+1, we should get back an object which describes Jane in our system. Our test is speaking about 
+_intent_, not just confirming value equality. Notice that the type of the object used for 
+comparison doesn't matter, and this holds for properties too.
 
 Note that I omitted the test for null in the second variant. You
 don't need it because the deep equality tester will deal with that
@@ -142,11 +149,12 @@ just fine. However, you are obviously still free to include it for the
 sake of clarity.
 
 [NExpect](https://github.com/fluffynuts/NExpect) gets this "for free"
-by depending on a git submodule of [PeanutButter](https://github.com/fluffynuts/PeanutButter) and importing only the bits it needs. In this way, I can re-use
-well-tested code and consumers don't have to depend on another Nuget package. Seems like a win to me.
+by depending on a git submodule of [PeanutButter](https://github.com/fluffynuts/PeanutButter) 
+and importing only the bits it needs. In this way, I can re-use well-tested code and 
+consumers don't have to depend on another Nuget package. Seems like a win to me.
 
-What if we didn't care about all of the properties? What if we only cared about, for example, `Name` and `Id`.
-A dead Jane is still a Jane, right?
+What if we didn't care about all of the properties? What if we only cared about, 
+for example, `Name` and `Id`. A dead Jane is still a Jane, right?
 
 [NExpect](https://github.com/fluffynuts/NExpect) has you covered:
 ```csharp
@@ -178,9 +186,9 @@ public void TypeTesting()
   var person = sut.FindById(1);
 
   // Assert
-  Expect(person).To.Be.An.Instance.Of&lt;Person&gt;();
-  Expect(person).To.Be.An.Instance.Of&lt;IPerson&gt;();
-  Expect(person).To.Be.An.Instance.Of&lt;BaseEntity&gt;();
+  Expect(person).To.Be.An.Instance.Of<Person>();
+  Expect(person).To.Be.An.Instance.Of<IPerson>();
+  Expect(person).To.Be.An.Instance.Of<BaseEntity>();
 }
 ```
 We can test for the exact type (`Person`), implemented interfaces (`IPerson`) and base types (`BaseEntity`).

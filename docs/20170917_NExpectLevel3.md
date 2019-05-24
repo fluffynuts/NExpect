@@ -2,7 +2,7 @@ In previous posts, I've examined how to do [simple](20170917_NExpectLevel1.md)
 and [collection-based](20170917_NExpectLevel2.md) assertions with
 [NExpect](https://github.com/fluffynuts/NExpect)
 
-These have enabled two of the design goals of NExpect:<br />
+These have enabled two of the design goals of NExpect:
 
 - Expect(NExpect).To.Be.Readable();
     - Because code is for co-workers, not compilers. And your tests are
@@ -23,7 +23,7 @@ internal static class Matchers
     this IBe<int> be
   )
   {
-    be.AddMatcher(actual =&gt;
+    be.AddMatcher(actual =>
     {
       var passed = actual % 2 == 1;
       var message = passed
@@ -36,18 +36,16 @@ internal static class Matchers
     });
   }
 }
-</int>```
-<br />
+```
 The above extension enables the following test:
-<br />
 ```csharp
-  [Test]
-  public void ILikeOddNumbers()
-  {
-    // Assert
-    Expect(1).To.Be.Odd();
-    Expect(2).Not.To.Be.Odd();
-  }
+[Test]
+public void ILikeOddNumbers()
+{
+  // Assert
+  Expect(1).To.Be.Odd();
+  Expect(2).Not.To.Be.Odd();
+}
 ```
 
 There are a few concepts to unpack:
@@ -79,10 +77,10 @@ It turns out that (mostly), we can write messages like so:
 internal static class Matchers
 {
   internal static void Odd(
-    this IBe&lt;int&gt; be
+    this IBe<int> be
   )
   {
-    be.AddMatcher(actual =&gt;
+    be.AddMatcher(actual =>
     {
       var passed = actual % 2 == 1;
       var message =
@@ -102,10 +100,10 @@ Doing this is tedious enough that [NExpect](https://github.com/fluffynuts/NExpec
 internal static class Matchers
 {
   internal static void Odd(
-    this IBe&lt;int&gt; be
+    this IBe<int> be
   )
   {
-    be.AddMatcher(actual =&gt;
+    be.AddMatcher(actual =>
     {
       var passed = actual % 2 == 1;
       var message =
@@ -132,10 +130,10 @@ Use as follows:
 internal static class NumberMatchers
 {
   internal static void Odd(
-    this IBe&lt;int&gt; be
+    this IBe<int> be
   )
   {
-    be.AddMatcher(actual =&gt;
+    be.AddMatcher(actual =>
     {
       var passed = actual % 2 == 1;
       var message =
@@ -164,10 +162,10 @@ Not to worry: [NExpect](https://github.com/fluffynuts/NExpect) has you covered w
 internal static class PersonMatchers
 {
   internal static void Jane(
-    this IA&lt;Person&gt; a
+    this IA<Person> a
   )
   {
-     a.Compose(actual =&gt;
+     a.Compose(actual =>
      {
         Expect(actual.Id).To.Equal(1);
         Expect(actual.Name).To.Equal("Jane");
@@ -193,7 +191,7 @@ a `Func` to `.Compose` to generate a more meaningful message.
 
 These are some rather simple examples -- I'm sure you can get much more creative! I know I have (:
 
-Some parts of NExpect are simply there to make fluent extension easier, for example:<br />
+Some parts of NExpect are simply there to make fluent extension easier, for example:
 
 - `To.Be.A`
 - `To.Be.An`
