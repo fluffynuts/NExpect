@@ -1,3 +1,6 @@
+* Table of Contents
+{:toc}
+
 ### <a name="basics"></a>Getting started
 To get started using NExpect, you will need to:
 - install the `NExpect` package into your project
