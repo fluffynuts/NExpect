@@ -7,6 +7,7 @@ To get started using NExpect, you will need to:
   - an import of `NExpect`
     - many assertions are done via extension methods which are brought
       into your local scope with this namespace
+      
 ```chsarp
 using static NExpect.Expectations;
 using NExpect;
@@ -26,6 +27,7 @@ public class MyTextFixture
   }
 }
 ```
+
 - Expectations can always be negated by using `.To.Not` or `.Not.To`.
 - Expectations carry type, so the compiler will help to prevent you from,
   eg, comparing strings and numbers, instead of failing at test-time like
