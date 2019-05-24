@@ -8,7 +8,7 @@ To get started using NExpect, you will need to:
     - many assertions are done via extension methods which are brought
       into your local scope with this namespace
       
-```chsarp
+```csharp
 using static NExpect.Expectations;
 using NExpect;
 
@@ -37,7 +37,7 @@ public class MyTextFixture
     with periods between the words -- you may be surprised (:
 - All assertions can take an argument providing a better contextual message
   for the sad case where the expectation is not met:
-  ```
+  ```csharp
   var price = 1.23;
   Expect(price).To.Equal(4, "Mismatched price");
   ```
@@ -81,6 +81,7 @@ There are basic tests for
 - starts-with
 - contains
 - ends-with
+
 ```csharp
 Expect("hello").To.Equal("hello");
 Expect("hello").To.Start.With("he");
@@ -112,6 +113,7 @@ Expect(result).To.Match(new Regex("^Regular"));
 // or let NExpect compile one for you
 Expect(result).To.Match("^Regular");
 ```
+
 #### <a name="date-times"></a>DateTime values
 NExpect can perform assertions against `DateTime` values in much the same
 way you'd expect to perform numeric assertions:
@@ -150,13 +152,16 @@ var first = DateTime.Now;
 Thread.Sleep(1500);
 var second = DateTime.Now;
 Expect(first).To.Approximately.Equal(second, TimeSpan.FromSeconds(2));
+
 ```
 ### <a name="reference-types"></a>Objects
 NExpect has rich support for complex object assertions:
+
 #### <a name="reference"></a>Reference equality
 ```csharp
 Expect(new {}).Not.To.Be(new {});
 ```
+
 #### <a name="deep"><a/>Deep equality
 This is most useful when there are multiple assertions which would
 have to be made to prove that two objects are equivalent:
@@ -211,6 +216,7 @@ even complex properties are compared:
 Expect(new { Child = new { id = 1 } })
   .To.Deep.Equal(new { Child = new { id = 1 } });
 ```
+
 #### <a name="intersection"></a>Intersection Equality
 Sometimes, we're only interested in a subset of properties, for example when
 adding a record to the database, where some fields are auto-generated (eg
