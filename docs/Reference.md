@@ -1,7 +1,7 @@
 * Table of Contents
 {:toc}
 
-### <a name="basics"></a>Getting started
+### Getting started
 To get started using NExpect, you will need to:
 - install the `NExpect` package into your project
 - create a test fixture as below, with:
@@ -45,16 +45,18 @@ public class MyTextFixture
   Expect(price).To.Equal(4, "Mismatched price");
   ```
 
-### <a name="primitives"></a>Primitives
+### Primitives
 Testing primitive values (or primitive properties) is quite simple:
-#### <a name="booleans"></a>Booleans
+
+#### Booleans
 ```csharp
 Expect(true).To.Be.True();
 Expect(false).To.Be.False();
 Expect(true).Not.To.Be.False();
 Expecct(false.Not.To.Be.True();
 ```
-#### <a name="numbers"></a>Numbers
+
+#### Numbers
 ```csharp
 Expect(1).To.Equal(1);
 // alternative
@@ -78,7 +80,8 @@ around this by up-casting the original call to `Expect()`:
 short result = 1;
 Expect((int)result).To.Equal(1);
 ```
-#### <a name="strings"></a>Strings
+
+#### Strings
 There are basic tests for
 - equality
 - starts-with
@@ -117,7 +120,7 @@ Expect(result).To.Match(new Regex("^Regular"));
 Expect(result).To.Match("^Regular");
 ```
 
-#### <a name="date-times"></a>DateTime values
+#### DateTime values
 NExpect can perform assertions against `DateTime` values in much the same
 way you'd expect to perform numeric assertions:
 ```csharp
@@ -157,15 +160,15 @@ var second = DateTime.Now;
 Expect(first).To.Approximately.Equal(second, TimeSpan.FromSeconds(2));
 
 ```
-### <a name="reference-types"></a>Objects
+### Objects
 NExpect has rich support for complex object assertions:
 
-#### <a name="reference"></a>Reference equality
+#### Reference equality
 ```csharp
 Expect(new {}).Not.To.Be(new {});
 ```
 
-#### <a name="deep"><a/>Deep equality
+#### Deep equality
 This is most useful when there are multiple assertions which would
 have to be made to prove that two objects are equivalent:
 ```
@@ -220,7 +223,7 @@ Expect(new { Child = new { id = 1 } })
   .To.Deep.Equal(new { Child = new { id = 1 } });
 ```
 
-#### <a name="intersection"></a>Intersection Equality
+#### Intersection Equality
 Sometimes, we're only interested in a subset of properties, for example when
 adding a record to the database, where some fields are auto-generated (eg
 timestamps) and are not crucial to the test at hand:
@@ -262,7 +265,7 @@ public class TestingIntersectionEquality
 }
 ```
 
-### <a name="collections"></a>Collections
+### Collections
 We can perform basic testing against sizes of collections:
 ```csharp
 Expect(collection).To.Be.Empty();
@@ -270,7 +273,7 @@ Expect(collection).To.Be.Empty();
 Expect(collection).To.Contain.Only(3).Items();
 ```
 
-#### <a name="collection-primitives"></a>Collections of primitives
+#### Collections of primitives
 ```
 Expect(strings)
   .To.Contain.Exactly(1)
@@ -289,7 +292,7 @@ Expect(numbers)
   .Equal.To(42);
 ```
 
-#### <a name="collection-objects"></a>Collections of objects
+#### Collections of objects
 ```
 Expect(objects)
   .To.Contain.Exactly(2)
@@ -299,19 +302,19 @@ Expect(objects)
   .Intersection.Equal.To(expected);
 ```
 
-### <a name="exceptions"></a>Exceptions
-#### <a name="no-throw"></a>Asserting no exception thrown
+### Exceptions
+#### Asserting no exception thrown
 ```
 Expect(() => { } ).Not.To.Throw();
 ```
-#### <a name="throw"></a>Asserting anything was thrown
+#### Asserting anything was thrown
 ```csharp
 // expect to throw anything
 Expect(() => throw new Exception("die"))
   .To.Throw();
 ```
 
-#### <a name="throw-t"></a>Asserting a specific exception was thrown
+#### Asserting a specific exception was thrown
 ```csharp
 // expect a specific exception
 Expect(() => throw new InvalidOperationException("uh-oh"))
@@ -320,14 +323,14 @@ Expect(() => throw new InvalidOperationException("uh-oh"))
 Expect(() => throw new ArgumentException("moo"))
   .To.Throw().With.Type(typeof(ArgumentException));
 ```
-#### <a name="throw-props"></a>Asserting against properties on any exception
+#### Asserting against properties on any exception
 ```csharp
 Expect(() => throw new ArgumentException("bad wolf"))
   .To.Throw()
   .With.Message.Containing("wolf");
 ```
 
-#### <a name="throw-t-props"></a>Asserting against properties on specific exceptions
+#### Asserting against properties on specific exceptions
 ```csharp
 Expect(() => throw new ArgumentException("name"))
   .To.Throw<ArgumentException>()
@@ -338,9 +341,9 @@ Expect(() => throw new CustomException("stuff"))
   .Equal.To("happens only at night");
 ```
 
-### <a name="extending"></a>Extending NExpect
+### Extending NExpect
 NExpect extension was originally inspired by Jasmine. 
-#### <a name="composing"></a>Composing Expectations (ie: refactoring blocks of Expectations)
+#### Composing Expectations (ie: refactoring blocks of Expectations)
 A "lower-hanging branch" of extension was added to facilitate easier extension from a refactor: 
 Composition. Messages from Composition may not be as specific as from going all the way into
 adding matchers, but they can be "good enough" and are quicker to grasp and produce. If we
@@ -403,7 +406,7 @@ The same method can be used against any dangling verb or noun:
 - `.Have`
 - `.Have.A`
 - `.Have.An`
-#### <a name="add-matcher"></a>Adding a matcher
+#### Adding a matcher
 This method is a little more complex, but allows for full customisation of the flow,
 as well as performing whatever complexity of expectation you'd like, with composite results.
 
@@ -447,11 +450,13 @@ public static class PersonMatchers
   }
 }
 ```
-### <a name="matcher-libraries"></a>Matcher libraries
+
+### Matcher libraries
 Some specific libraries of matchers have already been created for your convenience --
 install them if they are useful to you. If you'd like to publish your own matcher
 libraries that others might find useful, let me know so I can add them to the list below:
-#### <a name="nsubstitute-matchers"></a>NSubstitute matchers
+
+#### NSubstitute matchers
 - Install: `NExpect.Matchers.NSubstitute`
 - Use:
   ```csharp
@@ -461,7 +466,8 @@ libraries that others might find useful, let me know so I can add them to the li
   //  a more unified testing expression
   Expect(sub).To.Have.Received(1).SomeMethod(Arg.Any<string>());
   ```
-#### <a name="aspnetcore-matchers"></a>AspNetCore matchers
+  
+#### AspNetCore matchers
 - Install: `NExpect.Matchers.AspNetCore`
 - Use:
   ```
