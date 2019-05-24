@@ -302,6 +302,14 @@ Expect(objects)
   .Intersection.Equal.To(expected);
 ```
 
+### Dictionaries
+```
+var dict = new Dictionary<string, string>();
+dict["foo"] = "bar";
+Expect(dict).To.Contain.Key("foo")
+  .With.Value("bar");
+```
+
 ### Exceptions
 #### Asserting no exception thrown
 ```
