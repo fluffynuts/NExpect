@@ -1,8 +1,8 @@
 # NExpect
 
 ## Why
-The _why_ of [NExpect](https://github.com/fluffynuts/NExpect) is covered in a
-[blog post](https://github.com/fluffynuts/blog/blob/master/20170918_IntroducingNExpect.md).
+The _why_ of [NExpect](https://github.com/fluffynuts/NExpect) is covered in  detail in a
+[blog post](20170917_IntroducingNExpect.md).
 Basically, after working with Javascript assertion frameworks
 ([Chai](http://chaijs.com/) and [Jasmine](https://jasmine.github.io/)), I wasn't satisfied
 with [NUnit](https://github.com/nunit/nunit) assertions. I wanted something:
@@ -47,7 +47,7 @@ out-of-the-box matchers for specialised environments:
   ```
 
 There are a few introductory blog posts about usage:
-- [Level 1](https://github.com/fluffynuts/blog/blob/master/20170917_NExpectLevel1.md)
-- [Level 2](https://github.com/fluffynuts/blog/blob/master/20170917_NExpectLevel2.md)
-- [Level 3](https://github.com/fluffynuts/blog/blob/master/20170917_NExpectLevel3.md)
+- [Level 1](20170917_NExpectLevel1.md)
+- [Level 2](20170917_NExpectLevel2.md)
+- [Level 3](20170917_NExpectLevel3.md)
 
