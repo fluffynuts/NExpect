@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>NExpect.Matchers.AspNetCore</id>
-    <version>1.0.149</version>
+    <version>1.0.150</version>
     <title>NExpect.Matchers.AspNetCore</title>
     <authors>Davyd McColl</authors>
     <owners>Davyd McColl</owners>
@@ -38,7 +38,7 @@
         <dependency id="NSubstitute" version="4.1.0"/>
       </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="NExpect" version="1.0.149"/>
+        <dependency id="NExpect" version="1.0.150"/>
         <dependency id="Microsoft.AspNetCore.Mvc.Core" version="4.1.0"/>
       </group>
     </dependencies>
