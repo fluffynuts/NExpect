@@ -152,7 +152,7 @@ namespace NExpect
                 taskResult.ConfigureAwait(false);
                 try
                 {
-                    var maxWait = GetMaxTaskWait();
+                    var maxWait = NExpectEnvironment.TaskTimeoutMs;
                     var waitCompleted = taskResult.Wait(maxWait);
                     if (!waitCompleted)
                     {
@@ -160,7 +160,7 @@ namespace NExpect
                         {
                             $"Waited {maxWait}ms for task to complete.",
                             "If this is too short, consider adjusing environment ",
-                            $"variable {TASK_TIMEOUT_ENV_VAR} to suit your needs. ",
+                            $"variable {NExpectEnvironment.Variables.TASK_TIMEOUT_MS} to suit your needs. ",
                             "If this doesn't help, please log a bug: async/await can",
                             "be fickle"
                         }.JoinWith(" "));
@@ -171,17 +171,6 @@ namespace NExpect
                     throw ex.InnerExceptions.First();
                 }
             });
-        }
-
-        private const int TASK_TIMEOUT_MS = 5000;
-        private const string TASK_TIMEOUT_ENV_VAR = "NEXPECT_TASK_TIMEOUT_MS";
-
-        private static int GetMaxTaskWait()
-        {
-            var env = Environment.GetEnvironmentVariable(TASK_TIMEOUT_ENV_VAR) ?? "";
-            return int.TryParse(env, out var result)
-                ? result
-                : TASK_TIMEOUT_MS;
         }
 
         /// <summary>

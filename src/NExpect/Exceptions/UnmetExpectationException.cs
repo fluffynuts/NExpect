@@ -21,6 +21,11 @@ namespace NExpect.Exceptions
         private string GetEditedStackTrace()
         {
             var stackTrace = new StackTrace(this, true);
+            if (NExpectEnvironment.FullStackFrames)
+            {
+                return stackTrace.ToString();
+            }
+
             var reverseFrames = stackTrace.GetFrames()?.Reverse() ?? new StackFrame[0];
             var hitThisAssembly = false;
             var interestingFrames = reverseFrames.Aggregate(
@@ -31,12 +36,14 @@ namespace NExpect.Exceptions
                     {
                         return acc;
                     }
+
                     if (cur.IsFromOrReferencesThisAssembly())
                     {
                         hitThisAssembly = true;
                     }
                     else
                         acc.Add(cur);
+
                     return acc;
                 });
             return string.Join("",
