@@ -113,6 +113,7 @@ namespace NExpect.Exceptions
         /// on DateTime values. Since this comes from PeanutButter, there's no
         /// NEXPECT_ prefix
         /// </summary>
+        // ReSharper disable once UnusedMember.Global
         public static bool DeepEqualityIgnoresDateTimeKind
         {
             get => HaveEnvVar(Variables.DEEP_EQUALITY_IGNORES_DATE_TIME_KIND);
