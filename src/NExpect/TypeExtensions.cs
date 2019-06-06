@@ -126,7 +126,7 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="not">Continuation to operate on</param>
@@ -140,7 +140,7 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="not">Continuation to operate on</param>
@@ -156,7 +156,7 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="not">Continuation to operate on</param>
@@ -172,7 +172,7 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="to">Continuation to operate on</param>
@@ -186,7 +186,7 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="to">Continuation to operate on</param>
@@ -202,7 +202,7 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="to">Continuation to operate on</param>
@@ -217,7 +217,7 @@ namespace NExpect
             return to.AddImplementsMatcher<TInterface>(customMessageGenerator);
         }
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="to">Continuation to operate on</param>
@@ -231,7 +231,7 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="to">Continuation to operate on</param>
@@ -245,18 +245,174 @@ namespace NExpect
         {
             return to.AddImplementsMatcher<TInterface>(() => customMessage);
         }
+        
+        /// <summary>
+        /// Expects that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="not">Continuation to operate on</param>
+        /// <param name="expected">Interface type which should be implemented</param>
+        /// <returns></returns>
+        public static IMore<Type> Implement(
+            this INotAfterTo<Type> not,
+            Type expected
+        )
+        {
+            return not.Implement(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Expects that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="not">Continuation to operate on</param>
+        /// <param name="expected">Interface type which should be implemented</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns></returns>
+        public static IMore<Type> Implement(
+            this INotAfterTo<Type> not,
+            Type expected,
+            string customMessage
+        )
+        {
+            return not.Implement(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Expects that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="not">Continuation to operate on</param>
+        /// <param name="expected">Interface type which should be implemented</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <returns></returns>
+        public static IMore<Type> Implement(
+            this INotAfterTo<Type> not,
+            Type expected,
+            Func<string> customMessageGenerator
+        )
+        {
+            return not.AddImplementsMatcher(expected, customMessageGenerator);
+        }
+
+        /// <summary>
+        /// Expects that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <param name="expected">Interface type which should be implemented</param>
+        /// <returns></returns>
+        public static IMore<Type> Implement(
+            this IToAfterNot<Type> to,
+            Type expected
+        )
+        {
+            return to.Implement(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Expects that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <param name="expected">Interface type which should be implemented</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns></returns>
+        public static IMore<Type> Implement(
+            this IToAfterNot<Type> to,
+            Type expected,
+            string customMessage
+        )
+        {
+            return to.Implement(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Expects that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <param name="expected">Interface type which should be implemented</param>
+        /// <param name="customMessageGenerator">Custom message to add to failure messages</param>
+        /// <returns></returns>
+        public static IMore<Type> Implement(
+            this IToAfterNot<Type> to,
+            Type expected,
+            Func<string> customMessageGenerator
+        )
+        {
+            return to.AddImplementsMatcher(expected, customMessageGenerator);
+        }
+        /// <summary>
+        /// Expects that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <param name="expected">Interface type which should be implemented</param>
+        /// <returns></returns>
+        public static IMore<Type> Implement(
+            this ITo<Type> to,
+            Type expected
+        )
+        {
+            return to.Implement(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Expects that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <param name="expected">Interface type which should be implemented</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <returns></returns>
+        public static IMore<Type> Implement(
+            this ITo<Type> to,
+            Type expected, 
+            string customMessage
+        )
+        {
+            return to.Implement(expected, () => customMessage);
+        }
+        
+        /// <summary>
+        /// Expects that the Actual type implements the interface provided
+        /// as a generic parameter
+        /// </summary>
+        /// <param name="to">Continuation to operate on</param>
+        /// <param name="expected">Interface type which should be implemented</param>
+        /// <param name="customMessageGenerator">Custom message to add to failure messages</param>
+        /// <returns></returns>
+        public static IMore<Type> Implement(
+            this ITo<Type> to,
+            Type expected, 
+            Func<string> customMessageGenerator
+        )
+        {
+            return AddImplementsMatcher(to, expected, customMessageGenerator);
+        }
 
         private static IMore<Type> AddImplementsMatcher<TInterface>(
             this ICanAddMatcher<Type> addTo,
             Func<string> customMessage
         )
         {
+            return AddImplementsMatcher(
+                addTo,
+                typeof(TInterface),
+                customMessage);
+        }
+
+        private static IMore<Type> AddImplementsMatcher(
+            this ICanAddMatcher<Type> addTo,
+            Type shouldImplement,
+            Func<string> customMessage)
+        {
             addTo.AddMatcher(
                 actual =>
                 {
                     var interfaces = actual?.GetAllImplementedInterfaces() ?? new Type[0];
-                    var expected = typeof(TInterface);
-                    if (!expected.IsInterface())
+                    if (!shouldImplement.IsInterface())
                     {
                         return new MatcherResult(
                             false,
@@ -269,7 +425,7 @@ namespace NExpect
                                 customMessage));
                     }
 
-                    var passed = interfaces.Contains(expected);
+                    var passed = interfaces.Contains(shouldImplement);
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
@@ -278,7 +434,7 @@ namespace NExpect
                                 "Expected",
                                 actual.Stringify(),
                                 $"{passed.AsNot()}to implement",
-                                expected.Stringify()
+                                shouldImplement.Stringify()
                             },
                             customMessage
                         )
@@ -288,7 +444,7 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="not">Continuation to operate on</param>
@@ -302,7 +458,7 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="not">Continuation to operate on</param>
@@ -319,7 +475,7 @@ namespace NExpect
 
 
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="not">Continuation to operate on</param>
@@ -335,7 +491,7 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="to">Continuation to operate on</param>
@@ -349,7 +505,7 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="to">Continuation to operate on</param>
@@ -365,7 +521,7 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="to">Continuation to operate on</param>
@@ -380,7 +536,7 @@ namespace NExpect
             return to.AddInheritsMatcher<TBase>(customMessageGenerator);
         }
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="to">Continuation to operate on</param>
@@ -394,7 +550,7 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="to">Continuation to operate on</param>
@@ -410,7 +566,7 @@ namespace NExpect
         }
         
         /// <summary>
-        /// Expectes that the Actual type implements the interface provided
+        /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
         /// </summary>
         /// <param name="to">Continuation to operate on</param>
