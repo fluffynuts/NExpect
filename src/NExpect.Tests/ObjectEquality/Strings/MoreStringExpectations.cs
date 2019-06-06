@@ -541,7 +541,8 @@ namespace NExpect.Tests.ObjectEquality.Strings
         {
             return Range(0, GetRandomInt(1, 10))
                 .Select(i => 
-                    GetRandom(c => c < 'A' || c > 'z', 
+                    GetRandom(
+                        c => (c < 'A' || c > 'z') && (!"01234567890".Contains(c)), 
                         () => (char)GetRandomInt(32, 255)))
                 .JoinWith("");
         }
