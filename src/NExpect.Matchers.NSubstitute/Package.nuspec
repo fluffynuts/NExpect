@@ -2,34 +2,34 @@
 <package>
   <metadata>
     <id>NExpect.Matchers.NSubstitute</id>
-    <version>1.0.152</version>
+    <version>1.0.154</version>
     <title>NExpect.Matchers.NSubstitute</title>
     <authors>Davyd McColl</authors>
     <owners>Davyd McColl</owners>
-    <description>&#xD;&#xD;&#xD;
-        NSubstitute extensions for NExpect so you can:&#xD;&#xD;&#xD;
-        ```&#xD;&#xD;&#xD;
-        Expect(foo).(Not).To.Have.Received().Method(..);&#xD;&#xD;&#xD;
-        ```&#xD;&#xD;&#xD;
+    <description>&#xD;&#xD;&#xD;&#xD;
+        NSubstitute extensions for NExpect so you can:&#xD;&#xD;&#xD;&#xD;
+        ```&#xD;&#xD;&#xD;&#xD;
+        Expect(foo).(Not).To.Have.Received().Method(..);&#xD;&#xD;&#xD;&#xD;
+        ```&#xD;&#xD;&#xD;&#xD;
     </description>
-    <releaseNotes>&#xD;&#xD;&#xD;
+    <releaseNotes>&#xD;&#xD;&#xD;&#xD;
     </releaseNotes>
-    <summary>&#xD;&#xD;&#xD;
-    NExpect Provides Expect() syntax for doing assertions in .NET. Framework-agnostic, throwing&#xD;&#xD;&#xD;
-    UnmetExpectationExceptions for failures. Assertion exception type can be overridden at run-time.&#xD;&#xD;&#xD;
-    NExpect has grammar inspired by Chai and extensibility inspired by Jasmine.&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;
-    This library offers NSubistitute-specific extensions so you can have Expect-style&#xD;&#xD;&#xD;
-    syntax for your NSubstitute assertions. For example, one may previously have done:&#xD;&#xD;&#xD;
-    ```&#xD;&#xD;&#xD;
-    Expect(result).To.Equal(expected);&#xD;&#xD;&#xD;
-    someService.Received(1).SomeMethodCall();&#xD;&#xD;&#xD;
-    ```&#xD;&#xD;&#xD;
-    and now you can keep it consistent:&#xD;&#xD;&#xD;
-    ```&#xD;&#xD;&#xD;
-    Expect(result).To.Equal(expected);&#xD;&#xD;&#xD;
-    Expect(someService).To.Have.Received(1).SomeMethodCall();&#xD;&#xD;&#xD;
-    ```&#xD;&#xD;&#xD;
+    <summary>&#xD;&#xD;&#xD;&#xD;
+    NExpect Provides Expect() syntax for doing assertions in .NET. Framework-agnostic, throwing&#xD;&#xD;&#xD;&#xD;
+    UnmetExpectationExceptions for failures. Assertion exception type can be overridden at run-time.&#xD;&#xD;&#xD;&#xD;
+    NExpect has grammar inspired by Chai and extensibility inspired by Jasmine.&#xD;&#xD;&#xD;&#xD;
+&#xD;&#xD;&#xD;&#xD;
+    This library offers NSubistitute-specific extensions so you can have Expect-style&#xD;&#xD;&#xD;&#xD;
+    syntax for your NSubstitute assertions. For example, one may previously have done:&#xD;&#xD;&#xD;&#xD;
+    ```&#xD;&#xD;&#xD;&#xD;
+    Expect(result).To.Equal(expected);&#xD;&#xD;&#xD;&#xD;
+    someService.Received(1).SomeMethodCall();&#xD;&#xD;&#xD;&#xD;
+    ```&#xD;&#xD;&#xD;&#xD;
+    and now you can keep it consistent:&#xD;&#xD;&#xD;&#xD;
+    ```&#xD;&#xD;&#xD;&#xD;
+    Expect(result).To.Equal(expected);&#xD;&#xD;&#xD;&#xD;
+    Expect(someService).To.Have.Received(1).SomeMethodCall();&#xD;&#xD;&#xD;&#xD;
+    ```&#xD;&#xD;&#xD;&#xD;
     </summary>
     <language>en-US</language>
     <projectUrl>https://github.com/fluffynuts/NExpect</projectUrl>
@@ -39,11 +39,11 @@
     <copyright>Copyright 2019</copyright>
     <dependencies>
       <group targetFramework="net452">
-        <dependency id="NExpect" version="1.0.152"/>
+        <dependency id="NExpect" version="1.0.154"/>
         <dependency id="NSubstitute" version="4.2.0"/>
       </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="NExpect" version="1.0.152"/>
+        <dependency id="NExpect" version="1.0.154"/>
         <dependency id="NSubstitute" version="4.2.0"/>
       </group>
     </dependencies>
