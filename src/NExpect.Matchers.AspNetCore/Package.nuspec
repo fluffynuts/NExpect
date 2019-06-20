@@ -35,7 +35,8 @@
     <copyright>Copyright 2019</copyright>
     <dependencies>
       <group targetFramework="net452">
-        <dependency id="NSubstitute" version="4.1.0"/>
+        <dependency id="NExpect" version="1.0.152"/>
+        <dependency id="Microsoft.AspNetCore.Mvc.Core" version="4.1.0"/>
       </group>
       <group targetFramework="netstandard2.0">
         <dependency id="NExpect" version="1.0.152"/>
