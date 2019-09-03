@@ -481,6 +481,66 @@ namespace NExpect.Tests.Types
                     }
                 }
             }
+            
+            [TestFixture]
+            public class InheritGeneric
+            {
+                public class MyList<T> : List<T>
+                {
+                }
+
+                public class MyIntList : MyList<int>
+                {
+                }
+
+                [Test]
+                public void ShouldPassWithSystemGeneric()
+                {
+                    // Arrange
+                    var sut = typeof(MyIntList);
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(sut).To.Inherit<MyList<int>>();
+                        Expect(sut).To.Inherit<List<int>>();
+                    }, Throws.Nothing);
+                    // Assert
+                }
+
+                public abstract class SomeAbstractParent<T1, T2, T3>
+                {
+                }
+
+                public class SomeT1
+                {
+                }
+
+                public class SomeT2
+                {
+                }
+
+                public class SomeT3
+                {
+                }
+
+                public class SomeDerivedClass: SomeAbstractParent<SomeT1, SomeT2, SomeT3>
+                {
+                }
+
+                [Test]
+                public void ShouldPassWithConvolutedLocalGeneric()
+                {
+                    // Arrange
+                    var sut = typeof(SomeDerivedClass);
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(sut).To.Inherit<SomeAbstractParent<SomeT1, SomeT2, SomeT3>>();
+                    }, Throws.Nothing);
+                    // Assert
+                }
+                
+            }
 
             [TestFixture]
             public class Be
