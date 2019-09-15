@@ -69,6 +69,27 @@ namespace NExpect
         {
             return new Expectation<long>(value);
         }
+        
+        /// <summary>
+        /// Starts an expectation with integer value and up casts to long. Usually used to
+        /// check for equality.
+        /// </summary>
+        /// <param name="value">Int value to start with.</param>
+        /// <returns>IExpectation&lt;longT&gt;</returns>
+        public static IExpectation<long> Expect(long value)
+        {
+            return new Expectation<long>(value);
+        }
+
+        /// <summary>
+        /// Starts an expectation with decimal value. Usually used to check for equality.
+        /// </summary>
+        /// <param name="value">Int value to start with.</param>
+        /// <returns>IExpectation&lt;longT&gt;</returns>
+        public static IExpectation<decimal> Expect(decimal value)
+        {
+            return new Expectation<decimal>(value);
+        }
 
         /// <summary>
         /// Starts an expectation with byte value and up casts to long. Usually used to

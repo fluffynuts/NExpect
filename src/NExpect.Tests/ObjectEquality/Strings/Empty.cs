@@ -1,8 +1,6 @@
 ﻿using NExpect.Exceptions;
 using NUnit.Framework;
-
-// ReSharper disable ExpressionIsAlwaysNull
-// ReSharper disable MemberHidesStaticFromOuterClass
+using static NExpect.Expectations;
 
 namespace NExpect.Tests.ObjectEquality.Strings
 {
@@ -27,7 +25,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         // Act
                         Assert.That(() =>
                             {
-                                Expectations.Expect(input).To.Be.Empty();
+                                Expect(input).To.Be.Empty();
                             },
                             Throws.Nothing);
                         // Assert
@@ -42,7 +40,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         // Act
                         Assert.That(() =>
                             {
-                                Expectations.Expect(input).To.Not.Be.Empty();
+                                Expect(input).To.Not.Be.Empty();
                             },
                             Throws.Nothing);
                         // Assert
@@ -57,7 +55,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         // Act
                         Assert.That(() =>
                             {
-                                Expectations.Expect(input).To.Be.Empty();
+                                Expect(input).To.Be.Empty();
                             },
                             Throws.InstanceOf<UnmetExpectationException>());
                         // Assert
@@ -72,7 +70,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         // Act
                         Assert.That(() =>
                             {
-                                Expectations.Expect(input).To.Not.Be.Empty();
+                                Expect(input).To.Not.Be.Empty();
                             },
                             Throws.InstanceOf<UnmetExpectationException>());
                         // Assert

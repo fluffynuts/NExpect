@@ -1,5 +1,7 @@
 using NExpect.Exceptions;
 using NUnit.Framework;
+using static NExpect.Expectations;
+
 // ReSharper disable ExpressionIsAlwaysNull
 
 namespace NExpect.Tests.ObjectEquality.Strings
@@ -25,7 +27,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         // Act
                         Assert.That(() =>
                             {
-                                Expectations.Expect(input).To.Be.Null.Or.Whitespace();
+                                Expect(input).To.Be.Null.Or.Whitespace();
                             },
                             Throws.Nothing);
                         // Assert
@@ -40,7 +42,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         // Act
                         Assert.That(() =>
                             {
-                                Expectations.Expect(input).To.Be.Null.Or.Whitespace();
+                                Expect(input).To.Be.Null.Or.Whitespace();
                             },
                             Throws.Nothing);
                         // Assert
@@ -55,7 +57,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         // Act
                         Assert.That(() =>
                             {
-                                Expectations.Expect(input).To.Be.Null.Or.Whitespace();
+                                Expect(input).To.Be.Null.Or.Whitespace();
                             },
                             Throws.Nothing);
                         // Assert
@@ -70,7 +72,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         // Act
                         Assert.That(() =>
                             {
-                                Expectations.Expect(input).To.Not.Be.Null.Or.Whitespace();
+                                Expect(input).To.Not.Be.Null.Or.Whitespace();
                             },
                             Throws.Nothing);
                         // Assert
@@ -85,7 +87,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         // Act
                         Assert.That(() =>
                             {
-                                Expectations.Expect(input).To.Be.Null.Or.Whitespace();
+                                Expect(input).To.Be.Null.Or.Whitespace();
                             },
                             Throws.InstanceOf<UnmetExpectationException>());
                         // Assert
@@ -100,7 +102,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         // Act
                         Assert.That(() =>
                             {
-                                Expectations.Expect(input).To.Not.Be.Null.Or.Whitespace();
+                                Expect(input).To.Not.Be.Null.Or.Whitespace();
                             },
                             Throws.InstanceOf<UnmetExpectationException>());
                         // Assert
@@ -115,7 +117,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         // Act
                         Assert.That(() =>
                             {
-                                Expectations.Expect(input).To.Not.Be.Null.Or.Whitespace();
+                                Expect(input).To.Not.Be.Null.Or.Whitespace();
                             },
                             Throws.InstanceOf<UnmetExpectationException>());
                         // Assert
@@ -130,7 +132,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         // Act
                         Assert.That(() =>
                             {
-                                Expectations.Expect(input).To.Not.Be.Null.Or.Whitespace();
+                                Expect(input).To.Not.Be.Null.Or.Whitespace();
                             },
                             Throws.InstanceOf<UnmetExpectationException>());
                         // Assert

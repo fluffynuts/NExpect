@@ -2,6 +2,7 @@
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
+using static NExpect.Expectations;
 
 namespace NExpect.Tests.DanglingPrepositions
 {
@@ -19,14 +20,14 @@ namespace NExpect.Tests.DanglingPrepositions
             Assert.That(
                 () =>
                 {
-                    Expectations.Expect(new Ostrich() as object).To.Be.An.Ostrich();
+                    Expect(new Ostrich() as object).To.Be.An.Ostrich();
                 },
                 Throws.Nothing);
 
             Assert.That(
                 () =>
                 {
-                    Expectations.Expect(new Ostrich() as object).Not.To.Be.An.Ostrich();
+                    Expect(new Ostrich() as object).Not.To.Be.An.Ostrich();
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains("Expected not to get an Ostrich"));

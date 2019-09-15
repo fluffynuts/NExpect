@@ -5,6 +5,7 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
+using static NExpect.Expectations;
 
 namespace NExpect.Tests.DanglingPrepositions
 {
@@ -24,17 +25,17 @@ namespace NExpect.Tests.DanglingPrepositions
             // Act
             Assert.That(() =>
             {
-                Expectations.Expect(parent).Not.To.Have.Child(search);
+                Expect(parent).Not.To.Have.Child(search);
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             
             Assert.That(() =>
             {
-                Expectations.Expect(parent).To.Not.Have.Child(search);
+                Expect(parent).To.Not.Have.Child(search);
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             
             Assert.That(() =>
             {
-                Expectations.Expect(parent).To.Have.Child(search);
+                Expect(parent).To.Have.Child(search);
             }, Throws.Nothing);
             // Assert
         }

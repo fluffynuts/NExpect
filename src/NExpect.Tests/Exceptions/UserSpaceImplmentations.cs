@@ -2,6 +2,8 @@
 using NExpect.Interfaces;
 using NUnit.Framework;
 using PeanutButter.Utils;
+using static NExpect.Expectations;
+
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnassignedGetOnlyAutoProperty
 // ReSharper disable MemberCanBePrivate.Global
@@ -22,7 +24,7 @@ namespace NExpect.Tests.Exceptions
             var result = subject.With(e => e.ParamName);
             // Assert
             var actual = result.GetPropertyValue("Actual");
-            Expectations.Expect(actual).To.Equal("moo");
+            Expect(actual).To.Equal("moo");
         }
 
         [Test]

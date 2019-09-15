@@ -1,4 +1,5 @@
 using System;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using NExpect.Implementations;
 using NExpect.Interfaces;
@@ -41,12 +42,14 @@ namespace NExpect
         /// </summary>
         /// <param name="continuation">.Less</param>
         /// <param name="expected">value to compare with</param>
-        public static void Than(
-            this ILessContinuation<decimal?> continuation,
-            decimal? expected
+        public static IMore<T1?> Than<T1, T2>(
+            this ILessContinuation<T1?> continuation,
+            T2? expected
         )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
         {
-            continuation.Than(expected, NULL_STRING);
+            return continuation.Than(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -55,13 +58,15 @@ namespace NExpect
         /// <param name="continuation">.Less</param>
         /// <param name="expected">value to compare with</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
-        public static void Than(
-            this ILessContinuation<decimal?> continuation,
-            decimal? expected,
+        public static IMore<T1?> Than<T1, T2>(
+            this ILessContinuation<T1?> continuation,
+            T2? expected,
             string customMessage
         )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
         {
-            continuation.Than(expected, () => customMessage);
+            return continuation.Than(expected, () => customMessage);
         }
 
         /// <summary>
@@ -70,30 +75,37 @@ namespace NExpect
         /// <param name="continuation">.Less</param>
         /// <param name="expected">value to compare with</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
-        public static void Than(
-            this ILessContinuation<decimal?> continuation,
-            decimal? expected,
+        public static IMore<T1?> Than<T1, T2>(
+            this ILessContinuation<T1?> continuation,
+            T2? expected,
             Func<string> customMessageGenerator
         )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
         {
             AddMatcher(
                 continuation,
                 expected,
-                (a, e) => a.HasValue && a < e,
+                (a, e) => a.HasValue &&
+                    e.HasValue &&
+                    TryCompare(a, e) < 0,
                 customMessageGenerator);
+            return continuation.More();
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
         /// <param name="continuation">.Less</param>
         /// <param name="expected">value to compare with</param>
-        public static void Than(
-            this ILessContinuation<decimal> continuation,
-            decimal expected
+        public static IMore<T1> Than<T1, T2>(
+            this ILessContinuation<T1> continuation,
+            T2? expected
         )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
         {
-            continuation.Than(expected, NULL_STRING);
+            return continuation.Than(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -102,13 +114,15 @@ namespace NExpect
         /// <param name="continuation">.Less</param>
         /// <param name="expected">value to compare with</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
-        public static void Than(
-            this ILessContinuation<decimal> continuation,
-            decimal expected,
+        public static IMore<T1> Than<T1, T2>(
+            this ILessContinuation<T1> continuation,
+            T2? expected,
             string customMessage
         )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
         {
-            continuation.Than(expected, () => customMessage);
+            return continuation.Than(expected, () => customMessage);
         }
 
         /// <summary>
@@ -117,17 +131,137 @@ namespace NExpect
         /// <param name="continuation">.Less</param>
         /// <param name="expected">value to compare with</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
-        public static void Than(
-            this ILessContinuation<decimal> continuation,
-            decimal expected,
+        public static IMore<T1> Than<T1, T2>(
+            this ILessContinuation<T1> continuation,
+            T2? expected,
             Func<string> customMessageGenerator
         )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
         {
             AddMatcher(
                 continuation,
                 expected,
-                (a, e) => a < e,
+                (a, e) =>
+                {
+                    var compareResult = TryCompare(a, e);
+                    return compareResult == null || compareResult < 0;
+                },
                 customMessageGenerator);
+            return continuation.More();
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Less</param>
+        /// <param name="expected">value to compare with</param>
+        public static IMore<T1?> Than<T1, T2>(
+            this ILessContinuation<T1?> continuation,
+            T2 expected
+        )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
+        {
+            return continuation.Than(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Less</param>
+        /// <param name="expected">value to compare with</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        public static IMore<T1?> Than<T1, T2>(
+            this ILessContinuation<T1?> continuation,
+            T2 expected,
+            string customMessage
+        )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
+        {
+            return continuation.Than(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Less</param>
+        /// <param name="expected">value to compare with</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        public static IMore<T1?> Than<T1, T2>(
+            this ILessContinuation<T1?> continuation,
+            T2 expected,
+            Func<string> customMessageGenerator
+        )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
+        {
+            AddMatcher(
+                continuation,
+                expected,
+                (a, e) => a.HasValue &&
+                    TryCompare(a.Value, e) < 0,
+                customMessageGenerator);
+            return continuation.More();
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Less</param>
+        /// <param name="expected">value to compare with</param>
+        public static IMore<T1> Than<T1, T2>(
+            this ILessContinuation<T1> continuation,
+            T2 expected
+        )
+            where T1 : IComparable
+            where T2 : IComparable
+        {
+            return continuation.Than(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Less</param>
+        /// <param name="expected">value to compare with</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        public static IMore<T1> Than<T1, T2>(
+            this ILessContinuation<T1> continuation,
+            T2 expected,
+            string customMessage
+        )
+            where T1 : IComparable
+            where T2 : IComparable
+        {
+            return continuation.Than(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Less</param>
+        /// <param name="expected">value to compare with</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        public static IMore<T1> Than<T1, T2>(
+            this ILessContinuation<T1> continuation,
+            T2 expected,
+            Func<string> customMessageGenerator
+        )
+            where T1 : IComparable
+            where T2 : IComparable
+        {
+            AddMatcher(
+                continuation,
+                expected,
+                (a, e) =>
+                {
+                    var compareResult = TryCompare(a, e);
+                    return compareResult == null || compareResult < 0;
+                },
+                customMessageGenerator);
+            return continuation.More();
         }
 
         /// <summary>
@@ -135,10 +269,12 @@ namespace NExpect
         /// </summary>
         /// <param name="continuation">.Greater</param>
         /// <param name="expected">value to compare with</param>
-        public static IGreaterThanContinuation<decimal?> Than(
-            this IGreaterContinuation<decimal?> continuation,
-            decimal? expected
+        public static IGreaterThanContinuation<T1?> Than<T1, T2>(
+            this IGreaterContinuation<T1?> continuation,
+            T2? expected
         )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
         {
             return continuation.Than(expected, NULL_STRING);
         }
@@ -149,11 +285,13 @@ namespace NExpect
         /// <param name="continuation">.Greater</param>
         /// <param name="expected">value to compare with</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
-        public static IGreaterThanContinuation<decimal?> Than(
-            this IGreaterContinuation<decimal?> continuation,
-            decimal? expected,
+        public static IGreaterThanContinuation<T1?> Than<T1, T2>(
+            this IGreaterContinuation<T1?> continuation,
+            T2? expected,
             string customMessage
         )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
         {
             return continuation.Than(expected, () => customMessage);
         }
@@ -164,29 +302,35 @@ namespace NExpect
         /// <param name="continuation">.Greater</param>
         /// <param name="expected">value to compare with</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
-        public static IGreaterThanContinuation<decimal?> Than(
-            this IGreaterContinuation<decimal?> continuation,
-            decimal? expected,
+        public static IGreaterThanContinuation<T1?> Than<T1, T2>(
+            this IGreaterContinuation<T1?> continuation,
+            T2? expected,
             Func<string> customMessageGenerator
         )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
         {
             AddMatcher(
                 continuation,
                 expected,
-                (a, e) => a.HasValue && a > e,
+                (a, e) => a.HasValue &&
+                    e.HasValue &&
+                    a.Value.CompareTo(e.Value) > 0,
                 customMessageGenerator);
             return continuation.Continue();
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
         /// <param name="continuation">.Greater</param>
         /// <param name="expected">value to compare with</param>
-        public static IGreaterThanContinuation<decimal> Than(
-            this IGreaterContinuation<decimal> continuation,
-            decimal expected
+        public static IGreaterThanContinuation<T1> Than<T1, T2>(
+            this IGreaterContinuation<T1> continuation,
+            T2? expected
         )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
         {
             return continuation.Than(expected, NULL_STRING);
         }
@@ -197,11 +341,13 @@ namespace NExpect
         /// <param name="continuation">.Greater</param>
         /// <param name="expected">value to compare with</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
-        public static IGreaterThanContinuation<decimal> Than(
-            this IGreaterContinuation<decimal> continuation,
-            decimal expected,
+        public static IGreaterThanContinuation<T1> Than<T1, T2>(
+            this IGreaterContinuation<T1> continuation,
+            T2? expected,
             string customMessage
         )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
         {
             return continuation.Than(expected, () => customMessage);
         }
@@ -212,18 +358,218 @@ namespace NExpect
         /// <param name="continuation">.Greater</param>
         /// <param name="expected">value to compare with</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
-        public static IGreaterThanContinuation<decimal> Than(
-            this IGreaterContinuation<decimal> continuation,
-            decimal expected,
+        public static IGreaterThanContinuation<T1> Than<T1, T2>(
+            this IGreaterContinuation<T1> continuation,
+            T2? expected,
             Func<string> customMessageGenerator
         )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
         {
             AddMatcher(
                 continuation,
                 expected,
-                (a, e) => a > e,
+                (a, e) =>
+                {
+                    var compareResult = TryCompare(a, e);
+                    return compareResult == null || compareResult > 0;
+                },
                 customMessageGenerator);
             return continuation.Continue();
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater</param>
+        /// <param name="expected">value to compare with</param>
+        public static IGreaterThanContinuation<T1?> Than<T1, T2>(
+            this IGreaterContinuation<T1?> continuation,
+            T2 expected
+        )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
+        {
+            return continuation.Than(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater</param>
+        /// <param name="expected">value to compare with</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        public static IGreaterThanContinuation<T1?> Than<T1, T2>(
+            this IGreaterContinuation<T1?> continuation,
+            T2 expected,
+            string customMessage
+        )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
+        {
+            return continuation.Than(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater</param>
+        /// <param name="expected">value to compare with</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        public static IGreaterThanContinuation<T1?> Than<T1, T2>(
+            this IGreaterContinuation<T1?> continuation,
+            T2 expected,
+            Func<string> customMessageGenerator
+        )
+            where T1 : struct, IComparable
+            where T2 : struct, IComparable
+        {
+            AddMatcher(
+                continuation,
+                expected,
+                (a, e) =>
+                {
+                    var compareResult = TryCompare(a, e);
+                    return compareResult == null || compareResult > 0;
+                },
+                customMessageGenerator);
+            return continuation.Continue();
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater</param>
+        /// <param name="expected">value to compare with</param>
+        public static IGreaterThanContinuation<T1> Than<T1, T2>(
+            this IGreaterContinuation<T1> continuation,
+            T2 expected
+        )
+            where T1 : IComparable
+            where T2 : IComparable
+        {
+            return continuation.Than(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater</param>
+        /// <param name="expected">value to compare with</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        public static IGreaterThanContinuation<T1> Than<T1, T2>(
+            this IGreaterContinuation<T1> continuation,
+            T2 expected,
+            string customMessage
+        )
+            where T1 : IComparable
+            where T2 : IComparable
+        {
+            return continuation.Than(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Compares two values
+        /// </summary>
+        /// <param name="continuation">.Greater</param>
+        /// <param name="expected">value to compare with</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        public static IGreaterThanContinuation<T1> Than<T1, T2>(
+            this IGreaterContinuation<T1> continuation,
+            T2 expected,
+            Func<string> customMessageGenerator
+        )
+            where T1 : IComparable
+            where T2 : IComparable
+        {
+            AddMatcher(
+                continuation,
+                expected,
+                (a, e) => TryCompare(a, e) > 0,
+                customMessageGenerator);
+            return continuation.Continue();
+        }
+
+        private static int? TryCompare<T1, T2>(
+            T1? a,
+            T2? e
+        ) where T1 : struct, IComparable
+            where T2 : struct, IComparable
+        {
+            if (a == null || e == null)
+            {
+                return null;
+            }
+
+            return TryCompare(a.Value, e.Value);
+        }
+
+        private static int? TryCompare<T1, T2>(
+            T1? a,
+            T2 e
+        ) where T1 : struct, IComparable
+            where T2 : struct, IComparable
+        {
+            if (a == null)
+            {
+                return null;
+            }
+
+            return TryCompare(a.Value, e);
+        }
+
+        private static int? TryCompare<T1, T2>(
+            T1 a,
+            T2? e
+        ) where T1 : struct, IComparable
+            where T2 : struct, IComparable
+        {
+            if (e == null)
+            {
+                return null;
+            }
+
+            return TryCompare(a, e.Value);
+        }
+
+        private static int? TryCompare<T1, T2>(
+            T1 a,
+            T2 e
+        )
+            where T1 : IComparable
+            where T2 : IComparable
+        {
+            if (a == null || e == null)
+            {
+                return null;
+            }
+
+            var aType = a.GetType();
+            var eType = e.GetType();
+            if (aType == eType)
+            {
+                return a.CompareTo(e);
+            }
+
+
+            try
+            {
+                var eConverted = Convert.ChangeType(e, aType);
+                return a.CompareTo(eConverted);
+            }
+            catch
+            {
+                try
+                {
+                    var aConverted = Convert.ChangeType(a, eType) as IComparable;
+                    return aConverted?.CompareTo(e);
+                }
+                catch
+                {
+                    // can't convert, so can't compare
+                    return null;
+                }
+            }
         }
 
         /// <summary>
@@ -462,7 +808,7 @@ namespace NExpect
                 (a, e) => a.HasValue && a < new Decimal(e),
                 customMessageGenerator);
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -747,7 +1093,7 @@ namespace NExpect
                 customMessageGenerator);
             return continuation.Continue();
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -842,7 +1188,7 @@ namespace NExpect
                 (a, e) => a.HasValue && new Decimal(a.Value) < e,
                 customMessageGenerator);
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -930,12 +1276,13 @@ namespace NExpect
             Func<string> customMessageGenerator
         )
         {
-            AddMatcher(continuation, 
-                       expected, 
-                       (a, e) => a.HasValue && new Decimal(a.Value) > e, 
-                       customMessageGenerator);
+            AddMatcher(continuation,
+                expected,
+                (a, e) => a.HasValue && new Decimal(a.Value) > e,
+                customMessageGenerator);
             return continuation.Continue();
         }
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -976,10 +1323,10 @@ namespace NExpect
             Func<string> customMessageGenerator
         )
         {
-            AddMatcher(continuation, 
-                       expected, 
-                       (a, e) => new Decimal(a) > e, 
-                       customMessageGenerator);
+            AddMatcher(continuation,
+                expected,
+                (a, e) => new Decimal(a) > e,
+                customMessageGenerator);
             return continuation.Continue();
         }
 
@@ -1030,7 +1377,7 @@ namespace NExpect
                 customMessageGenerator);
             return continuation.More();
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -1126,7 +1473,7 @@ namespace NExpect
                 customMessageGenerator);
             return continuation.Continue();
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -1222,7 +1569,7 @@ namespace NExpect
                 customMessageGenerator);
             return continuation.More();
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -1318,7 +1665,7 @@ namespace NExpect
                 customMessageGenerator);
             return continuation.Continue();
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -1414,6 +1761,7 @@ namespace NExpect
                 customMessageGenerator);
             return continuation.More();
         }
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -1509,7 +1857,7 @@ namespace NExpect
                 customMessageGenerator);
             return continuation.Continue();
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -1701,7 +2049,7 @@ namespace NExpect
                 customMessageGenerator);
             return continuation.Continue();
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -1797,7 +2145,7 @@ namespace NExpect
                 customMessageGenerator);
             return continuation.More();
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -1989,7 +2337,7 @@ namespace NExpect
                 customMessageGenerator);
             return continuation.More();
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -2085,7 +2433,7 @@ namespace NExpect
                 customMessageGenerator);
             return continuation.Continue();
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -2180,7 +2528,7 @@ namespace NExpect
                 (a, e) => a.HasValue && a <= e,
                 customMessageGenerator);
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -2274,7 +2622,7 @@ namespace NExpect
                 (a, e) => a.HasValue && a <= e,
                 customMessageGenerator);
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -2368,7 +2716,7 @@ namespace NExpect
                 (a, e) => a.HasValue && new Decimal(a.Value) <= e,
                 customMessageGenerator);
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -2463,7 +2811,7 @@ namespace NExpect
                 customMessageGenerator);
             return continuation.Continue();
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -2558,7 +2906,7 @@ namespace NExpect
                 (a, e) => a.HasValue && a <= e,
                 customMessageGenerator);
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -2652,7 +3000,7 @@ namespace NExpect
                 (a, e) => a.HasValue && a >= e,
                 customMessageGenerator);
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -2840,7 +3188,7 @@ namespace NExpect
                 (a, e) => a.HasValue && a <= e,
                 customMessageGenerator);
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -2935,7 +3283,7 @@ namespace NExpect
                 customMessageGenerator);
             return continuation.Continue();
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -3031,7 +3379,7 @@ namespace NExpect
                 customMessageGenerator);
             return continuation.Continue();
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
@@ -3223,7 +3571,7 @@ namespace NExpect
                 customMessageGenerator);
             return continuation.Continue();
         }
-        
+
         /// <summary>
         /// Compares two values
         /// </summary>
