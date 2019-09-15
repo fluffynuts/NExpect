@@ -3,6 +3,7 @@ const gulp = requireModule("gulp-with-help"),
   path = require("path"),
   fs = require("fs"),
   runSequence = requireModule("run-sequence"),
+  findLocalNuget = requireModule("find-local-nuget"),
   spawn = requireModule("spawn");
 
 gulp.task("release", ["build-cover-report"], done => {
@@ -10,13 +11,12 @@ gulp.task("release", ["build-cover-report"], done => {
 });
 
 gulp.task("push", () => {
-  const
-    packages = [
-      findNupkg("NExpect"),
-      findNupkg("NExpect.Matchers.NSubstitute"),
-      findNupkg("NExpect.Matchers.AspNetCore")
-    ];
-    promises = packages.map(pushPackage);
+  const packages = [
+    findNupkg("NExpect"),
+    findNupkg("NExpect.Matchers.NSubstitute"),
+    findNupkg("NExpect.Matchers.AspNetCore")
+  ];
+  promises = packages.map(pushPackage);
   return Promise.all(promises);
 });
 
@@ -24,9 +24,9 @@ function findNupkg(id) {
   return fs
     .readdirSync(packageDir)
     .filter(p => {
-      var parts = p.split(".").filter(part =>
-        part !== "nupkg" && isNaN(parseInt(part))
-      );
+      var parts = p
+        .split(".")
+        .filter(part => part !== "nupkg" && isNaN(parseInt(part)));
       return parts.join(".") === id;
     })
     .map(p => path.join(packageDir, p))
@@ -36,5 +36,7 @@ function findNupkg(id) {
 
 function pushPackage(package) {
   console.log(`pushing package ${package}`);
-  return spawn("tools/nuget.exe", ["push", package, "-Source", "nuget.org"]);
+  return findLocalNuget().then(nuget =>
+    spawn(nuget, ["push", package, "-Source", "nuget.org"])
+  );
 }

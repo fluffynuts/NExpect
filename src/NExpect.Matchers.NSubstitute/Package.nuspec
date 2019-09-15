@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>NExpect.Matchers.NSubstitute</id>
-    <version>1.0.154</version>
+    <version>1.0.155</version>
     <title>NExpect.Matchers.NSubstitute</title>
     <authors>Davyd McColl</authors>
     <owners>Davyd McColl</owners>
@@ -39,11 +39,11 @@
     <copyright>Copyright 2019</copyright>
     <dependencies>
       <group targetFramework="net452">
-        <dependency id="NExpect" version="1.0.154"/>
+        <dependency id="NExpect" version="1.0.155"/>
         <dependency id="NSubstitute" version="4.2.0"/>
       </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="NExpect" version="1.0.154"/>
+        <dependency id="NExpect" version="1.0.155"/>
         <dependency id="NSubstitute" version="4.2.0"/>
       </group>
     </dependencies>
