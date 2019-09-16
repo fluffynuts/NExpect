@@ -35,9 +35,8 @@ namespace NExpect.Tests.ObjectEquality
                 {
                     yield return ("Less", Convert.ChangeType(1, actualType), Convert.ChangeType(2, expectedType), true);
                     yield return ("Greater", Convert.ChangeType(2, expectedType), Convert.ChangeType(1, actualType), true);
-                    // TODO: these flips should have "just worked"
-//                    yield return ("Less", Convert.ChangeType(2, expectedType), Convert.ChangeType(1, actualType), false);
-//                    yield return ("Greater", Convert.ChangeType(1, actualType), Convert.ChangeType(2, expectedType), false);
+                    yield return ("Less", Convert.ChangeType(2, actualType), Convert.ChangeType(1, expectedType), false);
+                    yield return ("Greater", Convert.ChangeType(1, actualType), Convert.ChangeType(2, expectedType), false);
                 }
             }
         }
@@ -107,7 +106,8 @@ namespace NExpect.Tests.ObjectEquality
             var be = to.GetPropertyValue("Be");
             var last = be.GetPropertyValue(testCase.compare);
 
-            var lessType = typeof(ILessContinuation<>).MakeGenericType(actualType);
+            var expectationType = expectation.GetType().GetGenericArguments()[0];
+            var lessType = typeof(ILessContinuation<>).MakeGenericType(expectationType);
             var extMethods = typeof(GreaterAndLessContinuationExtensions).GetMethods()
                 .Where(mi => mi.Name == "Than" && mi.GetParameters().Length == 2)
                 .ToArray();
@@ -120,13 +120,13 @@ namespace NExpect.Tests.ObjectEquality
                         mi.Invoke(null, new object[] { last, testCase.expected });
                         return mi;
                     }
-                    catch (UnmetExpectationException)
-                    {
-                        // this is a proper, failing expectation
-                        return mi;
-                    }
                     catch (Exception ex)
                     {
+                        if (ex.InnerException != null && ex.InnerException is UnmetExpectationException)
+                        {
+                            return mi;
+                        }
+
                         var foo = ex;
                         // invocation fails -- no implicit upcast, perhaps
                         return null;
@@ -155,12 +155,13 @@ namespace NExpect.Tests.ObjectEquality
                             genericExt.Invoke(null, new object[] { last, testCase.expected });
                             return genericExt;
                         }
-                        catch (UnmetExpectationException)
-                        {
-                            return genericExt;
-                        }
                         catch (Exception ex)
                         {
+                            if (ex.InnerException != null && ex.InnerException is UnmetExpectationException)
+                            {
+                                return genericExt;
+                            }
+
                             return null;
                         }
                     }).FirstOrDefault(o => o != null);
@@ -182,7 +183,8 @@ namespace NExpect.Tests.ObjectEquality
             {
                 Assert.That(
                     () => ext.Invoke(last, new object[] { last, testCase.expected }),
-                    Throws.InstanceOf<UnmetExpectationException>());
+                    Throws.InstanceOf<TargetInvocationException>()
+                        .With.InnerException.InstanceOf<UnmetExpectationException>());
             }
         }
     }
