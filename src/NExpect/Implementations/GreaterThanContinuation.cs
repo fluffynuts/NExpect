@@ -19,4 +19,19 @@ namespace NExpect.Implementations
             Actual = actual;
         }
     }
+    internal class LessThanContinuation<T> :
+        ExpectationContext<T>,
+        IHasActual<T>,
+        ILessThanContinuation<T>
+    {
+        public T Actual { get; }
+
+        public ILessThanAnd<T> And =>
+            ContinuationFactory.Create<T, LessThanAnd<T>>(Actual, this);
+
+        public LessThanContinuation(T actual)
+        {
+            Actual = actual;
+        }
+    }
 }
