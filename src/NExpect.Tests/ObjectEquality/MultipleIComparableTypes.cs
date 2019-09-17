@@ -162,13 +162,8 @@ namespace NExpect.Tests.ObjectEquality
                     {
                         return mi.Invoke(null, new[] { testCase.actual });
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
-                        if (mi.GetParameters()[0].ParameterType == typeof(long))
-                        {
-                            Console.WriteLine(ex.Message);
-                        }
-
                         return null;
                     }
                 })
