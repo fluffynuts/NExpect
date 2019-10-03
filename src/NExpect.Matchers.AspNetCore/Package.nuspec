@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>NExpect.Matchers.AspNetCore</id>
-    <version>1.0.156</version>
+    <version>1.0.157</version>
     <title>NExpect.Matchers.AspNetCore</title>
     <authors>Davyd McColl</authors>
     <owners>Davyd McColl</owners>
@@ -35,11 +35,11 @@
     <copyright>Copyright 2019</copyright>
     <dependencies>
       <group targetFramework="net452">
-        <dependency id="NExpect" version="1.0.156"/>
+        <dependency id="NExpect" version="1.0.157"/>
         <dependency id="Microsoft.AspNetCore.Mvc.Core" version="4.1.0"/>
       </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="NExpect" version="1.0.156"/>
+        <dependency id="NExpect" version="1.0.157"/>
         <dependency id="Microsoft.AspNetCore.Mvc.Core" version="4.1.0"/>
       </group>
     </dependencies>
