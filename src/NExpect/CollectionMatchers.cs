@@ -15,9 +15,9 @@ using static NExpect.Implementations.MessageHelpers;
 namespace NExpect
 {
     /// <summary>
-    /// Provides extensions for collection expectations
+    /// Provides matchers for collection expectations
     /// </summary>
-    public static class CollectionExtensions
+    public static class CollectionMatchers
     {
         /// <summary>
         /// Short contain, equivalent to .Contain.At.Least.One.Equal.To(x)

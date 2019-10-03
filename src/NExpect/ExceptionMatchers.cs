@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Reflection;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
-
 // ReSharper disable MemberCanBePrivate.Global
-
 // ReSharper disable UnusedMethodReturnValue.Global
 
 namespace NExpect
 {
     /// <summary>
-    /// Provides extensions for exception testing
+    /// Provides matchers for exception testing
     /// </summary>
-    public static class ExceptionExtensions
+    public static class ExceptionMatchers
     {
         /// <summary>
         /// Expects the Action to throw any kind of exception

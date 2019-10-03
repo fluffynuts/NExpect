@@ -14,9 +14,10 @@ using static NExpect.Helpers.DeepTestHelpers;
 namespace NExpect
 {
     /// <summary>
-    /// Provides extensions for performing deep equality testing on collections
+    /// Provides matchers for performing deep equality testing on collections
     /// </summary>
-    public static class CollectionDeepEqualityExtensions
+    // ReSharper disable once UnusedMember.Global
+    public static class CollectionDeepEqualityMatchers
     {
         /// <summary>
         /// Does deep-equality testing on two collections, ignoring complex item referencing

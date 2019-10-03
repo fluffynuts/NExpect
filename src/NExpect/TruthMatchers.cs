@@ -4,17 +4,15 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
 // ReSharper disable MemberCanBePrivate.Global
-
 // ReSharper disable HeapView.BoxingAllocation
-
 // ReSharper disable UnusedMember.Global
 
 namespace NExpect
 {
     /// <summary>
-    /// Provides extension methods to test True / False
+    /// Provides matchers to test True / False
     /// </summary>
-    public static class TruthExtensions
+    public static class TruthMatchers
     {
         /// <summary>
         /// Tests if a boolean value is True

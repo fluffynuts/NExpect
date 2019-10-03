@@ -16,9 +16,9 @@ using static NExpect.Implementations.MessageHelpers;
 namespace NExpect
 {
     /// <summary>
-    /// Provides in-built string-testing matcher extensions
+    /// Provides in-built string-testing matchers
     /// </summary>
-    public static class StringExtensions
+    public static class StringMatchers
     {
         /// <summary>
         /// Tests if the value under test contains a given string. May be continued

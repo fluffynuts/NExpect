@@ -11,7 +11,7 @@ namespace NExpect
     /// <summary>
     /// Provides NSubstitute extensions for NExpect
     /// </summary>
-    public static class ReceivedExtension
+    public static class ReceivedMatchers
     {
         /// <summary>
         /// Returns NSubstitute Received()

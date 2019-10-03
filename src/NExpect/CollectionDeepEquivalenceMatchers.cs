@@ -12,9 +12,10 @@ using static NExpect.Helpers.DeepTestHelpers;
 namespace NExpect
 {
     /// <summary>
-    /// Provides extensions for testing collection deep equivalence
+    /// Provides matchers for testing collection deep equivalence
     /// </summary>
-    public static class CollectionDeepEquivalenceExtensions
+    // ReSharper disable once UnusedMember.Global
+    public static class CollectionDeepEquivalenceMatchers
     {
         /// <summary>
         /// Does deep-equivalence testing on two collections, ignoring complex item referencing.

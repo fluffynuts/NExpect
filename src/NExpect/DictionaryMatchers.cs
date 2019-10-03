@@ -6,7 +6,7 @@ using Imported.PeanutButter.Utils;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
-using static NExpect.EqualityProviderExtensions;
+using static NExpect.EqualityProviderMatchers;
 using static NExpect.Implementations.MessageHelpers;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -17,7 +17,7 @@ namespace NExpect
     /// <summary>
     /// Provides matchers for dictionaries
     /// </summary>
-    public static class DictionaryExtensions
+    public static class DictionaryMatchers
     {
         /// <summary>
         /// Tests if the provided collection contains the required key.
@@ -578,7 +578,7 @@ namespace NExpect
         }
 
         private static readonly MethodInfo GenericUpcast =
-            typeof(DictionaryExtensions).GetMethod(
+            typeof(DictionaryMatchers).GetMethod(
                 nameof(Upcast),
                 BindingFlags.Static | BindingFlags.NonPublic
             );

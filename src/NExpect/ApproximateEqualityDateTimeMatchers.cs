@@ -9,9 +9,10 @@ using static NExpect.Implementations.MessageHelpers;
 namespace NExpect
 {
     /// <summary>
-    /// Adds approximate equality testing extensions for DateTime values
+    /// Adds approximate equality matchers for DateTime values
     /// </summary>
-    public static class ApproximateEqualityDateTimeExtensions
+    // ReSharper disable once UnusedMember.Global
+    public static class ApproximateEqualityDateTimeMatchers
     {
         /// <summary>
         /// Tests if the actual DateTime is approximately equal to the

@@ -11,9 +11,9 @@ using static NExpect.Implementations.MessageHelpers;
 namespace NExpect
 {
     /// <summary>
-    /// Provides extension methods for testing Intersection equality between objects
+    /// Provides matchers for testing Intersection equality between objects
     /// </summary>
-    public static class IntersectionEqualityExtensions
+    public static class IntersectionEqualityMatchers
     {
         /// <summary>
         /// Performs intersection-equality testing on two objects

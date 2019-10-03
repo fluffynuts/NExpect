@@ -11,9 +11,9 @@ using static NExpect.Implementations.MessageHelpers;
 namespace NExpect
 {
     /// <summary>
-    /// Adds extension methods for Greater and Less
+    /// Adds matchers for Greater and Less
     /// </summary>
-    public static class GreaterAndLessContinuationExtensions
+    public static class GreaterAndLessMatchers
     {
         private static IGreaterThanContinuation<T> Continue<T>(
             this IGreaterContinuation<T> continuation

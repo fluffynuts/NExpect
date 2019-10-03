@@ -4,16 +4,14 @@ using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
-
-// ReSharper disable PossibleMultipleEnumeration
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect
 {
     /// <summary>
-    /// Provides extensions for testing equality
+    /// Provides matchers for testing equality
     /// </summary>
-    public static class EqualityProviderExtensions
+    public static class EqualityProviderMatchers
     {
         /// <summary>
         /// Performs reference equality checking between your actual and the provided expected value

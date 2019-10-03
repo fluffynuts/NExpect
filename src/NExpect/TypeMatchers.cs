@@ -4,7 +4,6 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
-
 // ReSharper disable UnusedMethodReturnValue.Global
 
 namespace NExpect
@@ -12,7 +11,8 @@ namespace NExpect
     /// <summary>
     /// Provides matchers for testing if object are instances of specific types
     /// </summary>
-    public static class TypeExtensions
+    // ReSharper disable once UnusedMember.Global
+    public static class TypeMatchers
     {
         /// <summary>
         /// Tests if actual is an instance of TExpected

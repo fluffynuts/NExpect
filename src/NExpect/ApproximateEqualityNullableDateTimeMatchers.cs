@@ -6,9 +6,9 @@ using NExpect.MatcherLogic;
 namespace NExpect
 {
     /// <summary>
-    /// Adds approximate equality testing extensions for DateTime values
+    /// Adds approximate equality matchers for DateTime values
     /// </summary>
-    public static class ApproximateEqualityNullableDateTimeExtensions
+    public static class ApproximateEqualityNullableDateTimeMatchers
     {
         /// <summary>
         /// Tests if the actual DateTime is approximately equal to the

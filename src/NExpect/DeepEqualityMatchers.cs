@@ -12,9 +12,9 @@ using MH = NExpect.Implementations.MessageHelpers;
 namespace NExpect
 {
     /// <summary>
-    /// Provides extensions for deep equality testing of objects
+    /// Provides matchers for deep equality testing of objects
     /// </summary>
-    public static class DeepEqualityExtensions
+    public static class DeepEqualityMatchers
     {
         /// <summary>
         /// Performs deep equality testing on two objects

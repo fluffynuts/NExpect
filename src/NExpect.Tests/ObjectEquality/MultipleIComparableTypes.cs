@@ -205,7 +205,7 @@ namespace NExpect.Tests.ObjectEquality
                 last = last.GetPropertyValue(queue.Dequeue());
             }
 
-            var extMethods = typeof(GreaterAndLessContinuationExtensions).GetMethods()
+            var extMethods = typeof(GreaterAndLessMatchers).GetMethods()
                 .Where(mi => mi.Name == final && mi.GetParameters().Length == 2)
                 .ToArray();
 
