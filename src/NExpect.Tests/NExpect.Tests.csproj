@@ -16,7 +16,4 @@
   <ItemGroup>
     <ProjectReference Include="..\NExpect\NExpect.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="FileSystem" />
-  </ItemGroup>
 </Project>
