@@ -1,0 +1,106 @@
+<svg id="Group_2_copy_5" data-name="Group 2 copy 5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        stroke-width: 6px;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5 {
+        stroke: #293d7c;
+        stroke-linejoin: round;
+      }
+
+      .cls-2, .cls-3, .cls-4, .cls-5 {
+        fill: #eea45c;
+        stroke-width: 16px;
+      }
+
+      .cls-2 {
+        filter: url(#filter);
+      }
+
+      .cls-3 {
+        filter: url(#filter-2);
+      }
+
+      .cls-4 {
+        filter: url(#filter-3);
+      }
+
+      .cls-5 {
+        filter: url(#filter-4);
+      }
+
+      .cls-6 {
+        filter: url(#filter-5);
+      }
+
+      .cls-7 {
+        fill: #004fac;
+      }
+
+      .cls-8 {
+        fill: #57a4ff;
+      }
+    </style>
+    <filter id="filter" x="93" y="94" width="95" height="95" filterUnits="userSpaceOnUse">
+      <feFlood result="flood" flood-color="#ee6a5c"/>
+      <feComposite result="composite" operator="in" in2="SourceGraphic"/>
+      <feBlend result="blend" in2="SourceGraphic"/>
+    </filter>
+    <filter id="filter-2" x="324" y="323" width="95" height="95" filterUnits="userSpaceOnUse">
+      <feFlood result="flood" flood-color="#8fd76f"/>
+      <feComposite result="composite" operator="in" in2="SourceGraphic"/>
+      <feBlend result="blend" in2="SourceGraphic"/>
+    </filter>
+    <filter id="filter-3" x="324" y="94" width="95" height="95" filterUnits="userSpaceOnUse">
+      <feFlood result="flood" flood-color="#c3ddf4"/>
+      <feComposite result="composite" operator="in" in2="SourceGraphic"/>
+      <feBlend result="blend" in2="SourceGraphic"/>
+    </filter>
+    <filter id="filter-4" x="93" y="323" width="95" height="95" filterUnits="userSpaceOnUse">
+      <feFlood result="flood" flood-color="#f19f47"/>
+      <feComposite result="composite" operator="in" in2="SourceGraphic"/>
+      <feBlend result="blend" in2="SourceGraphic"/>
+    </filter>
+    <filter id="filter-5" filterUnits="userSpaceOnUse">
+      <feFlood result="flood" flood-color="#293d7c"/>
+      <feComposite result="composite" operator="in" in2="SourceGraphic"/>
+      <feBlend result="blend" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  <rect id="Rounded_Rectangle_2" data-name="Rounded Rectangle 2" class="cls-1" width="512" height="512" rx="80" ry="80"/>
+  <g style="fill: #eea45c; filter: url(#filter)">
+    <circle id="circle" class="cls-2" cx="140.5" cy="141.5" r="47.5" style="stroke: inherit; filter: none; fill: inherit"/>
+  </g>
+  <use xlink:href="#circle" style="stroke: #293d7c; filter: none; fill: none"/>
+  <g style="fill: #eea45c; filter: url(#filter-2)">
+    <circle id="Ellipse_2_copy" data-name="Ellipse 2 copy" class="cls-3" cx="371.5" cy="370.5" r="47.5" style="stroke: inherit; filter: none; fill: inherit"/>
+  </g>
+  <use xlink:href="#Ellipse_2_copy" style="stroke: #293d7c; filter: none; fill: none"/>
+  <g style="fill: #eea45c; filter: url(#filter-3)">
+    <rect id="Rounded_Rectangle_3" data-name="Rounded Rectangle 3" class="cls-4" x="324" y="94" width="95" height="95" rx="7" ry="7" style="stroke: inherit; filter: none; fill: inherit"/>
+  </g>
+  <use xlink:href="#Rounded_Rectangle_3" style="stroke: #293d7c; filter: none; fill: none"/>
+  <g style="fill: #eea45c; filter: url(#filter-4)">
+    <circle id="Ellipse_2_copy_2" data-name="Ellipse 2 copy 2" class="cls-5" cx="140.5" cy="370.5" r="47.5" style="stroke: inherit; filter: none; fill: inherit"/>
+  </g>
+  <use xlink:href="#Ellipse_2_copy_2" style="stroke: #293d7c; filter: none; fill: none"/>
+  <g class="cls-6">
+    <rect id="Rounded_Rectangle_1" data-name="Rounded Rectangle 1" class="cls-7" x="196" y="133" width="16" height="16" rx="3" ry="3"/>
+    <rect id="Rounded_Rectangle_1_copy" data-name="Rounded Rectangle 1 copy" class="cls-7" x="222" y="133" width="16" height="16" rx="3" ry="3"/>
+    <rect id="Rounded_Rectangle_1_copy_2" data-name="Rounded Rectangle 1 copy 2" class="cls-7" x="248" y="133" width="16" height="16" rx="3" ry="3"/>
+    <rect id="Rounded_Rectangle_1_copy_3" data-name="Rounded Rectangle 1 copy 3" class="cls-7" x="274" y="133" width="16" height="16" rx="3" ry="3"/>
+    <rect id="Rounded_Rectangle_1_copy_4" data-name="Rounded Rectangle 1 copy 4" class="cls-7" x="300" y="133" width="16" height="16" rx="3" ry="3"/>
+    <rect class="cls-7" x="364" y="188" width="16" height="138"/>
+    <rect id="Rectangle_2_copy_2" data-name="Rectangle 2 copy 2" class="cls-7" x="132" y="218" width="16" height="107"/>
+    <rect id="Rectangle_2_copy" data-name="Rectangle 2 copy" class="cls-7" x="187" y="362" width="138" height="16"/>
+  </g>
+  <g class="cls-6">
+    <circle id="Ellipse_1_copy_4" data-name="Ellipse 1 copy 4" class="cls-8" cx="389.5" cy="141.5" r="6.5"/>
+    <circle id="Ellipse_1_copy_5" data-name="Ellipse 1 copy 5" class="cls-8" cx="371.5" cy="141.5" r="6.5"/>
+    <circle id="Ellipse_1_copy_6" data-name="Ellipse 1 copy 6" class="cls-8" cx="353.5" cy="141.5" r="6.5"/>
+  </g>
+  <image id="left-arrow" x="96" y="202" width="88" height="106" xlink:href="data:img/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFgAAABqCAYAAAA4J5aSAAAFBElEQVR4nO2dS4gcVRSGv25EXETI3oVZuHHAjSKCmk58v1ARFHwsBHUjgoILn2kf0yY+Iggi7jQ7FURJTIxJT3qSdLJRCQaEBhEVhCgICiqK4mPkSjV09+2ursf9q24P54OBzKmaqTtfV99zTlX1TePczdtYAB4E7gbOBk4HfgQ+BR4Cvq9z+IN+x4uNcpoXiY/3gVsmRnUmsAm4CrgNOBTr4JteJC4+mCJ3lI3ASiI6SmIWvA+40YtOpwtcMXVLzcQq2J2VN3jRdNw00UrdowZiFLwKXOlFs3EUuKzqAacRm+CDAQStxjQnxyTYJbSrvWgxurFIjkVwnoSWFSf5Et2QsxGD4N0FElpWjgOXi353JuoW7KqFm71oWHrA5qr/sCF1Ci5TLeSlD2yt6Fhj1CU4RLWQl8N1JL46BIesFvJSeXVRtWBFtZCXbpWJr0rBRdpfFZUlvqoEV5nQslJJ4qtCcB0JLSvyxKcWvKfGhJYVNydfqvrlSsHvAjd50Tg5pmqrVYJd+3urF40bSVutEFxF+6sieHURWnCM1UJeglYXIQXHXC3kJVh1EUpwne2viiBtdQjBMbS/Kkq31WUFx9T+qiiV+MoIXg8JLSuFE19RwespoWWlUOIrIliZ0F4AvvKi+XAv/nei8eVuq/MK3iNMaPcCjwMbvC35eC2ZM/8SjfNYnjM5j+B9wmsLjwBvAmckT06WwY3za+A60VjJU11kFXxIWC08DexM/u2e/f3H26MYPbHkXpZn4bIIXhU+ueimhOWR79e8PcpxQHy99+hSq51aXcwTrKwWnkiSmhr37rteeIzDS632zBcxTbCyWngWeN6L6vhozoPcZenOkjxL8IfCamEH8IwX1bNbfAPASfYS3zTBK8K3lJtvn/Si1bEXuEZ4tN5Sqz3WVk8KVra/7aRiqJuuuMXvjya+UcHKhPYU8JwXrQ9XYl0rPLpLfP9XXkPBbwsT2nYg/cNk9XBQPCevLLXam5pJsXy7tzkM7syN+ZOOe4V1cgPY1Uw+LangpUjP3EmUXepWJ/hCL1weV+M+Khq0gv2ixPdbc0olUZblpEtbNHqC5yLWnNzPvHBxliMpxYoS+lm1DU7wq164GC8uuNwhwzk5xIWnj5tJ53bc25SPV4DHAgwoFvYH6mYfGM6/rlT7wtucDXct9+EFE5iFAyUbrzsH/c6JoWD3djjPrS/h7ZbO9uRuxHrlCLClwN92x6Dfcc3bWAXh7mFdDJz0dp/OjsibiFD0c5Zwdw36nXeG30yWaD8nr9gn3o+Ns7Pmq2JVM7z99Oec494z6HfeGg1Mq4F/AS4CXga+ndh2Mrn7u56nhVm4OfkC4D3g74l9XFLcMuh3dk3+7LxFkRrJEy0bE9knvD3C4u4onyp5Z7nhRcJzFnB+cqzPB/3ON7OOMG9RpLWk+DbGOZV8zV11atoUYQTEBIsxwWJMsBgTLMYEizHBYkywGBMsxgSLMcFiTLAYEyzGBIsxwWJMsBgTLMYEizHBYkywGBMsxgSLMcFiTLAYEyzGBIsxwWJMsBgTLMYEizHBYkywGBMsxgSLMcFiTLAYEyzGBIsxwWJMsBgTLMYEizHBYkywmNgENyr6tHxlxCb4XxOs5fcMq4osFDGewUe86AITY5K7v8SicG94kZqJUfAPyRqSf3hb0nELF92XukcNxFqmuWniHOB14Cfg15SvL90Ke1H+z2DAf0z+3KWQ2cHmAAAAAElFTkSuQmCC"/>
+</svg>
