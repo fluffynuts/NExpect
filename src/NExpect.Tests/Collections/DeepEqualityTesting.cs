@@ -1289,6 +1289,12 @@ namespace NExpect.Tests.Collections
             [Test]
             public void WrappedDeepEquality()
             {
+                if (RunningUnderMono())
+                {
+                    Assert.Ignore("This test fails under mono");
+                    return;
+                }
+
                 // Arrange
                 var left = GetRandom<ChangeRequest>();
                 var right = new ChangeRequest();
@@ -1300,6 +1306,12 @@ namespace NExpect.Tests.Collections
                 Assert.That(
                     () => Expect(wrappedLeft).To.Deep.Equal(wrappedRight), Throws.Nothing);
                 // Assert
+            }
+
+            public bool RunningUnderMono()
+            {
+                var type = Type.GetType("Mono.Runtime");
+                return type != null;
             }
 
             public class HasPrivates

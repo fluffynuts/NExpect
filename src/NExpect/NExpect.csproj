@@ -48,4 +48,6 @@
     <Reference Include="System.Diagnostics.StackTrace">
     </Reference>
   </ItemGroup>
+
+	<Import Project="..\MonoForFramework.targets" />
 </Project>

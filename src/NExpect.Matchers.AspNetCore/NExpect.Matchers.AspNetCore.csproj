@@ -20,4 +20,5 @@
     <DocumentationFile>bin\BuildForRelease\netstandard2.0\NExpect.Matchers.AspNetCore.xml</DocumentationFile>
   </PropertyGroup>
 
+	<Import Project="..\MonoForFramework.targets" />
 </Project>

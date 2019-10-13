@@ -1,26 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <DebugType>full</DebugType>
-        <LangVersion>latest</LangVersion>
-        <RootNamespace>NExpect</RootNamespace>
-    </PropertyGroup>
-    <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
-        <Configurations>Debug;Release;BuildForRelease</Configurations>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-        <DefineConstants>NETSTANDARD</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup>
-        <DefineConstants>BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)'=='BuildForRelease'">
-        <DocumentationFile>bin\BuildForRelease\netstandard2.0\NExpect.Matchers.NSubstitute.xml</DocumentationFile>
-    </PropertyGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\NExpect\NExpect.csproj" />
-    </ItemGroup>
-    <ItemGroup>
-      <PackageReference Include="NSubstitute" Version="4.2.1" />
-    </ItemGroup>
+  <PropertyGroup>
+    <DebugType>full</DebugType>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>NExpect</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
+    <Configurations>Debug;Release;BuildForRelease</Configurations>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <DefineConstants>NETSTANDARD</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DefineConstants>BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='BuildForRelease'">
+    <DocumentationFile>bin\BuildForRelease\netstandard2.0\NExpect.Matchers.NSubstitute.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NExpect\NExpect.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="NSubstitute" Version="4.2.1" />
+  </ItemGroup>
+	<Import Project="..\MonoForFramework.targets" />
 </Project>

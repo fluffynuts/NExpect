@@ -16,4 +16,5 @@
   <ItemGroup>
     <ProjectReference Include="..\NExpect\NExpect.csproj" />
   </ItemGroup>
+	<Import Project="..\MonoForFramework.targets" />
 </Project>

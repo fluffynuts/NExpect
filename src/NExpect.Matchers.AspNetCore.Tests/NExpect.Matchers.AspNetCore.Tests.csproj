@@ -25,5 +25,6 @@
       <HintPath>..\..\..\..\..\Users\davyd.mccoll\.nuget\packages\microsoft.aspnetcore.mvc.core\2.2.5\lib\netstandard2.0\Microsoft.AspNetCore.Mvc.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
+	<Import Project="..\MonoForFramework.targets" />
 
 </Project>
