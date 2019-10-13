@@ -33,17 +33,17 @@
     </summary>
     <language>en-US</language>
     <projectUrl>https://github.com/fluffynuts/NExpect</projectUrl>
-    <iconUrl>https://nuget.org/Content/Images/packageDefaultIcon-50x50.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/fluffynuts/NExpect/master/src/NExpect/icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">BSD-3-Clause</license>
     <copyright>Copyright 2019</copyright>
     <dependencies>
       <group targetFramework="net452">
-        <dependency id="NExpect" version="1.0.157"/>
+        <dependency id="NExpect" version="1.0.158"/>
         <dependency id="NSubstitute" version="4.2.0"/>
       </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="NExpect" version="1.0.157"/>
+        <dependency id="NExpect" version="1.0.158"/>
         <dependency id="NSubstitute" version="4.2.0"/>
       </group>
     </dependencies>
