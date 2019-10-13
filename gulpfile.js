@@ -43,7 +43,7 @@ function pauseWhilstWorking() {
         console.log(`--- taking over your ${task} task whilst we do some bootstrapping ---`);
         return new Promise(function watchWorker(resolve, reject) {
           if (!autoWorking) {
-            resolve();
+            return resolve();
           }
           setTimeout(function() {
             watchWorker(resolve, reject);
@@ -95,8 +95,15 @@ function mustInstallDeps() {
 
 function initializeNpm() {
   var spawn = requireModule("spawn");
+  var os = require("os");
   runNpmWith(["init"])
-  .then(() => spawn("cmd", [ "/c", "node", process.argv[1]]));
+  .then(() => {
+    if (os.platform() === "win32") {
+      spawn("cmd", [ "/c", "node", process.argv[1]])
+    } else {
+      spawn("node", [process.argv[1]])
+    }
+  });
 }
 
 function addMissingScript(package, name, script) {
@@ -181,10 +188,13 @@ function bootstrapGulp() {
 
 function runNpmWith(args) {
   var spawn = requireModule("spawn");
+  var os = require("os");
 
   testBin(["run-p", "run-s"], "npm-run-all");
   testBin("cross-env");
   testBin("gulp");
 
-  return spawn("cmd", ["/c", "npm"].concat(args));
+  return os.platform() === "win32"
+    ? spawn("cmd", ["/c", "npm"].concat(args))
+    : spawn("npm", args);
 }
