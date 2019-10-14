@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NExpect.Matchers.AspNetCore</name>
+    </assembly>
+    <members>
+        <member name="T:NExpect.Matchers">
+            <summary>
+            Adds matchers for AspNetCore Controllers and Controller Actions
+            </summary>
+        </member>
+        <member name="M:NExpect.Matchers.Method(NExpect.Interfaces.IHave{System.Type},System.String)">
+            <summary>
+            Asserts that the controller has the named method
+            </summary>
+            <param name="have"></param>
+            <param name="method"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.Matchers.Route(NExpect.Interfaces.IHave{System.Type},System.String)">
+            <summary>
+            Asserts that the controller has the expected base route
+            </summary>
+            <param name="have"></param>
+            <param name="expected"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.Matchers.Route(NExpect.Interfaces.IHave{System.Type},System.String,System.String)">
+            <summary>
+            Quick-n-dirty assertion that a controller's method has the required route
+            </summary>
+            <param name="have"></param>
+            <param name="member"></param>
+            <param name="expected"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NExpect.Matchers.SupportingExtension">
+            <summary>
+            Provides fluency for Supporting()
+            </summary>
+        </member>
+        <member name="M:NExpect.Matchers.SupportingExtension.Supporting(System.Net.Http.HttpMethod)">
+            <summary>
+            Asserts that the controller method being operated on supports
+            the desired HttpMethod
+            </summary>
+            <param name="method"></param>
+            <returns></returns>
+        </member>
+        <member name="P:NExpect.Matchers.SupportingExtension.With">
+            <summary>
+            Fluency extension
+            </summary>
+        </member>
+        <member name="P:NExpect.Matchers.SupportingExtension.And">
+            <summary>
+            Fluency extension
+            </summary>
+        </member>
+        <member name="M:NExpect.Matchers.SupportingExtension.Route(System.String)">
+            <summary>
+            Asserts that the controller action being operated on has the specified route
+            </summary>
+            <param name="expected"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NExpect.Matchers.AndSupportingExtension">
+            <summary>
+            Fluency extension
+            </summary>
+        </member>
+        <member name="P:NExpect.Matchers.AndSupportingExtension.With">
+            <summary>
+            Fluency extension
+            </summary>
+        </member>
+        <member name="M:NExpect.Matchers.AndSupportingExtension.And(System.Net.Http.HttpMethod)">
+            <summary>
+            Asserts that the controller method being operated on has an
+            additional supported HttpMethod
+            </summary>
+            <param name="method"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

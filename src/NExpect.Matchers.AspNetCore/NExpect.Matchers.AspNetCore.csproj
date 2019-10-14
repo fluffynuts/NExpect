@@ -6,6 +6,32 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Configurations>Debug;Release;BuildForRelease</Configurations>
     <RootNamespace>NExpect</RootNamespace>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <DocumentationFile>NExpect.Matchers.AspNetCore.xml</DocumentationFile>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <PackageVersion>1.0.158</PackageVersion>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/fluffynuts/NExpect/master/src/NExpect/icon.png</PackageIconUrl>
+    <Copyright>Copyright 2019</Copyright>
+    <Authors>Davyd McColl</Authors>
+    <Description>
+      This library adds ASP.Net core extensions for NExpect so you can test your
+      [Route] and [Http*] annotations like so:
+      ```
+      Expect(typeof(SomeController)
+      .To.Have.Method(nameof(SomeController.MethodName))
+      .Supporting(HttpMethod.Delete)
+      .And(HttpMethod.Post)
+      .With.Route("first-route")
+      .And.Route("second-route");
+      ```
+    </Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,9 +42,5 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
   </ItemGroup>
   
-  <PropertyGroup Condition="'$(Configuration)'=='BuildForRelease'">
-    <DocumentationFile>bin\BuildForRelease\netstandard2.0\NExpect.Matchers.AspNetCore.xml</DocumentationFile>
-  </PropertyGroup>
-
 	<Import Project="..\MonoForFramework.targets" />
 </Project>

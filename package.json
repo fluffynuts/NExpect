@@ -1,9 +1,11 @@
 {
     "name": "nexpect",
     "scripts": {
-        "test": "gulp build-cover-report",
-        "gulp": "gulp",
-        "release": "gulp release"
+        "test": "run-s \"gulp test-dotnet\"",
+        "pack": "run-s \"gulp pack\"",
+        "cover": "gulp build-cover-report",
+        "gulp": "cross-env DOTNET_CORE=1 BUILD_EXCLUDE=src/PeanutButter/**/* PACK_INCLUDE=* PACK_EXCLUDE=*Tests*,CoreConsumer,src/PeanutButter/**/* TEST_EXCLUDE=src/PeanutButter/**/* gulp",
+        "release": "run-s \"gulp release\""
     },
     "devDependencies": {
         "ansi-colors": "^4.1.1",
@@ -17,7 +19,7 @@
         "gulp": "^4.0.2",
         "gulp-debug": "^4.0.0",
         "gulp-dotnet-cli": "^1.1.0",
-        "gulp-edit-xml": "^3.0.0",
+        "gulp-edit-xml": "https://github.com/fluffynuts/gulp-edit-xml.git#pass-file-to-transform",
         "gulp-filter": "^6.0.0",
         "gulp-help": "^1.6.1",
         "gulp-msbuild": "^0.5.5",

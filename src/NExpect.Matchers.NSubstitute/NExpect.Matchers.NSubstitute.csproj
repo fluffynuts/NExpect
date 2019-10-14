@@ -3,19 +3,40 @@
     <DebugType>full</DebugType>
     <LangVersion>latest</LangVersion>
     <RootNamespace>NExpect</RootNamespace>
+    <DocumentationFile>NExpect.Matchers.NSubstitute.xml</DocumentationFile>
+    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <Configurations>Debug;Release;BuildForRelease</Configurations>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
-    <Configurations>Debug;Release;BuildForRelease</Configurations>
+    <PackageVersion>1.0.158</PackageVersion>
+    <Authors>Davyd McColl</Authors>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/fluffynuts/NExpect/master/src/NExpect/icon.png</PackageIconUrl>
+    <Copyright>Copyright 2019</Copyright>
+    <Description>
+      This library offers NSubistitute-specific extensions so you can have Expect-style
+      syntax for your NSubstitute assertions. For example, one may previously have done:
+      ```
+      Expect(result).To.Equal(expected);
+      someService.Received(1).SomeMethodCall();
+      ```
+      and now you can keep it consistent:
+      ```
+      Expect(result).To.Equal(expected);
+      Expect(someService).To.Have.Received(1).SomeMethodCall();
+      ```
+    </Description>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
     <DefineConstants>NETSTANDARD</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <DefineConstants>BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)'=='BuildForRelease'">
-    <DocumentationFile>bin\BuildForRelease\netstandard2.0\NExpect.Matchers.NSubstitute.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\NExpect\NExpect.csproj" />

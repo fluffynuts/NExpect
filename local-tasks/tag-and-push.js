@@ -1,14 +1,12 @@
 const gulp = requireModule("gulp-with-help"),
   gutil = require("gulp-util"),
-  Git = require("simple-git"),
-  git = new Git(),
   gitPushTags = requireModule("git-push-tags"),
   gitPush = requireModule("git-push"),
-  gitTagFromPackageNuspec = requireModule("gulp-git-tag-from-package-nuspec");
+  gitTagFromCsProj = requireModule("gulp-git-tag-from-csproj");
 
 gulp.task("tag-and-push", () => {
-  return gulp.src("**/NExpect/Package.nuspec")
-    .pipe(gitTagFromPackageNuspec());
+  return gulp.src("**/NExpect/NExpect.csproj")
+    .pipe(gitTagFromCsProj());
 });
 
 gulp.task("push-tags", "Pushes tags and commits", () => {

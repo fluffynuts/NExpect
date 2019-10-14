@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NExpect.Matchers.NSubstitute</name>
+    </assembly>
+    <members>
+        <member name="T:NExpect.ReceivedMatchers">
+            <summary>
+            Provides NSubstitute extensions for NExpect
+            </summary>
+        </member>
+        <member name="M:NExpect.ReceivedMatchers.Received``1(NExpect.Interfaces.IHave{``0})">
+            <summary>
+            Returns NSubstitute Received()
+            </summary>
+            <param name="have"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:NExpect.ReceivedMatchers.Received``1(NExpect.Interfaces.IHave{``0},System.Int32)">
+            <summary>
+            Returns NSubstitute Received(count)
+            </summary>
+            <param name="have"></param>
+            <param name="count"></param>
+            <typeparam name="T"></typeparam>
+        </member>
+    </members>
+</doc>

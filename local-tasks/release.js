@@ -6,7 +6,7 @@ const gulp = requireModule("gulp-with-help"),
   findLocalNuget = requireModule("find-local-nuget"),
   spawn = requireModule("spawn");
 
-gulp.task("release", ["build-cover-report"], done => {
+gulp.task("release", ["test-dotnet"], done => {
   runSequence("pack", "push", "commit-release", "tag-and-push", done);
 });
 
@@ -36,7 +36,12 @@ function findNupkg(id) {
 
 function pushPackage(package) {
   console.log(`pushing package ${package}`);
-  return findLocalNuget().then(nuget =>
-    spawn(nuget, ["push", package, "-Source", "nuget.org"])
-  );
+  return findLocalNuget().then(nuget => {
+    const args = ["push", package, "-Source", "nuget.org"];
+    if (process.env.DRY_RUN) {
+      console.log(`${nuget} ${args.join(" ")}`);
+      return Promise.resolve();
+    }
+    return spawn(nuget, args)
+  });
 }
