@@ -1,5 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DebugType>full</DebugType>
     <LangVersion>latest</LangVersion>
@@ -9,9 +9,8 @@
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <DocumentationFile>NExpect.Matchers.AspNetCore.xml</DocumentationFile>
   </PropertyGroup>
-  
   <PropertyGroup>
-    <PackageVersion>1.0.158</PackageVersion>
+    <PackageVersion>1.0.159</PackageVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
@@ -20,27 +19,24 @@
     <PackageIconUrl>https://raw.githubusercontent.com/fluffynuts/NExpect/master/src/NExpect/icon.png</PackageIconUrl>
     <Copyright>Copyright 2019</Copyright>
     <Authors>Davyd McColl</Authors>
-    <Description>
-      This library adds ASP.Net core extensions for NExpect so you can test your
-      [Route] and [Http*] annotations like so:
-      ```
-      Expect(typeof(SomeController)
-      .To.Have.Method(nameof(SomeController.MethodName))
-      .Supporting(HttpMethod.Delete)
-      .And(HttpMethod.Post)
-      .With.Route("first-route")
-      .And.Route("second-route");
-      ```
+    <Description>&#xD;
+      This library adds ASP.Net core extensions for NExpect so you can test your&#xD;
+      [Route] and [Http*] annotations like so:&#xD;
+      ```&#xD;
+      Expect(typeof(SomeController)&#xD;
+      .To.Have.Method(nameof(SomeController.MethodName))&#xD;
+      .Supporting(HttpMethod.Delete)&#xD;
+      .And(HttpMethod.Post)&#xD;
+      .With.Route("first-route")&#xD;
+      .And.Route("second-route");&#xD;
+      ```&#xD;
     </Description>
   </PropertyGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\NExpect\NExpect.csproj" />
+    <ProjectReference Include="..\NExpect\NExpect.csproj"/>
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5"/>
   </ItemGroup>
-  
-	<Import Project="..\MonoForFramework.targets" />
+  <Import Project="..\MonoForFramework.targets"/>
 </Project>

@@ -3,6 +3,7 @@ const gulp = requireModule("gulp-with-help"),
   editXml = require("gulp-edit-xml"),
   Git = require("simple-git"),
   git = new Git(),
+  env = requireModule("env"),
   containingFolder = "src/NExpect";
 
 // TODO: move up into gulp-tasks
@@ -13,11 +14,11 @@ gulp.task("commit-release", () => {
         const packageVersionPropGroup = xml.Project.PropertyGroup.filter(
             g => !!g.PackageVersion
           )[0],
-          node = packageVersionPropGroup.PackageVersion[0],
+          node = packageVersionPropGroup.PackageVersion,
           version = node[0].trim();
 
         gutil.log(gutil.colors.cyan(`Committing release ${version}`));
-        if (process.env.DRY_RUN) {
+        if (env.resolveFlag("DRY_RUN")) {
           resolve(" -- dry run: no commit --");
           return xml;
         }

@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DebugType>full</DebugType>
     <LangVersion>latest</LangVersion>
@@ -7,9 +8,8 @@
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <DocumentationFile>$(OutDir)\NExpect.xml</DocumentationFile>
   </PropertyGroup>
-  
   <PropertyGroup>
-    <PackageVersion>1.0.158</PackageVersion>
+    <PackageVersion>1.0.159</PackageVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
@@ -17,19 +17,18 @@
     <PackageIcon>icon.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/fluffynuts/NExpect/master/src/NExpect/icon.png</PackageIconUrl>
     <Copyright>Copyright 2017</Copyright>
-    <Authors>
-      Davyd McColl
-      Cobus Smit
+    <Authors>&#xD;
+      Davyd McColl&#xD;
+      Cobus Smit&#xD;
     </Authors>
-    <Description>
-      Unit-test-framework-agnostic Expect-style assertions for .NET
-
-      NExpect Provides Expect() syntax for doing assertions in .NET. Framework-agnostic, throwing
-      UnmetExpectationExceptions for failures. Assertion exception type can be overridden at run-time.
-      NExpect has grammar inspired by Chai and extensibility inspired by Jasmine.
+    <Description>&#xD;
+      Unit-test-framework-agnostic Expect-style assertions for .NET&#xD;
+&#xD;
+      NExpect Provides Expect() syntax for doing assertions in .NET. Framework-agnostic, throwing&#xD;
+      UnmetExpectationExceptions for failures. Assertion exception type can be overridden at run-time.&#xD;
+      NExpect has grammar inspired by Chai and extensibility inspired by Jasmine.&#xD;
     </Description>
   </PropertyGroup>
-  
   <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
     <DefineConstants>NETSTANDARD</DefineConstants>
   </PropertyGroup>
@@ -37,23 +36,21 @@
     <DefineConstants>BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ArrayExtensions.cs" Link="Imported\ArrayExtensions.cs" />
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\AutoLocker.cs" Link="Imported\AutoLocker.cs" />
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ByteArrayExtensions.cs" Link="Imported\ByteArrayExtensions.cs" />
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DeepEqualityTester.cs" Link="Imported\DeepEqualityTester.cs" />
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ExtensionsForIEnumerables.cs" Link="Imported\ExtensionsForIEnumerables.cs" />
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\MetadataExtensions.cs" Link="Imported\MetadataExtensions.cs" />
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PropertyOrField.cs" Link="Imported\PropertyOrField.cs" />
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PyLike.cs" Link="Imported\PyLike.cs" />
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\StringExtensions.cs" Link="Imported\StringExtensions.cs" />
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Stringifier.cs" Link="Imported\Stringifier.cs" />
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\TypeExtensions.cs" Link="Imported\TypeExtensions.cs" />
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Types.cs" Link="Imported\Types.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ArrayExtensions.cs" Link="Imported\ArrayExtensions.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\AutoLocker.cs" Link="Imported\AutoLocker.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ByteArrayExtensions.cs" Link="Imported\ByteArrayExtensions.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DeepEqualityTester.cs" Link="Imported\DeepEqualityTester.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ExtensionsForIEnumerables.cs" Link="Imported\ExtensionsForIEnumerables.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\MetadataExtensions.cs" Link="Imported\MetadataExtensions.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PropertyOrField.cs" Link="Imported\PropertyOrField.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PyLike.cs" Link="Imported\PyLike.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\StringExtensions.cs" Link="Imported\StringExtensions.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Stringifier.cs" Link="Imported\Stringifier.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\TypeExtensions.cs" Link="Imported\TypeExtensions.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Types.cs" Link="Imported\Types.cs"/>
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.6'">
-    <Reference Include="System.Diagnostics.StackTrace">
-    </Reference>
+    <Reference Include="System.Diagnostics.StackTrace"/>
   </ItemGroup>
-
-	<Import Project="..\MonoForFramework.targets" />
+  <Import Project="..\MonoForFramework.targets"/>
 </Project>
