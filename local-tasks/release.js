@@ -4,7 +4,10 @@ const gulp = requireModule("gulp-with-help"),
   fs = require("fs"),
   runSequence = requireModule("run-sequence"),
   findLocalNuget = requireModule("find-local-nuget"),
+  env = requireModule("env");
   spawn = requireModule("spawn");
+
+env.associate(["DRY_RUN"], ["push"]);
 
 gulp.task("release", ["test-dotnet"], done => {
   runSequence("pack", "push", "commit-release", "tag-and-push", done);
@@ -38,7 +41,7 @@ function pushPackage(package) {
   console.log(`pushing package ${package}`);
   return findLocalNuget().then(nuget => {
     const args = ["push", package, "-Source", "nuget.org"];
-    if (process.env.DRY_RUN) {
+    if (env.resolveFlag("DRY_RUN")) {
       console.log(`${nuget} ${args.join(" ")}`);
       return Promise.resolve();
     }
