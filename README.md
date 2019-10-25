@@ -9,6 +9,9 @@ An assertions framework for .NET with a BDD-like feel, inspired by Chai and Jasm
 - Expect(NExpect).To.Be.Extensible();
   - Because I can't predict every use-case. I believe that your assertions framework should enable expressive, readable tests through extension.
 
+## Tutorial / blog posts:
+[https://fluffynuts.github.io/NExpect](https://fluffynuts.github.io/NExpect)
+
 ## Usage
 1. Download from [nuget.org](https://nuget.org): `install-package nexpect`
 2. Import Expectations statically:
@@ -29,8 +32,12 @@ Expect(false).To.Not.Be.True();
 
 // exceptions
 Expect(() => { }).Not.To.Throw();
-Expect(() => { throw new ArgumentException("moo", "moo cow"); })
-  .To.Throw<ArgumentException>().With.Message.Containing("moo").And.("cow");
+Expect(() =>
+  {
+    throw new ArgumentException("moo", "moo cow");
+  }).To.Throw<ArgumentException>()
+  .With.Message.Containing("moo")
+  .And.("cow");
 
 // smarter string tests, with fluency
 Expect(someString).To.Contain("moo").And("cow");
@@ -64,7 +71,7 @@ Expect(person)
 ## Extending
 Mostly, you can extend by adding extension methods for ICanAddMatcher<T> where T is the
 type you want. You can also extend at any point in the grammar -- some of the "better"
-points are ITo<T>, IBe<T> and IHave<T>. You will need another namespace import:
+points are ITo<T>, IBe<T>, IHave<T>, IA<T>, IAn<T>. You will need another namespace import:
 ```csharp
 using NExpect.MatcherLogic
 ```
@@ -99,3 +106,116 @@ public void FifteenDividedByThree_ShouldEqual_Five()
 ```
 
 If you've ever written a Jasmine matcher, this should feel familiar.
+
+If you have a bunch of existing expectations that you'd like to wrap
+up into a nicely-named matcher, `.Compose` has you covered:
+
+```csharp
+// before
+var cow = animalFactory.MakeCow();
+var beetle = animalFactory.MakeBeetle();
+
+// animal factory should make a Jersey cow
+Expect(cow.Classification).To.Equal("Mammal");
+Expect(cow.Legs).To.Equal(4);
+Expect(cow.HasTail).To.Be.True();
+Expect(cow.HasHorns).To.Be.True();
+Expect(cow.HasSpots).To.Be.True();
+
+// Animal factory should make a rhinoceros beetle
+Expect(beetle.Classification).To.Equal("Insect");
+Expect(beetle.Legs).To.Equal(6);
+Expect(beetle.HasTail).To.Be.False();
+Expect(beetle.HasHorns).To.Be.True();
+Expect(beetle.HasSpots).To.Be.False();
+```
+
+```csharp
+// after
+var cow = animalFactory.MakeJerseyCow();
+var beetle = animalFactory.MakeRhinocerosBeetle();
+
+Expect(cow).To.Be.A.JerseyCow();
+Expect(beetle).To.Be.A.RhinocerosBeetle();
+
+
+// elsewhere:
+
+public static class AnimalMatchers
+{
+  // the IMore<T> interface allows fluent chaining of expectations
+  //  eg:
+  //  Expect(cow).To.Be.A.JerseyCow()
+  //     .And
+  //     .Not.To.Be.A.FrieslandCow();
+  public static IMore<Animal> JerseyCow(this IA<Animal> a)
+  {
+    return a.Compose(actual =>
+    {
+      Expect(cow.Classification).To.Equal("Mammal");
+      Expect(cow.Legs).To.Equal(4);
+      Expect(cow.HasTail).To.Be.True();
+      Expect(cow.HasHorns).To.Be.True();
+      Expect(cow.HasSpots).To.Be.True();
+    });
+  }
+  public static IMore<Animal> RhinocerosBeetle(this IA<Animal> a)
+  {
+    return a.Compose(actual =>
+    {
+      Expect(beetle.Classification).To.Equal("Insect");
+      Expect(beetle.Legs).To.Equal(6);
+      Expect(beetle.HasTail).To.Be.False();
+      Expect(beetle.HasHorns).To.Be.True();
+      Expect(beetle.HasSpots).To.Be.False();
+    });
+  }
+}
+```
+
+When one of the inner expectations fails, NExpect attempts to construct
+a nice failure message. As with all expectations, you can always make
+failures easier to understand with a custom message string or generator:
+
+```csharp
+using NExpect.Implementations;
+using NExpect.MatcherLogic;
+using NExpect;
+using static NExpect.Expectations;
+
+public static class AnimalMatchers
+{
+  public static IMore<Animal> JerseyCow(this IA<Animal> a)
+  {
+    return a.Compose(actual =>
+    {
+      // the Stringify extension method, available on all types,
+      // comes from NExpect.Implementation.MessageHelpers and
+      // produces a string representation of the object it's
+      // operating on which is similar to JSON, so it's easier
+      // to read what the object was
+      var customMessage = $"Expected {actual.Stringify()} to be a cow";
+      Expect(cow.Classification).To.Equal("Mammal", customMessage);
+      Expect(cow.Legs).To.Equal(4, customMessage);
+      Expect(cow.HasTail).To.Be.True(customMessage);
+      Expect(cow.HasHorns).To.Be.True(customMessage);
+      Expect(cow.HasSpots).To.Be.True(customMessage);
+    });
+  }
+  public static IMore<Animal> RhinocerosBeetle(this IA<Animal> a)
+  {
+    return a.Compose(actual =>
+    {
+      // we can use a generator func to delay generation of the message
+      //  which is especially helpful if message generation is expensive
+      //  and we'd only like to spend that cpu time on a failure
+      Func<string> customMessageGenerator = () => $"Expected {actual.Stringify()} to be a cow";
+      Expect(beetle.Classification).To.Equal("Insect", customMessageGenerator);
+      Expect(beetle.Legs).To.Equal(6, customMessageGenerator);
+      Expect(beetle.HasTail).To.Be.False(customMessageGenerator);
+      Expect(beetle.HasHorns).To.Be.True(customMessageGenerator);
+      Expect(beetle.HasSpots).To.Be.False(customMessageGenerator);
+    });
+  }
+}
+```
