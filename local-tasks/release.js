@@ -3,7 +3,7 @@ const gulp = requireModule("gulp-with-help"),
   path = require("path"),
   fs = require("fs"),
   runSequence = requireModule("run-sequence"),
-  findLocalNuget = requireModule("find-local-nuget"),
+  nugetPush = requireModule("nuget-push"),
   env = requireModule("env");
   spawn = requireModule("spawn");
 
@@ -38,13 +38,5 @@ function findNupkg(id) {
 }
 
 function pushPackage(package) {
-  console.log(`pushing package ${package}`);
-  return findLocalNuget().then(nuget => {
-    const args = ["push", package, "-Source", "nuget.org"];
-    if (env.resolveFlag("DRY_RUN")) {
-      console.log(`${nuget} ${args.join(" ")}`);
-      return Promise.resolve();
-    }
-    return spawn(nuget, args)
-  });
+  return nugetPush(package);
 }
