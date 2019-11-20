@@ -10,7 +10,7 @@
     <Configurations>Debug;Release;BuildForRelease</Configurations>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>1.0.159</PackageVersion>
+    <PackageVersion>1.0.160</PackageVersion>
     <Authors>Davyd McColl</Authors>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
@@ -19,18 +19,18 @@
     <PackageIcon>icon.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/fluffynuts/NExpect/master/src/NExpect/icon.png</PackageIconUrl>
     <Copyright>Copyright 2019</Copyright>
-    <Description>&#xD;
-      This library offers NSubistitute-specific extensions so you can have Expect-style&#xD;
-      syntax for your NSubstitute assertions. For example, one may previously have done:&#xD;
-      ```&#xD;
-      Expect(result).To.Equal(expected);&#xD;
-      someService.Received(1).SomeMethodCall();&#xD;
-      ```&#xD;
-      and now you can keep it consistent:&#xD;
-      ```&#xD;
-      Expect(result).To.Equal(expected);&#xD;
-      Expect(someService).To.Have.Received(1).SomeMethodCall();&#xD;
-      ```&#xD;
+    <Description>&#xD;&#xD;
+      This library offers NSubistitute-specific extensions so you can have Expect-style&#xD;&#xD;
+      syntax for your NSubstitute assertions. For example, one may previously have done:&#xD;&#xD;
+      ```&#xD;&#xD;
+      Expect(result).To.Equal(expected);&#xD;&#xD;
+      someService.Received(1).SomeMethodCall();&#xD;&#xD;
+      ```&#xD;&#xD;
+      and now you can keep it consistent:&#xD;&#xD;
+      ```&#xD;&#xD;
+      Expect(result).To.Equal(expected);&#xD;&#xD;
+      Expect(someService).To.Have.Received(1).SomeMethodCall();&#xD;&#xD;
+      ```&#xD;&#xD;
     </Description>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
@@ -46,7 +46,7 @@
     <PackageReference Include="NSubstitute" Version="4.2.1"/>
   </ItemGroup>
   <ItemGroup>
-    <None Include="icon.png" Pack="true" PackagePath="" />
+    <None Include="icon.png" Pack="true" PackagePath=""/>
   </ItemGroup>
   <Import Project="..\MonoForFramework.targets"/>
 </Project>
