@@ -505,7 +505,8 @@ namespace NExpect
             continuation.AddMatcher(
                 collection =>
                 {
-                    var passed = collection != null && TryFindValueForKey(collection, key, out var _);
+                    var passed = collection != null && 
+                        TryFindValueForKey(collection, key, out var _);
 
                     return new MatcherResult(
                         passed,

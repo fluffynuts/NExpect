@@ -4,6 +4,7 @@ using NUnit.Framework;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using NExpect.Exceptions;
 using NExpect.Implementations;
+using PeanutButter.Utils;
 using static NExpect.Expectations;
 
 // ReSharper disable InconsistentNaming
@@ -150,7 +151,7 @@ namespace NExpect.Tests.Collections
                         return new[]
                         {
                             StringComparer.OrdinalIgnoreCase,
-                            StringComparer.CurrentCultureIgnoreCase, 
+                            StringComparer.CurrentCultureIgnoreCase,
                             StringComparer.InvariantCultureIgnoreCase
                         };
                     }
@@ -490,6 +491,7 @@ namespace NExpect.Tests.Collections
                                     GetRandomInt(2, 9),
                                     GetRandomInt(2, 9)
                                 };
+                                var test = new List<int>(value);
                                 var src = new Dictionary<string, List<int>>()
                                 {
                                     [key] = value
@@ -500,11 +502,64 @@ namespace NExpect.Tests.Collections
                                 Assert.That(
                                     () =>
                                     {
-                                        Expect(src).To.Contain.Key(key).With.Value(value);
+                                        Expect(src)
+                                            .To.Contain.Key(key)
+                                            .With.Value(test);
                                     },
                                     Throws.Nothing);
 
                                 // Assert
+                            }
+
+                            [Test]
+                            public void WhenTestAndMatchAreNull_ShouldNotThrow()
+                            {
+                                // Arrange
+                                var key = GetRandomString(2);
+                                var src = new Dictionary<string, List<int>>()
+                                {
+                                    [key] = null
+                                };
+                                // Act
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(src)
+                                            .To.Contain.Key(key)
+                                            .With.Value(null);
+                                    }, Throws.Nothing);
+                                // Assert
+                            }
+
+                            [Test]
+                            public void TestingDeepEqualityOnDateTimeValues()
+                            {
+                                // Arrange
+                                var date1 = DateTime.Now;
+                                var date2 = new DateTime(date1.Ticks, date1.Kind);
+                                var tester = new DeepEqualityTester(
+                                    date1, date2);
+                                Expect(date1.Equals(date2))
+                                    .To.Be.True("test values don't actually match...");
+                                Expect(date1.Kind).To.Equal(date2.Kind,
+                                    () => "Not really equal if their kinds are different, eh");
+                                // Act
+                                var result = tester.AreDeepEqual();
+                                // Assert
+                                Expect(result).To.Be.True();
+                            }
+
+                            [Test]
+                            public void TestingDeepEqualityOnNulls()
+                            {
+                                // Arrange
+                                var left = null as string;
+                                var right = null as string;
+                                var tester = new DeepEqualityTester(left, right);
+                                // Act
+                                var result = tester.AreDeepEqual();
+                                // Assert
+                                Expect(result).To.Be.True();
                             }
 
                             [Test]
