@@ -1,0 +1,24 @@
+using System.Collections.Generic;
+using NExpect.Interfaces;
+
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable MemberCanBePrivate.Global
+
+namespace NExpect.Implementations.Collections
+{
+    internal class CollectionHave<T> :
+        ExpectationContext<IEnumerable<T>>,
+        IHasActual<IEnumerable<T>>,
+        ICollectionHave<T>
+    {
+        public ICollectionUnique<T> Unique =>
+            ContinuationFactory.Create<IEnumerable<T>, CollectionUnique<T>>(Actual, this);
+
+        public IEnumerable<T> Actual { get; }
+
+        public CollectionHave(IEnumerable<T> actual)
+        {
+            Actual = actual;
+        }
+    }
+}

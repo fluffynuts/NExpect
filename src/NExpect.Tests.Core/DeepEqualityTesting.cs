@@ -30,6 +30,7 @@ namespace NExpect.Tests.Core
             // Act
             Assert.That(() => Expect(left).To.Deep.Equal(right), Throws.Nothing);
             // Assert
+            
         }
     }
 }

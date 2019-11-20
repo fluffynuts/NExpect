@@ -1,5 +1,7 @@
 using System;
 using NExpect.Implementations;
+using NExpect.Implementations.Collections;
+using NExpect.Implementations.Numerics;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;

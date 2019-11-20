@@ -1,5 +1,7 @@
 ﻿using System;
 using Imported.PeanutButter.Utils;
+using NExpect.Implementations.Collections;
+using NExpect.Implementations.Fluency;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 

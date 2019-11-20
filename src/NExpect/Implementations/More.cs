@@ -1,3 +1,5 @@
+using NExpect.Implementations.Collections;
+using NExpect.Implementations.Fluency;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global

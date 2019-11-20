@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NExpect.Implementations;
+using NExpect.Implementations.Collections;
 using NExpect.Interfaces;
 // ReSharper disable once RedundantUsingDirective
 using PeanutButter.Utils;

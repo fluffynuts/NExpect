@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using Imported.PeanutButter.Utils;
 using NExpect.Exceptions;
 using NExpect.Implementations;
+using NExpect.Implementations.Collections;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 using NExpect.Shims;
 

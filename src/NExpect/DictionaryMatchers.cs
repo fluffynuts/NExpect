@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 using Imported.PeanutButter.Utils;
 using NExpect.Implementations;
+using NExpect.Implementations.Collections;
+using NExpect.Implementations.Dictionaries;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.EqualityProviderMatchers;
@@ -497,6 +499,78 @@ namespace NExpect
             );
         }
 
+        /// <summary>
+        /// Test the value matched by a prior key match for deep equality
+        /// with another object
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="otherValue">Value to test deep equality against</param>
+        /// <typeparam name="T">Type of the dictionary-sourced value</typeparam>
+        /// <returns></returns>
+        public static IMore<T> To<T>(
+            this IDictionaryValueEqual<T> continuation,
+            object otherValue)
+        {
+            return continuation.To(
+                otherValue,
+                NULL_STRING);
+        }
+
+        /// <summary>
+        /// Test the value matched by a prior key match for deep equality
+        /// with another object
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="otherValue">Value to test deep equality against</param>
+        /// <param name="customMessage">Custom failure message</param>
+        /// <typeparam name="T">Type of the dictionary-sourced value</typeparam>
+        /// <returns></returns>
+        public static IMore<T> To<T>(
+            this IDictionaryValueEqual<T> continuation,
+            object otherValue,
+            string customMessage)
+        {
+            return continuation.To(
+                otherValue,
+                () => customMessage);
+        }
+
+        /// <summary>
+        /// Test the value matched by a prior key match for deep equality
+        /// with another object
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="otherValue">Value to test deep equality against</param>
+        /// <param name="customMessageGenerator">Custom failure message generator</param>
+        /// <typeparam name="T">Type of the dictionary-sourced value</typeparam>
+        /// <returns></returns>
+        public static IMore<T> To<T>(
+            this IDictionaryValueEqual<T> continuation,
+            object otherValue,
+            Func<string> customMessageGenerator)
+        {
+            continuation.AddMatcher(actual =>
+            {
+                var tester = new DeepEqualityTester(
+                    actual,
+                    otherValue);
+                var passed = tester.AreDeepEqual();
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $@"Expected\n{
+                                actual.Stringify()
+                            }\n{
+                                passed.AsNot()
+                            }to deep equal\n{
+                                otherValue.Stringify()
+                            }", customMessageGenerator
+                    )
+                );
+            });
+            return continuation.More();
+        }
+
         private static void AddKeyMatcher<TKey, TValue>(
             IContain<IEnumerable<KeyValuePair<TKey, TValue>>> continuation,
             TKey key,
@@ -505,7 +579,7 @@ namespace NExpect
             continuation.AddMatcher(
                 collection =>
                 {
-                    var passed = collection != null && 
+                    var passed = collection != null &&
                         TryFindValueForKey(collection, key, out var _);
 
                     return new MatcherResult(
@@ -563,7 +637,7 @@ namespace NExpect
             {
                 var specificMethod = GenericUpcast.MakeGenericMethod(typeof(TTo));
                 var continuationValue =
-                    (TTo) (specificMethod.Invoke(null, new object[] {GetValueForKey(continuation, key)}));
+                    (TTo) (specificMethod.Invoke(null, new object[] { GetValueForKey(continuation, key) }));
                 return ContinuationFactory.Create<TTo, DictionaryValueContinuation<TTo>>(
                     continuationValue,
                     new WrappingContinuation<IEnumerable<KeyValuePair<TKey, TFrom>>, TTo>(

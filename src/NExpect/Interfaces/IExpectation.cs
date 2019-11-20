@@ -1,4 +1,5 @@
 ﻿// ReSharper disable UnusedMemberInSuper.Global
+
 namespace NExpect.Interfaces
 {
     /// <summary>

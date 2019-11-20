@@ -1,7 +1,5 @@
 ﻿// ReSharper disable InheritdocConsiderUsage
 
-using NExpect.Implementations;
-
 namespace NExpect.Interfaces
 {
     /// <summary>

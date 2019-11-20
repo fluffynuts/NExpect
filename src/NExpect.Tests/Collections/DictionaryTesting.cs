@@ -601,6 +601,104 @@ namespace NExpect.Tests.Collections
                         }
 
                         [TestFixture]
+                        public class DeepEquality
+                        {
+                            [Test]
+                            public void ShouldPassWhenMatched()
+                            {
+                                // Arrange
+                                var data = new { foo = "bar" };
+                                var copy = new { foo = "bar" };
+                                var key = GetRandomString(1);
+                                var dictionary = new Dictionary<string, object>()
+                                {
+                                    [key] = data
+                                };
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(dictionary)
+                                        .To.Contain.Key(key)
+                                        .With.Value.Deep.Equal.To(copy);
+                                }, Throws.Nothing);
+                                // Assert
+                            }
+
+                            [Test]
+                            public void ShouldFailWhenUnMatched()
+                            {
+                                // Arrange
+                                var data = new { foo = "bar" };
+                                var other = new { foo1 = "bar" };
+                                var another = new { foo = "qux" };
+                                var key = GetRandomString(1);
+                                var dictionary = new Dictionary<string, object>()
+                                {
+                                    [key] = data
+                                };
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(dictionary)
+                                        .To.Contain.Key(key)
+                                        .With.Value.Deep.Equal.To(other);
+                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    .With.Message.Contains(data.Stringify())
+                                    .And.Message.Contains(other.Stringify()));
+
+                                Assert.That(() =>
+                                    {
+                                        Expect(dictionary)
+                                            .To.Contain.Key(key)
+                                            .With.Value.Deep.Equal.To(another);
+                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains(data.Stringify())
+                                        .And.Message.Contains(another.Stringify())
+                                );
+                                // Assert
+                            }
+
+                            [Test]
+                            public void ShouldIncludeCustomMessagesWhenFailing()
+                            {
+                                // Arrange
+                                var data = new { foo = "bar" };
+                                var other = new { foo1 = "bar" };
+                                var another = new { foo = "qux" };
+                                var key = GetRandomString(1);
+                                var message1 = GetRandomString(10);
+                                var message2 = GetRandomString(10);
+                                var dictionary = new Dictionary<string, object>()
+                                {
+                                    [key] = data
+                                };
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(dictionary)
+                                            .To.Contain.Key(key)
+                                            .With.Value.Deep.Equal.To(other, message1);
+                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains(message1)
+                                        .And.Message.Contains(data.Stringify())
+                                        .And.Message.Contains(other.Stringify())
+                                );
+
+                                Assert.That(() =>
+                                    {
+                                        Expect(dictionary)
+                                            .To.Contain.Key(key)
+                                            .With.Value.Deep.Equal.To(another, () => message2);
+                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains(data.Stringify())
+                                        .And.Message.Contains(another.Stringify())
+                                        .And.Message.Contains(message2)
+                                );
+                                // Assert
+                            }
+                        }
+
+                        [TestFixture]
                         public class OperatingOnMisMatchedTypes
                         {
                             [Test]

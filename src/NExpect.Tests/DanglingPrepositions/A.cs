@@ -1,7 +1,8 @@
 ﻿using NExpect.Exceptions;
-using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
+using NExpect.Interfaces;
+using static NExpect.Expectations;
 
 namespace NExpect.Tests.DanglingPrepositions
 {
@@ -19,13 +20,13 @@ namespace NExpect.Tests.DanglingPrepositions
             Assert.That(
                 () =>
                 {
-                    Expectations.Expect(new Frog() as object).To.Be.A.Frog();
+                    Expect(new Frog() as object).To.Be.A.Frog();
                 },
                 Throws.Nothing);
             Assert.That(
                 () =>
                 {
-                    Expectations.Expect(new Frog() as object).Not.To.Be.A.Frog();
+                    Expect(new Frog() as object).Not.To.Be.A.Frog();
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains("Expected not to get a frog"));

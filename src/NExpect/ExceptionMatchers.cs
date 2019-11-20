@@ -3,6 +3,9 @@ using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
+using NExpect.Implementations.Collections;
+using NExpect.Implementations.Exceptions;
+using NExpect.Implementations.Strings;
 using static NExpect.Implementations.MessageHelpers;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMethodReturnValue.Global

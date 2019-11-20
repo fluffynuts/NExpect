@@ -1,4 +1,6 @@
 using NExpect.Implementations;
+using NExpect.Implementations.Collections;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 namespace NExpect.MatcherLogic

@@ -783,8 +783,19 @@ namespace NExpect
             T actual, 
             T expected)
         {
-            var result = actual != null &&
-                (actual.Equals(expected) ||
+            if (actual == null &&
+                expected == null)
+            {
+                return true;
+            }
+
+            if (actual == null 
+                || expected == null)
+            {
+                return false;
+            }
+
+            var result = (actual.Equals(expected) ||
                 CollectionsAreEqual(actual, expected));
             if (!result)
                 return false;

@@ -4,6 +4,7 @@ using System.Linq;
 using NExpect.Exceptions;
 using NExpect.Helpers;
 using NExpect.Implementations;
+using NExpect.Implementations.Collections;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
