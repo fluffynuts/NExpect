@@ -6,7 +6,7 @@
     <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
     <Configurations>Debug;Release;BuildForRelease</Configurations>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    <DocumentationFile>$(OutDir)\NExpect.xml</DocumentationFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <PackageVersion>1.0.160</PackageVersion>

@@ -209,7 +209,9 @@ namespace NExpect.Tests.Collections
             // Act
             Assert.That(() =>
                 {
-                    Expect(evens).Not.To.Contain.Any().Odds();
+                    Expect(evens)
+                        .Not.To.Contain.Any().Odds()
+                        .And.To.Contain.All().Evens();
                 },
                 Throws.Nothing);
             // Assert

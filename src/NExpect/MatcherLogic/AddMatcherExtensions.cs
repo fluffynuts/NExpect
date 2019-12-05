@@ -21,11 +21,12 @@ namespace NExpect.MatcherLogic
         /// <param name="continuation">Continuation to add matcher to</param>
         /// <param name="matcher">Matcher to run</param>
         /// <typeparam name="T">Type of the object under test</typeparam>
-        public static void AddMatcher<T>(
+        public static IMore<T> AddMatcher<T>(
             this ICanAddMatcher<T> continuation,
             Func<T, IMatcherResult> matcher)
         {
             AddMatcherPrivate(continuation, matcher);
+            return continuation.More();
         }
 
         /// <summary>
@@ -48,12 +49,13 @@ namespace NExpect.MatcherLogic
         /// <param name="continuation">Continuation to add matcher to</param>
         /// <param name="matcher">Matcher to run</param>
         /// <typeparam name="T">Type of the object under test</typeparam>
-        public static void AddMatcher<T>(
+        public static IMore<IEnumerable<T>> AddMatcher<T>(
             this ICanAddMatcher<IEnumerable<T>> continuation,
             Func<IEnumerable<T>, IMatcherResult> matcher
         )
         {
             AddMatcherPrivate(continuation, matcher);
+            return continuation.More();
         }
 
 
