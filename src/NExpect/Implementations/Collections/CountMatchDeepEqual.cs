@@ -1,4 +1,5 @@
 using NExpect.Interfaces;
+using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations.Collections
 {
@@ -7,6 +8,7 @@ namespace NExpect.Implementations.Collections
             ICountMatchDeepEqual<T>, ICountMatchEqual<T>
     {
         public ICanAddMatcher<T> Continuation { get; }
+        public T Actual => Continuation.GetActual();
         public CountMatchMethods Method { get; }
         public int ExpectedCount { get; }
 

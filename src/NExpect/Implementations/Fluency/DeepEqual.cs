@@ -4,9 +4,10 @@ namespace NExpect.Implementations.Fluency
 {
     internal class DeepEqual<T>
         : ExpectationContext<T>, 
-            IDeepEqual<T>
+            IDeepEqual<T>,
+            IHasActual<T>
     {
-        T Actual { get; }
+        public T Actual { get; }
 
         public DeepEqual(T actual)
         {

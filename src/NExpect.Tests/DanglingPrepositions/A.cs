@@ -72,7 +72,7 @@ namespace NExpect.Tests.DanglingPrepositions
                     var passed = o is Frog;
                     return new MatcherResult(
                         passed,
-                        () => $"Expected {passed.AsNot()}to get a dog"
+                        () => $"Expected {passed.AsNot()}to get a frog"
                     );
                 });
         }

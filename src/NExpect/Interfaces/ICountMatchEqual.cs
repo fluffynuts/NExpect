@@ -6,7 +6,7 @@ namespace NExpect.Interfaces
     /// Essentially, the original continuation is frankensquished into this.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ICountMatchEqual<T>: ICountMatch
+    public interface ICountMatchEqual<T>: ICountMatch, IHasActual<T>
     {
         /// <summary>
         /// Original continuation

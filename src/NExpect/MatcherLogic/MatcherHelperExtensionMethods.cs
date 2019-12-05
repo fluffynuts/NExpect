@@ -60,8 +60,8 @@ namespace NExpect.MatcherLogic
                     return countMatch.Method;
                 default:
                     return continuation.TryGetPropertyValue<CountMatchMethods?>(
-                               nameof(CountMatchContinuation<T>.Method)) ??
-                           CountMatchMethods.Exactly;
+                            nameof(CountMatchContinuation<T>.Method)) ??
+                        CountMatchMethods.Exactly;
             }
         }
 
@@ -76,23 +76,42 @@ namespace NExpect.MatcherLogic
             // ReSharper disable once UsePatternMatching
             var explicitImpl = matcher as IHasActual<T>;
             return explicitImpl == null
-                    ? TryGetActual(matcher)
-                    : explicitImpl.Actual;
+                ? TryGetActual(matcher)
+                : explicitImpl.Actual;
         }
 
         private static T TryGetActual<T>(ICanAddMatcher<T> matcher)
         {
+            if (matcher == null)
+            {
+                throw new InvalidOperationException(
+                    $"Can't get an Actual value from a NULL matcher"
+                );
+            }
+
             var prop = matcher?.GetType()
                 .GetProperties()
                 .FirstOrDefault(pi => pi.Name.ToLower() == "actual");
             if (prop == null)
-                throw new InvalidOperationException($"Failed to GetActual on type {typeof(T)}. GetActual only works on IHasActual<T> or objects with an 'Actual' property");
-            try {
-                return (T)prop.GetValue(matcher);
-            } catch {
-                throw new InvalidOperationException($"Unable to get Actual value matching type {typeof(T)} from {matcher.Stringify()}");
+            {
+                throw new InvalidOperationException(
+                    $"Failed to GetActual on type {typeof(T)}. GetActual only works on IHasActual<T> or objects with an 'Actual' property");
+            }
+
+            try
+            {
+                return (T) prop.GetValue(matcher);
+            }
+            catch
+            {
+                throw new InvalidOperationException(
+                    @$"Unable to get Actual value matching type {
+                            typeof(T)
+                        } from {
+                            matcher.Stringify()
+                        }"
+                );
             }
         }
     }
-
 }
