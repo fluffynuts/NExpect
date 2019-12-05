@@ -18,7 +18,7 @@
     </summary>
     <language>en-US</language>
     <projectUrl>https://github.com/fluffynuts/NExpect</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/fluffynuts/NExpect/master/src/NExpect/icon.png</iconUrl>
+    <icon>icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">BSD-3-Clause</license>
     <copyright>Copyright 2017</copyright>
@@ -28,6 +28,7 @@
     <tags/>
   </metadata>
   <files>
+    <file src="icon.png" target="" />
     <file src="bin\BuildForRelease\net452\NExpect.dll" target="lib\net452"/>
     <file src="bin\BuildForRelease\net452\NExpect.pdb" target="lib\net452"/>
     <file src="bin\BuildForRelease\net452\NExpect.xml" target="lib\net452"/>
