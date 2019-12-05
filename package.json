@@ -22,7 +22,7 @@
         "gulp-edit-xml": "https://github.com/fluffynuts/gulp-edit-xml.git#pass-file-to-transform",
         "gulp-filter": "^6.0.0",
         "gulp-help": "^1.6.1",
-        "gulp-msbuild": "^0.5.5",
+        "gulp-msbuild": "^0.6.2",
         "gulp-npm-run": "0.0.3",
         "gulp-nunit-runner": "^1.2.3",
         "gulp-util": "^3.0.8",
