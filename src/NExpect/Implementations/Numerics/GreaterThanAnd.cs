@@ -1,4 +1,5 @@
 using NExpect.Implementations.Collections;
+using NExpect.Implementations.Fluency;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -14,6 +15,9 @@ namespace NExpect.Implementations.Numerics
 
         public ILessContinuation<T> Less =>
             ContinuationFactory.Create<T, LessContinuation<T>>(Actual, this);
+
+        public ITo<T> To =>
+            ContinuationFactory.Create<T, To<T>>(Actual, this);
 
         public GreaterThanAnd(T actual)
         {

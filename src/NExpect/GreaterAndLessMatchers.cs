@@ -2940,14 +2940,14 @@ namespace NExpect
         /// </summary>
         /// <param name="continuation">.Less.Than.Or.Equal.To</param>
         /// <param name="expected">value to compare with</param>
-        public static void To<T1, T2>(
+        public static IMore<T1> To<T1, T2>(
             this ILessThanOrEqual<T1> continuation,
             T2 expected
         )
             where T1 : IComparable
             where T2 : IComparable
         {
-            continuation.To(expected, NULL_STRING);
+            return continuation.To(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -2956,7 +2956,7 @@ namespace NExpect
         /// <param name="continuation">.Less.Than.Or.Equal.To</param>
         /// <param name="expected">value to compare with</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
-        public static void To<T1, T2>(
+        public static IMore<T1> To<T1, T2>(
             this ILessThanOrEqual<T1> continuation,
             T2 expected,
             string customMessage
@@ -2964,7 +2964,7 @@ namespace NExpect
             where T1 : IComparable
             where T2 : IComparable
         {
-            continuation.To(expected, () => customMessage);
+            return continuation.To(expected, () => customMessage);
         }
 
         /// <summary>
@@ -2973,7 +2973,7 @@ namespace NExpect
         /// <param name="continuation">.Less.Than.Or.Equal.To</param>
         /// <param name="expected">value to compare with</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
-        public static void To<T1, T2>(
+        public static IMore<T1> To<T1, T2>(
             this ILessThanOrEqual<T1> continuation,
             T2 expected,
             Func<string> customMessageGenerator
@@ -2981,7 +2981,7 @@ namespace NExpect
             where T1 : IComparable
             where T2 : IComparable
         {
-            AddMatcher(
+            return AddMatcher(
                 continuation,
                 expected,
                 (a, e) => TryCompare(a, e) < 1,
@@ -4166,14 +4166,14 @@ namespace NExpect
             return continuation.Continue();
         }
 
-        private static void AddMatcher<T1, T2>(
+        private static IMore<T1> AddMatcher<T1, T2>(
             ICanAddMatcher<T1> continuation,
             T2 expected,
             Func<T1, T2, bool> test,
             Func<string> customMessageGenerator
         )
         {
-            continuation.AddMatcher(
+            return continuation.AddMatcher(
                 actual =>
                 {
                     var passed = test(actual, expected);

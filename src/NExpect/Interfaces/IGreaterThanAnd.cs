@@ -10,5 +10,10 @@ namespace NExpect.Interfaces
         /// Prepares to test the value for being less than another
         /// </summary>
         ILessContinuation<T> Less { get; }
+
+        /// <summary>
+        /// Prepares for a fluency continuation
+        /// </summary>
+        ITo<T> To { get; }
     }
 }

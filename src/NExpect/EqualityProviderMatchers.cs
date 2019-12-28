@@ -22,11 +22,11 @@ namespace NExpect
         /// <param name="be">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
         /// <typeparam name="T">Type of the object being tested</typeparam>
-        public static void Be<T>(
+        public static IMore<T> Be<T>(
             this ITo<T> be,
             object expected)
         {
-            be.Be(expected, NULL_STRING);
+            return be.Be(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -36,12 +36,12 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
         /// <typeparam name="T">Type of the object being tested</typeparam>
-        public static void Be<T>(
+        public static IMore<T> Be<T>(
             this ITo<T> be,
             object expected,
             string customMessage)
         {
-            be.Be(expected, () => customMessage);
+            return be.Be(expected, () => customMessage);
         }
 
         /// <summary>
@@ -51,12 +51,17 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
         /// <typeparam name="T">Type of the object being tested</typeparam>
-        public static void Be<T>(
+        public static IMore<T> Be<T>(
             this ITo<T> be,
             object expected,
             Func<string> customMessageGenerator)
         {
-            be.AddMatcher(CreateRefEqualMatcherFor<T>(expected, customMessageGenerator));
+            return be.AddMatcher(
+                CreateRefEqualMatcherFor<T>(
+                    expected,
+                    customMessageGenerator
+                )
+            );
         }
 
         /// <summary>
@@ -65,9 +70,9 @@ namespace NExpect
         /// <param name="be">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
         /// <typeparam name="T">Type of the object being tested</typeparam>
-        public static void Be<T>(this IToAfterNot<T> be, object expected)
+        public static IMore<T> Be<T>(this IToAfterNot<T> be, object expected)
         {
-            be.Be(expected, NULL_STRING);
+            return be.Be(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -77,12 +82,12 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
         /// <typeparam name="T">Type of the object being tested</typeparam>
-        public static void Be<T>(
+        public static IMore<T> Be<T>(
             this IToAfterNot<T> be,
             object expected,
             string customMessage)
         {
-            be.Be(expected, () => customMessage);
+            return be.Be(expected, () => customMessage);
         }
 
         /// <summary>
@@ -92,12 +97,63 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
         /// <typeparam name="T">Type of the object being tested</typeparam>
-        public static void Be<T>(
+        public static IMore<T> Be<T>(
             this IToAfterNot<T> be,
             object expected,
             Func<string> customMessageGenerator)
         {
-            be.AddMatcher(CreateRefEqualMatcherFor<T>(expected, customMessageGenerator));
+            return be.AddMatcher(
+                CreateRefEqualMatcherFor<T>(
+                    expected,
+                    customMessageGenerator
+                )
+            );
+        }
+
+        /// <summary>
+        /// Performs reference equality checking between your actual and the provided expected value
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <typeparam name="T">Type of the object being tested</typeparam>
+        public static IMore<T> Be<T>(this INotAfterTo<T> be, object expected)
+        {
+            return be.Be(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Performs reference equality checking between your actual and the provided expected value
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of the object being tested</typeparam>
+        public static IMore<T> Be<T>(
+            this INotAfterTo<T> be,
+            object expected,
+            string customMessage)
+        {
+            return be.Be(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs reference equality checking between your actual and the provided expected value
+        /// </summary>
+        /// <param name="be">Continuation to operate on</param>
+        /// <param name="expected">Expected value</param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T">Type of the object being tested</typeparam>
+        public static IMore<T> Be<T>(
+            this INotAfterTo<T> be,
+            object expected,
+            Func<string> customMessageGenerator)
+        {
+            return be.AddMatcher(
+                CreateRefEqualMatcherFor<T>(
+                    expected,
+                    customMessageGenerator
+                )
+            );
         }
 
         /// <summary>
@@ -149,12 +205,12 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this ITo<T> continuation,
             T expected
         )
         {
-            continuation.Equal(expected, NULL_STRING);
+            return continuation.Equal(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -164,13 +220,13 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this ITo<T> continuation,
             T expected,
             string customMessage
         )
         {
-            continuation.Equal(expected, () => customMessage);
+            return continuation.Equal(expected, () => customMessage);
         }
 
         /// <summary>
@@ -179,12 +235,12 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this ITo<T> continuation,
             T? expected
         ) where T : struct
         {
-            continuation.Equal(expected, NULL_STRING);
+            return continuation.Equal(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -194,13 +250,13 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessage">Custom message to add into failure messages</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this ITo<T> continuation,
             T? expected,
             string customMessage
         ) where T : struct
         {
-            continuation.Equal(expected, () => customMessage);
+            return continuation.Equal(expected, () => customMessage);
         }
 
         /// <summary>
@@ -210,13 +266,13 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessageGenerator">Custom message to add into failure messages</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this ITo<T> continuation,
             T? expected,
             Func<string> customMessageGenerator
         ) where T : struct
         {
-            continuation.AddMatcher(
+            return continuation.AddMatcher(
                 GenerateNullableEqualityMatcherFor(expected, customMessageGenerator)
             );
         }
@@ -227,12 +283,12 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this IToAfterNot<T> continuation,
             T expected
         )
         {
-            continuation.Equal(expected, NULL_STRING);
+            return continuation.Equal(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -242,13 +298,13 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this IToAfterNot<T> continuation,
             T expected,
             string customMessage
         )
         {
-            continuation.Equal(expected, () => customMessage);
+            return continuation.Equal(expected, () => customMessage);
         }
 
         /// <summary>
@@ -258,13 +314,13 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this IToAfterNot<T> continuation,
             T expected,
             Func<string> customMessageGenerator
         )
         {
-            continuation.AddMatcher(
+            return continuation.AddMatcher(
                 GenerateEqualityMatcherFor(expected, customMessageGenerator)
             );
         }
@@ -275,12 +331,12 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this IToAfterNot<T> continuation,
             T? expected
         ) where T : struct
         {
-            continuation.Equal(expected, NULL_STRING);
+            return continuation.Equal(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -290,13 +346,13 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this IToAfterNot<T> continuation,
             T? expected,
             string customMessage
         ) where T : struct
         {
-            continuation.Equal(expected, () => customMessage);
+            return continuation.Equal(expected, () => customMessage);
         }
 
         /// <summary>
@@ -306,13 +362,13 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this IToAfterNot<T> continuation,
             T? expected,
             Func<string> customMessageGenerator
         ) where T : struct
         {
-            continuation.AddMatcher(
+            return continuation.AddMatcher(
                 GenerateNullableEqualityMatcherFor(expected, customMessageGenerator)
             );
         }
@@ -323,12 +379,12 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this INotAfterTo<T> continuation,
             T expected
         )
         {
-            continuation.Equal(expected, NULL_STRING);
+            return continuation.Equal(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -338,15 +394,14 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this INotAfterTo<T> continuation,
             T expected,
             string customMessage
         )
         {
-            continuation.Equal(expected, () => customMessage);
+            return continuation.Equal(expected, () => customMessage);
         }
-
 
         /// <summary>
         /// Performs equality checking -- the end of .To.Equal()
@@ -355,13 +410,13 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this INotAfterTo<T> continuation,
             T expected,
             Func<string> customMessageGenerator
         )
         {
-            continuation.AddMatcher(
+            return continuation.AddMatcher(
                 GenerateEqualityMatcherFor(expected, customMessageGenerator)
             );
         }
@@ -372,12 +427,12 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this INotAfterTo<T> continuation,
             T? expected
         ) where T : struct
         {
-            continuation.Equal(expected, NULL_STRING);
+            return continuation.Equal(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -387,13 +442,13 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessage">Custom message to add to failure messages</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this INotAfterTo<T> continuation,
             T? expected,
             string customMessage
         ) where T : struct
         {
-            continuation.Equal(expected, () => customMessage);
+            return continuation.Equal(expected, () => customMessage);
         }
 
         /// <summary>
@@ -403,13 +458,13 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this INotAfterTo<T> continuation,
             T? expected,
             Func<string> customMessageGenerator
         ) where T : struct
         {
-            continuation.AddMatcher(
+            return continuation.AddMatcher(
                 GenerateNullableEqualityMatcherFor(expected, customMessageGenerator)
             );
         }
@@ -421,13 +476,13 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessageGenerator">Custom message to include when failing</param>
         /// <typeparam name="T">Type of object being tested</typeparam>
-        public static void Equal<T>(
+        public static IMore<T> Equal<T>(
             this ITo<T> continuation,
             T expected,
             Func<string> customMessageGenerator
         )
         {
-            continuation.AddMatcher(
+            return continuation.AddMatcher(
                 GenerateEqualityMatcherFor(expected, customMessageGenerator)
             );
         }
@@ -465,8 +520,8 @@ namespace NExpect
                         passed,
                         FinalMessageFor(
                             () => passed
-                                ? new[] { "Expected not to get null" }
-                                : new[] { "Expected null but got", Quote(actual) },
+                                      ? new[] { "Expected not to get null" }
+                                      : new[] { "Expected null but got", Quote(actual) },
                             customMessageGenerator)
                     );
                 });
@@ -489,12 +544,12 @@ namespace NExpect
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected value</param>
         /// <typeparam name="T">Object type being tested</typeparam>
-        public static void To<T>(
+        public static IMore<T> To<T>(
             this IEqualityContinuation<T> continuation,
             T expected
         )
         {
-            continuation.To(expected, NULL_STRING);
+            return continuation.To(expected, NULL_STRING);
         }
 
         /// <summary>
@@ -504,13 +559,13 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessage">Custom message to include when failing</param>
         /// <typeparam name="T">Object type being tested</typeparam>
-        public static void To<T>(
+        public static IMore<T> To<T>(
             this IEqualityContinuation<T> continuation,
             T expected,
             string customMessage
         )
         {
-            continuation.To(expected, () => customMessage);
+            return continuation.To(expected, () => customMessage);
         }
 
         /// <summary>
@@ -520,17 +575,17 @@ namespace NExpect
         /// <param name="expected">Expected value</param>
         /// <param name="customMessageGenerator">Generates a custom message to include when failing</param>
         /// <typeparam name="T">Object type being tested</typeparam>
-        public static void To<T>(
+        public static IMore<T> To<T>(
             this IEqualityContinuation<T> continuation,
             T expected,
             Func<string> customMessageGenerator
         )
         {
-            continuation.AddMatcher(
+            return continuation.AddMatcher(
                 actual =>
                 {
                     var passed = (actual == null && expected == null) ||
-                        (actual?.Equals(expected) ?? false);
+                                 (actual?.Equals(expected) ?? false);
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
@@ -575,8 +630,8 @@ namespace NExpect
                         passed,
                         FinalMessageFor(
                             () => passed
-                                ? new[] { "Expected not to be empty" }
-                                : new[] { "Expected empty string but got", Quote(actual) },
+                                      ? new[] { "Expected not to be empty" }
+                                      : new[] { "Expected empty string but got", Quote(actual) },
                             customMessageGenerator)
                     );
                 });
@@ -701,7 +756,9 @@ namespace NExpect
             return actual => RefCompare(actual, other, customMessageGenerator);
         }
 
-        private static IMatcherResult RefCompare(object actual, object other, Func<string> customMessageGenerator)
+        private static IMatcherResult RefCompare(object actual,
+            object other,
+            Func<string> customMessageGenerator)
         {
             var passed = ReferenceEquals(actual, other);
             return new MatcherResult(
@@ -731,8 +788,8 @@ namespace NExpect
         )
         {
             return actual => CompareForEquality(
-                actual, 
-                expected, 
+                actual,
+                expected,
                 customMessageGenerator);
         }
 
@@ -780,7 +837,7 @@ namespace NExpect
         }
 
         private static bool ValuesAreEqual<T>(
-            T actual, 
+            T actual,
             T expected)
         {
             if (actual == null &&
@@ -789,16 +846,17 @@ namespace NExpect
                 return true;
             }
 
-            if (actual == null 
-                || expected == null)
+            if (actual == null ||
+                expected == null)
             {
                 return false;
             }
 
             var result = (actual.Equals(expected) ||
-                CollectionsAreEqual(actual, expected));
+                          CollectionsAreEqual(actual, expected));
             if (!result)
                 return false;
+
             if (expected is DateTime expectedDateTime &&
                 actual is DateTime actualDateTime)
             {
@@ -809,7 +867,7 @@ namespace NExpect
         }
 
         private static bool CollectionsAreEqual<T>(
-            T actual, 
+            T actual,
             T expected)
         {
             var actualEnumerable = new EnumerableWrapper(actual);
@@ -817,29 +875,31 @@ namespace NExpect
             {
                 return false;
             }
+
             var expectedEnumerable = new EnumerableWrapper(expected);
             if (!expectedEnumerable.IsValid)
             {
                 return false;
             }
-            
+
             var actualEnumerator = actualEnumerable.GetEnumerator();
             var expectedEnumerator = expectedEnumerable.GetEnumerator();
-            
+
             var actualHasNext = actualEnumerator.MoveNext();
             var expectedHasNext = expectedEnumerator.MoveNext();
             while (actualHasNext && expectedHasNext)
             {
                 if (!ValuesAreEqual(
-                    actualEnumerator.Current,
-                    expectedEnumerator.Current))
+                        actualEnumerator.Current,
+                        expectedEnumerator.Current))
                 {
                     return false;
                 }
 
                 actualHasNext = actualEnumerator.MoveNext();
                 expectedHasNext = expectedEnumerator.MoveNext();
-            } 
+            }
+
             return actualHasNext == expectedHasNext;
         }
 
