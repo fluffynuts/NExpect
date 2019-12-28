@@ -10,7 +10,7 @@
     <Configurations>Debug;Release;BuildForRelease</Configurations>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>1.0.162</PackageVersion>
+    <PackageVersion>1.0.163</PackageVersion>
     <Authors>Davyd McColl</Authors>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>

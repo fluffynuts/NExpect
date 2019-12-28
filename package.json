@@ -5,7 +5,7 @@
         "pack": "run-s \"gulp pack\"",
         "cover": "gulp build-cover-report",
         "gulp": "cross-env DOTNET_CORE=1 BUILD_EXCLUDE=src/PeanutButter/**/* PACK_INCLUDE=* PACK_EXCLUDE=*Tests*,CoreConsumer,src/PeanutButter/**/* TEST_EXCLUDE=src/PeanutButter/**/* gulp",
-        "release": "run-s \"gulp release\""
+        "release": "cross-env BUILD_CONFIGURATION=BuildForRelease run-s \"gulp release\""
     },
     "devDependencies": {
         "ansi-colors": "^4.1.1",
