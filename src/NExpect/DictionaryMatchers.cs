@@ -551,20 +551,25 @@ namespace NExpect
         {
             continuation.AddMatcher(actual =>
             {
+                var isDeep = continuation.GetMetadata(
+                    DictionaryValueEqual<T>.DICTIONARY_VALUE_DEEP_EQUALITY_TESTING,
+                    true
+                );
                 var tester = new DeepEqualityTester(
                     actual,
                     otherValue);
+                
+                if (!isDeep)
+                {
+                    tester.OnlyTestIntersectingProperties = true;
+                }
+
                 var passed = tester.AreDeepEqual();
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        () => $@"Expected\n{
-                                actual.Stringify()
-                            }\n{
-                                passed.AsNot()
-                            }to deep equal\n{
-                                otherValue.Stringify()
-                            }", customMessageGenerator
+                        () => $@"Expected\n{actual.Stringify()}\n{passed.AsNot()}to deep equal\n{otherValue.Stringify()}",
+                        customMessageGenerator
                     )
                 );
             });
@@ -580,7 +585,7 @@ namespace NExpect
                 collection =>
                 {
                     var passed = collection != null &&
-                        TryFindValueForKey(collection, key, out var _);
+                                 TryFindValueForKey(collection, key, out var _);
 
                     return new MatcherResult(
                         passed,
@@ -604,17 +609,19 @@ namespace NExpect
             out TValue value
         )
         {
-            if (key is string stringKey && typeof(TKey) == typeof(string))
+            if (key is string stringKey &&
+                typeof(TKey) == typeof(string))
             {
                 var comparer = collection.HasMetadata<StringComparer>(Expectations.KEY_COMPARER)
-                    ? collection.GetMetadata<StringComparer>(Expectations.KEY_COMPARER)
-                    : StringComparer.Ordinal;
+                                   ? collection.GetMetadata<StringComparer>(Expectations.KEY_COMPARER)
+                                   : StringComparer.Ordinal;
                 var keyMatches = collection.Select(kvp => kvp.Key as string)
                     .Where(k => comparer.Compare(k, stringKey) == 0);
                 var hasMatch = keyMatches.Any();
                 value = hasMatch
-                    ? collection.First(kvp => comparer.Compare(kvp.Key as string, stringKey) == 0).Value
-                    : default;
+                            ? collection.First(kvp => comparer.Compare(kvp.Key as string, stringKey) == 0)
+                                .Value
+                            : default;
                 return hasMatch;
             }
             else
@@ -622,8 +629,9 @@ namespace NExpect
                 var matches = collection.Where(kvp => kvp.Key.Equals(key));
                 var hasMatch = matches.Any();
                 value = hasMatch
-                    ? matches.First().Value
-                    : default;
+                            ? matches.First()
+                                .Value
+                            : default;
                 return hasMatch;
             }
         }
@@ -674,8 +682,8 @@ namespace NExpect
         {
             var collection = continuation.GetActual();
             return TryFindValueForKey(collection, key, out var result)
-                ? result
-                : throw new KeyNotFoundException($"{key}");
+                       ? result
+                       : throw new KeyNotFoundException($"{key}");
         }
     }
 }

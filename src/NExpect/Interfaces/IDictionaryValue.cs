@@ -10,5 +10,10 @@ namespace NExpect.Interfaces
         /// Continue on to Deep Equality Testing for dictionary value
         /// </summary>
         IDictionaryValueDeep<T> Deep { get; }
+
+        /// <summary>
+        /// Continue on to Intersection Equality Testing for the dictionary value
+        /// </summary>
+        IDictionaryValueIntersection<T> Intersection { get; }
     }
 }

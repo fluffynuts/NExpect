@@ -9,8 +9,12 @@ namespace NExpect.Implementations.Dictionaries
           IDictionaryValue<T>
     {
         public T Actual { get; }
-        public IDictionaryValueDeep<T> Deep 
+
+        public IDictionaryValueDeep<T> Deep
             => ContinuationFactory.Create<T, DictionaryValueDeep<T>>(Actual, this);
+
+        public IDictionaryValueIntersection<T> Intersection
+            => ContinuationFactory.Create<T, DictionaryValueIntersection<T>>(Actual, this);
 
         public DictionaryValue(T actual)
         {

@@ -8,7 +8,8 @@ namespace NExpect.Implementations.Dictionaries
           IDictionaryValueDeep<T>
     {
         public T Actual { get; }
-        public IDictionaryValueEqual<T> Equal 
+
+        public IDictionaryValueEqual<T> Equal
             => ContinuationFactory.Create<T, DictionaryValueEqual<T>>(Actual, this);
 
         public DictionaryValueDeep(T actual)
