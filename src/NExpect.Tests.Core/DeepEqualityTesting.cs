@@ -30,7 +30,35 @@ namespace NExpect.Tests.Core
             // Act
             Assert.That(() => Expect(left).To.Deep.Equal(right), Throws.Nothing);
             // Assert
-            
+        }
+
+        [Test]
+        public void ShouldNotStackOverflowOnEnum()
+        {
+            // Arrange
+            var left = new
+            {
+                LogLevel = LogLevel.Critical
+            };
+            var right = new
+            {
+                LogLevel = LogLevel.Critical
+            };
+            // Act
+            Assert.That(() => Expect(left)
+                .To.Deep.Equal(right), Throws.Nothing);
+            // Assert
+        }
+
+        public enum LogLevel
+        {
+            Trace,
+            Debug,
+            Information,
+            Warning,
+            Error,
+            Critical,
+            None,
         }
     }
 }
