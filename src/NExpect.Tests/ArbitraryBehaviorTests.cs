@@ -16,9 +16,7 @@ using static PeanutButter.RandomGenerators.RandomValueGen;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMethodReturnValue.Global
-
 // ReSharper disable PossibleNullReferenceException
-
 // ReSharper disable ReturnValueOfPureMethodIsNotUsed
 // ReSharper disable SuspiciousTypeConversion.Global
 
