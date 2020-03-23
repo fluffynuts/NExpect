@@ -54,14 +54,6 @@ namespace NExpect.Tests.DanglingPrepositions
         }
     }
 
-    public class Frog
-    {
-    }
-
-    public class Dog
-    {
-    }
-
     public static class ExtensionsForTestingA
     {
         public static IMore<object> Frog(this IA<object> continuation)

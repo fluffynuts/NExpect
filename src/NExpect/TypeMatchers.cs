@@ -3,7 +3,10 @@ using System.Linq;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
+using NExpect.Implementations;
+using NExpect.Implementations.Fluency;
 using static NExpect.Implementations.MessageHelpers;
+
 // ReSharper disable UnusedMethodReturnValue.Global
 
 namespace NExpect
@@ -19,22 +22,22 @@ namespace NExpect
         /// </summary>
         /// <param name="instance">Instance to operate on</param>
         /// <typeparam name="TExpected">Expected Type of the Instance</typeparam>
-        public static void Of<TExpected>(this IInstanceContinuation instance)
+        public static IMore<TExpected> Of<TExpected>(this IInstanceContinuation instance)
         {
-            Of<TExpected>(instance, NULL_STRING);
+            return Of<TExpected>(instance, NULL_STRING);
         }
-        
+
         /// <summary>
         /// Tests if actual is an instance of TExpected
         /// </summary>
         /// <param name="instance">Instance to operate on</param>
         /// <param name="customMessage">Custom error message</param>
         /// <typeparam name="TExpected">Expected Type of the Instance</typeparam>
-        public static void Of<TExpected>(
+        public static IMore<TExpected> Of<TExpected>(
             this IInstanceContinuation instance,
             string customMessage)
         {
-            instance.Of<TExpected>(() => customMessage);
+            return instance.Of<TExpected>(() => customMessage);
         }
 
         /// <summary>
@@ -43,30 +46,44 @@ namespace NExpect
         /// <param name="instance">Instance to operate on</param>
         /// <param name="customMessageGenerator">Custom error message</param>
         /// <typeparam name="TExpected">Expected Type of the Instance</typeparam>
-        public static void Of<TExpected>(
+        public static IMore<TExpected> Of<TExpected>(
             this IInstanceContinuation instance,
             Func<string> customMessageGenerator)
         {
-            
-            instance.Of(typeof(TExpected), customMessageGenerator);
-//            instance.AddMatcher(
-//                expected =>
-//                {
-//                    var theExpectedType = typeof(TExpected);
-//                    var passed = theExpectedType.IsAssignableFrom(instance.Actual);
-//                    return new MatcherResult(
-//                        passed,
-//                        FinalMessageFor(
-//                            new[]
-//                            {
-//                                "Expected",
-//                                $"<{instance.Actual.PrettyName()}>",
-//                                $"to {passed.AsNot()}be an instance of",
-//                                $"<{theExpectedType.PrettyName()}>"
-//                            },
-//                            customMessageGenerator
-//                        ));
-//                });
+            instance.AddMatcher(actual =>
+            {
+                var expected = typeof(TExpected);
+                var passed = expected.IsAssignableFrom(instance.Actual);
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        new[]
+                        {
+                            "Expected",
+                            $"<{actual.PrettyName()}>",
+                            $"to {passed.AsNot()}be an instance of",
+                            $"<{expected.PrettyName()}>"
+                        },
+                        customMessageGenerator
+                    )
+                );
+            });
+
+            Type incomingType = null;
+            if (instance is InstanceContinuation concrete)
+            {
+                incomingType = concrete.Actual;
+                if (concrete.Parent is ICanAddMatcher<TExpected> addMatcher &&
+                    concrete.Parent is IExpectationContext<TExpected> expectationContext)
+                {
+                    return ContinuationFactory.Create<TExpected, More<TExpected>>(
+                        addMatcher.GetActual(),
+                        expectationContext
+                    );
+                }
+            }
+
+            return new TerminatedMore<TExpected>(incomingType);
         }
 
         /// <summary>
@@ -116,7 +133,7 @@ namespace NExpect
                             new[]
                             {
                                 "Expected",
-                                $"<{instance.Actual.PrettyName()}>",
+                                $"<{actual.PrettyName()}>",
                                 $"to {passed.AsNot()}be an instance of",
                                 $"<{expected.PrettyName()}>"
                             },
@@ -216,6 +233,7 @@ namespace NExpect
         {
             return to.AddImplementsMatcher<TInterface>(customMessageGenerator);
         }
+
         /// <summary>
         /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
@@ -245,7 +263,7 @@ namespace NExpect
         {
             return to.AddImplementsMatcher<TInterface>(() => customMessage);
         }
-        
+
         /// <summary>
         /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
@@ -343,6 +361,7 @@ namespace NExpect
         {
             return to.AddImplementsMatcher(expected, customMessageGenerator);
         }
+
         /// <summary>
         /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
@@ -368,13 +387,13 @@ namespace NExpect
         /// <returns></returns>
         public static IMore<Type> Implement(
             this ITo<Type> to,
-            Type expected, 
+            Type expected,
             string customMessage
         )
         {
             return to.Implement(expected, () => customMessage);
         }
-        
+
         /// <summary>
         /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
@@ -385,7 +404,7 @@ namespace NExpect
         /// <returns></returns>
         public static IMore<Type> Implement(
             this ITo<Type> to,
-            Type expected, 
+            Type expected,
             Func<string> customMessageGenerator
         )
         {
@@ -535,6 +554,7 @@ namespace NExpect
         {
             return to.AddInheritsMatcher<TBase>(customMessageGenerator);
         }
+
         /// <summary>
         /// Expects that the Actual type implements the interface provided
         /// as a generic parameter
@@ -564,7 +584,7 @@ namespace NExpect
         {
             return to.AddInheritsMatcher<TBase>(() => customMessage);
         }
-        
+
         /// <summary>
         /// Expects that the Actual type implements the interface provided
         /// as a generic parameter

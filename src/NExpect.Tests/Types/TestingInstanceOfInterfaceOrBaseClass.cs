@@ -630,7 +630,8 @@ namespace NExpect.Tests.Types
                                 // Act
                                 Assert.That(() =>
                                 {
-                                    Expect(sut).Not.To.Be.An.Instance.Of<AnotherTestClass>();
+                                    Expect(sut)
+                                        .Not.To.Be.An.Instance.Of<AnotherTestClass>();
                                 }, Throws.Nothing);
                                 // Assert
                             }
@@ -651,7 +652,7 @@ namespace NExpect.Tests.Types
                             }
 
                             [Test]
-                            public void WithGenerics_ShouldThrowWithValidCalssName()
+                            public void WithGenerics_ShouldThrowWithValidClassName()
                             {
                                 // Arrange
                                 var sut = new GenericTestClass<TestClass>();

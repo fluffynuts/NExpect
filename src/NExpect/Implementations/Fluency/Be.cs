@@ -12,7 +12,7 @@ namespace NExpect.Implementations.Fluency
         IHasActual<T>,
         IBe<T>
     {
-        public T Actual { get; }
+        public T Actual { get; private set; }
 
         public INotAfterBe<T> Not => ContinuationFactory.Create<T, NotAfterBe<T>>(Actual, this);
 
@@ -42,6 +42,11 @@ namespace NExpect.Implementations.Fluency
 
 
         public Be(T actual)
+        {
+            Actual = actual;
+        }
+
+        public void SetActual(T actual)
         {
             Actual = actual;
         }
