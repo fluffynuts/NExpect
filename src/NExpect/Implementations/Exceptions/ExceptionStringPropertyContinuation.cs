@@ -12,16 +12,16 @@ namespace NExpect.Implementations.Exceptions
         IStringPropertyContinuation
     {
         public new IStringPropertyNot Not 
-            => ContinuationFactory.Create<string, StringPropertyNot>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyNot>(() => Actual, this);
 
         public IStringPropertyContinuation And 
-            => ContinuationFactory.Create<string, StringPropertyAnd>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyAnd>(() => Actual, this);
 
         public IStringPropertyStartingContinuation Starting 
-            => ContinuationFactory.Create<string, StringPropertyContinuation>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyContinuation>(() => Actual, this);
         
         public IStringPropertyEndingContinuation Ending 
-            => ContinuationFactory.Create<string, StringPropertyContinuation>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyContinuation>(() => Actual, this);
 
         public ExceptionStringPropertyContinuation(string actual) : base(actual)
         {

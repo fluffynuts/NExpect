@@ -1,20 +1,19 @@
+using System;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Dictionaries
 {
     internal class DictionaryValueDeep<T>
-        : ExpectationContext<T>,
+        : ExpectationContextWithLazyActual<T>,
           IHasActual<T>,
           IDictionaryValueDeep<T>
     {
-        public T Actual { get; }
-
         public IDictionaryValueEqual<T> Equal
-            => ContinuationFactory.Create<T, DictionaryValueEqual<T>>(Actual, this);
+            => ContinuationFactory.Create<T, DictionaryValueEqual<T>>(ActualFetcher, this);
 
-        public DictionaryValueDeep(T actual)
+        public DictionaryValueDeep(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

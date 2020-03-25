@@ -558,7 +558,7 @@ namespace NExpect
                 var tester = new DeepEqualityTester(
                     actual,
                     otherValue);
-                
+
                 if (!isDeep)
                 {
                     tester.OnlyTestIntersectingProperties = true;
@@ -568,7 +568,8 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        () => $@"Expected\n{actual.Stringify()}\n{passed.AsNot()}to deep equal\n{otherValue.Stringify()}",
+                        () =>
+                            $@"Expected\n{actual.Stringify()}\n{passed.AsNot()}to deep equal\n{otherValue.Stringify()}",
                         customMessageGenerator
                     )
                 );
@@ -585,7 +586,7 @@ namespace NExpect
                 collection =>
                 {
                     var passed = collection != null &&
-                                 TryFindValueForKey(collection, key, out var _);
+                        TryFindValueForKey(collection, key, out var _);
 
                     return new MatcherResult(
                         passed,
@@ -613,15 +614,15 @@ namespace NExpect
                 typeof(TKey) == typeof(string))
             {
                 var comparer = collection.HasMetadata<StringComparer>(Expectations.KEY_COMPARER)
-                                   ? collection.GetMetadata<StringComparer>(Expectations.KEY_COMPARER)
-                                   : StringComparer.Ordinal;
+                    ? collection.GetMetadata<StringComparer>(Expectations.KEY_COMPARER)
+                    : StringComparer.Ordinal;
                 var keyMatches = collection.Select(kvp => kvp.Key as string)
                     .Where(k => comparer.Compare(k, stringKey) == 0);
                 var hasMatch = keyMatches.Any();
                 value = hasMatch
-                            ? collection.First(kvp => comparer.Compare(kvp.Key as string, stringKey) == 0)
-                                .Value
-                            : default;
+                    ? collection.First(kvp => comparer.Compare(kvp.Key as string, stringKey) == 0)
+                        .Value
+                    : default;
                 return hasMatch;
             }
             else
@@ -629,9 +630,9 @@ namespace NExpect
                 var matches = collection.Where(kvp => kvp.Key.Equals(key));
                 var hasMatch = matches.Any();
                 value = hasMatch
-                            ? matches.First()
-                                .Value
-                            : default;
+                    ? matches.First()
+                        .Value
+                    : default;
                 return hasMatch;
             }
         }
@@ -643,14 +644,19 @@ namespace NExpect
         {
             try
             {
-                var specificMethod = GenericUpcast.MakeGenericMethod(typeof(TTo));
-                var continuationValue =
-                    (TTo) (specificMethod.Invoke(null, new object[] { GetValueForKey(continuation, key) }));
+                var fetcher = FuncFactory.GenerateMemoized<TTo>(() =>
+                {
+                    var specificMethod = GenericUpcast.MakeGenericMethod(typeof(TTo));
+                    var continuationValue =
+                        (TTo) (specificMethod.Invoke(null, new object[] { GetValueForKey(continuation, key) }));
+                    return continuationValue;
+                });
+
                 return ContinuationFactory.Create<TTo, DictionaryValueContinuation<TTo>>(
-                    continuationValue,
+                    fetcher,
                     new WrappingContinuation<IEnumerable<KeyValuePair<TKey, TFrom>>, TTo>(
                         continuation as IHasActual<IEnumerable<KeyValuePair<TKey, TFrom>>>,
-                        c => continuationValue
+                        c => fetcher()
                     )
                 );
             }
@@ -682,8 +688,32 @@ namespace NExpect
         {
             var collection = continuation.GetActual();
             return TryFindValueForKey(collection, key, out var result)
-                       ? result
-                       : throw new KeyNotFoundException($"{key}");
+                ? result
+                : throw new KeyNotFoundException($"{key}");
+        }
+    }
+
+    internal static class FuncFactory
+    {
+        internal static Func<T> GenerateMemoized<T>(
+            Func<T> generator)
+        {
+            T fetched = default;
+            var haveFetched = false;
+
+            return () =>
+            {
+                return haveFetched
+                    ? fetched
+                    : Fetch();
+
+                T Fetch()
+                {
+                    var result = generator();
+                    haveFetched = true;
+                    return result;
+                }
+            };
         }
     }
 }

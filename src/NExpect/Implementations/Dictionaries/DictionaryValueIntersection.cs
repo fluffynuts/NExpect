@@ -1,18 +1,18 @@
+using System;
 using Imported.PeanutButter.Utils;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Dictionaries
 {
     internal class DictionaryValueIntersection<T>
-        : ExpectationContext<T>,
+        : ExpectationContextWithLazyActual<T>,
           IHasActual<T>,
           IDictionaryValueIntersection<T>
     {
-        public T Actual { get; }
-
         public IDictionaryValueEqual<T> Equal
             => ContinuationFactory.Create<T, DictionaryValueEqual<T>>(
-                Actual,
+                ActualFetcher,
                 this,
                 SetIntersectionFlag
             );
@@ -25,9 +25,8 @@ namespace NExpect.Implementations.Dictionaries
             );
         }
 
-        public DictionaryValueIntersection(T actual)
+        public DictionaryValueIntersection(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

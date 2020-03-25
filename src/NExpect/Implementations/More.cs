@@ -10,7 +10,11 @@ namespace NExpect.Implementations
           IHasActual<T>,
           IMore<T>
     {
-        public T Actual { get; set; }
+        public T Actual => _haveFetchedActual ? _actual : _actual = _actualGenerator();
+        
+        private T _actual;
+        private readonly Func<T> _actualGenerator;
+        private bool _haveFetchedActual = false;
 
         public IAnd<T> And =>
             ContinuationFactory.Create<T, And<T>>(Actual, this);
@@ -18,9 +22,9 @@ namespace NExpect.Implementations
         public IWith<T> With =>
             ContinuationFactory.Create<T, With<T>>(Actual, this);
 
-        public More(T actual)
+        public More(Func<T> actualGenerator)
         {
-            Actual = actual;
+            _actualGenerator = actualGenerator;
         }
     }
 

@@ -23,7 +23,7 @@ namespace NExpect.MatcherLogic
         )
         {
             return ContinuationFactory.Create<T, More<T>>(
-                continuation.GetActual(), 
+                continuation.GetActual, 
                 continuation as IExpectationContext<T>
             );
         }
@@ -39,7 +39,7 @@ namespace NExpect.MatcherLogic
         )
         {
             return ContinuationFactory.Create<string, StringMore>(
-                continuation.GetActual(), 
+                continuation.GetActual, 
                 continuation as IExpectationContext<string>
             );
         }

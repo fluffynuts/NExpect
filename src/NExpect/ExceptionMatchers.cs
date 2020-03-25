@@ -293,7 +293,7 @@ namespace NExpect
             Func<string> customMessageGenerator)
         {
             var result = ContinuationFactory.Create<string, StringPropertyContinuation>(
-                null,
+                () => null,
                 src as IExpectationContext<string>
             );
             src.AddMatcher(
@@ -363,7 +363,7 @@ namespace NExpect
             Func<string> customMessageGenerator)
         {
             var result = ContinuationFactory.Create<string, StringPropertyContinuation>(
-                null,
+                () => null,
                 src as IExpectationContext<string>
             );
             src.AddMatcher(
@@ -425,7 +425,7 @@ namespace NExpect
             Func<string> customMessageGenerator)
         {
             var result = ContinuationFactory.Create<string, StringPropertyContinuation>(
-                null,
+                () => null,
                 src as IExpectationContext<string>
             );
             src.AddMatcher(
@@ -608,7 +608,7 @@ namespace NExpect
             int offset)
         {
             var result = ContinuationFactory.Create<string, StringPropertyContinuation>(
-                null,
+                () => null,
                 continuation as IExpectationContext<string>
             );
             continuation.AddMatcher(
@@ -684,7 +684,7 @@ namespace NExpect
         )
         {
             var result = ContinuationFactory.Create<string, StringPropertyContinuation>(
-                null,
+                () => null,
                 continuation as IExpectationContext<string>
             );
             continuation.AddMatcher(
@@ -925,7 +925,7 @@ namespace NExpect
         )
         {
             return ContinuationFactory.Create<string, StringPropertyContinuation>(
-                (context as ICanAddMatcher<string>).GetActual(),
+                () => (context as ICanAddMatcher<string>).GetActual(),
                 context
             );
         }

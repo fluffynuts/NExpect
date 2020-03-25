@@ -1,3 +1,4 @@
+using System;
 using NExpect.Implementations.Collections;
 using NExpect.Implementations.Fluency;
 using NExpect.Interfaces;
@@ -8,22 +9,20 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Strings
 {
     internal class StringPropertyNot
-        : ExpectationContext<string>, IStringPropertyNot
+        : ExpectationContextWithLazyActual<string>, IStringPropertyNot
     {
-        public string Actual { get; set; }
-
-        public IToAfterNot<string> To 
+        public IToAfterNot<string> To
             => ContinuationFactory.Create<string, ToAfterNot<string>>(Actual, this);
-        
+
         public IStringPropertyEndingContinuation Ending
-            => ContinuationFactory.Create<string, StringPropertyContinuation>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyContinuation>(ActualFetcher, this);
 
-        public IStringPropertyEndingContinuation Starting 
-            => ContinuationFactory.Create<string, StringPropertyContinuation>(Actual, this);
+        public IStringPropertyEndingContinuation Starting
+            => ContinuationFactory.Create<string, StringPropertyContinuation>(ActualFetcher, this);
 
-        public StringPropertyNot(string actual)
+        public StringPropertyNot(Func<string> actualFetcher)
+            : base(actualFetcher)
         {
-            Actual = actual;
             // ReSharper disable once VirtualMemberCallInConstructor
             Negate();
         }

@@ -1,3 +1,4 @@
+using System;
 using NExpect.Implementations.Collections;
 using NExpect.Interfaces;
 
@@ -6,35 +7,61 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Strings
 {
-    internal class StringPropertyContinuation
-        : ExpectationContext<string>, 
-            IStringPropertyContinuation,
-            IStringPropertyStartingContinuation,
-            IStringPropertyEndingContinuation
+    internal abstract class ExpectationContextWithLazyActual<T>
+        : ExpectationContext<T>
     {
-        public string Actual { get; set; }
+        public T Actual
+        {
+            get =>
+                _fetchedActual
+                    ? _actual
+                    : _actual = _actualFetcher();
+            set
+            {
+                _actual = value;
+                _fetchedActual = true;
+            }
+        }
 
+        private T _actual;
+        private bool _fetchedActual = false;
+        private readonly Func<T> _actualFetcher;
+        protected Func<T> ActualFetcher => _actualFetcher;
+
+        protected ExpectationContextWithLazyActual(
+            Func<T> actualFetcher)
+        {
+            _actualFetcher = actualFetcher;
+        }
+    }
+
+    internal class StringPropertyContinuation
+        : ExpectationContextWithLazyActual<string>,
+          IStringPropertyContinuation,
+          IStringPropertyStartingContinuation,
+          IStringPropertyEndingContinuation
+    {
         public IStringPropertyContinuation And =>
             ContinuationFactory.Create<string, StringPropertyAnd>(Actual, this);
 
-        public IEqualityContinuation<string> Equal 
+        public IEqualityContinuation<string> Equal
             => ContinuationFactory.Create<string, EqualityContinuation<string>>(Actual, this);
 
         public IStringIn In =>
             ContinuationFactory.Create<string, StringIn>(Actual, this);
 
-        public IStringPropertyNot Not 
+        public IStringPropertyNot Not
             => ContinuationFactory.Create<string, StringPropertyNot>(Actual, this);
-        
+
         public IStringPropertyEndingContinuation Ending
             => ContinuationFactory.Create<string, StringPropertyContinuation>(Actual, this);
 
-        public IStringPropertyStartingContinuation Starting 
+        public IStringPropertyStartingContinuation Starting
             => ContinuationFactory.Create<string, StringPropertyContinuation>(Actual, this);
 
-        public StringPropertyContinuation(string actual)
+        public StringPropertyContinuation(Func<string> actualFetcher)
+            : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

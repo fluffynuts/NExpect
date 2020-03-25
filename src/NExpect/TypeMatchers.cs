@@ -69,21 +69,28 @@ namespace NExpect
                 );
             });
 
-            Type incomingType = null;
             if (instance is InstanceContinuation concrete)
             {
-                incomingType = concrete.Actual;
-                if (concrete.Parent is ICanAddMatcher<TExpected> addMatcher &&
-                    concrete.Parent is IExpectationContext<TExpected> expectationContext)
-                {
-                    return ContinuationFactory.Create<TExpected, More<TExpected>>(
-                        addMatcher.GetActual(),
-                        expectationContext
-                    );
-                }
+                return new LazyICanAddMatcher<TExpected>(
+                    concrete.Parent
+                ).More();
             }
 
-            return new TerminatedMore<TExpected>(incomingType);
+
+            // if (instance is InstanceContinuation concrete)
+            // {
+            //     incomingType = concrete.Actual;
+            //     if (concrete.Parent is ICanAddMatcher<TExpected> addMatcher &&
+            //         concrete.Parent is IExpectationContext<TExpected> expectationContext)
+            //     {
+            //         return ContinuationFactory.Create<TExpected, More<TExpected>>(
+            //             addMatcher.GetActual(),
+            //             expectationContext
+            //         );
+            //     }
+            // }
+            //
+            return new TerminatedMore<TExpected>(instance.Actual);
         }
 
         /// <summary>

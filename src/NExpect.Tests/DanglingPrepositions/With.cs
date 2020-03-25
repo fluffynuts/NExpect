@@ -59,6 +59,22 @@ namespace NExpect.Tests.DanglingPrepositions
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
         }
+
+        [Test]
+        public void ShouldAllowContinuationsFromAssignableType()
+        {
+            // Arrange
+            var dog = new Dog() { Name = "Rufus" } as IAnimal;
+            // Act
+            Assert.That(() =>
+            {
+                Expect(dog)
+                    .To.Be.An.Instance.Of<Dog>()
+                    .With.Property(o => o.Name)
+                    .Equal.To("Rufus");
+            }, Throws.Nothing);
+            // Assert
+        }
     }
 
     public static class WithExtensions
@@ -79,9 +95,13 @@ namespace NExpect.Tests.DanglingPrepositions
         }
     }
 
-    public abstract class Animal
+    public abstract class Animal: IAnimal
     {
         public string Name { get; set; }
+    }
+
+    public interface IAnimal
+    {
     }
 
     public class Dog : Animal

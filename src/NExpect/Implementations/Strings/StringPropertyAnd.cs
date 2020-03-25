@@ -13,7 +13,7 @@ namespace NExpect.Implementations.Strings
         public string Actual { get; }
 
         public IStringPropertyNot Not
-            => ContinuationFactory.Create<string, StringPropertyNot>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyNot>(() => Actual, this);
 
         public IStringPropertyContinuation And
             => ContinuationFactory.Create<string, StringPropertyAnd>(Actual, this);

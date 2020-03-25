@@ -1,4 +1,6 @@
-﻿using NExpect.Interfaces;
+﻿using System;
+using NExpect.Implementations.Strings;
+using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable MemberCanBePrivate.Global
@@ -6,18 +8,16 @@
 namespace NExpect.Implementations.Dictionaries
 {
     internal class DictionaryValueWith<TValue>
-        : ExpectationContext<TValue>,
+        : ExpectationContextWithLazyActual<TValue>,
           IHasActual<TValue>,
           IDictionaryValueWith<TValue>
     {
-        public TValue Actual { get; }
-
-        public DictionaryValueWith(TValue value)
-        {
-            Actual = value;
-        }
 
         public IDictionaryValue<TValue> Value =>
-            ContinuationFactory.Create<TValue, DictionaryValue<TValue>>(Actual, this);
+            ContinuationFactory.Create<TValue, DictionaryValue<TValue>>(ActualFetcher, this);
+
+        public DictionaryValueWith(Func<TValue> actualFetcher) : base(actualFetcher)
+        {
+        }
     }
 }

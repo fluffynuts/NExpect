@@ -1,5 +1,7 @@
-﻿using NExpect.Exceptions;
+﻿using System;
+using NExpect.Exceptions;
 using NExpect.Implementations.Collections;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -7,18 +9,15 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Dictionaries
 {
     internal class DictionaryValueContinuation<TValue> :
-        ExpectationContext<TValue>,
+        ExpectationContextWithLazyActual<TValue>,
         IHasActual<TValue>,
         IDictionaryValueContinuation<TValue>
     {
-        public TValue Actual { get; }
-
         public IDictionaryValueWith<TValue> With =>
-            ContinuationFactory.Create<TValue, DictionaryValueWith<TValue>>(Actual, this);
+            ContinuationFactory.Create<TValue, DictionaryValueWith<TValue>>(ActualFetcher, this);
 
-        public DictionaryValueContinuation(TValue value)
+        public DictionaryValueContinuation(Func<TValue> actualFetcher) : base(actualFetcher)
         {
-            Actual = value;
         }
     }
 

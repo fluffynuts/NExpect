@@ -177,7 +177,9 @@ namespace NExpect.Tests.Collections
                                 // Act
                                 Assert.That(() =>
                                     {
-                                        Expect(src).To.Contain.Key(key).With.Value(testingValue);
+                                        Expect(src)
+                                            .To.Contain.Key(key)
+                                            .With.Value(testingValue);
                                     },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
                                         .With.Message.Contains($"Expected\n\"{testingValue}\"\nbut got\n\"{value}\""));
