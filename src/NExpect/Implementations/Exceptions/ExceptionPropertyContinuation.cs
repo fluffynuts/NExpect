@@ -1,3 +1,4 @@
+using System;
 using NExpect.Implementations.Collections;
 using NExpect.Implementations.Fluency;
 using NExpect.Interfaces;
@@ -11,9 +12,9 @@ namespace NExpect.Implementations.Exceptions
         IExceptionPropertyContinuation<TValue>
     {
         public new IPropertyNot<TValue> Not
-            => ContinuationFactory.Create<TValue, PropertyNot<TValue>>(Actual, this);
+            => ContinuationFactory.Create<TValue, PropertyNot<TValue>>(ActualFetcher, this);
         
-        public ExceptionPropertyContinuation(TValue value): base(value)
+        public ExceptionPropertyContinuation(Func<TValue> actualFetcher): base(actualFetcher)
         {
         }
     }

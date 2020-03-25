@@ -1,30 +1,24 @@
 using System;
 using NExpect.Implementations.Fluency;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 // ReSharper disable ClassNeverInstantiated.Global
 
 namespace NExpect.Implementations
 {
     internal class More<T>
-        : ExpectationContext<T>,
+        : ExpectationContextWithLazyActual<T>,
           IHasActual<T>,
           IMore<T>
     {
-        public T Actual => _haveFetchedActual ? _actual : _actual = _actualGenerator();
-        
-        private T _actual;
-        private readonly Func<T> _actualGenerator;
-        private bool _haveFetchedActual = false;
-
         public IAnd<T> And =>
-            ContinuationFactory.Create<T, And<T>>(Actual, this);
+            ContinuationFactory.Create<T, And<T>>(ActualFetcher, this);
 
         public IWith<T> With =>
-            ContinuationFactory.Create<T, With<T>>(Actual, this);
+            ContinuationFactory.Create<T, With<T>>(ActualFetcher, this);
 
-        public More(Func<T> actualGenerator)
+        public More(Func<T> actualFetcher) : base(actualFetcher)
         {
-            _actualGenerator = actualGenerator;
         }
     }
 

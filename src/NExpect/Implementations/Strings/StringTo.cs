@@ -1,4 +1,4 @@
-using NExpect.Implementations.Collections;
+using System;
 using NExpect.Implementations.Fluency;
 using NExpect.Interfaces;
 
@@ -11,21 +11,21 @@ namespace NExpect.Implementations.Strings
         IStringTo
     {
         public IStringStart Start =>
-            ContinuationFactory.Create<string, StringStart>(Actual, this);
+            ContinuationFactory.Create<string, StringStart>(ActualFetcher, this);
 
         public IStringEnd End =>
-            ContinuationFactory.Create<string, StringEnd>(Actual, this);
+            ContinuationFactory.Create<string, StringEnd>(ActualFetcher, this);
 
         public new IStringNotAfterTo Not =>
-            ContinuationFactory.Create<string, StringNotAfterTo>(Actual, this);
+            ContinuationFactory.Create<string, StringNotAfterTo>(ActualFetcher, this);
 
         public new IStringBe Be =>
-            ContinuationFactory.Create<string, StringBe>(Actual, this);
+            ContinuationFactory.Create<string, StringBe>(ActualFetcher, this);
 
         public new IStringContain Contain =>
-            ContinuationFactory.Create<string, StringContain>(Actual, this);
+            ContinuationFactory.Create<string, StringContain>(ActualFetcher, this);
 
-        public StringTo(string actual) : base(actual)
+        public StringTo(Func<string> actualFetcher) : base(actualFetcher)
         {
         }
     }

@@ -1,4 +1,4 @@
-using NExpect.Implementations.Collections;
+using System;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -6,16 +6,15 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Strings
 {
     internal class StringContain
-        : ExpectationContext<string>,
+        : ExpectationContextWithLazyActual<string>,
             IStringContain,
             IHasActual<string>
     {
-        public string Actual { get; }
         public IStringIn In =>
-            ContinuationFactory.Create<string, StringIn>(Actual, this);
-        public StringContain(string actual)
+            ContinuationFactory.Create<string, StringIn>(ActualFetcher, this);
+
+        public StringContain(Func<string> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

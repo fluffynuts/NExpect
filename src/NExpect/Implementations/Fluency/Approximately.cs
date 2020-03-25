@@ -1,16 +1,15 @@
+using System;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Fluency
 {
     internal class Approximately<T>
-        : ExpectationContext<T>,
+        : ExpectationContextWithLazyActual<T>,
           IApproximately<T>
     {
-        public T Actual { get; set; }
-
-        public Approximately(T actual)
+        public Approximately(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

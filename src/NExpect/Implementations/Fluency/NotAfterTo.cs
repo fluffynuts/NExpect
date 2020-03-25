@@ -1,4 +1,6 @@
-﻿using NExpect.Implementations.Collections;
+﻿using System;
+using NExpect.Implementations.Collections;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable MemberCanBeProtected.Global
@@ -7,30 +9,27 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Fluency
 {
     internal class NotAfterTo<T> :
-        ExpectationContext<T>,
+        ExpectationContextWithLazyActual<T>,
         IHasActual<T>,
         INotAfterTo<T>
     {
         public IBe<T> Be =>
-            ContinuationFactory.Create<T, Be<T>>(Actual, this);
+            ContinuationFactory.Create<T, Be<T>>(ActualFetcher, this);
 
         public IContain<T> Contain =>
-            ContinuationFactory.Create<T, Contain<T>>(Actual, this);
+            ContinuationFactory.Create<T, Contain<T>>(ActualFetcher, this);
         
         public IHave<T> Have =>
-            ContinuationFactory.Create<T, Have<T>>(Actual, this);
+            ContinuationFactory.Create<T, Have<T>>(ActualFetcher, this);
 
         public IDeep<T> Deep =>
-            ContinuationFactory.Create<T, Deep<T>>(Actual, this);
+            ContinuationFactory.Create<T, Deep<T>>(ActualFetcher, this);
 
         public IIntersection<T> Intersection =>
-            ContinuationFactory.Create<T, Intersection<T>>(Actual, this);
+            ContinuationFactory.Create<T, Intersection<T>>(ActualFetcher, this);
 
-        public T Actual { get; }
-
-        public NotAfterTo(T actual)
+        public NotAfterTo(Func<T> actualFetcher): base(actualFetcher)
         {
-            Actual = actual;
             // ReSharper disable once VirtualMemberCallInConstructor
             Negate();
         }

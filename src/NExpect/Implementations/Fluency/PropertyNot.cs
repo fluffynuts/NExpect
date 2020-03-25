@@ -1,19 +1,17 @@
-using NExpect.Implementations.Collections;
+using System;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Fluency
 {
     internal class PropertyNot<TValue>
-        : ExpectationContext<TValue>, IPropertyNot<TValue>
+        : ExpectationContextWithLazyActual<TValue>, IPropertyNot<TValue>
     {
-        public TValue Actual { get; }
-
         public IToAfterNot<TValue> To
-            => ContinuationFactory.Create<TValue, ToAfterNot<TValue>>(Actual, this);
+            => ContinuationFactory.Create<TValue, ToAfterNot<TValue>>(ActualFetcher, this);
 
-        public PropertyNot(TValue actual)
+        public PropertyNot(Func<TValue> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

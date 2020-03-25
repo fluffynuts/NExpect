@@ -1,20 +1,20 @@
+using System;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Collections
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     internal class Contain<T> :
-        ExpectationContext<T>, 
+        ExpectationContextWithLazyActual<T>, 
         IHasActual<T>,
         IContain<T>
     {
-        public T Actual { get; }
-
         public IContainAt<T> At =>
-            ContinuationFactory.Create<T, ContainAt<T>>(Actual, this);
+            ContinuationFactory.Create<T, ContainAt<T>>(ActualFetcher, this);
 
-        public Contain(T actual)
+        public Contain(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

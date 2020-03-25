@@ -22,7 +22,7 @@ namespace NExpect
         )
         {
             return ContinuationFactory.Create<T, GreaterThanContinuation<T>>(
-                continuation.GetActual(),
+                continuation.GetActual,
                 continuation as IExpectationContext<T>
             );
         }
@@ -32,7 +32,7 @@ namespace NExpect
         )
         {
             return ContinuationFactory.Create<T, GreaterThanContinuation<T>>(
-                continuation.GetActual(),
+                continuation.GetActual,
                 continuation as IExpectationContext<T>
             );
         }
@@ -42,7 +42,7 @@ namespace NExpect
         )
         {
             return ContinuationFactory.Create<T, LessThanContinuation<T>>(
-                continuation.GetActual(),
+                continuation.GetActual,
                 continuation as IExpectationContext<T>
             );
         }
@@ -52,7 +52,7 @@ namespace NExpect
         )
         {
             return ContinuationFactory.Create<T, LessThanContinuation<T>>(
-                continuation.GetActual(),
+                continuation.GetActual,
                 continuation as IExpectationContext<T>
             );
         }

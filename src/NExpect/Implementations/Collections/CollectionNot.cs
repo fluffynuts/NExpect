@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable VirtualMemberCallInConstructor
@@ -8,20 +10,17 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Collections
 {
     internal class CollectionNot<T> :
-        ExpectationContext<IEnumerable<T>>,
+        ExpectationContextWithLazyActual<IEnumerable<T>>,
         IHasActual<IEnumerable<T>>,
         ICollectionNot<T>
     {
-        public IEnumerable<T> Actual { get; }
-
-        public CollectionNot(IEnumerable<T> actual)
+        public CollectionNot(Func<IEnumerable<T>> actualFetcher): base(actualFetcher)
         {
-            Actual = actual;
             Negate();
         }
 
         public ICollectionToAfterNot<T> To =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionToAfterNot<T>>(Actual, this);
+            ContinuationFactory.Create<IEnumerable<T>, CollectionToAfterNot<T>>(ActualFetcher, this);
 
     }
 }

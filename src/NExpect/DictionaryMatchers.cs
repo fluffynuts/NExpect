@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Imported.PeanutButter.Utils;
+using NExpect.Helpers;
 using NExpect.Implementations;
 using NExpect.Implementations.Collections;
 using NExpect.Implementations.Dictionaries;
@@ -644,7 +645,7 @@ namespace NExpect
         {
             try
             {
-                var fetcher = FuncFactory.GenerateMemoized<TTo>(() =>
+                var fetcher = FuncFactory.Memoize<TTo>(() =>
                 {
                     var specificMethod = GenericUpcast.MakeGenericMethod(typeof(TTo));
                     var continuationValue =
@@ -690,30 +691,6 @@ namespace NExpect
             return TryFindValueForKey(collection, key, out var result)
                 ? result
                 : throw new KeyNotFoundException($"{key}");
-        }
-    }
-
-    internal static class FuncFactory
-    {
-        internal static Func<T> GenerateMemoized<T>(
-            Func<T> generator)
-        {
-            T fetched = default;
-            var haveFetched = false;
-
-            return () =>
-            {
-                return haveFetched
-                    ? fetched
-                    : Fetch();
-
-                T Fetch()
-                {
-                    var result = generator();
-                    haveFetched = true;
-                    return result;
-                }
-            };
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using NExpect.Implementations.Collections;
 using NExpect.Implementations.Fluency;
 using NExpect.Implementations.Strings;
@@ -12,18 +13,18 @@ namespace NExpect.Implementations.Exceptions
         IStringPropertyContinuation
     {
         public new IStringPropertyNot Not 
-            => ContinuationFactory.Create<string, StringPropertyNot>(() => Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyNot>(ActualFetcher, this);
 
         public IStringPropertyContinuation And 
-            => ContinuationFactory.Create<string, StringPropertyAnd>(() => Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyAnd>(ActualFetcher, this);
 
         public IStringPropertyStartingContinuation Starting 
-            => ContinuationFactory.Create<string, StringPropertyContinuation>(() => Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyContinuation>(ActualFetcher, this);
         
         public IStringPropertyEndingContinuation Ending 
-            => ContinuationFactory.Create<string, StringPropertyContinuation>(() => Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyContinuation>(ActualFetcher, this);
 
-        public ExceptionStringPropertyContinuation(string actual) : base(actual)
+        public ExceptionStringPropertyContinuation(Func<string> actualFetcher) : base(actualFetcher)
         {
         }
     }

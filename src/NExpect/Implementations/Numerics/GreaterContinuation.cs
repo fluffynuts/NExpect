@@ -1,4 +1,6 @@
+using System;
 using NExpect.Implementations.Collections;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -6,59 +8,48 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Numerics
 {
     internal class GreaterContinuation<T>
-        : ExpectationContext<T>,
-            IHasActual<T>,
+        : ExpectationContextWithLazyActual<T>,
             IGreaterContinuation<T>
     {
-        public T Actual { get; }
-
-        public GreaterContinuation(T actual)
-        {
-            Actual = actual;
-        }
-
         public IGreaterThan<T> Than
-            => ContinuationFactory.Create<T, GreaterThan<T>>(Actual, this);
+            => ContinuationFactory.Create<T, GreaterThan<T>>(ActualFetcher, this);
+
+        public GreaterContinuation(Func<T> actualFetcher) : base(actualFetcher)
+        {
+        }
     }
 
     internal class GreaterThan<T>
-        : ExpectationContext<T>,
+        : ExpectationContextWithLazyActual<T>,
             IGreaterThan<T>
     {
-        public T Actual { get; }
         public IGreaterThanOr<T> Or 
-        => ContinuationFactory.Create<T, GreaterThanOr<T>>(Actual, this);
+        => ContinuationFactory.Create<T, GreaterThanOr<T>>(ActualFetcher, this);
 
-        public GreaterThan(T actual)
+        public GreaterThan(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
     
     internal class GreaterThanOr<T>
-        : ExpectationContext<T>,
+        : ExpectationContextWithLazyActual<T>,
             IGreaterThanOr<T>
     {
         public IGreaterThanOrEqual<T> Equal 
-            => ContinuationFactory.Create<T, GreaterThanOrEqual<T>>(Actual, this);
-        public T Actual { get; }
+            => ContinuationFactory.Create<T, GreaterThanOrEqual<T>>(ActualFetcher, this);
 
-        public GreaterThanOr(T actual)
+        public GreaterThanOr(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 
     internal class GreaterThanOrEqual<T> : 
-        ExpectationContext<T>,
+        ExpectationContextWithLazyActual<T>,
         IHasActual<T>,
         IGreaterThanOrEqual<T>
     {
-        public T Actual { get; }
-
-        public GreaterThanOrEqual(T actual)
+        public GreaterThanOrEqual(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

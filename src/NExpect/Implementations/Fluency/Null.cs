@@ -1,4 +1,6 @@
-﻿using NExpect.Implementations.Collections;
+﻿using System;
+using NExpect.Implementations.Collections;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -6,17 +8,14 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Fluency
 {
     internal class Null<T> :
-        ExpectationContext<T>,
+        ExpectationContextWithLazyActual<T>,
         IHasActual<T>,
         INull<T>
     {
-        public T Actual { get; }
+        public INullOr<T> Or => ContinuationFactory.Create<T, NullOr<T>>(ActualFetcher, this);
 
-        public Null(T actual)
+        public Null(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
-
-        public INullOr<T> Or => ContinuationFactory.Create<T, NullOr<T>>(Actual, this);
     }
 }

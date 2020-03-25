@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace NExpect.EqualityComparers
@@ -7,7 +7,7 @@ namespace NExpect.EqualityComparers
     /// Compares two decimals to a specified number of decimal places,
     /// truncated
     /// </summary>
-    public class DecimalsEqualToDecimalPlacesRounded : IEqualityComparer<decimal>
+    public class DoublesEqualToDecimalPlacesRounded : IEqualityComparer<double>
     {
         private readonly int _decimalPlaces;
 
@@ -15,12 +15,12 @@ namespace NExpect.EqualityComparers
         /// Constructor
         /// </summary>
         /// <param name="decimalPlaces"></param>
-        public DecimalsEqualToDecimalPlacesRounded(int decimalPlaces)
+        public DoublesEqualToDecimalPlacesRounded(int decimalPlaces)
         {
             _decimalPlaces = decimalPlaces;
         }
 
-        private decimal Round(decimal value)
+        private double Round(double value)
         {
             return Math.Round(value, _decimalPlaces);
         }
@@ -32,10 +32,10 @@ namespace NExpect.EqualityComparers
         /// <param name="y"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public bool Equals(decimal x,
-            decimal y)
+        public bool Equals(double x,
+            double y)
         {
-            return Round(x) == Round(y);
+            return Math.Abs(Round(x) - Round(y)) < Double.Epsilon;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace NExpect.EqualityComparers
         /// <param name="value"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public int GetHashCode(decimal value)
+        public int GetHashCode(double value)
         {
             return Round(value).GetHashCode();
         }

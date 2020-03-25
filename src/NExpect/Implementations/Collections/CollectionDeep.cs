@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -7,21 +9,18 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Collections
 {
     internal class CollectionDeep<T> :
-        ExpectationContext<IEnumerable<T>>,
+        ExpectationContextWithLazyActual<IEnumerable<T>>,
         IHasActual<IEnumerable<T>>,
         ICollectionDeep<T>
     {
         public ICollectionDeepEqual<T> Equal =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionDeepEqual<T>>(Actual, this);
+            ContinuationFactory.Create<IEnumerable<T>, CollectionDeepEqual<T>>(ActualFetcher, this);
 
         public ICollectionDeepEquivalent<T> Equivalent =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionDeepEquivalent<T>>(Actual, this);
+            ContinuationFactory.Create<IEnumerable<T>, CollectionDeepEquivalent<T>>(ActualFetcher, this);
 
-        public IEnumerable<T> Actual { get; }
-
-        public CollectionDeep(IEnumerable<T> actual)
+        public CollectionDeep(Func<IEnumerable<T>> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

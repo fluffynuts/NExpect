@@ -1,4 +1,6 @@
-﻿using NExpect.Interfaces;
+﻿using System;
+using NExpect.Implementations.Strings;
+using NExpect.Interfaces;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 // ReSharper disable ClassNeverInstantiated.Global
@@ -6,15 +8,12 @@
 namespace NExpect.Implementations.Collections
 {
     internal class ContainAt<T> :
-        ExpectationContext<T>,
+        ExpectationContextWithLazyActual<T>,
         IHasActual<T>,
         IContainAt<T>
     {
-        public T Actual { get; }
-
-        public ContainAt(T actual)
+        public ContainAt(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

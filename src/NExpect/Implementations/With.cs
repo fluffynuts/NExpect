@@ -1,17 +1,16 @@
+using System;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 namespace NExpect.Implementations
 {
     internal class With<T>
-        : ExpectationContext<T>,
+        : ExpectationContextWithLazyActual<T>,
           IHasActual<T>,
           IWith<T>
     {
-        public T Actual { get; set; }
-
-        public With(T actual)
+        public With(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

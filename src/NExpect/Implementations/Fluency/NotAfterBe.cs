@@ -1,4 +1,5 @@
-﻿using NExpect.Interfaces;
+﻿using System;
+using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
 
@@ -8,8 +9,8 @@ namespace NExpect.Implementations.Fluency
         Be<T>, 
         INotAfterBe<T>
     {
-        public NotAfterBe(T actual)
-            : base(actual)
+        public NotAfterBe(Func<T> actualFetcher)
+            : base(actualFetcher)
         {
             Negate();
         }

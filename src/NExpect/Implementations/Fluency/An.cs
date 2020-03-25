@@ -1,4 +1,6 @@
-﻿using NExpect.Interfaces;
+﻿using System;
+using NExpect.Implementations.Strings;
+using NExpect.Interfaces;
 
 // ReSharper disable UnusedMember.Global
 // ReSharper disable ClassNeverInstantiated.Global
@@ -6,18 +8,17 @@
 
 namespace NExpect.Implementations.Fluency
 {
-    internal class An<T> : 
-        ExpectationContext<T>, 
-        IHasActual<T>,
-        IAn<T>
+    internal class An<T>
+        : ExpectationContextWithLazyActual<T>,
+          IHasActual<T>,
+          IAn<T>
     {
-        public T Actual { get; }
+        public IInstanceContinuation Instance => new InstanceContinuation(
+            () => Actual?.GetType(),
+            this);
 
-        public An(T actual)
+        public An(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
-
-        public IInstanceContinuation Instance => new InstanceContinuation(Actual.GetType(), this);
     }
 }

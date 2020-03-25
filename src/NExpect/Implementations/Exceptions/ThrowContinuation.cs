@@ -1,24 +1,38 @@
 using System;
 using NExpect.Implementations.Collections;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations.Exceptions
 {
-    internal class ThrowContinuation<T> : 
-        ExpectationContext<T>,
-        IHasActual<T>,
-        IThrowContinuation<T> where T : Exception
+    internal class ThrowContinuation<T>
+        : ExpectationContextWithLazyActual<T>,
+          IHasActual<T>,
+          IThrowContinuation<T> where T : Exception
     {
-        public T Actual => Exception;
-        public T Exception { get; set; }
+        public T Exception
+        {
+            get => _exception;
+            set 
+            { 
+                Actual = value;
+                _exception = value;
+            }
+        }
 
-        public IWithAfterThrowContinuation<T> With => 
-            ContinuationFactory.Create<T, WithAfterThrowContinuation<T>>(Exception, this);
+        private T _exception;
+
+        public IWithAfterThrowContinuation<T> With =>
+            ContinuationFactory.Create<T, WithAfterThrowContinuation<T>>(() => Exception, this);
 
         public override void RunMatcher(Func<T, IMatcherResult> matcher)
         {
             MatcherRunner.RunMatcher(Exception, this.IsNegated(), matcher);
+        }
+
+        public ThrowContinuation() : base(() => null)
+        {
         }
     }
 
@@ -29,7 +43,8 @@ namespace NExpect.Implementations.Exceptions
     {
         public T Actual => Exception;
         public T Exception { get; set; }
+
         public IAndAfterWithAfterThrowContinuation<T> And =>
-        ContinuationFactory.Create<T, AndAfterWithAfterThrowContinuation<T>>(Exception, this);
+            ContinuationFactory.Create<T, AndAfterWithAfterThrowContinuation<T>>(() => Exception, this);
     }
 }

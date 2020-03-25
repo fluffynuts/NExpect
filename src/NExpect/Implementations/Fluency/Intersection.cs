@@ -1,4 +1,5 @@
-using NExpect.Implementations.Collections;
+using System;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -6,18 +7,15 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Fluency
 {
     internal class Intersection<T> :
-        ExpectationContext<T>,
+        ExpectationContextWithLazyActual<T>,
         IHasActual<T>,
         IIntersection<T>
     {
-        public T Actual { get; }
-
         public IIntersectionEqual<T> Equal
-            => ContinuationFactory.Create<T, IntersectionEqual<T>>(Actual, this);
+            => ContinuationFactory.Create<T, IntersectionEqual<T>>(ActualFetcher, this);
 
-        public Intersection(T actual)
+        public Intersection(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

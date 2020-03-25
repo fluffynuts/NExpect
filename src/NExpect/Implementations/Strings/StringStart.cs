@@ -1,3 +1,4 @@
+using System;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -5,15 +6,12 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Strings
 {
     internal class StringStart :
-        ExpectationContext<string>,
+        ExpectationContextWithLazyActual<string>,
         IHasActual<string>,
         IStringStart
     {
-        public string Actual { get; }
-
-        public StringStart(string actual)
+        public StringStart(Func<string> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using Imported.PeanutButter.Utils;
-using NExpect.Implementations.Collections;
 using NExpect.Implementations.Fluency;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -17,8 +16,8 @@ namespace NExpect.Implementations
         IExpectationContext<T> IExpectationContext<T>.TypedParent { get; set; }
 
         public T Actual { get; }
-        public ITo<T> To => ContinuationFactory.Create<T, To<T>>(Actual, this);
-        public IPropertyNot<T> Not => ContinuationFactory.Create<T, Not<T>>(Actual, this);
+        public ITo<T> To => ContinuationFactory.Create<T, To<T>>(() => Actual, this);
+        public IPropertyNot<T> Not => ContinuationFactory.Create<T, Not<T>>(() => Actual, this);
 
 
         public Expectation(T actual)
@@ -34,5 +33,6 @@ namespace NExpect.Implementations
         {
             RunMatcher(Actual, IsNegated, matcher, true);
         }
+        
     }
 }

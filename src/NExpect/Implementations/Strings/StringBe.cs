@@ -1,4 +1,4 @@
-using NExpect.Implementations.Collections;
+using System;
 using NExpect.Implementations.Fluency;
 using NExpect.Interfaces;
 
@@ -11,10 +11,9 @@ namespace NExpect.Implementations.Strings
         IStringBe
     {
         public IStringMatched Matched =>
-            ContinuationFactory.Create<string, StringMatched>(Actual, this);
+            ContinuationFactory.Create<string, StringMatched>(ActualFetcher, this);
 
-        public StringBe(string actual)
-            : base(actual)
+        public StringBe(Func<string> actualFetcher) : base(actualFetcher)
         {
         }
     }

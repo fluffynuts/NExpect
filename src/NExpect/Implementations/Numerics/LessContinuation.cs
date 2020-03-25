@@ -1,4 +1,6 @@
-﻿using NExpect.Implementations.Collections;
+﻿using System;
+using NExpect.Implementations.Collections;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -6,58 +8,48 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Numerics
 {
     internal class LessContinuation<T> :
-        ExpectationContext<T>,
+        ExpectationContextWithLazyActual<T>,
         IHasActual<T>,
         ILessContinuation<T>
     {
-        public T Actual { get; }
-
-        public LessContinuation(T actual)
-        {
-            Actual = actual;
-        }
-
         public ILessThan<T> Than =>
-            ContinuationFactory.Create<T, LessThan<T>>(Actual, this);
+            ContinuationFactory.Create<T, LessThan<T>>(ActualFetcher, this);
+
+        public LessContinuation(Func<T> actualFetcher) : base(actualFetcher)
+        {
+        }
     }
 
     internal class LessThan<T>
-    : ExpectationContext<T>,
+    : ExpectationContextWithLazyActual<T>,
         ILessThan<T>
     {
-        public T Actual { get; }
         public ILessThanOr<T> Or 
-            => ContinuationFactory.Create<T, LessThanOr<T>>(Actual, this);
+            => ContinuationFactory.Create<T, LessThanOr<T>>(ActualFetcher, this);
 
-        public LessThan(T actual)
+        public LessThan(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 
     internal class LessThanOr<T>
-    : ExpectationContext<T>,
+    : ExpectationContextWithLazyActual<T>,
         ILessThanOr<T>
     {
-        public T Actual { get; }
         public ILessThanOrEqual<T> Equal 
-            => ContinuationFactory.Create<T, LessThanOrEqual<T>>(Actual, this);
+            => ContinuationFactory.Create<T, LessThanOrEqual<T>>(ActualFetcher, this);
 
-        public LessThanOr(T actual)
+        public LessThanOr(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 
     internal class LessThanOrEqual<T>
-    : ExpectationContext<T>,
+    : ExpectationContextWithLazyActual<T>,
         ILessThanOrEqual<T>
     {
-        public T Actual { get; }
-
-        public LessThanOrEqual(T actual)
+        public LessThanOrEqual(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

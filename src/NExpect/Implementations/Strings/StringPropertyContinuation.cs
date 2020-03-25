@@ -1,4 +1,5 @@
 using System;
+using NExpect.Helpers;
 using NExpect.Implementations.Collections;
 using NExpect.Interfaces;
 
@@ -31,7 +32,7 @@ namespace NExpect.Implementations.Strings
         protected ExpectationContextWithLazyActual(
             Func<T> actualFetcher)
         {
-            _actualFetcher = actualFetcher;
+            _actualFetcher = FuncFactory.Memoize(actualFetcher);
         }
     }
 
@@ -42,22 +43,22 @@ namespace NExpect.Implementations.Strings
           IStringPropertyEndingContinuation
     {
         public IStringPropertyContinuation And =>
-            ContinuationFactory.Create<string, StringPropertyAnd>(Actual, this);
+            ContinuationFactory.Create<string, StringPropertyAnd>(ActualFetcher, this);
 
         public IEqualityContinuation<string> Equal
-            => ContinuationFactory.Create<string, EqualityContinuation<string>>(Actual, this);
+            => ContinuationFactory.Create<string, EqualityContinuation<string>>(ActualFetcher, this);
 
         public IStringIn In =>
-            ContinuationFactory.Create<string, StringIn>(Actual, this);
+            ContinuationFactory.Create<string, StringIn>(ActualFetcher, this);
 
         public IStringPropertyNot Not
-            => ContinuationFactory.Create<string, StringPropertyNot>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyNot>(ActualFetcher, this);
 
         public IStringPropertyEndingContinuation Ending
-            => ContinuationFactory.Create<string, StringPropertyContinuation>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyContinuation>(ActualFetcher, this);
 
         public IStringPropertyStartingContinuation Starting
-            => ContinuationFactory.Create<string, StringPropertyContinuation>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyContinuation>(ActualFetcher, this);
 
         public StringPropertyContinuation(Func<string> actualFetcher)
             : base(actualFetcher)

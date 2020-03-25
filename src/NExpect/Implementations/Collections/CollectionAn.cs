@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NExpect.Implementations.Fluency;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -8,18 +10,15 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Collections
 {
     internal class CollectionAn<T> :
-        ExpectationContext<IEnumerable<T>>,
+        ExpectationContextWithLazyActual<IEnumerable<T>>,
         IHasActual<IEnumerable<T>>,
         ICollectionAn<T>
     {
         public IInstanceContinuation Instance => 
-            new InstanceContinuation(Actual.GetType(), this);
+            new InstanceContinuation(() => ActualFetcher()?.GetType(), this);
 
-        public IEnumerable<T> Actual { get; }
-
-        public CollectionAn(IEnumerable<T> actual)
+        public CollectionAn(Func<IEnumerable<T>> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

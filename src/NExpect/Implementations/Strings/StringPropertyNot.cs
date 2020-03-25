@@ -12,7 +12,7 @@ namespace NExpect.Implementations.Strings
         : ExpectationContextWithLazyActual<string>, IStringPropertyNot
     {
         public IToAfterNot<string> To
-            => ContinuationFactory.Create<string, ToAfterNot<string>>(Actual, this);
+            => ContinuationFactory.Create<string, ToAfterNot<string>>(ActualFetcher, this);
 
         public IStringPropertyEndingContinuation Ending
             => ContinuationFactory.Create<string, StringPropertyContinuation>(ActualFetcher, this);

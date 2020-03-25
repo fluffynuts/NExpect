@@ -1,3 +1,4 @@
+using System;
 using NExpect.Implementations.Collections;
 using NExpect.Interfaces;
 
@@ -7,29 +8,26 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Strings
 {
     internal class StringPropertyAnd
-        : ExpectationContext<string>,
+        : ExpectationContextWithLazyActual<string>,
             IStringPropertyContinuation
     {
-        public string Actual { get; }
-
         public IStringPropertyNot Not
-            => ContinuationFactory.Create<string, StringPropertyNot>(() => Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyNot>(ActualFetcher, this);
 
         public IStringPropertyContinuation And
-            => ContinuationFactory.Create<string, StringPropertyAnd>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyAnd>(ActualFetcher, this);
 
         public IEqualityContinuation<string> Equal
-            => ContinuationFactory.Create<string, EqualityContinuation<string>>(Actual, this);
+            => ContinuationFactory.Create<string, EqualityContinuation<string>>(ActualFetcher, this);
 
         public IStringPropertyStartingContinuation Starting
-            => ContinuationFactory.Create<string, StringPropertyContinuation>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyContinuation>(ActualFetcher, this);
 
         public IStringPropertyEndingContinuation Ending
-            => ContinuationFactory.Create<string, StringPropertyContinuation>(Actual, this);
+            => ContinuationFactory.Create<string, StringPropertyContinuation>(ActualFetcher, this);
 
-        public StringPropertyAnd(string actual)
+        public StringPropertyAnd(Func<string> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

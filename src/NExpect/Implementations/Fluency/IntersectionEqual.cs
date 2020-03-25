@@ -1,16 +1,15 @@
+using System;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Fluency
 {
     internal class IntersectionEqual<T>
-        : ExpectationContext<T>,
+        : ExpectationContextWithLazyActual<T>,
             IIntersectionEqual<T>
     {
-        public T Actual { get; }
-
-        public IntersectionEqual(T actual)
+        public IntersectionEqual(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

@@ -1,19 +1,18 @@
-﻿using NExpect.Interfaces;
+﻿using System;
+using NExpect.Implementations.Strings;
+using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
 
 namespace NExpect.Implementations.Fluency
 {
     internal class NullOr<T> :
-        ExpectationContext<T>,
+        ExpectationContextWithLazyActual<T>,
         IHasActual<T>,
         INullOr<T>
     {
-        public T Actual { get; }
-
-        public NullOr(T actual)
+        public NullOr(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

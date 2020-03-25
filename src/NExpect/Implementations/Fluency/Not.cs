@@ -1,4 +1,6 @@
-﻿using NExpect.Implementations.Collections;
+﻿using System;
+using NExpect.Implementations.Collections;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable MemberCanBeProtected.Global
@@ -7,16 +9,14 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Fluency
 {
     internal class Not<T>: 
-        ExpectationContext<T>, 
+        ExpectationContextWithLazyActual<T>, 
         IHasActual<T>,
         IPropertyNot<T>
     {
-        public T Actual { get; }
-        public IToAfterNot<T> To => ContinuationFactory.Create<T, ToAfterNot<T>>(Actual, this);
+        public IToAfterNot<T> To => ContinuationFactory.Create<T, ToAfterNot<T>>(ActualFetcher, this);
 
-        public Not(T actual)
+        public Not(Func<T> actualFetcher): base(actualFetcher)
         {
-            Actual = actual;
             Negate();
         }
     }

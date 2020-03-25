@@ -1,3 +1,4 @@
+using System;
 using NExpect.Implementations.Collections;
 using NExpect.Implementations.Fluency;
 using NExpect.Interfaces;
@@ -11,16 +12,16 @@ namespace NExpect.Implementations.Strings
         IStringToAfterNot
     {
         public IStringStart Start =>
-            ContinuationFactory.Create<string, StringStart>(Actual, this);
+            ContinuationFactory.Create<string, StringStart>(ActualFetcher, this);
 
         public IStringEnd End =>
-            ContinuationFactory.Create<string, StringEnd>(Actual, this);
+            ContinuationFactory.Create<string, StringEnd>(ActualFetcher, this);
 
         public new IStringBe Be =>
-            ContinuationFactory.Create<string, StringBe>(Actual, this);
+            ContinuationFactory.Create<string, StringBe>(ActualFetcher, this);
 
-        public StringToAfterNot(string actual)
-            : base(actual)
+        public StringToAfterNot(Func<string> actualFetcher)
+            : base(actualFetcher)
         {
         }
     }

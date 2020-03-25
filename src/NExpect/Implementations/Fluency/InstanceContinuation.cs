@@ -1,34 +1,35 @@
 ﻿using System;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations.Fluency
 {
     internal class InstanceContinuation :
+        ExpectationContextWithLazyActual<Type>,
         IExpectationContext<Type>,
         IInstanceContinuation
     {
-        public Type Actual { get; }
         public IExpectationContext<Type> TypedParent { get; set; }
-        public IExpectationContext Parent { get; }
+        public override IExpectationContext Parent { get; }
 
-        public InstanceContinuation(Type actual, IExpectationContext originalParent)
+        public InstanceContinuation(Func<Type> actualFetcher, IExpectationContext originalParent)
+            : base(actualFetcher)
         {
-            Actual = actual;
             Parent = originalParent;
         }
 
-        public void Negate()
+        public override void Negate()
         {
             throw new InvalidOperationException("This context cannot be negated");
         }
 
-        public void ResetNegation()
+        public override void ResetNegation()
         {
             throw new InvalidOperationException("This context cannot be negated");
         }
 
-        public void RunMatcher(Func<Type, IMatcherResult> matcher)
+        public override void RunMatcher(Func<Type, IMatcherResult> matcher)
         {
             IMatcherResult result;
             try

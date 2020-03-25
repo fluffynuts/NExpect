@@ -15,7 +15,7 @@ namespace NExpect.Implementations
         /// <summary>
         /// Parent context for this expectation
         /// </summary>
-        public IExpectationContext Parent => _parent;
+        public virtual IExpectationContext Parent => _parent;
         private IExpectationContext<T> _parent;
 
         IExpectationContext<T> IExpectationContext<T>.TypedParent
@@ -46,7 +46,7 @@ namespace NExpect.Implementations
         /// <summary>
         /// Resets expectation negatin
         /// </summary>
-        public void ResetNegation()
+        public virtual void ResetNegation()
         {
             _storedNegation = false;
             RunResetNegations();

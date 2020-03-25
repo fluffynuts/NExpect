@@ -1,4 +1,6 @@
+using System;
 using NExpect.Implementations.Collections;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -6,33 +8,27 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Numerics
 {
     internal class GreaterThanContinuation<T> :
-        ExpectationContext<T>,
+        ExpectationContextWithLazyActual<T>,
         IHasActual<T>,
         IGreaterThanContinuation<T>
     {
-        public T Actual { get; }
-
         public IGreaterThanAnd<T> And =>
-            ContinuationFactory.Create<T, GreaterThanAnd<T>>(Actual, this);
+            ContinuationFactory.Create<T, GreaterThanAnd<T>>(ActualFetcher, this);
 
-        public GreaterThanContinuation(T actual)
+        public GreaterThanContinuation(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
     internal class LessThanContinuation<T> :
-        ExpectationContext<T>,
+        ExpectationContextWithLazyActual<T>,
         IHasActual<T>,
         ILessThanContinuation<T>
     {
-        public T Actual { get; }
-
         public ILessThanAnd<T> And =>
-            ContinuationFactory.Create<T, LessThanAnd<T>>(Actual, this);
+            ContinuationFactory.Create<T, LessThanAnd<T>>(ActualFetcher, this);
 
-        public LessThanContinuation(T actual)
+        public LessThanContinuation(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

@@ -1,3 +1,5 @@
+using System;
+using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -5,15 +7,12 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations
 {
     internal class EqualityContinuation<T> :
-        ExpectationContext<T>,
+        ExpectationContextWithLazyActual<T>,
         IHasActual<T>,
         IEqualityContinuation<T>
     {
-        public T Actual { get; }
-
-        public EqualityContinuation(T actual)
+        public EqualityContinuation(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

@@ -3,6 +3,7 @@ using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
+using NExpect.Helpers;
 using NExpect.Implementations.Collections;
 using NExpect.Implementations.Exceptions;
 using NExpect.Implementations.Strings;
@@ -165,14 +166,14 @@ namespace NExpect
                 throw new ArgumentException(
                     "With should operate on a ThrowContinuation<T> or at least something with an Exception property that is an Exception.");
             }
-
-            var exceptionPropertyValue = fetcher(actual);
+            
+            var memoized = FuncFactory.Memoize(() => fetcher(actual));
 
             return ContinuationFactory.Create<TValue, ExceptionPropertyContinuation<TValue>>(
-                exceptionPropertyValue,
+                memoized,
                 new WrappingContinuation<T, TValue>(
                     throwContinuation,
-                    c => exceptionPropertyValue
+                    c => memoized()
                 )
             );
         }

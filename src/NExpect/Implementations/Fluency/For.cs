@@ -1,15 +1,16 @@
-﻿using NExpect.Interfaces;
+﻿using System;
+using NExpect.Implementations.Strings;
+using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Fluency
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     internal class For<T>:
-        ExpectationContext<T>,
+        ExpectationContextWithLazyActual<T>,
         IFor<T>
     {
-        public T Actual { get; }
-        public For(T actual)
+        public For(Func<T> actualFetcher) : base(actualFetcher)
         {
-            Actual = actual;
         }
     }
 }

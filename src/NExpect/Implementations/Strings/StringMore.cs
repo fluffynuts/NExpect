@@ -1,5 +1,4 @@
 using System;
-using NExpect.Implementations.Collections;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -7,25 +6,15 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Strings
 {
     internal class StringMore
-        : ExpectationContext<string>,
+        : ExpectationContextWithLazyActual<string>,
           IHasActual<string>,
           IStringMore
     {
-        public string Actual =>
-            _haveFetchedActual
-                ? _actual
-                : _actual = _actualGenerator();
-
-        private string _actual;
-        private bool _haveFetchedActual = false;
-        private readonly Func<string> _actualGenerator;
-
         public IStringAnd And =>
-            ContinuationFactory.Create<string, StringAnd>(Actual, this);
+            ContinuationFactory.Create<string, StringAnd>(ActualFetcher, this);
 
-        public StringMore(Func<string> actualGenerator)
+        public StringMore(Func<string> actualFetcher) : base(actualFetcher)
         {
-            _actualGenerator = actualGenerator;
         }
     }
 }
