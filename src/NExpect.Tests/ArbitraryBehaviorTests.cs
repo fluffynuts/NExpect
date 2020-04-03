@@ -417,7 +417,7 @@ namespace NExpect.Tests
             // Pre-assert
             // Act
             var continuation = Expect(new[] { "a", "b", "c" })
-                .To.Contain.Any();
+                .To.Contain.Any;
             var result = continuation.GetCountMatchMethod();
             // Assert
             Expect(result)
@@ -431,7 +431,7 @@ namespace NExpect.Tests
             // Pre-assert
             // Act
             var continuation = Expect(new[] { "a", "b", "c" })
-                .To.Contain.All();
+                .To.Contain.All;
             var result = continuation.GetCountMatchMethod();
             // Assert
             Expect(result)

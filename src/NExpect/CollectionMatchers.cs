@@ -291,6 +291,7 @@ namespace NExpect
         /// <param name="contain">Continuation to continue from</param>
         /// <typeparam name="T">Type of items in collection</typeparam>
         /// <returns></returns>
+        [Obsolete("Please use the Any property")]
         public static ICountMatchContinuation<IEnumerable<T>> Any<T>(
             this IContain<IEnumerable<T>> contain
         )
@@ -303,18 +304,21 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Starts continuation to match no items in the source collection
+        /// Starts continuation to match an empty collection
+        /// - really only useful as an alternative to
+        ///     Expect(collection).To.Be.Empty();
         /// </summary>
         /// <param name="contain">Continuation to continue from</param>
         /// <typeparam name="T">Type of items in collection</typeparam>
         /// <returns></returns>
+        [Obsolete("Please use the No property")]
         public static ICountMatchContinuation<IEnumerable<T>> No<T>(
             this IContain<IEnumerable<T>> contain
         )
         {
             return new CountMatchContinuation<IEnumerable<T>>(
                 contain,
-                CountMatchMethods.Exactly,
+                CountMatchMethods.Only,
                 0
             );
         }
@@ -325,6 +329,7 @@ namespace NExpect
         /// <param name="contain">Continuation to continue from</param>
         /// <typeparam name="T">Type of items in collection</typeparam>
         /// <returns></returns>
+        [Obsolete("Please use the All property")]
         public static ICountMatchContinuation<IEnumerable<T>> All<T>(
             this IContain<IEnumerable<T>> contain
         )

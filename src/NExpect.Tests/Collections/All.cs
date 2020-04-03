@@ -22,7 +22,9 @@ namespace NExpect.Tests.Collections
             // Act
             Assert.That(() =>
                 {
-                    Expect(collection).To.Contain.All().Equal.To(search);
+                    Expect(collection)
+                        .To.Contain.All
+                        .Equal.To(search);
                 },
                 Throws.Nothing);
             // Assert
@@ -42,7 +44,9 @@ namespace NExpect.Tests.Collections
             // Act
             Assert.That(() =>
                 {
-                    Expect(collection).To.Contain.All().Equal.To(search);
+                    Expect(collection)
+                        .To.Contain.All
+                        .Equal.To(search);
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
@@ -60,7 +64,9 @@ namespace NExpect.Tests.Collections
             // Act
             Assert.That(() =>
                 {
-                    Expect(collection).Not.To.Contain.All().Equal.To(search);
+                    Expect(collection)
+                        .Not.To.Contain.All
+                        .Equal.To(search);
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>());
 
@@ -79,7 +85,9 @@ namespace NExpect.Tests.Collections
             // Act
             Assert.That(() =>
                 {
-                    Expect(collection).To.Not.Contain.All().Equal.To(search);
+                    Expect(collection)
+                        .To.Not.Contain.All
+                        .Equal.To(search);
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>());
 

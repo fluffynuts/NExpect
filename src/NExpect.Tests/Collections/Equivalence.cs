@@ -210,8 +210,8 @@ namespace NExpect.Tests.Collections
             Assert.That(() =>
                 {
                     Expect(evens)
-                        .Not.To.Contain.Any().Odds()
-                        .And.To.Contain.All().Evens();
+                        .Not.To.Contain.Any.Odds()
+                        .And.To.Contain.All.Evens();
                 },
                 Throws.Nothing);
             // Assert
@@ -226,7 +226,7 @@ namespace NExpect.Tests.Collections
             // Act
             Assert.That(() =>
                 {
-                    Expect(evens).To.Contain.Any().Odds();
+                    Expect(evens).To.Contain.Any.Odds();
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
@@ -910,51 +910,101 @@ namespace NExpect.Tests.Collections
             // Assert
         }
 
-        [Test]
-        public void No_WhenCollectionHasNoItems_ShouldThrow()
+        [TestFixture]
+        public class No
         {
-            // Arrange
-            var input = new int[0];
-            // Pre-Assert
-            // Act
-            Assert.That(() =>
-                {
-                    Expect(input).To.Contain.No().Items();
-                },
-                Throws.Nothing);
-            // Assert
+            [Test]
+            public void WhenCollectionHasNoItems_ShouldThrow()
+            {
+                // Arrange
+                var input = new int[0];
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(input).To.Contain.No.Items();
+                    },
+                    Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void WhenCollectionHasItems_ShouldThrow()
+            {
+                // Arrange
+                var expected = GetRandomInt(1);
+                var input = new int[expected];
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(input).To.Contain.No.Items();
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+
+            [Test]
+            public void Negated_WhenCollectionHasItems_ShouldNotThrow()
+            {
+                // Arrange
+                var expected = GetRandomInt(1);
+                var input = new int[expected];
+                // Pre-Assert
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(input).Not.To.Contain.No.Items();
+                    },
+                    Throws.Nothing);
+                // Assert
+            }
         }
 
-        [Test]
-        public void No_WhenCollectionHasItems_ShouldThrow()
+        [TestFixture]
+        public class None
         {
-            // Arrange
-            var expected = GetRandomInt(1);
-            var input = new int[expected];
-            // Pre-Assert
-            // Act
-            Assert.That(() =>
+            [Test]
+            public void ShouldNotThrowWhenNoMatches()
+            {
+                // Arrange
+                // Act
+                Assert.That(() =>
                 {
-                    Expect(input).To.Contain.No().Items();
-                },
-                Throws.Exception.InstanceOf<UnmetExpectationException>());
-            // Assert
-        }
+                    Expect(new[] { 1, 2, 3 })
+                        .To.Contain.None
+                        .Matched.By(i => i > 3);
+                }, Throws.Nothing);
+                
+                Assert.That(() =>
+                {
+                    Expect(new[] { 1, 2, 3 })
+                        .Not.To.Contain.None
+                        .Matched.By(i => i > 3);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
 
-        [Test]
-        public void No_Negated_WhenCollectionHasItems_ShouldNotThrow()
-        {
-            // Arrange
-            var expected = GetRandomInt(1);
-            var input = new int[expected];
-            // Pre-Assert
-            // Act
-            Assert.That(() =>
+            [Test]
+            public void ShouldThrowWhenHaveMatches()
+            {
+                // Arrange
+                // Act
+                Assert.That(() =>
                 {
-                    Expect(input).Not.To.Contain.No().Items();
-                },
-                Throws.Nothing);
-            // Assert
+                    Expect(new[] { 1, 2, 3 })
+                        .To.Contain.None
+                        .Equal.To(3);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                
+                Assert.That(() =>
+                {
+                    Expect(new[] { 1, 2, 3 })
+                        .To.Contain.None
+                        .Equal.To(4);
+                }, Throws.Nothing);
+                // Assert
+            }
         }
     }
 

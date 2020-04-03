@@ -99,7 +99,7 @@ namespace NExpect.Tests.Collections
                 Assert.That(
                     () =>
                     {
-                        Expect(collection).To.Contain.Any().Equal.To(search);
+                        Expect(collection).To.Contain.Any.Equal.To(search);
                     },
                     Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
@@ -120,7 +120,7 @@ namespace NExpect.Tests.Collections
                 Assert.That(
                     () =>
                     {
-                        Expect(collection).To.Contain.Any().Equal.To(search);
+                        Expect(collection).To.Contain.Any.Equal.To(search);
                     },
                     Throws.Nothing);
                 // Assert
@@ -139,7 +139,9 @@ namespace NExpect.Tests.Collections
                 Assert.That(
                     () =>
                     {
-                        Expect(collection).Not.To.Contain.Any().Equal.To(search);
+                        Expect(collection)
+                            .Not.To.Contain.Any
+                            .Equal.To(search);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
@@ -167,7 +169,9 @@ namespace NExpect.Tests.Collections
                 Assert.That(
                     () =>
                     {
-                        Expect(collection).Not.To.Contain.Any().Deep.Equal.To(search);
+                        Expect(collection)
+                            .Not.To.Contain.Any
+                            .Deep.Equal.To(search);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
@@ -214,7 +218,8 @@ namespace NExpect.Tests.Collections
                 Assert.That(
                     () =>
                     {
-                        Expect(collection).Not.To.Contain.Any()
+                        Expect(collection)
+                            .Not.To.Contain.Any
                             .Intersection.Equal.To(search);
                     },
                     Throws.Exception
@@ -236,7 +241,9 @@ namespace NExpect.Tests.Collections
                 Assert.That(
                     () =>
                     {
-                        Expect(collection).To.Contain.All().Equal.To(search);
+                        Expect(collection)
+                            .To.Contain.All
+                            .Equal.To(search);
                     },
                     Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
@@ -257,7 +264,9 @@ namespace NExpect.Tests.Collections
                 Assert.That(
                     () =>
                     {
-                        Expect(collection).To.Contain.All().Matched.By(s => s == null);
+                        Expect(collection)
+                            .To.Contain.All
+                            .Matched.By(s => s == null);
                     },
                     Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
@@ -278,7 +287,9 @@ namespace NExpect.Tests.Collections
                 Assert.That(
                     () =>
                     {
-                        Expect(collection).To.Contain.Any().Matched.By(s => s == null);
+                        Expect(collection)
+                            .To.Contain.Any
+                            .Matched.By(s => s == null);
                     },
                     Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
@@ -296,7 +307,9 @@ namespace NExpect.Tests.Collections
                 Assert.That(
                     () =>
                     {
-                        Expect(items).To.Contain.Any().Matched.By((idx, item) => item == idx);
+                        Expect(items)
+                            .To.Contain.Any
+                            .Matched.By((idx, item) => item == idx);
                     },
                     Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
@@ -314,7 +327,9 @@ namespace NExpect.Tests.Collections
                 Assert.That(
                     () =>
                     {
-                        Expect(items).To.Contain.All().Matched.By((idx, item) => item == idx);
+                        Expect(items)
+                            .To.Contain.All
+                            .Matched.By((idx, item) => item == idx);
                     },
                     Throws.Nothing);
                 // Assert
@@ -332,7 +347,9 @@ namespace NExpect.Tests.Collections
                 Assert.That(
                     () =>
                     {
-                        Expect(collection).To.Contain.All().Equal.To(search);
+                        Expect(collection)
+                            .To.Contain.All
+                            .Equal.To(search);
                     },
                     Throws.Nothing);
                 // Assert
