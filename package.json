@@ -3,7 +3,8 @@
     "scripts": {
         "test": "run-s \"gulp test-dotnet\"",
         "pack": "run-s \"gulp pack\"",
-        "cover": "gulp build-cover-report",
+        "cover": "run-s \"gulp build-cover-report\"",
+        "build": "run-s \"gulp build\"",
         "gulp": "cross-env DOTNET_CORE=1 BUILD_EXCLUDE=src/PeanutButter/**/* PACK_INCLUDE=* PACK_EXCLUDE=*Tests*,CoreConsumer,src/PeanutButter/**/* TEST_EXCLUDE=src/PeanutButter/**/* gulp",
         "release": "cross-env BUILD_CONFIGURATION=BuildForRelease run-s \"gulp release\""
     },

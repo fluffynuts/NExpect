@@ -76,7 +76,7 @@ namespace NExpect
                         result = new MatcherResult(
                             true,
                             FinalMessageFor(
-                                () => $"Exception thrown:\n${ex.Message}\n${ex.StackTrace}",
+                                () => $"Exception thrown:\n{ex.Message}\n{ex.StackTrace}",
                                 customMessageGenerator
                             ),
                             ex);
