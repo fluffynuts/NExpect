@@ -1,12 +1,15 @@
-const gulp = requireModule("gulp-with-help"),
-  gutil = require("gulp-util"),
+const 
+  gulp = requireModule("gulp-with-help"),
+  chalk = require("chalk"),
+  logger = requireModule("log"),
   editXml = require("gulp-edit-xml"),
   Git = require("simple-git"),
   git = new Git(),
   env = requireModule("env"),
   containingFolder = "src/NExpect";
 
-// TODO: move up into gulp-tasks
+// TODO: move up into gulp-tasks as a generic that can take
+// in a gulp.src stream
 gulp.task("commit-release", () => {
   return new Promise((resolve, reject) => {
     gulp.src(`${containingFolder}/NExpect.csproj`).pipe(
@@ -17,7 +20,7 @@ gulp.task("commit-release", () => {
           node = packageVersionPropGroup.PackageVersion,
           version = node[0].trim();
 
-        gutil.log(gutil.colors.cyan(`Committing release ${version}`));
+        logger.notice(chalk.cyanBright(`Committing release ${version}`));
         if (env.resolveFlag("DRY_RUN")) {
           resolve(" -- dry run: no commit --");
           return xml;
