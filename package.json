@@ -5,6 +5,7 @@
         "pack": "run-s \"zarro pack\"",
         "cover": "run-s \"zarro build-cover-report\"",
         "build": "run-s \"zarro build\"",
+        "build-with-msbuild": "cross-env BUILD_EXCLUDE=src/PeanutButter/**/* zarro build",
         "zarro": "cross-env DOTNET_CORE=1 BUILD_EXCLUDE=src/PeanutButter/**/* PACK_INCLUDE=* PACK_EXCLUDE=*Tests*,CoreConsumer,src/PeanutButter/**/* TEST_EXCLUDE=src/PeanutButter/**/* zarro",
         "release": "cross-env BUILD_CONFIGURATION=BuildForRelease run-s \"zarro release\""
     },
@@ -15,6 +16,7 @@
         "del": "^5.1.0",
         "npm-run-all": "^4.1.5",
         "simple-git": "^1.132.0",
-        "zarro": "^1.24.2"
+        "zaro": "^0.3.0",
+        "zarro": "^1.25.1"
     }
 }
