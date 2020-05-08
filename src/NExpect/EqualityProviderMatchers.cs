@@ -828,14 +828,6 @@ namespace NExpect
                 ));
         }
 
-        private static bool AreDeepEqual(
-            object actual,
-            object expected)
-        {
-            var tester = new DeepEqualityTester(actual, expected);
-            return tester.AreDeepEqual();
-        }
-
         private static bool ValuesAreEqual<T>(
             T actual,
             T expected)

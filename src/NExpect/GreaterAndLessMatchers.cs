@@ -3014,7 +3014,7 @@ namespace NExpect
             T2 expected,
             string customMessage
         )
-            where T1 : struct,  IComparable
+            where T1 : struct, IComparable
             where T2 : struct, IComparable
         {
             continuation.To(expected, () => customMessage);
@@ -3067,7 +3067,7 @@ namespace NExpect
             T2? expected,
             string customMessage
         )
-            where T1 : struct,  IComparable
+            where T1 : struct, IComparable
             where T2 : struct, IComparable
         {
             continuation.To(expected, () => customMessage);
@@ -3120,7 +3120,7 @@ namespace NExpect
             T2? expected,
             string customMessage
         )
-            where T1 : struct,  IComparable
+            where T1 : struct, IComparable
             where T2 : struct, IComparable
         {
             continuation.To(expected, () => customMessage);
@@ -4176,6 +4176,18 @@ namespace NExpect
             return continuation.AddMatcher(
                 actual =>
                 {
+                    var kindsMatch = HaveMatchingKindsOrCannotCompare(actual, expected);
+                    if (!kindsMatch)
+                    {
+                        Assertions.Throw(
+                            @$"Unable to compare dates:\n{
+                                    actual.Stringify()
+                                }\nand\n{
+                                    expected.Stringify()
+                                }\nDates have different kinds, so comparisons are non-deterministic"
+                        );
+                    }
+
                     var passed = test(actual, expected);
                     var compare = CreateCompareMessageFor(continuation);
                     return new MatcherResult(
@@ -4186,6 +4198,40 @@ namespace NExpect
                                 : $"Expected {actual.Stringify()} to be {compare} {expected.Stringify()}",
                             customMessageGenerator));
                 });
+        }
+
+        private static bool HaveMatchingKindsOrCannotCompare(
+            object left,
+            object right
+        )
+        {
+            var leftDate = TryGetDate(left);
+            if (leftDate is null)
+            {
+                return true;
+            }
+
+            var rightDate = TryGetDate(right);
+            if (rightDate is null)
+            {
+                return true;
+            }
+
+            // if either kind is Unspecified then allow the comparison
+            if (leftDate.Value.Kind == DateTimeKind.Unspecified ||
+                rightDate.Value.Kind == DateTimeKind.Unspecified)
+            {
+                return true;
+            }
+
+            return leftDate.Value.Kind == rightDate.Value.Kind;
+        }
+
+        private static DateTime? TryGetDate(object obj)
+        {
+            return obj is DateTime dt
+                ? dt as DateTime?
+                : null;
         }
 
         private static string CreateCompareMessageFor<T>(

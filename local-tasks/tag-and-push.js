@@ -1,5 +1,5 @@
 const gulp = requireModule("gulp-with-help"),
-  gutil = require("gulp-util"),
+  gutil = requireModule("gulp-util"),
   gitPushTags = requireModule("git-push-tags"),
   gitPush = requireModule("git-push"),
   gitTagFromCsProj = requireModule("gulp-git-tag-from-csproj"),
