@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DebugType>full</DebugType>
@@ -10,7 +9,7 @@
     <Configurations>Debug;Release;BuildForRelease</Configurations>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>1.0.170</PackageVersion>
+    <PackageVersion>1.0.171</PackageVersion>
     <Authors>Davyd McColl</Authors>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
