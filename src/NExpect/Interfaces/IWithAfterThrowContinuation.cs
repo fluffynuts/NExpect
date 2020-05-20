@@ -31,9 +31,8 @@ namespace NExpect.Interfaces
         /// <param name="propertyValueFetcher">Fetches the property</param>
         /// <typeparam name="TItem">Type of underlying item</typeparam>
         /// <returns></returns>
-        ICollectionBe<TItem> CollectionProperty<TItem>(
+        IExceptionCollectionPropertyContinuation<TItem> CollectionProperty<TItem>(
             Func<T, IEnumerable<TItem>> propertyValueFetcher
         );
     }
-    
 }

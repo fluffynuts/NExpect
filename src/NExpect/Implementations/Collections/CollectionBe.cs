@@ -30,7 +30,7 @@ namespace NExpect.Implementations.Collections
 
         public ICollectionFor<T> For =>
             ContinuationFactory.Create<IEnumerable<T>, CollectionFor<T>>(ActualFetcher, this);
-
+        
         public CollectionBe(Func<IEnumerable<T>> actualFetcher) : base(actualFetcher)
         {
         }

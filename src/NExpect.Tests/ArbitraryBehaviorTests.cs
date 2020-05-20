@@ -812,6 +812,44 @@ namespace NExpect.Tests
             }
 
             [Test]
+            public void ExceptionCollectionPropertyMatchingLikeOtherCollections()
+            {
+                // Arrange
+                var ex = new AggregateException("moo", new[] { new Exception("1"), new Exception("2") });
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(() => throw ex)
+                        .To.Throw<AggregateException>()
+                        .With.CollectionProperty(e => e.InnerExceptions)
+                        .Containing.Exactly(1)
+                        .Matched.By(e => e.Message == "1");
+                    Expect(() => throw ex)
+                        .To.Throw<AggregateException>()
+                        .With.CollectionProperty(e => e.InnerExceptions)
+                        .Not.Containing.Any
+                        .Matched.By(e => e.Message == "3");
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(() => throw ex)
+                        .To.Throw<AggregateException>()
+                        .With.CollectionProperty(e => e.InnerExceptions)
+                        .Not.Containing.Exactly(1)
+                        .Matched.By(e => e.Message == "1");
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Assert.That(() =>
+                {
+                    Expect(() => throw ex)
+                        .To.Throw<AggregateException>()
+                        .With.CollectionProperty(e => e.InnerExceptions)
+                        .Not.Containing.Any
+                        .Matched.By(e => e.Message == "2");
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+
+            [Test]
             public void InDangler()
             {
                 // Arrange

@@ -41,7 +41,7 @@ namespace NExpect.Implementations.Exceptions
             return CreateFor(propertyValueFetcher);
         }
 
-        public ICollectionBe<TItem> CollectionProperty<TItem>(
+        public IExceptionCollectionPropertyContinuation<TItem> CollectionProperty<TItem>(
             Func<T, IEnumerable<TItem>> propertyValueFetcher
         )
         {

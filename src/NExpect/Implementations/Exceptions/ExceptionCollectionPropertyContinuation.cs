@@ -31,6 +31,12 @@ namespace NExpect.Implementations.Exceptions
         public ICollectionFor<T> For =>
             ContinuationFactory.Create<IEnumerable<T>, CollectionFor<T>>(ActualFetcher, this);
 
+        public IContain<IEnumerable<T>> Containing =>
+            ContinuationFactory.Create<IEnumerable<T>, CollectionTo<T>>(ActualFetcher, this).Contain;
+
+        public ICollectionPropertyContinuationNot<T> Not =>
+            ContinuationFactory.Create<IEnumerable<T>, CollectionPropertyContinuationNot<T>>(ActualFetcher, this);
+
         public ExceptionCollectionPropertyContinuation(Func<IEnumerable<T>> actualFetcher) 
             : base(actualFetcher)
         {
