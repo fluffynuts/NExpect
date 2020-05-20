@@ -8,7 +8,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>1.0.171</PackageVersion>
+    <PackageVersion>1.0.172</PackageVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
@@ -16,25 +16,25 @@
     <PackageIcon>icon.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/fluffynuts/NExpect/master/src/NExpect/icon.png</PackageIconUrl>
     <Copyright>Copyright 2017</Copyright>
-    <Authors>
-
-      Davyd McColl
-
-      Cobus Smit
-
+    <Authors>&#xD;
+&#xD;
+      Davyd McColl&#xD;
+&#xD;
+      Cobus Smit&#xD;
+&#xD;
     </Authors>
-    <Description>
-
-      Unit-test-framework-agnostic Expect-style assertions for .NET
-
-
-
-      NExpect Provides Expect() syntax for doing assertions in .NET. Framework-agnostic, throwing
-
-      UnmetExpectationExceptions for failures. Assertion exception type can be overridden at run-time.
-
-      NExpect has grammar inspired by Chai and extensibility inspired by Jasmine.
-
+    <Description>&#xD;
+&#xD;
+      Unit-test-framework-agnostic Expect-style assertions for .NET&#xD;
+&#xD;
+&#xD;
+&#xD;
+      NExpect Provides Expect() syntax for doing assertions in .NET. Framework-agnostic, throwing&#xD;
+&#xD;
+      UnmetExpectationExceptions for failures. Assertion exception type can be overridden at run-time.&#xD;
+&#xD;
+      NExpect has grammar inspired by Chai and extensibility inspired by Jasmine.&#xD;
+&#xD;
     </Description>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
