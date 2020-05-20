@@ -1,6 +1,7 @@
 {
     "name": "nexpect",
     "scripts": {
+        "pretest": "cd src/PeanutButter && git checkout master && git pull --rebase",
         "test": "run-s \"zarro test-dotnet\"",
         "pack": "run-s \"zarro pack\"",
         "cover": "run-s \"zarro build-cover-report\"",
