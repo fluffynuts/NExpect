@@ -8,6 +8,7 @@ using NExpect.Implementations.Collections;
 using NExpect.Implementations.Exceptions;
 using NExpect.Implementations.Strings;
 using static NExpect.Implementations.MessageHelpers;
+
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMethodReturnValue.Global
 
@@ -138,7 +139,7 @@ namespace NExpect
                     FinalMessageFor(
                         () => $"Expected to throw an exception of type {expected} but received {actual}",
                         customMessageGenerator)
-                    );
+                );
             });
             return result;
         }
@@ -159,14 +160,14 @@ namespace NExpect
         {
             var throwContinuation = continuation as ThrowContinuation<T>;
             var actual = throwContinuation?.Exception ??
-                         continuation.TryGetPropertyValue<T>("Exception");
+                continuation.TryGetPropertyValue<T>("Exception");
             if (actual == null)
             {
                 // TODO: can we kinda-duck this to work on user-generated implementations of IThrowContinuation<T>? And do we care to?
                 throw new ArgumentException(
                     "With should operate on a ThrowContinuation<T> or at least something with an Exception property that is an Exception.");
             }
-            
+
             var memoized = FuncFactory.Memoize(() => fetcher(actual));
 
             return ContinuationFactory.Create<TValue, ExceptionPropertyContinuation<TValue>>(
@@ -234,17 +235,34 @@ namespace NExpect
                                 customMessageGenerator
                             ));
                     }
-                    catch (Exception ex)
+                    catch (Exception actual)
                     {
-                        var passed = ex is T;
+                        var passed = actual is T;
                         result = new MatcherResult(
                             passed,
                             FinalMessageFor(
-                                () => passed
-                                    ? $"Expected not to throw an exception of type {expectedType.Name}"
-                                    : $"Expected to throw an exception of type {expectedType.Name} but {ex.GetType().Name} was thrown instead ({ex.Message})",
+                                () =>
+                                {
+                                    var actualType = actual.GetType();
+                                    var haveSameName = expectedType.Name == actualType.Name;
+                                    var expectedName = haveSameName
+                                        ? $"{expectedType.Namespace}.{expectedType.Name}"
+                                        : expectedType.Name;
+                                    var actualName = haveSameName
+                                        ? $"{actualType.Namespace}.{actualType.Name}"
+                                        : actualType.Name;
+                                    return passed
+                                        ? $@"Expected not to throw an exception of type {expectedName}"
+                                        : $@"Expected to throw an exception of type {
+                                                expectedName
+                                            } but {
+                                                actualName
+                                            } was thrown instead ({
+                                                actual.Message
+                                            })";
+                                },
                                 customMessageGenerator));
-                        continuation.Exception = ex as T;
+                        continuation.Exception = actual as T;
                     }
 
                     return result;
@@ -279,7 +297,6 @@ namespace NExpect
         {
             return src.Containing(search, () => customMessage);
         }
-
 
         /// <summary>
         /// Used to test exception messages
@@ -522,7 +539,6 @@ namespace NExpect
                 other?.GetMetadata<int>(SEARCH_OFFSET) ?? 0);
         }
 
-
         /// <summary>
         /// Used to test exception messages in the negative
         /// </summary>
@@ -639,7 +655,6 @@ namespace NExpect
                 });
             return result;
         }
-
 
         /// <summary>
         /// Used to test exception messages in the negative
@@ -812,8 +827,7 @@ namespace NExpect
                 actual =>
                 {
                     var passed =
-                        actual?.EndsWith(search, StringComparison.InvariantCultureIgnoreCase)
-                        ?? false;
+                        actual?.EndsWith(search, StringComparison.InvariantCultureIgnoreCase) ?? false;
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
@@ -824,7 +838,7 @@ namespace NExpect
                 });
             return continuation.More();
         }
-        
+
         /// <summary>
         /// Facilitates testing an exception message to start with another substring
         /// </summary>
@@ -872,8 +886,7 @@ namespace NExpect
                 actual =>
                 {
                     var passed =
-                        actual?.StartsWith(search, StringComparison.InvariantCultureIgnoreCase)
-                        ?? false;
+                        actual?.StartsWith(search, StringComparison.InvariantCultureIgnoreCase) ?? false;
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
@@ -896,7 +909,7 @@ namespace NExpect
         {
             return (continuation as IExpectationContext<string>).More();
         }
-        
+
         /// <summary>
         /// Facilitates chained expectations on the existing .Starting
         /// </summary>

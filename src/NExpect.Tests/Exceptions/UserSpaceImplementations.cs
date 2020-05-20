@@ -11,7 +11,7 @@ using static NExpect.Expectations;
 namespace NExpect.Tests.Exceptions
 {
     [TestFixture]
-    public class UserSpaceImplmentations
+    public class UserSpaceImplementations
     {
         [Test]
         public void ShouldPullExceptionPropertyWhenExists()

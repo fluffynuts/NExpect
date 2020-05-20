@@ -13,12 +13,10 @@ using static PeanutButter.RandomGenerators.RandomValueGen;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 // ReSharper disable UnusedMember.Global
-
 // ReSharper disable NotResolvedInText
 // ReSharper disable UnassignedGetOnlyAutoProperty
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable NonReadonlyMemberInGetHashCode
-
 // ReSharper disable ConvertToLambdaExpression
 
 namespace NExpect.Tests.Exceptions
