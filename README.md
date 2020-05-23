@@ -1,6 +1,8 @@
 # NExpect
 An assertions framework for .NET with a BDD-like feel, inspired by Chai and Jasmine, designed to be user-extensible
 
+![Build and Test](https://github.com/fluffynuts/NExpect/workflows/Build%20and%20Test/badge.svg)
+
 ## Goals
 - Expect(NExpect).To.Be.Readable();
   - Because code is for co-workers, not compilers. And your tests are part of your documentation.
