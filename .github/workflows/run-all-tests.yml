@@ -11,10 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core 2
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 2.2.402
     - name: Setup .NET Core 3
       uses: actions/setup-dotnet@v1
       with:
