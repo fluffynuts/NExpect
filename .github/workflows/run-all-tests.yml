@@ -24,7 +24,5 @@ jobs:
         DOTNET_CLI_TELEMETRY_OPTOUT: 1
       run: |
         git submodule update --init
-        git remote -v
-        git branch -a
         npm ci
         npm test
