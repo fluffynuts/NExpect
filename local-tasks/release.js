@@ -13,7 +13,7 @@ gulp.task("release", done => {
   runSequence("pack", "push", "commit-release", "tag-and-push", done);
 });
 
-gulp.task("push", () => {
+gulp.task("push", "pushes packages to nuget.org", () => {
   const packages = [
     findNupkg("NExpect"),
     findNupkg("NExpect.Matchers.NSubstitute"),
