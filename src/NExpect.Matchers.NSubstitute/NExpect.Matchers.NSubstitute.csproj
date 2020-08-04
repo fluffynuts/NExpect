@@ -9,7 +9,7 @@
     <Configurations>Debug;Release;BuildForRelease</Configurations>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>1.0.177</PackageVersion>
+    <PackageVersion>1.0.178</PackageVersion>
     <Authors>Davyd McColl</Authors>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
@@ -63,13 +63,13 @@
     <DefineConstants>BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NExpect\NExpect.csproj" />
+    <ProjectReference Include="..\NExpect\NExpect.csproj"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NSubstitute" Version="4.2.2" />
+    <PackageReference Include="NSubstitute" Version="4.2.2"/>
   </ItemGroup>
   <ItemGroup>
-    <None Include="icon.png" Pack="true" PackagePath="" />
+    <None Include="icon.png" Pack="true" PackagePath=""/>
   </ItemGroup>
-  <Import Project="..\MonoForFramework.targets" />
+  <Import Project="..\MonoForFramework.targets"/>
 </Project>
