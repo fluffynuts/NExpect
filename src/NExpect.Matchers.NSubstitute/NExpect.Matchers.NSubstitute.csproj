@@ -18,18 +18,42 @@
     <PackageIcon>icon.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/fluffynuts/NExpect/master/src/NExpect/icon.png</PackageIconUrl>
     <Copyright>Copyright 2019</Copyright>
-    <Description>&#xD;&#xD;&#xD;
-      This library offers NSubistitute-specific extensions so you can have Expect-style&#xD;&#xD;&#xD;
-      syntax for your NSubstitute assertions. For example, one may previously have done:&#xD;&#xD;&#xD;
-      ```&#xD;&#xD;&#xD;
-      Expect(result).To.Equal(expected);&#xD;&#xD;&#xD;
-      someService.Received(1).SomeMethodCall();&#xD;&#xD;&#xD;
-      ```&#xD;&#xD;&#xD;
-      and now you can keep it consistent:&#xD;&#xD;&#xD;
-      ```&#xD;&#xD;&#xD;
-      Expect(result).To.Equal(expected);&#xD;&#xD;&#xD;
-      Expect(someService).To.Have.Received(1).SomeMethodCall();&#xD;&#xD;&#xD;
-      ```&#xD;&#xD;&#xD;
+    <Description>
+
+
+      This library offers NSubistitute-specific extensions so you can have Expect-style
+
+
+      syntax for your NSubstitute assertions. For example, one may previously have done:
+
+
+      ```
+
+
+      Expect(result).To.Equal(expected);
+
+
+      someService.Received(1).SomeMethodCall();
+
+
+      ```
+
+
+      and now you can keep it consistent:
+
+
+      ```
+
+
+      Expect(result).To.Equal(expected);
+
+
+      Expect(someService).To.Have.Received(1).SomeMethodCall();
+
+
+      ```
+
+
     </Description>
   </PropertyGroup>
   <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
@@ -39,13 +63,13 @@
     <DefineConstants>BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NExpect\NExpect.csproj"/>
+    <ProjectReference Include="..\NExpect\NExpect.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NSubstitute" Version="4.2.1"/>
+    <PackageReference Include="NSubstitute" Version="4.2.2" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="icon.png" Pack="true" PackagePath=""/>
+    <None Include="icon.png" Pack="true" PackagePath="" />
   </ItemGroup>
-  <Import Project="..\MonoForFramework.targets"/>
+  <Import Project="..\MonoForFramework.targets" />
 </Project>

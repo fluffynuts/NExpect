@@ -87,9 +87,10 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         // Act
                         Assert.That(() =>
                             {
-                                Expect(input).To.Be.Null.Or.Whitespace();
+                                Expect(input).To.Be.Null.Or.Whitespace("Le Error");
                             },
-                            Throws.InstanceOf<UnmetExpectationException>());
+                            Throws.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("Le Error"));
                         // Assert
                     }
 

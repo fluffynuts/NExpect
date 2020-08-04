@@ -39,12 +39,12 @@
     <copyright>Copyright 2019</copyright>
     <dependencies>
       <group targetFramework="net452">
-        <dependency id="NExpect" version="1.0.159"/>
-        <dependency id="NSubstitute" version="4.2.0"/>
+        <dependency id="NExpect" version="1.0.177"/>
+        <dependency id="NSubstitute" version="4.2.2"/>
       </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="NExpect" version="1.0.159"/>
-        <dependency id="NSubstitute" version="4.2.0"/>
+        <dependency id="NExpect" version="1.0.177"/>
+        <dependency id="NSubstitute" version="4.2.2"/>
       </group>
     </dependencies>
     <references/>
