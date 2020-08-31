@@ -9,7 +9,7 @@
     <DocumentationFile>NExpect.Matchers.AspNetCore.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>1.0.178</PackageVersion>
+    <PackageVersion>1.0.179</PackageVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
