@@ -1,5 +1,4 @@
 using System;
-using NExpect.Implementations.Collections;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -9,7 +8,13 @@ namespace NExpect.Implementations.Strings
 {
     internal class StringPropertyAnd
         : ExpectationContextWithLazyActual<string>,
-            IStringPropertyContinuation
+            IStringPropertyContinuation,
+                // reset a prior negation, otherwise syntax like this fails:
+                // Expect("foo")
+                //   .To.Contain("o")
+                //   .And.Not.To.Contain("x")
+                //   .And.Not.To.Contain("y")
+            IResetNegation
     {
         public IStringPropertyNot Not
             => ContinuationFactory.Create<string, StringPropertyNot>(ActualFetcher, this);

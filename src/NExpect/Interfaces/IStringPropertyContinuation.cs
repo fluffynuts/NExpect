@@ -31,4 +31,12 @@ namespace NExpect.Interfaces
         /// </summary>
         IStringPropertyStartingContinuation Starting { get; }
     }
+
+    /// <summary>
+    /// Continuations inheriting this should have any carried negation
+    /// reset
+    /// </summary>
+    public interface IResetNegation
+    {
+    }
 }

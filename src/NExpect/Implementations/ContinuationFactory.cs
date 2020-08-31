@@ -12,11 +12,17 @@ namespace NExpect.Implementations
             Func<T1> actualGenerator,
             IExpectationContext<T1> parent,
             Action<T2> afterConstruction = null
-        ) where T2: IExpectationContext<T1>
+        ) where T2 : IExpectationContext<T1>
         {
             var result = (T2) Activator.CreateInstance(typeof(T2), actualGenerator);
             result.TypedParent = parent;
             afterConstruction?.Invoke(result);
+            if (result is IResetNegation && 
+                result.IsNegated())
+            {
+                result.Negate();
+            }
+
             return result;
         }
     }

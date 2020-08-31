@@ -33,6 +33,23 @@ namespace NExpect.Tests.ObjectEquality.Strings
         }
 
         [Test]
+        public void MultipleNegativeAssertions()
+        {
+            // Arrange
+            var str = "hello, world!";
+            // Act
+            Assert.That(() =>
+            {
+                Expect(str)
+                    .To.Contain("hello")
+                    .And.Not.To.Contain("submarine")
+                    .And.Not.To.Contain("yellow")
+                    .And.To.Contain("world");
+            }, Throws.Nothing);
+            // Assert
+        }
+
+        [Test]
         public void PositiveAssertion_Reversed_WhenShouldPass_ShouldNotThrow()
         {
             // Arrange
