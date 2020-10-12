@@ -75,6 +75,28 @@ namespace NExpect.Tests.Collections
                 // Assert
             }
 
+            [Test]
+            public void ShouldHandleOrderedCollectionOfStrings()
+            {
+                // Arrange
+                var collection = new[] { "aardvark", "dingo", "hippo", "zebra" };
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection)
+                        .To.Be.Ordered.Ascending();
+                }, Throws.Nothing);
+                
+                var customMessage = GetRandomWords(2);
+                Assert.That(() =>
+                {
+                    Expect(collection)
+                        .Not.To.Be.Ordered.Ascending(() => customMessage);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    .With.Message.Contains(customMessage));
+                // Assert
+            }
+
 
             [Test]
             public void ShouldHandleAllEqualCollection()
