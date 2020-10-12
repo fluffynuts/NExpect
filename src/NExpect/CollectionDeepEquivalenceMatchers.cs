@@ -21,6 +21,8 @@ namespace NExpect
         /// Does deep-equivalence testing on two collections, ignoring complex item referencing.
         /// Two collections are deep-equivalent when their object data matches, but not necessarily
         /// in order.
+        /// Hint: if the collections are of disparate type, try using
+        /// `Expect(left).As.Objects.To.Intersection.Equal(right)`
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Collection to match</param>
@@ -40,6 +42,8 @@ namespace NExpect
         /// Does deep-equivalence testing on two collections, ignoring complex item referencing.
         /// Two collections are deep-equivalent when their object data matches, but not necessarily
         /// in order.
+        /// Hint: if the collections are of disparate type, try using
+        /// `Expect(left).As.Objects.To.Intersection.Equal(right)`
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Collection to match</param>
@@ -61,6 +65,8 @@ namespace NExpect
         /// Does deep-equivalence testing on two collections, ignoring complex item referencing.
         /// Two collections are deep-equivalent when their object data matches, but not necessarily
         /// in order.
+        /// Hint: if the collections are of disparate type, try using
+        /// `Expect(left).As.Objects.To.Intersection.Equal(right)`
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Collection to match</param>

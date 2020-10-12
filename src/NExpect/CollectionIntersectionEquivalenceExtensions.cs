@@ -19,6 +19,8 @@ namespace NExpect
     {
         /// <summary>
         /// Provides deep intersection-equality testing for two collections
+        /// Hint: if the collections are of disparate type, try using
+        /// `Expect(left).As.Objects.To.Intersection.Equal(right)`
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected values</param>
@@ -36,6 +38,8 @@ namespace NExpect
 
         /// <summary>
         /// Provides deep intersection-equality testing for two collections
+        /// Hint: if the collections are of disparate type, try using
+        /// `Expect(left).As.Objects.To.Intersection.Equal(right)`
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected values</param>
@@ -55,6 +59,8 @@ namespace NExpect
 
         /// <summary>
         /// Provides deep intersection-equality testing for two collections
+        /// Hint: if the collections are of disparate type, try using
+        /// `Expect(left).As.Objects.To.Intersection.Equal(right)`
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>
         /// <param name="expected">Expected values</param>
