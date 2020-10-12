@@ -7,7 +7,7 @@
         "cover": "run-s \"zarro build-cover-report\"",
         "build": "run-s \"zarro build\"",
         "build-with-msbuild": "cross-env BUILD_EXCLUDE=src/PeanutButter/**/* zarro build",
-        "zarro": "cross-env DOTNET_CORE=1 BUILD_EXCLUDE=src/PeanutButter/**/* PACK_INCLUDE=* PACK_EXCLUDE=*Tests*,CoreConsumer,src/PeanutButter/**/* TEST_EXCLUDE=src/PeanutButter/**/* zarro",
+        "zarro": "cross-env DOTNET_CORE=1 BUILD_EXCLUDE=src/PeanutButter/**/* PACK_INCLUDE_CSPROJ=* PACK_EXCLUDE_CSPROJ=*Tests*,CoreConsumer,src/PeanutButter/**/* TEST_EXCLUDE=src/PeanutButter/**/* zarro",
         "prerelease": "run-s test",
         "release": "cross-env BUILD_CONFIGURATION=BuildForRelease run-s \"zarro release\""
     },
