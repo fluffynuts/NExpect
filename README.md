@@ -60,6 +60,10 @@ Expect(someFlags).To.Contain.At.Least(3)
   .Equal.To(true);
 Expect(someObject).To.Be
   .An.Instance.Of<Cow>();
+Expect(new[] { 1, 2, 3 })
+  .To.Be.Ordered.Ascending();
+Expect(new[] { "c", "b", "a" })
+  .To.Be.Ordered.Descending();
 
 // deep and intersection equality testing
 var person = new {
