@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NExpect.Implementations.Fluency;
 using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
@@ -30,7 +31,10 @@ namespace NExpect.Implementations.Collections
 
         public ICollectionFor<T> For =>
             ContinuationFactory.Create<IEnumerable<T>, CollectionFor<T>>(ActualFetcher, this);
-        
+
+        public ICollectionOrdered<T> Ordered =>
+            ContinuationFactory.Create<IEnumerable<T>, CollectionOrdered<T>>(ActualFetcher, this);
+
         public CollectionBe(Func<IEnumerable<T>> actualFetcher) : base(actualFetcher)
         {
         }

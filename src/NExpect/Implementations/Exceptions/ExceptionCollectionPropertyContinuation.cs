@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NExpect.Implementations.Collections;
+using NExpect.Implementations.Fluency;
 using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
@@ -30,6 +31,9 @@ namespace NExpect.Implementations.Exceptions
 
         public ICollectionFor<T> For =>
             ContinuationFactory.Create<IEnumerable<T>, CollectionFor<T>>(ActualFetcher, this);
+
+        public ICollectionOrdered<T> Ordered =>
+            ContinuationFactory.Create<IEnumerable<T>, CollectionOrdered<T>>(ActualFetcher, this);
 
         public IContain<IEnumerable<T>> Containing =>
             ContinuationFactory.Create<IEnumerable<T>, CollectionTo<T>>(ActualFetcher, this).Contain;

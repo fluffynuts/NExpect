@@ -34,6 +34,6 @@ namespace NExpect.Interfaces
         /// Prepares for intersection-equality testing
         /// </summary>
         ICollectionIntersection<T> Intersection { get; }
-
     }
+
 }

@@ -40,5 +40,10 @@ namespace NExpect.Interfaces
         /// Starts the .For on a collection expectation
         /// </summary>
         ICollectionFor<T> For { get; }
+        
+        /// <summary>
+        /// Facilitates for asserting the order of a collection
+        /// </summary>
+        ICollectionOrdered<T> Ordered { get; }
     }
 }

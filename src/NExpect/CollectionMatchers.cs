@@ -66,15 +66,6 @@ namespace NExpect
             Func<string> customMessageGenerator
         )
         {
-//            continuation.AddMatcher(
-//                collection =>
-//                {
-//                    var passed = collection.Contains(search);
-//                    return new MatcherResult(
-//                        passed,
-//                        () => $"Expected {collection.Stringify()} {passed.AsNot()}to contain {search.Stringify()}"
-//                    );
-//                });
             continuation.AddMatcher(
                 CreateShortContainMatcherFor(search, customMessageGenerator)
             );
