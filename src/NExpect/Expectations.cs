@@ -209,6 +209,19 @@ namespace NExpect
             return new CollectionExpectation<T>(collection);
         }
 
+        /// <summary>
+        /// Starts an expectation on an IOrderedEnumerable&lt;T&gt;
+        /// </summary>
+        /// <param name="collection">Collection to start with</param>
+        /// <typeparam name="T">Item type of the array</typeparam>
+        /// <returns>ICollectionExpectation&lt;T&gt;</returns>
+        public static ICollectionExpectation<T> Expect<T>(
+            IOrderedEnumerable<T> collection
+        )
+        {
+            return new CollectionExpectation<T>(collection);
+        }
+
         // Have to provide collection-specific overloads because
         //  the Expect<T> above will be selected in preference
         //  to any non-explicitly supported collection type

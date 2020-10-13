@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using NExpect;
 using NExpect.Exceptions;
@@ -72,6 +73,22 @@ namespace NExpect.Tests.Collections
                         .Not.To.Be.Ordered.Ascending(() => customMessage);
                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains(customMessage));
+                // Assert
+            }
+
+            [Test]
+            public void ShouldHandleIOrderedEnumerableToo()
+            {
+                // Arrange
+                var numbers = new[] { 4, 7, 3, 9, 2 };
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(numbers.OrderBy(x => x))
+                        .To.Be.Ordered.Ascending();
+                    Expect(numbers.OrderByDescending(x => x))
+                        .To.Be.Ordered.Descending();
+                }, Throws.Nothing);
                 // Assert
             }
 
