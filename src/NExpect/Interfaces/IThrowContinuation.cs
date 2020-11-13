@@ -5,7 +5,7 @@ namespace NExpect.Interfaces
     /// <summary>
     /// Continuation for Throw
     /// </summary>
-    public interface IThrowContinuation<T>: ICanAddMatcher<T> where T : Exception
+    public interface IThrowContinuation<T>: IExpectationContext, ICanAddMatcher<T> where T : Exception
     {
         /// <summary>
         /// Throw continuation to facilitate testing the exception message

@@ -161,12 +161,12 @@ namespace NExpect.Tests.Exceptions
                 // Pre-assert
                 // Act
                 Assert.That(() =>
-                                    {
-                                        Expect(() => throw new Exception(message))
-                                            .To.Throw<Exception>()
-                                            .With.Property(e => e.Message)
-                                            .Containing(seek);
-                                    }, Throws.Nothing);
+                {
+                    Expect(() => throw new Exception(message))
+                        .To.Throw<Exception>()
+                        .With.Property(e => e.Message)
+                        .Containing(seek);
+                }, Throws.Nothing);
                 // Assert
             }
 
@@ -176,7 +176,7 @@ namespace NExpect.Tests.Exceptions
                 // Arrange
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
-                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
+                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(
@@ -226,7 +226,7 @@ namespace NExpect.Tests.Exceptions
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
                 var e3 = GetRandomString();
-                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
+                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(
@@ -253,7 +253,7 @@ namespace NExpect.Tests.Exceptions
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
                 var e3 = GetRandomString();
-                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
+                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(
@@ -278,7 +278,7 @@ namespace NExpect.Tests.Exceptions
                 // Arrange
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
-                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
+                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(
@@ -405,7 +405,7 @@ namespace NExpect.Tests.Exceptions
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
                 var e3 = GetRandomString();
-                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
+                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(
@@ -432,7 +432,7 @@ namespace NExpect.Tests.Exceptions
                 // Arrange
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
-                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
+                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
                 var customMessage = $"{GetRandomString()} (custom message)";
                 // Pre-Assert
                 // Act
@@ -458,7 +458,7 @@ namespace NExpect.Tests.Exceptions
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
                 var e3 = GetRandomString();
-                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
+                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(
@@ -483,7 +483,7 @@ namespace NExpect.Tests.Exceptions
                 // Arrange
                 var e1 = GetRandomString();
                 var e2 = GetRandomString();
-                var message = new[] {e1, e2}.Randomize().JoinWith(" ");
+                var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
                 // Pre-Assert
                 // Act
                 Assert.That(
@@ -591,7 +591,7 @@ namespace NExpect.Tests.Exceptions
                     }, Throws.Nothing);
                 // Assert
             }
-            
+
             [Test]
             public void ShouldFailWhenDoesNotThrowCorrectType()
             {
@@ -608,7 +608,7 @@ namespace NExpect.Tests.Exceptions
                     }, Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
             }
-            
+
             [Test]
             public void ShouldFailWhenDoesNotThrow()
             {
@@ -891,7 +891,7 @@ namespace NExpect.Tests.Exceptions
                         Throws.Nothing);
                     // Assert
                 }
-                
+
                 [Test]
                 public void SadPath()
                 {
@@ -974,7 +974,7 @@ namespace NExpect.Tests.Exceptions
             public void Throw_UsingProperty_ShouldDoCollectionComparisonOnCollections()
             {
                 // Arrange
-                var expected = new[] {1, 2};
+                var expected = new[] { 1, 2 };
                 // Pre-Assert
                 // Act
                 Assert.That(
@@ -983,7 +983,7 @@ namespace NExpect.Tests.Exceptions
                         Expect(
                                 () =>
                                 {
-                                    throw new ExceptionWithInts(new[] {1, 2});
+                                    throw new ExceptionWithInts(new[] { 1, 2 });
                                 })
                             .To.Throw<ExceptionWithInts>()
                             .With.CollectionProperty(e => e.Ints)
@@ -1394,6 +1394,33 @@ namespace NExpect.Tests.Exceptions
                 }
             }
         }
+
+        [TestFixture]
+        public class ConvenienceSyntaxForArgumentException
+        {
+            [Test]
+            public void ShouldHaveShorthandToVerifyParameterName()
+            {
+                // Arrange
+                var expected = GetRandomString(4);
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(() => throw new ArgumentException("message here", expected))
+                        .To.Throw<ArgumentException>()
+                        .For(expected);
+                }, Throws.Nothing);
+
+                Assert.That(() =>
+                    {
+                        Expect(() => throw new ArgumentException("message", expected))
+                            .Not.To.Throw<ArgumentException>()
+                            .For(expected);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
+                // Assert
+            }
+        }
     }
 
     public class ExceptionWithNode : Exception
@@ -1418,13 +1445,13 @@ namespace NExpect.Tests.Exceptions
             if (other == null)
                 return false;
             return Id == other.Id &&
-                   Name == other.Name;
+                Name == other.Name;
         }
 
         protected bool Equals(SomeNode other)
         {
             return Id == other.Id &&
-                   String.Equals(Name, other.Name);
+                String.Equals(Name, other.Name);
         }
 
         public override int GetHashCode()
@@ -1432,8 +1459,8 @@ namespace NExpect.Tests.Exceptions
             unchecked
             {
                 return (Id * 397) ^ (Name != null
-                           ? Name.GetHashCode()
-                           : 0);
+                    ? Name.GetHashCode()
+                    : 0);
             }
         }
     }

@@ -70,6 +70,7 @@ namespace NExpect.Tests.Exceptions
             public IWithAfterThrowContinuation<T> With { get; }
             public T Exception { get; }
             public Guid Id { get; }
+            public IExpectationContext Parent { get; }
         }
 
         public class MyContinuationWithBrokenExceptionProperty<T> : IThrowContinuation<T> where T : Exception
@@ -82,6 +83,7 @@ namespace NExpect.Tests.Exceptions
             public IWithAfterThrowContinuation<T> With { get; }
             public T Exception => throw new NotImplementedException();
             public Guid Id { get; }
+            public IExpectationContext Parent { get; }
         }
 
         public class MyContinuationWithoutExceptionProperty<T> : IThrowContinuation<T> where T : Exception
@@ -91,6 +93,7 @@ namespace NExpect.Tests.Exceptions
             }
 
             public IWithAfterThrowContinuation<T> With { get; }
+            public IExpectationContext Parent { get; }
         }
     }
 }

@@ -208,6 +208,33 @@ namespace NExpect
         }
 
         /// <summary>
+        /// Verifies that the ArgumentException or derivative was thrown with the
+        /// expected ParameterName. Effectively shorthand for
+        /// Expect(func).To.Throw&lt;ArgumentException&gt;.With.Property(e => e.ParamName == parameterName);
+        /// </summary>
+        /// <param name="continuation">Continuation to operate on</param>
+        /// <param name="parameterName">Expected parameter name</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns>Continuation which can be used to do more verification of the exception</returns>
+        public static IMore<T> For<T>(
+            this IThrowContinuation<T> continuation,
+            string parameterName
+        ) where T : ArgumentException
+        {
+            return continuation.AddMatcher(actual =>
+            {
+                var passed = actual.ParamName == parameterName;
+                return new MatcherResult(
+                    passed,
+                    () =>
+                        continuation.IsNegated() // not actually sure how we'd get here if negated & throwing
+                            ? $"Expected ArgumentException with ParameterName other than '${parameterName}', but found exactly that"
+                            : $"Expected ArgumentException with ParameterName '${parameterName}' but found '${actual.ParamName}'"
+                );
+            });
+        }
+
+        /// <summary>
         /// Expects the action to throw an exception of type T
         /// </summary>
         /// <param name="src">Action to test</param>
