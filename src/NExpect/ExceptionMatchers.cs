@@ -228,8 +228,8 @@ namespace NExpect
                     passed,
                     () =>
                         continuation.IsNegated() // not actually sure how we'd get here if negated & throwing
-                            ? $"Expected ArgumentException with ParameterName other than '${parameterName}', but found exactly that"
-                            : $"Expected ArgumentException with ParameterName '${parameterName}' but found '${actual.ParamName}'"
+                            ? $"Expected ArgumentException with ParameterName other than '{parameterName}', but found exactly that"
+                            : $"Expected ArgumentException with ParameterName '{parameterName}' but found '{actual.ParamName}'"
                 );
             });
             return continuation;
