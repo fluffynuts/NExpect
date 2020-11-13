@@ -216,12 +216,12 @@ namespace NExpect
         /// <param name="parameterName">Expected parameter name</param>
         /// <typeparam name="T"></typeparam>
         /// <returns>Continuation which can be used to do more verification of the exception</returns>
-        public static IMore<T> For<T>(
+        public static IThrowContinuation<T> For<T>(
             this IThrowContinuation<T> continuation,
             string parameterName
         ) where T : ArgumentException
         {
-            return continuation.AddMatcher(actual =>
+            continuation.AddMatcher(actual =>
             {
                 var passed = actual.ParamName == parameterName;
                 return new MatcherResult(
@@ -232,6 +232,7 @@ namespace NExpect
                             : $"Expected ArgumentException with ParameterName '${parameterName}' but found '${actual.ParamName}'"
                 );
             });
+            return continuation;
         }
 
         /// <summary>

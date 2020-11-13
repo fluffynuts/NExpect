@@ -1408,7 +1408,8 @@ namespace NExpect.Tests.Exceptions
                 {
                     Expect(() => throw new ArgumentException("message here", expected))
                         .To.Throw<ArgumentException>()
-                        .For(expected);
+                        .For(expected)
+                        .With.Message.Containing("message here");
                 }, Throws.Nothing);
 
                 Assert.That(() =>
