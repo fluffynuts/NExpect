@@ -539,12 +539,12 @@ namespace NExpect
 
                     var idx = 0;
                     var have = collection.Select(
-                                             o => new
-                                             {
-                                                 o,
-                                                 idx = idx++
-                                             })
-                                         .Count(o => test(o.idx, o.o));
+                            o => new
+                            {
+                                o,
+                                idx = idx++
+                            })
+                        .Count(o => test(o.idx, o.o));
                     var passed = CollectionCountMatchStrategies[countMatch.Method](have, compare);
                     return new MatcherResult(
                         passed,
@@ -1194,8 +1194,8 @@ namespace NExpect
                 collection =>
                 {
                     var actualCount = collection?.Count(
-                                          o => matcher(o, expected).AreEqual
-                                      ) ?? 0;
+                        o => matcher(o, expected).AreEqual
+                    ) ?? 0;
                     var total = collection?.Count() ?? 0;
                     var passed = CountPassStrategies[continuation.Method](
                         actualCount,
@@ -2175,16 +2175,25 @@ namespace NExpect
         {
             if (actual == null &&
                 expected == null)
+            {
                 return true;
+            }
+
             if (actual == null ||
                 expected == null)
+            {
                 return false;
+            }
+
             var actualArray = actual.ToArray();
             var expectedArray = expected.ToArray();
             if (actualArray.Length != expectedArray.Length)
+            {
                 return false;
+            }
+
             return actualArray.Zip(expectedArray, Tuple.Create)
-                              .All(o => comparer.Equals(o.Item1, o.Item2));
+                .All(o => comparer.Equals(o.Item1, o.Item2));
         }
 
 
@@ -2196,14 +2205,23 @@ namespace NExpect
         {
             if (collectionA == null &&
                 collectionB == null)
+            {
                 return true;
+            }
+
             if (collectionA == null ||
                 collectionB == null)
+            {
                 return false;
+            }
+
             var distinctA = collectionA.Distinct().ToArray();
             var distinctB = collectionB.Distinct().ToArray();
             if (distinctA.Length != distinctB.Length)
+            {
                 return false;
+            }
+
             var countsA = GetCounts(distinctA, collectionA.ToArray());
             var countsB = GetCounts(distinctB, collectionB.ToArray());
             return countsA.Aggregate(
@@ -2211,8 +2229,13 @@ namespace NExpect
                 (acc, cur) =>
                 {
                     if (!acc)
+                    {
                         return false;
-                    var match = countsB.FirstOrDefault(o => comparer.Equals(o.Item1, cur.Item1));
+                    }
+
+                    var match = countsB.FirstOrDefault(
+                        o => comparer.Equals(o.Item1, cur.Item1)
+                    );
                     return match?.Item2 == cur.Item2;
                 });
         }
@@ -2220,8 +2243,8 @@ namespace NExpect
         private static Tuple<T, int>[] GetCounts<T>(T[] distinctA, T[] collectionA)
         {
             return distinctA
-                   .Select(o => Tuple.Create(o, collectionA.Count(o2 => AreEqual(o2, o))))
-                   .ToArray();
+                .Select(o => Tuple.Create(o, collectionA.Count(o2 => AreEqual(o2, o))))
+                .ToArray();
         }
 
         private static bool AreEqual<T>(T left, T right)
@@ -2381,7 +2404,9 @@ namespace NExpect
             int have,
             int total)
         {
-            var itemS = total == 1 ? "" : "s";
+            var itemS = total == 1
+                ? ""
+                : "s";
             return want == total
                 ? $"Expected to find {comparison} {want} occurrence{s} of {search.Stringify()} but found {have} of {total}"
                 : $"Expected to find only {want} occurrence{s} of {search} in collection but found a total of {total} item{itemS}";
@@ -2402,11 +2427,16 @@ namespace NExpect
                 : $"Expected not to find {comparison} {want} occurrence{s} of {search.Stringify()} but found {have}";
         }
 
-        private static string CreateOnlyPassedMessageFor(string comparison, string s, object search, int want, int have, int total)
+        private static string CreateOnlyPassedMessageFor(string comparison,
+            string s,
+            object search,
+            int want,
+            int have,
+            int total)
         {
             return want == total
-                   ? $"Expected not to find only {want} occurrence{s} of {search} in collection but found exactly that"
-                   : $"Expected not to find {comparison} {want} occurrence{s} of {search.Stringify()} but found exactly that";
+                ? $"Expected not to find only {want} occurrence{s} of {search} in collection but found exactly that"
+                : $"Expected not to find {comparison} {want} occurrence{s} of {search.Stringify()} but found exactly that";
         }
 
         private static string CreateFailedMatchMessageFor(

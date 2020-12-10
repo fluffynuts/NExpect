@@ -68,7 +68,8 @@ namespace NExpect
                             false,
                             FinalMessageFor(
                                 () => "Expected to throw an exception but none was thrown",
-                                customMessageGenerator)
+                                customMessageGenerator
+                            )
                         );
                     }
                     catch (Exception ex)
