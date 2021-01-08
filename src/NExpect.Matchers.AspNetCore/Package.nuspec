@@ -6,26 +6,26 @@
     <title>NExpect.Matchers.AspNetCore</title>
     <authors>Davyd McColl</authors>
     <owners>Davyd McColl</owners>
-    <description>&#xD;&#xD;&#xD;&#xD;&#xD;
-        ASP.Net core extensions for NExpect&#xD;&#xD;&#xD;&#xD;&#xD;
+    <description>
+        ASP.Net core extensions for NExpect
     </description>
-    <releaseNotes>&#xD;&#xD;&#xD;&#xD;&#xD;
+    <releaseNotes>
     </releaseNotes>
-    <summary>&#xD;&#xD;&#xD;&#xD;&#xD;
-      NExpect Provides Expect() syntax for doing assertions in .NET. Framework-agnostic, throwing&#xD;&#xD;&#xD;&#xD;&#xD;
-      UnmetExpectationExceptions for failures. Assertion exception type can be overridden at run-time.&#xD;&#xD;&#xD;&#xD;&#xD;
-      NExpect has grammar inspired by Chai and extensibility inspired by Jasmine.&#xD;&#xD;&#xD;&#xD;&#xD;
-      &#xD;&#xD;&#xD;&#xD;&#xD;
-      This library adds ASP.Net core extensions for NExpect so you can test your&#xD;&#xD;&#xD;&#xD;&#xD;
-      [Route] and [Http*] annotations like so:&#xD;&#xD;&#xD;&#xD;&#xD;
-      ```&#xD;&#xD;&#xD;&#xD;&#xD;
-      Expect(typeof(SomeController)&#xD;&#xD;&#xD;&#xD;&#xD;
-      .To.Have.Method(nameof(SomeController.MethodName))&#xD;&#xD;&#xD;&#xD;&#xD;
-      .Supporting(HttpMethod.Delete)&#xD;&#xD;&#xD;&#xD;&#xD;
-      .And(HttpMethod.Post)&#xD;&#xD;&#xD;&#xD;&#xD;
-      .With.Route("first-route")&#xD;&#xD;&#xD;&#xD;&#xD;
-      .And.Route("second-route");&#xD;&#xD;&#xD;&#xD;&#xD;
-      ```&#xD;&#xD;&#xD;&#xD;&#xD;
+    <summary>
+      NExpect Provides Expect() syntax for doing assertions in .NET. Framework-agnostic, throwing
+      UnmetExpectationExceptions for failures. Assertion exception type can be overridden at run-time.
+      NExpect has grammar inspired by Chai and extensibility inspired by Jasmine.
+      
+      This library adds ASP.Net core extensions for NExpect so you can test your
+      [Route] and [Http*] annotations like so:
+      ```
+      Expect(typeof(SomeController)
+      .To.Have.Method(nameof(SomeController.MethodName))
+      .Supporting(HttpMethod.Delete)
+      .And(HttpMethod.Post)
+      .With.Route("first-route")
+      .And.Route("second-route");
+      ```
     </summary>
     <language>en-US</language>
     <projectUrl>https://github.com/fluffynuts/NExpect</projectUrl>

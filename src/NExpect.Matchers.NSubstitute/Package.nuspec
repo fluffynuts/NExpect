@@ -6,30 +6,30 @@
     <title>NExpect.Matchers.NSubstitute</title>
     <authors>Davyd McColl</authors>
     <owners>Davyd McColl</owners>
-    <description>&#xD;&#xD;&#xD;&#xD;&#xD;
-        NSubstitute extensions for NExpect so you can:&#xD;&#xD;&#xD;&#xD;&#xD;
-        ```&#xD;&#xD;&#xD;&#xD;&#xD;
-        Expect(foo).(Not).To.Have.Received().Method(..);&#xD;&#xD;&#xD;&#xD;&#xD;
-        ```&#xD;&#xD;&#xD;&#xD;&#xD;
+    <description>
+        NSubstitute extensions for NExpect so you can:
+        ```
+        Expect(foo).(Not).To.Have.Received().Method(..);
+        ```
     </description>
-    <releaseNotes>&#xD;&#xD;&#xD;&#xD;&#xD;
+    <releaseNotes>
     </releaseNotes>
-    <summary>&#xD;&#xD;&#xD;&#xD;&#xD;
-    NExpect Provides Expect() syntax for doing assertions in .NET. Framework-agnostic, throwing&#xD;&#xD;&#xD;&#xD;&#xD;
-    UnmetExpectationExceptions for failures. Assertion exception type can be overridden at run-time.&#xD;&#xD;&#xD;&#xD;&#xD;
-    NExpect has grammar inspired by Chai and extensibility inspired by Jasmine.&#xD;&#xD;&#xD;&#xD;&#xD;
-&#xD;&#xD;&#xD;&#xD;&#xD;
-    This library offers NSubistitute-specific extensions so you can have Expect-style&#xD;&#xD;&#xD;&#xD;&#xD;
-    syntax for your NSubstitute assertions. For example, one may previously have done:&#xD;&#xD;&#xD;&#xD;&#xD;
-    ```&#xD;&#xD;&#xD;&#xD;&#xD;
-    Expect(result).To.Equal(expected);&#xD;&#xD;&#xD;&#xD;&#xD;
-    someService.Received(1).SomeMethodCall();&#xD;&#xD;&#xD;&#xD;&#xD;
-    ```&#xD;&#xD;&#xD;&#xD;&#xD;
-    and now you can keep it consistent:&#xD;&#xD;&#xD;&#xD;&#xD;
-    ```&#xD;&#xD;&#xD;&#xD;&#xD;
-    Expect(result).To.Equal(expected);&#xD;&#xD;&#xD;&#xD;&#xD;
-    Expect(someService).To.Have.Received(1).SomeMethodCall();&#xD;&#xD;&#xD;&#xD;&#xD;
-    ```&#xD;&#xD;&#xD;&#xD;&#xD;
+    <summary>
+    NExpect Provides Expect() syntax for doing assertions in .NET. Framework-agnostic, throwing
+    UnmetExpectationExceptions for failures. Assertion exception type can be overridden at run-time.
+    NExpect has grammar inspired by Chai and extensibility inspired by Jasmine.
+
+    This library offers NSubistitute-specific extensions so you can have Expect-style
+    syntax for your NSubstitute assertions. For example, one may previously have done:
+    ```
+    Expect(result).To.Equal(expected);
+    someService.Received(1).SomeMethodCall();
+    ```
+    and now you can keep it consistent:
+    ```
+    Expect(result).To.Equal(expected);
+    Expect(someService).To.Have.Received(1).SomeMethodCall();
+    ```
     </summary>
     <language>en-US</language>
     <projectUrl>https://github.com/fluffynuts/NExpect</projectUrl>

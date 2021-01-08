@@ -16,7 +16,7 @@
     <PackageIcon>icon.png</PackageIcon>
     <PackageIconUrl>https://raw.githubusercontent.com/fluffynuts/NExpect/master/src/NExpect/icon.png</PackageIconUrl>
     <Copyright>Copyright 2017</Copyright>
-    <Authors>&#xD;
+    <Authors>
       Davyd McColl
       Cobus Smit
     </Authors>
