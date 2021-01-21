@@ -453,6 +453,55 @@ namespace NExpect
             return (with as ICanAddMatcher<T>).Type(expected, customMessageGenerator);
         }
 
+        /// <summary>
+        /// Tests the type on a property With continuation
+        /// </summary>
+        /// <param name="with"></param>
+        /// <param name="expected"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<T> Type<T>(
+            this IOf<T> with,
+            Type expected
+        )
+        {
+            return with.Type(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Tests the type on a property With continuation
+        /// </summary>
+        /// <param name="with"></param>
+        /// <param name="expected"></param>
+        /// <param name="customMessage"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<T> Type<T>(
+            this IOf<T> with,
+            Type expected,
+            string customMessage
+        )
+        {
+            return with.Type(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests the type on a property With continuation
+        /// </summary>
+        /// <param name="with"></param>
+        /// <param name="expected"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<T> Type<T>(
+            this IOf<T> with,
+            Type expected,
+            Func<string> customMessageGenerator
+        )
+        {
+            return (with as ICanAddMatcher<T>).Type(expected, customMessageGenerator);
+        }
+
         private static IMore<T> Type<T>(
             this ICanAddMatcher<T> canAddMatcher,
             Type expected,

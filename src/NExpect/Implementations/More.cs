@@ -2,6 +2,7 @@ using System;
 using NExpect.Implementations.Fluency;
 using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
+
 // ReSharper disable ClassNeverInstantiated.Global
 
 namespace NExpect.Implementations
@@ -17,26 +18,11 @@ namespace NExpect.Implementations
         public IWith<T> With =>
             ContinuationFactory.Create<T, With<T>>(ActualFetcher, this);
 
+        public IOf<T> Of =>
+            ContinuationFactory.Create<T, Of<T>>(ActualFetcher, this);
+
         public More(Func<T> actualFetcher) : base(actualFetcher)
         {
         }
-    }
-
-    internal class TerminatedMore<T> : IMore<T>
-    {
-        private InvalidOperationException
-            Terminated => new InvalidOperationException(
-                $"IMore<{typeof(T)}> cannot be continued from incoming continuation acting on type {IncomingType}"
-            );
-
-        public TerminatedMore(Type incomingType)
-        {
-            IncomingType = incomingType;
-        }
-
-        public Type IncomingType { get; }
-
-        public IAnd<T> And => throw Terminated;
-        public IWith<T> With => throw Terminated;
     }
 }

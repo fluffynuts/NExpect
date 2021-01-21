@@ -100,6 +100,14 @@ namespace NExpect.Tests.ObjectEquality
                 {
                     Expect(data)
                         .To.Have.Property("id")
+                        .Of.Type(typeof(int))
+                        .With.Value(1);
+                }, Throws.Nothing);
+
+                Assert.That(() =>
+                {
+                    Expect(data)
+                        .To.Have.Property("id")
                         .With.Value(1)
                         .And.Type(typeof(int));
                 }, Throws.Nothing);

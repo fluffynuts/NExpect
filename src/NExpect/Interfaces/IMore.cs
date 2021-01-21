@@ -15,5 +15,10 @@
         /// Provides the .With grammar extension
         /// </summary>
         IWith<T> With { get; }
+
+        /// <summary>
+        /// Provides the .Of grammar extension
+        /// </summary>
+        IOf<T> Of { get; }
     }
 }
