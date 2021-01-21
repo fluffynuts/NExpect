@@ -125,6 +125,21 @@ namespace NExpect.Tests.ObjectEquality
                 );
                 // Assert
             }
+
+            [Test]
+            public void ShouldBehaveOnTypeAsType()
+            {
+                // Arrange
+                var type = typeof(Data);
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(type)
+                        .To.Have.Property(nameof(Data.id))
+                        .With.Type(typeof(int));
+                }, Throws.Nothing);
+                // Assert
+            }
         }
     }
 }

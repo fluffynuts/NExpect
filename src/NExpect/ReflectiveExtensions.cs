@@ -149,6 +149,8 @@ namespace NExpect
         {
             return (have as ICanAddMatcher<T>).Property(property, customMessageGenerator);
         }
+        
+        private const BindingFlags PUBLIC_INSTANCE = BindingFlags.Public | BindingFlags.Instance;
 
         private static IMore<T> Property<T>(
             this ICanAddMatcher<T> canAddMatcher,
@@ -170,7 +172,12 @@ namespace NExpect
 
                 actual.SetMetadata(METADATA_KEY_PROPERTY_NAME, property);
                 var actualType = actual.GetType();
-                var propInfo = actualType.GetProperty(property, BindingFlags.Instance | BindingFlags.Public);
+                if (actualType.Name == "RuntimeType" && actualType.Namespace == "System")
+                {
+                    actualType = (Type)(actual as object);
+                }
+
+                var propInfo = actualType.GetProperty(property, PUBLIC_INSTANCE);
                 if (propInfo is null)
                 {
                     return new MatcherResult(
@@ -343,11 +350,11 @@ namespace NExpect
                         () => $@"expected {
                                 passed.AsNot()
                             }to find value of {
-                                expected
+                                expected.Stringify()
                             } for property '{
                                 propInfo.Name
                             }', but found {
-                                actualValue
+                                actualValue.Stringify()
                             }",
                         customMessageGenerator
                     )
