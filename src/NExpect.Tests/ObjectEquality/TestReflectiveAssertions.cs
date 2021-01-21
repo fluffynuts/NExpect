@@ -6,7 +6,7 @@ using static NExpect.Expectations;
 namespace NExpect.Tests.ObjectEquality
 {
     [TestFixture]
-    public class ReflectiveAssertions
+    public class TestReflectiveAssertions
     {
         [TestFixture]
         public class TestingPropertyValueByName
@@ -78,6 +78,42 @@ namespace NExpect.Tests.ObjectEquality
                             .With.Value(2);
                     }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains("not to have property 'id'")
+                );
+                // Assert
+            }
+
+            [Test]
+            public void ShouldFacilitateTypeTesting()
+            {
+                // Arrange
+                var data = new Data() { id = 1 };
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(data)
+                        .To.Have.Property("id")
+                        .With.Type(typeof(int))
+                        .And.Value(1);
+                }, Throws.Nothing);
+
+                Assert.That(() =>
+                {
+                    Expect(data)
+                        .To.Have.Property("id")
+                        .With.Value(1)
+                        .And.Type(typeof(int));
+                }, Throws.Nothing);
+
+                Assert.That(() =>
+                    {
+                        Expect(data)
+                            .To.Have.Property("id")
+                            .With.Type(typeof(string))
+                            .And.Value(1);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains(
+                            "Expected property 'Data.id' to be of type 'System.String', but it has type 'System.Int32'"
+                        )
                 );
                 // Assert
             }

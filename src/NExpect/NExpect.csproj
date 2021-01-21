@@ -50,6 +50,8 @@
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Stringifier.cs" Link="Imported\Stringifier.cs" />
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\TypeExtensions.cs" Link="Imported\TypeExtensions.cs" />
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Types.cs" Link="Imported\Types.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\CannotZipNullException.cs" Link="Imported\CannotZipNullException.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\UnevenZipException.cs" Link="Imported\UnevenZipException.cs" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='netstandard1.6'">
     <Reference Include="System.Diagnostics.StackTrace" />
