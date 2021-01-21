@@ -9,7 +9,7 @@
     <DocumentationFile>NExpect.Matchers.AspNetCore.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>1.0.188</PackageVersion>
+    <PackageVersion>1.0.189</PackageVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
@@ -19,7 +19,7 @@
     <Copyright>Copyright 2019</Copyright>
     <Authors>Davyd McColl</Authors>
     <Description>
-      This library adds ASP.Net core extensions for NExpect so you can test your&#xD;
+      This library adds ASP.Net core extensions for NExpect so you can test your
       [Route] and [Http*] annotations like so:
       ```
       Expect(typeof(SomeController)
