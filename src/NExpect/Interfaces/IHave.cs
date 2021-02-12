@@ -11,9 +11,15 @@ namespace NExpect.Interfaces
         /// ".A" grammar continuation extension point
         /// </summary>
         IA<T> A { get; }
+        
         /// <summary>
         /// ".An" grammar continuation extension point
         /// </summary>
         IAn<T> An { get; }
+
+        /// <summary>
+        /// ".Been" grammar continuation extension point
+        /// </summary>
+        IBeen<T> Been { get; }
     }
 }
