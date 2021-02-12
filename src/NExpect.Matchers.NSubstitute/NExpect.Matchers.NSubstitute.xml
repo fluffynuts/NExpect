@@ -4,6 +4,38 @@
         <name>NExpect.Matchers.NSubstitute</name>
     </assembly>
     <members>
+        <member name="T:NExpect.CalledMatchers">
+            <summary>
+            Provides extension for quickly testing that something has or hasn't
+            been called in any way
+            </summary>
+        </member>
+        <member name="M:NExpect.CalledMatchers.Called``1(NExpect.Interfaces.IBeen{``0})">
+            <summary>
+            Tests if a substitute has received any calls whatsoever
+            </summary>
+            <param name="been"></param>
+            <typeparam name="T"></typeparam>
+            <returns>IMore&lt;T&gt; continuation</returns>
+        </member>
+        <member name="M:NExpect.CalledMatchers.Called``1(NExpect.Interfaces.IBeen{``0},System.String)">
+            <summary>
+            Tests if a substitute has received any calls whatsoever
+            </summary>
+            <param name="been"></param>
+            <param name="customMessage"></param>
+            <typeparam name="T"></typeparam>
+            <returns>IMore&lt;T&gt; continuation</returns>
+        </member>
+        <member name="M:NExpect.CalledMatchers.Called``1(NExpect.Interfaces.IBeen{``0},System.Func{System.String})">
+            <summary>
+            Tests if a substitute has received any calls whatsoever
+            </summary>
+            <param name="been"></param>
+            <param name="messageGenerator"></param>
+            <typeparam name="T"></typeparam>
+            <returns>IMore&lt;T&gt; continuation</returns>
+        </member>
         <member name="T:NExpect.ReceivedMatchers">
             <summary>
             Provides NSubstitute extensions for NExpect
