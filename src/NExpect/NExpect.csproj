@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <LangVersion>latest</LangVersion>
     <TargetFrameworks>netstandard2.0;net452;net462</TargetFrameworks>
     <Configurations>Debug;Release;BuildForRelease</Configurations>
@@ -11,7 +11,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>1.0.195</PackageVersion>
+    <PackageVersion>1.0.196</PackageVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
