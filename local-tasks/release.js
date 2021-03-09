@@ -18,18 +18,31 @@ gulp.task("push", "pushes packages to nuget.org", () => {
     findNupkg("NExpect"),
     findNupkg("NExpect.Matchers.NSubstitute"),
     findNupkg("NExpect.Matchers.AspNetCore")
-  ];
+  ].flat();
   promises = packages.map(pushPackage);
   return Promise.all(promises);
 });
 
+function findAllPackages(id) {
+  return [ findNupkg(id), findSnupkg(id) ];
+}
+
+function findSnupkg(id) {
+  return findPackage(id, "snupkg");
+}
+
 function findNupkg(id) {
+  return findPackage(id, "nupkg");
+}
+
+function findPackage(id, ext) {
   return fs
     .readdirSync(packageDir)
+    .filter(p => p.endsWith(`.${ext}`))
     .filter(p => {
       var parts = p
         .split(".")
-        .filter(part => part !== "nupkg" && isNaN(parseInt(part)));
+        .filter(part => part !== ext && isNaN(parseInt(part)));
       return parts.join(".") === id;
     })
     .map(p => path.join(packageDir, p))
