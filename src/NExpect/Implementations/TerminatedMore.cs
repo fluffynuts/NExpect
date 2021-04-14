@@ -20,5 +20,6 @@ namespace NExpect.Implementations
         public IAnd<T> And => throw Terminated;
         public IWith<T> With => throw Terminated;
         public IOf<T> Of => throw Terminated;
+        public IBy<T> By => throw Terminated;
     }
 }

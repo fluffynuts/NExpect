@@ -20,5 +20,10 @@
         /// Provides the .Of grammar extension
         /// </summary>
         IOf<T> Of { get; }
+
+        /// <summary>
+        /// Provides the .By grammar extension
+        /// </summary>
+        IBy<T> By { get; }
     }
 }

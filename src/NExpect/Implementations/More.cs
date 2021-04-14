@@ -21,6 +21,9 @@ namespace NExpect.Implementations
         public IOf<T> Of =>
             ContinuationFactory.Create<T, Of<T>>(ActualFetcher, this);
 
+        public IBy<T> By =>
+            ContinuationFactory.Create<T, By<T>>(ActualFetcher, this);
+
         public More(Func<T> actualFetcher) : base(actualFetcher)
         {
         }
