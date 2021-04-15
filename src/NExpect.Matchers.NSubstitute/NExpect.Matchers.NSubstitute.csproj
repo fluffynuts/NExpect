@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DebugType>full</DebugType>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>preview</LangVersion>
     <RootNamespace>NExpect</RootNamespace>
     <DocumentationFile>NExpect.Matchers.NSubstitute.xml</DocumentationFile>
     <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
