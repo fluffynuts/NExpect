@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using NExpect.Exceptions;
 using NSubstitute.Exceptions;
@@ -305,6 +306,7 @@ namespace NExpect.Tests.Exceptions
             {
                 // Arrange
                 var msg = GetRandomString();
+                var re = new Regex(msg);
                 // Pre-Assert
 
                 // Act
@@ -319,7 +321,21 @@ namespace NExpect.Tests.Exceptions
                             .To.Throw()
                             .With.Message.Matching(s => s == msg);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(
+                                () =>
+                                {
+                                    throw new Exception(msg);
+                                })
+                            .To.Throw()
+                            .With.Message.Matching(re);
+                    },
+                    Throws.Nothing
+                );
 
                 // Assert
             }

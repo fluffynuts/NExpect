@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -283,12 +284,12 @@ namespace NExpect
                                     return passed
                                         ? $@"Expected not to throw an exception of type {expectedName}"
                                         : $@"Expected to throw an exception of type {
-                                                expectedName
-                                            } but {
-                                                actualName
-                                            } was thrown instead ({
-                                                actual.Message
-                                            })";
+                                            expectedName
+                                        } but {
+                                            actualName
+                                        } was thrown instead ({
+                                            actual.Message
+                                        })";
                                 },
                                 customMessageGenerator));
                         continuation.Exception = actual as T;
@@ -428,6 +429,55 @@ namespace NExpect
                     );
                 });
             return result;
+        }
+
+        /// <summary>
+        /// Matches a string property with a regular expression
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="re"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation Matching(
+            this IStringPropertyContinuation src,
+            Regex re
+        )
+        {
+            return src.Matching(re, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Matches a string property with a regular expression
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="re"></param>
+        /// <param name="customMessage"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation Matching(
+            this IStringPropertyContinuation src,
+            Regex re,
+            string customMessage
+        )
+        {
+            return src.Matching(re, () => customMessage);
+        }
+
+        /// <summary>
+        /// Matches a string property with a regular expression
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="re"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <returns></returns>
+        public static IStringPropertyContinuation Matching(
+            this IStringPropertyContinuation src,
+            Regex re,
+            Func<string> customMessageGenerator
+        )
+        {
+            return src.Matching(
+                re.IsMatch,
+                customMessageGenerator
+            );
         }
 
         /// <summary>
