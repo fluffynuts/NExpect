@@ -344,26 +344,25 @@ namespace NExpect
                 () => null,
                 src as IExpectationContext<string>
             );
-            src.AddMatcher(
-                s =>
-                {
-                    result.Actual = s;
-                    var nextOffset = s?.IndexOf(search) ?? -1;
-                    if (nextOffset > -1)
-                        nextOffset += search?.Length ?? 0;
-                    result.SetMetadata(SEARCH_OFFSET, nextOffset);
+            src.AddMatcher(s =>
+            {
+                result.Actual = s;
+                var nextOffset = s?.IndexOf(search) ?? -1;
+                if (nextOffset > -1)
+                    nextOffset += search?.Length ?? 0;
+                result.SetMetadata(SEARCH_OFFSET, nextOffset);
 
-                    var passed = nextOffset > -1;
-                    return new MatcherResult(
+                var passed = nextOffset > -1;
+                return new MatcherResult(
+                    passed,
+                    MessageForContainsResult(
                         passed,
-                        MessageForContainsResult(
-                            passed,
-                            s,
-                            search,
-                            customMessageGenerator
-                        )
-                    );
-                });
+                        s,
+                        search,
+                        customMessageGenerator
+                    )
+                );
+            });
             return result;
         }
 
@@ -474,10 +473,28 @@ namespace NExpect
             Func<string> customMessageGenerator
         )
         {
-            return src.Matching(
-                re.IsMatch,
-                customMessageGenerator
+            var result = ContinuationFactory.Create<string, StringPropertyContinuation>(
+                () => null,
+                src as IExpectationContext<string>
             );
+            src.AddMatcher(s =>
+            {
+                result.Actual = s;
+                var passed = re.IsMatch(s);
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected \"{s}\" {passed.AsNot()}to match regex {PrettyPrint(re)}",
+                        customMessageGenerator
+                    )
+                );
+            });
+            return result;
+        }
+
+        private static string PrettyPrint(Regex re)
+        {
+            return $"\"{re}\" (options: ${re.Options})";
         }
 
         /// <summary>
