@@ -1135,6 +1135,55 @@ namespace NExpect.Tests.Collections
                                 // Assert
                             }
                         }
+
+                        [TestFixture]
+                        public class MatchingValueWithLambda
+                        {
+                            [Test]
+                            public void ShouldBeAbleToMatchValueWithLambda()
+                            {
+                                // Arrange
+                                var dict = new Dictionary<string, IdentifierAndName>();
+                                var key = GetRandomString(1);
+                                var value = GetRandom<IdentifierAndName>();
+                                dict[key] = value;
+                                // Act
+                                Assert.That(() =>
+                                {
+                                    Expect(dict)
+                                        .To.Contain.Key(key)
+                                        .With.Value.Matched.By(
+                                            o => o.Name == value.Name &&
+                                                o.Id == value.Id
+                                        );
+                                }, Throws.Nothing);
+                                var customMessage = GetRandomWords();
+                                Assert.That(() =>
+                                    {
+                                        Expect(dict)
+                                            .To.Contain.Key(key)
+                                            .With.Value.Matched.By(
+                                                o => o.Name != value.Name,
+                                                () => customMessage
+                                            );
+                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains(customMessage)
+                                );
+                                // Assert
+                            }
+
+                            public class IdentifierAndName
+                            {
+                                public int Id { get; }
+                                public string Name { get; }
+
+                                public IdentifierAndName(int id, string name)
+                                {
+                                    Id = id;
+                                    Name = name;
+                                }
+                            }
+                        }
                     }
                 }
             }

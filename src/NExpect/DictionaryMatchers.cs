@@ -692,5 +692,64 @@ namespace NExpect
                 ? result
                 : throw new KeyNotFoundException($"{key}");
         }
+
+        /// <summary>
+        /// Facilitates matching a value within a dictionary by arbitrary logic
+        /// </summary>
+        /// <param name="matched">Continuation to operate on</param>
+        /// <param name="matcher">Func containing custom logic: return true if the value meets expectations</param>
+        /// <typeparam name="T">Type of the dictionary value</typeparam>
+        /// <returns></returns>
+        public static IMore<T> By<T>(
+            this IDictionaryValueMatched<T> matched,
+            Func<T, bool> matcher
+        )
+        {
+            return matched.By(matcher, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Facilitates matching a value within a dictionary by arbitrary logic
+        /// </summary>
+        /// <param name="matched">Continuation to operate on</param>
+        /// <param name="matcher">Func containing custom logic: return true if the value meets expectations</param>
+        /// <param name="customMessage">Custom message to add on failure</param>
+        /// <typeparam name="T">Type of the dictionary value</typeparam>
+        /// <returns></returns>
+        public static IMore<T> By<T>(
+            this IDictionaryValueMatched<T> matched,
+            Func<T, bool> matcher,
+            string customMessage
+        )
+        {
+            return matched.By(matcher, () => customMessage);
+        }
+
+        /// <summary>
+        /// Facilitates matching a value within a dictionary by arbitrary logic
+        /// </summary>
+        /// <param name="matched">Continuation to operate on</param>
+        /// <param name="matcher">Func containing custom logic: return true if the value meets expectations</param>
+        /// <param name="customMessageGenerator">Provides a custom message to add on failure</param>
+        /// <typeparam name="T">Type of the dictionary value</typeparam>
+        /// <returns></returns>
+        public static IMore<T> By<T>(
+            this IDictionaryValueMatched<T> matched,
+            Func<T, bool> matcher,
+            Func<string> customMessageGenerator
+        )
+        {
+            return matched.AddMatcher(actual =>
+            {
+                var passed = matcher(actual);
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected {passed.AsNot()}to find match for value, but none was found",
+                        customMessageGenerator
+                    )
+                );
+            });
+        }
     }
 }

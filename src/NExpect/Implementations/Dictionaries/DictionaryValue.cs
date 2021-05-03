@@ -16,6 +16,9 @@ namespace NExpect.Implementations.Dictionaries
         public IDictionaryValueIntersection<T> Intersection
             => ContinuationFactory.Create<T, DictionaryValueIntersection<T>>(ActualFetcher, this);
 
+        public IDictionaryValueMatched<T> Matched 
+            => ContinuationFactory.Create<T, DictionaryValueMatched<T>>(ActualFetcher, this);
+
         public DictionaryValue(Func<T> actualFetcher) : base(actualFetcher)
         {
         }

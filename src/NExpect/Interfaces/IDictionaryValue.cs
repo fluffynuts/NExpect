@@ -15,5 +15,18 @@ namespace NExpect.Interfaces
         /// Continue on to Intersection Equality Testing for the dictionary value
         /// </summary>
         IDictionaryValueIntersection<T> Intersection { get; }
+
+        /// <summary>
+    /// Allows for the `.Value.Matched.By` syntax on dictionary matching
+        /// </summary>
+        IDictionaryValueMatched<T> Matched { get; }
+    }
+
+    /// <summary>
+    /// Allows for the `.Value.Matched.By` syntax on dictionary matching
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public interface IDictionaryValueMatched<T>: ICanAddMatcher<T>
+    {
     }
 }
