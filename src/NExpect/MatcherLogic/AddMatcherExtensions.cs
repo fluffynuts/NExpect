@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Imported.PeanutButter.Utils;
 using NExpect.Exceptions;
 using NExpect.Implementations;
 using NExpect.Interfaces;
@@ -55,7 +56,9 @@ namespace NExpect.MatcherLogic
         )
         {
             AddMatcherPrivate(continuation, matcher);
-            return continuation.More();
+            var more = continuation.More();
+            continuation.CopyPropertiesTo(more);
+            return more;
         }
 
 

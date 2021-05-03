@@ -5,7 +5,6 @@ using System.Reflection;
 using Imported.PeanutButter.Utils;
 using NExpect.Helpers;
 using NExpect.Implementations;
-using NExpect.Implementations.Collections;
 using NExpect.Implementations.Dictionaries;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -578,17 +577,16 @@ namespace NExpect
             return continuation.More();
         }
 
-        private static void AddKeyMatcher<TKey, TValue>(
+        private static IMore<IEnumerable<KeyValuePair<TKey, TValue>>> AddKeyMatcher<TKey, TValue>(
             IContain<IEnumerable<KeyValuePair<TKey, TValue>>> continuation,
             TKey key,
             Func<string> customMessage)
         {
-            continuation.AddMatcher(
-                collection =>
+            continuation.SetMetadata(CONTINUATION_KEY, key);
+            return continuation.AddMatcher(collection =>
                 {
                     var passed = collection != null &&
                         TryFindValueForKey(collection, key, out var _);
-
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
@@ -604,6 +602,8 @@ namespace NExpect
                     );
                 });
         }
+        
+        private const string CONTINUATION_KEY = "__NEXPECT_CONTINUATION_KEY__";
 
         private static bool TryFindValueForKey<TKey, TValue>(
             IEnumerable<KeyValuePair<TKey, TValue>> collection,
@@ -624,6 +624,7 @@ namespace NExpect
                     ? collection.First(kvp => comparer.Compare(kvp.Key as string, stringKey) == 0)
                         .Value
                     : default;
+
                 return hasMatch;
             }
             else
@@ -631,11 +632,11 @@ namespace NExpect
                 var matches = collection.Where(kvp => kvp.Key.Equals(key));
                 var hasMatch = matches.Any();
                 value = hasMatch
-                    ? matches.First()
-                        .Value
+                    ? matches.Single().Value
                     : default;
                 return hasMatch;
             }
+
         }
 
         private static IDictionaryValueContinuation<TTo> CreateValueContinuationFor<TKey, TFrom, TTo>(
@@ -653,13 +654,15 @@ namespace NExpect
                     return continuationValue;
                 });
 
-                return ContinuationFactory.Create<TTo, DictionaryValueContinuation<TTo>>(
+                var result = ContinuationFactory.Create<TTo, DictionaryValueContinuation<TTo>>(
                     fetcher,
                     new WrappingContinuation<IEnumerable<KeyValuePair<TKey, TFrom>>, TTo>(
                         continuation as IHasActual<IEnumerable<KeyValuePair<TKey, TFrom>>>,
                         c => fetcher()
                     )
                 );
+                continuation.CopyAllMetadataTo(result);
+                return result;
             }
             catch (KeyNotFoundException)
             {
@@ -745,7 +748,18 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        () => $"Expected {passed.AsNot()}to find match for value, but none was found",
+                        () =>
+                        {
+                            if (matched.TryGetMetadata<string>(CONTINUATION_KEY, out var key))
+                            {
+                                // TODO: 
+                                return $"Mismatch for value keyed by: {key.Stringify()}\nreceived value was:\n{actual.Stringify()}";
+                            }
+                            else
+                            {
+                                return $"Expected {passed.AsNot()}to find match for value, but none was found";
+                            }
+                        },
                         customMessageGenerator
                     )
                 );

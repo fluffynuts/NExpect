@@ -1172,6 +1172,30 @@ namespace NExpect.Tests.Collections
                                 // Assert
                             }
 
+                            [Test]
+                            public void ValueMismatchOnFoundKeyShouldOutputValueOfValue()
+                            {
+                                // Arrange
+                                var dict = new Dictionary<string, IdentifierAndName>();
+                                var key = GetRandomString(1);
+                                var value = GetRandom<IdentifierAndName>();
+                                dict[key] = value;
+                                // Act
+                                Assert.That(() =>
+                                    {
+                                        Expect(dict)
+                                            .To.Contain.Key(key)
+                                            .With.Value.Matched.By(
+                                                o => o.Name != value.Name
+                                            );
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains(value.Name)
+                                        .And.Message.Contains(value.Id.ToString())
+                                );
+                                // Assert
+                            }
+
                             public class IdentifierAndName
                             {
                                 public int Id { get; }

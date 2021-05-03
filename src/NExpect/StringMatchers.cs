@@ -903,11 +903,21 @@ namespace NExpect
         )
         {
             if (priorOffset >= (haystack?.Length ?? 0) - 1)
+            {
                 return -1;
+            }
+
+            if (priorOffset < 0)
+            {
+                priorOffset = 0;
+            }
 
             var nextOffset = haystack?.IndexOf(needle, priorOffset) ?? -1;
             if (nextOffset > -1)
+            {
                 nextOffset += needle?.Length ?? 0;
+            }
+
             return nextOffset;
         }
 

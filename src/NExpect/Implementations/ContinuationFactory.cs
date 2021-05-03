@@ -1,4 +1,5 @@
 using System;
+using Imported.PeanutButter.Utils;
 using NExpect.Interfaces;
 
 namespace NExpect.Implementations
@@ -22,6 +23,8 @@ namespace NExpect.Implementations
             {
                 result.Negate();
             }
+            
+            parent.CopyAllMetadataTo(result);
 
             return result;
         }

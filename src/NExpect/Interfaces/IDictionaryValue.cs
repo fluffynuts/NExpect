@@ -21,12 +21,4 @@ namespace NExpect.Interfaces
         /// </summary>
         IDictionaryValueMatched<T> Matched { get; }
     }
-
-    /// <summary>
-    /// Allows for the `.Value.Matched.By` syntax on dictionary matching
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IDictionaryValueMatched<T>: ICanAddMatcher<T>
-    {
-    }
 }

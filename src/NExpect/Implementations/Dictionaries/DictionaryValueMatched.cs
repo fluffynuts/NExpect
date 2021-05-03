@@ -4,6 +4,7 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Dictionaries
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     internal class DictionaryValueMatched<T>
         : ExpectationContextWithLazyActual<T>,
           IHasActual<T>,

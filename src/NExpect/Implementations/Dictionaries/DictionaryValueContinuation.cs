@@ -1,6 +1,5 @@
 ﻿using System;
 using NExpect.Exceptions;
-using NExpect.Implementations.Collections;
 using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
