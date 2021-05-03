@@ -8,6 +8,7 @@ using NExpect.Implementations.Collections;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
+using Imported.PeanutButter.Utils;
 
 // ReSharper disable UnusedMember.Global
 // ReSharper disable MemberCanBePrivate.Global
@@ -478,10 +479,14 @@ namespace NExpect
                         passed,
                         FinalMessageFor(
                             () => CollectionCountMatchMessageStrategies[countMatch.Method](
-                                passed,
-                                have,
-                                countMatch.Compare,
-                                collectionCount),
+                                    passed,
+                                    have,
+                                    countMatch.Compare,
+                                    collectionCount
+                                ).AsArray()
+                                .And("within")
+                                .And($"{collection?.LimitedPrint()}"
+                                ),
                             customMessageGenerator));
                 });
         }
@@ -550,10 +555,13 @@ namespace NExpect
                         passed,
                         FinalMessageFor(
                             () => CollectionCountMatchMessageStrategies[countMatch.Method](
-                                passed,
-                                have,
-                                countMatch.Compare,
-                                collectionCount),
+                                    passed,
+                                    have,
+                                    countMatch.Compare,
+                                    collectionCount
+                                ).AsArray()
+                                .And("within")
+                                .And($"{collection?.LimitedPrint()}"),
                             customMessageGenerator));
                 });
         }
@@ -746,7 +754,8 @@ namespace NExpect
             equivalent.To(
                 other,
                 comparer,
-                NULL_STRING);
+                NULL_STRING
+            );
         }
 
         /// <summary>
@@ -767,7 +776,8 @@ namespace NExpect
             equivalent.To(
                 other,
                 comparer,
-                () => customMessage);
+                () => customMessage
+            );
         }
 
         /// <summary>
@@ -788,7 +798,8 @@ namespace NExpect
             equivalent.To(
                 other,
                 new FuncComparer<T>(comparer),
-                customMessageGenerator);
+                customMessageGenerator
+            );
         }
 
         /// <summary>
@@ -2135,8 +2146,13 @@ namespace NExpect
         )
         {
             if (!(continuation is CountMatchContinuationOfStringCollectionVerb concrete))
+            {
                 throw new InvalidOperationException(
-                    $".With() for collections of strings only supported where the concrete continuation is of type {typeof(CountMatchContinuationOfStringCollection)}");
+                    $@".With() for collections of strings only supported where the concrete continuation is of type {
+                        typeof(CountMatchContinuationOfStringCollection)
+                    }");
+            }
+
             concrete.Wrapped.Matched.By(
                 s => s.StartsWith(search, comparison),
                 customMessageGenerator

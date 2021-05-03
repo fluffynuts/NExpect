@@ -9,7 +9,7 @@ namespace NExpect.Helpers
 {
     internal static class CollectionFluencyExtensions
     {
-        internal static bool IsEmpty<T>(this IEnumerable<T> collection)
+        internal static bool ThrowIfIsEmpty<T>(this IEnumerable<T> collection)
         {
             return !collection?.Any() 
                    ?? throw new ArgumentNullException(nameof(collection), 

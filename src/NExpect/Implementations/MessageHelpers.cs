@@ -45,7 +45,7 @@ namespace NExpect.Implementations
         }
 
         /// <summary>
-        /// Procides a final message, given a standard message generator
+        /// Provides a final message, given a standard message generator
         /// and a custom message generator. If the custom message generator
         /// return null or whitespace, the standard message alone is returned
         /// from the result func.
@@ -236,7 +236,7 @@ namespace NExpect.Implementations
         /// <returns>Comma-separated list representing the collection</returns>
         public static string Stringify<T>(this IEnumerable<T> collection)
         {
-            return collection == null
+            return collection is null
                 ? NULL_REPLACER
                 : $"[ {string.Join(", ", collection.Select(Quote))} ]";
         }
@@ -249,8 +249,11 @@ namespace NExpect.Implementations
         /// <returns>Something like `[ "a", "b", "c" ]`</returns>
         public static string LimitedPrint<T>(this IEnumerable<T> collection)
         {
-            if (collection == null)
+            if (collection is null)
+            {
                 return NULL_REPLACER;
+            }
+
             var asArray = collection.ToArray();
             var ellipsis = asArray.Length > 10
                 ? " ..."
