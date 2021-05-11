@@ -21,5 +21,7 @@ namespace NExpect.Implementations
         public IWith<T> With => throw Terminated;
         public IOf<T> Of => throw Terminated;
         public IBy<T> By => throw Terminated;
+        public IMax<T> Max => throw Terminated;
+        public ITo<T> To => throw Terminated;
     }
 }

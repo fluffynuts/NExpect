@@ -21,5 +21,10 @@ namespace NExpect.Interfaces
         /// ".Been" grammar continuation extension point
         /// </summary>
         IBeen<T> Been { get; }
+
+        /// <summary>
+        /// ".Max" grammar continuation extension point
+        /// </summary>
+        IMax<T> Max { get; }
     }
 }

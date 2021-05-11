@@ -12,7 +12,7 @@ namespace NExpect
     /// <summary>
     /// Adds matchers for AspNetCore Controllers and Controller Actions
     /// </summary>
-    public static class Matchers
+    public static class ControllerMatchers
     {
         /// <summary>
         /// Asserts that the controller has the named method

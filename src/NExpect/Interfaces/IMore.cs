@@ -25,5 +25,15 @@
         /// Provides the .By grammar extension
         /// </summary>
         IBy<T> By { get; }
+
+        /// <summary>
+        ///  Provides the .Max grammar extension
+        /// </summary>
+        IMax<T> Max { get; }
+
+        /// <summary>
+        /// Provides the .To grammar extension
+        /// </summary>
+        ITo<T> To { get; }
     }
 }

@@ -2,6 +2,8 @@
 // ReSharper disable UnusedMember.Global
 
 using System;
+using NExpect.Implementations;
+
 // ReSharper disable IntroduceOptionalParameters.Global
 
 namespace NExpect.MatcherLogic
@@ -85,6 +87,23 @@ namespace NExpect.MatcherLogic
             bool passed, 
             Func<string> messageGenerator, 
             Exception localException): this(passed, () => messageGenerator, localException)
+        {
+        }
+
+        /// <summary>
+        /// Constructor for message generator with two message lambdas
+        /// - the regular message generator
+        /// - the custom message generator (user-provided)
+        /// if the latter produces NULL, it's not echoed back
+        /// </summary>
+        /// <param name="passed"></param>
+        /// <param name="regularMessageGenerator"></param>
+        /// <param name="customMessageGenerator"></param>
+        public MatcherResult(
+            bool passed,
+            Func<string> regularMessageGenerator,
+            Func<string> customMessageGenerator
+        ): this(passed, MessageHelpers.FinalMessageFor(regularMessageGenerator, customMessageGenerator))
         {
         }
 

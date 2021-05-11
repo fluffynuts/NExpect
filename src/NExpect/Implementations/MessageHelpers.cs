@@ -18,7 +18,7 @@ namespace NExpect.Implementations
         /// - use to disambiguate calls between the version which
         /// takes a static string and the version which takes a Func&lt;string&gt;
         /// </summary>
-        internal const string NULL_STRING = null;
+        public const string NULL_STRING = null;
 
         /// <summary>
         /// Not to be confused with NULL, this is the string
