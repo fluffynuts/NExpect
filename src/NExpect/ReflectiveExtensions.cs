@@ -331,7 +331,7 @@ namespace NExpect
                         return
                             $@"Expected {passed.AsNot()}to find {
                                 actual.FullName()
-                            } decorated with [{Attrib<TAttribute>()}]{more}";
+                            } decorated with {Attrib<TAttribute>()}{more}";
                     },
                     customMessageGenerator
                 );
