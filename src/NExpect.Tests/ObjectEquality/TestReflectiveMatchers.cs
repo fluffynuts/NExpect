@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NExpect.Exceptions;
 using NUnit.Framework;
 using PeanutButter.Utils;
@@ -250,6 +251,42 @@ namespace NExpect.Tests.ObjectEquality
                 // Assert
             }
 
+            [Test]
+            public void ShouldBeAbleToDiscriminateBetweenOverloads()
+            {
+                // Arrange
+                var cow = new Cow();
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(cow)
+                        .To.Have.Method(
+                            "NotMoo2", mi => !mi.GetParameters().Any()
+                        );
+                    Expect(cow)
+                        .To.Have.Method(
+                            "NotMoo2", mi => mi.GetParameters().FirstOrDefault()?.ParameterType == typeof(string)
+                        );
+                }, Throws.Nothing);
+
+                Assert.That(() =>
+                {
+                    Expect(cow)
+                        .Not.To.Have.Method(
+                            "NotMoo2", mi => !mi.GetParameters().Any()
+                        );
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Assert.That(() =>
+                    {
+                        Expect(cow)
+                            .To.Have.Method("NotMoo2");
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains("single")
+                );
+                // Assert
+            }
+
             public class Cow
             {
                 [Comment("it's what cows do")]
@@ -259,6 +296,15 @@ namespace NExpect.Tests.ObjectEquality
 
                 public void NotMoo()
                 {
+                }
+
+                public void NotMoo2()
+                {
+                }
+
+                public void NotMoo2(string msg)
+                {
+                    Console.WriteLine(msg);
                 }
             }
 

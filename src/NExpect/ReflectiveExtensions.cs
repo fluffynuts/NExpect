@@ -60,7 +60,7 @@ namespace NExpect
             Func<string> customMessageGenerator
         )
         {
-            return have.AddMatcher<T, MethodInfo>(actual =>
+            return have.AddMatcher(actual =>
             {
                 if (actual is null)
                 {
@@ -68,11 +68,139 @@ namespace NExpect
                 }
 
                 var type = actual as Type ?? typeof(T);
-                var methodInfo = type.GetMethod(methodName);
-                var passed = methodInfo is not null;
+                var methodInfos = type.GetMethods(
+                        BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static
+                    ).Where(mi => mi.Name == methodName)
+                    .ToArray();
+                var methodInfo = methodInfos.FirstOrDefault();
+                var haveMultiple = methodInfos.Length > 1;
+                var passed = methodInfo is not null && !haveMultiple;
                 return new MatcherResultWithNext<MethodInfo>(
                     passed,
-                    () => $"Expected '{type.PrettyName()}' {passed.AsNot()} to have method '{methodName}'",
+                    () => 
+                        haveMultiple
+                        ? $"Expected '{type.PrettyName()}' {passed.AsNot()}to have a single method called '{methodName}' (perhaps you need a discriminator?)"
+                        : $"Expected '{type.PrettyName()}' {passed.AsNot()}to have method '{methodName}'",
+                    customMessageGenerator,
+                    () => methodInfo
+                );
+            });
+
+            IMatcherResultWithNext<MethodInfo> Fail(string message)
+            {
+                return new MatcherResultWithNext<MethodInfo>(
+                    false,
+                    () => message,
+                    customMessageGenerator,
+                    () => default
+                );
+            }
+        }
+
+        /// <summary>
+        /// Tests for a method by name and discriminator
+        /// - use if you're trying to discern between overloads
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="methodName"></param>
+        /// <param name="discriminator"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Method<T>(
+            this IHave<T> have,
+            string methodName,
+            Func<MethodInfo, bool> discriminator
+        )
+        {
+            return have.Method(
+                methodName,
+                discriminator,
+                NULL_STRING
+            );
+        }
+
+        /// <summary>
+        /// Tests for a method by name and discriminator
+        /// - use if you're trying to discern between overloads
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="methodName"></param>
+        /// <param name="discriminator"></param>
+        /// <param name="customMessage"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Method<T>(
+            this IHave<T> have,
+            string methodName,
+            Func<MethodInfo, bool> discriminator,
+            string customMessage
+        )
+        {
+            return have.Method(
+                methodName,
+                discriminator,
+                () => customMessage
+            );
+        }
+
+        /// <summary>
+        /// Tests for a method by name and discriminator
+        /// - use if you're trying to discern between overloads
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="methodName"></param>
+        /// <param name="discriminator"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Method<T>(
+            this IHave<T> have,
+            string methodName,
+            Func<MethodInfo, bool> discriminator,
+            Func<string> customMessageGenerator
+        )
+        {
+            return have.AddMatcher(actual =>
+            {
+                if (actual is null)
+                {
+                    return Fail("actual is null");
+                }
+
+                var type = actual as Type ?? typeof(T);
+                var matchesName = type.GetMethods(
+                        BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static
+                    )
+                    .Where(mi => mi.Name == methodName)
+                    .ToArray();
+                var allDiscriminatorMatches = matchesName
+                    .Where(
+                        mi => mi.Name == methodName && discriminator(mi)
+                    ).ToArray();
+                var methodInfo = allDiscriminatorMatches.FirstOrDefault();
+                var passed = methodInfo is not null && allDiscriminatorMatches.Length == 1;
+                return new MatcherResultWithNext<MethodInfo>(
+                    passed,
+                    () =>
+                    {
+                        var single = matchesName.Length == 1;
+                        var moreInfo = matchesName.Any()
+                            ? $" (there {(single ? "was" : "were")} {matchesName.Length} match{(single ? "" : "es")} by name '{methodName}')"
+                            : "";
+                        if (matchesName.Any() && allDiscriminatorMatches.Length > 1)
+                        {
+                            moreInfo = moreInfo.RegexReplace(")$",
+                                " - there were multiple matches for your provided discriminator)");
+                        }
+
+                        return $@"Expected {
+                            type.PrettyName()
+                        } to have one matching method for name '{
+                            methodName
+                        }' and provided discriminator{
+                            moreInfo
+                        }";
+                    },
                     customMessageGenerator,
                     () => methodInfo
                 );
