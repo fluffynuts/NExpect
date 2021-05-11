@@ -22,16 +22,19 @@ namespace NExpect.Implementations
             IsNegated = false;
         }
 
-        public void RunMatcher(
+        public IMatcherResult RunMatcher(
             T actual,
             bool negated,
             Func<T, IMatcherResult> matcher,
             bool resetNegationAfterRun
         )
         {
-            MatcherRunner.RunMatcher(actual, negated, matcher);
+            var result =MatcherRunner.RunMatcher(actual, negated, matcher);
             if (resetNegationAfterRun)
+            {
                 ResetNegation();
+            }
+            return result;
         }
     }
 }

@@ -29,9 +29,9 @@ namespace NExpect.Implementations
             }
         }
 
-        public void RunMatcher(Func<T, IMatcherResult> matcher)
+        public IMatcherResult RunMatcher(Func<T, IMatcherResult> matcher)
         {
-            RunMatcher(Actual, IsNegated, matcher, true);
+            return RunMatcher(Actual, IsNegated, matcher, true);
         }
         
     }

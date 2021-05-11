@@ -68,10 +68,10 @@ namespace NExpect.Implementations
         /// run within NExpect.
         /// </summary>
         /// <param name="matcher"></param>
-        public virtual void RunMatcher(Func<T, IMatcherResult> matcher)
+        public virtual IMatcherResult RunMatcher(Func<T, IMatcherResult> matcher)
         {
             _storedExpectation = matcher;
-            RunExpectations();
+            return RunExpectations();
         }
 
         private void RunNegations()
@@ -86,16 +86,17 @@ namespace NExpect.Implementations
             _shouldResetNegation = false;
         }
 
-        private void RunExpectations()
+        private IMatcherResult RunExpectations()
         {
             if (_parent == null ||
                 _storedExpectation == null)
             {
-                return;
+                return default;
             }
 
-            _parent.RunMatcher(_storedExpectation);
+            var result = _parent.RunMatcher(_storedExpectation);
             _storedExpectation = null;
+            return result;
         }
 
         internal void SetParent(IExpectationContext<T> parent)

@@ -6,7 +6,7 @@ namespace NExpect.Implementations
 {
     internal static class MatcherRunner
     {
-        public static void RunMatcher<T>(
+        public static IMatcherResult RunMatcher<T>(
             T actual,
             bool negated,
             Func<T, IMatcherResult> matcher
@@ -24,10 +24,11 @@ namespace NExpect.Implementations
             catch (Exception ex)
             {
                 ProcessMatcherException(ex);
-                return;
+                return default;
             }
 
             ProcessMatcherResult(negated, result);
+            return result;
         }
 
         public static void ProcessMatcherException(

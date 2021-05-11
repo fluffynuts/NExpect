@@ -19,10 +19,11 @@ namespace NExpect.Interfaces
         /// Reset all negation on the current expectation
         /// </summary>
         void ResetNegation();
+
         /// <summary>
         /// Run a matcher from the current expectation context
         /// </summary>
         /// <param name="matcher"></param>
-        void RunMatcher(Func<T, IMatcherResult> matcher);
+        IMatcherResult RunMatcher(Func<T, IMatcherResult> matcher);
     }
 }

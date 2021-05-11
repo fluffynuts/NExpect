@@ -18,9 +18,9 @@ namespace NExpect.Implementations
         private readonly IHasActual<TFrom> _wrapped;
         private readonly Func<IHasActual<TFrom>, TTo> _unwrap;
 
-        public void RunMatcher(Func<TTo, IMatcherResult> matcher)
+        public IMatcherResult RunMatcher(Func<TTo, IMatcherResult> matcher)
         {
-            RunMatcher(Actual, IsNegated, matcher, false);
+            return RunMatcher(Actual, IsNegated, matcher, false);
         }
 
 

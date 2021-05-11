@@ -34,9 +34,9 @@ namespace NExpect.Implementations
         /// 
         /// </summary>
         /// <param name="matcher"></param>
-        public override void RunMatcher(Func<T, IMatcherResult> matcher)
+        public override IMatcherResult RunMatcher(Func<T, IMatcherResult> matcher)
         {
-            MatcherRunner.RunMatcher(
+            return MatcherRunner.RunMatcher(
                 Actual,
                 _parent.IsNegated(),
                 matcher

@@ -1,4 +1,5 @@
-﻿using NExpect.Exceptions;
+﻿using System;
+using NExpect.Exceptions;
 using NUnit.Framework;
 using PeanutButter.Utils;
 using static NExpect.Expectations;
@@ -6,7 +7,7 @@ using static NExpect.Expectations;
 namespace NExpect.Tests.ObjectEquality
 {
     [TestFixture]
-    public class TestReflectiveAssertions
+    public class TestReflectiveMatchers
     {
         [TestFixture]
         public class TestingPropertyValueByName
@@ -139,6 +140,138 @@ namespace NExpect.Tests.ObjectEquality
                         .With.Type(typeof(int));
                 }, Throws.Nothing);
                 // Assert
+            }
+        }
+
+        [TestFixture]
+        public class AssertingAgainstMethods
+        {
+            [Test]
+            public void ShouldBeAbleToAssertMethodPresence()
+            {
+                // Arrange
+                var cow = new Cow();
+                var goodMethod = nameof(cow.Moo);
+                var badMethod = "MooMoo";
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(cow)
+                        .To.Have.Method(goodMethod);
+                }, Throws.Nothing);
+
+                Assert.That(() =>
+                    {
+                        Expect(cow)
+                            .Not.To.Have.Method(goodMethod);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
+
+                Assert.That(() =>
+                    {
+                        Expect(cow)
+                            .To.Have.Method(badMethod);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains(badMethod)
+                );
+                // Assert
+            }
+
+            [Test]
+            public void ShouldBeAbleToAssertMethodPresenceOnType()
+            {
+                // Arrange
+                var cow = typeof(Cow);
+                var goodMethod = nameof(Cow.Moo);
+                var badMethod = "MooMoo";
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(cow)
+                        .To.Have.Method(goodMethod);
+                }, Throws.Nothing);
+
+                Assert.That(() =>
+                    {
+                        Expect(cow)
+                            .Not.To.Have.Method(goodMethod);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
+
+                Assert.That(() =>
+                    {
+                        Expect(cow)
+                            .To.Have.Method(badMethod);
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains(badMethod)
+                );
+                // Assert
+            }
+
+            [Test]
+            public void ShouldBeAbleToAssertMethodAttributes()
+            {
+                // Arrange
+                var cow = new Cow();
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(cow)
+                        .To.Have.Method(nameof(cow.Moo))
+                        .With.Attribute<CommentAttribute>();
+                    Expect(cow)
+                        .To.Have.Method(nameof(cow.Moo))
+                        .With.Attribute<CommentAttribute>(
+                            c => c.Comment == "it's what cows do"
+                        );
+                }, Throws.Nothing);
+
+                Assert.That(() =>
+                    {
+                        Expect(cow)
+                            .To.Have.Method(nameof(Cow.NotMoo))
+                            .With.Attribute<CommentAttribute>(
+                                c => c.Comment == "it's what cows do"
+                            );
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains("[Comment]")
+                );
+                Assert.That(() =>
+                    {
+                        Expect(cow)
+                            .To.Have.Method(nameof(Cow.Moo))
+                            .With.Attribute<CommentAttribute>(
+                                c => c.Comment == "it's not what cows do"
+                            );
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains("[Comment]")
+                        .And.With.Message.Contains("provided matcher")
+                );
+                // Assert
+            }
+
+            public class Cow
+            {
+                [Comment("it's what cows do")]
+                public void Moo()
+                {
+                }
+
+                public void NotMoo()
+                {
+                }
+            }
+
+            public class CommentAttribute : Attribute
+            {
+                public string Comment { get; }
+
+                public CommentAttribute(
+                    string comment
+                )
+                {
+                    Comment = comment;
+                }
             }
         }
     }

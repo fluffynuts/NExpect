@@ -40,9 +40,9 @@ namespace NExpect.Implementations.Strings
             _expectationContext.ResetNegation();
         }
 
-        public override void RunMatcher(Func<string, IMatcherResult> matcher)
+        public override IMatcherResult RunMatcher(Func<string, IMatcherResult> matcher)
         {
-            _expectationContext.RunMatcher(matcher);
+            return _expectationContext.RunMatcher(matcher);
         }
 
         public IStringAnd And =>

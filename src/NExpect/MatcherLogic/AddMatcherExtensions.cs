@@ -6,6 +6,7 @@ using NExpect.Exceptions;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using static NExpect.Implementations.MessageHelpers;
+
 // ReSharper disable UsePatternMatching
 // ReSharper disable PossibleMultipleEnumeration
 
@@ -16,6 +17,35 @@ namespace NExpect.MatcherLogic
     /// </summary>
     public static class AddMatcherExtensions
     {
+        /// <summary>
+        /// Simplifies adding matchers which also include a context switch
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="matcher"></param>
+        /// <typeparam name="TCurrent"></typeparam>
+        /// <typeparam name="TNext"></typeparam>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        public static IMore<TNext> AddMatcher<TCurrent, TNext>(
+            this ICanAddMatcher<TCurrent> continuation,
+            Func<TCurrent, IMatcherResultWithNext<TNext>> matcher
+        )
+        {
+            var result = AddMatcherPrivate(continuation, matcher)
+                as IMatcherResultWithNext<TNext>;
+            if (result is null)
+            {
+                throw new InvalidOperationException(
+                    "Expected to get a matcher result with NextFetcher, but got null"
+                );
+            }
+
+            return new Next<TNext>(
+                result.NextFetcher,
+                continuation as IExpectationContext
+            );
+        }
+
         /// <summary>
         /// Most general matcher add - onto ICanAddMatcher&lt;T&gt;
         /// </summary>
@@ -75,7 +105,7 @@ namespace NExpect.MatcherLogic
             [CallerMemberName] string callingMethod = null
         )
         {
-            return continuation.Compose(expectationsRunner, 
+            return continuation.Compose(expectationsRunner,
                 (a, b) => $"Expectation \"{callingMethod}\" should {(!b).AsNot()}have failed.");
         }
 
@@ -101,7 +131,7 @@ namespace NExpect.MatcherLogic
                 }
                 catch (UnmetExpectationException e)
                 {
-                    return new MatcherResult(false, 
+                    return new MatcherResult(false,
                         () => FinalMessageFor(
                             new[] { "Specifically:", e.Message },
                             messageGenerator?.Invoke(actual, false)
@@ -125,7 +155,7 @@ namespace NExpect.MatcherLogic
             [CallerMemberName] string callingMethod = null
         )
         {
-            return continuation.Compose(expectationsRunner, 
+            return continuation.Compose(expectationsRunner,
                 (a, b) => $"{callingMethod} should {b.AsNot()}have passed.");
         }
 
@@ -151,7 +181,7 @@ namespace NExpect.MatcherLogic
                 }
                 catch (UnmetExpectationException e)
                 {
-                    return new MatcherResult(false, 
+                    return new MatcherResult(false,
                         () => FinalMessageFor(
                             new[] { "Specifically:", e.Message },
                             messageGenerator?.Invoke(actual, false)
@@ -162,7 +192,7 @@ namespace NExpect.MatcherLogic
             return continuation.More();
         }
 
-        private static void AddMatcherPrivate<T>(
+        private static IMatcherResult AddMatcherPrivate<T>(
             object continuation,
             Func<T, IMatcherResult> matcher)
         {
@@ -172,7 +202,8 @@ namespace NExpect.MatcherLogic
             {
                 throw new InvalidOperationException($"{continuation} does not implement IExpectationContext<T>");
             }
-            asContext.RunMatcher(matcher);
+
+            return asContext.RunMatcher(matcher);
         }
     }
 }

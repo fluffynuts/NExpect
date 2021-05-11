@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using Imported.PeanutButter.Utils;
 using NExpect.Implementations;
@@ -9,42 +10,218 @@ using static NExpect.Implementations.MessageHelpers;
 namespace NExpect
 {
     /// <summary>
-    /// Used to continue reflective property assertions
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IHasWith<T>
-    {
-        /// <summary>
-        /// Continues the .Property().With syntax
-        /// </summary>
-        IWith<T> With { get; }
-    }
-
-    internal class HasWith<T1, T> : With<T>, IHasWith<T>
-    {
-        public IWith<T> With { get; }
-
-        internal HasWith(
-            IExpectationContext<T1> parent,
-            string propertyName,
-            Func<T> actualFetcher
-        ) : base(actualFetcher)
-        {
-            With = ContinuationFactory.Create<T, WithPropertyName<T>>(
-                actualFetcher,
-                this
-            );
-            (this as IExpectationContext<T1>).TypedParent = parent;
-            (With as WithPropertyName<T>).PropertyName = propertyName;
-        }
-    }
-
-    /// <summary>
     /// Performs expectations reflectively
     /// </summary>
     public static class ReflectiveExtensions
     {
         /// <summary>
+        /// Tests if an object or Type has a method with the provided name
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="methodName"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Method<T>(
+            this IHave<T> have,
+            string methodName
+        )
+        {
+            return have.Method(methodName, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Tests if an object or Type has a method with the provided name
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="methodName"></param>
+        /// <param name="customMessage"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Method<T>(
+            this IHave<T> have,
+            string methodName,
+            string customMessage
+        )
+        {
+            return have.Method(methodName, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if an object or Type has a method with the provided name
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="methodName"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Method<T>(
+            this IHave<T> have,
+            string methodName,
+            Func<string> customMessageGenerator
+        )
+        {
+            return have.AddMatcher<T, MethodInfo>(actual =>
+            {
+                if (actual is null)
+                {
+                    return Fail("actual is null");
+                }
+
+                var type = actual as Type ?? typeof(T);
+                var methodInfo = type.GetMethod(methodName);
+                var passed = methodInfo is not null;
+                return new MatcherResultWithNext<MethodInfo>(
+                    passed,
+                    () => $"Expected '{type.PrettyName()}' {passed.AsNot()} to have method '{methodName}'",
+                    customMessageGenerator,
+                    () => methodInfo
+                );
+            });
+
+            IMatcherResultWithNext<MethodInfo> Fail(string message)
+            {
+                return new MatcherResultWithNext<MethodInfo>(
+                    false,
+                    () => message,
+                    customMessageGenerator,
+                    () => default
+                );
+            }
+        }
+
+        /// <summary>
+        /// Asserts against an expected attribute, with a matcher for the attribute
+        /// </summary>
+        /// <param name="with"></param>
+        /// <typeparam name="TAttribute"></typeparam>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Attribute<TAttribute>(
+            this IWith<MethodInfo> with
+        ) where TAttribute : Attribute
+        {
+            return with.Attribute<TAttribute>(NULL_STRING);
+        }
+
+        /// <summary>
+        /// Asserts against an expected attribute, with a matcher for the attribute
+        /// </summary>
+        /// <param name="with"></param>
+        /// <param name="customMessage"></param>
+        /// <typeparam name="TAttribute"></typeparam>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Attribute<TAttribute>(
+            this IWith<MethodInfo> with,
+            string customMessage
+        ) where TAttribute : Attribute
+        {
+            return with.Attribute<TAttribute>(() => customMessage);
+        }
+
+        /// <summary>
+        /// Asserts against an expected attribute, with a matcher for the attribute
+        /// </summary>
+        /// <param name="with"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <typeparam name="TAttribute"></typeparam>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Attribute<TAttribute>(
+            this IWith<MethodInfo> with,
+            Func<string> customMessageGenerator
+        ) where TAttribute : Attribute
+        {
+            return with.Attribute(
+                null as Func<TAttribute, bool>,
+                customMessageGenerator
+            );
+        }
+
+        /// <summary>
+        /// Asserts against an expected attribute, with a matcher for the attribute
+        /// </summary>
+        /// <param name="with"></param>
+        /// <param name="matcher"></param>
+        /// <typeparam name="TAttribute"></typeparam>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Attribute<TAttribute>(
+            this IWith<MethodInfo> with,
+            Func<TAttribute, bool> matcher
+        ) where TAttribute : Attribute
+        {
+            return with.Attribute(
+                matcher,
+                NULL_STRING
+            );
+        }
+
+        /// <summary>
+        /// Asserts against an expected attribute, with a matcher for the attribute
+        /// </summary>
+        /// <param name="with"></param>
+        /// <param name="matcher"></param>
+        /// <param name="customMessage"></param>
+        /// <typeparam name="TAttribute"></typeparam>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Attribute<TAttribute>(
+            this IWith<MethodInfo> with,
+            Func<TAttribute, bool> matcher,
+            string customMessage
+        ) where TAttribute : Attribute
+        {
+            return with.Attribute(
+                matcher, () => customMessage
+            );
+        }
+
+        /// <summary>
+        /// Asserts against an expected attribute, with a matcher for the attribute
+        /// </summary>
+        /// <param name="with"></param>
+        /// <param name="matcher"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <typeparam name="TAttribute"></typeparam>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Attribute<TAttribute>(
+            this IWith<MethodInfo> with,
+            Func<TAttribute, bool> matcher,
+            Func<string> customMessageGenerator
+        ) where TAttribute : Attribute
+        {
+            return with.AddMatcher(actual =>
+            {
+                var attribs = actual.GetCustomAttributes()
+                    .OfType<TAttribute>()
+                    .ToArray();
+                var hasMatcher = matcher is not null;
+                var passed = attribs.Any(matcher ?? (a => true));
+                return new MatcherResult(
+                    passed,
+                    () =>
+                    {
+                        var more = hasMatcher
+                            ? " matched by the provided matcher"
+                            : "";
+                        return
+                            $@"Expected {passed.AsNot()}to find {
+                                actual.FullName()
+                            } decorated with [{Attrib<TAttribute>()}]{more}";
+                    },
+                    customMessageGenerator
+                );
+            });
+        }
+
+        private static string FullName(this MethodInfo mi)
+        {
+            return $"{mi.DeclaringType.PrettyName()}.{mi.Name}";
+        }
+
+        private static string Attrib<TAttrib>()
+            where TAttrib : Attribute
+        {
+            return $"[{typeof(TAttrib).Name.RegexReplace("Attribute$", "")}]";
+        }
+
+        /// <summary>
         /// Tests if an object has a given property, may continue on to test
         /// the property value
         /// </summary>
@@ -149,7 +326,7 @@ namespace NExpect
         {
             return (have as ICanAddMatcher<T>).Property(property, customMessageGenerator);
         }
-        
+
         private const BindingFlags PUBLIC_INSTANCE = BindingFlags.Public | BindingFlags.Instance;
 
         private static IMore<T> Property<T>(
@@ -174,7 +351,7 @@ namespace NExpect
                 var actualType = actual.GetType();
                 if (actualType.Name == "RuntimeType" && actualType.Namespace == "System")
                 {
-                    actualType = (Type)(actual as object);
+                    actualType = (Type) (actual as object);
                 }
 
                 var propInfo = actualType.GetProperty(property, PUBLIC_INSTANCE);
@@ -184,10 +361,10 @@ namespace NExpect
                         false,
                         () =>
                             $@"Expected {
-                                    actualType.PrettyName()
-                                } {
-                                    false.AsNot()
-                                }to have a public property named '{property}'"
+                                actualType.PrettyName()
+                            } {
+                                false.AsNot()
+                            }to have a public property named '{property}'"
                     );
                 }
 
@@ -348,14 +525,14 @@ namespace NExpect
                     passed,
                     FinalMessageFor(
                         () => $@"expected {
-                                passed.AsNot()
-                            }to find value of {
-                                expected.Stringify()
-                            } for property '{
-                                propInfo.Name
-                            }', but found {
-                                actualValue.Stringify()
-                            }",
+                            passed.AsNot()
+                        }to find value of {
+                            expected.Stringify()
+                        } for property '{
+                            propInfo.Name
+                        }', but found {
+                            actualValue.Stringify()
+                        }",
                         customMessageGenerator
                     )
                 );
@@ -540,7 +717,8 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        () => $@"Expected property '{propInfo.DeclaringType.PrettyName()}.{propInfo.Name}' {passed.AsNot()}to be of type '{expected}', but it has type '{propInfo.PropertyType}'",
+                        () =>
+                            $@"Expected property '{propInfo.DeclaringType.PrettyName()}.{propInfo.Name}' {passed.AsNot()}to be of type '{expected}', but it has type '{propInfo.PropertyType}'",
                         customMessageGenerator
                     )
                 );

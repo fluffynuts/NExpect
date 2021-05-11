@@ -26,9 +26,9 @@ namespace NExpect.Implementations.Exceptions
         public IWithAfterThrowContinuation<T> With =>
             ContinuationFactory.Create<T, WithAfterThrowContinuation<T>>(() => Exception, this);
 
-        public override void RunMatcher(Func<T, IMatcherResult> matcher)
+        public override IMatcherResult RunMatcher(Func<T, IMatcherResult> matcher)
         {
-            MatcherRunner.RunMatcher(Exception, this.IsNegated(), matcher);
+            return MatcherRunner.RunMatcher(Exception, this.IsNegated(), matcher);
         }
 
         public ThrowContinuation() : base(() => null)

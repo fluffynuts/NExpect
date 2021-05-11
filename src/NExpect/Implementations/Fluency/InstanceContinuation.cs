@@ -29,7 +29,7 @@ namespace NExpect.Implementations.Fluency
             throw new InvalidOperationException("This context cannot be negated");
         }
 
-        public override void RunMatcher(Func<Type, IMatcherResult> matcher)
+        public override IMatcherResult RunMatcher(Func<Type, IMatcherResult> matcher)
         {
             IMatcherResult result;
             try
@@ -39,10 +39,11 @@ namespace NExpect.Implementations.Fluency
             catch (Exception ex)
             {
                 MatcherRunner.ProcessMatcherException(ex);
-                return;
+                return default;
             }
 
             MatcherRunner.ProcessMatcherResult(Parent.IsNegated(), result);
+            return result;
         }
     }
 }
