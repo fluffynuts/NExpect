@@ -13,23 +13,12 @@ namespace NExpect.Implementations.Collections
         IHasActual<IEnumerable<T>>,
         ICollectionTo<T>
     {
-        public IContain<IEnumerable<T>> Contain
-            => ContinuationFactory.Create<IEnumerable<T>, Contain<IEnumerable<T>>>(ActualFetcher, this);
-
-        public ICollectionNotAfterTo<T> Not =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionNotAfterTo<T>>(ActualFetcher, this);
-
-        public ICollectionBe<T> Be =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionBe<T>>(ActualFetcher, this);
-
-        public ICollectionHave<T> Have =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionHave<T>>(ActualFetcher, this);
-
-        public ICollectionDeep<T> Deep =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionDeep<T>>(ActualFetcher, this);
-
-        public ICollectionIntersection<T> Intersection =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionIntersection<T>>(ActualFetcher, this);
+        public IContain<IEnumerable<T>> Contain => Next<Contain<IEnumerable<T>>>();
+        public ICollectionNotAfterTo<T> Not => Next<CollectionNotAfterTo<T>>();
+        public ICollectionBe<T> Be => Next<CollectionBe<T>>();
+        public ICollectionHave<T> Have => Next<CollectionHave<T>>();
+        public ICollectionDeep<T> Deep => Next<CollectionDeep<T>>();
+        public ICollectionIntersection<T> Intersection => Next<CollectionIntersection<T>>();
 
         public CollectionTo(Func<IEnumerable<T>> actualFetcher) : base(actualFetcher)
         {

@@ -1,5 +1,4 @@
 using System;
-using NExpect.Implementations.Collections;
 using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
@@ -12,11 +11,13 @@ namespace NExpect.Implementations.Fluency
         IHasActual<T>,
         IAnd<T>
     {
-        public IA<T> A => ContinuationFactory.Create<T, A<T>>(ActualFetcher, this);
-        public IAn<T> An => ContinuationFactory.Create<T, An<T>>(ActualFetcher, this);
-        public IHave<T> Have => ContinuationFactory.Create<T, Have<T>>(ActualFetcher, this);
-        public IPropertyNot<T> Not => ContinuationFactory.Create<T, Not<T>>(ActualFetcher, this);
-        public ITo<T> To => ContinuationFactory.Create<T, To<T>>(ActualFetcher, this);
+        public IA<T> A => Next<A<T>>();
+        public IAn<T> An => Next<An<T>>();
+        public IHave<T> Have => Next<Have<T>>();
+        public IPropertyNot<T> Not => Next<Not<T>>();
+        public ITo<T> To => Next<To<T>>();
+        public IIs<T> Is => Next<Is<T>>();
+        public IHas<T> Has => Next<Has<T>>();
 
         public And(Func<T> actualFetcher) : base(actualFetcher)
         {

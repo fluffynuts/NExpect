@@ -11,7 +11,7 @@ namespace NExpect.Implementations.Strings
           IStringMore
     {
         public IStringAnd And =>
-            ContinuationFactory.Create<string, StringAnd>(ActualFetcher, this);
+            Next<StringAnd>();
 
         public StringMore(Func<string> actualFetcher) : base(actualFetcher)
         {

@@ -1,5 +1,4 @@
 ﻿using System;
-using NExpect.Implementations.Collections;
 using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
@@ -13,7 +12,7 @@ namespace NExpect.Implementations.Fluency
         IHasActual<T>,
         IPropertyNot<T>
     {
-        public IToAfterNot<T> To => ContinuationFactory.Create<T, ToAfterNot<T>>(ActualFetcher, this);
+        public IToAfterNot<T> To => Next<ToAfterNot<T>>();
 
         public Not(Func<T> actualFetcher): base(actualFetcher)
         {

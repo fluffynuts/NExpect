@@ -14,14 +14,10 @@ namespace NExpect.Implementations.Collections
           ICollectionIntersection<T>
     {
         public ICollectionIntersectionEquivalent<T> Equivalent =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionIntersectionEquivalent<T>>(
-                ActualFetcher, this
-            );
+            Next<CollectionIntersectionEquivalent<T>>();
 
         public ICollectionIntersectionEqual<T> Equal =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionIntersectionEqual<T>>(
-                ActualFetcher, this
-            );
+            Next<CollectionIntersectionEqual<T>>();
 
         public CollectionIntersection(Func<IEnumerable<T>> actualFetcher) : base(actualFetcher)
         {

@@ -19,29 +19,23 @@ namespace NExpect.Implementations
           IMore<T>
     {
         /// <inheritdoc />
-        public IAnd<T> And =>
-            ContinuationFactory.Create<T, And<T>>(ActualFetcher, this);
+        public IAnd<T> And => Next<And<T>>();
 
         /// <inheritdoc />
-        public IWith<T> With =>
-            ContinuationFactory.Create<T, With<T>>(ActualFetcher, this);
+        public IWith<T> With => Next<With<T>>();
 
         /// <inheritdoc />
-        public IOf<T> Of =>
-            ContinuationFactory.Create<T, Of<T>>(ActualFetcher, this);
+        public IOf<T> Of => Next<Of<T>>();
 
         /// <inheritdoc />
-        public IBy<T> By =>
-            ContinuationFactory.Create<T, By<T>>(ActualFetcher, this);
+        public IBy<T> By => Next<By<T>>();
 
 
         /// <inheritdoc />
-        public IMax<T> Max =>
-            ContinuationFactory.Create<T, Max<T>>(ActualFetcher, this);
+        public IMax<T> Max => Next<Max<T>>();
 
         /// <inheritdoc />
-        public ITo<T> To =>
-            ContinuationFactory.Create<T, To<T>>(ActualFetcher, this);
+        public ITo<T> To => Next<To<T>>();
 
         /// <summary>
         /// Construct a More&lt;T&gt;

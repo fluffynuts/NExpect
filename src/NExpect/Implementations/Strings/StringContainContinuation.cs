@@ -1,5 +1,4 @@
 ﻿using System;
-using NExpect.Implementations.Collections;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
@@ -11,6 +10,8 @@ namespace NExpect.Implementations.Strings
         IHasActual<string>,
         IExpectationContext<string>
     {
+        public IStringAnd And => Next<StringAnd>();
+
         public override IExpectationContext Parent => _expectationContext;
 
         IExpectationContext<string> IExpectationContext<string>.TypedParent
@@ -44,8 +45,5 @@ namespace NExpect.Implementations.Strings
         {
             return _expectationContext.RunMatcher(matcher);
         }
-
-        public IStringAnd And =>
-            ContinuationFactory.Create<string, StringAnd>(ActualFetcher, this);
     }
 }

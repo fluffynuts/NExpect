@@ -12,8 +12,7 @@ namespace NExpect.Implementations.Fluency
         IHasActual<T>,
         IDeep<T>
     {
-        public IDeepEqual<T> Equal 
-            => ContinuationFactory.Create<T, DeepEqual<T>>(ActualFetcher, this);
+        public IDeepEqual<T> Equal => Next<DeepEqual<T>>();
 
         public Deep(Func<T> actualFetcher) : base(actualFetcher)
         {

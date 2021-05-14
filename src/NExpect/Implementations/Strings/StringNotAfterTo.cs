@@ -6,18 +6,13 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Strings
 {
-    internal class StringNotAfterTo :
-        NotAfterTo<string>,
-        IStringNotAfterTo
+    internal class StringNotAfterTo
+        : NotAfterTo<string>,
+          IStringNotAfterTo
     {
-        public IStringStart Start =>
-            ContinuationFactory.Create<string, StringStart>(ActualFetcher, this);
-
-        public IStringEnd End =>
-            ContinuationFactory.Create<string, StringEnd>(ActualFetcher, this);
-
-        public new IStringBe Be =>
-            ContinuationFactory.Create<string, StringBe>(ActualFetcher, this);
+        public IStringStart Start => Next<StringStart>();
+        public IStringEnd End => Next<StringEnd>();
+        public new IStringBe Be => Next<StringBe>();
 
         public StringNotAfterTo(Func<string> actualFetcher) : base(actualFetcher)
         {

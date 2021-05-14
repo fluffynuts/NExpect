@@ -91,6 +91,16 @@ namespace NExpect.Matchers.AspNet.Tests
                         .And.To.Have.Max.Age(maxAge)
                         .And.To.Be.HttpOnly();
                 }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(message)
+                        .To.Have.Cookie(cookieName)
+                        .With.Value(cookieValue)
+                        .And.Is.Secure()
+                        .And.Has.Domain(domain)
+                        .And.Has.Max.Age(maxAge)
+                        .And.Is.HttpOnly();
+                }, Throws.Nothing);
 
                 Assert.That(() =>
                 {

@@ -1,5 +1,4 @@
 ﻿using System;
-using NExpect.Implementations.Collections;
 using NExpect.Implementations.Numerics;
 using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
@@ -9,36 +8,21 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Fluency
 {
-    internal class Be<T> : 
-        ExpectationContextWithLazyActual<T>, 
-        IHasActual<T>,
-        IBe<T>
+    internal class Be<T>
+        : ExpectationContextWithLazyActual<T>,
+          IHasActual<T>,
+          IBe<T>
     {
-        public INotAfterBe<T> Not => ContinuationFactory.Create<T, NotAfterBe<T>>(ActualFetcher, this);
-
-        public IEqualityContinuation<T> Equal =>
-            ContinuationFactory.Create<T, EqualityContinuation<T>>(ActualFetcher, this);
-
-        public IGreaterContinuation<T> Greater =>
-            ContinuationFactory.Create<T, GreaterContinuation<T>>(
-                ActualFetcher,
-                this);
-
-        public ILessContinuation<T> Less =>
-            ContinuationFactory.Create<T, LessContinuation<T>>(
-                ActualFetcher,
-                this);
-
-        public IA<T> A => ContinuationFactory.Create<T, A<T>>(ActualFetcher, this);
-        public IAn<T> An => ContinuationFactory.Create<T, An<T>>(ActualFetcher, this);
-        public INull<T> Null => ContinuationFactory.Create<T, Null<T>>(ActualFetcher, this);
-        public IFor<T> For => ContinuationFactory.Create<T, For<T>>(ActualFetcher, this);
-        
-        public IDeep<T> Deep =>
-            ContinuationFactory.Create<T, Deep<T>>(ActualFetcher, this);
-
-        public IIntersection<T> Intersection =>
-            ContinuationFactory.Create<T, Intersection<T>>(ActualFetcher, this);
+        public INotAfterBe<T> Not => Next<NotAfterBe<T>>();
+        public IEqualityContinuation<T> Equal => Next<EqualityContinuation<T>>();
+        public IGreaterContinuation<T> Greater => Next<Greater<T>>();
+        public ILessContinuation<T> Less => Next<LessContinuation<T>>();
+        public IA<T> A => Next<A<T>>();
+        public IAn<T> An => Next<An<T>>();
+        public INull<T> Null => Next<Null<T>>();
+        public IFor<T> For => Next<For<T>>();
+        public IDeep<T> Deep => Next<Deep<T>>();
+        public IIntersection<T> Intersection => Next<Intersection<T>>();
 
         public void SetActual(T actual)
         {

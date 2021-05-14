@@ -13,8 +13,7 @@ namespace NExpect.Implementations.Collections
         IHasActual<IEnumerable<T>>,
         ICollectionHave<T>
     {
-        public ICollectionUnique<T> Unique =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionUnique<T>>(ActualFetcher, this);
+        public ICollectionUnique<T> Unique => Next<CollectionUnique<T>>();
 
         public CollectionHave(Func<IEnumerable<T>> actualFetcher) : base(actualFetcher)
         {

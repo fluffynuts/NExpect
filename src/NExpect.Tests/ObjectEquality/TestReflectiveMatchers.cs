@@ -306,6 +306,19 @@ namespace NExpect.Tests.ObjectEquality
                 {
                     Console.WriteLine(msg);
                 }
+
+                public virtual void Overrideable()
+                {
+                }
+            }
+
+            public class SuperCow: Cow
+            {
+                [Comment("super-cow")]
+                public override void Overrideable()
+                {
+                    base.Overrideable();
+                }
             }
 
             public class CommentAttribute : Attribute

@@ -5,14 +5,13 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Numerics
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    internal class GreaterThanContinuation<T>
+    internal class GreaterThanOr<T>
         : ExpectationContextWithLazyActual<T>,
-          IHasActual<T>,
-          IGreaterThanContinuation<T>
+          IGreaterThanOr<T>
     {
-        public IGreaterThanAnd<T> And => Next<GreaterThanAnd<T>>();
+        public IGreaterThanOrEqual<T> Equal => Next<GreaterThanOrEqual<T>>();
 
-        public GreaterThanContinuation(Func<T> actualFetcher) : base(actualFetcher)
+        public GreaterThanOr(Func<T> actualFetcher) : base(actualFetcher)
         {
         }
     }

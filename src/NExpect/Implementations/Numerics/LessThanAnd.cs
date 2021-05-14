@@ -10,8 +10,7 @@ namespace NExpect.Implementations.Numerics
         IHasActual<T>,
         ILessThanAnd<T>
     {
-        public IGreaterContinuation<T> Greater =>
-            ContinuationFactory.Create<T, GreaterContinuation<T>>(ActualFetcher, this);
+        public IGreaterContinuation<T> Greater => Next<Greater<T>>();
 
         public LessThanAnd(Func<T> actualFetcher) : base(actualFetcher)
         {

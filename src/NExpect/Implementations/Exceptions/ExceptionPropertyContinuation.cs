@@ -1,10 +1,8 @@
 using System;
-using NExpect.Implementations.Collections;
 using NExpect.Implementations.Fluency;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
-
 namespace NExpect.Implementations.Exceptions
 {
     internal class ExceptionPropertyContinuation<TValue> :
@@ -12,7 +10,7 @@ namespace NExpect.Implementations.Exceptions
         IExceptionPropertyContinuation<TValue>
     {
         public new IPropertyNot<TValue> Not
-            => ContinuationFactory.Create<TValue, PropertyNot<TValue>>(ActualFetcher, this);
+            => Next<PropertyNot<TValue>>();
         
         public ExceptionPropertyContinuation(Func<TValue> actualFetcher): base(actualFetcher)
         {

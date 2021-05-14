@@ -11,7 +11,7 @@ namespace NExpect.Implementations.Strings
             IHasActual<string>
     {
         public IStringIn In =>
-            ContinuationFactory.Create<string, StringIn>(ActualFetcher, this);
+            Next<StringIn>();
 
         public StringContain(Func<string> actualFetcher) : base(actualFetcher)
         {

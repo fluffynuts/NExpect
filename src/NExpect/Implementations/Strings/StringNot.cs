@@ -1,5 +1,4 @@
 using System;
-using NExpect.Implementations.Collections;
 using NExpect.Implementations.Fluency;
 using NExpect.Interfaces;
 
@@ -7,18 +6,13 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Strings
 {
-    internal class StringNot :
-        Not<string>,
-        IStringNot
+    internal class StringNot
+        : Not<string>,
+          IStringNot
     {
-        public IStringStart Start =>
-            ContinuationFactory.Create<string, StringStart>(ActualFetcher, this);
-
-        public IStringEnd End =>
-            ContinuationFactory.Create<string, StringEnd>(ActualFetcher, this);
-
-        public new IStringToAfterNot To =>
-            ContinuationFactory.Create<string, StringToAfterNot>(ActualFetcher, this);
+        public IStringStart Start => Next<StringStart>();
+        public IStringEnd End => Next<StringEnd>();
+        public new IStringToAfterNot To => Next<StringToAfterNot>();
 
         public StringNot(Func<string> actualFetcher) : base(actualFetcher)
         {

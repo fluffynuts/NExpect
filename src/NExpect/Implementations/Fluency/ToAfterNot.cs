@@ -9,21 +9,16 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Fluency
 {
-    internal class ToAfterNot<T> :
-        ExpectationContextWithLazyActual<T>,
-        IHasActual<T>,
-        IToAfterNot<T>
+    internal class ToAfterNot<T>
+        : ExpectationContextWithLazyActual<T>,
+          IHasActual<T>,
+          IToAfterNot<T>
     {
-        public IBe<T> Be => 
-            ContinuationFactory.Create<T, Be<T>>(ActualFetcher, this);
-        public IContain<T> Contain => 
-            ContinuationFactory.Create<T, Contain<T>>(ActualFetcher, this);
-        public IHave<T> Have => 
-            ContinuationFactory.Create<T, Have<T>>(ActualFetcher, this);
-        public IDeep<T> Deep => 
-            ContinuationFactory.Create<T, Deep<T>>(ActualFetcher, this);
-        public IIntersection<T> Intersection => 
-            ContinuationFactory.Create<T, Intersection<T>>(ActualFetcher, this);
+        public IBe<T> Be => Next<Be<T>>();
+        public IContain<T> Contain => Next<Contain<T>>();
+        public IHave<T> Have => Next<Have<T>>();
+        public IDeep<T> Deep => Next<Deep<T>>();
+        public IIntersection<T> Intersection => Next<Intersection<T>>();
 
         public ToAfterNot(Func<T> actualFetcher) : base(actualFetcher)
         {

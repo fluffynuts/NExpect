@@ -1,5 +1,4 @@
 using System;
-using NExpect.Implementations.Collections;
 using NExpect.Implementations.Fluency;
 using NExpect.Interfaces;
 
@@ -11,14 +10,9 @@ namespace NExpect.Implementations.Strings
     internal class StringPropertyNot
         : ExpectationContextWithLazyActual<string>, IStringPropertyNot
     {
-        public IToAfterNot<string> To
-            => ContinuationFactory.Create<string, ToAfterNot<string>>(ActualFetcher, this);
-
-        public IStringPropertyEndingContinuation Ending
-            => ContinuationFactory.Create<string, StringPropertyContinuation>(ActualFetcher, this);
-
-        public IStringPropertyEndingContinuation Starting
-            => ContinuationFactory.Create<string, StringPropertyContinuation>(ActualFetcher, this);
+        public IToAfterNot<string> To => Next<ToAfterNot<string>>();
+        public IStringPropertyEndingContinuation Ending => Next<StringPropertyContinuation>();
+        public IStringPropertyEndingContinuation Starting => Next<StringPropertyContinuation>();
 
         public StringPropertyNot(Func<string> actualFetcher)
             : base(actualFetcher)

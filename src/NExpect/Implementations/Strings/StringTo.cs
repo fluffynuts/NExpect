@@ -6,24 +6,15 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Strings
 {
-    internal class StringTo :
-        To<string>,
-        IStringTo
+    internal class StringTo
+        : To<string>,
+          IStringTo
     {
-        public IStringStart Start =>
-            ContinuationFactory.Create<string, StringStart>(ActualFetcher, this);
-
-        public IStringEnd End =>
-            ContinuationFactory.Create<string, StringEnd>(ActualFetcher, this);
-
-        public new IStringNotAfterTo Not =>
-            ContinuationFactory.Create<string, StringNotAfterTo>(ActualFetcher, this);
-
-        public new IStringBe Be =>
-            ContinuationFactory.Create<string, StringBe>(ActualFetcher, this);
-
-        public new IStringContain Contain =>
-            ContinuationFactory.Create<string, StringContain>(ActualFetcher, this);
+        public IStringStart Start => Next<StringStart>();
+        public IStringEnd End => Next<StringEnd>();
+        public new IStringNotAfterTo Not => Next<StringNotAfterTo>();
+        public new IStringBe Be => Next<StringBe>();
+        public new IStringContain Contain => Next<StringContain>();
 
         public StringTo(Func<string> actualFetcher) : base(actualFetcher)
         {

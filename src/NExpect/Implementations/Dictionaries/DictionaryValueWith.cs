@@ -13,8 +13,7 @@ namespace NExpect.Implementations.Dictionaries
           IDictionaryValueWith<TValue>
     {
 
-        public IDictionaryValue<TValue> Value =>
-            ContinuationFactory.Create<TValue, DictionaryValue<TValue>>(ActualFetcher, this);
+        public IDictionaryValue<TValue> Value => Next<DictionaryValue<TValue>>();
 
         public DictionaryValueWith(Func<TValue> actualFetcher) : base(actualFetcher)
         {

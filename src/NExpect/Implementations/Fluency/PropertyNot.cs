@@ -7,8 +7,7 @@ namespace NExpect.Implementations.Fluency
     internal class PropertyNot<TValue>
         : ExpectationContextWithLazyActual<TValue>, IPropertyNot<TValue>
     {
-        public IToAfterNot<TValue> To
-            => ContinuationFactory.Create<TValue, ToAfterNot<TValue>>(ActualFetcher, this);
+        public IToAfterNot<TValue> To => Next<ToAfterNot<TValue>>();
 
         public PropertyNot(Func<TValue> actualFetcher) : base(actualFetcher)
         {

@@ -10,14 +10,9 @@ namespace NExpect.Implementations.Dictionaries
           IHasActual<T>,
           IDictionaryValue<T>
     {
-        public IDictionaryValueDeep<T> Deep
-            => ContinuationFactory.Create<T, DictionaryValueDeep<T>>(ActualFetcher, this);
-
-        public IDictionaryValueIntersection<T> Intersection
-            => ContinuationFactory.Create<T, DictionaryValueIntersection<T>>(ActualFetcher, this);
-
-        public IDictionaryValueMatched<T> Matched 
-            => ContinuationFactory.Create<T, DictionaryValueMatched<T>>(ActualFetcher, this);
+        public IDictionaryValueDeep<T> Deep => Next<DictionaryValueDeep<T>>();
+        public IDictionaryValueIntersection<T> Intersection => Next<DictionaryValueIntersection<T>>();
+        public IDictionaryValueMatched<T> Matched => Next<DictionaryValueMatched<T>>();
 
         public DictionaryValue(Func<T> actualFetcher) : base(actualFetcher)
         {

@@ -4,13 +4,14 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Dictionaries
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     internal class DictionaryValueDeep<T>
         : ExpectationContextWithLazyActual<T>,
           IHasActual<T>,
           IDictionaryValueDeep<T>
     {
         public IDictionaryValueEqual<T> Equal
-            => ContinuationFactory.Create<T, DictionaryValueEqual<T>>(ActualFetcher, this);
+            => Next<DictionaryValueEqual<T>>();
 
         public DictionaryValueDeep(Func<T> actualFetcher) : base(actualFetcher)
         {

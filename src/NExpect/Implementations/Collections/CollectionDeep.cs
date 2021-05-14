@@ -14,10 +14,10 @@ namespace NExpect.Implementations.Collections
         ICollectionDeep<T>
     {
         public ICollectionDeepEqual<T> Equal =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionDeepEqual<T>>(ActualFetcher, this);
+            Next<CollectionDeepEqual<T>>();
 
         public ICollectionDeepEquivalent<T> Equivalent =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionDeepEquivalent<T>>(ActualFetcher, this);
+            Next<CollectionDeepEquivalent<T>>();
 
         public CollectionDeep(Func<IEnumerable<T>> actualFetcher) : base(actualFetcher)
         {

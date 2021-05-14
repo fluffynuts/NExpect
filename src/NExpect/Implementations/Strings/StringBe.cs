@@ -10,8 +10,7 @@ namespace NExpect.Implementations.Strings
         Be<string>,
         IStringBe
     {
-        public IStringMatched Matched =>
-            ContinuationFactory.Create<string, StringMatched>(ActualFetcher, this);
+        public IStringMatched Matched => Next<StringMatched>();
 
         public StringBe(Func<string> actualFetcher) : base(actualFetcher)
         {

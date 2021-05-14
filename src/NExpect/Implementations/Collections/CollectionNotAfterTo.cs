@@ -8,27 +8,18 @@ using NExpect.Interfaces;
 namespace NExpect.Implementations.Collections
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    internal class CollectionNotAfterTo<T>: 
-        ExpectationContextWithLazyActual<IEnumerable<T>>,
-        IHasActual<IEnumerable<T>>,
-        ICollectionNotAfterTo<T>
+    internal class CollectionNotAfterTo<T>
+        : ExpectationContextWithLazyActual<IEnumerable<T>>,
+          IHasActual<IEnumerable<T>>,
+          ICollectionNotAfterTo<T>
     {
-        public IContain<IEnumerable<T>> Contain =>
-            ContinuationFactory.Create<IEnumerable<T>, Contain<IEnumerable<T>>>(ActualFetcher, this);
+        public IContain<IEnumerable<T>> Contain => Next<Contain<IEnumerable<T>>>();
+        public ICollectionBe<T> Be => Next<CollectionBe<T>>();
+        public ICollectionHave<T> Have => Next<CollectionHave<T>>();
+        public ICollectionDeep<T> Deep => Next<CollectionDeep<T>>();
+        public ICollectionIntersection<T> Intersection => Next<CollectionIntersection<T>>();
 
-        public ICollectionBe<T> Be =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionBe<T>>(ActualFetcher, this);
-
-        public ICollectionHave<T> Have =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionHave<T>>(ActualFetcher, this);
-
-        public ICollectionDeep<T> Deep =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionDeep<T>>(ActualFetcher, this);
-
-        public ICollectionIntersection<T> Intersection =>
-            ContinuationFactory.Create<IEnumerable<T>, CollectionIntersection<T>>(ActualFetcher, this);
-
-        public CollectionNotAfterTo(Func<IEnumerable<T>> actualFetcher): base(actualFetcher)
+        public CollectionNotAfterTo(Func<IEnumerable<T>> actualFetcher) : base(actualFetcher)
         {
             Negate();
         }
