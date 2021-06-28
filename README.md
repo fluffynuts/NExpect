@@ -15,6 +15,7 @@ An assertions framework for .NET with a BDD-like feel, inspired by Chai and Jasm
 
 ## Tutorial / blog posts:
 [https://fluffynuts.github.io/NExpect](https://fluffynuts.github.io/NExpect)
+[dev.to](https://dev.to/fluffynuts/introducing-nexpect-555c)
 
 ## Usage
 1. Download from [nuget.org](https://nuget.org): `install-package nexpect`
