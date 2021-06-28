@@ -292,3 +292,4 @@ buildreports
 *.swp
 *.swo
 build-tools
+.vscode
