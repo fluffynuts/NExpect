@@ -66,43 +66,7 @@ namespace NExpect
             Func<string> customMessageGenerator
         )
         {
-            return have.AddMatcher(actual =>
-            {
-                if (actual is null)
-                {
-                    return Fail("actual is null");
-                }
-
-                var type = actual as Type ?? typeof(T);
-                var methodInfos = type.GetMethods(
-                        BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static
-                    ).Where(mi => mi.Name == methodName)
-                    .ToArray();
-                var methodInfo = methodInfos.FirstOrDefault();
-                var haveMultiple = methodInfos.Length > 1;
-                var passed = methodInfo is not null && !haveMultiple;
-                actual.SetMetadata(METADATA_KEY_METHOD_INFO, methodInfo);
-
-                return new MatcherResultWithNext<MethodInfo>(
-                    passed,
-                    () =>
-                        haveMultiple
-                            ? $"Expected '{type.PrettyName()}' {passed.AsNot()}to have a single method called '{methodName}' (perhaps you need a discriminator?)"
-                            : $"Expected '{type.PrettyName()}' {passed.AsNot()}to have method '{methodName}'",
-                    customMessageGenerator,
-                    () => methodInfo
-                );
-            });
-
-            IMatcherResultWithNext<MethodInfo> Fail(string message)
-            {
-                return new MatcherResultWithNext<MethodInfo>(
-                    false,
-                    () => message,
-                    customMessageGenerator,
-                    () => default
-                );
-            }
+            return have.Method<T>(methodName, _ => true, customMessageGenerator);
         }
 
         /// <summary>
@@ -186,6 +150,7 @@ namespace NExpect
                         mi => mi.Name == methodName && discriminator(mi)
                     ).ToArray();
                 var methodInfo = allDiscriminatorMatches.FirstOrDefault();
+                methodInfo.DeleteMetadata();
                 var passed = methodInfo is not null && allDiscriminatorMatches.Length == 1;
                 return new MatcherResultWithNext<MethodInfo>(
                     passed,
@@ -197,13 +162,13 @@ namespace NExpect
                             : "";
                         if (matchesName.Any() && allDiscriminatorMatches.Length > 1)
                         {
-                            moreInfo = moreInfo.RegexReplace(")$",
+                            moreInfo = moreInfo.RegexReplace("\\)$",
                                 " - there were multiple matches for your provided discriminator)");
                         }
 
                         return $@"Expected {
                             type.PrettyName()
-                        } to have one matching method for name '{
+                        } to have a single matching method for name '{
                             methodName
                         }' and provided discriminator{
                             moreInfo

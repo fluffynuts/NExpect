@@ -316,16 +316,19 @@ namespace NExpect.Tests.ObjectEquality
                 // Arrange
                 var cow = new Cow();
                 // Act
-                Expect(cow)
-                    .To.Have.Method(nameof(cow.Echo))
-                    .With.Parameter("toEcho")
-                    .Of.Type<string>()
-                    .With.Attribute<NotNullAttribute>();
-                Expect(cow)
-                    .To.Have.Method(nameof(cow.Echo))
-                    .With.Parameter()
-                    .Of.Type<string>()
-                    .With.Attribute<NotNullAttribute>();
+                Assert.That(() =>
+                {
+                    Expect(cow)
+                        .To.Have.Method(nameof(cow.Echo))
+                        .With.Parameter("toEcho")
+                        .Of.Type<string>()
+                        .With.Attribute<NotNullAttribute>();
+                    Expect(cow)
+                        .To.Have.Method(nameof(cow.Echo))
+                        .With.Parameter()
+                        .Of.Type<string>()
+                        .With.Attribute<NotNullAttribute>();
+                }, Throws.Nothing);
                 Assert.That(() =>
                 {
                     Expect(cow)
@@ -345,6 +348,27 @@ namespace NExpect.Tests.ObjectEquality
                     }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Match(".*'toEcho'.*\\[NotUsed\\]")
                 );
+                // Assert
+            }
+
+            [Test]
+            public void ShouldBeAbleToAssertAgainstParameterThenMethodInfo()
+            {
+                // Arrange
+                var cow = new Cow();
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(cow)
+                        .To.Have.Method(nameof(cow.Echo))
+                        .With.Parameter()
+                        .Of.Type<string>()
+                        .With.Attribute<NotNullAttribute>();
+                    Expect(cow)
+                        .To.Have.Method(nameof(cow.Echo))
+                        .With.Attribute<CommentAttribute>();
+                }, Throws.Nothing);
+
                 // Assert
             }
 
@@ -373,6 +397,7 @@ namespace NExpect.Tests.ObjectEquality
                     return a + b;
                 }
 
+                [Comment("echos")]
                 public string Echo([NotNull] string toEcho)
                 {
                     return $"echo: {toEcho}";
