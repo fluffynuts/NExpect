@@ -322,28 +322,85 @@ namespace NExpect
             Func<string> customMessageGenerator
         ) where TAttribute : Attribute
         {
+            matcher ??= _ => true;
             return with.AddMatcher(actual =>
+                TryMatchAnyParameterAttribute(actual, matcher, customMessageGenerator)
+                ?? TryMatchParameterAttribute(actual, matcher, customMessageGenerator)
+                ?? MatchMethodAttribute(actual, matcher, customMessageGenerator)
+            );
+        }
+
+        private static MatcherResult MatchMethodAttribute<TAttribute>(
+            MethodInfo actual,
+            Func<TAttribute, bool> matcher,
+            Func<string> customMessageGenerator
+        ) where TAttribute : Attribute
+        {
+            var attribs = actual.GetCustomAttributes()
+                .OfType<TAttribute>()
+                .Where(matcher)
+                .ToArray();
+            var passed = attribs.Length > 0;
+            return new MatcherResult(
+                passed,
+                () => $@"Expected {passed.AsNot()}to find {
+                    actual.FullName()
+                } decorated with {Attrib<TAttribute>()}",
+                customMessageGenerator
+            );
+        }
+
+        private static MatcherResult TryMatchAnyParameterAttribute<TAttribute>(
+            MethodInfo actual,
+            Func<TAttribute, bool> matcher,
+            Func<string> customMessageGenerator
+        ) where TAttribute : Attribute
+        {
+            if (!actual.TryGetMetadata<ParameterInfo[]>(METADATA_KEY_PARAMETER_INFOS, out var parameterInfos))
             {
-                var attribs = actual.GetCustomAttributes()
-                    .OfType<TAttribute>()
-                    .ToArray();
-                var hasMatcher = matcher is not null;
-                var passed = attribs.Any(matcher ?? (a => true));
-                return new MatcherResult(
-                    passed,
-                    () =>
-                    {
-                        var more = hasMatcher
-                            ? " matched by the provided matcher"
-                            : "";
-                        return
-                            $@"Expected {passed.AsNot()}to find {
-                                actual.FullName()
-                            } decorated with {Attrib<TAttribute>()}{more}";
-                    },
+                return null;
+            }
+
+            var attribs = parameterInfos.Select(pi => pi.GetCustomAttributes().OfType<TAttribute>())
+                .SelectMany(o => o)
+                .Where(matcher)
+                .ToArray();
+            var passed = attribs.Length == 1;
+            return new MatcherResult(
+                passed,
+                FinalMessageFor(
+                    () => attribs.Length == 0
+                        ? $"Expected {passed.AsNot()}to find a parameter decorated with {Attrib<TAttribute>()}"
+                        : $"Expected {passed.AsNot()}to find a single parameter decorated with {Attrib<TAttribute>()} but found {attribs.Length}",
                     customMessageGenerator
-                );
-            });
+                )
+            );
+        }
+
+        private static MatcherResult TryMatchParameterAttribute<TAttribute>(
+            MethodInfo actual,
+            Func<TAttribute, bool> matcher,
+            Func<string> customMessageGenerator
+        ) where TAttribute : Attribute
+        {
+            if (!actual.TryGetMetadata<ParameterInfo>(METADATA_KEY_PARAMETER_INFO, out var parameterInfo))
+            {
+                return null;
+            }
+
+            var attribs = parameterInfo.GetCustomAttributes()
+                .OfType<TAttribute>()
+                .Where(matcher)
+                .ToArray();
+            var passed = attribs.Length == 1;
+            return new MatcherResult(
+                passed,
+                () => FinalMessageFor(
+                    () =>
+                        $"Expected parameter '{parameterInfo.Name}' of method '{actual.Name}' to be decorated with {Attrib<TAttribute>()}",
+                    customMessageGenerator
+                )
+            );
         }
 
         private static string FullName(this MethodInfo mi)
@@ -779,7 +836,7 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Tests the type on a property With continuation
+        /// Tests the type on a property / method-info With continuation
         /// </summary>
         /// <param name="with"></param>
         /// <param name="expected"></param>
@@ -791,6 +848,53 @@ namespace NExpect
         )
         {
             return with.Type(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// tests type on a method-info With continuation
+        /// </summary>
+        /// <param name="of"></param>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Type<TExpected>(
+            this IOf<MethodInfo> of
+        )
+        {
+            return of.Type<TExpected>(NULL_STRING);
+        }
+
+        /// <summary>
+        /// tests type on a method-info With continuation
+        /// </summary>
+        /// <param name="of"></param>
+        /// <param name="customMessage"></param>
+        /// <typeparam name="TExpected"></typeparam>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Type<TExpected>(
+            this IOf<MethodInfo> of,
+            string customMessage
+        )
+        {
+            return of.Type<TExpected>(
+                () => customMessage
+            );
+        }
+
+        /// <summary>
+        /// tests type on a method-info with continuation
+        /// </summary>
+        /// <param name="of"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <typeparam name="TExpected"></typeparam>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Type<TExpected>(
+            this IOf<MethodInfo> of,
+            Func<string> customMessageGenerator
+        )
+        {
+            return of.Type(
+                typeof(TExpected),
+                customMessageGenerator
+            );
         }
 
         /// <summary>
@@ -834,14 +938,12 @@ namespace NExpect
         )
         {
             return canAddMatcher.AddMatcher(actual =>
-            {
-                return TryMatchPropertyType(actual, expected, customMessageGenerator)
-                    ?? TryMatchAnyParameterType(actual, expected, customMessageGenerator)
-                    ?? TryMatchParameterType(actual, expected, customMessageGenerator)
-                    ?? throw new NotImplementedException(
-                        $"Type matching not implemented for this case"
-                    );
-            });
+                TryMatchPropertyType(actual, expected, customMessageGenerator)
+                ?? TryMatchAnyParameterType(actual, expected, customMessageGenerator)
+                ?? TryMatchParameterType(actual, expected, customMessageGenerator)
+                ?? throw new NotImplementedException(
+                    $"Type matching not implemented for this case"
+                ));
         }
 
         private static MatcherResult TryMatchAnyParameterType<T>(
@@ -860,15 +962,29 @@ namespace NExpect
                 methodInfo = actual as MethodInfo;
             }
 
-            var passed = propertyInfos.Any(pi => pi.ParameterType == expected);
+            var matching = propertyInfos.Where(pi => pi.ParameterType == expected)
+                .ToArray();
+            // filter down for subsequent testing - if testing without
+            // a name (ie only with type)
+            actual.SetMetadata(METADATA_KEY_PARAMETER_INFOS, matching);
+            var passed = matching.Length == 1;
             return new MatcherResult(
                 passed,
                 FinalMessageFor(
-                    () => $@"Expected {
-                        (methodInfo?.Name ?? "Unknown method")
-                    } {
-                        passed.AsNot()
-                    }to have parameter with type {expected}",
+                    () =>
+                        matching.Length == 0
+                            ? $@"Expected {
+                                (methodInfo?.Name ?? "Unknown method")
+                            } {
+                                passed.AsNot()
+                            }to have a parameter with type {expected}"
+                            : $@"Expected {
+                                (methodInfo?.Name ?? "Unknown method")
+                            } to have a single parameter with type {expected}, but found {
+                                matching.Length
+                            }: {
+                                string.Join(", ", matching.Select(p => p.Name))
+                            } (suggest: provide a parameter name to filter by)",
                     customMessageGenerator
                 )
             );
@@ -1027,6 +1143,9 @@ namespace NExpect
             return continuation.AddMatcher(actual =>
             {
                 var parameters = actual.GetParameters();
+                actual.DeleteMetadata(METADATA_KEY_PROPERTY_INFO);
+                actual.DeleteMetadata(METADATA_KEY_PARAMETER_INFO);
+                actual.DeleteMetadata(METADATA_KEY_PARAMETER_INFOS);
 
                 if (parameterName is null)
                 {

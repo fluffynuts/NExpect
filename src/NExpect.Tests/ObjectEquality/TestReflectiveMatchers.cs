@@ -246,7 +246,6 @@ namespace NExpect.Tests.ObjectEquality
                             );
                     }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Contains("[Comment]")
-                        .And.With.Message.Contains("provided matcher")
                 );
                 // Assert
             }
@@ -304,6 +303,48 @@ namespace NExpect.Tests.ObjectEquality
                 Expect(cow)
                     .To.Have.Method(nameof(cow.Add))
                     .Which.Returns(typeof(int));
+                Expect(cow)
+                    .To.Have.Method(nameof(cow.Echo))
+                    .With.Parameter()
+                    .Of.Type<string>();
+                // Assert
+            }
+
+            [Test]
+            public void ShouldBeAbleToAssertMethodParameterAttributes()
+            {
+                // Arrange
+                var cow = new Cow();
+                // Act
+                Expect(cow)
+                    .To.Have.Method(nameof(cow.Echo))
+                    .With.Parameter("toEcho")
+                    .Of.Type<string>()
+                    .With.Attribute<NotNullAttribute>();
+                Expect(cow)
+                    .To.Have.Method(nameof(cow.Echo))
+                    .With.Parameter()
+                    .Of.Type<string>()
+                    .With.Attribute<NotNullAttribute>();
+                Assert.That(() =>
+                {
+                    Expect(cow)
+                        .To.Have.Method(nameof(cow.Echo))
+                        .With.Parameter()
+                        .Of.Type<string>()
+                        .With.Attribute<NotUsedAttribute>();
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    .With.Message.Contains("[NotUsed]"));
+                Assert.That(() =>
+                    {
+                        Expect(cow)
+                            .To.Have.Method(nameof(cow.Echo))
+                            .With.Parameter("toEcho")
+                            .Of.Type<string>()
+                            .With.Attribute<NotUsedAttribute>();
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Match(".*'toEcho'.*\\[NotUsed\\]")
+                );
                 // Assert
             }
 
@@ -332,9 +373,22 @@ namespace NExpect.Tests.ObjectEquality
                     return a + b;
                 }
 
+                public string Echo([NotNull] string toEcho)
+                {
+                    return $"echo: {toEcho}";
+                }
+
                 public virtual void Overrideable()
                 {
                 }
+            }
+
+            public class NotNullAttribute : Attribute
+            {
+            }
+
+            public class NotUsedAttribute : Attribute
+            {
             }
 
             public class SuperCow : Cow
