@@ -4,7 +4,7 @@ using NExpect.Implementations;
 using NExpect.Implementations.Collections;
 using NExpect.Interfaces;
 // ReSharper disable once RedundantUsingDirective
-using PeanutButter.Utils;
+using Imported.PeanutButter.Utils;
 
 namespace NExpect.MatcherLogic
 {

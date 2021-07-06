@@ -35,5 +35,11 @@
         /// Provides the .To grammar extension
         /// </summary>
         ITo<T> To { get; }
+
+        /// <summary>
+        /// Provides the .Which grammar extension
+        /// </summary>
+        IWhich<T> Which { get; }
     }
+   
 }
