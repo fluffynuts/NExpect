@@ -23,5 +23,6 @@ namespace NExpect.Implementations
         public IBy<T> By => throw Terminated;
         public IMax<T> Max => throw Terminated;
         public ITo<T> To => throw Terminated;
+        public IWhich<T> Which => throw Terminated;
     }
 }

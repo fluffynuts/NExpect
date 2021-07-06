@@ -37,6 +37,9 @@ namespace NExpect.Implementations
         /// <inheritdoc />
         public ITo<T> To => Next<To<T>>();
 
+        /// <inheritdoc />
+        public IWhich<T> Which => Next<Which<T>>();
+
         /// <summary>
         /// Construct a More&lt;T&gt;
         /// - provide the late-fetching func for the actual value

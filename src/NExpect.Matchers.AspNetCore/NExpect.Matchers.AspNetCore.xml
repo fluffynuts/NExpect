@@ -418,13 +418,13 @@
             </summary>
             <param name="comparer"></param>
         </member>
-        <member name="T:Imported.PeanutButter.Utils.IWrapper">
+        <member name="T:Imported.PeanutButter.Utils.IEnumerableWrapper">
             <summary>
             Used to describe a wrapper
             - IsValid should flag whether or not the wrapping was successful
             </summary>
         </member>
-        <member name="P:Imported.PeanutButter.Utils.IWrapper.IsValid">
+        <member name="P:Imported.PeanutButter.Utils.IEnumerableWrapper.IsValid">
             <summary>
             Flag: communicates if the wrapping was successful. Unsuccessful wraps
             will result in empty enumerations.
@@ -440,7 +440,10 @@
             <inheritdoc />
         </member>
         <member name="M:Imported.PeanutButter.Utils.EnumerableWrapper.#ctor(System.Object)">
-            <inheritdoc />
+            <summary>
+            Construct an EnumerableWrapper around a (hopefully) enumerable object
+            </summary>
+            <param name="toWrap"></param>
         </member>
         <member name="M:Imported.PeanutButter.Utils.EnumerableWrapper.GetEnumerator">
             <inheritdoc />
@@ -911,6 +914,42 @@
             <param name="collection">Subject collection to operate over</param>
             <param name="toRunWithIndex">Action to run on each member of the collection</param>
             <typeparam name="T">Item type of the collection</typeparam>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.ExtensionsForIEnumerables.FindOrAdd``1(System.Collections.Generic.ICollection{``0},``0)">
+            <summary>
+            Find or add an item to a collection
+            - item equality is determined by T.Equals
+            </summary>
+            <param name="collection"></param>
+            <param name="seek"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.ExtensionsForIEnumerables.FindOrAdd``1(System.Collections.Generic.ICollection{``0},System.Func{``0,System.Boolean})">
+            <summary>
+            Find or add an item to a collection
+            - item equality is determined by the provided matcher
+            - new items are generated with `new T()`
+            </summary>
+            <param name="collection"></param>
+            <param name="matcher"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.ExtensionsForIEnumerables.FindOrAdd``1(System.Collections.Generic.ICollection{``0},System.Func{``0,System.Boolean},System.Func{``0})">
+            <summary>
+            Find or add an item to a collection
+            - item equality is determined by the provided matcher
+            - new items are generated with the provided matcher
+            </summary>
+            <param name="collection"></param>
+            <param name="matcher"></param>
+            <param name="generator"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException">
+            Thrown if the collection, matcher or generator are null
+            </exception>
         </member>
         <member name="M:Imported.PeanutButter.Utils.ExtensionsForIEnumerables.IsSameAs``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
             <summary>
@@ -1409,6 +1448,37 @@
             <typeparam name="T">Expected type of metadata</typeparam>
             <returns></returns>
         </member>
+        <member name="M:Imported.PeanutButter.Utils.MetadataExtensions.HasMetadata(System.Object)">
+            <summary>
+            Tests if an object has any metadata stored against it at all
+            - will always return false for a null object
+            </summary>
+            <param name="parent"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.MetadataExtensions.HasMetadata(System.Object,System.String)">
+            <summary>
+            Tests if an object has metadata with the provided key
+            - will always return false for a null object
+            </summary>
+            <param name="parent"></param>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.MetadataExtensions.DeleteMetadata(System.Object)">
+            <summary>
+            Deletes all metadata associated with the object, if any
+            </summary>
+            <param name="parent"></param>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.MetadataExtensions.DeleteMetadata(System.Object,System.String)">
+            <summary>
+            Deletes the metadata identified by the key for this
+            object, if found
+            </summary>
+            <param name="parent"></param>
+            <param name="key"></param>
+        </member>
         <member name="M:Imported.PeanutButter.Utils.MetadataExtensions.TryGetMetadata``1(System.Object,System.String,``0@)">
             <summary>
             Try get the named metadata for the provided type
@@ -1454,6 +1524,73 @@
             This member is a Field
             </summary>
         </member>
+        <member name="T:Imported.PeanutButter.Utils.IPropertyOrField">
+            <summary>
+            Represents a property or a field on an object
+            </summary>
+        </member>
+        <member name="P:Imported.PeanutButter.Utils.IPropertyOrField.Name">
+            <summary>
+            Name of the property or field
+            </summary>
+        </member>
+        <member name="P:Imported.PeanutButter.Utils.IPropertyOrField.Type">
+            <summary>
+            Type of the property or field
+            </summary>
+        </member>
+        <member name="P:Imported.PeanutButter.Utils.IPropertyOrField.CanWrite">
+            <summary>
+            Write access to property or field
+            </summary>
+        </member>
+        <member name="P:Imported.PeanutButter.Utils.IPropertyOrField.CanRead">
+            <summary>
+            Read access to property or field
+            </summary>
+        </member>
+        <member name="P:Imported.PeanutButter.Utils.IPropertyOrField.DeclaringType">
+            <summary>
+            The type on which this property or field is declared
+            </summary>
+        </member>
+        <member name="P:Imported.PeanutButter.Utils.IPropertyOrField.HostingType">
+            <summary>
+            The type from which this property or field is read
+            - this may not be the DeclaringType as the property
+            or field may be inherited
+            - this must be explicitly provided by callers
+            </summary>
+        </member>
+        <member name="P:Imported.PeanutButter.Utils.IPropertyOrField.AncestralDistance">
+            <summary>
+            Returns the ancestral distance between the DeclaringType
+            and the HostingType (0 if they are the same type)
+            </summary>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.IPropertyOrField.GetValue(System.Object)">
+            <summary>
+            Gets the value of the property or field for the provided host
+            </summary>
+            <param name="host"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.IPropertyOrField.SetValue(System.Object,System.Object)">
+            <summary>
+            Sets the value of the property or field on the provided host
+            </summary>
+            <param name="host"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.IPropertyOrField.SetValue``1(``0@,System.Object)">
+            <summary>
+            Sets the value for the field or property
+            as found on the provided host
+            </summary>
+            <param name="host"></param>
+            <param name="value"></param>
+            <typeparam name="T"></typeparam>
+        </member>
         <member name="T:Imported.PeanutButter.Utils.PropertyOrField">
             <summary>
             Provides a single storage / representation
@@ -1496,24 +1633,16 @@
             <returns></returns>
         </member>
         <member name="P:Imported.PeanutButter.Utils.PropertyOrField.Name">
-            <summary>
-            Name of the property or field
-            </summary>
+            <inheritdoc />
         </member>
         <member name="P:Imported.PeanutButter.Utils.PropertyOrField.Type">
-            <summary>
-            Type of the property or field
-            </summary>
+            <inheritdoc />
         </member>
         <member name="P:Imported.PeanutButter.Utils.PropertyOrField.CanWrite">
-            <summary>
-            Write access to property or field
-            </summary>
+            <inheritdoc />
         </member>
         <member name="P:Imported.PeanutButter.Utils.PropertyOrField.CanRead">
-            <summary>
-            Read access to property or field
-            </summary>
+            <inheritdoc />
         </member>
         <member name="P:Imported.PeanutButter.Utils.PropertyOrField.MemberType">
             <summary>
@@ -1521,12 +1650,28 @@
             </summary>
         </member>
         <member name="P:Imported.PeanutButter.Utils.PropertyOrField.DeclaringType">
-            <summary>
-            The type on which this property or field is declared
-            </summary>
+            <inheritdoc />
+        </member>
+        <member name="P:Imported.PeanutButter.Utils.PropertyOrField.HostingType">
+            <inheritdoc />
+        </member>
+        <member name="P:Imported.PeanutButter.Utils.PropertyOrField.AncestralDistance">
+            <inheritdoc />
         </member>
         <member name="M:Imported.PeanutButter.Utils.PropertyOrField.#ctor(System.Reflection.PropertyInfo)">
-            <inheritdoc />
+            <summary>
+            Constructs the PropertyOrField around a property
+            </summary>
+            <param name="prop"></param>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.PropertyOrField.#ctor(System.Reflection.PropertyInfo,System.Type)">
+            <summary>
+            Constructs the PropertyOrField around a property, relative
+            to an hosting type (ie, without assuming that the DeclaringType
+            is the hosting type for the property)
+            </summary>
+            <param name="prop"></param>
+            <param name="hostingType"></param>
         </member>
         <member name="M:Imported.PeanutButter.Utils.PropertyOrField.op_Implicit(System.Reflection.PropertyInfo)~Imported.PeanutButter.Utils.PropertyOrField">
             <summary>
@@ -1543,30 +1688,79 @@
             <returns></returns>
         </member>
         <member name="M:Imported.PeanutButter.Utils.PropertyOrField.#ctor(System.Reflection.FieldInfo)">
-            <inheritdoc />
+            <summary>
+            Constructs the PropertyOrField around a field
+            </summary>
+            <param name="field"></param>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.PropertyOrField.#ctor(System.Reflection.FieldInfo,System.Type)">
+            <summary>
+            Constructs the PropertyOrField around a field
+            </summary>
+            <param name="field"></param>
+            <param name="hostingType"></param>
         </member>
         <member name="M:Imported.PeanutButter.Utils.PropertyOrField.GetValue(System.Object)">
-            <summary>
-            Gets the value of the property or field for the provided host
-            </summary>
-            <param name="host"></param>
-            <returns></returns>
+            <inheritdoc />
         </member>
         <member name="M:Imported.PeanutButter.Utils.PropertyOrField.SetValue(System.Object,System.Object)">
-            <summary>
-            Sets the value of the property or field on the provided host
-            </summary>
-            <param name="host"></param>
-            <param name="value"></param>
+            <inheritdoc />
         </member>
         <member name="M:Imported.PeanutButter.Utils.PropertyOrField.SetValue``1(``0@,System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="T:Imported.PeanutButter.Utils.PyLike">
             <summary>
-            Sets the value for the field or property
-            as found on the provided host
+            Provides a Python-like Range method
             </summary>
-            <param name="host"></param>
-            <param name="value"></param>
-            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.PyLike.Range(System.Int32)">
+            <summary>
+            Produces a sequence of consecutive ints from zero to (stop - 1)
+            </summary>
+            <param name="stop">upper bound of sequence, not included in result</param>
+            <returns>Sequence of ints</returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.PyLike.Range(System.Int32,System.Int32)">
+            <summary>
+            Produces a sequence of consecutive ints from start to (stop - 1)
+            </summary>
+            <param name="start"></param>
+            <param name="stop"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.PyLike.Range(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            produces a sequence of ints from start to stop (not inclusive), stepping by step
+            </summary>
+            <param name="start">first item to expect in sequence</param>
+            <param name="stop">go no higher, young padawan!</param>
+            <param name="step">step up by this amount each time</param>
+            <returns>Sequence of ints</returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.PyLike.Zip``2(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1})">
+            <summary>
+            "Zips" two collections together so you can enumerate over them. The
+              length of the enumeration is determined by the shortest collection
+            </summary>
+            <param name="left">left collection</param>
+            <param name="right">right collection</param>
+            <typeparam name="T1"></typeparam>
+            <typeparam name="T2"></typeparam>
+            <returns>Enumeration over the collections (Tuple of T1, T2)</returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.PyLike.Zip``3(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``2})">
+            <summary>
+            "Zips" three collections together so you can enumerate over them. The
+              length of the enumeration is determined by the shortest collection
+            </summary>
+            <param name="left">left collection</param>
+            <param name="middle">right collection</param>
+            <param name="right">right collection</param>
+            <typeparam name="T1"></typeparam>
+            <typeparam name="T2"></typeparam>
+            <typeparam name="T3"></typeparam>
+            <returns>Enumeration over the collections (Tuple of T1, T2, T3)</returns>
         </member>
         <member name="T:Imported.PeanutButter.Utils.StringExtensions">
             <summary>
@@ -1971,6 +2165,88 @@
             <param name="length"></param>
             <returns></returns>
         </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.UnBase64(System.String)">
+            <summary>
+            Converts a base64 string back to the original string
+            - assumes the original string is UTF8
+            </summary>
+            <param name="base64Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.UnBase64(System.String,System.Text.Encoding)">
+            <summary>
+            Converts a base64 string back to the original string
+            using the provided encoding
+            </summary>
+            <param name="base64Data"></param>
+            <param name="encoding"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.UnBase64``1(System.String)">
+            <summary>
+            Quick-decode for string base64 data
+            T _must_ be a string, ie var str = base64.UnBase64&lt;string&gt;()
+            - assumes UTF8 encoding
+            </summary>
+            <param name="base64Data"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.UnBase64``1(System.String,System.Text.Encoding)">
+            <summary>
+            Quick-decode for string base64 data using the provided encoding
+            T _must_ be a string, ie var str = base64.UnBase64&lt;string&gt;()
+            </summary>
+            <param name="base64Data"></param>
+            <param name="encoding"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.UnBase64``1(System.String,System.Func{System.String,``0})">
+            <summary>
+            decode base64 string data &amp; deserialize to type T
+            </summary>
+            <param name="base64Data"></param>
+            <param name="deserializer"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.UnBase64``1(System.String,System.Func{System.Byte[],``0})">
+            <summary>
+            decode base64 string data &amp; deserialize to type T
+            </summary>
+            <param name="base64Data"></param>
+            <param name="deserializer"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.UnBase64``1(System.String,System.Func{System.String,``0},System.Text.Encoding)">
+            <summary>
+            decode base64 string data &amp; deserialize to type T,
+            assuming that the original data in the base64 string was
+            a string (eg json), using the provided encoding
+            </summary>
+            <param name="base64Data"></param>
+            <param name="deserializer"></param>
+            <param name="encoding"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.Base64Padded(System.String)">
+            <summary>
+            Pads out a base64 string which is missing the base64 padding
+            </summary>
+            <param name="unpadded"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.Base64UnPadded(System.String)">
+            <summary>
+            Removes base64 data padding (trailing '=' chars)
+            - symmetrical with Base64Padded()
+            </summary>
+            <param name="base64Data"></param>
+            <returns></returns>
+        </member>
         <member name="T:Imported.PeanutButter.Utils.RandomNumber">
             <summary>
             provides a singleton wrapper around Random.Next
@@ -2266,7 +2542,7 @@
         </member>
         <member name="M:Imported.PeanutButter.Utils.TypeExtensions.GetCollectionItemType(System.Type)">
             <summary>
-            Attempts to get the item type of a colleciton
+            Attempts to get the item type of a collection
             </summary>
             <param name="collectionType">Type to inspect</param>
             <returns>Item type, if it can be found, or null</returns>
@@ -2493,6 +2769,18 @@
             <param name="fieldOrPropertyName"></param>
             <typeparam name="T"></typeparam>
         </member>
+        <member name="M:Imported.PeanutButter.Utils.TypeExtensions.IsPrimitiveOrImmutable(System.Type)">
+            <summary>
+            Tests if the provided type is a "proper" primitive or
+            some other built-in immutable type, eg DateTime, TimeSpan,
+            Guid, DateTimeOffset
+            - useful when performing recursive reflection - if you hit
+              a type identified by this extension method, then you should
+              probably stop recursing.
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
         <member name="T:Imported.PeanutButter.Utils.CannotZipNullException">
             <summary>
             Thrown when an attempt is made to strict-zip null and anything else
@@ -2528,59 +2816,6 @@
         </member>
         <member name="M:Imported.PeanutButter.Utils.UnevenZipException`2.#ctor(System.Collections.Generic.IEnumerable{`0},System.Collections.Generic.IEnumerable{`1})">
             <inheritdoc />
-        </member>
-        <member name="T:PeanutButter.Utils.PyLike">
-            <summary>
-            Provides a Python-like Range method
-            </summary>
-        </member>
-        <member name="M:PeanutButter.Utils.PyLike.Range(System.Int32)">
-            <summary>
-            Produces a sequence of consecutive ints from zero to (stop - 1)
-            </summary>
-            <param name="stop">upper bound of sequence, not included in result</param>
-            <returns>Sequence of ints</returns>
-        </member>
-        <member name="M:PeanutButter.Utils.PyLike.Range(System.Int32,System.Int32)">
-            <summary>
-            Produces a sequence of consecutive ints from start to (stop - 1)
-            </summary>
-            <param name="start"></param>
-            <param name="stop"></param>
-            <returns></returns>
-        </member>
-        <member name="M:PeanutButter.Utils.PyLike.Range(System.Int32,System.Int32,System.Int32)">
-            <summary>
-            produces a sequence of ints from start to stop (not inclusive), stepping by step
-            </summary>
-            <param name="start">first item to expect in sequence</param>
-            <param name="stop">go no higher, young padawan!</param>
-            <param name="step">step up by this amount each time</param>
-            <returns>Sequence of ints</returns>
-        </member>
-        <member name="M:PeanutButter.Utils.PyLike.Zip``2(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1})">
-            <summary>
-            "Zips" two collections together so you can enumerate over them. The
-              length of the enumeration is determined by the shortest collection
-            </summary>
-            <param name="left">left collection</param>
-            <param name="right">right collection</param>
-            <typeparam name="T1"></typeparam>
-            <typeparam name="T2"></typeparam>
-            <returns>Enumeration over the collections (Tuple of T1, T2)</returns>
-        </member>
-        <member name="M:PeanutButter.Utils.PyLike.Zip``3(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``2})">
-            <summary>
-            "Zips" three collections together so you can enumerate over them. The
-              length of the enumeration is determined by the shortest collection
-            </summary>
-            <param name="left">left collection</param>
-            <param name="middle">right collection</param>
-            <param name="right">right collection</param>
-            <typeparam name="T1"></typeparam>
-            <typeparam name="T2"></typeparam>
-            <typeparam name="T3"></typeparam>
-            <returns>Enumeration over the collections (Tuple of T1, T2, T3)</returns>
         </member>
     </members>
 </doc>

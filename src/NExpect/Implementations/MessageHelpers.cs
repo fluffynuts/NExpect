@@ -19,6 +19,11 @@ namespace NExpect.Implementations
         /// takes a static string and the version which takes a Func&lt;string&gt;
         /// </summary>
         public const string NULL_STRING = null;
+        
+        /// <summary>
+        /// Provides easy access to a null custom message generator
+        /// </summary>
+        public const Func<string> NULL_GENERATOR = null;
 
         /// <summary>
         /// Not to be confused with NULL, this is the string

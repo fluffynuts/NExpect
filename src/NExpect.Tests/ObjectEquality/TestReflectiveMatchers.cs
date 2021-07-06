@@ -287,6 +287,26 @@ namespace NExpect.Tests.ObjectEquality
                 // Assert
             }
 
+            [Test]
+            public void ShouldBeAbleToAssertMethodParameters()
+            {
+                // Arrange
+                var cow = new Cow();
+                // Act
+                Expect(cow)
+                    .To.Have.Method(nameof(cow.Add))
+                    .With.Parameter("a")
+                    .Of.Type(typeof(int));
+                Expect(cow)
+                    .To.Have.Method(nameof(cow.Add))
+                    .With.Parameter("b")
+                    .Of.Type(typeof(int));
+                Expect(cow)
+                    .To.Have.Method(nameof(cow.Add))
+                    .Which.Returns(typeof(int));
+                // Assert
+            }
+
             public class Cow
             {
                 [Comment("it's what cows do")]
@@ -307,12 +327,17 @@ namespace NExpect.Tests.ObjectEquality
                     Console.WriteLine(msg);
                 }
 
+                public int Add(int a, int b)
+                {
+                    return a + b;
+                }
+
                 public virtual void Overrideable()
                 {
                 }
             }
 
-            public class SuperCow: Cow
+            public class SuperCow : Cow
             {
                 [Comment("super-cow")]
                 public override void Overrideable()

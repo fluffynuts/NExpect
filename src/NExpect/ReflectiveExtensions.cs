@@ -26,7 +26,10 @@ namespace NExpect
             string methodName
         )
         {
-            return have.Method(methodName, NULL_STRING);
+            return have.Method(
+                methodName,
+                NULL_STRING
+            );
         }
 
         /// <summary>
@@ -43,7 +46,10 @@ namespace NExpect
             string customMessage
         )
         {
-            return have.Method(methodName, () => customMessage);
+            return have.Method(
+                methodName,
+                () => customMessage
+            );
         }
 
         /// <summary>
@@ -75,12 +81,14 @@ namespace NExpect
                 var methodInfo = methodInfos.FirstOrDefault();
                 var haveMultiple = methodInfos.Length > 1;
                 var passed = methodInfo is not null && !haveMultiple;
+                actual.SetMetadata(METADATA_KEY_METHOD_INFO, methodInfo);
+
                 return new MatcherResultWithNext<MethodInfo>(
                     passed,
-                    () => 
+                    () =>
                         haveMultiple
-                        ? $"Expected '{type.PrettyName()}' {passed.AsNot()}to have a single method called '{methodName}' (perhaps you need a discriminator?)"
-                        : $"Expected '{type.PrettyName()}' {passed.AsNot()}to have method '{methodName}'",
+                            ? $"Expected '{type.PrettyName()}' {passed.AsNot()}to have a single method called '{methodName}' (perhaps you need a discriminator?)"
+                            : $"Expected '{type.PrettyName()}' {passed.AsNot()}to have method '{methodName}'",
                     customMessageGenerator,
                     () => methodInfo
                 );
@@ -479,7 +487,7 @@ namespace NExpect
                 var actualType = actual.GetType();
                 if (actualType.Name == "RuntimeType" && actualType.Namespace == "System")
                 {
-                    actualType = (Type) (actual as object);
+                    actualType = (Type)(actual as object);
                 }
 
                 var propInfo = actualType.GetProperty(property, PUBLIC_INSTANCE);
@@ -521,6 +529,11 @@ namespace NExpect
 
         private const string METADATA_KEY_PROPERTY_NAME = "__PropertyName__";
         private const string METADATA_KEY_PROPERTY_INFO = "__PropertyInfo__";
+
+        private const string METADATA_KEY_METHOD_INFO = "__MethodInfo__";
+
+        private const string METADATA_KEY_PARAMETER_INFO = "__ParameterInfo__";
+        private const string METADATA_KEY_PARAMETER_INFOS = "__ParameterInfos__";
 
         /// <summary>
         /// Continues testing a named property for an expected value
@@ -822,31 +835,285 @@ namespace NExpect
         {
             return canAddMatcher.AddMatcher(actual =>
             {
-                if (!actual.TryGetMetadata<PropertyInfo>(
-                        METADATA_KEY_PROPERTY_INFO,
-                        out var propInfo
-                    )
-                )
-                {
-                    actual.TryGetMetadata<string>(METADATA_KEY_PROPERTY_NAME, out var propName);
+                return TryMatchPropertyType(actual, expected, customMessageGenerator)
+                    ?? TryMatchAnyParameterType(actual, expected, customMessageGenerator)
+                    ?? TryMatchParameterType(actual, expected, customMessageGenerator)
+                    ?? throw new NotImplementedException(
+                        $"Type matching not implemented for this case"
+                    );
+            });
+        }
 
+        private static MatcherResult TryMatchAnyParameterType<T>(
+            T actual,
+            Type expected,
+            Func<string> customMessageGenerator
+        )
+        {
+            if (!actual.TryGetMetadata<ParameterInfo[]>(METADATA_KEY_PARAMETER_INFOS, out var propertyInfos))
+            {
+                return null;
+            }
+
+            if (!actual.TryGetMetadata<MethodInfo>(METADATA_KEY_METHOD_INFO, out var methodInfo))
+            {
+                methodInfo = actual as MethodInfo;
+            }
+
+            var passed = propertyInfos.Any(pi => pi.ParameterType == expected);
+            return new MatcherResult(
+                passed,
+                FinalMessageFor(
+                    () => $@"Expected {
+                        (methodInfo?.Name ?? "Unknown method")
+                    } {
+                        passed.AsNot()
+                    }to have parameter with type {expected}",
+                    customMessageGenerator
+                )
+            );
+        }
+
+        private static MatcherResult TryMatchParameterType<T>(
+            T actual,
+            Type expected,
+            Func<string> customMessageGenerator
+        )
+        {
+            if (!actual.TryGetMetadata<ParameterInfo>(
+                METADATA_KEY_PARAMETER_INFO,
+                out var parameterInfo
+            ))
+            {
+                return null;
+            }
+
+            if (!actual.TryGetMetadata<MethodInfo>(METADATA_KEY_METHOD_INFO, out var methodInfo))
+            {
+                methodInfo = actual as MethodInfo;
+            }
+
+            var passed = parameterInfo.ParameterType == expected;
+            return new MatcherResult(
+                passed,
+                FinalMessageFor(
+                    () => $@"Expected {
+                        (methodInfo?.Name ?? "Unknown method")
+                    } {
+                        passed.AsNot()
+                    }to have parameter '{parameterInfo.Name}' with type {expected} (found: {parameterInfo.ParameterType})",
+                    customMessageGenerator
+                )
+            );
+        }
+
+        private static MatcherResult TryMatchPropertyType<T>(
+            T actual,
+            Type expected,
+            Func<string> customMessageGenerator
+        )
+        {
+            if (!actual.HasMetadata(METADATA_KEY_PROPERTY_NAME))
+            {
+                return null;
+            }
+
+            if (!actual.TryGetMetadata<PropertyInfo>(
+                    METADATA_KEY_PROPERTY_INFO,
+                    out var propInfo
+                )
+            )
+            {
+                actual.TryGetMetadata<string>(METADATA_KEY_PROPERTY_NAME, out var propName);
+
+                return new MatcherResult(
+                    true,
+                    FinalMessageFor(
+                        () => propName is null
+                            ? "actual value was null"
+                            : $"actual missing property {propName}",
+                        customMessageGenerator
+                    )
+                );
+            }
+
+            var passed = propInfo.PropertyType == expected;
+            return new MatcherResult(
+                passed,
+                FinalMessageFor(
+                    () =>
+                        $@"Expected property '{propInfo.DeclaringType.PrettyName()}.{propInfo.Name}' {passed.AsNot()}to be of type '{expected}', but it has type '{propInfo.PropertyType}'",
+                    customMessageGenerator
+                )
+            );
+        }
+
+        /// <summary>
+        /// Tests for any parameter on a .Method continuation
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Parameter(
+            this ICanAddMatcher<MethodInfo> continuation
+        )
+        {
+            return continuation.Parameter(NULL_STRING, NULL_GENERATOR);
+        }
+
+        /// <summary>
+        /// Tests for any parameter on a .Method continuation
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="parameterName"></param>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Parameter(
+            this ICanAddMatcher<MethodInfo> continuation,
+            string parameterName
+        )
+        {
+            return continuation.Parameter(parameterName, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Tests for a parameter by name on a .Method continuation
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="parameterName"></param>
+        /// <param name="customMessage"></param>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Parameter(
+            this ICanAddMatcher<MethodInfo> continuation,
+            string parameterName,
+            string customMessage
+        )
+        {
+            return continuation.Parameter(
+                parameterName,
+                () => customMessage
+            );
+        }
+
+        /// <summary>
+        /// Tests for any parameter on a .Method continuation
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Parameter(
+            this ICanAddMatcher<MethodInfo> continuation,
+            Func<string> customMessageGenerator
+        )
+        {
+            return continuation.Parameter(
+                NULL_STRING,
+                customMessageGenerator
+            );
+        }
+
+        /// <summary>
+        /// Tests for a parameter by name on a .Method continuation
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="parameterName"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static IMore<MethodInfo> Parameter(
+            this ICanAddMatcher<MethodInfo> continuation,
+            string parameterName,
+            Func<string> customMessageGenerator
+        )
+        {
+            return continuation.AddMatcher(actual =>
+            {
+                var parameters = actual.GetParameters();
+
+                if (parameterName is null)
+                {
+                    actual.SetMetadata(METADATA_KEY_PARAMETER_INFOS, parameters);
+                }
+                else
+                {
+                    parameters = parameters.Where(pi => pi.Name == parameterName)
+                        .ToArray();
+                    actual.SetMetadata(METADATA_KEY_PARAMETER_INFO, parameters.FirstOrDefault());
+                }
+
+                var passed = parameters.Length > 0;
+                {
                     return new MatcherResult(
-                        true,
+                        passed,
                         FinalMessageFor(
-                            () => propName is null
-                                ? "actual value was null"
-                                : $"actual missing property {propName}",
+                            () => $"Expected {passed.AsNot()}to find parameters on method {actual.Name}",
                             customMessageGenerator
                         )
                     );
                 }
+            });
+        }
 
-                var passed = propInfo.PropertyType == expected;
+        /// <summary>
+        /// Tests the return value on a .Method continuation
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="expected"></param>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Returns(
+            this ICanAddMatcher<MethodInfo> continuation,
+            Type expected
+        )
+        {
+            return continuation.Returns(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Tests the return value on a .Method continuation
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="expected"></param>
+        /// <param name="customMessage"></param>
+        /// <returns></returns>
+        public static IMore<MethodInfo> Returns(
+            this ICanAddMatcher<MethodInfo> continuation,
+            Type expected,
+            string customMessage
+        )
+        {
+            return continuation.Returns(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests that the provided method info returns the expected type
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="expected"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static IMore<MethodInfo> Returns(
+            this ICanAddMatcher<MethodInfo> continuation,
+            Type expected,
+            Func<string> customMessageGenerator
+        )
+        {
+            return continuation.AddMatcher(actual =>
+            {
+                if (actual is null)
+                {
+                    throw new InvalidOperationException(
+                        $"Cannot test return type on null MethodInfo"
+                    );
+                }
+
+                var passed = actual.ReturnType == expected;
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        () =>
-                            $@"Expected property '{propInfo.DeclaringType.PrettyName()}.{propInfo.Name}' {passed.AsNot()}to be of type '{expected}', but it has type '{propInfo.PropertyType}'",
+                        () => $@"Expected '{
+                            actual.Name
+                        }' {
+                            passed.AsNot()
+                        } to have return value of type {expected} (found: {actual.ReturnType})",
                         customMessageGenerator
                     )
                 );
