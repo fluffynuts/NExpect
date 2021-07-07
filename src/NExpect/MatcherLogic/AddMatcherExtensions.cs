@@ -126,6 +126,11 @@ namespace NExpect.MatcherLogic
             {
                 try
                 {
+                    // if we're using custom assertions, we won't get an UnmetExpectationException
+                    // on a failure
+                    // worse, if those custom assertions are from NUnit, we can't stop the failure
+                    // -> it's part of the design of NUnit
+                    using var _ = Assertions.TemporarilyUseDefaultAssertionsFactoryForThisThread();
                     expectationsRunner(actual);
                     return new MatcherResult(true, () => messageGenerator(actual, true));
                 }

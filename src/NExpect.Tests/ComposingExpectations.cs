@@ -133,7 +133,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                 {
-                    Expect(new[] {person1, person2}).To.Be.Bennies();
+                    Expect(new[] { person1, person2 }).To.Be.Bennies();
                 }, Throws.Nothing);
                 // Assert
             }
@@ -265,6 +265,34 @@ namespace NExpect.Tests
 
                 // Assert
                 Assert.That(result, Is.InstanceOf<IMore<IEnumerable<string>>>());
+            }
+        }
+
+        [TestFixture]
+        public class Negation
+        {
+            [Test]
+            public void ShouldPassWhenNegatingAFailingComposition()
+            {
+                // Arrange
+                using var _ = new AutoResetter(
+                    () => Assertions.RegisterAssertionsFactory(
+                        s => new AssertionException(s)
+                    ),
+                    Assertions.UseDefaultAssertionsFactory
+                );
+                var person = new Person()
+                {
+                    Gender = Genders.Unknown,
+                    Name = "Blergschootz"
+                };
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(person)
+                        .Not.To.Be.A.Benny();
+                }, Throws.Nothing);
+                // Assert
             }
         }
     }
