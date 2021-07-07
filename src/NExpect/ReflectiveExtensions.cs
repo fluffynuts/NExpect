@@ -506,11 +506,7 @@ namespace NExpect
                 }
 
                 actual.SetMetadata(METADATA_KEY_PROPERTY_NAME, property);
-                var actualType = actual.GetType();
-                if (actualType.Name == "RuntimeType" && actualType.Namespace == "System")
-                {
-                    actualType = (Type)(actual as object);
-                }
+                var actualType = actual.ResolveToType();
 
                 var propInfo = actualType.GetProperty(property, PUBLIC_INSTANCE);
                 if (propInfo is null)
@@ -556,6 +552,8 @@ namespace NExpect
 
         private const string METADATA_KEY_PARAMETER_INFO = "__ParameterInfo__";
         private const string METADATA_KEY_PARAMETER_INFOS = "__ParameterInfos__";
+
+        private const string METADATA_KEY_TYPE_ATTRIBUTES = "__TypeAttributes__";
 
         /// <summary>
         /// Continues testing a named property for an expected value
@@ -1202,6 +1200,70 @@ namespace NExpect
                     )
                 );
             });
+        }
+
+        /// <summary>
+        /// Tests if the provided type is decorated with TAttribute
+        /// </summary>
+        /// <param name="have"></param>
+        /// <typeparam name="TAttribute"></typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Attribute<TAttribute>(
+            this IHave<Type> have
+        ) where TAttribute : Attribute
+        {
+            return have.Attribute<TAttribute>(NULL_STRING);
+        }
+
+        /// <summary>
+        /// Tests if the provided type is decorated with TAttribute
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="customMessage"></param>
+        /// <typeparam name="TAttribute"></typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Attribute<TAttribute>(
+            this IHave<Type> have,
+            string customMessage
+        ) where TAttribute : Attribute
+        {
+            return have.Attribute<TAttribute>(() => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if the provided type is decorated with TAttribute
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <typeparam name="TAttribute"></typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Attribute<TAttribute>(
+            this IHave<Type> have,
+            Func<string> customMessageGenerator
+        ) where TAttribute : Attribute
+        {
+            return have.AddMatcher(actual =>
+            {
+                var attributes = actual?.GetCustomAttributes()
+                    .OfType<TAttribute>()
+                    .ToArray() ?? new TAttribute[0];
+                actual.SetMetadata(METADATA_KEY_TYPE_ATTRIBUTES, attributes);
+                var passed = attributes.Any();
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected '{actual}' to be decorated with {Attrib<TAttribute>()}",
+                        customMessageGenerator
+                    )
+                );
+            });
+        }
+
+        private static Type ResolveToType(this object obj)
+        {
+            return obj.IsRuntimeType()
+                ? obj as Type
+                : obj?.GetType();
         }
     }
 }

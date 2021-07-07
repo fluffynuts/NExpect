@@ -386,70 +386,118 @@ namespace NExpect.Tests.ObjectEquality
 
                 // Assert
             }
+        }
 
-            public class Cow
+        [TestFixture]
+        public class AssertingAgainstTypes
+        {
+            [Test]
+            public void ShouldBeAbleToAssertTypeHasAttribute()
             {
-                [Comment("it's what cows do")]
-                public void Moo()
+                // Arrange
+                // Act
+                Assert.That(() =>
                 {
-                }
+                    Expect(typeof(HasAttribute))
+                        .To.Have.Attribute<CommentAttribute>();
+                }, Throws.Nothing);
+                Assert.That(() =>
+                    {
+                        Expect(typeof(HasAttribute))
+                            .Not.To.Have.Attribute<CommentAttribute>();
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Match("HasAttribute.*\\[Comment\\]")
+                );
 
-                public void NotMoo()
+                Assert.That(() =>
                 {
-                }
+                    Expect(typeof(HasNoAttribute))
+                        .Not.To.Have.Attribute<CommentAttribute>();
+                }, Throws.Nothing);
 
-                public void NotMoo2()
-                {
-                }
+                Assert.That(() =>
+                    {
+                        Expect(typeof(HasNoAttribute))
+                            .To.Have.Attribute<CommentAttribute>();
+                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        .With.Message.Match("HasNoAttribute.*\\[Comment\\]")
+                );
 
-                public void NotMoo2(string msg)
-                {
-                    Console.WriteLine(msg);
-                }
-
-                public int Add(int a, int b)
-                {
-                    return a + b;
-                }
-
-                [Comment("echos")]
-                public string Echo([NotNull] string toEcho)
-                {
-                    return $"echo: {toEcho}";
-                }
-
-                public virtual void Overrideable()
-                {
-                }
+                // Assert
             }
 
-            public class NotNullAttribute : Attribute
+            [Comment("has a comment")]
+            public class HasAttribute
             {
             }
 
-            public class NotUsedAttribute : Attribute
+            public class HasNoAttribute
+            {
+            }
+        }
+
+        public class NotNullAttribute : Attribute
+        {
+        }
+
+        public class NotUsedAttribute : Attribute
+        {
+        }
+
+        public class SuperCow : Cow
+        {
+            [Comment("super-cow")]
+            public override void Overrideable()
+            {
+                base.Overrideable();
+            }
+        }
+
+        public class CommentAttribute : Attribute
+        {
+            public string Comment { get; }
+
+            public CommentAttribute(
+                string comment
+            )
+            {
+                Comment = comment;
+            }
+        }
+
+        public class Cow
+        {
+            [Comment("it's what cows do")]
+            public void Moo()
             {
             }
 
-            public class SuperCow : Cow
+            public void NotMoo()
             {
-                [Comment("super-cow")]
-                public override void Overrideable()
-                {
-                    base.Overrideable();
-                }
             }
 
-            public class CommentAttribute : Attribute
+            public void NotMoo2()
             {
-                public string Comment { get; }
+            }
 
-                public CommentAttribute(
-                    string comment
-                )
-                {
-                    Comment = comment;
-                }
+            public void NotMoo2(string msg)
+            {
+                Console.WriteLine(msg);
+            }
+
+            public int Add(int a, int b)
+            {
+                return a + b;
+            }
+
+            [Comment("echos")]
+            public string Echo([NotNull] string toEcho)
+            {
+                return $"echo: {toEcho}";
+            }
+
+            public virtual void Overrideable()
+            {
             }
         }
     }
