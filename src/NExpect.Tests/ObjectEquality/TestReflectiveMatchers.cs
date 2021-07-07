@@ -251,6 +251,21 @@ namespace NExpect.Tests.ObjectEquality
             }
 
             [Test]
+            public void ShouldBeAbleToAssertMethodDoesNotHaveAttribute()
+            {
+                // Arrange
+                var cow = new Cow();
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(cow)
+                        .To.Have.Method(nameof(Cow.NotMoo))
+                        .Without.Attribute<CommentAttribute>();
+                }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
             public void ShouldBeAbleToDiscriminateBetweenOverloads()
             {
                 // Arrange

@@ -29,7 +29,7 @@ namespace NExpect.Implementations
             bool resetNegationAfterRun
         )
         {
-            var result =MatcherRunner.RunMatcher(actual, negated, matcher);
+            var result = MatcherRunner.RunMatcher(actual, negated, matcher);
             if (resetNegationAfterRun)
             {
                 ResetNegation();

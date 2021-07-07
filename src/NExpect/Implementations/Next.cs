@@ -15,6 +15,18 @@ namespace NExpect.Implementations
     public class Next<T>
         : More<T>
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public override bool? IsNegated
+        {
+            get => _parent.IsNegated();
+            set 
+            {
+                var parentPropInfo = _parent?.GetType()?.GetProperty(nameof(IsNegated));
+                parentPropInfo?.SetValue(_parent, value);
+            }
+        }
         private readonly IExpectationContext _parent;
 
         /// <summary>

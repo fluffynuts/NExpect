@@ -40,6 +40,10 @@
         /// Provides the .Which grammar extension
         /// </summary>
         IWhich<T> Which { get; }
+
+        /// <summary>
+        /// Provides the .Without grammar extension
+        /// </summary>
+        IWithout<T> Without { get; }
     }
-   
 }

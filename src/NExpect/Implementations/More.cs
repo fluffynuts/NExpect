@@ -30,7 +30,6 @@ namespace NExpect.Implementations
         /// <inheritdoc />
         public IBy<T> By => Next<By<T>>();
 
-
         /// <inheritdoc />
         public IMax<T> Max => Next<Max<T>>();
 
@@ -39,6 +38,9 @@ namespace NExpect.Implementations
 
         /// <inheritdoc />
         public IWhich<T> Which => Next<Which<T>>();
+
+        /// <inheritdoc />
+        public IWithout<T> Without => NextNegated<Without<T>>();
 
         /// <summary>
         /// Construct a More&lt;T&gt;

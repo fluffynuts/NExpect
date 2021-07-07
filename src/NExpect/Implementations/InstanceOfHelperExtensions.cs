@@ -23,6 +23,7 @@ namespace NExpect.Implementations
                     negated = !negated;
                 current = GetParentOf(current);
             }
+
             return negated;
         }
 
@@ -36,8 +37,20 @@ namespace NExpect.Implementations
 
         private static bool IsNegatedPrivate(IExpectationContext current)
         {
-            var concrete = current as ExpectationBase;
-            return concrete?.IsNegated ?? TryReadIsNegatedOn(current);
+            var propInfo = current.GetType().GetProperty(nameof(ExpectationBase.IsNegated));
+            if (propInfo is null)
+            {
+                return false;
+            }
+
+            try
+            {
+                return (bool)propInfo.GetValue(current);
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         private static bool TryReadIsNegatedOn(IExpectationContext current)

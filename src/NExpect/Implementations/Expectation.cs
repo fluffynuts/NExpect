@@ -6,11 +6,11 @@ using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations
 {
-    internal class Expectation<T> :
-        ExpectationBase<T>,
-        IExpectation<T>,
-        IHasActual<T>,
-        IExpectationContext<T>
+    internal class Expectation<T>
+        : ExpectationBase<T>,
+          IExpectation<T>,
+          IHasActual<T>,
+          IExpectationContext<T>
     {
         public IExpectationContext Parent => (this as IExpectationContext<T>).TypedParent;
         IExpectationContext<T> IExpectationContext<T>.TypedParent { get; set; }
@@ -31,8 +31,12 @@ namespace NExpect.Implementations
 
         public IMatcherResult RunMatcher(Func<T, IMatcherResult> matcher)
         {
-            return RunMatcher(Actual, IsNegated, matcher, true);
+            return RunMatcher(
+                Actual,
+                IsNegated,
+                matcher,
+                resetNegationAfterRun: true
+            );
         }
-        
     }
 }
