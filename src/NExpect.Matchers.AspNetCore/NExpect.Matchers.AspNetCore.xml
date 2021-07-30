@@ -1816,11 +1816,21 @@
         </member>
         <member name="M:Imported.PeanutButter.Utils.StringExtensions.ContainsOneOf(System.String,System.String[])">
             <summary>
-            Searches a master string for occurrences of any of the given strings
+            Searches a master string for occurrences of any of the given strings,
+            case-insensitive
             </summary>
             <param name="haystack">String to search</param>
             <param name="needles">Strings to search for</param>
             <returns>True if any of the needles are found in the haystack; False otherwise</returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.EqualsOneOf(System.String,System.String[])">
+            <summary>
+            Much like ContainsOneOf, but performs a case-insensitive exact match
+            for the needles against the haystack
+            </summary>
+            <param name="haystack"></param>
+            <param name="needles"></param>
+            <returns></returns>
         </member>
         <member name="M:Imported.PeanutButter.Utils.StringExtensions.ContainsAllOf(System.String,System.String[])">
             <summary>
