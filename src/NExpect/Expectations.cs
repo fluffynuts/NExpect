@@ -304,7 +304,7 @@ namespace NExpect
         }
 
         /// <summary>
-        /// Starts an expectation on a concrete Stack&lt;T&gt;
+        /// Starts an expectation on a concrete HashSet&lt;T&gt;
         /// </summary>
         /// <param name="hashSet">HashSet to start with</param>
         /// <typeparam name="T">Item type of the HashSet</typeparam>
@@ -314,6 +314,19 @@ namespace NExpect
         )
         {
             return new CollectionExpectation<T>(hashSet);
+        }
+
+        /// <summary>
+        /// Starts an expectation on any ISet&lt;T&gt;
+        /// </summary>
+        /// <param name="set"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static ICollectionExpectation<T> Expect<T>(
+            ISet<T> set
+        )
+        {
+            return new CollectionExpectation<T>(set);
         }
 
         /// <summary>

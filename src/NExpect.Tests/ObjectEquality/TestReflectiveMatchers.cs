@@ -4,6 +4,7 @@ using NExpect.Exceptions;
 using NUnit.Framework;
 using PeanutButter.Utils;
 using static NExpect.Expectations;
+using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Tests.ObjectEquality
 {
@@ -16,6 +17,11 @@ namespace NExpect.Tests.ObjectEquality
             public class Data
             {
                 public int id { get; set; }
+
+                [Comment("this is commented!")]
+                public bool IsCommented { get; set; }
+
+                public bool IsNotCommented { get; set; }
             }
 
             [Test]
@@ -140,6 +146,22 @@ namespace NExpect.Tests.ObjectEquality
                         .To.Have.Property(nameof(Data.id))
                         .With.Type(typeof(int));
                 }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            [Explicit("TODO: .Property should return IMore<PropertyInfo> like .Method does - then we can do more interesting stuff")]
+            public void ShouldBeAbleToAssertAgainstPropertyAttributes()
+            {
+                // Arrange
+                var data = GetRandom<Data>();
+                // Act
+                // Assert.That(() =>
+                // {
+                //     Expect(data)
+                //         .To.Have.Property(nameof(data.IsCommented))
+                //         .With.Attribute<CommentAttribute>();
+                // }, Throws.Nothing);
                 // Assert
             }
         }
