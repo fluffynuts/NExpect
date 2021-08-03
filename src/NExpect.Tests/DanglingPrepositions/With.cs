@@ -26,7 +26,7 @@ namespace NExpect.Tests.DanglingPrepositions
                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains("to have name 'Spot'")
             );
-            
+
             Assert.That(() =>
             {
                 Expect(dog)
@@ -75,10 +75,55 @@ namespace NExpect.Tests.DanglingPrepositions
             }, Throws.Nothing);
             // Assert
         }
+
+        [TestCase(".With.Required")]
+        public void ShouldBeAbleToDangle_(string moo)
+        {
+            // Arrange
+            var passingAnimal = new Dog()
+            {
+                Name = "Rex"
+            };
+            var failingAnimal = new Dog()
+            {
+                Name = "Spot"
+            };
+            // Act
+            Assert.That(() =>
+            {
+                Expect(passingAnimal)
+                    .To.Be.An.Instance.Of<Dog>()
+                    .With.Required.Name("Rex");
+            }, Throws.Nothing);
+            
+            Assert.That(() =>
+            {
+                Expect(failingAnimal)
+                    .To.Be.An.Instance.Of<Dog>()
+                    .With.Required.Name("Rex");
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            // Assert
+        }
     }
 
     public static class WithExtensions
     {
+        public static IMore<Dog> Name(
+            this IRequired<Dog> required,
+            string requiredName
+        )
+        {
+            return required.AddMatcher(actual =>
+            {
+                var name = actual.Name; // ?.GetOrDefault(nameof(Animal.Name), null as string);
+                var passed = name == requiredName;
+                return new MatcherResult(
+                    passed,
+                    () => $"Expected {actual} to have name '{requiredName}'"
+                );
+            });
+        }
+
         public static IMore<Dog> Name(
             this IWith<Dog> with,
             string expected)
@@ -95,7 +140,7 @@ namespace NExpect.Tests.DanglingPrepositions
         }
     }
 
-    public abstract class Animal: IAnimal
+    public abstract class Animal : IAnimal
     {
         public string Name { get; set; }
     }
