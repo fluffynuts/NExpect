@@ -150,7 +150,8 @@ namespace NExpect.Tests.ObjectEquality
             }
 
             [Test]
-            [Explicit("TODO: .Property should return IMore<PropertyInfo> like .Method does - then we can do more interesting stuff")]
+            [Explicit(
+                "TODO: .Property should return IMore<PropertyInfo> like .Method does - then we can do more interesting stuff")]
             public void ShouldBeAbleToAssertAgainstPropertyAttributes()
             {
                 // Arrange
@@ -389,6 +390,34 @@ namespace NExpect.Tests.ObjectEquality
             }
 
             [Test]
+            public void ShouldBeAbleToAssertAgainstMultipleMethodAttributes()
+            {
+                // Arrange
+                var cow = new Cow();
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(cow)
+                        .To.Have.Method(nameof(Cow.MultipleComments))
+                        .With.Attribute<CommentAttribute>(
+                            a => a.Comment.Contains("best of times"));
+                    Expect(cow)
+                        .To.Have.Method(nameof(Cow.MultipleComments))
+                        .With.Attribute<CommentAttribute>(
+                            a => a.Comment.Contains("dark and stormy night"));
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(cow)
+                        .To.Have.Method(nameof(Cow.MultipleComments))
+                        .With.Attribute<CommentAttribute>(
+                            o => o.Comment.Contains("yabba dabba doo")
+                        );
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+
+            [Test]
             public void ShouldBeAbleToAssertAgainstParameterThenMethodInfo()
             {
                 // Arrange
@@ -475,6 +504,11 @@ namespace NExpect.Tests.ObjectEquality
             }
         }
 
+        [AttributeUsage(
+            AttributeTargets.All,
+            AllowMultiple = true,
+            Inherited = true
+        )]
         public class CommentAttribute : Attribute
         {
             public string Comment { get; }
@@ -519,6 +553,12 @@ namespace NExpect.Tests.ObjectEquality
             }
 
             public virtual void Overrideable()
+            {
+            }
+
+            [Comment("It was a dark and stormy night")]
+            [Comment("It was the best of times, it was the worst of times")]
+            public void MultipleComments()
             {
             }
         }
