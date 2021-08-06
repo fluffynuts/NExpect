@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Imported.PeanutButter.Utils;
 using NExpect.Implementations;
 using NExpect.Interfaces;
@@ -520,8 +519,8 @@ namespace NExpect
                         passed,
                         FinalMessageFor(
                             () => passed
-                                      ? new[] { "Expected not to get null" }
-                                      : new[] { "Expected null but got", Quote(actual) },
+                                ? new[] { "Expected not to get null" }
+                                : new[] { "Expected null but got", Quote(actual) },
                             customMessageGenerator)
                     );
                 });
@@ -585,7 +584,7 @@ namespace NExpect
                 actual =>
                 {
                     var passed = (actual == null && expected == null) ||
-                                 (actual?.Equals(expected) ?? false);
+                        (actual?.Equals(expected) ?? false);
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
@@ -630,8 +629,8 @@ namespace NExpect
                         passed,
                         FinalMessageFor(
                             () => passed
-                                      ? new[] { "Expected not to be empty" }
-                                      : new[] { "Expected empty string but got", Quote(actual) },
+                                ? new[] { "Expected not to be empty" }
+                                : new[] { "Expected empty string but got", Quote(actual) },
                             customMessageGenerator)
                     );
                 });
@@ -814,16 +813,26 @@ namespace NExpect
                 );
             }
 
+            var extraMessage = DifferenceHighlighting.ProvideMoreInfoFor(
+                actual,
+                expected
+            );
+            var message = new List<string>(new[]
+            {
+                "Expected",
+                Quote(expected),
+                "but got",
+                Quote(actual)
+            });
+            if (!string.IsNullOrWhiteSpace(extraMessage))
+            {
+                message.Add(extraMessage);
+            }
+
             return new MatcherResult(
                 false,
                 FinalMessageFor(
-                    () => new[]
-                    {
-                        "Expected",
-                        Quote(expected),
-                        "but got",
-                        Quote(actual)
-                    },
+                    () => message.ToArray(),
                     customMessageGenerator
                 ));
         }
@@ -845,7 +854,7 @@ namespace NExpect
             }
 
             var result = (actual.Equals(expected) ||
-                          CollectionsAreEqual(actual, expected));
+                CollectionsAreEqual(actual, expected));
             if (!result)
                 return false;
 
@@ -882,8 +891,8 @@ namespace NExpect
             while (actualHasNext && expectedHasNext)
             {
                 if (!ValuesAreEqual(
-                        actualEnumerator.Current,
-                        expectedEnumerator.Current))
+                    actualEnumerator.Current,
+                    expectedEnumerator.Current))
                 {
                     return false;
                 }

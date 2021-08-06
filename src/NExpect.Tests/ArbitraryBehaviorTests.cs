@@ -306,15 +306,6 @@ namespace NExpect.Tests
         }
 
         [Test]
-        public void AllowingContinuationForBe()
-        {
-            // Arrange
-
-            // Act
-            // Assert
-        }
-
-        [Test]
         public void MatcherWhichThrowsUnmetExpectationException_ShouldGetThatExactException()
         {
             // Arrange
@@ -919,7 +910,7 @@ namespace NExpect.Tests
         }
     }
 
-    public static class MatcherThrowingUnmentExpectationException
+    public static class MatcherThrowingUnmetExpectationException
     {
         public static void CurrentFilePath(
             this IStringContain contain,
