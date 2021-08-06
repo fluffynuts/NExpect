@@ -1,6 +1,4 @@
 using NUnit.Framework;
-using static PeanutButter.RandomGenerators.RandomValueGen;
-using NExpect;
 using NExpect.Exceptions;
 using static NExpect.Expectations;
 
@@ -30,8 +28,8 @@ namespace NExpect.Tests
         public void ShouldReportWhenStringsOnlyDifferByLineEndings()
         {
             // Arrange
-            var result = "foo\r\nbar";
-            var expected = "foo\nbar";
+            var result = "foo\r\nbar\r\nquuz";
+            var expected = "foo\nbar\nquuz";
             // Act
             Assert.That(() =>
                 {

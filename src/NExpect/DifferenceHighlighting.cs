@@ -36,17 +36,7 @@ namespace NExpect
                 return null;
             }
 
-            var charZip = left.ToCharArray().Zip(right.ToCharArray(), (c1, c2) => Tuple.Create(c1, c2));
-            var idx = 0;
-            foreach (var pair in charZip)
-            {
-                if (pair.Item1 != pair.Item2)
-                {
-                    break;
-                }
-
-                idx++;
-            }
+            var idx = FindIndexOfFirstDifference(left, right);
 
             var depth = 5;
             var from = idx - depth;
@@ -55,12 +45,17 @@ namespace NExpect
                 from = 0;
             }
 
-            var len = idx + depth;
+            var len = depth;
             if (from + len >= left.Length)
             {
                 len = left.Length - from;
             }
-            var arrowBodyLength = idx > depth ? depth : idx;
+
+            len = TruncateToNextNewLineIfTooClose(left, from, len);
+
+            var arrowBodyLength = idx > depth
+                ? depth
+                : idx;
             if (arrowBodyLength > left.Length)
             {
                 arrowBodyLength = left.Length;
@@ -77,6 +72,44 @@ namespace NExpect
 {
     arrowBody
 }^";
+        }
+
+        private static int TruncateToNextNewLineIfTooClose(
+            string left,
+            int from,
+            int len
+        )
+        {
+            var nextNewLine = left.IndexOf('\n', from);
+            var nextLineFeed = left.IndexOf('\r', from);
+            var closestLineEnding = Math.Min(nextNewLine, nextLineFeed);
+            if (closestLineEnding < 0)
+            {
+                return len;
+            }
+
+            if (closestLineEnding < from + len)
+            {
+                len = closestLineEnding - from;
+            }
+            return len;
+        }
+
+        private static int FindIndexOfFirstDifference(string left, string right)
+        {
+            var charZip = left.ToCharArray().Zip(right.ToCharArray(), (c1, c2) => Tuple.Create(c1, c2));
+            var idx = 0;
+            foreach (var pair in charZip)
+            {
+                if (pair.Item1 != pair.Item2)
+                {
+                    break;
+                }
+
+                idx++;
+            }
+
+            return idx;
         }
 
         private static string CompareCaseInsensitive(
