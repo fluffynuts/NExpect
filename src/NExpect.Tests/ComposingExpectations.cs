@@ -307,8 +307,10 @@ namespace NExpect.Tests
 
     public class Person
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public Genders Gender { get; set; }
+        public Person Partner { get; set; }
     }
 
     internal static class PersonMatchers

@@ -14,6 +14,7 @@ namespace NExpect.Implementations.Fluency
         public IAn<T> An => Next<An<T>>();
         public IBeen<T> Been => Next<Been<T>>();
         public IMax<T> Max => Next<Max<T>>();
+        public IDefault<T> Default => Next<Default<T>>();
 
         public Have(Func<T> actualFetcher) : base(actualFetcher)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
@@ -60,9 +61,9 @@ namespace NExpect
                         new[]
                         {
                             "Expected",
-                            $"<{actual.PrettyName()}>",
+                            $"<{actual.FullyQualifiedPrettyName()}>",
                             $"to {passed.AsNot()}be an instance of",
-                            $"<{expected.PrettyName()}>"
+                            $"<{expected.FullyQualifiedPrettyName()}>"
                         },
                         customMessageGenerator
                     )
@@ -76,20 +77,6 @@ namespace NExpect
                 ).More();
             }
 
-
-            // if (instance is InstanceContinuation concrete)
-            // {
-            //     incomingType = concrete.Actual;
-            //     if (concrete.Parent is ICanAddMatcher<TExpected> addMatcher &&
-            //         concrete.Parent is IExpectationContext<TExpected> expectationContext)
-            //     {
-            //         return ContinuationFactory.Create<TExpected, More<TExpected>>(
-            //             addMatcher.GetActual(),
-            //             expectationContext
-            //         );
-            //     }
-            // }
-            //
             return new TerminatedMore<TExpected>(instance.Actual);
         }
 
@@ -140,9 +127,9 @@ namespace NExpect
                             new[]
                             {
                                 "Expected",
-                                $"<{actual.PrettyName()}>",
+                                $"<{actual.FullyQualifiedPrettyName()}>",
                                 $"to {passed.AsNot()}be an instance of",
-                                $"<{expected.PrettyName()}>"
+                                $"<{expected.FullyQualifiedPrettyName()}>"
                             },
                             customMessageGenerator
                         ));
@@ -648,26 +635,166 @@ namespace NExpect
             return addTo.More();
         }
 
-        //TODO: find a better home for this method
-        private static string PrettyName(this Type type)
+
+        /// <summary>
+        /// Tests whether or not an object has all default values
+        /// for all properties
+        /// </summary>
+        /// <param name="def">continuation</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<T> Properties<T>(
+            this IDefault<T> def
+        )
+        {
+            return def.Properties(NULL_STRING);
+        }
+
+        /// <summary>
+        /// Tests whether or not an object has all default values
+        /// for all properties
+        /// </summary>
+        /// <param name="def">continuation</param>
+        /// <param name="customMessage">Custom message for failure events</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<T> Properties<T>(
+            this IDefault<T> def,
+            string customMessage
+        )
+        {
+            return def.Properties(() => customMessage);
+        }
+
+        /// <summary>
+        /// Tests whether or not an object has all default values
+        /// for all properties
+        /// </summary>
+        /// <param name="def">continuation</param>
+        /// <param name="customMessageGenerator">Provides custom message for failure events</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<T> Properties<T>(
+            this IDefault<T> def,
+            Func<string> customMessageGenerator
+        )
+        {
+            return def.AddMatcher(actual =>
+            {
+                var props = actual?.GetType().GetProperties() ?? new PropertyInfo[0];
+                var passed = props.IsEmpty() ||
+                    props.Select(
+                        pi => AreEqual(pi.GetValue(actual), pi.PropertyType.DefaultValue())
+                    ).All(o => o);
+                return new MatcherResult(
+                    passed,
+                    () => $"Expected object {passed.AsNot()}to have default values for all properties",
+                    customMessageGenerator
+                );
+            });
+        }
+
+        /// <summary>
+        /// Tests whether or not an object has all default values
+        /// for all properties
+        /// </summary>
+        /// <param name="def">continuation</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<T> Fields<T>(
+            this IDefault<T> def
+        )
+        {
+            return def.Fields(NULL_STRING);
+        }
+
+        /// <summary>
+        /// Tests whether or not an object has all default values
+        /// for all properties
+        /// </summary>
+        /// <param name="def">continuation</param>
+        /// <param name="customMessage">Custom message for failure events</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<T> Fields<T>(
+            this IDefault<T> def,
+            string customMessage
+        )
+        {
+            return def.Fields(() => customMessage);
+        }
+
+        /// <summary>
+        /// Tests whether or not an object has all default values
+        /// for all properties
+        /// </summary>
+        /// <param name="def">continuation</param>
+        /// <param name="customMessageGenerator">Provides custom message for failure events</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<T> Fields<T>(
+            this IDefault<T> def,
+            Func<string> customMessageGenerator
+        )
+        {
+            return def.AddMatcher(actual =>
+            {
+                var props = actual?.GetType().GetFields() ?? new FieldInfo[0];
+                var passed = props.IsEmpty() ||
+                    props.Select(
+                        fi => AreEqual(fi.GetValue(actual), fi.FieldType.DefaultValue())
+                    ).All(o => o);
+                return new MatcherResult(
+                    passed,
+                    () => $"Expected object {passed.AsNot()}to have default values for all fields",
+                    customMessageGenerator
+                );
+            });
+        }
+
+        private static bool AreEqual(object left, object right)
+        {
+            if (left is null && right is null)
+            {
+                return true;
+            }
+
+            if (left is null || right is null)
+            {
+                return false;
+            }
+            
+            return left.Equals(right);
+        }
+        
+        // TODO: figure out a single source of truth: this produces
+        // slightly different results from PB's PrettyName, sprecifically,
+        // it includes namespacing
+        private static string FullyQualifiedPrettyName(this Type type)
         {
             if (type == null)
+            {
                 return "(null Type)";
+            }
+
             if (type.IsGenericType())
             {
                 if (type.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {
                     var underlyingType = type.GetGenericArguments()[0];
-                    return $"{PrettyName(underlyingType)}?";
+                    return $"{FullyQualifiedPrettyName(underlyingType)}?";
                 }
 
                 var typeFyllName = type.FullName ?? string.Empty;
                 var baseName = typeFyllName.Substring(0, typeFyllName.IndexOf("`", StringComparison.Ordinal));
                 var parts = baseName.Split('.');
-                return parts.Last() + "<" + string.Join(", ", type.GetGenericArguments().Select(PrettyName)) + ">";
+                return parts.Last() + "<" + string.Join(", ", type.GetGenericArguments().Select(FullyQualifiedPrettyName)) + ">";
             }
             else
+            {
                 return type.FullName;
+            }
         }
+
     }
 }
