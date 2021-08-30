@@ -138,8 +138,8 @@ namespace NExpect.Tests
     [RequireNonZeroId]
     public class HasFieldsAndProps
     {
-        public int Id;
-        public string Name { get; set; }
+        public int Id { get; set; }
+        public string Name;
     }
 
     [RequireNonZeroId]

@@ -45,5 +45,10 @@
         /// Provides the .Without grammar extension
         /// </summary>
         IWithout<T> Without { get; }
+        
+        /// <summary>
+        /// Provides the .For grammar extension
+        /// </summary>
+        IFor<T> For { get; }
     }
 }

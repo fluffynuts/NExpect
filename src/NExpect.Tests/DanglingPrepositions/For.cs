@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using NExpect.Exceptions;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -51,7 +52,7 @@ namespace NExpect.Tests.DanglingPrepositions
         public class ForCollections
         {
             [Test]
-            public void ShouldProvidExtensionPoint()
+            public void ShouldProvideExtensionPoint()
             {
                 // Arrange
                 var pet1 = GetRandom<Pet>();
@@ -68,7 +69,7 @@ namespace NExpect.Tests.DanglingPrepositions
             }
 
             [Test]
-            public void ShouldProvidExtensionPoint_Negative()
+            public void ShouldProvideExtensionPoint_Negative()
             {
                 // Arrange
                 var pet1 = GetRandom<Pet>();
@@ -84,6 +85,28 @@ namespace NExpect.Tests.DanglingPrepositions
                 // Assert
             }
         }
+
+        [TestFixture]
+        public class ForMore
+        {
+            [Test]
+            public void ShouldProvideExtensionPointOnMore()
+            {
+                // Arrange
+                var pet = GetRandom<Pet>();
+                
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(pet)
+                        .To.Be.For.Owner(pet.Owner)
+                        // yes, the syntax here doesn't make sense - I just
+                        // need a quick 'n dirty test to enforce that .For is in
+                        .For.Owner(pet.Owner);
+                }, Throws.Nothing);
+                // Assert
+            }
+        }
     }
 
     public class Pet
@@ -93,14 +116,14 @@ namespace NExpect.Tests.DanglingPrepositions
 
     internal static class ExtendingFor
     {
-        internal static void Owner(this IFor<Pet> petFor, Person expectedOwner)
+        internal static IMore<Pet> Owner(this IFor<Pet> petFor, Person expectedOwner)
         {
-            petFor.Compose(pet => Expect(pet.Owner).To.Deep.Equal(expectedOwner));
+            return petFor.Compose(pet => Expect(pet.Owner).To.Deep.Equal(expectedOwner));
         }
 
-        internal static void Owner(this ICollectionFor<Pet> petFor, Person expectedOwner)
+        internal static IMore<IEnumerable<Pet>> Owner(this ICollectionFor<Pet> petFor, Person expectedOwner)
         {
-            petFor.Compose(pets =>
+            return petFor.Compose(pets =>
             {
                 Expect(pets.All(p => p.Owner.DeepEquals(expectedOwner))).To.Be.True();
             });

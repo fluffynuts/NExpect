@@ -42,6 +42,9 @@ namespace NExpect.Implementations
         /// <inheritdoc />
         public IWithout<T> Without => NextNegated<Without<T>>();
 
+        /// <inheritdoc />
+        public IFor<T> For => Next<For<T>>();
+
         /// <summary>
         /// Construct a More&lt;T&gt;
         /// - provide the late-fetching func for the actual value

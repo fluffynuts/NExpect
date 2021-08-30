@@ -168,6 +168,13 @@ namespace NExpect.Tests.Exceptions
                         .With.Property(e => e.Message)
                         .Containing(seek);
                 }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(() => throw new Exception(message))
+                        .To.Throw().With.Type(typeof(Exception))
+                        .And.Property(e => e.Message)
+                        .Containing(seek);
+                }, Throws.Nothing);
                 // Assert
             }
 
