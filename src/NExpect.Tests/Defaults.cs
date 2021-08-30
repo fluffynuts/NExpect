@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using NExpect;
@@ -81,8 +82,7 @@ namespace NExpect.Tests
             // Arrange
             var defaults = new HasFieldsAndProps();
             var notDefaults = GetRandom<HasFieldsAndProps>();
-            var defaultPropertyOnly = GetRandom<HasFieldsAndProps>();
-            defaultPropertyOnly.Name = default;
+            var defaultPropertyOnly = new HasFieldsAndProps();
 
             // Act
             Assert.That(() =>
@@ -135,7 +135,6 @@ namespace NExpect.Tests
         }
     }
 
-    [RequireNonZeroId]
     public class HasFieldsAndProps
     {
         public int Id { get; set; }
@@ -143,12 +142,21 @@ namespace NExpect.Tests
     }
 
     [RequireNonZeroId]
+    public class HasFieldsAndPropsBuilder : GenericBuilder<HasFieldsAndPropsBuilder, HasFieldsAndProps>
+    {
+    }
+
     public struct HasFields
     {
         public int Id;
         public string Name;
         public AnotherStruct Friend;
         public Person Acquaintance;
+    }
+
+    [RequireNonZeroId]
+    public class HasFieldsBuilder : GenericBuilder<HasFieldsBuilder, HasFields>
+    {
     }
 
     public struct AnotherStruct
