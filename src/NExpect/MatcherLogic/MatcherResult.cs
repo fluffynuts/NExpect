@@ -9,6 +9,50 @@ using NExpect.Implementations;
 namespace NExpect.MatcherLogic
 {
     /// <summary>
+    /// Implements IMatcher result, with the added constraint
+    /// that the result cannot be negated. Useful for when
+    /// a situation warrants failure both for the positive
+    /// and negative cases (eg testing a null collection)
+    /// </summary>
+    public class EnforcedMatcherResult : MatcherResult
+    {
+        /// <inheritdoc />
+        public EnforcedMatcherResult(bool passed) : base(passed)
+        {
+        }
+
+        /// <inheritdoc />
+        public EnforcedMatcherResult(bool passed, string message) : base(passed, message)
+        {
+        }
+
+        /// <inheritdoc />
+        public EnforcedMatcherResult(bool passed, Func<string> messageGenerator) : base(passed, messageGenerator)
+        {
+        }
+
+        /// <inheritdoc />
+        public EnforcedMatcherResult(bool passed, Func<Func<string>> messageGeneratorGenerator) : base(passed, messageGeneratorGenerator)
+        {
+        }
+
+        /// <inheritdoc />
+        public EnforcedMatcherResult(bool passed, Func<string> messageGenerator, Exception localException) : base(passed, messageGenerator, localException)
+        {
+        }
+
+        /// <inheritdoc />
+        public EnforcedMatcherResult(bool passed, Func<string> regularMessageGenerator, Func<string> customMessageGenerator) : base(passed, regularMessageGenerator, customMessageGenerator)
+        {
+        }
+
+        /// <inheritdoc />
+        public EnforcedMatcherResult(bool passed, Func<Func<string>> messageGeneratorGenerator, Exception localException) : base(passed, messageGeneratorGenerator, localException)
+        {
+        }
+    }
+
+    /// <summary>
     /// Implements the IMatcher result, use to contain your
     /// matcher result
     /// </summary>
@@ -22,19 +66,19 @@ namespace NExpect.MatcherLogic
         public bool Passed { get; set; }
 
         /// <inheritdoc />
-        public string Message => _message ?? (_message = MessageGenerator?.Invoke());
+        public string Message => _message ??= MessageGenerator?.Invoke();
 
         /// <inheritdoc />
         public Exception LocalException { get; }
 
-        private Func<string> MessageGenerator => _messageGenerator ??
-                                                 (_messageGenerator = _messageGeneratorGenerator?.Invoke());
+        private Func<string> MessageGenerator =>
+            _messageGenerator ??= _messageGeneratorGenerator?.Invoke();
 
         /// <summary>
-        /// Constructor with just pased value -- set message later
+        /// Constructor with just passed value -- set message later
         /// </summary>
         /// <param name="passed">Whether or not the matcher passed</param>
-        public MatcherResult(bool passed): this(passed, () => "")
+        public MatcherResult(bool passed) : this(passed, () => "")
         {
         }
 
@@ -48,8 +92,10 @@ namespace NExpect.MatcherLogic
         /// </summary>
         /// <param name="passed">Did the matcher pass?</param>
         /// <param name="message">Message about the pass / fail</param>
-        public MatcherResult(bool passed, string message) :
-            this(passed, () => message)
+        public MatcherResult(
+            bool passed,
+            string message
+        ) : this(passed, () => message)
         {
         }
 
@@ -59,7 +105,7 @@ namespace NExpect.MatcherLogic
         /// <param name="passed">Did the matcher pass?</param>
         /// <param name="messageGenerator">Generator about the pass / fail</param>
         public MatcherResult(
-            bool passed, 
+            bool passed,
             Func<string> messageGenerator)
             : this(passed, () => messageGenerator, null)
         {
@@ -71,7 +117,7 @@ namespace NExpect.MatcherLogic
         /// <param name="passed"></param>
         /// <param name="messageGeneratorGenerator"></param>
         public MatcherResult(
-            bool passed, 
+            bool passed,
             Func<Func<string>> messageGeneratorGenerator)
             : this(passed, messageGeneratorGenerator, null)
         {
@@ -84,9 +130,10 @@ namespace NExpect.MatcherLogic
         /// <param name="messageGenerator"></param>
         /// <param name="localException"></param>
         public MatcherResult(
-            bool passed, 
-            Func<string> messageGenerator, 
-            Exception localException): this(passed, () => messageGenerator, localException)
+            bool passed,
+            Func<string> messageGenerator,
+            Exception localException
+        ) : this(passed, () => messageGenerator, localException)
         {
         }
 
@@ -103,7 +150,7 @@ namespace NExpect.MatcherLogic
             bool passed,
             Func<string> regularMessageGenerator,
             Func<string> customMessageGenerator
-        ): this(passed, MessageHelpers.FinalMessageFor(regularMessageGenerator, customMessageGenerator))
+        ) : this(passed, MessageHelpers.FinalMessageFor(regularMessageGenerator, customMessageGenerator))
         {
         }
 

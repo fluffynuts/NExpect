@@ -11,6 +11,7 @@ namespace NExpect.MatcherLogic
         /// Whether or not the matcher passed
         /// </summary>
         bool Passed { get; }
+
         /// <summary>
         /// Message to display. In the case when your matcher
         /// passes, put in the message you would display if your

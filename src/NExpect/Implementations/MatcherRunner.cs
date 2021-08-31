@@ -46,11 +46,15 @@ namespace NExpect.Implementations
             IMatcherResult result
         )
         {
-            var isPass = negated
+            var isPass = negated && result is not EnforcedMatcherResult
                 ? !result.Passed
                 : result.Passed;
+
             if (isPass)
+            {
                 return;
+            }
+
             Assertions.Throw(result.Message, result.LocalException);
         }
     }
