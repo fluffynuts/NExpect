@@ -960,9 +960,9 @@ namespace NExpect
         )
         {
             if (!actual.TryGetMetadata<ParameterInfo>(
-                METADATA_KEY_PARAMETER_INFO,
-                out var parameterInfo
-            ))
+                    METADATA_KEY_PARAMETER_INFO,
+                    out var parameterInfo
+                ))
             {
                 return null;
             }
@@ -1219,6 +1219,41 @@ namespace NExpect
         /// Tests if the provided type is decorated with TAttribute
         /// </summary>
         /// <param name="have"></param>
+        /// <param name="attributeMatcher"></param>
+        /// <typeparam name="TAttribute"></typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Attribute<TAttribute>(
+            this IHave<Type> have,
+            Func<TAttribute, bool> attributeMatcher
+        ) where TAttribute : Attribute
+        {
+            return have.Attribute<TAttribute>(attributeMatcher, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Tests if the provided type is decorated with TAttribute
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="attributeMatcher"></param>
+        /// <param name="customMessage"></param>
+        /// <typeparam name="TAttribute"></typeparam>
+        /// <returns></returns>
+        public static IMore<Type> Attribute<TAttribute>(
+            this IHave<Type> have,
+            Func<TAttribute, bool> attributeMatcher,
+            string customMessage
+        ) where TAttribute : Attribute
+        {
+            return have.Attribute<TAttribute>(
+                attributeMatcher,
+                () => customMessage
+            );
+        }
+
+        /// <summary>
+        /// Tests if the provided type is decorated with TAttribute
+        /// </summary>
+        /// <param name="have"></param>
         /// <param name="customMessage"></param>
         /// <typeparam name="TAttribute"></typeparam>
         /// <returns></returns>
@@ -1227,18 +1262,20 @@ namespace NExpect
             string customMessage
         ) where TAttribute : Attribute
         {
-            return have.Attribute<TAttribute>(() => customMessage);
+            return have.Attribute<TAttribute>(null, () => customMessage);
         }
 
         /// <summary>
         /// Tests if the provided type is decorated with TAttribute
         /// </summary>
         /// <param name="have"></param>
+        /// <param name="attributeMatcher"></param>
         /// <param name="customMessageGenerator"></param>
         /// <typeparam name="TAttribute"></typeparam>
         /// <returns></returns>
         public static IMore<Type> Attribute<TAttribute>(
             this IHave<Type> have,
+            Func<TAttribute, bool> attributeMatcher,
             Func<string> customMessageGenerator
         ) where TAttribute : Attribute
         {
@@ -1248,11 +1285,13 @@ namespace NExpect
                     .OfType<TAttribute>()
                     .ToArray() ?? new TAttribute[0];
                 actual.SetMetadata(METADATA_KEY_TYPE_ATTRIBUTES, attributes);
-                var passed = attributes.Any();
+                var passed = attributes.Any(attributeMatcher ?? (_ => true));
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        () => $"Expected '{actual}' to be decorated with {Attrib<TAttribute>()}",
+                        () => attributeMatcher is null
+                            ? $"Expected '{actual}' to be decorated with {Attrib<TAttribute>()}"
+                            : $"Expected '{actual}' to be decorated with {Attrib<TAttribute>()} and pass provided matcher",
                         customMessageGenerator
                     )
                 );

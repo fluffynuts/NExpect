@@ -477,6 +477,28 @@ namespace NExpect.Tests.ObjectEquality
                 // Assert
             }
 
+            [Test]
+            public void ShouldBeAbleToAssertAgainstAttributeData()
+            {
+                // Arrange
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(typeof(HasAttribute))
+                        .To.Have.Attribute<CommentAttribute>(
+                            a => a.Comment == "has a comment"
+                        );
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(typeof(HasAttribute))
+                        .To.Have.Attribute<CommentAttribute>(
+                            a => a.Comment == "has no comment"
+                        );
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+
             [Comment("has a comment")]
             public class HasAttribute
             {
