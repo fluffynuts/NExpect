@@ -8,7 +8,8 @@
         "build": "run-s \"zarro build\"",
         "build-with-msbuild": "cross-env BUILD_EXCLUDE=src/PeanutButter/**/* zarro build",
         "zarro": "cross-env DOTNET_CORE=1 BUILD_EXCLUDE=src/PeanutButter/**/* PACK_INCLUDE_CSPROJ=* PACK_EXCLUDE_CSPROJ=*Tests*,CoreConsumer,src/PeanutButter/**/* TEST_EXCLUDE=src/PeanutButter/**/* zarro",
-        "prerelease": "run-s test",
+        "prerelease": "run-s verify-up-to-date test",
+        "verify-up-to-date": "zarro verify-up-to-date",
         "release": "cross-env BUILD_CONFIGURATION=BuildForRelease run-s \"zarro release\""
     },
     "devDependencies": {
