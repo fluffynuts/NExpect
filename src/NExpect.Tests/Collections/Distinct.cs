@@ -112,103 +112,99 @@ namespace NExpect.Tests.Collections
                     // Act
                     Assert.That(() =>
                         {
-                            Expect(collection).To.Be.Distinct();
+                            Expect(collection)
+                                .Not.To.Be.Distinct();
                         },
-                        Throws.Exception.TypeOf<UnmetExpectationException>());
+                        Throws.Nothing
+                    );
+
+                    // Assert
+                }
+
+                [Test]
+                public void AltGrammar_ShouldNotThrow()
+                {
+                    // Arrange
+                    var collection = new List<int> { 1, 1 };
+
+                    // Pre-Assert
+
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(collection)
+                                .To.Not.Be.Distinct();
+                        },
+                        Throws.Nothing
+                    );
 
                     // Assert
                 }
             }
         }
 
-        [Test]
-        public void OperatingOnCollectionWithUniqueItems_ShouldNotThrow()
+        [TestFixture]
+        public class WhenCollectionHasUniqueItems
         {
-            // Arrange
-            var collection = new List<int> { 1, 2, 3 };
+            [Test]
+            public void ShouldNotThrow()
+            {
+                // Arrange
+                var collection = new List<int> { 1, 2, 3 };
 
-            // Pre-Assert
+                // Pre-Assert
 
-            // Act
-            Assert.That(() =>
+                // Act
+                Assert.That(() =>
+                    {
+                        Expect(collection).To.Be.Distinct();
+                    },
+                    Throws.Nothing);
+
+                // Assert
+            }
+
+            [TestFixture]
+            public class AndIsNegated
+            {
+                [Test]
+                public void ShouldThrow()
                 {
-                    Expect(collection).To.Be.Distinct();
-                },
-                Throws.Nothing);
+                    // Arrange
+                    var collection = new List<int> { 1, 2, 3 };
 
-            // Assert
-        }
+                    // Pre-Assert
 
-        [Test]
-        public void Negated_OperatingOnCollectionWithUniqueItems_ShouldThrow()
-        {
-            // Arrange
-            var collection = new List<int> { 1, 2, 3 };
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(collection)
+                                .Not.To.Be.Distinct();
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    );
 
-            // Pre-Assert
+                    // Assert
+                }
 
-            // Act
-            Assert.That(() =>
+                [Test]
+                public void AltGrammar_ShouldThrow()
                 {
-                    Expect(collection).Not.To.Be.Distinct();
-                },
-                Throws.Exception.TypeOf<UnmetExpectationException>());
+                    // Arrange
+                    var collection = new List<int> { 1, 2, 3 };
 
-            // Assert
-        }
+                    // Pre-Assert
 
-        [Test]
-        public void Negated_AltGrammar_OperatingOnCollectionWithUniqueItems_ShouldThrow()
-        {
-            // Arrange
-            var collection = new List<int> { 1, 2, 3 };
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(collection).To.Not.Be.Distinct();
+                        },
+                        Throws.Exception.TypeOf<UnmetExpectationException>());
 
-            // Pre-Assert
-
-            // Act
-            Assert.That(() =>
-                {
-                    Expect(collection).To.Not.Be.Distinct();
-                },
-                Throws.Exception.TypeOf<UnmetExpectationException>());
-
-            // Assert
-        }
-
-        [Test]
-        public void Negated_OperatingOnCollectionWithSameItems_ShouldNotThrow()
-        {
-            // Arrange
-            var collection = new List<int> { 1, 1 };
-
-            // Pre-Assert
-
-            // Act
-            Assert.That(() =>
-                {
-                    Expect(collection).Not.To.Be.Distinct();
-                },
-                Throws.Nothing);
-
-            // Assert
-        }
-
-        [Test]
-        public void Negated_AltGrammar_OperatingOnCollectionWithSameItems_ShouldNotThrow()
-        {
-            // Arrange
-            var collection = new List<int> { 1, 1 };
-
-            // Pre-Assert
-
-            // Act
-            Assert.That(() =>
-                {
-                    Expect(collection).To.Not.Be.Distinct();
-                },
-                Throws.Nothing);
-
-            // Assert
+                    // Assert
+                }
+            }
         }
     }
 }
