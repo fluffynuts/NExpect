@@ -5,7 +5,7 @@ const gulp = requireModule("gulp-with-help"),
   runSequence = requireModule("run-sequence"),
   nugetPush = requireModule("nuget-push"),
   env = requireModule("env");
-  spawn = requireModule("spawn");
+spawn = requireModule("spawn");
 
 env.associate(["DRY_RUN"], ["push"]);
 
@@ -22,14 +22,6 @@ gulp.task("push", "pushes packages to nuget.org", () => {
   promises = packages.map(pushPackage);
   return Promise.all(promises);
 });
-
-function findAllPackages(id) {
-  return [ findNupkg(id), findSnupkg(id) ];
-}
-
-function findSnupkg(id) {
-  return findPackage(id, "snupkg");
-}
 
 function findNupkg(id) {
   return findPackage(id, "nupkg");
