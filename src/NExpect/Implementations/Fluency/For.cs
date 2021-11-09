@@ -13,4 +13,5 @@ namespace NExpect.Implementations.Fluency
         {
         }
     }
+    // ReSharper disable once ClassNeverInstantiated.Global
 }

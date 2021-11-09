@@ -50,5 +50,10 @@
         /// Provides the .For grammar extension
         /// </summary>
         IFor<T> For { get; }
+
+        /// <summary>
+        /// Provides the .Having grammar extension
+        /// </summary>
+        IHaving<T> Having { get; }
     }
 }

@@ -1,0 +1,172 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NExpect.Matchers.Xml</name>
+    </assembly>
+    <members>
+        <member name="T:NExpect.XmlMatchers">
+            <summary>
+            Provides Xml matchers via XDocument and xpath expressions
+            </summary>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Element(NExpect.Interfaces.IHave{System.Xml.Linq.XDocument},System.String)">
+            <summary>
+            Asserts that the provided document has a single element matched by the
+            provided xpath
+            </summary>
+            <param name="have"></param>
+            <param name="xpath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Element(NExpect.Interfaces.IHave{System.Xml.Linq.XDocument},System.String,System.String)">
+            <summary>
+            Asserts that the provided document has a single element matched by the
+            provided xpath
+            </summary>
+            <param name="have"></param>
+            <param name="xpath"></param>
+            <param name="customMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Element(NExpect.Interfaces.IHave{System.Xml.Linq.XDocument},System.String,System.Func{System.String})">
+            <summary>
+            Asserts that the provided document has a single element matched by the
+            provided xpath
+            </summary>
+            <param name="have"></param>
+            <param name="xpath"></param>
+            <param name="customMessageGenerator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Attribute(NExpect.Interfaces.IWith{System.Xml.Linq.XDocument},System.String)">
+            <summary>
+            
+            </summary>
+            <param name="with"></param>
+            <param name="attribute"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Attribute(NExpect.Interfaces.IWith{System.Xml.Linq.XDocument},System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="with"></param>
+            <param name="attribute"></param>
+            <param name="customMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Attribute(NExpect.Interfaces.IWith{System.Xml.Linq.XDocument},System.String,System.Func{System.String})">
+            <summary>
+            
+            </summary>
+            <param name="with"></param>
+            <param name="attribute"></param>
+            <param name="customMessageGenerator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Value(NExpect.Interfaces.IHaving{System.Xml.Linq.XDocument},System.String)">
+            <summary>
+            
+            </summary>
+            <param name="having"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Value(NExpect.Interfaces.IHaving{System.Xml.Linq.XDocument},System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="having"></param>
+            <param name="value"></param>
+            <param name="customMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Value(NExpect.Interfaces.IHaving{System.Xml.Linq.XDocument},System.String,System.Func{System.String})">
+            <summary>
+            
+            </summary>
+            <param name="having"></param>
+            <param name="value"></param>
+            <param name="customMessageGenerator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Value(NExpect.Interfaces.IHaving{System.Xml.Linq.XDocument},System.Text.RegularExpressions.Regex)">
+            <summary>
+            
+            </summary>
+            <param name="having"></param>
+            <param name="matching"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Value(NExpect.Interfaces.IHaving{System.Xml.Linq.XDocument},System.Text.RegularExpressions.Regex,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="having"></param>
+            <param name="matching"></param>
+            <param name="customMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Value(NExpect.Interfaces.IHaving{System.Xml.Linq.XDocument},System.Text.RegularExpressions.Regex,System.Func{System.String})">
+            <summary>
+            
+            </summary>
+            <param name="having"></param>
+            <param name="matching"></param>
+            <param name="customMessageGenerator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Text(NExpect.Interfaces.IWith{System.Xml.Linq.XDocument},System.String)">
+            <summary>
+            
+            </summary>
+            <param name="with"></param>
+            <param name="expectedText"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Text(NExpect.Interfaces.IWith{System.Xml.Linq.XDocument},System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="with"></param>
+            <param name="expectedText"></param>
+            <param name="customMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Text(NExpect.Interfaces.IWith{System.Xml.Linq.XDocument},System.String,System.Func{System.String})">
+            <summary>
+            
+            </summary>
+            <param name="with"></param>
+            <param name="expectedText"></param>
+            <param name="customMessageGenerator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Text(NExpect.Interfaces.IWith{System.Xml.Linq.XDocument},System.Text.RegularExpressions.Regex)">
+            <summary>
+            
+            </summary>
+            <param name="with"></param>
+            <param name="matcher"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Text(NExpect.Interfaces.IWith{System.Xml.Linq.XDocument},System.Text.RegularExpressions.Regex,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="with"></param>
+            <param name="matcher"></param>
+            <param name="customMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.XmlMatchers.Text(NExpect.Interfaces.IWith{System.Xml.Linq.XDocument},System.Text.RegularExpressions.Regex,System.Func{System.String})">
+            <summary>
+            
+            </summary>
+            <param name="with"></param>
+            <param name="matcher"></param>
+            <param name="customMessageGenerator"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

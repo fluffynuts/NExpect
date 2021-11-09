@@ -14,7 +14,8 @@ using NExpect.Interfaces;
 using NExpect.Shims;
 
 // ReSharper disable UnusedMember.Global
-[assembly:InternalsVisibleTo("NExpect.Matchers.NSubstitute")]
+[assembly: InternalsVisibleTo("NExpect.Matchers.NSubstitute")]
+[assembly: InternalsVisibleTo("NExpect.Matchers.Xml")]
 
 namespace NExpect
 {
@@ -26,7 +27,7 @@ namespace NExpect
     {
         internal const string METADATA_KEY = "__ExpectationContext__";
         internal const string KEY_COMPARER = "key-comparer";
-        
+
         /// <summary>
         /// Starts an expectation with a value. Usually used to
         /// check for equality or null.
@@ -71,7 +72,7 @@ namespace NExpect
         {
             return new Expectation<long>(value);
         }
-        
+
         /// <summary>
         /// Starts an expectation with integer value and up casts to long. Usually used to
         /// check for equality.

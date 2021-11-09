@@ -773,6 +773,17 @@
             <param name="newValue"></param>
             <typeparam name="T"></typeparam>
         </member>
+        <member name="M:Imported.PeanutButter.Utils.ObjectExtensions.TrySet``1(System.Object,System.String,``0)">
+            <summary>
+            attempts to set a property value on an object by path and value
+            - will not throw on error, but will return false instead
+            </summary>
+            <param name="src"></param>
+            <param name="propertyPath"></param>
+            <param name="newValue"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
         <member name="M:Imported.PeanutButter.Utils.ObjectExtensions.GetPropertyValue``1(System.Object,System.String)">
             <summary>
             Gets an immediate property value, cast to the specified type

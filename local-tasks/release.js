@@ -17,7 +17,8 @@ gulp.task("push", "pushes packages to nuget.org", () => {
   const packages = [
     findNupkg("NExpect"),
     findNupkg("NExpect.Matchers.NSubstitute"),
-    findNupkg("NExpect.Matchers.AspNetCore")
+    findNupkg("NExpect.Matchers.AspNetCore"),
+    findNupkg("NExpect.Matchers.Xml")
   ].flat();
   promises = packages.map(pushPackage);
   return Promise.all(promises);

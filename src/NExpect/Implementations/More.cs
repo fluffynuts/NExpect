@@ -45,6 +45,9 @@ namespace NExpect.Implementations
         /// <inheritdoc />
         public IFor<T> For => Next<For<T>>();
 
+        /// <inheritdoc />
+        public IHaving<T> Having => Next<Having<T>>();
+
         /// <summary>
         /// Construct a More&lt;T&gt;
         /// - provide the late-fetching func for the actual value

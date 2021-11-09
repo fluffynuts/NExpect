@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <DebugType>full</DebugType>
+    <LangVersion>preview</LangVersion>
+    <RootNamespace>NExpect</RootNamespace>
+    <DocumentationFile>NExpect.Matchers.Xml.xml</DocumentationFile>
+    <TargetFrameworks>netstandard2.0;net452</TargetFrameworks>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <Configurations>Debug;Release;BuildForRelease</Configurations>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageVersion>1.0.229</PackageVersion>
+    <Authors>Davyd McColl</Authors>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/fluffynuts/NExpect/master/src/NExpect/icon.png</PackageIconUrl>
+    <Copyright>Copyright 2019</Copyright>
+    <Description>
+      This library offers XML-specific assertions so you can, for instance:
+      ```
+      var doc = XDocument.Parse(someXml);
+      Expect(doc)
+        .To.Have.Element("//path/to/element")
+        .With.Attribute("some-attribute")
+        .Having.Value("expected-attribute-value");
+      ```
+    </Description>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <DefineConstants>NETSTANDARD</DefineConstants>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DefineConstants>BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NExpect\NExpect.csproj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icon.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
+  <Import Project="..\MonoForFramework.targets"/>
+</Project>

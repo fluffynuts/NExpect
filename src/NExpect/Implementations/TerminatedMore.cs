@@ -26,5 +26,6 @@ namespace NExpect.Implementations
         public IWhich<T> Which => throw Terminated;
         public IWithout<T> Without => throw Terminated;
         public IFor<T> For => throw Terminated;
+        public IHaving<T> Having => throw Terminated;
     }
 }
