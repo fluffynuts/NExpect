@@ -199,6 +199,98 @@ namespace NExpect
         }
 
         /// <summary>
+        /// Performs reference equality checking between actual and expected values
+        /// </summary>
+        /// <param name="be"></param>
+        /// <param name="expected"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Be<T>(
+            this ICollectionToAfterNot<T> be,
+            object expected
+        )
+        {
+            be.Be(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Performs reference equality checking between actual and expected values
+        /// </summary>
+        /// <param name="be"></param>
+        /// <param name="expected"></param>
+        /// <param name="customMessage"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Be<T>(
+            this ICollectionToAfterNot<T> be,
+            object expected,
+            string customMessage
+        )
+        {
+            be.Be(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs reference equality checking between actual and expected values
+        /// </summary>
+        /// <param name="be"></param>
+        /// <param name="expected"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Be<T>(
+            this ICollectionToAfterNot<T> be,
+            object expected,
+            Func<string> customMessageGenerator
+        )
+        {
+            be.AddMatcher(CreateCollectionRefEqualMatcherFor<T>(expected, customMessageGenerator));
+        }
+
+        /// <summary>
+        /// Performs reference equality checking between actual and expected values
+        /// </summary>
+        /// <param name="be"></param>
+        /// <param name="expected"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Be<T>(
+            this ICollectionNotAfterTo<T> be,
+            object expected
+        )
+        {
+            be.Be(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Performs reference equality checking between actual and expected values
+        /// </summary>
+        /// <param name="be"></param>
+        /// <param name="expected"></param>
+        /// <param name="customMessage"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Be<T>(
+            this ICollectionNotAfterTo<T> be,
+            object expected,
+            string customMessage
+        )
+        {
+            be.Be(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Performs reference equality checking between actual and expected values
+        /// </summary>
+        /// <param name="be"></param>
+        /// <param name="expected"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <typeparam name="T"></typeparam>
+        public static void Be<T>(
+            this ICollectionNotAfterTo<T> be,
+            object expected,
+            Func<string> customMessageGenerator
+        )
+        {
+            be.AddMatcher(CreateCollectionRefEqualMatcherFor<T>(expected, customMessageGenerator));
+        }
+
+        /// <summary>
         /// Performs equality checking -- the end of .To.Equal()
         /// </summary>
         /// <param name="continuation">Continuation to operate on</param>

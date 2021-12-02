@@ -352,7 +352,7 @@ namespace NExpect.Tests.ObjectEquality
                         );
                         // Assert
                         var beforeDiagnostics = ex.Message.IndexOf(
-                            "Property value mismatch", 
+                            "Property value mismatch",
                             StringComparison.InvariantCulture
                         );
                         if (beforeDiagnostics == -1)
@@ -362,7 +362,7 @@ namespace NExpect.Tests.ObjectEquality
                         }
 
                         var testMessage = ex.Message.Substring(0, beforeDiagnostics).Trim();
-                        
+
                         var parts = testMessage.Split('\n');
                         Expect(parts).To.Contain.Exactly(8).Items();
                     }
@@ -424,8 +424,8 @@ namespace NExpect.Tests.ObjectEquality
                     public void WhenNoPropertiesInCommon_ShouldThrow()
                     {
                         // Arrange
-                        var left = new {moo = "cow"};
-                        var right = new {cow = "cake"};
+                        var left = new { moo = "cow" };
+                        var right = new { cow = "cake" };
                         // Pre-Assert
                         // Act
                         Assert.That(
@@ -495,8 +495,8 @@ namespace NExpect.Tests.ObjectEquality
                     public void WithCustomEqualityComparer()
                     {
                         // Arrange
-                        var left = new {Date = DateTime.Now};
-                        var right = new {Date = DateTime.Now.AddSeconds(-1)};
+                        var left = new { Date = DateTime.Now };
+                        var right = new { Date = DateTime.Now.AddSeconds(-1) };
                         // Pre-assert
                         // Act
                         Assert.That(
@@ -607,8 +607,8 @@ namespace NExpect.Tests.ObjectEquality
                     public void WithCustomEqualityComparer()
                     {
                         // Arrange
-                        var left = new {Date = DateTime.Now};
-                        var right = new {Date = DateTime.Now.AddSeconds(-1)};
+                        var left = new { Date = DateTime.Now };
+                        var right = new { Date = DateTime.Now.AddSeconds(-1) };
                         // Pre-assert
                         // Act
                         Assert.That(
@@ -630,8 +630,8 @@ namespace NExpect.Tests.ObjectEquality
                     public void DeepEqualityTestingBetweenShorts_ShouldNotFailWhenTheyAreEqual()
                     {
                         // Arrange
-                        var left = new {x = (short) 1};
-                        var right = new {x = (short) 1};
+                        var left = new { x = (short)1 };
+                        var right = new { x = (short)1 };
                         // Pre-Assert
                         // Act
                         Assert.That(
@@ -647,8 +647,8 @@ namespace NExpect.Tests.ObjectEquality
                     public void IntersectionEqualityTestingBetweenShortAndIntProperty_ShouldNotFailWhenTheyAreEqual()
                     {
                         // Arrange
-                        var left = new {x = short.MaxValue};
-                        var right = new {x = (int) short.MaxValue};
+                        var left = new { x = short.MaxValue };
+                        var right = new { x = (int)short.MaxValue };
                         // Pre-Assert
                         // Act
                         Assert.That(
@@ -931,12 +931,12 @@ namespace NExpect.Tests.ObjectEquality
 
         private static float GetRandomFloat(float min, float max)
         {
-            return (float) GetRandomDouble(min, max);
+            return (float)GetRandomDouble(min, max);
         }
 
         private static long GetRandomLong(long min, long max)
         {
-            return GetRandomInt((int) min, (int) max);
+            return GetRandomInt((int)min, (int)max);
         }
 
         [TestFixture]
@@ -1086,6 +1086,7 @@ namespace NExpect.Tests.ObjectEquality
                             // Assert
                         }
                     }
+
                     [TestFixture]
                     public class LongsToDecimals
                     {
@@ -1124,8 +1125,8 @@ namespace NExpect.Tests.ObjectEquality
                                     .With.Message.Contains("greater than or equal to"));
                             // Assert
                         }
-                    }                   
-                    
+                    }
+
                     [TestFixture]
                     public class NullableLongsToDecimals
                     {
@@ -1164,8 +1165,8 @@ namespace NExpect.Tests.ObjectEquality
                                     .With.Message.Contains("greater than or equal to"));
                             // Assert
                         }
-                    }                   
-                    
+                    }
+
                     [TestFixture]
                     public class LongsToDoubles
                     {
@@ -1204,8 +1205,8 @@ namespace NExpect.Tests.ObjectEquality
                                     .With.Message.Contains("greater than or equal to"));
                             // Assert
                         }
-                    }                   
-                    
+                    }
+
                     [TestFixture]
                     public class NullableLongsToDoubles
                     {
@@ -1244,8 +1245,8 @@ namespace NExpect.Tests.ObjectEquality
                                     .With.Message.Contains("greater than or equal to"));
                             // Assert
                         }
-                    }                   
-                    
+                    }
+
                     [TestFixture]
                     public class DecimalsToDecimals
                     {
@@ -1284,8 +1285,8 @@ namespace NExpect.Tests.ObjectEquality
                                     .With.Message.Contains("greater than or equal to"));
                             // Assert
                         }
-                    }                    
-                                        
+                    }
+
                     [TestFixture]
                     public class NullableDecimalsToDecimals
                     {
@@ -1324,8 +1325,8 @@ namespace NExpect.Tests.ObjectEquality
                                     .With.Message.Contains("greater than or equal to"));
                             // Assert
                         }
-                    }                    
-                    
+                    }
+
                     [TestFixture]
                     public class DoublesToDecimals
                     {
@@ -1365,7 +1366,7 @@ namespace NExpect.Tests.ObjectEquality
                             // Assert
                         }
                     }
-                    
+
                     [TestFixture]
                     public class NullableDoublesToDecimals
                     {
@@ -1405,7 +1406,7 @@ namespace NExpect.Tests.ObjectEquality
                             // Assert
                         }
                     }
-                    
+
                     [TestFixture]
                     public class DateTimes
                     {
@@ -1459,7 +1460,7 @@ namespace NExpect.Tests.ObjectEquality
                             // Assert
                         }
                     }
-                    
+
                     [TestFixture]
                     public class NullableDateTimes
                     {
@@ -1495,7 +1496,7 @@ namespace NExpect.Tests.ObjectEquality
                                 Throws.Exception.InstanceOf<UnmetExpectationException>()
                                     .With.Message.Contains("greater than or equal to"));
                             Assert.That(
-                                () => 
+                                () =>
                                 {
                                     Expect(null as DateTime?).To.Be.Greater.Than.Or.Equal.To(range.To);
                                 },
@@ -1592,7 +1593,7 @@ namespace NExpect.Tests.ObjectEquality
                             // Assert
                         }
                     }
-                    
+
                     [TestFixture]
                     public class DecimalsToDecimals
                     {
@@ -1632,7 +1633,7 @@ namespace NExpect.Tests.ObjectEquality
                             // Assert
                         }
                     }
-                    
+
                     [TestFixture]
                     public class DoublesToDecimals
                     {
@@ -1672,7 +1673,7 @@ namespace NExpect.Tests.ObjectEquality
                             // Assert
                         }
                     }
-                    
+
                     [TestFixture]
                     public class LongsToDoubles
                     {
@@ -1977,107 +1978,145 @@ namespace NExpect.Tests.ObjectEquality
                 }
             }
 
-            [Test]
-            public void Be_WhenHaveSameRef_ShouldNotThrow()
+            [TestFixture]
+            public class OperatingOnObject
             {
-                // Arrange
-                var instance = new Coordinate(2, 3);
-                // Pre-Assert
-                // Act
-                Assert.That(
-                    () =>
-                    {
-                        Expect(instance).To.Be(instance);
-                    },
-                    Throws.Nothing);
-                // Assert
+                [Test]
+                public void Be_WhenHaveSameRef_ShouldNotThrow()
+                {
+                    // Arrange
+                    var instance = new Coordinate(2, 3);
+                    var otherInstance = new Coordinate(2, 3);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(instance).To.Be(instance);
+                        },
+                        Throws.Nothing);
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(instance)
+                                .Not.To.Be(otherInstance);
+                        }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void Be_WhenHaveDifferentRefButAreEqual_ShouldThrow()
+                {
+                    // Arrange
+                    var instance = new Coordinate(2, 3);
+                    var other = new Coordinate(2, 3);
+                    // Pre-Assert
+                    Assert.That(instance, Is.EqualTo(other));
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(instance).To.Be(other);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.EqualTo($"Expected {instance} to be the same reference as {other}"));
+                    // Assert
+                }
+
+                [Test]
+                public void Be_Negated_WhenHaveSameRef_ShouldThrow()
+                {
+                    // Arrange
+                    var instance = new Coordinate(2, 3);
+                    // Pre-Assert
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(instance).Not.To.Be(instance);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.EqualTo($"Expected {instance} not to be the same reference as {instance}"));
+                    // Assert
+                }
+
+                [Test]
+                public void Be_Negated_WhenHaveDifferentRefButAreEqual_ShouldNotThrow()
+                {
+                    // Arrange
+                    var instance = new Coordinate(2, 3);
+                    var other = new Coordinate(2, 3);
+                    // Pre-Assert
+                    Assert.That(instance, Is.EqualTo(other));
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(instance).Not.To.Be(other);
+                        },
+                        Throws.Nothing);
+                    // Assert
+                }
             }
 
-            [Test]
-            public void Be_WhenHaveDifferentRefButAreEqual_ShouldThrow()
+            [TestFixture]
+            public class OperatingOnCollection
             {
-                // Arrange
-                var instance = new Coordinate(2, 3);
-                var other = new Coordinate(2, 3);
-                // Pre-Assert
-                Assert.That(instance, Is.EqualTo(other));
-                // Act
-                Assert.That(
-                    () =>
-                    {
-                        Expect(instance).To.Be(other);
-                    },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.EqualTo($"Expected {instance} to be the same reference as {other}"));
-                // Assert
-            }
+                [Test]
+                public void Be_ActingOnCollection_WhenRefEqual_ShouldNotThrow()
+                {
+                    // Arrange
+                    var collection = new List<int>();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(collection).To.Be(collection);
+                        },
+                        Throws.Nothing);
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(collection)
+                                .Not.To.Be(collection);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(collection)
+                                .To.Not.Be(collection);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    // Assert
+                }
 
-            [Test]
-            public void Be_Negated_WhenHaveSameRef_ShouldThrow()
-            {
-                // Arrange
-                var instance = new Coordinate(2, 3);
-                // Pre-Assert
-                // Act
-                Assert.That(
-                    () =>
-                    {
-                        Expect(instance).Not.To.Be(instance);
-                    },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.EqualTo($"Expected {instance} not to be the same reference as {instance}"));
-                // Assert
-            }
-
-            [Test]
-            public void Be_Negated_WhenHaveDifferentRefButAreEqual_ShouldNotThrow()
-            {
-                // Arrange
-                var instance = new Coordinate(2, 3);
-                var other = new Coordinate(2, 3);
-                // Pre-Assert
-                Assert.That(instance, Is.EqualTo(other));
-                // Act
-                Assert.That(
-                    () =>
-                    {
-                        Expect(instance).Not.To.Be(other);
-                    },
-                    Throws.Nothing);
-                // Assert
-            }
-
-            [Test]
-            public void Be_ActingOnCollection_WhenRefEqual_ShouldNotThrow()
-            {
-                // Arrange
-                var collection = new List<int>();
-                // Pre-Assert
-                // Act
-                Assert.That(
-                    () =>
-                    {
-                        Expect(collection).To.Be(collection);
-                    },
-                    Throws.Nothing);
-                // Assert
-            }
-
-            [Test]
-            public void Be_ActingOnCollection_WhenNotRefEqual_ShouldThrow()
-            {
-                // Arrange
-                var collection = new List<int>();
-                var other = new List<int>();
-                // Pre-Assert
-                // Act
-                Assert.That(
-                    () =>
-                    {
-                        Expect(collection).To.Be(other);
-                    },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>());
-                // Assert
+                [Test]
+                public void Be_ActingOnCollection_WhenNotRefEqual_ShouldThrow()
+                {
+                    // Arrange
+                    var collection = new List<int>();
+                    var other = new List<int>();
+                    // Pre-Assert
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(collection)
+                                .To.Be(other);
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(collection)
+                                .Not.To.Be(other);
+                        },
+                        Throws.Nothing
+                    );
+                    // Assert
+                }
             }
         }
 
