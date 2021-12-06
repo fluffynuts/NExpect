@@ -20,7 +20,7 @@ An assertions framework for .NET with a BDD-like feel, inspired by Chai and Jasm
 ## Usage
 1. Download from [nuget.org](https://nuget.org): `install-package nexpect`
 2. Import Expectations statically:
-```
+```csharp
 using static NExpect.Expectations;
 ```
 3. `Expect` inside your tests, with fluent syntax:
