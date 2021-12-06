@@ -9,7 +9,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
-    <PackageVersion>1.0.238</PackageVersion>
+    <PackageVersion>1.0.239</PackageVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
@@ -39,7 +39,7 @@
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ArrayExtensions.cs" Link="Imported\ArrayExtensions.cs"/>

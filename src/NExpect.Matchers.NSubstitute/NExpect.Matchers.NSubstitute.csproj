@@ -13,7 +13,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>1.0.238</PackageVersion>
+    <PackageVersion>1.0.239</PackageVersion>
     <Authors>Davyd McColl</Authors>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
@@ -43,19 +43,19 @@
     <DefineConstants>BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="README.md" Pack="true" PackagePath="\" />
+    <None Include="README.md" Pack="true" PackagePath="\"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NExpect\NExpect.csproj" />
+    <ProjectReference Include="..\NExpect\NExpect.csproj"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NSubstitute" Version="4.2.2" />
+    <PackageReference Include="NSubstitute" Version="4.2.2"/>
   </ItemGroup>
   <ItemGroup>
-    <None Include="icon.png" Pack="true" PackagePath="" />
+    <None Include="icon.png" Pack="true" PackagePath=""/>
   </ItemGroup>
-  <Import Project="..\MonoForFramework.targets" />
+  <Import Project="..\MonoForFramework.targets"/>
 </Project>
