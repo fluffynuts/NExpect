@@ -481,7 +481,7 @@ namespace NExpect.Tests.Types
                     }
                 }
             }
-            
+
             [TestFixture]
             public class InheritGeneric
             {
@@ -523,7 +523,7 @@ namespace NExpect.Tests.Types
                 {
                 }
 
-                public class SomeDerivedClass: SomeAbstractParent<SomeT1, SomeT2, SomeT3>
+                public class SomeDerivedClass : SomeAbstractParent<SomeT1, SomeT2, SomeT3>
                 {
                 }
 
@@ -539,7 +539,6 @@ namespace NExpect.Tests.Types
                     }, Throws.Nothing);
                     // Assert
                 }
-                
             }
 
             [TestFixture]
@@ -567,19 +566,19 @@ namespace NExpect.Tests.Types
                                     Expect(sut).Not.To.Be.An.Instance.Of<TestClass>();
                                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                                     .With.Message.Contains("to not be an instance of"));
-                                
+
                                 Assert.That(() =>
                                 {
                                     Expect(sut).Not.To.Be.An.Instance.Of<TestClass>(customMessage);
                                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                                     .With.Message.Contains(customMessage));
-                                
+
                                 Assert.That(() =>
                                 {
                                     Expect(sut).Not.To.Be.An.Instance.Of<TestClass>(() => customMessage);
                                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                                     .With.Message.Contains("to not be an instance of"));
-                                
+
                                 Assert.That(() =>
                                 {
                                     Expect(sut).Not.To.Be.An.Instance.Of(typeof(TestClass));
@@ -591,7 +590,7 @@ namespace NExpect.Tests.Types
                                     Expect(sut).Not.To.Be.An.Instance.Of(typeof(TestClass), customMessage);
                                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                                     .With.Message.Contains(customMessage));
-                                
+
                                 Assert.That(() =>
                                 {
                                     Expect(sut).Not.To.Be.An.Instance.Of(typeof(TestClass), () => customMessage);
@@ -600,6 +599,48 @@ namespace NExpect.Tests.Types
 
 
                                 // Assert
+                            }
+
+                            [TestFixture]
+                            public class AlternativeTypeValidationSyntax
+                            {
+                                [Test]
+                                public void ShouldBeAbleToAssertAnObjectHasAType()
+                                {
+                                    // Arrange
+                                    var obj = new TestClass();
+                                    // Act
+                                    Assert.That(
+                                        () => Expect(obj)
+                                            .To.Have.Type(typeof(TestClass)),
+                                        Throws.Nothing
+                                    );
+                                    Assert.That(
+                                        () => Expect(obj).To.Have.Type(typeof(AlternativeTypeValidationSyntax)),
+                                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    );
+                                    Assert.That(
+                                        () => Expect(obj)
+                                            .Not.To.Have.Type(typeof(TestClass)),
+                                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    );
+                                    Assert.That(
+                                        () => Expect(obj)
+                                            .To.Not.Have.Type(typeof(TestClass)),
+                                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    );
+                                    Assert.That(
+                                        () => Expect(obj)
+                                            .Not.To.Have.Type(typeof(AlternativeTypeValidationSyntax)),
+                                        Throws.Nothing
+                                    );
+                                    Assert.That(
+                                        () => Expect(obj)
+                                            .To.Not.Have.Type(typeof(AlternativeTypeValidationSyntax)),
+                                        Throws.Nothing
+                                    );
+                                    // Assert
+                                }
                             }
 
                             [Test]
@@ -613,7 +654,7 @@ namespace NExpect.Tests.Types
                                 {
                                     Expect(sut).To.Be.An.Instance.Of<TestClass>();
                                 }, Throws.Nothing);
-                                
+
                                 Assert.That(() =>
                                 {
                                     Expect(sut).To.Be.An.Instance.Of(typeof(TestClass));

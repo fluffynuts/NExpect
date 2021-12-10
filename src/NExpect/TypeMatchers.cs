@@ -19,6 +19,88 @@ namespace NExpect
     public static class TypeMatchers
     {
         /// <summary>
+        /// Assert that the provided object has the expected type
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="expected"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<T> Type<T>(
+            this IHave<T> have,
+            Type expected
+        )
+        {
+            return have.Type(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Assert that the provided object has the expected type
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="expected"></param>
+        /// <param name="customMessage">Custom message to add to failure messages</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<T> Type<T>(
+            this IHave<T> have,
+            Type expected,
+            string customMessage
+        )
+        {
+            return have.Type(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Assert that the provided object has the expected type
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="expected"></param>
+        /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<T> Type<T>(
+            this IHave<T> have,
+            Type expected,
+            Func<string> customMessageGenerator
+        )
+        {
+            return have.AddMatcher(actual =>
+            {
+                if (actual is null)
+                {
+                    return new EnforcedMatcherResult(
+                        false,
+                        FinalMessageFor(
+                            () => "actual is null",
+                            customMessageGenerator
+                        )
+                    );
+                }
+
+                if (expected is null)
+                {
+                    return new EnforcedMatcherResult(
+                        false,
+                        FinalMessageFor(
+                            () => "expected type is null",
+                            customMessageGenerator
+                        )
+                    );
+                }
+
+                var actualType = actual.GetType();
+                var pass = actualType == expected;
+                return new MatcherResult(
+                    pass,
+                    FinalMessageFor(
+                        () => $"Expected {actual} [ {actualType} ] {pass.AsNot()}to have type {expected}",
+                        customMessageGenerator
+                    )
+                );
+            });
+        }
+
+        /// <summary>
         /// Tests if actual is an instance of TExpected
         /// </summary>
         /// <param name="instance">Instance to operate on</param>
@@ -763,10 +845,10 @@ namespace NExpect
             {
                 return false;
             }
-            
+
             return left.Equals(right);
         }
-        
+
         // TODO: figure out a single source of truth: this produces
         // slightly different results from PB's PrettyName, sprecifically,
         // it includes namespacing
@@ -788,13 +870,13 @@ namespace NExpect
                 var typeFyllName = type.FullName ?? string.Empty;
                 var baseName = typeFyllName.Substring(0, typeFyllName.IndexOf("`", StringComparison.Ordinal));
                 var parts = baseName.Split('.');
-                return parts.Last() + "<" + string.Join(", ", type.GetGenericArguments().Select(FullyQualifiedPrettyName)) + ">";
+                return parts.Last() + "<" +
+                    string.Join(", ", type.GetGenericArguments().Select(FullyQualifiedPrettyName)) + ">";
             }
             else
             {
                 return type.FullName;
             }
         }
-
     }
 }
