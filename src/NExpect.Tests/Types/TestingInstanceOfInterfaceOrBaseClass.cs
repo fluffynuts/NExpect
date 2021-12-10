@@ -643,6 +643,29 @@ namespace NExpect.Tests.Types
                                 }
                             }
 
+                            [TestFixture]
+                            public class AnotherAlternative
+                            {
+                                [Test]
+                                public void ShouldBeAbleToAssertAnObjectIsType()
+                                {
+                                    // Arrange
+                                    var obj = new TestClass();
+                                    // Act
+                                    Assert.That(
+                                        () => Expect(obj)
+                                            .To.Be.A<TestClass>(),
+                                        Throws.Nothing
+                                    );
+                                    Assert.That(
+                                        () => Expect(obj)
+                                            .Not.To.Be.A<TestClass>(),
+                                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    );
+                                    // Assert
+                                }
+                            }
+
                             [Test]
                             public void WhenIsInstance_ShouldNotThrow()
                             {
