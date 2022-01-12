@@ -23,6 +23,8 @@ namespace NExpect.Implementations.Fluency
         public IFor<T> For => Next<For<T>>();
         public IDeep<T> Deep => Next<Deep<T>>();
         public IIntersection<T> Intersection => Next<Intersection<T>>();
+        public IOn<T> On => Next<On<T>>();
+        public IIn<T> In => Next<In<T>>();
 
         public void SetActual(T actual)
         {

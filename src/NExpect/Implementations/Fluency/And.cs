@@ -18,6 +18,8 @@ namespace NExpect.Implementations.Fluency
         public ITo<T> To => Next<To<T>>();
         public IIs<T> Is => Next<Is<T>>();
         public IHas<T> Has => Next<Has<T>>();
+        public IIn<T> In => Next<In<T>>();
+        public IOn<T> On => Next<On<T>>();
 
         public And(Func<T> actualFetcher) : base(actualFetcher)
         {

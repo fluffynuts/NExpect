@@ -1,10 +1,7 @@
 using NUnit.Framework;
-using static PeanutButter.RandomGenerators.RandomValueGen;
-using NExpect;
 using NExpect.Exceptions;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
-using PeanutButter.Utils;
 using static NExpect.Expectations;
 
 namespace NExpect.Tests.DanglingPrepositions

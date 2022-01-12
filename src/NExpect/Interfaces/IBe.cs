@@ -57,5 +57,15 @@ namespace NExpect.Interfaces
         /// Starts intersection equality testing on the extracted property
         /// </summary>
         IIntersection<T> Intersection { get; }
+
+        /// <summary>
+        /// Provides the .Be.On grammar
+        /// </summary>
+        IOn<T> On { get; }
+
+        /// <summary>
+        /// Provides the .Be.In grammar
+        /// </summary>
+        IIn<T> In { get; }
     }
 }

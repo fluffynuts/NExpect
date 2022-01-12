@@ -42,5 +42,16 @@ namespace NExpect.Interfaces
         /// Provides the .And.Has extension point
         /// </summary>
         IHas<T> Has { get; }
+
+        /// <summary>
+        /// Provides the .And.In grammar extension
+        /// </summary>
+        IIn<T> In { get; }
+
+        /// <summary>
+        /// Provides the .And.On grammar extension
+        /// </summary>
+        IOn<T> On { get; }
+
     }
 }

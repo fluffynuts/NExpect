@@ -48,6 +48,12 @@ namespace NExpect.Implementations
         /// <inheritdoc />
         public IHaving<T> Having => Next<Having<T>>();
 
+        /// <inheritdoc />
+        public IOn<T> On => Next<On<T>>();
+
+        /// <inheritdoc />
+        public IIn<T> In => Next<In<T>>();
+
         /// <summary>
         /// Construct a More&lt;T&gt;
         /// - provide the late-fetching func for the actual value
