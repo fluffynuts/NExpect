@@ -1,8 +1,6 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using NUnit.Framework;
 using static PeanutButter.RandomGenerators.RandomValueGen;
-using NExpect;
 using NExpect.Exceptions;
 using PeanutButter.Utils;
 using static NExpect.Expectations;
@@ -164,6 +162,40 @@ public class TestActionResultMatchers
                 .With.Message.Contains("Property value mismatch"));
             // Assert
         }
+
+        [Test]
+        public void ShouldBeAbleToAssertNoModel()
+        {
+            // Arrange
+            var noModel = new ViewResult()
+            {
+                ViewName = "no-model"
+            } as ActionResult;
+            var hasModel = new ViewResult()
+            {
+                ViewName = "has-model",
+                ViewData = new ViewDataDictionary()
+                {
+                    Model = new object()
+                }
+            } as ActionResult;
+            // Act
+            Assert.That(() =>
+            {
+                Expect(noModel)
+                    .To.Be.A.View()
+                    .With.Name("no-model")
+                    .And.Without.Model();
+            }, Throws.Nothing);
+            Assert.That(() =>
+            {
+                Expect(hasModel)
+                    .To.Be.A.View()
+                    .With.Name("has-model")
+                    .And.Without.Model();
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            // Assert
+        }
     }
 
     public class Model
@@ -220,7 +252,7 @@ public class TestActionResultMatchers
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
         }
-        
+
         [Test]
         public void ShouldMatchModelWithMatcher()
         {
@@ -254,7 +286,7 @@ public class TestActionResultMatchers
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
         }
-        
+
         [Test]
         public void ShouldMatchModelWithTypedMatcher()
         {
@@ -288,7 +320,7 @@ public class TestActionResultMatchers
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
         }
-        
+
         [Test]
         public void ShouldPerformDeepEqualityTestingOnProvidedModel()
         {
@@ -323,8 +355,42 @@ public class TestActionResultMatchers
                 .With.Message.Contains("Property value mismatch"));
             // Assert
         }
+        
+        [Test]
+        public void ShouldBeAbleToAssertNoModel()
+        {
+            // Arrange
+            var noModel = new PartialViewResult()
+            {
+                ViewName = "no-model"
+            } as ActionResult;
+            var hasModel = new PartialViewResult()
+            {
+                ViewName = "has-model",
+                ViewData = new ViewDataDictionary()
+                {
+                    Model = new object()
+                }
+            } as ActionResult;
+            // Act
+            Assert.That(() =>
+            {
+                Expect(noModel)
+                    .To.Be.A.PartialView()
+                    .With.Name("no-model")
+                    .And.Without.Model();
+            }, Throws.Nothing);
+            Assert.That(() =>
+            {
+                Expect(hasModel)
+                    .To.Be.A.PartialView()
+                    .With.Name("has-model")
+                    .And.Without.Model();
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            // Assert
+        }
     }
 
-    // TODO: add redirect result matchers (current use-case has to incorporate
-    // t4mvc crap, which doesn't belong in NExpect)
+// TODO: add redirect result matchers (current use-case has to incorporate
+// t4mvc crap, which doesn't belong in NExpect)
 }

@@ -439,6 +439,52 @@
             <param name="customMessageGenerator"></param>
             <returns></returns>
         </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IWithout{System.Web.Mvc.ViewResult})">
+            <summary>
+            Asserts that the view result has a null model
+            </summary>
+            <param name="without"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IWithout{System.Web.Mvc.ViewResult},System.String)">
+            <summary>
+            Asserts that the view result has a null model
+            </summary>
+            <param name="without"></param>
+            <param name="customMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IWithout{System.Web.Mvc.ViewResult},System.Func{System.String})">
+            <summary>
+            Asserts that the view result has a null model
+            </summary>
+            <param name="without"></param>
+            <param name="customMessageGenerator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IWithout{System.Web.Mvc.PartialViewResult})">
+            <summary>
+            Asserts that the view result has a null model
+            </summary>
+            <param name="without"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IWithout{System.Web.Mvc.PartialViewResult},System.String)">
+            <summary>
+            Asserts that the view result has a null model
+            </summary>
+            <param name="without"></param>
+            <param name="customMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IWithout{System.Web.Mvc.PartialViewResult},System.Func{System.String})">
+            <summary>
+            Asserts that the view result has a null model
+            </summary>
+            <param name="without"></param>
+            <param name="customMessageGenerator"></param>
+            <returns></returns>
+        </member>
         <member name="T:NExpect.ViewResultNameMatchers">
             <summary>
             Provides matchers for fluently asserting view names on action results which are

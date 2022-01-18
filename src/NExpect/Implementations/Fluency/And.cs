@@ -20,6 +20,8 @@ namespace NExpect.Implementations.Fluency
         public IHas<T> Has => Next<Has<T>>();
         public IIn<T> In => Next<In<T>>();
         public IOn<T> On => Next<On<T>>();
+        public IWith<T> With => Next<With<T>>();
+        public IWithout<T> Without => Next<Without<T>>();
 
         public And(Func<T> actualFetcher) : base(actualFetcher)
         {

@@ -53,5 +53,15 @@ namespace NExpect.Interfaces
         /// </summary>
         IOn<T> On { get; }
 
+        /// <summary>
+        /// Provides the .And.With grammar extension
+        /// </summary>
+        IWith<T> With { get; }
+
+        /// <summary>
+        /// Provides the .And.Without grammar extension
+        /// </summary>
+        IWithout<T> Without { get; }
+
     }
 }

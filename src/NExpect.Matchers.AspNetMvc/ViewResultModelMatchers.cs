@@ -316,7 +316,7 @@ public static class ViewResultModelMatchers
         }
 
         throw new Exception(
-            $"Expected\n{o.Stringify()}\nto deep equal\n{expected.Stringify()}\n{string.Join("\n", tester.Errors)}"
+            $"Expected\n{o.Stringify()}\n{false.AsNot()}to deep equal\n{expected.Stringify()}\n{string.Join("\n", tester.Errors)}"
         );
     }
 
@@ -357,9 +357,119 @@ public static class ViewResultModelMatchers
             passed,
             FinalMessageFor(
                 () =>
-                    $"Expected to match model on {resultType} result{(exceptionMessage is null ? null : $"\n{exceptionMessage}")}",
+                    $"Expected {passed.AsNot()}to match model on {resultType} result{(exceptionMessage is null ? null : $"\n{exceptionMessage}")}",
                 customMessageGenerator
             )
         );
+    }
+
+    /// <summary>
+    /// Asserts that the view result has a null model
+    /// </summary>
+    /// <param name="without"></param>
+    /// <returns></returns>
+    public static IMore<ViewResult> Model(
+        this IWithout<ViewResult> without
+    )
+    {
+        return without.Model(NULL_STRING);
+    }
+
+    /// <summary>
+    /// Asserts that the view result has a null model
+    /// </summary>
+    /// <param name="without"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<ViewResult> Model(
+        this IWithout<ViewResult> without,
+        string customMessage
+    )
+    {
+        return without.Model(() => customMessage);
+    }
+
+    /// <summary>
+    /// Asserts that the view result has a null model
+    /// </summary>
+    /// <param name="without"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<ViewResult> Model(
+        this IWithout<ViewResult> without,
+        Func<string> customMessageGenerator
+    )
+    {
+        return without.AddMatcher(actual =>
+        {
+            if (actual is null)
+            {
+                return new EnforcedMatcherResult(false, "view result is null");
+            }
+
+            var passed = actual.Model is null;
+            return new MatcherResult(
+                passed,
+                FinalMessageFor(
+                    () => $"Expected {passed.AsNot()}to find a null model on the view result",
+                    customMessageGenerator
+                )
+            );
+        });
+    }
+
+    /// <summary>
+    /// Asserts that the view result has a null model
+    /// </summary>
+    /// <param name="without"></param>
+    /// <returns></returns>
+    public static IMore<PartialViewResult> Model(
+        this IWithout<PartialViewResult> without
+    )
+    {
+        return without.Model(NULL_STRING);
+    }
+
+    /// <summary>
+    /// Asserts that the view result has a null model
+    /// </summary>
+    /// <param name="without"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<PartialViewResult> Model(
+        this IWithout<PartialViewResult> without,
+        string customMessage
+    )
+    {
+        return without.Model(() => customMessage);
+    }
+
+    /// <summary>
+    /// Asserts that the view result has a null model
+    /// </summary>
+    /// <param name="without"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<PartialViewResult> Model(
+        this IWithout<PartialViewResult> without,
+        Func<string> customMessageGenerator
+    )
+    {
+        return without.AddMatcher(actual =>
+        {
+            if (actual is null)
+            {
+                return new EnforcedMatcherResult(false, "view result is null");
+            }
+
+            var passed = actual.Model is null;
+            return new MatcherResult(
+                passed,
+                FinalMessageFor(
+                    () => $"Expected {passed.AsNot()}to find a null model on the view result",
+                    customMessageGenerator
+                )
+            );
+        });
     }
 }
