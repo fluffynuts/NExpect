@@ -208,7 +208,9 @@ namespace NExpect.MatcherLogic
                 throw new InvalidOperationException($"{continuation} does not implement IExpectationContext<T>");
             }
 
-            return asContext.RunMatcher(matcher);
+            return asContext.RunMatcher(matcher) ?? throw new InvalidOperationException(
+                "Unable to run matcher - null result returned"
+            );
         }
     }
 }

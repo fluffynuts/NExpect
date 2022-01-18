@@ -240,6 +240,242 @@
             <param name="customMessageGenerator"></param>
             <returns></returns>
         </member>
+        <member name="T:NExpect.PartialViewResultNameMatchers">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:NExpect.PartialViewResultNameMatchers.PartialView(NExpect.Interfaces.IA{System.Web.Mvc.ActionResult})">
+            <summary>
+            Asserts that the action result is a partial view result
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.PartialViewResultNameMatchers.Name(NExpect.Interfaces.IWith{System.Web.Mvc.PartialViewResult},System.String)">
+            <summary>
+            Asserts that the partial view result has the expected view name
+            </summary>
+            <param name="with"></param>
+            <param name="expected"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.PartialViewResultNameMatchers.Name(NExpect.Interfaces.IWith{System.Web.Mvc.PartialViewResult},System.String,System.String)">
+            <summary>
+            Asserts that the partial view result has the expected view name
+            </summary>
+            <param name="with"></param>
+            <param name="expected"></param>
+            <param name="customMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.PartialViewResultNameMatchers.Name(NExpect.Interfaces.IWith{System.Web.Mvc.PartialViewResult},System.String,System.Func{System.String})">
+            <summary>
+            Asserts that the partial view result has the expected view name
+            </summary>
+            <param name="with"></param>
+            <param name="expected"></param>
+            <param name="customMessageGenerator"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NExpect.ViewResultModelMatchers">
+            <summary>
+            Provides model matchers for view result continuations
+            </summary>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model``1(NExpect.Interfaces.IAnd{System.Web.Mvc.ViewResult},System.Func{``0,System.Boolean})">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="matcher"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model``1(NExpect.Interfaces.IAnd{System.Web.Mvc.ViewResult},System.Func{``0,System.Boolean},System.String)">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="matcher"></param>
+            <param name="customMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model``1(NExpect.Interfaces.IAnd{System.Web.Mvc.ViewResult},System.Func{``0,System.Boolean},System.Func{System.String})">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="matcher"></param>
+            <param name="customMessageGenerator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IAnd{System.Web.Mvc.ViewResult},System.Func{System.Object,System.Boolean})">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="matcher"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IAnd{System.Web.Mvc.ViewResult},System.Func{System.Object,System.Boolean},System.String)">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="matcher"></param>
+            <param name="customMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IAnd{System.Web.Mvc.ViewResult},System.Func{System.Object,System.Boolean},System.Func{System.String})">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="matcher"></param>
+            <param name="customMessageGenerator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IAnd{System.Web.Mvc.ViewResult},System.Object)">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="expected"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IAnd{System.Web.Mvc.ViewResult},System.Object,System.String)">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="expected"></param>
+            <param name="customMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IAnd{System.Web.Mvc.ViewResult},System.Object,System.Func{System.String})">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="expected"></param>
+            <param name="customMessageGenerator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model``1(NExpect.Interfaces.IAnd{System.Web.Mvc.PartialViewResult},System.Func{``0,System.Boolean})">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="matcher"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model``1(NExpect.Interfaces.IAnd{System.Web.Mvc.PartialViewResult},System.Func{``0,System.Boolean},System.String)">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="matcher"></param>
+            <param name="customMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model``1(NExpect.Interfaces.IAnd{System.Web.Mvc.PartialViewResult},System.Func{``0,System.Boolean},System.Func{System.String})">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="matcher"></param>
+            <param name="customMessageGenerator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IAnd{System.Web.Mvc.PartialViewResult},System.Func{System.Object,System.Boolean})">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="matcher"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IAnd{System.Web.Mvc.PartialViewResult},System.Func{System.Object,System.Boolean},System.String)">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="matcher"></param>
+            <param name="customMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IAnd{System.Web.Mvc.PartialViewResult},System.Func{System.Object,System.Boolean},System.Func{System.String})">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="matcher"></param>
+            <param name="customMessageGenerator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IAnd{System.Web.Mvc.PartialViewResult},System.Object)">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="expected"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IAnd{System.Web.Mvc.PartialViewResult},System.Object,System.String)">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="expected"></param>
+            <param name="customMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultModelMatchers.Model(NExpect.Interfaces.IAnd{System.Web.Mvc.PartialViewResult},System.Object,System.Func{System.String})">
+            <summary>
+            Validates the model on the view result continuation using the provided matcher function
+            </summary>
+            <param name="and"></param>
+            <param name="expected"></param>
+            <param name="customMessageGenerator"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NExpect.ViewResultNameMatchers">
+            <summary>
+            Provides matchers for fluently asserting view names on action results which are
+            in fact view results
+            </summary>
+        </member>
+        <member name="M:NExpect.ViewResultNameMatchers.View(NExpect.Interfaces.IA{System.Web.Mvc.ActionResult})">
+            <summary>
+            Asserts that the provided action result is a view result
+            </summary>
+            <param name="a"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultNameMatchers.View(NExpect.Interfaces.IA{System.Web.Mvc.ActionResult},System.String)">
+            <summary>
+            Asserts that the provided action result is a view result
+            </summary>
+            <param name="a"></param>
+            <param name="customMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultNameMatchers.View(NExpect.Interfaces.IA{System.Web.Mvc.ActionResult},System.Func{System.String})">
+            <summary>
+            Asserts that the provided action result is a view result
+            </summary>
+            <param name="a"></param>
+            <param name="customMessageGenerator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.ViewResultNameMatchers.Name(NExpect.Interfaces.IWith{System.Web.Mvc.ViewResult},System.String)">
+            <summary>
+            Asserts that the name on the view result is the expected name
+            </summary>
+            <param name="with"></param>
+            <param name="expected"></param>
+            <returns></returns>
+        </member>
         <member name="T:Imported.PeanutButter.Utils.AutoLocker">
             <summary>
             Class to use the using() {} pattern to take care of locking / unlocking one of:

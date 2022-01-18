@@ -5,17 +5,18 @@ using NExpect.MatcherLogic;
 namespace NExpect.Implementations
 {
     /// <summary>
-    /// 
+    /// Base behavior for expectation contexts
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public abstract class ExpectationContext<T> :
-        CannotBeCompared,
-        IExpectationContext<T>
+    public abstract class ExpectationContext<T>
+        : CannotBeCompared,
+          IExpectationContext<T>
     {
         /// <summary>
         /// Parent context for this expectation
         /// </summary>
         public virtual IExpectationContext Parent => _parent;
+
         private IExpectationContext<T> _parent;
 
         IExpectationContext<T> IExpectationContext<T>.TypedParent
@@ -88,10 +89,34 @@ namespace NExpect.Implementations
 
         private IMatcherResult RunExpectations()
         {
-            if (_parent == null ||
-                _storedExpectation == null)
+            if (_storedExpectation is null)
             {
                 return default;
+            }
+
+            if (_parent is null)
+            {
+                if (this is IHasActualFetcher<T> hasActualFetcher)
+                {
+                    return MatcherRunner.RunMatcher(
+                        hasActualFetcher.ActualFetcher(),
+                        _storedNegation,
+                        _storedExpectation
+                    );
+                }
+
+                if (this is IHasActual<T> hasActual)
+                {
+                    return MatcherRunner.RunMatcher(
+                        hasActual.Actual,
+                        _storedNegation,
+                        _storedExpectation
+                    );
+                }
+
+                throw new InvalidOperationException(
+                    "Current expectation context has no parent and no actual value or fetcher, so the stored expectation cannot be run."
+                );
             }
 
             var result = _parent.RunMatcher(_storedExpectation);
@@ -103,6 +128,5 @@ namespace NExpect.Implementations
         {
             (this as IExpectationContext<T>).TypedParent = parent;
         }
-
     }
 }

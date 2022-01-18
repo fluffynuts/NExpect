@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 using NExpect.Helpers;
 using NExpect.Interfaces;
 
-namespace NExpect.Implementations.Strings
+namespace NExpect.Implementations
 {
     /// <summary>
     /// Provides an expectation context to inherit from where
@@ -10,7 +10,7 @@ namespace NExpect.Implementations.Strings
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class ExpectationContextWithLazyActual<T>
-        : ExpectationContext<T>
+        : ExpectationContext<T>, IHasActualFetcher<T>
     {
         /// <summary>
         /// 
@@ -101,7 +101,7 @@ namespace NExpect.Implementations.Strings
         /// <summary>
         /// The func to use to fetch the value on-demand
         /// </summary>
-        protected Func<T> ActualFetcher => _actualFetcher;
+        public Func<T> ActualFetcher => _actualFetcher;
 
         /// <summary>
         /// Constructs a new Expectation context with a lazy fetcher
