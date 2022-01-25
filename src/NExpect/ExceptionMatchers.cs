@@ -5,7 +5,6 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
 using NExpect.Helpers;
-using NExpect.Implementations.Collections;
 using NExpect.Implementations.Exceptions;
 using NExpect.Implementations.Strings;
 using static NExpect.Implementations.MessageHelpers;
@@ -64,7 +63,7 @@ namespace NExpect
                     MatcherResult result;
                     try
                     {
-                        fn();
+                        ActionRunner.Run(fn);
                         result = new MatcherResult(
                             false,
                             FinalMessageFor(

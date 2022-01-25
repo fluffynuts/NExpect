@@ -154,9 +154,9 @@ namespace NExpect
         /// </summary>
         /// <param name="action">Action to start with</param>
         /// <returns>IExpectation&lt;Action&gt;</returns>
-        public static IExpectation<Action> Expect(Action action)
+        public static IActionExpectation Expect(Action action)
         {
-            return new Expectation<Action>(action);
+            return new ActionExpectation(action);
         }
 
         /// <summary>
