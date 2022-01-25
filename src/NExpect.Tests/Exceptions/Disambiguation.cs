@@ -1,9 +1,8 @@
 using System;
-using static NExpect.Expectations;
-using NExpect;
 using NExpect.Exceptions;
 using NExpect.Tests.Exceptions.B;
 using NUnit.Framework;
+using static NExpect.Expectations;
 
 namespace NExpect.Tests.Exceptions
 {

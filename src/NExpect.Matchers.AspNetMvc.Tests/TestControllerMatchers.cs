@@ -1,10 +1,10 @@
 using System.Net.Http;
 using System.Web.Mvc;
 using NExpect.Exceptions;
-using static NExpect.Expectations;
 using NUnit.Framework;
+using static NExpect.Expectations;
 
-namespace NExpect.Matchers.AspNet.Tests
+namespace NExpect.Matchers.AspNetMvc.Tests
 {
     [TestFixture]
     public class TestControllerMatchers

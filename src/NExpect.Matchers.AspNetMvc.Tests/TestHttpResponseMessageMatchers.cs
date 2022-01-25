@@ -3,9 +3,8 @@ using NExpect.Exceptions;
 using NUnit.Framework;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
-using NExpect;
 
-namespace NExpect.Matchers.AspNet.Tests
+namespace NExpect.Matchers.AspNetMvc.Tests
 {
     [TestFixture]
     public class TestHttpResponseMessageMatchers
