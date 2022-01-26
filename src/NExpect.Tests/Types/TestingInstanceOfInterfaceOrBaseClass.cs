@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using NExpect.Exceptions;
+using NExpect.MatcherLogic;
 using NUnit.Framework;
 using static NExpect.Expectations;
 using PeanutButter.Utils;
@@ -14,8 +16,10 @@ namespace NExpect.Tests.Types
         {
         }
 
-        private class TestClass : ITestInterface
+        public class TestClass : ITestInterface
         {
+            public int Id { get; set; }
+            public string Name { get; set; }
         }
 
         private class DerivedClass : TestClass
@@ -660,6 +664,110 @@ namespace NExpect.Tests.Types
                                     Expect(sut).To.Be.An.Instance.Of(typeof(TestClass));
                                 }, Throws.Nothing);
                                 // AsserEt
+                            }
+
+                            [TestFixture]
+                            public class FluentlyTestingOnResolvedInstaceType
+                            {
+                                [Test]
+                                public void ShouldFacilitateFurtherTestingWithBooleanMatcher()
+                                {
+                                    // Arrange
+                                    var sut = GetRandom<TestClass>();
+                                    // Act
+                                    Assert.That(() =>
+                                    {
+                                        Expect(sut)
+                                            .To.Be.An.Instance.Of<TestClass>()
+                                            .With(o => o.Id == sut.Id);
+                                    }, Throws.Nothing);
+
+                                    Assert.That(() =>
+                                    {
+                                        Expect(sut)
+                                            .To.Be.An.Instance.Of<TestClass>()
+                                            .With(o =>
+                                            {
+                                                throw new Exception("oopsie");
+#pragma warning disable CS0162
+                                                return false;
+#pragma warning restore CS0162
+                                            });
+                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains("oopsie"));
+
+                                    Assert.That(() =>
+                                    {
+                                        Expect(sut)
+                                            .To.Be.An.Instance.Of<TestClass>()
+                                            .With(o => o.Id == sut.Id)
+                                            .And
+                                            .With(o => o.Name == sut.Name);
+                                    }, Throws.Nothing);
+
+                                    Assert.That(() =>
+                                    {
+                                        Expect(sut)
+                                            .To.Be.An.Instance.Of<TestClass>()
+                                            .With(o => o.Id == sut.Id + 1);
+                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                    // Assert
+                                }
+
+                                [Test]
+                                public void ShouldFacilitateFurtherTestingWithComplexMatcher()
+                                {
+                                    // Arrange
+                                    var sut = GetRandom<TestClass>();
+                                    // Act
+                                    Assert.That(() =>
+                                    {
+                                        Expect(sut)
+                                            .To.Be.An.Instance.Of<TestClass>()
+                                            .With(o => Check(o.Id == sut.Id));
+                                    }, Throws.Nothing);
+
+                                    Assert.That(() =>
+                                    {
+                                        Expect(sut)
+                                            .To.Be.An.Instance.Of<TestClass>()
+                                            .With(o => o.Id == sut.Id)
+                                            .And
+                                            .With(o => o.Name == sut.Name);
+                                    }, Throws.Nothing);
+
+                                    Assert.That(() =>
+                                    {
+                                        Expect(sut)
+                                            .To.Be.An.Instance.Of<TestClass>()
+                                            .With(o => o.Id == sut.Id + 1);
+                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                    // Assert
+
+                                    IMatcherResult Check(bool result)
+                                    {
+                                        return new ResultOfMatcher(
+                                            () => result,
+                                            "Some message"
+                                        );
+                                    }
+                                }
+
+                                private class ResultOfMatcher : IMatcherResult
+                                {
+                                    public bool Passed { get; }
+                                    public string Message { get; }
+                                    public Exception LocalException { get; set; }
+
+                                    public ResultOfMatcher(
+                                        Func<bool> logic,
+                                        string message
+                                    )
+                                    {
+                                        Passed = logic();
+                                        Message = message;
+                                    }
+                                }
                             }
 
                             [Test]

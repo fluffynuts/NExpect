@@ -1,5 +1,4 @@
 using System;
-using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable MemberCanBeProtected.Global
