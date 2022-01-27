@@ -1868,6 +1868,17 @@
             <param name="host"></param>
             <returns></returns>
         </member>
+        <member name="M:Imported.PeanutButter.Utils.IPropertyOrField.TryGetValue(System.Object,System.Object@,System.Exception@)">
+            <summary>
+            Attempts to get the value of the property
+            - if the getter throws, returns false and the output exception is set
+            - if the getter succeeds, returns true and the output value is set
+            </summary>
+            <param name="host"></param>
+            <param name="value"></param>
+            <param name="exception"></param>
+            <returns></returns>
+        </member>
         <member name="M:Imported.PeanutButter.Utils.IPropertyOrField.SetValue(System.Object,System.Object)">
             <summary>
             Sets the value of the property or field on the provided host
@@ -1994,6 +2005,9 @@
             <param name="hostingType"></param>
         </member>
         <member name="M:Imported.PeanutButter.Utils.PropertyOrField.GetValue(System.Object)">
+            <inheritdoc />
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.PropertyOrField.TryGetValue(System.Object,System.Object@,System.Exception@)">
             <inheritdoc />
         </member>
         <member name="M:Imported.PeanutButter.Utils.PropertyOrField.SetValue(System.Object,System.Object)">
