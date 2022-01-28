@@ -2816,6 +2816,14 @@
             <param name="type"></param>
             <returns></returns>
         </member>
+        <member name="M:Imported.PeanutButter.Utils.TypeExtensions.ResolveNullableUnderlyingType(System.Type)">
+            <summary>
+            Resolves to the actual type or the underlying type T if the provided
+            type is Nullable&lt;T&gt;
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
         <member name="T:Imported.PeanutButter.Utils.CannotZipNullException">
             <summary>
             Thrown when an attempt is made to strict-zip null and anything else
