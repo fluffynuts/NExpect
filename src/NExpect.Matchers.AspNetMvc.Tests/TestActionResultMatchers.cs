@@ -88,6 +88,13 @@ public class TestActionResultMatchers
                 Expect(actionResult)
                     .To.Be.A.View()
                     .With.Name(viewResult.ViewName)
+                    .And.Model(model);
+            }, Throws.Nothing);
+            Assert.That(() =>
+            {
+                Expect(actionResult)
+                    .To.Be.A.View()
+                    .With.Name(viewResult.ViewName)
                     .And.Model(o => o.DeepEquals(other));
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert

@@ -2682,9 +2682,19 @@
         <member name="M:Imported.PeanutButter.Utils.TypeExtensions.IsAncestorOf(System.Type,System.Type)">
             <summary>
             Determines whether the type being operated on is an ancestor of the other type
+            ie typeof(object).IsAncestorOf(typeof(Foo)) => true
             </summary>
             <param name="type"></param>
-            <param name="other"></param>
+            <param name="test"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.TypeExtensions.Inherits(System.Type,System.Type)">
+            <summary>
+            Returns true when the type being operated on inherits from the test type, ie
+            typeof(Foo).Inherits(typeof(object)) => true
+            </summary>
+            <param name="type"></param>
+            <param name="test"></param>
             <returns></returns>
         </member>
         <member name="M:Imported.PeanutButter.Utils.TypeExtensions.Implements``1(System.Type)">
