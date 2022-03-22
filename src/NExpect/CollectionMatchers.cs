@@ -362,12 +362,12 @@ namespace NExpect
         /// <param name="search">Thing to search for</param>
         /// <typeparam name="T">Type of underlying continuation</typeparam>
         /// <exception cref="ArgumentNullException">Thrown if the countMatch is null -- mainly to keep the library sane and testable</exception>
-        public static void To<T>(
+        public static IMore<IEnumerable<T>> To<T>(
             this ICountMatchEqual<IEnumerable<T>> countMatch,
             T search
         )
         {
-            countMatch.To(search, null);
+            return countMatch.To(search, null);
         }
 
         /// <summary>
@@ -379,7 +379,7 @@ namespace NExpect
         /// <param name="customMessage">Custom message to include in failure messages</param>
         /// <typeparam name="T">Type of underlying continuation</typeparam>
         /// <exception cref="ArgumentNullException">Thrown if the countMatch is null -- mainly to keep the library sane and testable</exception>
-        public static void To<T>(
+        public static IMore<IEnumerable<T>> To<T>(
             this ICountMatchEqual<IEnumerable<T>> countMatch,
             T search,
             string customMessage
@@ -392,7 +392,7 @@ namespace NExpect
                     $"EqualTo<T> cannot extend null ICanAddMatcher<IEnumerable<{typeof(T)}>>");
             }
 
-            countMatch.Continuation.AddMatcher(
+            return countMatch.Continuation.AddMatcher(
                 collection =>
                 {
                     var asArray = collection.ToArray();
@@ -429,12 +429,12 @@ namespace NExpect
         /// <param name="countMatch">Matched continuation</param>
         /// <param name="test">Func to test Actual value with; return true for match, false for non-match</param>
         /// <typeparam name="T">Type of artifact being tested</typeparam>
-        public static void By<T>(
+        public static IMore<IEnumerable<T>> By<T>(
             this ICountMatchMatched<IEnumerable<T>> countMatch,
             Func<T, bool> test
         )
         {
-            countMatch.By(test, NULL_STRING);
+            return countMatch.By(test, NULL_STRING);
         }
 
         /// <summary>
@@ -444,13 +444,13 @@ namespace NExpect
         /// <param name="test">Func to test Actual value with; return true for match, false for non-match</param>
         /// <param name="customMessage">Custom message to include in failure messages</param>
         /// <typeparam name="T">Type of artifact being tested</typeparam>
-        public static void By<T>(
+        public static IMore<IEnumerable<T>> By<T>(
             this ICountMatchMatched<IEnumerable<T>> countMatch,
             Func<T, bool> test,
             string customMessage
         )
         {
-            countMatch.By(test, () => customMessage);
+            return countMatch.By(test, () => customMessage);
         }
 
         /// <summary>
@@ -460,16 +460,16 @@ namespace NExpect
         /// <param name="test">Func to test Actual value with; return true for match, false for non-match</param>
         /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
         /// <typeparam name="T">Type of artifact being tested</typeparam>
-        public static void By<T>(
+        public static IMore<IEnumerable<T>> By<T>(
             this ICountMatchMatched<IEnumerable<T>> countMatch,
             Func<T, bool> test,
             Func<string> customMessageGenerator
         )
         {
-            countMatch.Continuation.AddMatcher(
+            return countMatch.Continuation.AddMatcher(
                 collection =>
                 {
-                    var have = collection.Where(test).Count();
+                    var have = collection?.Where(test).Count() ?? 0;
                     var collectionCount = collection?.Count() ?? 0;
                     var compare = countMatch.Method == CountMatchMethods.All
                         ? collectionCount
@@ -492,17 +492,103 @@ namespace NExpect
         }
 
         /// <summary>
+        /// Tests if the required number of items in the collection have the required
+        /// type (or sub-class that type)
+        /// </summary>
+        /// <param name="countMatchOf"></param>
+        /// <param name="expected"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static IMore<IEnumerable<T>> Type<T>(
+            this ICountMatchOf<IEnumerable<T>> countMatchOf,
+            Type expected
+        )
+        {
+            return countMatchOf.Type(expected, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Tests if the required number of items in the collection have the required
+        /// type (or sub-class that type)
+        /// </summary>
+        /// <param name="countMatchOf"></param>
+        /// <param name="expected"></param>
+        /// <param name="customMessage"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static IMore<IEnumerable<T>> Type<T>(
+            this ICountMatchOf<IEnumerable<T>> countMatchOf,
+            Type expected,
+            string customMessage
+        )
+        {
+            return countMatchOf.Type(expected, () => customMessage);
+        }
+
+        /// <summary>
+        /// Tests if the required number of items in the collection have the required
+        /// type (or sub-class that type)
+        /// </summary>
+        /// <param name="countMatchOf"></param>
+        /// <param name="expected"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static IMore<IEnumerable<T>> Type<T>(
+            this ICountMatchOf<IEnumerable<T>> countMatchOf,
+            Type expected,
+            Func<string> customMessageGenerator
+        )
+        {
+            return countMatchOf.Continuation.AddMatcher(
+                collection =>
+                {
+                    var have = collection?
+                        .Where(o => o is not null)
+                        .Count(o => expected.IsInstanceOfType(o)) ?? 0;
+                    var collectionCount = collection?.Count() ?? 0;
+                    var compare = countMatchOf.Method == CountMatchMethods.All
+                        ? collectionCount
+                        : countMatchOf.Compare;
+                    var passed = CollectionCountMatchStrategies[countMatchOf.Method](have, compare);
+                    return new MatcherResult(
+                        passed,
+                        FinalMessageFor(
+                            () => new string[]
+                                {
+                                    $"Searching for type {expected}:"
+                                }.And(
+                                    CollectionCountMatchMessageStrategies[countMatchOf.Method](
+                                        passed,
+                                        have,
+                                        countMatchOf.Compare,
+                                        collectionCount
+                                    )
+                                )
+                                .And("within collection with types")
+                                .And($"{collection?.Select(o => o?.GetType()).LimitedPrint()}"
+                                ),
+                            customMessageGenerator
+                        )
+                    );
+                });
+        }
+
+        /// <summary>
         /// Continuation for Matched, allowing testing the artifact with a simple func
         /// </summary>
         /// <param name="countMatch">Matched continuation</param>
         /// <param name="test">Func to test Actual value with; return true for match, false for non-match</param>
         /// <typeparam name="T">Type of artifact being tested</typeparam>
-        public static void By<T>(
+        public static IMore<IEnumerable<T>> By<T>(
             this ICountMatchMatched<IEnumerable<T>> countMatch,
             Func<int, T, bool> test
         )
         {
-            countMatch.By(test, NULL_STRING);
+            return countMatch.By(test, NULL_STRING);
         }
 
         /// <summary>
@@ -512,13 +598,13 @@ namespace NExpect
         /// <param name="test">Func to test Actual value with; return true for match, false for non-match</param>
         /// <param name="customMessage">Custom message to include in failure messages</param>
         /// <typeparam name="T">Type of artifact being tested</typeparam>
-        public static void By<T>(
+        public static IMore<IEnumerable<T>> By<T>(
             this ICountMatchMatched<IEnumerable<T>> countMatch,
             Func<int, T, bool> test,
             string customMessage
         )
         {
-            countMatch.By(test, () => customMessage);
+            return countMatch.By(test, () => customMessage);
         }
 
         /// <summary>
@@ -528,13 +614,13 @@ namespace NExpect
         /// <param name="test">Func to test Actual value with; return true for match, false for non-match</param>
         /// <param name="customMessageGenerator">Custom message to include in failure messages</param>
         /// <typeparam name="T">Type of artifact being tested</typeparam>
-        public static void By<T>(
+        public static IMore<IEnumerable<T>> By<T>(
             this ICountMatchMatched<IEnumerable<T>> countMatch,
             Func<int, T, bool> test,
             Func<string> customMessageGenerator
         )
         {
-            countMatch.Continuation.AddMatcher(
+            return countMatch.Continuation.AddMatcher(
                 collection =>
                 {
                     var collectionCount = collection?.Count() ?? 0;
@@ -2345,7 +2431,7 @@ namespace NExpect
 
         private static readonly Dictionary<CountMatchMethods,
             Func<bool, int, int, int, string>> CollectionCountMatchMessageStrategies =
-            new Dictionary<CountMatchMethods, Func<bool, int, int, int, string>>()
+            new()
             {
                 [CountMatchMethods.Exactly] = CreateMatchMessageFor("exactly"),
                 [CountMatchMethods.Only] = CreateMatchMessageFor("only"),
@@ -2355,7 +2441,9 @@ namespace NExpect
                 [CountMatchMethods.All] = CreateMatchAnyAllMessageFor("all")
             };
 
-        private static Func<bool, int, int, int, string> CreateMatchAnyAllMessageFor(string comparison)
+        private static Func<bool, int, int, int, string> CreateMatchAnyAllMessageFor(
+            string comparison
+        )
         {
             return (passed, have, want, total) =>
             {
@@ -2368,7 +2456,7 @@ namespace NExpect
 
         private static readonly Dictionary<CountMatchMethods,
             Func<int, int, bool>> CollectionCountMatchStrategies =
-            new Dictionary<CountMatchMethods, Func<int, int, bool>>()
+            new()
             {
                 [CountMatchMethods.Exactly] = (have, want) => have == want,
                 [CountMatchMethods.Only] = (have, want) => have == want,

@@ -6,8 +6,8 @@ namespace NExpect.Implementations.Collections
 {
     internal class CountMatchContinuation<T>
         : ExpectationContext<T>,
-            IHasActual<T>,
-            ICountMatchContinuation<T>
+          IHasActual<T>,
+          ICountMatchContinuation<T>
     {
         public int ExpectedCount => _expectedCount;
         public CountMatchMethods Method => _method;
@@ -48,6 +48,9 @@ namespace NExpect.Implementations.Collections
         public ICountMatchIntersection<T> Intersection =>
             CreateCountMatchIntersection();
 
+        public ICountMatchOf<T> Of =>
+            CreateCountMatchOf();
+
         private ICountMatchIntersection<T> CreateCountMatchIntersection()
         {
             var result = new CountMatchIntersection<T>(
@@ -62,6 +65,17 @@ namespace NExpect.Implementations.Collections
         private CountMatchDeep<T> CreateCountMatchDeep()
         {
             var result = new CountMatchDeep<T>(
+                _wrapped,
+                _method,
+                _expectedCount
+            );
+            result.SetParent(this);
+            return result;
+        }
+
+        private CountMatchOf<T> CreateCountMatchOf()
+        {
+            var result = new CountMatchOf<T>(
                 _wrapped,
                 _method,
                 _expectedCount

@@ -28,5 +28,10 @@ namespace NExpect.Interfaces
         /// Prepares for intersection equality testing
         /// </summary>
         ICountMatchIntersection<T> Intersection { get; }
+
+        /// <summary>
+        /// Prepares for type matching
+        /// </summary>
+        ICountMatchOf<T> Of { get; }
     }
 }

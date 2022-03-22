@@ -1008,9 +1008,36 @@
             Convenience method to create a new array with the provided element(s) appended
             </summary>
             <param name="source">Source array to start with</param>
-            <param name="toAdd">Item(s) to add to the result array</param>
+            <param name="values"></param>
             <typeparam name="T">Item type of the array</typeparam>
             <returns>A new array which is the source with the new items appended</returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.ExtensionsForIEnumerables.And``1(``0[],``0[])">
+            <summary>
+            Convenience method to create a new array with the provided element(s) appended
+            </summary>
+            <param name="source">Source array to start with</param>
+            <param name="values"></param>
+            <typeparam name="T">Item type of the array</typeparam>
+            <returns>A new array which is the source with the new items appended</returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.ExtensionsForIEnumerables.And``1(System.Collections.Generic.List{``0},``0[])">
+            <summary>
+            Convenience method to add one one or more values to a list
+            </summary>
+            <param name="source"></param>
+            <param name="values"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.ExtensionsForIEnumerables.And``1(System.Collections.Generic.IList{``0},``0[])">
+            <summary>
+            Convenience method to add more values to a list
+            </summary>
+            <param name="source"></param>
+            <param name="values"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
         </member>
         <member name="M:Imported.PeanutButter.Utils.ExtensionsForIEnumerables.ButNot``1(System.Collections.Generic.IEnumerable{``0},``0[])">
             <summary>
@@ -2280,6 +2307,44 @@
             - symmetrical with Base64Padded()
             </summary>
             <param name="base64Data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.Outdent(System.String)">
+            <summary>
+            Outdents a block to the first indentation.
+            </summary>
+            <param name="str">string to outdent</param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.Outdent(System.String,System.Int32)">
+            <summary>
+            Outdents a block of text at most to the given depth. Will
+            stop as soon as any line is outdented completely.
+            </summary>
+            <param name="str">string to outdent</param>
+            <param name="depth">depth to outdent to</param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.Outdent(System.String[],System.Int32)">
+            <summary>
+            Outdents a block of text at most to the given depth. Will
+            stop as soon as any line is outdented completely.
+            Attempts to determine the indent character from the first line with
+            indenting.
+            </summary>
+            <param name="lines"></param>
+            <param name="depth">depth to outdent to</param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.Outdent(System.String[],System.String,System.Int32,System.Boolean)">
+            <summary>
+            Outdents a block of text at most to the given depth. Will
+            stop as soon as any line is outdented completely.
+            </summary>
+            <param name="lines"></param>
+            <param name="indentedWith"></param>
+            <param name="depth"></param>
+            <param name="alsoTrimEnd">also right-trim lines, much like an auto-formatter would</param>
             <returns></returns>
         </member>
         <member name="T:Imported.PeanutButter.Utils.RandomNumber">
