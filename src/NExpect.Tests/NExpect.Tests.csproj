@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Configurations>Debug;Release;BuildForRelease</Configurations>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
@@ -9,8 +9,8 @@
     <PackageReference Include="NSubstitute" Version="4.2.2" />
     <PackageReference Include="nunit" Version="3.12.0" />
     <PackageReference Include="nunit3testadapter" Version="3.15.1" />
-    <PackageReference Include="PeanutButter.DuckTyping" Version="1.2.316" />
-    <PackageReference Include="PeanutButter.RandomGenerators" Version="1.2.316" />
+    <PackageReference Include="PeanutButter.DuckTyping" Version="2.0.66" />
+    <PackageReference Include="PeanutButter.RandomGenerators" Version="2.0.66" />
     <PackageReference Include="system.valuetuple" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
