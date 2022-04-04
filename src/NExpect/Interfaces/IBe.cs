@@ -67,5 +67,10 @@ namespace NExpect.Interfaces
         /// Provides the .Be.In grammar
         /// </summary>
         IIn<T> In { get; }
+
+        /// <summary>
+        /// Provides the .Be.At grammar
+        /// </summary>
+        IAt<T> At { get; }
     }
 }

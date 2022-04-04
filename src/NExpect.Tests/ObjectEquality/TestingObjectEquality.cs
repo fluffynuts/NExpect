@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using NExpect.Exceptions;
 using NExpect.Implementations;
 using NExpect.Tests.Collections;
@@ -757,19 +756,6 @@ namespace NExpect.Tests.ObjectEquality
         }
 
         [TestFixture]
-        public class ActingOnTimespans
-        {
-            [TestFixture]
-            public class Greater
-            {
-                [TestFixture]
-                public class Than
-                {
-                }
-            }
-        }
-
-        [TestFixture]
         public class ActingOnDateTimes
         {
             [TestFixture]
@@ -940,873 +926,1152 @@ namespace NExpect.Tests.ObjectEquality
         }
 
         [TestFixture]
-        public class ActingOnLongs
+        public class GreaterThan
         {
-            [TestFixture]
-            public class GreaterThan
+            [Test]
+            public void GreaterThan_WhenActualIsGreaterThanExpected_ShouldNotThrow()
             {
-                [Test]
-                public void GreaterThan_WhenActualIsGreaterThanExpected_ShouldNotThrow()
+                // Arrange
+                var actual = GetRandomLong(5, 10);
+                var expected = GetRandomLong(0, 4);
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(actual).To.Be.Greater.Than(expected);
+                    },
+                    Throws.Nothing);
+
+                // Assert
+            }
+
+            [Test]
+            public void GreaterThan_WhenActualIsEqualToExpected_ShouldThrow()
+            {
+                // Arrange
+                var actual = GetRandomLong(5, 10);
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(actual).To.Be.Greater.Than(actual);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+
+                // Assert
+            }
+
+            [Test]
+            public void GreaterThan_WhenActualIsLessThanExpected_ShouldThrow()
+            {
+                // Arrange
+                var actual = GetRandomLong(5, 10);
+                var expected = GetRandomLong(11, 20);
+
+                // Pre-Assert
+
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(actual).To.Be.Greater.Than(expected);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+
+                // Assert
+            }
+
+            [TestFixture]
+            public class OrEqualTo
+            {
+                [TestFixture]
+                public class Longs
                 {
-                    // Arrange
-                    var actual = GetRandomLong(5, 10);
-                    var expected = GetRandomLong(0, 4);
+                    [Test]
+                    public void GreaterThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 5;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Greater.Than.Or.Equal.To(actual);
+                                Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Nothing);
+                        // alt. syntax
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Least(actual);
+                                Expect(actual).To.Be.At.Least(expected);
+                            },
+                            Throws.Nothing);
+                        // Assert
+                    }
 
-                    // Pre-Assert
-
-                    // Act
-                    Assert.That(
-                        () =>
-                        {
-                            Expect(actual).To.Be.Greater.Than(expected);
-                        },
-                        Throws.Nothing);
-
-                    // Assert
-                }
-
-                [Test]
-                public void GreaterThan_WhenActualIsEqualToExpected_ShouldThrow()
-                {
-                    // Arrange
-                    var actual = GetRandomLong(5, 10);
-
-                    // Pre-Assert
-
-                    // Act
-                    Assert.That(
-                        () =>
-                        {
-                            Expect(actual).To.Be.Greater.Than(actual);
-                        },
-                        Throws.Exception.InstanceOf<UnmetExpectationException>());
-
-                    // Assert
-                }
-
-                [Test]
-                public void GreaterThan_WhenActualIsLessThanExpected_ShouldThrow()
-                {
-                    // Arrange
-                    var actual = GetRandomLong(5, 10);
-                    var expected = GetRandomLong(11, 20);
-
-                    // Pre-Assert
-
-                    // Act
-                    Assert.That(
-                        () =>
-                        {
-                            Expect(actual).To.Be.Greater.Than(expected);
-                        },
-                        Throws.Exception.InstanceOf<UnmetExpectationException>());
-
-                    // Assert
+                    [Test]
+                    public void GreaterThanOrEqualTo_NegativeResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 11;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("greater than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Least(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at least"));
+                        // Assert
+                    }
                 }
 
                 [TestFixture]
-                public class OrEqualTo
+                public class NullableLongs
                 {
-                    [TestFixture]
-                    public class Longs
+                    [Test]
+                    public void GreaterThanOrEqualTo_PositiveResult()
                     {
-                        [Test]
-                        public void GreaterThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 5;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Greater.Than.Or.Equal.To(actual);
-                                    Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
-
-                        [Test]
-                        public void GreaterThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 11;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("greater than or equal to"));
-                            // Assert
-                        }
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 5;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(actual);
+                                Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as long?).To.Be.At.Least(actual);
+                                Expect(actual as long?).To.Be.At.Least(expected);
+                            },
+                            Throws.Nothing);
+                        // Assert
                     }
 
-                    [TestFixture]
-                    public class NullableLongs
+                    [Test]
+                    public void GreaterThanOrEqualTo_NegativeResult()
                     {
-                        [Test]
-                        public void GreaterThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 5;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(actual);
-                                    Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 11;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("greater than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as long?).To.Be.At.Least(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at least"));
+                        // Assert
+                    }
+                }
 
-                        [Test]
-                        public void GreaterThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 11;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("greater than or equal to"));
-                            // Assert
-                        }
+                [TestFixture]
+                public class LongsToDecimals
+                {
+                    [Test]
+                    public void GreaterThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 5M;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Greater.Than.Or.Equal.To(actual);
+                                Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Least(actual);
+                                Expect(actual).To.Be.At.Least(expected);
+                            },
+                            Throws.Nothing);
+                        // Assert
                     }
 
-                    [TestFixture]
-                    public class LongsToDecimals
+                    [Test]
+                    public void GreaterThanOrEqualTo_NegativeResult()
                     {
-                        [Test]
-                        public void GreaterThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 5M;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Greater.Than.Or.Equal.To(actual);
-                                    Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 11M;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("greater than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Least(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at least"));
+                        // Assert
+                    }
+                }
 
-                        [Test]
-                        public void GreaterThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 11M;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("greater than or equal to"));
-                            // Assert
-                        }
+                [TestFixture]
+                public class NullableLongsToDecimals
+                {
+                    [Test]
+                    public void GreaterThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 5M;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(actual);
+                                Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as long?).To.Be.At.Least(actual);
+                                Expect(actual as long?).To.Be.At.Least(expected);
+                            },
+                            Throws.Nothing);
+                        // Assert
                     }
 
-                    [TestFixture]
-                    public class NullableLongsToDecimals
+                    [Test]
+                    public void GreaterThanOrEqualTo_NegativeResult()
                     {
-                        [Test]
-                        public void GreaterThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 5M;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(actual);
-                                    Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 11M;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("greater than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as long?).To.Be.At.Least(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at least"));
+                        // Assert
+                    }
+                }
 
-                        [Test]
-                        public void GreaterThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 11M;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("greater than or equal to"));
-                            // Assert
-                        }
+                [TestFixture]
+                public class LongsToDoubles
+                {
+                    [Test]
+                    public void GreaterThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 5D;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Greater.Than.Or.Equal.To(actual);
+                                Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Least(actual);
+                                Expect(actual).To.Be.At.Least(expected);
+                            },
+                            Throws.Nothing);
+                        // Assert
                     }
 
-                    [TestFixture]
-                    public class LongsToDoubles
+                    [Test]
+                    public void GreaterThanOrEqualTo_NegativeResult()
                     {
-                        [Test]
-                        public void GreaterThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 5D;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Greater.Than.Or.Equal.To(actual);
-                                    Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 11D;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("greater than or equal to"));
+                        // Assert
+                    }
+                }
 
-                        [Test]
-                        public void GreaterThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 11D;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("greater than or equal to"));
-                            // Assert
-                        }
+                [TestFixture]
+                public class NullableLongsToDoubles
+                {
+                    [Test]
+                    public void GreaterThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 5D;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(actual);
+                                Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as long?).To.Be.At.Least(actual);
+                                Expect(actual as long?).To.Be.At.Least(expected);
+                            },
+                            Throws.Nothing);
+                        // Assert
                     }
 
-                    [TestFixture]
-                    public class NullableLongsToDoubles
+                    [Test]
+                    public void GreaterThanOrEqualTo_NegativeResult()
                     {
-                        [Test]
-                        public void GreaterThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 5D;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(actual);
-                                    Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 11D;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("greater than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as long?).To.Be.At.Least(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at least"));
+                        // Assert
+                    }
+                }
 
-                        [Test]
-                        public void GreaterThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 11D;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual as long?).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("greater than or equal to"));
-                            // Assert
-                        }
+                [TestFixture]
+                public class DecimalsToDecimals
+                {
+                    [Test]
+                    public void GreaterThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomDecimal(5, 10);
+                        var expected = 5M;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Greater.Than.Or.Equal.To(actual);
+                                Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Least(actual);
+                                Expect(actual).To.Be.At.Least(expected);
+                            },
+                            Throws.Nothing);
+                        // Assert
                     }
 
-                    [TestFixture]
-                    public class DecimalsToDecimals
+                    [Test]
+                    public void GreaterThanOrEqualTo_NegativeResult()
                     {
-                        [Test]
-                        public void GreaterThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomDecimal(5, 10);
-                            var expected = 5M;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Greater.Than.Or.Equal.To(actual);
-                                    Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 11;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("greater than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Least(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at least"));
+                        // Assert
+                    }
+                }
 
-                        [Test]
-                        public void GreaterThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 11;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("greater than or equal to"));
-                            // Assert
-                        }
+                [TestFixture]
+                public class NullableDecimalsToDecimals
+                {
+                    [Test]
+                    public void GreaterThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomDecimal(5, 10);
+                        var expected = 5M;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as decimal?).To.Be.Greater.Than.Or.Equal.To(actual);
+                                Expect(actual as decimal?).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as decimal?).To.Be.At.Least(actual);
+                                Expect(actual as decimal?).To.Be.At.Least(expected);
+                            },
+                            Throws.Nothing);
+                        // Assert
                     }
 
-                    [TestFixture]
-                    public class NullableDecimalsToDecimals
+                    [Test]
+                    public void GreaterThanOrEqualTo_NegativeResult()
                     {
-                        [Test]
-                        public void GreaterThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomDecimal(5, 10);
-                            var expected = 5M;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual as decimal?).To.Be.Greater.Than.Or.Equal.To(actual);
-                                    Expect(actual as decimal?).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 11;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("greater than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Least(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at least"));
+                        // Assert
+                    }
+                }
 
-                        [Test]
-                        public void GreaterThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 11;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("greater than or equal to"));
-                            // Assert
-                        }
+                [TestFixture]
+                public class DoublesToDecimals
+                {
+                    [Test]
+                    public void GreaterThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomFloat(5, 10);
+                        var expected = 5M;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Greater.Than.Or.Equal.To(actual);
+                                Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Least(actual);
+                                Expect(actual).To.Be.At.Least(expected);
+                            },
+                            Throws.Nothing);
+                        // Assert
                     }
 
-                    [TestFixture]
-                    public class DoublesToDecimals
+                    [Test]
+                    public void GreaterThanOrEqualTo_NegativeResult()
                     {
-                        [Test]
-                        public void GreaterThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomFloat(5, 10);
-                            var expected = 5M;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Greater.Than.Or.Equal.To(actual);
-                                    Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 11;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("greater than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Least(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at least"));
+                        // Assert
+                    }
+                }
 
-                        [Test]
-                        public void GreaterThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 11;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("greater than or equal to"));
-                            // Assert
-                        }
+                [TestFixture]
+                public class NullableDoublesToDecimals
+                {
+                    [Test]
+                    public void GreaterThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var actual = (double)(GetRandomFloat(5, 10));
+                        var expected = 5;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as double?).To.Be.Greater.Than.Or.Equal.To(actual);
+                                Expect(actual as double?).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as double?).To.Be.At.Least(actual);
+                                Expect(actual as double?).To.Be.At.Least(expected);
+                            },
+                            Throws.Nothing);
+                        // Assert
                     }
 
-                    [TestFixture]
-                    public class NullableDoublesToDecimals
+                    [Test]
+                    public void GreaterThanOrEqualTo_NegativeResult()
                     {
-                        [Test]
-                        public void GreaterThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var actual = (double)(GetRandomFloat(5, 10));
-                            var expected = 5;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual as double?).To.Be.Greater.Than.Or.Equal.To(actual);
-                                    Expect(actual as double?).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
+                        // Arrange
+                        var actual = (double)GetRandomLong(5, 10);
+                        var expected = 11M;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as double?).To.Be.Greater.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("greater than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual as double?).To.Be.At.Least(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at least"));
+                        // Assert
+                    }
+                }
 
-                        [Test]
-                        public void GreaterThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var actual = (double)GetRandomLong(5, 10);
-                            var expected = 11M;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual as double?).To.Be.Greater.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("greater than or equal to"));
-                            // Assert
-                        }
+                [TestFixture]
+                public class DateTimes
+                {
+                    [Test]
+                    public void GreaterThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var range = GetRandomDateRange();
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(range.To).To.Be.Greater.Than.Or.Equal.To(range.To);
+                                Expect(range.To).To.Be.Greater.Than.Or.Equal.To(range.From);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(range.To).To.Be.At.Least(range.To);
+                                Expect(range.To).To.Be.At.Least(range.From);
+                            },
+                            Throws.Nothing);
+                        // Assert
                     }
 
-                    [TestFixture]
-                    public class DateTimes
+                    [Test]
+                    public void GreaterThanOrEqualTo_NegativeResult()
                     {
-                        [Test]
-                        public void GreaterThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var range = GetRandomDateRange();
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(range.To).To.Be.Greater.Than.Or.Equal.To(range.To);
-                                    Expect(range.To).To.Be.Greater.Than.Or.Equal.To(range.From);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
-
-                        [Test]
-                        public void GreaterThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var range = GetRandomDateRange();
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(range.From).To.Be.Greater.Than.Or.Equal.To(range.To);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("greater than or equal to"));
-                            // Assert
-                        }
-
-                        [Test]
-                        public void ContinuingWithMore()
-                        {
-                            // Arrange
-                            var range = GetRandomDateRange();
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(range.From).To.Be.Greater.Than.Or.Equal.To(range.From)
-                                        .And.To.Be.Less.Than.Or.Equal.To(range.To);
-                                }, Throws.Nothing);
-                            // Assert
-                        }
+                        // Arrange
+                        var range = GetRandomDateRange();
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(range.From).To.Be.Greater.Than.Or.Equal.To(range.To);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("greater than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(range.From).To.Be.At.Least(range.To);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at least"));
+                        // Assert
                     }
 
-                    [TestFixture]
-                    public class NullableDateTimes
+                    [Test]
+                    public void ContinuingWithMore()
                     {
-                        [Test]
-                        public void GreaterThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var range = GetRandomDateRange();
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(range.To as DateTime?).To.Be.Greater.Than.Or.Equal.To(range.To);
-                                    Expect(range.To as DateTime?).To.Be.Greater.Than.Or.Equal.To(range.From);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
+                        // Arrange
+                        var range = GetRandomDateRange();
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(range.From)
+                                    .To.Be.Greater.Than.Or.Equal.To(range.From)
+                                    .And.To.Be.Less.Than.Or.Equal.To(range.To);
+                            }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(range.From)
+                                    .To.Be.At.Least(range.From)
+                                    .And.To.Be.At.Most(range.To);
+                            }, Throws.Nothing);
+                        // Assert
+                    }
+                }
 
-                        [Test]
-                        public void GreaterThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var range = GetRandomDateRange();
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(range.From as DateTime?).To.Be.Greater.Than.Or.Equal.To(range.To);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("greater than or equal to"));
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(null as DateTime?).To.Be.Greater.Than.Or.Equal.To(range.To);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("greater than or equal to"));
-                            // Assert
-                        }
+                [TestFixture]
+                public class NullableDateTimes
+                {
+                    [Test]
+                    public void GreaterThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var range = GetRandomDateRange();
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(range.To as DateTime?).To.Be.Greater.Than.Or.Equal.To(range.To);
+                                Expect(range.To as DateTime?).To.Be.Greater.Than.Or.Equal.To(range.From);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(range.To as DateTime?).To.Be.At.Least(range.To);
+                                Expect(range.To as DateTime?).To.Be.At.Least(range.From);
+                            },
+                            Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void GreaterThanOrEqualTo_NegativeResult()
+                    {
+                        // Arrange
+                        var range = GetRandomDateRange();
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(range.From as DateTime?).To.Be.Greater.Than.Or.Equal.To(range.To);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("greater than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(null as DateTime?).To.Be.Greater.Than.Or.Equal.To(range.To);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("greater than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(range.From as DateTime?).To.Be.At.Least(range.To);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at least"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(null as DateTime?).To.Be.At.Least(range.To);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at least"));
+                        // Assert
+                    }
+                }
+            }
+        }
+
+        [TestFixture]
+        public class LessThan
+        {
+            [TestFixture]
+            public class OrEqualTo
+            {
+                [TestFixture]
+                public class Longs
+                {
+                    [Test]
+                    public void LessThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 10;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Less.Than.Or.Equal.To(actual);
+                                Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Most(actual);
+                                Expect(actual).To.Be.At.Most(expected);
+                            },
+                            Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void LessThanOrEqualTo_NegativeResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 4;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("less than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Most(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at most"));
+                        // Assert
+                    }
+                }
+
+                [TestFixture]
+                public class LongsToDecimals
+                {
+                    [Test]
+                    public void LessThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 11M;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Less.Than.Or.Equal.To(actual);
+                                Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Most(actual);
+                                Expect(actual).To.Be.At.Most(expected);
+                            },
+                            Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void LessThanOrEqualTo_NegativeResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 4M;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("less than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Most(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at most"));
+                        // Assert
+                    }
+                }
+
+                [TestFixture]
+                public class DecimalsToDecimals
+                {
+                    [Test]
+                    public void LessThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomDecimal(5, 10);
+                        var expected = 11M;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Less.Than.Or.Equal.To(actual);
+                                Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Most(actual);
+                                Expect(actual).To.Be.At.Most(expected);
+                            },
+                            Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void LessThanOrEqualTo_NegativeResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 4M;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("less than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Most(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at most"));
+                        // Assert
+                    }
+                }
+
+                [TestFixture]
+                public class DoublesToDecimals
+                {
+                    [Test]
+                    public void LessThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomFloat(5, 10);
+                        var expected = 11M;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Less.Than.Or.Equal.To(actual);
+                                Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Most(actual);
+                                Expect(actual).To.Be.At.Most(expected);
+                            },
+                            Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void LessThanOrEqualTo_NegativeResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 4;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("less than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Most(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at most"));
+                        // Assert
+                    }
+                }
+
+                [TestFixture]
+                public class LongsToDoubles
+                {
+                    [Test]
+                    public void LessThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 11D;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Less.Than.Or.Equal.To(actual);
+                                Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Most(actual);
+                                Expect(actual).To.Be.At.Most(expected);
+                            },
+                            Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void LessThanOrEqualTo_NegativeResult()
+                    {
+                        // Arrange
+                        var actual = GetRandomLong(5, 10);
+                        var expected = 4D;
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("less than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(actual).To.Be.At.Most(expected);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at most"));
+                        // Assert
+                    }
+                }
+
+                [TestFixture]
+                public class DateTimes
+                {
+                    [Test]
+                    public void LessThanOrEqualTo_PositiveResult()
+                    {
+                        // Arrange
+                        var range = GetRandomDateRange();
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(range.From).To.Be.Less.Than.Or.Equal.To(range.From);
+                                Expect(range.From).To.Be.Less.Than.Or.Equal.To(range.To);
+                            },
+                            Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(range.From).To.Be.At.Most(range.From);
+                                Expect(range.From).To.Be.At.Most(range.To);
+                            },
+                            Throws.Nothing);
+                        // Assert
+                    }
+
+                    [Test]
+                    public void LessThanOrEqualTo_NegativeResult()
+                    {
+                        // Arrange
+                        var range = GetRandomDateRange();
+                        // Pre-assert
+                        // Act
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(range.To).To.Be.Less.Than.Or.Equal.To(range.From);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("less than or equal to"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(range.To).To.Be.At.Most(range.From);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("at most"));
+                        // Assert
                     }
                 }
             }
 
-            [TestFixture]
-            public class LessThan
+            [Test]
+            public void LessThan_WhenActualIsLessThanExpected_ShouldNotThrow()
             {
-                [TestFixture]
-                public class OrEqualTo
-                {
-                    [TestFixture]
-                    public class Longs
+                // Arrange
+                var actual = GetRandomInt(1, 5);
+                var expected = GetRandomInt(6, 12);
+                // Pre-Assert
+                // Act
+                Assert.That(
+                    () =>
                     {
-                        [Test]
-                        public void LessThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 10;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Less.Than.Or.Equal.To(actual);
-                                    Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
-
-                        [Test]
-                        public void LessThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 4;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("less than or equal to"));
-                            // Assert
-                        }
-                    }
-
-                    [TestFixture]
-                    public class LongsToDecimals
+                        Expect(actual).To.Be.Less.Than(expected);
+                    },
+                    Throws.Nothing);
+                Assert.That(
+                    () =>
                     {
-                        [Test]
-                        public void LessThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 11M;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Less.Than.Or.Equal.To(actual);
-                                    Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
+                        Expect(actual).To.Be.Less.Than(expected);
+                    },
+                    Throws.Nothing);
+                // Assert
+            }
 
-                        [Test]
-                        public void LessThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 4M;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("less than or equal to"));
-                            // Assert
-                        }
-                    }
-
-                    [TestFixture]
-                    public class DecimalsToDecimals
+            [Test]
+            public void LessThan_WhenActualIsEqualToExpected_ShouldThrow()
+            {
+                // Arrange
+                var actual = GetRandomInt(1, 5);
+                var expected = actual;
+                // Pre-Assert
+                // Act
+                Assert.That(
+                    () =>
                     {
-                        [Test]
-                        public void LessThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomDecimal(5, 10);
-                            var expected = 11M;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Less.Than.Or.Equal.To(actual);
-                                    Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
-
-                        [Test]
-                        public void LessThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 4M;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("less than or equal to"));
-                            // Assert
-                        }
-                    }
-
-                    [TestFixture]
-                    public class DoublesToDecimals
+                        Expect(actual).To.Be.Less.Than(expected);
+                    },
+                    Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                Assert.That(
+                    () =>
                     {
-                        [Test]
-                        public void LessThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomFloat(5, 10);
-                            var expected = 11M;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Less.Than.Or.Equal.To(actual);
-                                    Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
+                        Expect(actual).To.Be.Less.Than(expected);
+                    },
+                    Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                // Assert
+            }
 
-                        [Test]
-                        public void LessThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 4;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("less than or equal to"));
-                            // Assert
-                        }
-                    }
-
-                    [TestFixture]
-                    public class LongsToDoubles
+            [Test]
+            public void LessThan_WhenActualIsGreaterThanExpected_ShouldThrow()
+            {
+                // Arrange
+                var actual = GetRandomInt(1, 5);
+                var expected = GetRandomInt(-5, 0);
+                // Pre-Assert
+                // Act
+                Assert.That(
+                    () =>
                     {
-                        [Test]
-                        public void LessThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 11D;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Less.Than.Or.Equal.To(actual);
-                                    Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
-
-                        [Test]
-                        public void LessThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var actual = GetRandomLong(5, 10);
-                            var expected = 4D;
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(actual).To.Be.Less.Than.Or.Equal.To(expected);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("less than or equal to"));
-                            // Assert
-                        }
-                    }
-
-                    [TestFixture]
-                    public class DateTimes
+                        Expect(actual).To.Be.Less.Than(expected);
+                    },
+                    Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains($"{actual} to be less than {expected}"));
+                Assert.That(
+                    () =>
                     {
-                        [Test]
-                        public void LessThanOrEqualTo_PositiveResult()
-                        {
-                            // Arrange
-                            var range = GetRandomDateRange();
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(range.From).To.Be.Less.Than.Or.Equal.To(range.From);
-                                    Expect(range.From).To.Be.Less.Than.Or.Equal.To(range.To);
-                                },
-                                Throws.Nothing);
-                            // Assert
-                        }
-
-                        [Test]
-                        public void LessThanOrEqualTo_NegativeResult()
-                        {
-                            // Arrange
-                            var range = GetRandomDateRange();
-                            // Pre-assert
-                            // Act
-                            Assert.That(
-                                () =>
-                                {
-                                    Expect(range.To).To.Be.Less.Than.Or.Equal.To(range.From);
-                                },
-                                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("less than or equal to"));
-                            // Assert
-                        }
-                    }
-                }
-
-                [Test]
-                public void LessThan_WhenActualIsLessThanExpected_ShouldNotThrow()
-                {
-                    // Arrange
-                    var actual = GetRandomInt(1, 5);
-                    var expected = GetRandomInt(6, 12);
-                    // Pre-Assert
-                    // Act
-                    Assert.That(
-                        () =>
-                        {
-                            Expect(actual).To.Be.Less.Than(expected);
-                        },
-                        Throws.Nothing);
-                    // Assert
-                }
-
-                [Test]
-                public void LessThan_WhenActualIsEqualToExpected_ShouldThrow()
-                {
-                    // Arrange
-                    var actual = GetRandomInt(1, 5);
-                    var expected = actual;
-                    // Pre-Assert
-                    // Act
-                    Assert.That(
-                        () =>
-                        {
-                            Expect(actual).To.Be.Less.Than(expected);
-                        },
-                        Throws.Exception
-                            .InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"{actual} to be less than {expected}"));
-                    // Assert
-                }
-
-                [Test]
-                public void LessThan_WhenActualIsGreaterThanExpected_ShouldThrow()
-                {
-                    // Arrange
-                    var actual = GetRandomInt(1, 5);
-                    var expected = GetRandomInt(-5, 0);
-                    // Pre-Assert
-                    // Act
-                    Assert.That(
-                        () =>
-                        {
-                            Expect(actual).To.Be.Less.Than(expected);
-                        },
-                        Throws.Exception
-                            .InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains($"{actual} to be less than {expected}"));
-                    // Assert
-                }
+                        Expect(actual).To.Be.At.Most(expected);
+                    },
+                    Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.Contains($"{actual} to be at most {expected}"));
+                // Assert
             }
         }
 

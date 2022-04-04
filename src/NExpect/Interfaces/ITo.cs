@@ -12,22 +12,27 @@ namespace NExpect.Interfaces
         /// Negates the expectation
         /// </summary>
         INotAfterTo<T> Not { get; }
+
         /// <summary>
         /// Starts an expectation some kind of similarity
         /// </summary>
         IBe<T> Be { get; }
+
         /// <summary>        
         /// Starts a test for contains on arbitrary objects
         /// </summary>
         IContain<T> Contain { get; }
+
         /// <summary>
         /// Starts an expectation for some property
         /// </summary>
         IHave<T> Have { get; }
+
         /// <summary>
         /// Starts an expectation for a deep equality test
         /// </summary>
         IDeep<T> Deep { get; }
+
         /// <summary>
         /// Starts an expectation for an intersection equality test
         /// -> only tests properties and fields with the same name and type

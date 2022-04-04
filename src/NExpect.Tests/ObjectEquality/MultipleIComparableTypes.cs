@@ -7,6 +7,8 @@ using NExpect.Interfaces;
 using NExpect.Tests.Collections;
 using NUnit.Framework;
 using PeanutButter.Utils;
+using static NExpect.Expectations;
+using NExpect;
 
 namespace NExpect.Tests.ObjectEquality
 {
@@ -15,7 +17,7 @@ namespace NExpect.Tests.ObjectEquality
     public class MultipleIComparableTypes
     {
         private static Type NullableType = typeof(Nullable<>);
-        
+
         private static readonly Type[] NonNullableNumerics = new[]
         {
             typeof(char),
@@ -28,22 +30,44 @@ namespace NExpect.Tests.ObjectEquality
             typeof(double),
             typeof(decimal)
         };
-        
-        private static readonly Type[] NullableNumerics 
+
+        private static readonly Type[] NullableNumerics
             = NonNullableNumerics.Select(n => NullableType.MakeGenericType(n))
                 .ToArray();
+
         private static readonly Type[] Numerics =
             NonNullableNumerics.And(NullableNumerics);
 
         // basically runs all permutations of numeric Greater.Than / Less.Than invocations
-        public static IEnumerable<(string dotted, object a, object e, bool shouldPass)> NumericsGenerator()
+        public static IEnumerable<GeneratedTestData> NumericsGenerator()
         {
-            return GenerateTestCasesFor(Numerics, 1, 2);
+            return GenerateTestCasesFor(Numerics, 1, 2)
+                .Select(o => new GeneratedTestData(o));
+            ;
         }
 
-        public static IEnumerable<(string dotted, object a, object e, bool shouldPass)> TimeSpansGenerator()
+        public static IEnumerable<GeneratedTestData> TimeSpansGenerator()
         {
-            return GenerateTestCasesFor(new[] { typeof(TimeSpan) }, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2));
+            return GenerateTestCasesFor(new[] { typeof(TimeSpan) }, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2))
+                .Select(o => new GeneratedTestData(o));
+        }
+
+        public class GeneratedTestData
+        {
+            public (string dotted, object actual, object expected, bool shouldPass) TestParameters { get; }
+
+            public GeneratedTestData(
+                (string dotted, object actual, object expected, bool shouldPass) testParameters
+            )
+            {
+                TestParameters = testParameters;
+            }
+
+            public override string ToString()
+            {
+                return
+                    $"{(TestParameters.shouldPass ? "✔" : "❌")} Expect({TestParameters.actual}).{TestParameters.dotted}({TestParameters.expected})";
+            }
         }
 
         private static object Coerce(object value, Type type)
@@ -58,7 +82,8 @@ namespace NExpect.Tests.ObjectEquality
 
                 var underlyingType = type.GetGenericArguments()[0];
                 var newValue = Convert.ChangeType(value, underlyingType);
-                var generic = typeof(MultipleIComparableTypes).GetMethod(nameof(MakeNullable), BindingFlags.NonPublic | BindingFlags.Static);
+                var generic = typeof(MultipleIComparableTypes).GetMethod(nameof(MakeNullable),
+                    BindingFlags.NonPublic | BindingFlags.Static);
                 var specific = generic.MakeGenericMethod(underlyingType);
                 return specific.Invoke(null, new object[] { newValue });
             }
@@ -67,13 +92,18 @@ namespace NExpect.Tests.ObjectEquality
         }
 
         // ReSharper disable once ConvertNullableToShortForm
-        private static Nullable<T> MakeNullable<T>(T value) where T: struct
+        private static Nullable<T> MakeNullable<T>(T value) where T : struct
         {
             // ReSharper disable once ConvertNullableToShortForm
             return new Nullable<T>(value);
         }
 
-        private static IEnumerable<(string dotted, object a, object e, bool shouldPass)> GenerateTestCasesFor<T>(
+        private static IEnumerable<(
+            string dotted,
+            object actual,
+            object expected,
+            bool shouldPass
+            )> GenerateTestCasesFor<T>(
             Type[] types,
             T minValue,
             T maxValue)
@@ -88,7 +118,13 @@ namespace NExpect.Tests.ObjectEquality
                         Coerce(maxValue, expectedType),
                         true
                     );
-                    
+                    yield return (
+                        "To.Be.Less.Than",
+                        Coerce(maxValue, actualType),
+                        Coerce(minValue, expectedType),
+                        false
+                    );
+
                     yield return (
                         "To.Be.Greater.Than",
                         Coerce(maxValue, expectedType),
@@ -96,45 +132,86 @@ namespace NExpect.Tests.ObjectEquality
                         true
                     );
                     yield return (
-                        "To.Be.Less.Than",
-                        Coerce(maxValue, actualType),
-                        Coerce(minValue, expectedType),
-                        false
-                    );
-                    yield return (
                         "To.Be.Greater.Than",
                         Coerce(minValue, actualType),
                         Coerce(maxValue, expectedType),
                         false
                     );
-                    
+
                     yield return (
-                            "To.Be.Greater.Than.Or.Equal.To",
-                            Coerce(maxValue, actualType),
-                            Coerce(minValue, actualType),
-                            true
-                        );
-                    
+                        "To.Be.Greater.Than.Or.Equal.To",
+                        Coerce(maxValue, actualType),
+                        Coerce(minValue, expectedType),
+                        true
+                    );
                     yield return (
-                            "To.Be.Greater.Than.Or.Equal.To",
-                            Coerce(maxValue, actualType),
-                            Coerce(maxValue, actualType),
-                            true
-                        );
-                    
+                        "To.Be.Greater.Than.Or.Equal.To",
+                        Coerce(maxValue, actualType),
+                        Coerce(maxValue, expectedType),
+                        true
+                    );
                     yield return (
-                            "To.Be.Less.Than.Or.Equal.To",
-                            Coerce(minValue, actualType),
-                            Coerce(maxValue, actualType),
-                            true
-                        );
-                    
+                        "To.Be.Greater.Than.Or.Equal.To",
+                        Coerce(minValue, actualType),
+                        Coerce(maxValue, expectedType),
+                        false
+                    );
                     yield return (
-                            "To.Be.Less.Than.Or.Equal.To",
-                            Coerce(maxValue, actualType),
-                            Coerce(maxValue, actualType),
-                            true
-                        );
+                        "To.Be.At.Least",
+                        Coerce(maxValue, actualType),
+                        Coerce(minValue, expectedType),
+                        true
+                    );
+                    yield return (
+                        "To.Be.At.Least",
+                        Coerce(maxValue, actualType),
+                        Coerce(maxValue, expectedType),
+                        true
+                    );
+                    yield return (
+                        "To.Be.At.Least",
+                        Coerce(minValue, actualType),
+                        Coerce(maxValue, expectedType),
+                        false
+                    );
+
+
+                    yield return (
+                        "To.Be.Less.Than.Or.Equal.To",
+                        Coerce(minValue, actualType),
+                        Coerce(maxValue, expectedType),
+                        true
+                    );
+                    yield return (
+                        "To.Be.Less.Than.Or.Equal.To",
+                        Coerce(maxValue, actualType),
+                        Coerce(maxValue, actualType),
+                        true
+                    );
+                    yield return (
+                        "To.Be.Less.Than.Or.Equal.To",
+                        Coerce(maxValue, actualType),
+                        Coerce(minValue, expectedType),
+                        false
+                    );
+                    yield return (
+                        "To.Be.At.Most",
+                        Coerce(minValue, actualType),
+                        Coerce(maxValue, expectedType),
+                        true
+                    );
+                    yield return (
+                        "To.Be.At.Most",
+                        Coerce(maxValue, actualType),
+                        Coerce(maxValue, actualType),
+                        true
+                    );
+                    yield return (
+                        "To.Be.At.Most",
+                        Coerce(maxValue, actualType),
+                        Coerce(minValue, expectedType),
+                        false
+                    );
                 }
             }
         }
@@ -142,10 +219,12 @@ namespace NExpect.Tests.ObjectEquality
         [TestCaseSource(nameof(NumericsGenerator))]
         [TestCaseSource(nameof(TimeSpansGenerator))]
         [Test]
-        public void WhenActualNotEqualExpected_ShouldNotThrowForComparison_(
-            (string dotted, object actual, object expected, bool shouldPass) testCase)
+        public void _(
+            GeneratedTestData generatedTestData
+        )
         {
             // Arrange
+            var testCase = generatedTestData.TestParameters;
             // Act
             var actualType = testCase.actual.GetType();
             var expectedType = testCase.expected.GetType();
@@ -168,7 +247,7 @@ namespace NExpect.Tests.ObjectEquality
                     }
                 })
                 .FirstOrDefault(o => o != null);
-            if (expectation == null)
+            if (expectation is null)
             {
                 // try invoke the generic one
                 expectation = expectMethods.Select(
@@ -205,7 +284,18 @@ namespace NExpect.Tests.ObjectEquality
                 last = last.GetPropertyValue(queue.Dequeue());
             }
 
-            var extMethods = typeof(GreaterAndLessMatchers).GetMethods()
+            var matcherTypes = new[]
+            {
+                typeof(GreaterThanMatchers),
+                typeof(GreaterThanOrEqualMatchers),
+                typeof(LessThanMatchers),
+                typeof(LessThanOrEqualMatchers),
+                typeof(AtLeastMatchers),
+                typeof(AtMostMatchers)
+            };
+
+            var extMethods = matcherTypes.Select(t => t.GetMethods())
+                .SelectMany(o => o)
                 .Where(mi => mi.Name == final && mi.GetParameters().Length == 2)
                 .ToArray();
 
@@ -231,17 +321,51 @@ namespace NExpect.Tests.ObjectEquality
                     }
                 }).FirstOrDefault(o => o != null);
 
-            if (ext == null)
+            if (ext is null)
             {
                 // try find the generic with T1, T2
+                var lastType = last.GetType();
+                var lastGenericType = lastType.GetGenericTypeDefinition();
+                var lastGenericTypeArgs = lastGenericType.GetGenericArguments();
                 ext = extMethods
-                    .Where(mi => mi.IsGenericMethod)
+                    .Where(mi =>
+                    {
+                        if (!mi.IsGenericMethod)
+                        {
+                            return false;
+                        }
+
+                        var methodParameters = mi.GetParameters();
+                        if (methodParameters.Length != 2)
+                        {
+                            return false;
+                        }
+
+                        var firstParameterType = methodParameters[0].ParameterType;
+                        if (!firstParameterType.IsGenericType)
+                        {
+                            return false;
+                        }
+
+                        var firstArgGenericArgs = firstParameterType.GetGenericArguments();
+                        if (firstArgGenericArgs.Length != lastGenericTypeArgs.Length)
+                        {
+                            return false;
+                        }
+
+                        var firstArgGenericType = firstParameterType.GetGenericTypeDefinition();
+                        var concreted = firstArgGenericType.MakeGenericType(lastGenericTypeArgs);
+                        return lastGenericType.Implements(concreted);
+                    })
                     .Select(mi =>
                     {
                         MethodInfo genericExt;
                         try
                         {
-                            genericExt = mi.MakeGenericMethod(actualType, expectedType);
+                            genericExt = mi.MakeGenericMethod(
+                                last.GetType().GetGenericArguments()[0],
+                                expectedType
+                            );
                         }
                         catch
                         {
@@ -250,12 +374,13 @@ namespace NExpect.Tests.ObjectEquality
 
                         try
                         {
-                            genericExt.Invoke(null, new object[] { last, testCase.expected });
+                            genericExt.Invoke(null, new[] { last, testCase.expected });
                             return genericExt;
                         }
                         catch (Exception ex)
                         {
-                            if (ex.InnerException != null && ex.InnerException is UnmetExpectationException)
+                            if (ex.InnerException != null &&
+                                ex.InnerException is UnmetExpectationException)
                             {
                                 return genericExt;
                             }
@@ -267,7 +392,7 @@ namespace NExpect.Tests.ObjectEquality
 
             if (ext == null)
             {
-                Assert.Fail($"Can't find .Than to operate on {last.GetType()} with expected type {expectedType}");
+                Assert.Fail($"Can't find .{final} to operate on {last.GetType()} with expected type {expectedType}");
             }
 
             // Assert
