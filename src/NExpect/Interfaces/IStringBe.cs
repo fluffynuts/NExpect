@@ -1,14 +1,13 @@
-﻿namespace NExpect.Interfaces
+﻿namespace NExpect.Interfaces;
+
+/// <summary>
+/// Facilitates the string-specific .Be syntax
+/// </summary>
+public interface IStringBe: IBe<string>
 {
     /// <summary>
-    /// Facilitates the string-specific .Be syntax
+    /// Starts an expectation to match the Actual string with
+    /// a regular expression
     /// </summary>
-    public interface IStringBe: IBe<string>
-    {
-        /// <summary>
-        /// Starts an expectation to match the Actual string with
-        /// a regular expression
-        /// </summary>
-        IStringMatched Matched { get; }
-    }
+    IStringMatched Matched { get; }
 }

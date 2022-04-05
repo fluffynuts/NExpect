@@ -1,26 +1,25 @@
-namespace NExpect.Interfaces
+namespace NExpect.Interfaces;
+
+/// <summary>
+/// Provides the .And on .Greater.Than
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public interface IGreaterThanContinuation<T> 
 {
     /// <summary>
-    /// Provides the .And on .Greater.Than
+    /// Prepares to test for more than just greatness
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IGreaterThanContinuation<T> 
-    {
-        /// <summary>
-        /// Prepares to test for more than just greatness
-        /// </summary>
-        IGreaterThanAnd<T> And { get; }
-    }
+    IGreaterThanAnd<T> And { get; }
+}
 
+/// <summary>
+/// Provides the .And on .Less.Than
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public interface ILessThanContinuation<T>
+{
     /// <summary>
-    /// Provides the .And on .Less.Than
+    /// Prepares to test for more than just lesserness
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface ILessThanContinuation<T>
-    {
-        /// <summary>
-        /// Prepares to test for more than just lesserness
-        /// </summary>
-        ILessThanAnd<T> And { get; }
-    }
+    ILessThanAnd<T> And { get; }
 }

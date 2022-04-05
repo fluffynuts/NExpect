@@ -1,37 +1,36 @@
 using System;
 
-namespace NExpect.Helpers
+namespace NExpect.Helpers;
+
+/// <summary>
+/// Helper class to memoize functions
+/// </summary>
+public static class FuncFactory
 {
     /// <summary>
-    /// Helper class to memoize functions
+    /// Memoizes a func so that it's only called once
     /// </summary>
-    public static class FuncFactory
+    /// <param name="generator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static Func<T> Memoize<T>(
+        Func<T> generator)
     {
-        /// <summary>
-        /// Memoizes a func so that it's only called once
-        /// </summary>
-        /// <param name="generator"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static Func<T> Memoize<T>(
-            Func<T> generator)
+        T fetchedValue = default;
+        var haveFetched = false;
+
+        return () =>
         {
-            T fetchedValue = default;
-            var haveFetched = false;
+            return haveFetched
+                ? fetchedValue
+                : Fetch();
 
-            return () =>
+            T Fetch()
             {
-                return haveFetched
-                    ? fetchedValue
-                    : Fetch();
-
-                T Fetch()
-                {
-                    var result = fetchedValue = generator();
-                    haveFetched = true;
-                    return result;
-                }
-            };
-        }
+                var result = fetchedValue = generator();
+                haveFetched = true;
+                return result;
+            }
+        };
     }
 }

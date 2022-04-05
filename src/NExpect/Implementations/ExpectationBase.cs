@@ -3,38 +3,37 @@ using NExpect.MatcherLogic;
 
 // ReSharper disable MemberCanBeProtected.Global
 
-namespace NExpect.Implementations
+namespace NExpect.Implementations;
+
+internal abstract class ExpectationBase: CannotBeCompared
 {
-    internal abstract class ExpectationBase: CannotBeCompared
+    public bool IsNegated { get; protected set; }
+}
+
+internal abstract class ExpectationBase<T> : ExpectationBase
+{
+    public void Negate()
     {
-        public bool IsNegated { get; protected set; }
+        IsNegated = !IsNegated;
     }
 
-    internal abstract class ExpectationBase<T> : ExpectationBase
+    public void ResetNegation()
     {
-        public void Negate()
-        {
-            IsNegated = !IsNegated;
-        }
+        IsNegated = false;
+    }
 
-        public void ResetNegation()
+    public IMatcherResult RunMatcher(
+        T actual,
+        bool negated,
+        Func<T, IMatcherResult> matcher,
+        bool resetNegationAfterRun
+    )
+    {
+        var result = MatcherRunner.RunMatcher(actual, negated, matcher);
+        if (resetNegationAfterRun)
         {
-            IsNegated = false;
+            ResetNegation();
         }
-
-        public IMatcherResult RunMatcher(
-            T actual,
-            bool negated,
-            Func<T, IMatcherResult> matcher,
-            bool resetNegationAfterRun
-        )
-        {
-            var result = MatcherRunner.RunMatcher(actual, negated, matcher);
-            if (resetNegationAfterRun)
-            {
-                ResetNegation();
-            }
-            return result;
-        }
+        return result;
     }
 }

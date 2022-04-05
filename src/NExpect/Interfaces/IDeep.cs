@@ -1,14 +1,13 @@
-﻿namespace NExpect.Interfaces
+﻿namespace NExpect.Interfaces;
+
+/// <summary>
+/// Provides the .Deep grammar for objects
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public interface IDeep<T>: ICanAddMatcher<T>
 {
     /// <summary>
-    /// Provides the .Deep grammar for objects
+    /// 
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IDeep<T>: ICanAddMatcher<T>
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        IDeepEqual<T> Equal { get; }
-    }
+    IDeepEqual<T> Equal { get; }
 }

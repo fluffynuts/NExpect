@@ -1,16 +1,15 @@
 ﻿// ReSharper disable InheritdocConsiderUsage
-namespace NExpect.Interfaces
+namespace NExpect.Interfaces;
+
+/// <summary>
+/// Provides the Contain hook point specifically for strings
+/// </summary>
+public interface IStringContainContinuation
+    : IStringMore
 {
     /// <summary>
-    /// Provides the Contain hook point specifically for strings
+    /// Provides the .In continuation for expecting string fragments
+    /// in order
     /// </summary>
-    public interface IStringContainContinuation
-        : IStringMore
-    {
-        /// <summary>
-        /// Provides the .In continuation for expecting string fragments
-        /// in order
-        /// </summary>
-        IStringIn In { get; }
-    }
+    IStringIn In { get; }
 }

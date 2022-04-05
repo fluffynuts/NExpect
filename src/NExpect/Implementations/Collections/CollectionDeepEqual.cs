@@ -7,15 +7,14 @@ using NExpect.Interfaces;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 
-namespace NExpect.Implementations.Collections
+namespace NExpect.Implementations.Collections;
+
+internal class CollectionDeepEqual<T> :
+    ExpectationContextWithLazyActual<IEnumerable<T>>,
+    IHasActual<IEnumerable<T>>,
+    ICollectionDeepEqual<T>
 {
-    internal class CollectionDeepEqual<T> :
-        ExpectationContextWithLazyActual<IEnumerable<T>>,
-        IHasActual<IEnumerable<T>>,
-        ICollectionDeepEqual<T>
+    public CollectionDeepEqual(Func<IEnumerable<T>> actualFetcher) : base(actualFetcher)
     {
-        public CollectionDeepEqual(Func<IEnumerable<T>> actualFetcher) : base(actualFetcher)
-        {
-        }
     }
 }

@@ -2,15 +2,14 @@ using System;
 using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
-namespace NExpect.Implementations.Fluency
-{
-    internal class PropertyNot<TValue>
-        : ExpectationContextWithLazyActual<TValue>, IPropertyNot<TValue>
-    {
-        public IToAfterNot<TValue> To => Next<ToAfterNot<TValue>>();
+namespace NExpect.Implementations.Fluency;
 
-        public PropertyNot(Func<TValue> actualFetcher) : base(actualFetcher)
-        {
-        }
+internal class PropertyNot<TValue>
+    : ExpectationContextWithLazyActual<TValue>, IPropertyNot<TValue>
+{
+    public IToAfterNot<TValue> To => Next<ToAfterNot<TValue>>();
+
+    public PropertyNot(Func<TValue> actualFetcher) : base(actualFetcher)
+    {
     }
 }

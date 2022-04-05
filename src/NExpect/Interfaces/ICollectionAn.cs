@@ -1,16 +1,15 @@
 ﻿// ReSharper disable UnusedTypeParameter
 
-namespace NExpect.Interfaces
+namespace NExpect.Interfaces;
+
+/// <summary>
+/// Continuation to provide the ".An" grammar for collections
+/// </summary>
+/// <typeparam name="T">Type of the continuation</typeparam>
+public interface ICollectionAn<T>
 {
     /// <summary>
-    /// Continuation to provide the ".An" grammar for collections
+    /// Prepares to check the Type of Actual
     /// </summary>
-    /// <typeparam name="T">Type of the continuation</typeparam>
-    public interface ICollectionAn<T>
-    {
-        /// <summary>
-        /// Prepares to check the Type of Actual
-        /// </summary>
-        IInstanceContinuation Instance { get; }
-    }
+    IInstanceContinuation Instance { get; }
 }

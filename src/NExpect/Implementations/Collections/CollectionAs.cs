@@ -6,18 +6,17 @@ using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
 
-namespace NExpect.Implementations.Collections
-{
-    internal class CollectionAs<T>:
-        ExpectationContextWithLazyActual<IEnumerable<T>>,
-        IHasActual<IEnumerable<T>>,
-        ICollectionAs<T>
-    {
-        public ICollectionExpectation<object> Objects =>
-            new CollectionExpectation<object>(Actual.Select(o => o as object));
+namespace NExpect.Implementations.Collections;
 
-        public CollectionAs(Func<IEnumerable<T>> actualFetcher) : base(actualFetcher)
-        {
-        }
+internal class CollectionAs<T>:
+    ExpectationContextWithLazyActual<IEnumerable<T>>,
+    IHasActual<IEnumerable<T>>,
+    ICollectionAs<T>
+{
+    public ICollectionExpectation<object> Objects =>
+        new CollectionExpectation<object>(Actual.Select(o => o as object));
+
+    public CollectionAs(Func<IEnumerable<T>> actualFetcher) : base(actualFetcher)
+    {
     }
 }

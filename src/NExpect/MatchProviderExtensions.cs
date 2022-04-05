@@ -6,179 +6,178 @@ using static NExpect.Implementations.MessageHelpers;
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMember.Global
 
-namespace NExpect
+namespace NExpect;
+
+/// <summary>
+/// Provides Match() continuations which allow providing a simple
+/// lambda to do your matching, for when writing an entire extension method
+/// seems like an overkill.
+/// </summary>
+public static class MatchProviderExtensions
 {
     /// <summary>
-    /// Provides Match() continuations which allow providing a simple
-    /// lambda to do your matching, for when writing an entire extension method
-    /// seems like an overkill.
+    /// Match the value under test with a simple Func which takes in your value
+    /// and returns true if the test should pass.
     /// </summary>
-    public static class MatchProviderExtensions
+    /// <param name="continuation">Continuation to act on</param>
+    /// <param name="test">Func to test the original value with</param>
+    /// <typeparam name="T"></typeparam>
+    public static void Match<T>(
+        this ITo<T> continuation,
+        Func<T, bool> test
+    )
     {
-        /// <summary>
-        /// Match the value under test with a simple Func which takes in your value
-        /// and returns true if the test should pass.
-        /// </summary>
-        /// <param name="continuation">Continuation to act on</param>
-        /// <param name="test">Func to test the original value with</param>
-        /// <typeparam name="T"></typeparam>
-        public static void Match<T>(
-            this ITo<T> continuation,
-            Func<T, bool> test
-        )
-        {
-            continuation.Match(test, NULL_STRING);
-        }
+        continuation.Match(test, NULL_STRING);
+    }
 
-        /// <summary>
-        /// Match the value under test with a simple Func which takes in your value
-        /// and returns true if the test should pass.
-        /// </summary>
-        /// <param name="continuation">Continuation to act on</param>
-        /// <param name="test">Func to test the original value with</param>
-        /// <param name="customMessage">Message to include in the result upon failure</param>
-        /// <typeparam name="T"></typeparam>
-        public static void Match<T>(
-            this ITo<T> continuation,
-            Func<T, bool> test,
-            string customMessage
-        )
-        {
-            continuation.Match(test, () => customMessage);
-        }
+    /// <summary>
+    /// Match the value under test with a simple Func which takes in your value
+    /// and returns true if the test should pass.
+    /// </summary>
+    /// <param name="continuation">Continuation to act on</param>
+    /// <param name="test">Func to test the original value with</param>
+    /// <param name="customMessage">Message to include in the result upon failure</param>
+    /// <typeparam name="T"></typeparam>
+    public static void Match<T>(
+        this ITo<T> continuation,
+        Func<T, bool> test,
+        string customMessage
+    )
+    {
+        continuation.Match(test, () => customMessage);
+    }
 
-        /// <summary>
-        /// Match the value under test with a simple Func which takes in your value
-        /// and returns true if the test should pass.
-        /// </summary>
-        /// <param name="continuation">Continuation to act on</param>
-        /// <param name="test">Func to test the original value with</param>
-        /// <param name="customMessageGenerator">Generates a custom message to include in the result upon failure</param>
-        /// <typeparam name="T"></typeparam>
-        public static void Match<T>(
-            this ITo<T> continuation,
-            Func<T, bool> test,
-            Func<string> customMessageGenerator
-        )
-        {
-            continuation.AddMatcher(MatchMatcherFor(test, customMessageGenerator));
-        }
+    /// <summary>
+    /// Match the value under test with a simple Func which takes in your value
+    /// and returns true if the test should pass.
+    /// </summary>
+    /// <param name="continuation">Continuation to act on</param>
+    /// <param name="test">Func to test the original value with</param>
+    /// <param name="customMessageGenerator">Generates a custom message to include in the result upon failure</param>
+    /// <typeparam name="T"></typeparam>
+    public static void Match<T>(
+        this ITo<T> continuation,
+        Func<T, bool> test,
+        Func<string> customMessageGenerator
+    )
+    {
+        continuation.AddMatcher(MatchMatcherFor(test, customMessageGenerator));
+    }
 
-        /// <summary>
-        /// Match the value under test with a simple Func which takes in your value
-        /// and returns true if the test should pass.
-        /// </summary>
-        /// <param name="continuation">Continuation to act on</param>
-        /// <param name="test">Func to test the original value with</param>
-        /// <typeparam name="T"></typeparam>
-        public static void Match<T>(
-            this IToAfterNot<T> continuation,
-            Func<T, bool> test
-        )
-        {
-            continuation.Match(test, NULL_STRING);
-        }
+    /// <summary>
+    /// Match the value under test with a simple Func which takes in your value
+    /// and returns true if the test should pass.
+    /// </summary>
+    /// <param name="continuation">Continuation to act on</param>
+    /// <param name="test">Func to test the original value with</param>
+    /// <typeparam name="T"></typeparam>
+    public static void Match<T>(
+        this IToAfterNot<T> continuation,
+        Func<T, bool> test
+    )
+    {
+        continuation.Match(test, NULL_STRING);
+    }
 
-        /// <summary>
-        /// Match the value under test with a simple Func which takes in your value
-        /// and returns true if the test should pass.
-        /// </summary>
-        /// <param name="continuation">Continuation to act on</param>
-        /// <param name="test">Func to test the original value with</param>
-        /// <param name="customMessage">Message to include in the result upon failure</param>
-        /// <typeparam name="T"></typeparam>
-        public static void Match<T>(
-            this IToAfterNot<T> continuation,
-            Func<T, bool> test,
-            string customMessage
-        )
-        {
-            continuation.Match(test, () => customMessage);
-        }
+    /// <summary>
+    /// Match the value under test with a simple Func which takes in your value
+    /// and returns true if the test should pass.
+    /// </summary>
+    /// <param name="continuation">Continuation to act on</param>
+    /// <param name="test">Func to test the original value with</param>
+    /// <param name="customMessage">Message to include in the result upon failure</param>
+    /// <typeparam name="T"></typeparam>
+    public static void Match<T>(
+        this IToAfterNot<T> continuation,
+        Func<T, bool> test,
+        string customMessage
+    )
+    {
+        continuation.Match(test, () => customMessage);
+    }
 
-        /// <summary>
-        /// Match the value under test with a simple Func which takes in your value
-        /// and returns true if the test should pass.
-        /// </summary>
-        /// <param name="continuation">Continuation to act on</param>
-        /// <param name="test">Func to test the original value with</param>
-        /// <param name="customMessageGenerator">Generates a custom message to include in the result upon failure</param>
-        /// <typeparam name="T"></typeparam>
-        public static void Match<T>(
-            this IToAfterNot<T> continuation,
-            Func<T, bool> test,
-            Func<string> customMessageGenerator
-        )
-        {
-            continuation.AddMatcher(MatchMatcherFor(test, customMessageGenerator));
-        }
+    /// <summary>
+    /// Match the value under test with a simple Func which takes in your value
+    /// and returns true if the test should pass.
+    /// </summary>
+    /// <param name="continuation">Continuation to act on</param>
+    /// <param name="test">Func to test the original value with</param>
+    /// <param name="customMessageGenerator">Generates a custom message to include in the result upon failure</param>
+    /// <typeparam name="T"></typeparam>
+    public static void Match<T>(
+        this IToAfterNot<T> continuation,
+        Func<T, bool> test,
+        Func<string> customMessageGenerator
+    )
+    {
+        continuation.AddMatcher(MatchMatcherFor(test, customMessageGenerator));
+    }
 
-        /// <summary>
-        /// Match the value under test with a simple Func which takes in your value
-        /// and returns true if the test should pass.
-        /// </summary>
-        /// <param name="continuation">Continuation to act on</param>
-        /// <param name="test">Func to test the original value with</param>
-        /// <typeparam name="T"></typeparam>
-        public static void Match<T>(
-            this INotAfterTo<T> continuation,
-            Func<T, bool> test
-        )
-        {
-            continuation.Match(test, NULL_STRING);
-        }
+    /// <summary>
+    /// Match the value under test with a simple Func which takes in your value
+    /// and returns true if the test should pass.
+    /// </summary>
+    /// <param name="continuation">Continuation to act on</param>
+    /// <param name="test">Func to test the original value with</param>
+    /// <typeparam name="T"></typeparam>
+    public static void Match<T>(
+        this INotAfterTo<T> continuation,
+        Func<T, bool> test
+    )
+    {
+        continuation.Match(test, NULL_STRING);
+    }
 
-        /// <summary>
-        /// Match the value under test with a simple Func which takes in your value
-        /// and returns true if the test should pass.
-        /// </summary>
-        /// <param name="continuation">Continuation to act on</param>
-        /// <param name="test">Func to test the original value with</param>
-        /// <param name="customMessage">Message to include in the result upon failure</param>
-        /// <typeparam name="T"></typeparam>
-        public static void Match<T>(
-            this INotAfterTo<T> continuation,
-            Func<T, bool> test,
-            string customMessage
-        )
-        {
-            continuation.Match(test, () => customMessage);
-        }
+    /// <summary>
+    /// Match the value under test with a simple Func which takes in your value
+    /// and returns true if the test should pass.
+    /// </summary>
+    /// <param name="continuation">Continuation to act on</param>
+    /// <param name="test">Func to test the original value with</param>
+    /// <param name="customMessage">Message to include in the result upon failure</param>
+    /// <typeparam name="T"></typeparam>
+    public static void Match<T>(
+        this INotAfterTo<T> continuation,
+        Func<T, bool> test,
+        string customMessage
+    )
+    {
+        continuation.Match(test, () => customMessage);
+    }
 
-        /// <summary>
-        /// Match the value under test with a simple Func which takes in your value
-        /// and returns true if the test should pass.
-        /// </summary>
-        /// <param name="continuation">Continuation to act on</param>
-        /// <param name="test">Func to test the original value with</param>
-        /// <param name="customMessageGenerator">Generates a custom message to include in the result upon failure</param>
-        /// <typeparam name="T"></typeparam>
-        public static void Match<T>(
-            this INotAfterTo<T> continuation,
-            Func<T, bool> test,
-            Func<string> customMessageGenerator
-        )
-        {
-            continuation.AddMatcher(MatchMatcherFor(test, customMessageGenerator));
-        }
+    /// <summary>
+    /// Match the value under test with a simple Func which takes in your value
+    /// and returns true if the test should pass.
+    /// </summary>
+    /// <param name="continuation">Continuation to act on</param>
+    /// <param name="test">Func to test the original value with</param>
+    /// <param name="customMessageGenerator">Generates a custom message to include in the result upon failure</param>
+    /// <typeparam name="T"></typeparam>
+    public static void Match<T>(
+        this INotAfterTo<T> continuation,
+        Func<T, bool> test,
+        Func<string> customMessageGenerator
+    )
+    {
+        continuation.AddMatcher(MatchMatcherFor(test, customMessageGenerator));
+    }
 
-        private static Func<T, IMatcherResult> MatchMatcherFor<T>(
-            Func<T, bool> test,
-            Func<string> customMessageGenerator
-        )
+    private static Func<T, IMatcherResult> MatchMatcherFor<T>(
+        Func<T, bool> test,
+        Func<string> customMessageGenerator
+    )
+    {
+        return actual =>
         {
-            return actual =>
-            {
-                var passed = test(actual);
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        () => passed
-                            ? new[] {"Expected", actual.Stringify(), "not to be matched"}
-                            : new[] {"Expected", actual.Stringify(), "to be matched"},
-                        customMessageGenerator)
-                );
-            };
-        }
+            var passed = test(actual);
+            return new MatcherResult(
+                passed,
+                FinalMessageFor(
+                    () => passed
+                        ? new[] {"Expected", actual.Stringify(), "not to be matched"}
+                        : new[] {"Expected", actual.Stringify(), "to be matched"},
+                    customMessageGenerator)
+            );
+        };
     }
 }

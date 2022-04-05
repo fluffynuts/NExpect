@@ -3,47 +3,46 @@ using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
-namespace NExpect.Implementations.Fluency
+namespace NExpect.Implementations.Fluency;
+
+internal class InstanceContinuation :
+    ExpectationContextWithLazyActual<Type>,
+    IExpectationContext<Type>,
+    IInstanceContinuation
 {
-    internal class InstanceContinuation :
-        ExpectationContextWithLazyActual<Type>,
-        IExpectationContext<Type>,
-        IInstanceContinuation
+    public IExpectationContext<Type> TypedParent { get; set; }
+    public override IExpectationContext Parent { get; }
+
+    public InstanceContinuation(Func<Type> actualFetcher, IExpectationContext originalParent)
+        : base(actualFetcher)
     {
-        public IExpectationContext<Type> TypedParent { get; set; }
-        public override IExpectationContext Parent { get; }
+        Parent = originalParent;
+    }
 
-        public InstanceContinuation(Func<Type> actualFetcher, IExpectationContext originalParent)
-            : base(actualFetcher)
+    public override void Negate()
+    {
+        throw new InvalidOperationException("This context cannot be negated");
+    }
+
+    public override void ResetNegation()
+    {
+        throw new InvalidOperationException("This context cannot be negated");
+    }
+
+    public override IMatcherResult RunMatcher(Func<Type, IMatcherResult> matcher)
+    {
+        IMatcherResult result;
+        try
         {
-            Parent = originalParent;
+            result = matcher(Actual);
+        }
+        catch (Exception ex)
+        {
+            MatcherRunner.ProcessMatcherException(ex);
+            return default;
         }
 
-        public override void Negate()
-        {
-            throw new InvalidOperationException("This context cannot be negated");
-        }
-
-        public override void ResetNegation()
-        {
-            throw new InvalidOperationException("This context cannot be negated");
-        }
-
-        public override IMatcherResult RunMatcher(Func<Type, IMatcherResult> matcher)
-        {
-            IMatcherResult result;
-            try
-            {
-                result = matcher(Actual);
-            }
-            catch (Exception ex)
-            {
-                MatcherRunner.ProcessMatcherException(ex);
-                return default;
-            }
-
-            MatcherRunner.ProcessMatcherResult(Parent.IsNegated(), result);
-            return result;
-        }
+        MatcherRunner.ProcessMatcherResult(Parent.IsNegated(), result);
+        return result;
     }
 }

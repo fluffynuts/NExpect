@@ -1,13 +1,12 @@
 using System;
 using NExpect.Interfaces;
 
-namespace NExpect.Implementations
+namespace NExpect.Implementations;
+
+internal class Without<T> : With<T>, IWithout<T>
 {
-    internal class Without<T> : With<T>, IWithout<T>
+    public Without(Func<T> actualFetcher) 
+        : base(actualFetcher)
     {
-        public Without(Func<T> actualFetcher) 
-            : base(actualFetcher)
-        {
-        }
     }
 }

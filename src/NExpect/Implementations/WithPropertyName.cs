@@ -1,16 +1,15 @@
 ﻿using System;
 using NExpect.Interfaces;
 
-namespace NExpect.Implementations
-{
-    internal class WithPropertyName<T> : With<T>, IWithPropertyName<T>
-    {
-        public string PropertyName { get; set; }
+namespace NExpect.Implementations;
 
-        public WithPropertyName(
-            Func<T> actualFetcher
-        ) : base(actualFetcher)
-        {
-        }
+internal class WithPropertyName<T> : With<T>, IWithPropertyName<T>
+{
+    public string PropertyName { get; set; }
+
+    public WithPropertyName(
+        Func<T> actualFetcher
+    ) : base(actualFetcher)
+    {
     }
 }

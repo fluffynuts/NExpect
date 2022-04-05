@@ -1,14 +1,13 @@
-namespace NExpect.Interfaces
+namespace NExpect.Interfaces;
+
+/// <summary>
+/// Used to continue reflective property assertions
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public interface IHasWith<T>
 {
     /// <summary>
-    /// Used to continue reflective property assertions
+    /// Continues the .Property().With syntax
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IHasWith<T>
-    {
-        /// <summary>
-        /// Continues the .Property().With syntax
-        /// </summary>
-        IWith<T> With { get; }
-    }
+    IWith<T> With { get; }
 }

@@ -7,132 +7,131 @@ using NExpect.Implementations;
 
 // ReSharper disable IntroduceOptionalParameters.Global
 
-namespace NExpect.Helpers
+namespace NExpect.Helpers;
+
+internal class DeepTestResult
 {
-    internal class DeepTestResult
+    public static DeepTestResult Pass { get; } = new DeepTestResult(true);
+
+    public static DeepTestResult Fail(params string[] errors)
     {
-        public static DeepTestResult Pass { get; } = new DeepTestResult(true);
-
-        public static DeepTestResult Fail(params string[] errors)
-        {
-            return new DeepTestResult(false, errors);
-        }
-
-        public bool AreEqual { get; }
-        public IEnumerable<string> Errors { get; }
-
-        public DeepTestResult(bool areEqual) : this(areEqual, new string[0])
-        {
-        }
-
-        public DeepTestResult(bool areEqual, params string[] errors)
-            : this(areEqual, errors.AsEnumerable())
-        {
-        }
-
-        public DeepTestResult(bool areEqual, IEnumerable<string> errors)
-        {
-            AreEqual = areEqual;
-            Errors = errors;
-        }
+        return new DeepTestResult(false, errors);
     }
 
-    internal static class DeepTestHelpers
+    public bool AreEqual { get; }
+    public IEnumerable<string> Errors { get; }
+
+    public DeepTestResult(bool areEqual) : this(areEqual, new string[0])
     {
-        internal static DeepTestResult AreIntersectionEqual<T>(
-            T item1,
-            T item2,
-            params object[] customEqualityComparers)
+    }
+
+    public DeepTestResult(bool areEqual, params string[] errors)
+        : this(areEqual, errors.AsEnumerable())
+    {
+    }
+
+    public DeepTestResult(bool areEqual, IEnumerable<string> errors)
+    {
+        AreEqual = areEqual;
+        Errors = errors;
+    }
+}
+
+internal static class DeepTestHelpers
+{
+    internal static DeepTestResult AreIntersectionEqual<T>(
+        T item1,
+        T item2,
+        params object[] customEqualityComparers)
+    {
+        var tester = new DeepEqualityTester(item1, item2)
         {
-            var tester = new DeepEqualityTester(item1, item2)
+            OnlyTestIntersectingProperties = true,
+            RecordErrors = true,
+            VerbosePropertyMismatchErrors = false,
+            FailOnMissingProperties = false,
+            IncludeFields = true
+        };
+        AddCustomComparerersTo(tester, customEqualityComparers);
+        return new DeepTestResult(
+            tester.AreDeepEqual(),
+            tester.Errors);
+    }
+
+    internal static DeepTestResult AreDeepEqual(
+        object item1,
+        object item2,
+        object[] customEqualityComparers)
+    {
+        var tester = new DeepEqualityTester(item1, item2)
+        {
+            RecordErrors = true,
+            VerbosePropertyMismatchErrors = false,
+            FailOnMissingProperties = true,
+            IncludeFields = true,
+            OnlyTestIntersectingProperties = false
+        };
+        AddCustomComparerersTo(tester, customEqualityComparers);
+        return new DeepTestResult(
+            tester.AreDeepEqual(),
+            tester.Errors);
+    }
+
+    private static void AddCustomComparerersTo(
+        DeepEqualityTester tester,
+        params object[] customEqualityComparers)
+    {
+        ValidateAreComparers(customEqualityComparers);
+        customEqualityComparers.ForEach(tester.AddCustomComparer);
+    }
+
+    private static void ValidateAreComparers(object[] customEqualityComparers)
+    {
+        var invalid = customEqualityComparers.Where(
+            o =>
             {
-                OnlyTestIntersectingProperties = true,
-                RecordErrors = true,
-                VerbosePropertyMismatchErrors = false,
-                FailOnMissingProperties = false,
-                IncludeFields = true
-            };
-            AddCustomComparerersTo(tester, customEqualityComparers);
-            return new DeepTestResult(
-                tester.AreDeepEqual(),
-                tester.Errors);
+                var implemented =
+                    o.GetType().GetTypeInfo().ImplementedInterfaces;
+                var match = implemented.FirstOrDefault(
+                    i => i.IsGenericOf(typeof(IEqualityComparer<>)));
+                return match == null;
+            }).ToArray();
+        if (!invalid.Any())
+            return;
+        var names = invalid.Select(t => t.GetType().PrettyName()).JoinWith(",");
+        throw new ArgumentException(
+            $"Custom equality comparers must implement IEqualityComparer<T>. The following do not: {names}"
+        );
+    }
+
+    internal static DeepTestResult CollectionCompare<T>(
+        IEnumerable<T> collection,
+        IEnumerable<T> expected,
+        Func<List<T>, List<T>, DeepTestResult> finalComparison
+    )
+    {
+        if (collection == null &&
+            expected == null)
+        {
+            return DeepTestResult.Pass;
         }
 
-        internal static DeepTestResult AreDeepEqual(
-            object item1,
-            object item2,
-            object[] customEqualityComparers)
+        if (collection == null ||
+            expected == null)
         {
-            var tester = new DeepEqualityTester(item1, item2)
-            {
-                RecordErrors = true,
-                VerbosePropertyMismatchErrors = false,
-                FailOnMissingProperties = true,
-                IncludeFields = true,
-                OnlyTestIntersectingProperties = false
-            };
-            AddCustomComparerersTo(tester, customEqualityComparers);
-            return new DeepTestResult(
-                tester.AreDeepEqual(),
-                tester.Errors);
+            return DeepTestResult.Fail(
+                expected == null
+                    ? $"Expected collection is null but actual is not"
+                    : "Actual collection is null but expected is not");
         }
 
-        private static void AddCustomComparerersTo(
-            DeepEqualityTester tester,
-            params object[] customEqualityComparers)
+        var master = collection.ToList();
+        var compare = expected.ToList();
+        if (master.Count != compare.Count)
         {
-            ValidateAreComparers(customEqualityComparers);
-            customEqualityComparers.ForEach(tester.AddCustomComparer);
+            return DeepTestResult.Fail($"Collection count mismatch: expected {expected.Count()}, but got {collection.Count()}");
         }
 
-        private static void ValidateAreComparers(object[] customEqualityComparers)
-        {
-            var invalid = customEqualityComparers.Where(
-                o =>
-                {
-                    var implemented =
-                        o.GetType().GetTypeInfo().ImplementedInterfaces;
-                    var match = implemented.FirstOrDefault(
-                        i => i.IsGenericOf(typeof(IEqualityComparer<>)));
-                    return match == null;
-                }).ToArray();
-            if (!invalid.Any())
-                return;
-            var names = invalid.Select(t => t.GetType().PrettyName()).JoinWith(",");
-            throw new ArgumentException(
-                $"Custom equality comparers must implement IEqualityComparer<T>. The following do not: {names}"
-            );
-        }
-
-        internal static DeepTestResult CollectionCompare<T>(
-            IEnumerable<T> collection,
-            IEnumerable<T> expected,
-            Func<List<T>, List<T>, DeepTestResult> finalComparison
-        )
-        {
-            if (collection == null &&
-                expected == null)
-            {
-                return DeepTestResult.Pass;
-            }
-
-            if (collection == null ||
-                expected == null)
-            {
-                return DeepTestResult.Fail(
-                    expected == null
-                        ? $"Expected collection is null but actual is not"
-                        : "Actual collection is null but expected is not");
-            }
-
-            var master = collection.ToList();
-            var compare = expected.ToList();
-            if (master.Count != compare.Count)
-            {
-                return DeepTestResult.Fail($"Collection count mismatch: expected {expected.Count()}, but got {collection.Count()}");
-            }
-
-            return finalComparison(master, compare);
-        }
+        return finalComparison(master, compare);
     }
 }

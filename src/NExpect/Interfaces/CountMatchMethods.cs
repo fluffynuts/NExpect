@@ -1,33 +1,32 @@
-namespace NExpect.Interfaces
+namespace NExpect.Interfaces;
+
+/// <summary>
+/// Method to use looking at the number of items, eg in Exactly()
+/// </summary>
+public enum CountMatchMethods
 {
     /// <summary>
-    /// Method to use looking at the number of items, eg in Exactly()
+    /// Exact match
     /// </summary>
-    public enum CountMatchMethods
-    {
-        /// <summary>
-        /// Exact match
-        /// </summary>
-        Exactly,
-        /// <summary>
-        /// Minimum match (At.Least)
-        /// </summary>
-        Minimum,
-        /// <summary>
-        /// Maximum match (At.Most())
-        /// </summary>
-        Maximum,
-        /// <summary>
-        /// Match any
-        /// </summary>
-        Any,
-        /// <summary>
-        /// Match all
-        /// </summary>
-        All,
-        /// <summary>
-        /// Match only
-        /// </summary>
-        Only
-    }
+    Exactly,
+    /// <summary>
+    /// Minimum match (At.Least)
+    /// </summary>
+    Minimum,
+    /// <summary>
+    /// Maximum match (At.Most())
+    /// </summary>
+    Maximum,
+    /// <summary>
+    /// Match any
+    /// </summary>
+    Any,
+    /// <summary>
+    /// Match all
+    /// </summary>
+    All,
+    /// <summary>
+    /// Match only
+    /// </summary>
+    Only
 }
