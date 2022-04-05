@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Imported.PeanutButter.Utils;
 using NExpect.Implementations;
+using NExpect.Implementations.Fluency;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
@@ -387,7 +388,7 @@ public static class ReflectiveExtensions
     /// <param name="property"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static IMore<T> Property<T>(
+    public static IPropertyMore<T> Property<T>(
         this IHave<T> have,
         string property
     )
@@ -404,7 +405,7 @@ public static class ReflectiveExtensions
     /// <param name="customMessage"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static IMore<T> Property<T>(
+    public static IPropertyMore<T> Property<T>(
         this IHave<T> have,
         string property,
         string customMessage
@@ -423,13 +424,16 @@ public static class ReflectiveExtensions
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public static IMore<T> Property<T>(
+    public static IPropertyMore<T> Property<T>(
         this IHave<T> have,
         string property,
         Func<string> customMessageGenerator
     )
     {
-        return (have as ICanAddMatcher<T>).Property(property, customMessageGenerator);
+        return new PropertyMore<T>(
+            (have as ICanAddMatcher<T>).Property(property, customMessageGenerator),
+            have
+        );
     }
 
     /// <summary>
@@ -545,8 +549,8 @@ public static class ReflectiveExtensions
         }
     }
 
-    private const string METADATA_KEY_PROPERTY_NAME = "__PropertyName__";
-    private const string METADATA_KEY_PROPERTY_INFO = "__PropertyInfo__";
+    internal const string METADATA_KEY_PROPERTY_NAME = "__PropertyName__";
+    internal const string METADATA_KEY_PROPERTY_INFO = "__PropertyInfo__";
 
     private const string METADATA_KEY_METHOD_INFO = "__MethodInfo__";
 

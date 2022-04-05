@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using NExpect.Exceptions;
 using NUnit.Framework;
@@ -150,19 +151,50 @@ namespace NExpect.Tests.ObjectEquality
             }
 
             [Test]
-            [Explicit(
-                "TODO: .Property should return IMore<PropertyInfo> like .Method does - then we can do more interesting stuff")]
             public void ShouldBeAbleToAssertAgainstPropertyAttributes()
             {
                 // Arrange
                 var data = GetRandom<Data>();
                 // Act
-                // Assert.That(() =>
-                // {
-                //     Expect(data)
-                //         .To.Have.Property(nameof(data.IsCommented))
-                //         .With.Attribute<CommentAttribute>();
-                // }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    var foo = Expect(data)
+                        .To.Have.Property(nameof(data.IsCommented))
+                        .With.Attribute<CommentAttribute>();
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    var foo = Expect(data)
+                        .To.Have.Property(nameof(data.IsCommented))
+                        .With.Type<bool>()
+                        .And
+                        .With
+                        .Attribute<CommentAttribute>(o => o.Comment == "this is commented!")
+                        ;
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(data)
+                        .To.Have.Property(nameof(data.IsCommented))
+                        .With.Type<string>("I wanted a string!")
+                        .And
+                        .With.Attribute<CommentAttribute>(o => o.Comment == "this is commented!");
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    .With.Message.Contains("I wanted a string!"));
+                Assert.That(() =>
+                {
+                    Expect(data)
+                        .To.Have.Property(nameof(data.IsCommented))
+                        .With.Type<bool>()
+                        .And
+                        .With.Attribute<CommentAttribute>(o => o.Comment == "moo");
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Assert.That(() =>
+                {
+                    var foo = Expect(data)
+                        .To.Have.Property(nameof(data.IsCommented))
+                        .With.Attribute<RequiredAttribute>();
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
             }
         }

@@ -2,13 +2,12 @@ using System;
 using NExpect.Interfaces;
 
 // ReSharper disable MemberCanBeProtected.Global
-
 namespace NExpect.Implementations.Fluency;
 
-internal class And<T> :
-    ExpectationContextWithLazyActual<T>,
-    IHasActual<T>,
-    IAnd<T>
+internal class And<T>
+    : ExpectationContextWithLazyActual<T>,
+      IHasActual<T>,
+      IAnd<T>
 {
     public IA<T> A => Next<A<T>>();
     public IAn<T> An => Next<An<T>>();
