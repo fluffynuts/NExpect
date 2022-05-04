@@ -28,12 +28,12 @@ public static class CollectionMatchers
     /// <param name="continuation"></param>
     /// <param name="search"></param>
     /// <typeparam name="T"></typeparam>
-    public static void Contain<T>(
+    public static IMore<IEnumerable<T>> Contain<T>(
         this ICollectionTo<T> continuation,
         T search
     )
     {
-        continuation.Contain(search, NULL_STRING);
+        return continuation.Contain(search, NULL_STRING);
     }
 
     /// <summary>
@@ -44,13 +44,13 @@ public static class CollectionMatchers
     /// <param name="search"></param>
     /// <param name="customMessage">Custom message to add to failure messages</param>
     /// <typeparam name="T"></typeparam>
-    public static void Contain<T>(
+    public static IMore<IEnumerable<T>> Contain<T>(
         this ICollectionTo<T> continuation,
         T search,
         string customMessage
     )
     {
-        continuation.Contain(search, () => customMessage);
+        return continuation.Contain(search, () => customMessage);
     }
 
     /// <summary>
@@ -61,13 +61,13 @@ public static class CollectionMatchers
     /// <param name="search"></param>
     /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
     /// <typeparam name="T"></typeparam>
-    public static void Contain<T>(
+    public static IMore<IEnumerable<T>> Contain<T>(
         this ICollectionTo<T> continuation,
         T search,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             CreateShortContainMatcherFor(search, customMessageGenerator)
         );
     }
@@ -79,12 +79,12 @@ public static class CollectionMatchers
     /// <param name="continuation"></param>
     /// <param name="search"></param>
     /// <typeparam name="T"></typeparam>
-    public static void Contain<T>(
+    public static IMore<IEnumerable<T>> Contain<T>(
         this ICollectionToAfterNot<T> continuation,
         T search
     )
     {
-        continuation.Contain(search, NULL_STRING);
+        return continuation.Contain(search, NULL_STRING);
     }
 
     /// <summary>
@@ -95,13 +95,13 @@ public static class CollectionMatchers
     /// <param name="search"></param>
     /// <param name="customMessage">Custom message to add to failure messages</param>
     /// <typeparam name="T"></typeparam>
-    public static void Contain<T>(
+    public static IMore<IEnumerable<T>> Contain<T>(
         this ICollectionToAfterNot<T> continuation,
         T search,
         string customMessage
     )
     {
-        continuation.Contain(search, () => customMessage);
+        return continuation.Contain(search, () => customMessage);
     }
 
     /// <summary>
@@ -112,13 +112,13 @@ public static class CollectionMatchers
     /// <param name="search"></param>
     /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
     /// <typeparam name="T"></typeparam>
-    public static void Contain<T>(
+    public static IMore<IEnumerable<T>> Contain<T>(
         this ICollectionToAfterNot<T> continuation,
         T search,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             CreateShortContainMatcherFor(search, customMessageGenerator)
         );
     }
@@ -130,12 +130,12 @@ public static class CollectionMatchers
     /// <param name="continuation"></param>
     /// <param name="search"></param>
     /// <typeparam name="T"></typeparam>
-    public static void Contain<T>(
+    public static IMore<IEnumerable<T>> Contain<T>(
         this ICollectionNotAfterTo<T> continuation,
         T search
     )
     {
-        continuation.Contain(search, NULL_STRING);
+        return continuation.Contain(search, NULL_STRING);
     }
 
     /// <summary>
@@ -146,13 +146,13 @@ public static class CollectionMatchers
     /// <param name="search"></param>
     /// <param name="customMessage">Custom message to add to failure messages</param>
     /// <typeparam name="T"></typeparam>
-    public static void Contain<T>(
+    public static IMore<IEnumerable<T>> Contain<T>(
         this ICollectionNotAfterTo<T> continuation,
         T search,
         string customMessage
     )
     {
-        continuation.Contain(search, () => customMessage);
+        return continuation.Contain(search, () => customMessage);
     }
 
     /// <summary>
@@ -163,13 +163,13 @@ public static class CollectionMatchers
     /// <param name="search"></param>
     /// <param name="customMessageGenerator">Generats a custom message to add to failure messages</param>
     /// <typeparam name="T"></typeparam>
-    public static void Contain<T>(
+    public static IMore<IEnumerable<T>> Contain<T>(
         this ICollectionNotAfterTo<T> continuation,
         T search,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             CreateShortContainMatcherFor(search, customMessageGenerator)
         );
     }
@@ -657,11 +657,11 @@ public static class CollectionMatchers
     /// </summary>
     /// <param name="be">ICollectionBe&lt;T&gt; continuation</param>
     /// <typeparam name="T">Item type of the collection being tested</typeparam>
-    public static void Empty<T>(
+    public static IMore<IEnumerable<T>> Empty<T>(
         this ICollectionBe<T> be
     )
     {
-        be.Empty(NULL_STRING);
+        return be.Empty(NULL_STRING);
     }
 
     /// <summary>
@@ -670,12 +670,12 @@ public static class CollectionMatchers
     /// <param name="be">ICollectionBe&lt;T&gt; continuation</param>
     /// <param name="customMessage">Custom message to include in failure messages</param>
     /// <typeparam name="T">Item type of the collection being tested</typeparam>
-    public static void Empty<T>(
+    public static IMore<IEnumerable<T>> Empty<T>(
         this ICollectionBe<T> be,
         string customMessage
     )
     {
-        be.Empty(() => customMessage);
+        return be.Empty(() => customMessage);
     }
 
     /// <summary>
@@ -684,12 +684,12 @@ public static class CollectionMatchers
     /// <param name="be">ICollectionBe&lt;T&gt; continuation</param>
     /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
     /// <typeparam name="T">Item type of the collection being tested</typeparam>
-    public static void Empty<T>(
+    public static IMore<IEnumerable<T>> Empty<T>(
         this ICollectionBe<T> be,
         Func<string> customMessageGenerator
     )
     {
-        be.AddMatcher(
+        return be.AddMatcher(
             collection =>
             {
                 var passed = collection != null && !collection.Any();
@@ -715,12 +715,12 @@ public static class CollectionMatchers
     /// <param name="equivalent">continuation for test</param>
     /// <param name="other">collection to test against</param>
     /// <typeparam name="T"></typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionEquivalent<T> equivalent,
         IEnumerable<T> other
     )
     {
-        equivalent.To(other, NULL_STRING);
+        return equivalent.To(other, NULL_STRING);
     }
 
     /// <summary>
@@ -730,13 +730,13 @@ public static class CollectionMatchers
     /// <param name="other">collection to test against</param>
     /// <param name="customMessage">Custom message to include in failure messages</param>
     /// <typeparam name="T"></typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionEquivalent<T> equivalent,
         IEnumerable<T> other,
         string customMessage
     )
     {
-        equivalent.To(other, () => customMessage);
+        return equivalent.To(other, () => customMessage);
     }
 
     /// <summary>
@@ -746,13 +746,13 @@ public static class CollectionMatchers
     /// <param name="other">collection to test against</param>
     /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
     /// <typeparam name="T"></typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionEquivalent<T> equivalent,
         IEnumerable<T> other,
         Func<string> customMessageGenerator
     )
     {
-        equivalent.To(other, null as IEqualityComparer<T>, customMessageGenerator);
+        return equivalent.To(other, null as IEqualityComparer<T>, customMessageGenerator);
     }
 
     /// <summary>
@@ -762,13 +762,13 @@ public static class CollectionMatchers
     /// <param name="other">collection to test against</param>
     /// <param name="comparer">Custom equality comparer for each item</param>
     /// <typeparam name="T"></typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionEquivalent<T> equivalent,
         IEnumerable<T> other,
         IEqualityComparer<T> comparer
     )
     {
-        equivalent.To(other, comparer, NULL_STRING);
+        return equivalent.To(other, comparer, NULL_STRING);
     }
 
     /// <summary>
@@ -779,14 +779,14 @@ public static class CollectionMatchers
     /// <param name="comparer">Custom equality comparer for each item</param>
     /// <param name="customMessage">Custom message to include in failure messages</param>
     /// <typeparam name="T"></typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionEquivalent<T> equivalent,
         IEnumerable<T> other,
         IEqualityComparer<T> comparer,
         string customMessage
     )
     {
-        equivalent.To(other, comparer, () => customMessage);
+        return equivalent.To(other, comparer, () => customMessage);
     }
 
     /// <summary>
@@ -797,14 +797,14 @@ public static class CollectionMatchers
     /// <param name="comparer">Custom equality comparer for each item</param>
     /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
     /// <typeparam name="T"></typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionEquivalent<T> equivalent,
         IEnumerable<T> other,
         IEqualityComparer<T> comparer,
         Func<string> customMessageGenerator
     )
     {
-        equivalent.AddMatcher(
+        return equivalent.AddMatcher(
             collection =>
             {
                 var passed = TestEquivalenceOf(collection, other, comparer ?? new DefaultEqualityComparer<T>());
@@ -831,13 +831,13 @@ public static class CollectionMatchers
     /// <param name="other">collection to test against</param>
     /// <param name="comparer">Custom equality comparer function for each item</param>
     /// <typeparam name="T"></typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionEquivalent<T> equivalent,
         IEnumerable<T> other,
         Func<T, T, bool> comparer
     )
     {
-        equivalent.To(
+        return equivalent.To(
             other,
             comparer,
             NULL_STRING
@@ -852,14 +852,14 @@ public static class CollectionMatchers
     /// <param name="comparer">Custom equality comparer function for each item</param>
     /// <param name="customMessage">Custom message to include in failure messages</param>
     /// <typeparam name="T"></typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionEquivalent<T> equivalent,
         IEnumerable<T> other,
         Func<T, T, bool> comparer,
         string customMessage
     )
     {
-        equivalent.To(
+        return equivalent.To(
             other,
             comparer,
             () => customMessage
@@ -874,14 +874,14 @@ public static class CollectionMatchers
     /// <param name="comparer">Custom equality comparer function for each item</param>
     /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
     /// <typeparam name="T"></typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionEquivalent<T> equivalent,
         IEnumerable<T> other,
         Func<T, T, bool> comparer,
         Func<string> customMessageGenerator
     )
     {
-        equivalent.To(
+        return equivalent.To(
             other,
             new FuncComparer<T>(comparer),
             customMessageGenerator
@@ -893,11 +893,11 @@ public static class CollectionMatchers
     /// </summary>
     /// <param name="be">Continuation to operate on</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void Null<T>(
+    public static IMore<IEnumerable<T>> Null<T>(
         this ICollectionBe<T> be
     )
     {
-        be.Null(NULL_STRING);
+        return be.Null(NULL_STRING);
     }
 
     /// <summary>
@@ -906,12 +906,12 @@ public static class CollectionMatchers
     /// <param name="be">Continuation to operate on</param>
     /// <param name="customMessage">Provide a custom message to include when the matcher fails</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void Null<T>(
+    public static IMore<IEnumerable<T>> Null<T>(
         this ICollectionBe<T> be,
         string customMessage
     )
     {
-        be.Null(() => customMessage);
+        return be.Null(() => customMessage);
     }
 
     /// <summary>
@@ -920,12 +920,12 @@ public static class CollectionMatchers
     /// <param name="be">Continuation to operate on</param>
     /// <param name="customMessageGenerator">Provide a custom message to include when the matcher fails</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void Null<T>(
+    public static IMore<IEnumerable<T>> Null<T>(
         this ICollectionBe<T> be,
         Func<string> customMessageGenerator
     )
     {
-        be.AddMatcher(
+        return be.AddMatcher(
             collection =>
             {
                 var passed = collection == null;
@@ -948,11 +948,11 @@ public static class CollectionMatchers
     /// </summary>
     /// <param name="unique">Continuation to operate on</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void Items<T>(
+    public static IMore<IEnumerable<T>> Items<T>(
         this ICollectionUnique<T> unique
     )
     {
-        unique.Items(NULL_STRING);
+        return unique.Items(NULL_STRING);
     }
 
 
@@ -962,12 +962,12 @@ public static class CollectionMatchers
     /// <param name="unique">Continuation to operate on</param>
     /// <param name="customMessage">Provide a custom message to include when the matcher fails</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void Items<T>(
+    public static IMore<IEnumerable<T>> Items<T>(
         this ICollectionUnique<T> unique,
         string customMessage
     )
     {
-        unique.Items(() => customMessage);
+        return unique.Items(() => customMessage);
     }
 
     /// <summary>
@@ -976,12 +976,12 @@ public static class CollectionMatchers
     /// <param name="unique">Continuation to operate on</param>
     /// <param name="customMessageGenerator">Generates a custom message to include when the matcher fails</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void Items<T>(
+    public static IMore<IEnumerable<T>> Items<T>(
         this ICollectionUnique<T> unique,
         Func<string> customMessageGenerator
     )
     {
-        CheckDistinct(unique, customMessageGenerator);
+        return CheckDistinct(unique, customMessageGenerator);
     }
 
     /// <summary>
@@ -989,11 +989,11 @@ public static class CollectionMatchers
     /// </summary>
     /// <param name="be">Continuation to operate on</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void Distinct<T>(
+    public static IMore<IEnumerable<T>> Distinct<T>(
         this ICollectionBe<T> be
     )
     {
-        be.Distinct(NULL_STRING);
+        return be.Distinct(NULL_STRING);
     }
 
     /// <summary>
@@ -1002,12 +1002,12 @@ public static class CollectionMatchers
     /// <param name="be">Continuation to operate on</param>
     /// <param name="customMessage">Provide a custom message to include when the matcher fails</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void Distinct<T>(
+    public static IMore<IEnumerable<T>> Distinct<T>(
         this ICollectionBe<T> be,
         string customMessage
     )
     {
-        be.Distinct(() => customMessage);
+        return be.Distinct(() => customMessage);
     }
 
     /// <summary>
@@ -1016,12 +1016,12 @@ public static class CollectionMatchers
     /// <param name="be">Continuation to operate on</param>
     /// <param name="customMessageGenerator">Generates a custom message to include when the matcher fails</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void Distinct<T>(
+    public static IMore<IEnumerable<T>> Distinct<T>(
         this ICollectionBe<T> be,
         Func<string> customMessageGenerator
     )
     {
-        CheckDistinct(be, customMessageGenerator);
+        return CheckDistinct(be, customMessageGenerator);
     }
 
     /// <summary>
@@ -1029,11 +1029,11 @@ public static class CollectionMatchers
     /// </summary>
     /// <param name="contain">Collection to test</param>
     /// <typeparam name="T">Item type of the collection</typeparam>
-    public static void Items<T>(
+    public static IMore<IEnumerable<T>> Items<T>(
         this ICountMatchContinuation<IEnumerable<T>> contain
     )
     {
-        contain.Items(NULL_STRING);
+        return contain.Items(NULL_STRING);
     }
 
     /// <summary>
@@ -1041,11 +1041,11 @@ public static class CollectionMatchers
     /// </summary>
     /// <param name="contain">Collection to test</param>
     /// <typeparam name="T">Item type of the collection</typeparam>
-    public static void Item<T>(
+    public static IMore<IEnumerable<T>> Item<T>(
         this ICountMatchContinuation<IEnumerable<T>> contain
     )
     {
-        contain.Item(NULL_STRING);
+        return contain.Item(NULL_STRING);
     }
 
     /// <summary>
@@ -1054,12 +1054,12 @@ public static class CollectionMatchers
     /// <param name="contain">Collection to test</param>
     /// <param name="customMessage">Custom message to include in failure messages</param>
     /// <typeparam name="T">Item type of the collection</typeparam>
-    public static void Item<T>(
+    public static IMore<IEnumerable<T>> Item<T>(
         this ICountMatchContinuation<IEnumerable<T>> contain,
         string customMessage
     )
     {
-        contain.Item(() => customMessage);
+        return contain.Item(() => customMessage);
     }
 
     /// <summary>
@@ -1068,12 +1068,12 @@ public static class CollectionMatchers
     /// <param name="contain">Collection to test</param>
     /// <param name="customMessageGenerator">Custom message to include in failure messages</param>
     /// <typeparam name="T">Item type of the collection</typeparam>
-    public static void Item<T>(
+    public static IMore<IEnumerable<T>> Item<T>(
         this ICountMatchContinuation<IEnumerable<T>> contain,
         Func<string> customMessageGenerator
     )
     {
-        contain.Items(customMessageGenerator);
+        return contain.Items(customMessageGenerator);
     }
 
     /// <summary>
@@ -1082,12 +1082,12 @@ public static class CollectionMatchers
     /// <param name="contain">Collection to test</param>
     /// <param name="customMessage">Generates a custom message to include in failure messages</param>
     /// <typeparam name="T">Item type of the collection</typeparam>
-    public static void Items<T>(
+    public static IMore<IEnumerable<T>> Items<T>(
         this ICountMatchContinuation<IEnumerable<T>> contain,
         string customMessage
     )
     {
-        contain.Items(() => customMessage);
+        return contain.Items(() => customMessage);
     }
 
     /// <summary>
@@ -1096,12 +1096,12 @@ public static class CollectionMatchers
     /// <param name="contain">Collection to test</param>
     /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
     /// <typeparam name="T">Item type of the collection</typeparam>
-    public static void Items<T>(
+    public static IMore<IEnumerable<T>> Items<T>(
         this ICountMatchContinuation<IEnumerable<T>> contain,
         Func<string> customMessageGenerator
     )
     {
-        contain.AddMatcher(
+        return contain.AddMatcher(
             collection =>
             {
                 var expected = contain.ExpectedCount;
@@ -1168,13 +1168,13 @@ public static class CollectionMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Type of collection item</typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICountMatchDeepEqual<IEnumerable<T>> continuation,
         object expected,
         params object[] customEqualityComparers
     )
     {
-        continuation.To(expected, NULL_STRING, customEqualityComparers);
+        return continuation.To(expected, NULL_STRING, customEqualityComparers);
     }
 
     /// <summary>
@@ -1186,14 +1186,14 @@ public static class CollectionMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Type of collection item</typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICountMatchDeepEqual<IEnumerable<T>> continuation,
         object expected,
         string customMessage,
         params object[] customEqualityComparers
     )
     {
-        continuation.To(expected, () => customMessage, customEqualityComparers);
+        return continuation.To(expected, () => customMessage, customEqualityComparers);
     }
 
     /// <summary>
@@ -1205,14 +1205,14 @@ public static class CollectionMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Type of collection item</typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICountMatchDeepEqual<IEnumerable<T>> continuation,
         object expected,
         Func<string> customMessageGenerator,
         params object[] customEqualityComparers
     )
     {
-        AddEqualityMatcher(
+        return AddEqualityMatcher(
             continuation,
             expected,
             customMessageGenerator,
@@ -1228,14 +1228,14 @@ public static class CollectionMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Type of collection item</typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICountMatchIntersectionEqual<IEnumerable<T>> continuation,
         object expected,
         Func<string> customMessageGenerator,
         params object[] customEqualityComparers
     )
     {
-        AddEqualityMatcher(
+        return AddEqualityMatcher(
             continuation,
             expected,
             customMessageGenerator,
@@ -1253,13 +1253,13 @@ public static class CollectionMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Type of collection item</typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICountMatchIntersectionEqual<IEnumerable<T>> continuation,
         object expected,
         params object[] customEqualityComparers
     )
     {
-        continuation.To(expected, NULL_STRING, customEqualityComparers);
+        return continuation.To(expected, NULL_STRING, customEqualityComparers);
     }
 
     /// <summary>
@@ -1271,23 +1271,23 @@ public static class CollectionMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Type of collection item</typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICountMatchIntersectionEqual<IEnumerable<T>> continuation,
         object expected,
         string customMessage,
         params object[] customEqualityComparers
     )
     {
-        continuation.To(expected, () => customMessage, customEqualityComparers);
+        return continuation.To(expected, () => customMessage, customEqualityComparers);
     }
 
-    private static void AddEqualityMatcher<T>(
+    private static IMore<IEnumerable<T>> AddEqualityMatcher<T>(
         ICountMatch<IEnumerable<T>> continuation,
         object expected,
         Func<string> customMessageGenerator,
         Func<object, object, DeepTestResult> matcher)
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             collection =>
             {
                 var actualCount = collection?.Count(
@@ -1333,12 +1333,12 @@ public static class CollectionMatchers
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="expected">Expected value</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionTo<T> continuation,
         IEnumerable<T> expected
     )
     {
-        continuation.Equal(
+        return continuation.Equal(
             expected,
             null as IEqualityComparer<T>,
             NULL_STRING);
@@ -1350,12 +1350,12 @@ public static class CollectionMatchers
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="expected">Expected value</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionToAfterNot<T> continuation,
         IEnumerable<T> expected
     )
     {
-        continuation.Equal(
+        return continuation.Equal(
             expected,
             null as IEqualityComparer<T>,
             NULL_STRING);
@@ -1368,13 +1368,13 @@ public static class CollectionMatchers
     /// <param name="expected">Expected value</param>
     /// <param name="customMessage">Custom message to add to failure messages</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionToAfterNot<T> continuation,
         IEnumerable<T> expected,
         string customMessage
     )
     {
-        continuation.Equal(expected, () => customMessage);
+        return continuation.Equal(expected, () => customMessage);
     }
 
     /// <summary>
@@ -1384,13 +1384,13 @@ public static class CollectionMatchers
     /// <param name="expected">Expected value</param>
     /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionToAfterNot<T> continuation,
         IEnumerable<T> expected,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             GenerateEqualityMatcherFor(expected, null, customMessageGenerator)
         );
     }
@@ -1402,13 +1402,13 @@ public static class CollectionMatchers
     /// <param name="expected">Expected value</param>
     /// <param name="comparer">Custom item equality comparer</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionToAfterNot<T> continuation,
         IEnumerable<T> expected,
         IEqualityComparer<T> comparer
     )
     {
-        continuation.Equal(expected, comparer, NULL_STRING);
+        return continuation.Equal(expected, comparer, NULL_STRING);
     }
 
     /// <summary>
@@ -1419,14 +1419,14 @@ public static class CollectionMatchers
     /// <param name="comparer">Custom item equality comparer</param>
     /// <param name="customMessage">Custom message to add to failure messages</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionToAfterNot<T> continuation,
         IEnumerable<T> expected,
         IEqualityComparer<T> comparer,
         string customMessage
     )
     {
-        continuation.Equal(expected, comparer, () => customMessage);
+        return continuation.Equal(expected, comparer, () => customMessage);
     }
 
     /// <summary>
@@ -1437,14 +1437,14 @@ public static class CollectionMatchers
     /// <param name="comparer">Custom item equality comparer</param>
     /// <param name="customMessageGenerator">Generate a custom message to add to failure messages</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionToAfterNot<T> continuation,
         IEnumerable<T> expected,
         IEqualityComparer<T> comparer,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             GenerateEqualityMatcherFor(expected, comparer, customMessageGenerator)
         );
     }
@@ -1456,13 +1456,13 @@ public static class CollectionMatchers
     /// <param name="expected">Expected value</param>
     /// <param name="comparer">Custom item equality comparer function</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionToAfterNot<T> continuation,
         IEnumerable<T> expected,
         Func<T, T, bool> comparer
     )
     {
-        continuation.Equal(
+        return continuation.Equal(
             expected,
             comparer,
             NULL_STRING);
@@ -1476,14 +1476,14 @@ public static class CollectionMatchers
     /// <param name="comparer">Custom item equality comparer function</param>
     /// <param name="customMessage">Custom message to add to failure messages</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionToAfterNot<T> continuation,
         IEnumerable<T> expected,
         Func<T, T, bool> comparer,
         string customMessage
     )
     {
-        continuation.Equal(
+        return continuation.Equal(
             expected,
             comparer,
             () => customMessage
@@ -1498,14 +1498,14 @@ public static class CollectionMatchers
     /// <param name="comparer">Custom item equality comparer function</param>
     /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionToAfterNot<T> continuation,
         IEnumerable<T> expected,
         Func<T, T, bool> comparer,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             GenerateEqualityMatcherFor(expected, new FuncComparer<T>(comparer), customMessageGenerator)
         );
     }
@@ -1516,12 +1516,12 @@ public static class CollectionMatchers
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="expected">Expected value</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionNotAfterTo<T> continuation,
         IEnumerable<T> expected
     )
     {
-        continuation.Equal(
+        return continuation.Equal(
             expected,
             null as IEqualityComparer<T>,
             NULL_STRING);
@@ -1534,13 +1534,13 @@ public static class CollectionMatchers
     /// <param name="expected">Expected value</param>
     /// <param name="customMessage">Custom message to add to failure messages</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionNotAfterTo<T> continuation,
         IEnumerable<T> expected,
         string customMessage
     )
     {
-        continuation.Equal(expected, () => customMessage);
+        return continuation.Equal(expected, () => customMessage);
     }
 
     /// <summary>
@@ -1550,13 +1550,13 @@ public static class CollectionMatchers
     /// <param name="expected">Expected value</param>
     /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionNotAfterTo<T> continuation,
         IEnumerable<T> expected,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             GenerateEqualityMatcherFor(
                 expected,
                 null,
@@ -1571,13 +1571,13 @@ public static class CollectionMatchers
     /// <param name="expected">Expected value</param>
     /// <param name="comparer">Custom comparer to use on items</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionNotAfterTo<T> continuation,
         IEnumerable<T> expected,
         IEqualityComparer<T> comparer
     )
     {
-        continuation.Equal(
+        return continuation.Equal(
             expected,
             comparer,
             NULL_STRING);
@@ -1591,14 +1591,14 @@ public static class CollectionMatchers
     /// <param name="comparer">Custom comparer to use on items</param>
     /// <param name="customMessage">Custom message to add to failure messages</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionNotAfterTo<T> continuation,
         IEnumerable<T> expected,
         IEqualityComparer<T> comparer,
         string customMessage
     )
     {
-        continuation.Equal(expected, comparer, () => customMessage);
+        return continuation.Equal(expected, comparer, () => customMessage);
     }
 
     /// <summary>
@@ -1609,14 +1609,14 @@ public static class CollectionMatchers
     /// <param name="comparer">Custom comparer to use on items</param>
     /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionNotAfterTo<T> continuation,
         IEnumerable<T> expected,
         IEqualityComparer<T> comparer,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             GenerateEqualityMatcherFor(expected, comparer, customMessageGenerator)
         );
     }
@@ -1628,13 +1628,13 @@ public static class CollectionMatchers
     /// <param name="expected">Expected value</param>
     /// <param name="comparer">Custom comparer function to use on items</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionNotAfterTo<T> continuation,
         IEnumerable<T> expected,
         Func<T, T, bool> comparer
     )
     {
-        continuation.Equal(expected, comparer, NULL_STRING);
+        return continuation.Equal(expected, comparer, NULL_STRING);
     }
 
     /// <summary>
@@ -1645,14 +1645,14 @@ public static class CollectionMatchers
     /// <param name="comparer">Custom comparer function to use on items</param>
     /// <param name="customMessage">Custom message to add to failure messages</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionNotAfterTo<T> continuation,
         IEnumerable<T> expected,
         Func<T, T, bool> comparer,
         string customMessage
     )
     {
-        continuation.Equal(expected, comparer, () => customMessage);
+        return continuation.Equal(expected, comparer, () => customMessage);
     }
 
     /// <summary>
@@ -1663,14 +1663,14 @@ public static class CollectionMatchers
     /// <param name="comparer">Custom comparer function to use on items</param>
     /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionNotAfterTo<T> continuation,
         IEnumerable<T> expected,
         Func<T, T, bool> comparer,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             GenerateEqualityMatcherFor(
                 expected,
                 new FuncComparer<T>(comparer),
@@ -1685,13 +1685,13 @@ public static class CollectionMatchers
     /// <param name="expected">Expected value</param>
     /// <param name="customMessage">Custom message to include when failing</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionTo<T> continuation,
         IEnumerable<T> expected,
         string customMessage
     )
     {
-        continuation.Equal(expected, () => customMessage);
+        return continuation.Equal(expected, () => customMessage);
     }
 
     /// <summary>
@@ -1701,13 +1701,13 @@ public static class CollectionMatchers
     /// <param name="expected">Expected value</param>
     /// <param name="customMessageGenerator">Generates a custom message to include when failing</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionTo<T> continuation,
         IEnumerable<T> expected,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             GenerateEqualityMatcherFor(
                 expected,
                 null,
@@ -1722,13 +1722,13 @@ public static class CollectionMatchers
     /// <param name="expected">Expected value</param>
     /// <param name="comparer">Custom item comparer</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionTo<T> continuation,
         IEnumerable<T> expected,
         IEqualityComparer<T> comparer
     )
     {
-        continuation.Equal(expected, comparer, NULL_STRING);
+        return continuation.Equal(expected, comparer, NULL_STRING);
     }
 
     /// <summary>
@@ -1739,14 +1739,14 @@ public static class CollectionMatchers
     /// <param name="comparer">Custom item comparer</param>
     /// <param name="customMessage">Custom message to include in failure messages</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionTo<T> continuation,
         IEnumerable<T> expected,
         IEqualityComparer<T> comparer,
         string customMessage
     )
     {
-        continuation.Equal(expected, comparer, () => customMessage);
+        return continuation.Equal(expected, comparer, () => customMessage);
     }
 
     /// <summary>
@@ -1757,14 +1757,16 @@ public static class CollectionMatchers
     /// <param name="comparer">Custom item comparer</param>
     /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionTo<T> continuation,
         IEnumerable<T> expected,
         IEqualityComparer<T> comparer,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(GenerateEqualityMatcherFor(expected, comparer, customMessageGenerator));
+        return continuation.AddMatcher(
+            GenerateEqualityMatcherFor(expected, comparer, customMessageGenerator)
+        );
     }
 
     /// <summary>
@@ -1774,13 +1776,13 @@ public static class CollectionMatchers
     /// <param name="expected">Expected value</param>
     /// <param name="comparer">Custom item comparer Func</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionTo<T> continuation,
         IEnumerable<T> expected,
         Func<T, T, bool> comparer
     )
     {
-        continuation.Equal(expected, comparer, NULL_STRING);
+        return continuation.Equal(expected, comparer, NULL_STRING);
     }
 
     /// <summary>
@@ -1791,14 +1793,14 @@ public static class CollectionMatchers
     /// <param name="comparer">Custom item comparer Func</param>
     /// <param name="customMessage">Custom message to include in failure messages</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionTo<T> continuation,
         IEnumerable<T> expected,
         Func<T, T, bool> comparer,
         string customMessage
     )
     {
-        continuation.Equal(expected, comparer, () => customMessage);
+        return continuation.Equal(expected, comparer, () => customMessage);
     }
 
     /// <summary>
@@ -1809,14 +1811,14 @@ public static class CollectionMatchers
     /// <param name="comparer">Custom item comparer Func</param>
     /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
     /// <typeparam name="T">Type of object being tested</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionTo<T> continuation,
         IEnumerable<T> expected,
         Func<T, T, bool> comparer,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             GenerateEqualityMatcherFor(
                 expected,
                 new FuncComparer<T>(comparer),
@@ -1831,12 +1833,12 @@ public static class CollectionMatchers
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="expected">Expected collection to match against</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionEqual<T> continuation,
         IEnumerable<T> expected
     )
     {
-        continuation.To(expected, NULL_STRING);
+        return continuation.To(expected, NULL_STRING);
     }
 
     /// <summary>
@@ -1847,13 +1849,13 @@ public static class CollectionMatchers
     /// <param name="expected">Expected collection to match against</param>
     /// <param name="customMessage">Custom message to add to failure messages</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionEqual<T> continuation,
         IEnumerable<T> expected,
         string customMessage
     )
     {
-        continuation.To(expected, () => customMessage);
+        return continuation.To(expected, () => customMessage);
     }
 
     /// <summary>
@@ -1864,13 +1866,13 @@ public static class CollectionMatchers
     /// <param name="expected">Expected collection to match against</param>
     /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionEqual<T> continuation,
         IEnumerable<T> expected,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             GenerateEqualityMatcherFor(
                 expected,
                 null,
@@ -1885,13 +1887,13 @@ public static class CollectionMatchers
     /// <param name="continuation">Continuation to act upon</param>
     /// <param name="search">Substring to search for</param>
     /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
-    public static void Containing(
+    public static IMore<IEnumerable<string>> Containing(
         this ICountMatchContinuationOfStringCollection continuation,
         string search,
         Func<string> customMessageGenerator
     )
     {
-        continuation.Containing(
+        return continuation.Containing(
             search,
             StringComparison.Ordinal,
             customMessageGenerator);
@@ -1904,12 +1906,12 @@ public static class CollectionMatchers
     /// </summary>
     /// <param name="continuation">Continuation to act upon</param>
     /// <param name="search">Substring to search for</param>
-    public static void Containing(
+    public static IMore<IEnumerable<string>> Containing(
         this ICountMatchContinuationOfStringCollection continuation,
         string search
     )
     {
-        continuation.Containing(
+        return continuation.Containing(
             search,
             StringComparison.Ordinal);
     }
@@ -1922,13 +1924,13 @@ public static class CollectionMatchers
     /// <param name="continuation">Continuation to act upon</param>
     /// <param name="search">Substring to search for</param>
     /// <param name="comparison">StringComparer to use for locating matches</param>
-    public static void Containing(
+    public static IMore<IEnumerable<string>> Containing(
         this ICountMatchContinuationOfStringCollection continuation,
         string search,
         StringComparison comparison
     )
     {
-        continuation.Containing(
+        return continuation.Containing(
             search,
             comparison,
             NULL_STRING);
@@ -1942,13 +1944,13 @@ public static class CollectionMatchers
     /// <param name="continuation">Continuation to act upon</param>
     /// <param name="search">Substring to search for</param>
     /// <param name="customMessage">Custom message to add when failing</param>
-    public static void Containing(
+    public static IMore<IEnumerable<string>> Containing(
         this ICountMatchContinuationOfStringCollection continuation,
         string search,
         string customMessage
     )
     {
-        continuation.Containing(
+        return continuation.Containing(
             search,
             StringComparison.Ordinal,
             customMessage);
@@ -1963,14 +1965,14 @@ public static class CollectionMatchers
     /// <param name="search">Substring to search for</param>
     /// <param name="comparison">StringComparer to use for locating matches</param>
     /// <param name="customMessage">Custom message to add when failing</param>
-    public static void Containing(
+    public static IMore<IEnumerable<string>> Containing(
         this ICountMatchContinuationOfStringCollection continuation,
         string search,
         StringComparison comparison,
         string customMessage
     )
     {
-        continuation.Containing(
+        return continuation.Containing(
             search,
             comparison,
             () => customMessage);
@@ -1985,14 +1987,14 @@ public static class CollectionMatchers
     /// <param name="search">Substring to search for</param>
     /// <param name="comparison">StringComparer to use for locating matches</param>
     /// <param name="customMessageGenerator">Custom message to add when failing</param>
-    public static void Containing(
+    public static IMore<IEnumerable<string>> Containing(
         this ICountMatchContinuationOfStringCollection continuation,
         string search,
         StringComparison comparison,
         Func<string> customMessageGenerator
     )
     {
-        continuation.Matched.By(
+        return continuation.Matched.By(
             s => s.IndexOf(search, comparison) > -1,
             customMessageGenerator
         );
@@ -2005,12 +2007,12 @@ public static class CollectionMatchers
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="search">Substring to search for</param>
-    public static void With(
+    public static IMore<IEnumerable<string>> With(
         this ICountMatchContinuationOfStringCollectionEnding continuation,
         string search
     )
     {
-        continuation.With(
+        return continuation.With(
             search,
             StringComparison.Ordinal);
     }
@@ -2022,13 +2024,13 @@ public static class CollectionMatchers
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="search">Substring to search for</param>
     /// <param name="comparison">Method of string comparison</param>
-    public static void With(
+    public static IMore<IEnumerable<string>> With(
         this ICountMatchContinuationOfStringCollectionEnding continuation,
         string search,
         StringComparison comparison
     )
     {
-        continuation.With(
+        return continuation.With(
             search,
             comparison,
             NULL_STRING
@@ -2043,13 +2045,13 @@ public static class CollectionMatchers
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="search">Substring to search for</param>
     /// <param name="customMessage">Custom message to add to failure messages</param>
-    public static void With(
+    public static IMore<IEnumerable<string>> With(
         this ICountMatchContinuationOfStringCollectionEnding continuation,
         string search,
         string customMessage
     )
     {
-        continuation.With(search, () => customMessage);
+        return continuation.With(search, () => customMessage);
     }
 
     /// <summary>
@@ -2060,13 +2062,13 @@ public static class CollectionMatchers
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="search">Substring to search for</param>
     /// <param name="customMessageGenerator">Custom message to add to failure messages</param>
-    public static void With(
+    public static IMore<IEnumerable<string>> With(
         this ICountMatchContinuationOfStringCollectionEnding continuation,
         string search,
         Func<string> customMessageGenerator
     )
     {
-        continuation.With(
+        return continuation.With(
             search,
             StringComparison.Ordinal,
             customMessageGenerator
@@ -2082,14 +2084,14 @@ public static class CollectionMatchers
     /// <param name="search">Substring to search for</param>
     /// <param name="comparison">Method of string comparison</param>
     /// <param name="customMessage">Custom message</param>
-    public static void With(
+    public static IMore<IEnumerable<string>> With(
         this ICountMatchContinuationOfStringCollectionEnding continuation,
         string search,
         StringComparison comparison,
         string customMessage
     )
     {
-        continuation.With(
+        return continuation.With(
             search,
             comparison,
             () => customMessage);
@@ -2104,7 +2106,7 @@ public static class CollectionMatchers
     /// <param name="search">Substring to search for</param>
     /// <param name="comparison">Method of string comparison</param>
     /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
-    public static void With(
+    public static IMore<IEnumerable<string>> With(
         this ICountMatchContinuationOfStringCollectionEnding continuation,
         string search,
         StringComparison comparison,
@@ -2114,7 +2116,7 @@ public static class CollectionMatchers
         if (!(continuation is CountMatchContinuationOfStringCollectionVerb concrete))
             throw new InvalidOperationException(
                 $".With() for collections of strings only supported where the concrete continuation is of type {typeof(CountMatchContinuationOfStringCollection)}");
-        concrete.Wrapped.Matched.By(
+        return concrete.Wrapped.Matched.By(
             s => s.EndsWith(search, comparison),
             customMessageGenerator
         );
@@ -2128,12 +2130,12 @@ public static class CollectionMatchers
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="search">Substring to search for</param>
-    public static void With(
+    public static IMore<IEnumerable<string>> With(
         this ICountMatchContinuationOfStringCollectionStarting continuation,
         string search
     )
     {
-        continuation.With(
+        return continuation.With(
             search,
             StringComparison.Ordinal);
     }
@@ -2145,13 +2147,13 @@ public static class CollectionMatchers
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="search">Substring to search for</param>
     /// <param name="comparison">Method of string comparison</param>
-    public static void With(
+    public static IMore<IEnumerable<string>> With(
         this ICountMatchContinuationOfStringCollectionStarting continuation,
         string search,
         StringComparison comparison
     )
     {
-        continuation.With(
+        return continuation.With(
             search,
             comparison,
             NULL_STRING
@@ -2166,13 +2168,13 @@ public static class CollectionMatchers
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="search">Substring to search for</param>
     /// <param name="customMessage">Custom message to add to failure messages</param>
-    public static void With(
+    public static IMore<IEnumerable<string>> With(
         this ICountMatchContinuationOfStringCollectionStarting continuation,
         string search,
         string customMessage
     )
     {
-        continuation.With(search, () => customMessage);
+        return continuation.With(search, () => customMessage);
     }
 
     /// <summary>
@@ -2183,13 +2185,13 @@ public static class CollectionMatchers
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="search">Substring to search for</param>
     /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
-    public static void With(
+    public static IMore<IEnumerable<string>> With(
         this ICountMatchContinuationOfStringCollectionStarting continuation,
         string search,
         Func<string> customMessageGenerator
     )
     {
-        continuation.With(
+        return continuation.With(
             search,
             StringComparison.Ordinal,
             customMessageGenerator
@@ -2205,14 +2207,14 @@ public static class CollectionMatchers
     /// <param name="search">Substring to search for</param>
     /// <param name="comparison">Method of string comparison</param>
     /// <param name="customMessage">Custom message</param>
-    public static void With(
+    public static IMore<IEnumerable<string>> With(
         this ICountMatchContinuationOfStringCollectionStarting continuation,
         string search,
         StringComparison comparison,
         string customMessage
     )
     {
-        continuation.With(search, comparison, () => customMessage);
+        return continuation.With(search, comparison, () => customMessage);
     }
 
     /// <summary>
@@ -2224,7 +2226,7 @@ public static class CollectionMatchers
     /// <param name="search">Substring to search for</param>
     /// <param name="comparison">Method of string comparison</param>
     /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
-    public static void With(
+    public static IMore<IEnumerable<string>> With(
         this ICountMatchContinuationOfStringCollectionStarting continuation,
         string search,
         StringComparison comparison,
@@ -2239,7 +2241,7 @@ public static class CollectionMatchers
                 }");
         }
 
-        concrete.Wrapped.Matched.By(
+        return concrete.Wrapped.Matched.By(
             s => s.StartsWith(search, comparison),
             customMessageGenerator
         );
@@ -2380,13 +2382,13 @@ public static class CollectionMatchers
             $"Expected to find only {howMany} item{s} in collection, but found {itemInCollection}");
     }
 
-    private static void CheckDistinct<T>(
+    private static IMore<IEnumerable<T>> CheckDistinct<T>(
         ICanAddMatcher<IEnumerable<T>>
             distinct,
         Func<string> customMessageGenerator
     )
     {
-        distinct.AddMatcher(
+        return distinct.AddMatcher(
             collection =>
             {
                 var passed = collection.IsDistinct();

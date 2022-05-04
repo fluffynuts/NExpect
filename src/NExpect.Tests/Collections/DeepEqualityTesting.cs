@@ -278,7 +278,7 @@ namespace NExpect.Tests.Collections
                                         new NeverEqualEqualityComparer());
                                 },
                                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                      .With.Message.Contain(nameof(NeverEqualEqualityComparer)));
+                                    .With.Message.Contain(nameof(NeverEqualEqualityComparer)));
                             // Assert
                         }
                     }
@@ -718,10 +718,10 @@ namespace NExpect.Tests.Collections
                                     () =>
                                     {
                                         Expect(left).To.Contain.Only(1)
-                                                    .Intersection.Equal.To(
-                                                        search,
-                                                        new DriftingDateTimeEqualityComparer()
-                                                    );
+                                            .Intersection.Equal.To(
+                                                search,
+                                                new DriftingDateTimeEqualityComparer()
+                                            );
                                     },
                                     Throws.Nothing);
                                 // Assert
@@ -739,14 +739,14 @@ namespace NExpect.Tests.Collections
                                     () =>
                                     {
                                         Expect(left).To.Contain.Only(1)
-                                                    .Intersection.Equal.To(
-                                                        search,
-                                                        new NotAnEqualityComparer()
-                                                    );
+                                            .Intersection.Equal.To(
+                                                search,
+                                                new NotAnEqualityComparer()
+                                            );
                                     },
                                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                          .With.InnerException.InstanceOf<ArgumentException>()
-                                          .With.Message.Contains("must implement IEqualityComparer"));
+                                        .With.InnerException.InstanceOf<ArgumentException>()
+                                        .With.Message.Contains("must implement IEqualityComparer"));
                                 // Assert
                             }
 
@@ -907,7 +907,15 @@ namespace NExpect.Tests.Collections
                                                     Id = 1,
                                                     Name = "moo"
                                                 }
-                                            );
+                                            )
+                                            .And
+                                            .To.Contain.Exactly(1)
+                                            .Deep.Equal.To(
+                                                new
+                                                {
+                                                    Id = 2,
+                                                    Name = "Cake"
+                                                });
                                     },
                                     Throws.Nothing);
                                 // Assert
@@ -1349,7 +1357,7 @@ namespace NExpect.Tests.Collections
                 Assert.That(
                     () => Expect(left).To.Deep.Equal(right),
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                          .With.Message.Contains("Property value mismatch for Id"));
+                        .With.Message.Contains("Property value mismatch for Id"));
                 // Assert
             }
         }
