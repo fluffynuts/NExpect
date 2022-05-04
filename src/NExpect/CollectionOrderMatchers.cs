@@ -301,6 +301,7 @@ public static class CollectionOrderMatchers
                 );
             }
 
+            last = item;
             itemCount++;
         }
 

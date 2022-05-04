@@ -65,7 +65,7 @@ namespace NExpect.Tests.Collections
                     Expect(collection)
                         .To.Be.Ordered.Ascending();
                 }, Throws.Nothing);
-                
+
                 var customMessage = GetRandomWords(2);
                 Assert.That(() =>
                 {
@@ -73,6 +73,27 @@ namespace NExpect.Tests.Collections
                         .Not.To.Be.Ordered.Ascending(() => customMessage);
                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains(customMessage));
+                // Assert
+            }
+
+            [Test]
+            public void ShouldOrderCollectionOfStrings()
+            {
+                // Arrange
+                var items = new[]
+                {
+                    "'Murican",
+                    "Queen's English",
+                    "Boerie",
+                    "English"
+                };
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(items)
+                        .To.Be.Ordered.Ascending();
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
             }
 
@@ -103,7 +124,7 @@ namespace NExpect.Tests.Collections
                     Expect(collection)
                         .To.Be.Ordered.Ascending();
                 }, Throws.Nothing);
-                
+
                 var customMessage = GetRandomWords(2);
                 Assert.That(() =>
                 {
@@ -133,7 +154,7 @@ namespace NExpect.Tests.Collections
             public void ShouldHandleDescendingCollection()
             {
                 // Arrange
-                var collection = new[] { 3, 2, 1 };   
+                var collection = new[] { 3, 2, 1 };
                 // Act
                 Assert.That(() =>
                 {
@@ -148,7 +169,7 @@ namespace NExpect.Tests.Collections
                 // Assert
             }
         }
-        
+
         [TestFixture]
         public class DescendingOrder
         {
@@ -171,7 +192,7 @@ namespace NExpect.Tests.Collections
                     .With.Message.Contains("at least two items"));
                 // Assert
             }
-        
+
             [Test]
             public void ShouldAlwaysThrowForSingleItem()
             {
@@ -192,7 +213,7 @@ namespace NExpect.Tests.Collections
                     .With.Message.Contains("at least two items"));
                 // Assert
             }
-        
+
             [Test]
             public void ShouldHandleOrderedCollection()
             {
@@ -204,7 +225,7 @@ namespace NExpect.Tests.Collections
                     Expect(collection)
                         .To.Be.Ordered.Descending();
                 }, Throws.Nothing);
-                
+
                 var customMessage = GetRandomWords(2);
                 Assert.That(() =>
                 {
@@ -214,7 +235,7 @@ namespace NExpect.Tests.Collections
                     .With.Message.Contains(customMessage));
                 // Assert
             }
-        
+
             [Test]
             public void ShouldHandleAllEqualCollection()
             {
@@ -228,12 +249,12 @@ namespace NExpect.Tests.Collections
                 }, Throws.Nothing);
                 // Assert
             }
-        
+
             [Test]
             public void ShouldHandleDescendingCollection()
             {
                 // Arrange
-                var collection = new[] { 1, 2, 3 };   
+                var collection = new[] { 1, 2, 3 };
                 // Act
                 Assert.That(() =>
                 {
