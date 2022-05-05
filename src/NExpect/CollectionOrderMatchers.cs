@@ -292,7 +292,8 @@ public static class CollectionOrderMatchers
     }
 
     /// <summary>
-    /// 
+    /// Tests if the collection is ordered ascending
+    /// by the property exposed by the selector
     /// </summary>
     /// <param name="collectionOrdered"></param>
     /// <param name="selector"></param>
@@ -310,7 +311,8 @@ public static class CollectionOrderMatchers
     }
 
     /// <summary>
-    /// 
+    /// Tests if the collection is ordered ascending
+    /// by the property exposed by the selector
     /// </summary>
     /// <param name="collectionOrdered"></param>
     /// <param name="selector"></param>
@@ -330,7 +332,8 @@ public static class CollectionOrderMatchers
     }
 
     /// <summary>
-    /// 
+    /// Tests if the collection is ordered ascending
+    /// by the property exposed by the selector
     /// </summary>
     /// <param name="collectionOrdered"></param>
     /// <param name="selector"></param>
@@ -351,7 +354,8 @@ public static class CollectionOrderMatchers
     }
 
     /// <summary>
-    /// 
+    /// Tests if the collection is ordered in the given direction
+    /// by the property exposed by the selector
     /// </summary>
     /// <param name="collectionOrdered"></param>
     /// <param name="selector"></param>
@@ -372,7 +376,8 @@ public static class CollectionOrderMatchers
     }
 
     /// <summary>
-    /// 
+    /// Tests if the collection is ordered in the given direction
+    /// by the property exposed by the selector
     /// </summary>
     /// <param name="collectionOrdered"></param>
     /// <param name="selector"></param>
@@ -395,7 +400,8 @@ public static class CollectionOrderMatchers
     }
 
     /// <summary>
-    /// 
+    /// Tests if the collection is ordered in the given direction
+    /// by the property exposed by the selector
     /// </summary>
     /// <param name="collectionOrdered"></param>
     /// <param name="selector"></param>
