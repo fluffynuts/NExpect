@@ -302,7 +302,7 @@ namespace NExpect.Tests.Collections
             }
 
             [Test]
-            public void ShouldEnforceOrdering()
+            public void ShouldEnforceOrderingOnCollectionOfTwo()
             {
                 // Arrange
                 var collection = new[]
@@ -333,6 +333,46 @@ namespace NExpect.Tests.Collections
                         .To.Be.Ordered.By(
                             o => o.Name
                         );
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            }
+
+            [Test]
+            public void ShouldEnforceOrderingOnCollectionOfThree()
+            {
+                // Arrange
+                var ordered = new[] { 1, 2, 3 };
+                var unordered = new[] { 3, 1, 2 };
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(ordered)
+                        .To.Be.Ordered.By(i => i);
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(unordered)
+                        .To.Be.Ordered.By(i => i);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+
+            [Test]
+            public void ShouldNegateCorrectly()
+            {
+                // Arrange
+                
+                var ordered = new[] { 1, 2, 3 };
+                var unordered = new[] { 3, 1, 2 };
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(unordered)
+                        .Not.To.Be.Ordered.By(i => i);
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(ordered)
+                        .Not.To.Be.Ordered.By(i => i);
                 }, Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
             }

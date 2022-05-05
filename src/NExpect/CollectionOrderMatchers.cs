@@ -300,7 +300,7 @@ public static class CollectionOrderMatchers
     /// <returns></returns>
     public static IMore<IEnumerable<T>> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
-        Func<T, object> selector
+        Expression<Func<T, object>> selector
     )
     {
         return collectionOrdered.By(
@@ -319,7 +319,7 @@ public static class CollectionOrderMatchers
     /// <returns></returns>
     public static IMore<IEnumerable<T>> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
-        Func<T, object> selector,
+        Expression<Func<T, object>> selector,
         string customMessage
     )
     {
@@ -339,7 +339,7 @@ public static class CollectionOrderMatchers
     /// <returns></returns>
     public static IMore<IEnumerable<T>> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
-        Func<T, object> selector,
+        Expression<Func<T, object>> selector,
         Func<string> customMessageGenerator
     )
     {
@@ -360,7 +360,7 @@ public static class CollectionOrderMatchers
     /// <returns></returns>
     public static IMore<IEnumerable<T>> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
-        Func<T, object> selector,
+        Expression<Func<T, object>> selector,
         Direction direction
     )
     {
@@ -382,7 +382,7 @@ public static class CollectionOrderMatchers
     /// <returns></returns>
     public static IMore<IEnumerable<T>> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
-        Func<T, object> selector,
+        Expression<Func<T, object>> selector,
         Direction direction,
         string customMessage
     )
@@ -405,7 +405,7 @@ public static class CollectionOrderMatchers
     /// <returns></returns>
     public static IMore<IEnumerable<T>> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
-        Func<T, object> selector,
+        Expression<Func<T, object>> selector,
         Direction direction,
         Func<string> customMessageGenerator
     )
@@ -430,22 +430,15 @@ public static class CollectionOrderMatchers
                 );
             }
 
-            var lastValue = selector(enumerator.Current);
-            if (!enumerator.MoveNext())
-            {
-                return new EnforcedMatcherResult(
-                    false,
-                    () => "Cannot test ordering on a collection containing only one item"
-                );
-            }
-
+            var sel = selector.Compile();
+            var lastValue = sel(enumerator.Current);
             Func<int, bool> outOfOrder = direction == Direction.Ascending
                 ? i => i > 0
                 : i => i < 0;
             ComparerWrapper comparer = null;
             do
             {
-                var currentValue = selector(enumerator.Current);
+                var currentValue = sel(enumerator.Current);
                 var comparisonResult = CompareWithDefaultComparer(lastValue, currentValue, ref comparer);
                 if (outOfOrder(comparisonResult))
                 {
@@ -456,7 +449,6 @@ public static class CollectionOrderMatchers
                 lastValue = currentValue;
             } while (enumerator.MoveNext());
 
-
             return new MatcherResult(
                 passed,
                 FinalMessageFor(
@@ -464,12 +456,43 @@ public static class CollectionOrderMatchers
                         passed.AsNot()
                     }to be ordered {
                         direction.ToString().ToLower()
-                    } by the ordering {selector}",
+                    } by: {selector}",
                     customMessageGenerator
                 )
             );
         });
     }
+
+    private static bool TestOrdering<T>(
+        Expression<Func<T, object>> selector,
+        IEnumerator<T> enumerator,
+        Direction direction
+        )
+    {
+        var passed = false;
+        var sel = selector.Compile();
+        var lastValue = sel(enumerator.Current);
+        Func<int, bool> outOfOrder = direction == Direction.Ascending
+            ? i => i > 0
+            : i => i < 0;
+        ComparerWrapper comparer = null;
+        while(enumerator.MoveNext())
+        {
+            passed = true;
+            var currentValue = sel(enumerator.Current);
+            var comparisonResult = CompareWithDefaultComparer(lastValue, currentValue, ref comparer);
+            if (outOfOrder(comparisonResult))
+            {
+                passed = false;
+                break;
+            }
+
+            lastValue = currentValue;
+        }
+        
+        return passed;
+    }
+
 
     private static int CompareWithDefaultComparer(
         object lastValue,
