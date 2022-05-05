@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
@@ -7,6 +11,22 @@ using Imported.PeanutButter.Utils;
 using NExpect.Implementations;
 
 namespace NExpect;
+
+/// <summary>
+/// Direction to select when testing ordering with Order.By
+/// </summary>
+public enum Direction
+{
+    /// <summary>
+    /// Order should be ascending
+    /// </summary>
+    Ascending,
+
+    /// <summary>
+    /// Order should be descending
+    /// </summary>
+    Descending
+}
 
 /// <summary>
 /// Provides matchers for asserting the order of collections
@@ -140,8 +160,8 @@ public static class CollectionOrderMatchers
                 );
             });
     }
-        
-        
+
+
     // -> descending start
     /// <summary>
     /// Asserts that the given collection is ordered descending with the
@@ -269,6 +289,238 @@ public static class CollectionOrderMatchers
                     customMessageGenerator
                 );
             });
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="collectionOrdered"></param>
+    /// <param name="selector"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> By<T>(
+        this ICollectionOrdered<T> collectionOrdered,
+        Func<T, object> selector
+    )
+    {
+        return collectionOrdered.By(
+            selector,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="collectionOrdered"></param>
+    /// <param name="selector"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> By<T>(
+        this ICollectionOrdered<T> collectionOrdered,
+        Func<T, object> selector,
+        string customMessage
+    )
+    {
+        return collectionOrdered.By(
+            selector,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="collectionOrdered"></param>
+    /// <param name="selector"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> By<T>(
+        this ICollectionOrdered<T> collectionOrdered,
+        Func<T, object> selector,
+        Func<string> customMessageGenerator
+    )
+    {
+        return collectionOrdered.By(
+            selector,
+            Direction.Ascending,
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="collectionOrdered"></param>
+    /// <param name="selector"></param>
+    /// <param name="direction"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> By<T>(
+        this ICollectionOrdered<T> collectionOrdered,
+        Func<T, object> selector,
+        Direction direction
+    )
+    {
+        return collectionOrdered.By(
+            selector,
+            direction,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="collectionOrdered"></param>
+    /// <param name="selector"></param>
+    /// <param name="direction"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> By<T>(
+        this ICollectionOrdered<T> collectionOrdered,
+        Func<T, object> selector,
+        Direction direction,
+        string customMessage
+    )
+    {
+        return collectionOrdered.By(
+            selector,
+            direction,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="collectionOrdered"></param>
+    /// <param name="selector"></param>
+    /// <param name="direction"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> By<T>(
+        this ICollectionOrdered<T> collectionOrdered,
+        Func<T, object> selector,
+        Direction direction,
+        Func<string> customMessageGenerator
+    )
+    {
+        return collectionOrdered.AddMatcher(actual =>
+        {
+            if (actual is null)
+            {
+                return new EnforcedMatcherResult(
+                    false,
+                    () => "Cannot test ordering on a null collection"
+                );
+            }
+
+            var passed = true;
+            using var enumerator = actual.GetEnumerator();
+            if (!enumerator.MoveNext())
+            {
+                return new EnforcedMatcherResult(
+                    false,
+                    () => "Cannot test ordering on an empty collection"
+                );
+            }
+
+            var lastValue = selector(enumerator.Current);
+            if (!enumerator.MoveNext())
+            {
+                return new EnforcedMatcherResult(
+                    false,
+                    () => "Cannot test ordering on a collection containing only one item"
+                );
+            }
+
+            Func<int, bool> outOfOrder = direction == Direction.Ascending
+                ? i => i > 0
+                : i => i < 0;
+            ComparerWrapper comparer = null;
+            do
+            {
+                var currentValue = selector(enumerator.Current);
+                var comparisonResult = CompareWithDefaultComparer(lastValue, currentValue, ref comparer);
+                if (outOfOrder(comparisonResult))
+                {
+                    passed = false;
+                    break;
+                }
+
+                lastValue = currentValue;
+            } while (enumerator.MoveNext());
+
+
+            return new MatcherResult(
+                passed,
+                FinalMessageFor(
+                    () => $@"Expected collection {
+                        passed.AsNot()
+                    }to be ordered {
+                        direction.ToString().ToLower()
+                    } by the ordering {selector}",
+                    customMessageGenerator
+                )
+            );
+        });
+    }
+
+    private static int CompareWithDefaultComparer(
+        object lastValue,
+        object currentValue,
+        ref ComparerWrapper comparer
+    )
+    {
+        if (lastValue is null && currentValue is null)
+        {
+            return 0;
+        }
+
+        if (lastValue is null)
+        {
+            return -1;
+        }
+
+        if (currentValue is null)
+        {
+            return 1;
+        }
+
+        comparer ??= new ComparerWrapper(currentValue.GetType());
+        return comparer.Compare(lastValue, currentValue);
+    }
+
+    private class ComparerWrapper
+    {
+        public ComparerWrapper(Type forType)
+        {
+            var comparerType = GenericComparerType.MakeGenericType(forType);
+            var prop = comparerType.GetProperty(
+                nameof(Comparer<int>.Default),
+                BindingFlags.Static | BindingFlags.Public
+            );
+            _actualComparer = prop?.GetValue(null)
+                ?? throw new ArgumentException($"No Default comparer on Comparer<{forType}>");
+            _compareMethod = comparerType.GetMethod(
+                nameof(Comparer<int>.Default.Compare),
+                BindingFlags.Public | BindingFlags.Instance
+            );
+        }
+
+        public int Compare(object left, object right)
+        {
+            return (int) _compareMethod.Invoke(_actualComparer, new[] { left, right });
+        }
+
+        private static readonly Type GenericComparerType = typeof(Comparer<>);
+        private readonly object _actualComparer;
+        private readonly MethodInfo _compareMethod;
     }
 
     private static MatcherResult TestOrderingOf<T>(

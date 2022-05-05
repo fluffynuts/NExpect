@@ -1,8 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using NUnit.Framework;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using NExpect;
 using NExpect.Exceptions;
+using NExpect.Implementations;
 using static NExpect.Expectations;
 
 namespace NExpect.Tests.Collections
@@ -73,6 +77,25 @@ namespace NExpect.Tests.Collections
                         .Not.To.Be.Ordered.Ascending(() => customMessage);
                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains(customMessage));
+                // Assert
+            }
+
+            [Test]
+            public void ShouldHandleHomogenousCollection()
+            {
+                // Arrange
+                var collection = new[] { 1, 1, 1 };
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection)
+                        .To.Be.Ordered.Ascending();
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(collection)
+                        .To.Be.Ordered.Descending();
+                }, Throws.Nothing);
                 // Assert
             }
 
@@ -266,6 +289,51 @@ namespace NExpect.Tests.Collections
                     Expect(collection)
                         .Not.To.Be.Ordered.Descending();
                 }, Throws.Nothing);
+                // Assert
+            }
+        }
+
+        [TestFixture]
+        public class GivenOrderingLambda
+        {
+            public class HasId
+            {
+                public int Id { get; set; }
+            }
+
+            [Test]
+            public void ShouldEnforceOrdering()
+            {
+                // Arrange
+                var collection = new[]
+                {
+                    new { Id = 1, Name = "Zebra" },
+                    new { Id = 2, Name = "Aardvark" }
+                };
+
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(collection)
+                        .To.Be.Ordered.By(
+                            o => o.Id
+                        );
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(collection)
+                        .To.Be.Ordered.By(
+                            o => o.Name,
+                            Direction.Descending
+                        );
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(collection)
+                        .To.Be.Ordered.By(
+                            o => o.Name
+                        );
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
             }
         }
