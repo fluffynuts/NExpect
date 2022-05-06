@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Web;
 using System.Web.Mvc;
+using Imported.PeanutButter.Utils;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -85,8 +88,13 @@ namespace NExpect
                         );
                     }
 
-                    var attribs = method.GetCustomAttributes(false).OfType<RouteAttribute>();
-                    var passed = attribs.Any(a => a.Template == expected);
+                    // cater for RouteAttribute from System.Web.Mvc and System.Web.Http (WebApi core)
+                    var attribs = method.GetCustomAttributes(false)
+                        .Where(a => a.GetType().Name == nameof(RouteAttribute))
+                        .ToArray();
+                    var passed = attribs.Any(
+                        a => a.GetOrDefault<string>(nameof(RouteAttribute.Template), null) == expected
+                    );
                     return new MatcherResult(
                         passed,
                         () => $"Expected {actual}.{method} {passed.AsNot()}to have route '{expected}'"
@@ -103,6 +111,18 @@ namespace NExpect
             internal string Member { get; set; }
             internal IHave<Type> Continuation { get; set; }
 
+            private static readonly HashSet<string> HttpVerbAttributeNames = new(
+                new[]
+                {
+                    nameof(HttpGetAttribute),
+                    nameof(HttpPutAttribute),
+                    nameof(HttpPostAttribute),
+                    nameof(HttpDeleteAttribute),
+                    nameof(HttpHeadAttribute),
+                    nameof(HttpOptionsAttribute)
+                }
+            );
+
             /// <summary>
             /// Asserts that the controller method being operated on supports
             /// the desired HttpMethod
@@ -114,20 +134,21 @@ namespace NExpect
                 Continuation.AddMatcher(
                     controllerType =>
                     {
+                        // support MVC and WebApi attributes via name & reflection
                         var supportedMethods = controllerType.GetMethod(Member)
                             ?.GetCustomAttributes(false)
-                            .Select(attrib => attrib as ActionMethodSelectorAttribute)
-                            .Where(a => a != null)
+                            .Where(a => HttpVerbAttributeNames.Contains(a.GetType().Name))
                             .Select(a =>
                             {
-                                return a switch
+                                var typeName = a.GetType().Name;
+                                return typeName switch
                                 {
-                                    HttpGetAttribute => HttpMethod.Get,
-                                    HttpPutAttribute => HttpMethod.Put,
-                                    HttpPostAttribute => HttpMethod.Post,
-                                    HttpDeleteAttribute => HttpMethod.Delete,
-                                    HttpHeadAttribute => HttpMethod.Head,
-                                    HttpOptionsAttribute => HttpMethod.Options,
+                                    nameof(HttpGetAttribute) => HttpMethod.Get,
+                                    nameof(HttpPutAttribute) => HttpMethod.Put,
+                                    nameof(HttpPostAttribute) => HttpMethod.Post,
+                                    nameof(HttpDeleteAttribute) => HttpMethod.Delete,
+                                    nameof(HttpHeadAttribute) => HttpMethod.Head,
+                                    nameof(HttpOptionsAttribute) => HttpMethod.Options,
                                     _ => null
                                 };
                             })
