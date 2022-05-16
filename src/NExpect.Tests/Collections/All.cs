@@ -93,5 +93,6 @@ namespace NExpect.Tests.Collections
 
             // Assert
         }
+
     }
 }

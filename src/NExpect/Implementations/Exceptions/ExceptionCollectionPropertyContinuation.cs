@@ -19,6 +19,7 @@ internal class ExceptionCollectionPropertyContinuation<T>
     public ICollectionDeep<T> Deep => Next<CollectionDeep<T>>();
     public ICollectionIntersection<T> Intersection => Next<CollectionIntersection<T>>();
     public ICollectionAn<T> An => Next<CollectionAn<T>>();
+    public ICollectionA<T> A => Next<CollectionA<T>>();
     public ICollectionFor<T> For => Next<CollectionFor<T>>();
     public ICollectionOrdered<T> Ordered => Next<CollectionOrdered<T>>();
     public IContain<IEnumerable<T>> Containing => Next<CollectionTo<T>>().Contain;

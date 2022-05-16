@@ -37,6 +37,11 @@ public interface ICollectionBe<T> : ICanAddMatcher<IEnumerable<T>>
     ICollectionAn<T> An { get; }
 
     /// <summary>
+    /// Prepares for superset / subset testing
+    /// </summary>
+    ICollectionA<T> A { get; }
+
+    /// <summary>
     /// Starts the .For on a collection expectation
     /// </summary>
     ICollectionFor<T> For { get; }
