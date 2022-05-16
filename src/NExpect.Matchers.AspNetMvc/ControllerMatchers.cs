@@ -54,8 +54,10 @@ namespace NExpect
             have.AddMatcher(
                 actual =>
                 {
-                    var attribs = actual.GetCustomAttributes(false).OfType<RouteAttribute>();
-                    var passed = attribs.Any(a => a.Template == expected);
+                    var attribs = actual.GetCustomAttributes(false)
+                        .Where(attrib => attrib.GetType().Name == nameof(RouteAttribute))
+                        .ToArray();
+                    var passed = attribs.Any(a => a.GetOrDefault<string>(nameof(RouteAttribute.Template)) == expected);
                     return new MatcherResult(
                         passed,
                         () => $"Expected {actual.Name} {passed.AsNot()}to have route '{expected}'"
@@ -192,8 +194,8 @@ namespace NExpect
                     {
                         var routes = controllerType.GetMethod(Member)
                             ?.GetCustomAttributes(false)
-                            .OfType<RouteAttribute>()
-                            .Select(a => a.Template)
+                            .Where(attrib => attrib.GetType().Name == nameof(RouteAttribute))
+                            .Select(a => a.GetOrDefault<string>(nameof(RouteAttribute.Template)))
                             .ToArray();
                         var passed = routes?.Contains(expected) ?? false;
                         return new MatcherResult(
