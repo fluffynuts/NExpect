@@ -470,37 +470,6 @@ public static class CollectionOrderMatchers
         });
     }
 
-    private static bool TestOrdering<T>(
-        Expression<Func<T, object>> selector,
-        IEnumerator<T> enumerator,
-        Direction direction
-        )
-    {
-        var passed = false;
-        var sel = selector.Compile();
-        var lastValue = sel(enumerator.Current);
-        Func<int, bool> outOfOrder = direction == Direction.Ascending
-            ? i => i > 0
-            : i => i < 0;
-        ComparerWrapper comparer = null;
-        while(enumerator.MoveNext())
-        {
-            passed = true;
-            var currentValue = sel(enumerator.Current);
-            var comparisonResult = CompareWithDefaultComparer(lastValue, currentValue, ref comparer);
-            if (outOfOrder(comparisonResult))
-            {
-                passed = false;
-                break;
-            }
-
-            lastValue = currentValue;
-        }
-        
-        return passed;
-    }
-
-
     private static int CompareWithDefaultComparer(
         object lastValue,
         object currentValue,
