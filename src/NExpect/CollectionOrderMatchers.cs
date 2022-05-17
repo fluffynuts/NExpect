@@ -462,7 +462,8 @@ public static class CollectionOrderMatchers
                         passed.AsNot()
                     }to be ordered {
                         direction.ToString().ToLower()
-                    } by: {selector}",
+                    } by: [{selector}], which produces
+{actual.Select(sel).Stringify<IEnumerable<object>>()}",
                     customMessageGenerator
                 )
             );
