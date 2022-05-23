@@ -399,6 +399,23 @@ public static class CollectionOrderMatchers
         );
     }
 
+    private const string META_KEY_ORDERINGS = "__orderings__";
+
+    private class Ordering<T>
+    {
+        public Expression<Func<T, object>> Selector { get; }
+        public Direction Direction { get; }
+
+        public Ordering(
+            Expression<Func<T, object>> selector,
+            Direction direction
+        )
+        {
+            Selector = selector;
+            Direction = direction;
+        }
+    }
+
     /// <summary>
     /// Tests if the collection is ordered in the given direction
     /// by the property exposed by the selector
@@ -426,48 +443,123 @@ public static class CollectionOrderMatchers
                 );
             }
 
-            var passed = true;
-            using var enumerator = actual.GetEnumerator();
-            if (!enumerator.MoveNext())
+            actual.SetMetadata(META_KEY_ORDERINGS, new List<Ordering<T>>()
             {
-                return new EnforcedMatcherResult(
-                    false,
-                    () => "Cannot test ordering on an empty collection"
-                );
-            }
+                new(selector, direction)
+            });
 
             var sel = selector.Compile();
-            var lastValue = sel(enumerator.Current);
-            Func<int, bool> outOfOrder = direction == Direction.Ascending
-                ? i => i > 0
-                : i => i < 0;
-            ComparerWrapper comparer = null;
-            do
+            return DetermineIfIsInExpectedOrder(actual, new Expression<Func<object, object>>[]
             {
-                var currentValue = sel(enumerator.Current);
-                var comparisonResult = CompareWithDefaultComparer(lastValue, currentValue, ref comparer);
-                if (outOfOrder(comparisonResult))
-                {
-                    passed = false;
-                    break;
-                }
-
-                lastValue = currentValue;
-            } while (enumerator.MoveNext());
-
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () => $@"Expected collection {
-                        passed.AsNot()
-                    }to be ordered {
-                        direction.ToString().ToLower()
-                    } by: [{selector}], which produces
-{actual.Select(sel).Stringify<IEnumerable<object>>()}",
-                    customMessageGenerator
-                )
-            );
+                o => sel((T) o)
+            }, direction, customMessageGenerator);
         });
+    }
+
+    private static MatcherResult DetermineIfIsInExpectedOrder<T>(
+        IEnumerable<T> actual,
+        Expression<Func<object, object>>[] selectors,
+        Direction direction,
+        Func<string> customMessageGenerator
+    )
+    {
+        var passed = true;
+        using var enumerator = actual.GetEnumerator();
+        if (!enumerator.MoveNext())
+        {
+            return new EnforcedMatcherResult(
+                false,
+                () => "Cannot test ordering on an empty collection"
+            );
+        }
+
+        var sels = selectors.Select(s => s.Compile())
+            .ToArray();
+        var lastValue = sels.Aggregate(enumerator.Current as object, (acc, cur) => cur(acc));
+        Func<int, bool> outOfOrder = direction == Direction.Ascending
+            ? i => i > 0
+            : i => i < 0;
+        ComparerWrapper comparer = null;
+        do
+        {
+            var currentValue = sels.Aggregate(enumerator.Current as object, (acc, cur) => cur(acc));
+            var comparisonResult = CompareWithDefaultComparer(lastValue, currentValue, ref comparer);
+            if (outOfOrder(comparisonResult))
+            {
+                passed = false;
+                break;
+            }
+
+            lastValue = currentValue;
+        } while (enumerator.MoveNext());
+
+        return new MatcherResult(
+            passed,
+            FinalMessageFor(
+                () => $@"Expected collection {
+                    passed.AsNot()
+                }to be ordered {
+                    direction.ToString().ToLower()
+                } by: [{selectors.Select(o => o.ToString()).JoinWith(" | ")}],",
+                // TODO: get the visible output here
+                customMessageGenerator
+            )
+        );
+    }
+
+    /// <summary>
+    /// Asserts ordering after initial ordering
+    /// </summary>
+    /// <param name="then"></param>
+    /// <param name="selector"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> By<T>(
+        this IThen<IEnumerable<T>> then,
+        Expression<Func<T, object>> selector
+    )
+    {
+        return then.By(
+            selector,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Asserts ordering after initial ordering
+    /// </summary>
+    /// <param name="then"></param>
+    /// <param name="selector"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> By<T>(
+        this IThen<IEnumerable<T>> then,
+        Expression<Func<T, object>> selector,
+        string customMessage
+    )
+    {
+        return then.By(
+            selector,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Asserts ordering after initial ordering
+    /// </summary>
+    /// <param name="then"></param>
+    /// <param name="selector"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> By<T>(
+        this IThen<IEnumerable<T>> then,
+        Expression<Func<T, object>> selector,
+        Func<string> customMessageGenerator
+    )
+    {
+        throw new NotImplementedException();
     }
 
     private static int CompareWithDefaultComparer(
