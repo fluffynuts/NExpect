@@ -54,6 +54,9 @@ public class More<T>
     /// <inheritdoc />
     public IIn<T> In => Next<In<T>>();
 
+    /// <inheritdoc />
+    public IThen<T> Then => Next<Then<T>>();
+
     /// <summary>
     /// Construct a More&lt;T&gt;
     /// - provide the late-fetching func for the actual value
