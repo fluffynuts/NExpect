@@ -3,6 +3,7 @@ using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
+
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable HeapView.BoxingAllocation
 // ReSharper disable UnusedMember.Global
@@ -18,10 +19,10 @@ public static class TruthMatchers
     /// Tests if a boolean value is True
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
-    public static void True(
+    public static IMore<bool> True(
         this IBe<bool> continuation)
     {
-        continuation.True(NULL_STRING);
+        return continuation.True(NULL_STRING);
     }
 
     /// <summary>
@@ -29,11 +30,11 @@ public static class TruthMatchers
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="message">Custom message to include on failure</param>
-    public static void True(
+    public static IMore<bool> True(
         this IBe<bool> continuation,
         string message)
     {
-        continuation.True(() => message);
+        return continuation.True(() => message);
     }
 
     /// <summary>
@@ -41,22 +42,22 @@ public static class TruthMatchers
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="customMessageGenerator">Generates a custom message to include on failure</param>
-    public static void True(
+    public static IMore<bool> True(
         this IBe<bool> continuation,
         Func<string> customMessageGenerator
     )
     {
-        TestBoolean(continuation, true, customMessageGenerator);
+        return TestBoolean(continuation, true, customMessageGenerator);
     }
 
     /// <summary>
     /// Tests if a boolean value is True
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
-    public static void True(this IBe<bool?> continuation)
+    public static IMore<bool?> True(this IBe<bool?> continuation)
     {
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-        continuation.True(null as string);
+        return continuation.True(null as string);
     }
 
     /// <summary>
@@ -64,9 +65,9 @@ public static class TruthMatchers
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="message">Custom message to include on failure</param>
-    public static void True(this IBe<bool?> continuation, string message)
+    public static IMore<bool?> True(this IBe<bool?> continuation, string message)
     {
-        continuation.True(() => message);
+        return continuation.True(() => message);
     }
 
     /// <summary>
@@ -74,22 +75,22 @@ public static class TruthMatchers
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="customMessageGenerator">Generates a custom message to include on failure</param>
-    public static void True(
+    public static IMore<bool?> True(
         this IBe<bool?> continuation,
         Func<string> customMessageGenerator
     )
     {
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-        continuation.AddMatcher(TruthTestFor(true as bool?, customMessageGenerator));
+        return continuation.AddMatcher(TruthTestFor(true as bool?, customMessageGenerator));
     }
 
     /// <summary>
     /// Tests if a boolean value is False
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
-    public static void False(this IBe<bool> continuation)
+    public static IMore<bool> False(this IBe<bool> continuation)
     {
-        continuation.AddMatcher(TruthTestFor(false, null));
+        return continuation.AddMatcher(TruthTestFor(false, null));
     }
 
     /// <summary>
@@ -97,11 +98,11 @@ public static class TruthMatchers
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="message">Custom message to include on failure</param>
-    public static void False(
+    public static IMore<bool> False(
         this IBe<bool> continuation,
         string message)
     {
-        continuation.False(() => message);
+        return continuation.False(() => message);
     }
 
     /// <summary>
@@ -109,21 +110,21 @@ public static class TruthMatchers
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="customMessageGenerator">Generats a custom message to include on failure</param>
-    public static void False(
+    public static IMore<bool> False(
         this IBe<bool> continuation,
         Func<string> customMessageGenerator)
     {
-        continuation.AddMatcher(TruthTestFor(false, customMessageGenerator));
+        return continuation.AddMatcher(TruthTestFor(false, customMessageGenerator));
     }
 
     /// <summary>
     /// Tests if a boolean value is False
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
-    public static void False(this IBe<bool?> continuation)
+    public static IMore<bool?> False(this IBe<bool?> continuation)
     {
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-        continuation.False(null as string);
+        return continuation.False(null as string);
     }
 
     /// <summary>
@@ -131,9 +132,9 @@ public static class TruthMatchers
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="message">Custom message to include on failure</param>
-    public static void False(this IBe<bool?> continuation, string message)
+    public static IMore<bool?> False(this IBe<bool?> continuation, string message)
     {
-        continuation.False(() => message);
+        return continuation.False(() => message);
     }
 
     /// <summary>
@@ -141,22 +142,24 @@ public static class TruthMatchers
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="customMessageGenerator">Generates a custom message to include on failure</param>
-    public static void False(
+    public static IMore<bool?> False(
         this IBe<bool?> continuation,
         Func<string> customMessageGenerator
     )
     {
         // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-        continuation.AddMatcher(TruthTestFor(false as bool?, customMessageGenerator));
+        return continuation.AddMatcher(
+            TruthTestFor(false as bool?, customMessageGenerator)
+        );
     }
 
-    private static void TestBoolean(
+    private static IMore<bool> TestBoolean(
         IBe<bool> expectation,
         bool expected,
         Func<string> message
     )
     {
-        expectation.AddMatcher(TruthTestFor(expected, message));
+        return expectation.AddMatcher(TruthTestFor(expected, message));
     }
 
     private static Func<T, MatcherResult> TruthTestFor<T>(

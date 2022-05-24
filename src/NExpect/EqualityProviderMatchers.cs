@@ -161,11 +161,11 @@ public static class EqualityProviderMatchers
     /// <param name="be">Continuation to operate on</param>
     /// <param name="expected">Expected value</param>
     /// <typeparam name="T">Type of the object being tested</typeparam>
-    public static void Be<T>(
+    public static IMore<IEnumerable<T>> Be<T>(
         this ICollectionTo<T> be,
         object expected)
     {
-        be.Be(expected, NULL_STRING);
+        return be.Be(expected, NULL_STRING);
     }
 
     /// <summary>
@@ -175,12 +175,12 @@ public static class EqualityProviderMatchers
     /// <param name="expected">Expected value</param>
     /// <param name="customMessage"></param>
     /// <typeparam name="T">Type of the object being tested</typeparam>
-    public static void Be<T>(
+    public static IMore<IEnumerable<T>> Be<T>(
         this ICollectionTo<T> be,
         object expected,
         string customMessage)
     {
-        be.Be(expected, () => customMessage);
+        return be.Be(expected, () => customMessage);
     }
 
     /// <summary>
@@ -190,12 +190,17 @@ public static class EqualityProviderMatchers
     /// <param name="expected">Expected value</param>
     /// <param name="customMessageGenerator"></param>
     /// <typeparam name="T">Type of the object being tested</typeparam>
-    public static void Be<T>(
+    public static IMore<IEnumerable<T>> Be<T>(
         this ICollectionTo<T> be,
         object expected,
         Func<string> customMessageGenerator)
     {
-        be.AddMatcher(CreateCollectionRefEqualMatcherFor<T>(expected, customMessageGenerator));
+        return be.AddMatcher(
+            CreateCollectionRefEqualMatcherFor<T>(
+                expected,
+                customMessageGenerator
+            )
+        );
     }
 
     /// <summary>
@@ -204,12 +209,12 @@ public static class EqualityProviderMatchers
     /// <param name="be"></param>
     /// <param name="expected"></param>
     /// <typeparam name="T"></typeparam>
-    public static void Be<T>(
+    public static IMore<IEnumerable<T>> Be<T>(
         this ICollectionToAfterNot<T> be,
         object expected
     )
     {
-        be.Be(expected, NULL_STRING);
+        return be.Be(expected, NULL_STRING);
     }
 
     /// <summary>
@@ -219,13 +224,13 @@ public static class EqualityProviderMatchers
     /// <param name="expected"></param>
     /// <param name="customMessage"></param>
     /// <typeparam name="T"></typeparam>
-    public static void Be<T>(
+    public static IMore<IEnumerable<T>> Be<T>(
         this ICollectionToAfterNot<T> be,
         object expected,
         string customMessage
     )
     {
-        be.Be(expected, () => customMessage);
+        return be.Be(expected, () => customMessage);
     }
 
     /// <summary>
@@ -235,13 +240,18 @@ public static class EqualityProviderMatchers
     /// <param name="expected"></param>
     /// <param name="customMessageGenerator"></param>
     /// <typeparam name="T"></typeparam>
-    public static void Be<T>(
+    public static IMore<IEnumerable<T>> Be<T>(
         this ICollectionToAfterNot<T> be,
         object expected,
         Func<string> customMessageGenerator
     )
     {
-        be.AddMatcher(CreateCollectionRefEqualMatcherFor<T>(expected, customMessageGenerator));
+        return be.AddMatcher(
+            CreateCollectionRefEqualMatcherFor<T>(
+                expected,
+                customMessageGenerator
+            )
+        );
     }
 
     /// <summary>
@@ -250,12 +260,15 @@ public static class EqualityProviderMatchers
     /// <param name="be"></param>
     /// <param name="expected"></param>
     /// <typeparam name="T"></typeparam>
-    public static void Be<T>(
+    public static IMore<IEnumerable<T>> Be<T>(
         this ICollectionNotAfterTo<T> be,
         object expected
     )
     {
-        be.Be(expected, NULL_STRING);
+        return be.Be(
+            expected,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -265,13 +278,16 @@ public static class EqualityProviderMatchers
     /// <param name="expected"></param>
     /// <param name="customMessage"></param>
     /// <typeparam name="T"></typeparam>
-    public static void Be<T>(
+    public static IMore<IEnumerable<T>> Be<T>(
         this ICollectionNotAfterTo<T> be,
         object expected,
         string customMessage
     )
     {
-        be.Be(expected, () => customMessage);
+        return be.Be(
+            expected,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -281,13 +297,18 @@ public static class EqualityProviderMatchers
     /// <param name="expected"></param>
     /// <param name="customMessageGenerator"></param>
     /// <typeparam name="T"></typeparam>
-    public static void Be<T>(
+    public static IMore<IEnumerable<T>> Be<T>(
         this ICollectionNotAfterTo<T> be,
         object expected,
         Func<string> customMessageGenerator
     )
     {
-        be.AddMatcher(CreateCollectionRefEqualMatcherFor<T>(expected, customMessageGenerator));
+        return be.AddMatcher(
+            CreateCollectionRefEqualMatcherFor<T>(
+                expected,
+                customMessageGenerator
+            )
+        );
     }
 
     /// <summary>
@@ -697,11 +718,11 @@ public static class EqualityProviderMatchers
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="customMessage">Custom message to include when failing</param>
-    public static void Empty(
+    public static IMore<string> Empty(
         this IBe<string> continuation,
         string customMessage)
     {
-        continuation.Empty(() => customMessage);
+        return continuation.Empty(() => customMessage);
     }
 
     /// <summary>
@@ -709,11 +730,11 @@ public static class EqualityProviderMatchers
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="customMessageGenerator">Generates a custom message to include when failing</param>
-    public static void Empty(
+    public static IMore<string> Empty(
         this IBe<string> continuation,
         Func<string> customMessageGenerator)
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             actual =>
             {
                 var passed = actual == "";
@@ -732,20 +753,20 @@ public static class EqualityProviderMatchers
     /// Tests if a string is empty
     /// </summary>
     /// <param name="continuation"></param>
-    public static void Empty(this IBe<string> continuation)
+    public static IMore<string> Empty(this IBe<string> continuation)
     {
-        continuation.Empty(NULL_STRING);
+        return continuation.Empty(NULL_STRING);
     }
 
     /// <summary>
     /// Tests if a string is null or empty
     /// </summary>
     /// <param name="nullOr"></param>
-    public static void Empty(
+    public static IMore<string> Empty(
         this INullOr<string> nullOr
     )
     {
-        nullOr.Empty(NULL_STRING);
+        return nullOr.Empty(NULL_STRING);
     }
 
     /// <summary>
@@ -753,12 +774,12 @@ public static class EqualityProviderMatchers
     /// </summary>
     /// <param name="nullOr"></param>
     /// <param name="customMessage">Custom message to add to the final failure message</param>
-    public static void Empty(
+    public static IMore<string> Empty(
         this INullOr<string> nullOr,
         string customMessage
     )
     {
-        nullOr.Empty(() => customMessage);
+        return nullOr.Empty(() => customMessage);
     }
 
     /// <summary>
@@ -766,12 +787,12 @@ public static class EqualityProviderMatchers
     /// </summary>
     /// <param name="nullOr"></param>
     /// <param name="customMessageGenerator">Generates a custom message to add to the final failure message</param>
-    public static void Empty(
+    public static IMore<string> Empty(
         this INullOr<string> nullOr,
         Func<string> customMessageGenerator
     )
     {
-        nullOr.AddMatcher(
+        return nullOr.AddMatcher(
             actual =>
             {
                 var passed = string.IsNullOrEmpty(actual);
@@ -789,11 +810,11 @@ public static class EqualityProviderMatchers
     /// Test if string is null or whitespace
     /// </summary>
     /// <param name="nullOr"></param>
-    public static void Whitespace(
+    public static IMore<string> Whitespace(
         this INullOr<string> nullOr
     )
     {
-        nullOr.Whitespace(NULL_STRING);
+        return nullOr.Whitespace(NULL_STRING);
     }
 
     /// <summary>
@@ -801,12 +822,12 @@ public static class EqualityProviderMatchers
     /// </summary>
     /// <param name="nullOr"></param>
     /// <param name="customMessage">Custom message to add to the final failure message</param>
-    public static void Whitespace(
+    public static IMore<string> Whitespace(
         this INullOr<string> nullOr,
         string customMessage
     )
     {
-        nullOr.Whitespace(() => customMessage);
+        return nullOr.Whitespace(() => customMessage);
     }
 
     /// <summary>
@@ -814,12 +835,12 @@ public static class EqualityProviderMatchers
     /// </summary>
     /// <param name="nullOr"></param>
     /// <param name="customMessageGenerator">Generates a custom message to add to the final failure message</param>
-    public static void Whitespace(
+    public static IMore<string> Whitespace(
         this INullOr<string> nullOr,
         Func<string> customMessageGenerator
     )
     {
-        nullOr.AddMatcher(
+        return nullOr.AddMatcher(
             actual =>
             {
                 var passed = string.IsNullOrWhiteSpace(actual);

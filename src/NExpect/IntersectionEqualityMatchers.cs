@@ -23,13 +23,13 @@ public static class IntersectionEqualityMatchers
     /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
     /// for customising equality testing for properties of type TProperty</param>
     /// <typeparam name="T">Original type</typeparam>
-    public static void Equal<T>(
+    public static IMore<T> Equal<T>(
         this IIntersection<T> continuation,
         object expected,
         params object[] customEqualityComparers
     )
     {
-        continuation.Equal(expected, NULL_STRING, customEqualityComparers);
+        return continuation.Equal(expected, NULL_STRING, customEqualityComparers);
     }
 
     /// <summary>
@@ -41,14 +41,14 @@ public static class IntersectionEqualityMatchers
     /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
     /// for customising equality testing for properties of type TProperty</param>
     /// <typeparam name="T">Original type</typeparam>
-    public static void Equal<T>(
+    public static IMore<T> Equal<T>(
         this IIntersection<T> continuation,
         object expected,
         string customMessage,
         params object[] customEqualityComparers
     )
     {
-        continuation.Equal(expected, () => customMessage, customEqualityComparers);
+        return continuation.Equal(expected, () => customMessage, customEqualityComparers);
     }
 
     /// <summary>
@@ -60,14 +60,14 @@ public static class IntersectionEqualityMatchers
     /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
     /// for customising equality testing for properties of type TProperty</param>
     /// <typeparam name="T">Original type</typeparam>
-    public static void Equal<T>(
+    public static IMore<T> Equal<T>(
         this IIntersection<T> continuation,
         object expected,
         Func<string> customMessageGenerator,
         params object[] customEqualityComparers
     )
     {
-        RunIntersectioEqualityTest(
+        return RunIntersectionEqualityTest(
             continuation,
             expected,
             customMessageGenerator,
@@ -83,13 +83,13 @@ public static class IntersectionEqualityMatchers
     /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
     /// for customising equality testing for properties of type TProperty</param>
     /// <typeparam name="T">Original type</typeparam>
-    public static void To<T>(
+    public static IMore<T> To<T>(
         this IIntersectionEqual<T> continuation,
         object expected,
         params object[] customEqualityComparers
     )
     {
-        continuation.To(expected, NULL_STRING, customEqualityComparers);
+        return continuation.To(expected, NULL_STRING, customEqualityComparers);
     }
 
     /// <summary>
@@ -101,14 +101,14 @@ public static class IntersectionEqualityMatchers
     /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
     /// for customising equality testing for properties of type TProperty</param>
     /// <typeparam name="T">Original type</typeparam>
-    public static void To<T>(
+    public static IMore<T> To<T>(
         this IIntersectionEqual<T> continuation,
         object expected,
         string customMessage,
         params object[] customEqualityComparers
     )
     {
-        continuation.To(expected, () => customMessage, customEqualityComparers);
+        return continuation.To(expected, () => customMessage, customEqualityComparers);
     }
 
     /// <summary>
@@ -120,14 +120,14 @@ public static class IntersectionEqualityMatchers
     /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
     /// for customising equality testing for properties of type TProperty</param>
     /// <typeparam name="T">Original type</typeparam>
-    public static void To<T>(
+    public static IMore<T> To<T>(
         this IIntersectionEqual<T> continuation,
         object expected,
         Func<string> customMessageGenerator,
         params object[] customEqualityComparers
     )
     {
-        RunIntersectioEqualityTest(
+        return RunIntersectionEqualityTest(
             continuation,
             expected,
             customMessageGenerator,
@@ -135,14 +135,14 @@ public static class IntersectionEqualityMatchers
         );
     }
 
-    private static void RunIntersectioEqualityTest<T>(
+    private static IMore<T> RunIntersectionEqualityTest<T>(
         ICanAddMatcher<T> continuation,
         object expected,
         Func<string> customMessageGenerator,
         params object[] customEqualityComparers
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             actual =>
             {
                 var result = DeepTestHelpers.AreIntersectionEqual(

@@ -208,12 +208,12 @@ public static class GreaterThanOrEqualMatchers
     /// </summary>
     /// <param name="continuation">.Greater.Than.Or.Equal.To</param>
     /// <param name="expected">value to compare with</param>
-    public static void To(
+    public static IMore<long?> To(
         this IGreaterThanOrEqual<long?> continuation,
         double expected
     )
     {
-        continuation.To(expected, NULL_STRING);
+        return continuation.To(expected, NULL_STRING);
     }
 
     /// <summary>
@@ -222,13 +222,13 @@ public static class GreaterThanOrEqualMatchers
     /// <param name="continuation">.Greater.Than.Or.Equal.To</param>
     /// <param name="expected">value to compare with</param>
     /// <param name="customMessage">Custom message to add to failure messages</param>
-    public static void To(
+    public static IMore<long?> To(
         this IGreaterThanOrEqual<long?> continuation,
         double expected,
         string customMessage
     )
     {
-        continuation.To(expected, () => customMessage);
+        return continuation.To(expected, () => customMessage);
     }
 
     /// <summary>
@@ -237,13 +237,13 @@ public static class GreaterThanOrEqualMatchers
     /// <param name="continuation">.Greater.Than.Or.Equal.To</param>
     /// <param name="expected">value to compare with</param>
     /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
-    public static void To(
+    public static IMore<long?> To(
         this IGreaterThanOrEqual<long?> continuation,
         double expected,
         Func<string> customMessageGenerator
     )
     {
-        AddMatcher(
+        return AddMatcher(
             continuation,
             expected,
             (a, e) => a.HasValue && a >= e,

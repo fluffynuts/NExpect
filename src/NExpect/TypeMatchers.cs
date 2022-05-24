@@ -167,11 +167,11 @@ public static class TypeMatchers
     /// </summary>
     /// <param name="instance"></param>
     /// <param name="expected"></param>
-    public static void Of(
+    public static IMore<Type> Of(
         this IInstanceContinuation instance,
         Type expected)
     {
-        instance.Of(expected, null as string);
+        return instance.Of(expected, null as string);
     }
 
     /// <summary>
@@ -180,12 +180,12 @@ public static class TypeMatchers
     /// <param name="instance"></param>
     /// <param name="expected"></param>
     /// <param name="customMessage"></param>
-    public static void Of(
+    public static IMore<Type> Of(
         this IInstanceContinuation instance,
         Type expected,
         string customMessage)
     {
-        instance.Of(expected, () => customMessage);
+        return instance.Of(expected, () => customMessage);
     }
 
     /// <summary>
@@ -194,12 +194,12 @@ public static class TypeMatchers
     /// <param name="instance">Instance to operate on</param>
     /// <param name="expected">Expected Type of the Instance</param>
     /// <param name="customMessageGenerator">Custom error message</param>
-    public static void Of(
+    public static IMore<Type> Of(
         this IInstanceContinuation instance,
         Type expected,
         Func<string> customMessageGenerator)
     {
-        instance.AddMatcher(
+        return instance.AddMatcher(
             actual =>
             {
                 var passed = expected.IsAssignableFrom(instance.Actual);

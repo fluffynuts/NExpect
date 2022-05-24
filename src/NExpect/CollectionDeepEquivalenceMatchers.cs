@@ -29,13 +29,13 @@ public static class CollectionDeepEquivalenceMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionDeepEquivalent<T> continuation,
         IEnumerable<T> expected,
         params object[] customEqualityComparers
     )
     {
-        continuation.To(expected, NULL_STRING, customEqualityComparers);
+        return continuation.To(expected, NULL_STRING, customEqualityComparers);
     }
 
     /// <summary>
@@ -51,14 +51,14 @@ public static class CollectionDeepEquivalenceMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionDeepEquivalent<T> continuation,
         IEnumerable<T> expected,
         string customMessage,
         params object[] customEqualityComparers
     )
     {
-        continuation.To(expected, () => customMessage, customEqualityComparers);
+        return continuation.To(expected, () => customMessage, customEqualityComparers);
     }
 
     /// <summary>
@@ -74,14 +74,14 @@ public static class CollectionDeepEquivalenceMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionDeepEquivalent<T> continuation,
         IEnumerable<T> expected,
         Func<string> customMessageGenerator,
         params object[] customEqualityComparers
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             collection =>
             {
                 var result = CollectionsAreDeepEquivalent(

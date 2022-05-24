@@ -2251,13 +2251,18 @@ namespace NExpect.Tests.ObjectEquality
                 {
                     // Arrange
                     var instance = new Coordinate(2, 3);
+                    var ref1 = instance;
+                    var ref2 = instance;
                     var otherInstance = new Coordinate(2, 3);
                     // Pre-Assert
                     // Act
                     Assert.That(
                         () =>
                         {
-                            Expect(instance).To.Be(instance);
+                            Expect(instance)
+                                .To.Be(ref1)
+                                .And
+                                .To.Be(ref2);
                         },
                         Throws.Nothing);
                     Assert.That(
@@ -2266,6 +2271,24 @@ namespace NExpect.Tests.ObjectEquality
                             Expect(instance)
                                 .Not.To.Be(otherInstance);
                         }, Throws.Nothing);
+                    // Assert
+                }
+
+                [Test]
+                public void ShouldBeAbleToDoMoreWithCollectionInstanceValidation()
+                {
+                    // Arrange
+                    var instance = new[] { 1, 2, 3 };
+                    var ref1 = instance;
+                    var ref2 = instance;
+                    // Act
+                    Assert.That(() =>
+                    {
+                        Expect(instance)
+                            .To.Be(ref1)
+                            .And
+                            .To.Be(ref2);
+                    }, Throws.Nothing);
                     // Assert
                 }
 

@@ -27,12 +27,12 @@ public static class CollectionDeepEqualityMatchers
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="expected">Collection to match</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionDeep<T> continuation,
         IEnumerable<T> expected
     )
     {
-        continuation.Equal(expected, NULL_STRING);
+        return continuation.Equal(expected, NULL_STRING);
     }
 
     /// <summary>
@@ -44,13 +44,13 @@ public static class CollectionDeepEqualityMatchers
     /// <param name="expected">Collection to match</param>
     /// <param name="customMessage">Custom message to add when failing</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionDeep<T> continuation,
         IEnumerable<T> expected,
         string customMessage
     )
     {
-        continuation.Equal(expected, () => customMessage);
+        return continuation.Equal(expected, () => customMessage);
     }
 
     /// <summary>
@@ -62,13 +62,13 @@ public static class CollectionDeepEqualityMatchers
     /// <param name="expected">Collection to match</param>
     /// <param name="customMessageGenerator">Generates a custom message to add when failing</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void Equal<T>(
+    public static IMore<IEnumerable<T>> Equal<T>(
         this ICollectionDeep<T> continuation,
         IEnumerable<T> expected,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             MakeCollectionDeepEqualMatcherFor(expected, customMessageGenerator)
         );
     }
@@ -83,13 +83,13 @@ public static class CollectionDeepEqualityMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionDeepEqual<T> continuation,
         IEnumerable<T> expected,
         params object[] customEqualityComparers
     )
     {
-        continuation.To(expected, NULL_STRING, customEqualityComparers);
+        return continuation.To(expected, NULL_STRING, customEqualityComparers);
     }
 
     /// <summary>
@@ -103,14 +103,14 @@ public static class CollectionDeepEqualityMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionDeepEqual<T> continuation,
         IEnumerable<T> expected,
         string customMessage,
         params object[] customEqualityComparers
     )
     {
-        continuation.To(expected, () => customMessage, customEqualityComparers);
+        return continuation.To(expected, () => customMessage, customEqualityComparers);
     }
 
     /// <summary>
@@ -124,14 +124,14 @@ public static class CollectionDeepEqualityMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static void To<T>(
+    public static IMore<IEnumerable<T>> To<T>(
         this ICollectionDeepEqual<T> continuation,
         IEnumerable<T> expected,
         Func<string> customMessage,
         params object[] customEqualityComparers
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             MakeCollectionDeepEqualMatcherFor(
                 expected,
                 customMessage,

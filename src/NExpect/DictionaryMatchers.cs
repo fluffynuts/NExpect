@@ -457,12 +457,12 @@ public static class DictionaryMatchers
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="expected">Value to match on</param>
     /// <typeparam name="T">Type of the values</typeparam>
-    public static void Value<T>(
+    public static IMore<T> Value<T>(
         this IDictionaryValueWith<T> continuation,
         T expected
     )
     {
-        continuation.Value(expected, NULL_STRING);
+        return continuation.Value(expected, NULL_STRING);
     }
 
     /// <summary>
@@ -472,13 +472,13 @@ public static class DictionaryMatchers
     /// <param name="expected">Value to match on</param>
     /// <param name="customMessage">Custom message to add to failure messages</param>
     /// <typeparam name="T">Type of the values</typeparam>
-    public static void Value<T>(
+    public static IMore<T> Value<T>(
         this IDictionaryValueWith<T> continuation,
         T expected,
         string customMessage
     )
     {
-        continuation.Value(expected, () => customMessage);
+        return continuation.Value(expected, () => customMessage);
     }
 
     /// <summary>
@@ -488,13 +488,13 @@ public static class DictionaryMatchers
     /// <param name="expected">Value to match on</param>
     /// <param name="customMessage">Custom message to add to failure messages</param>
     /// <typeparam name="T">Type of the values</typeparam>
-    public static void Value<T>(
+    public static IMore<T> Value<T>(
         this IDictionaryValueWith<T> continuation,
         T expected,
         Func<string> customMessage
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             GenerateEqualityMatcherFor(expected, customMessage)
         );
     }

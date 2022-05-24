@@ -22,12 +22,12 @@ public static class MatchProviderExtensions
     /// <param name="continuation">Continuation to act on</param>
     /// <param name="test">Func to test the original value with</param>
     /// <typeparam name="T"></typeparam>
-    public static void Match<T>(
+    public static IMore<T> Match<T>(
         this ITo<T> continuation,
         Func<T, bool> test
     )
     {
-        continuation.Match(test, NULL_STRING);
+        return continuation.Match(test, NULL_STRING);
     }
 
     /// <summary>
@@ -38,13 +38,13 @@ public static class MatchProviderExtensions
     /// <param name="test">Func to test the original value with</param>
     /// <param name="customMessage">Message to include in the result upon failure</param>
     /// <typeparam name="T"></typeparam>
-    public static void Match<T>(
+    public static IMore<T> Match<T>(
         this ITo<T> continuation,
         Func<T, bool> test,
         string customMessage
     )
     {
-        continuation.Match(test, () => customMessage);
+        return continuation.Match(test, () => customMessage);
     }
 
     /// <summary>
@@ -55,13 +55,13 @@ public static class MatchProviderExtensions
     /// <param name="test">Func to test the original value with</param>
     /// <param name="customMessageGenerator">Generates a custom message to include in the result upon failure</param>
     /// <typeparam name="T"></typeparam>
-    public static void Match<T>(
+    public static IMore<T> Match<T>(
         this ITo<T> continuation,
         Func<T, bool> test,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(MatchMatcherFor(test, customMessageGenerator));
+        return continuation.AddMatcher(MatchMatcherFor(test, customMessageGenerator));
     }
 
     /// <summary>
@@ -71,12 +71,12 @@ public static class MatchProviderExtensions
     /// <param name="continuation">Continuation to act on</param>
     /// <param name="test">Func to test the original value with</param>
     /// <typeparam name="T"></typeparam>
-    public static void Match<T>(
+    public static IMore<T> Match<T>(
         this IToAfterNot<T> continuation,
         Func<T, bool> test
     )
     {
-        continuation.Match(test, NULL_STRING);
+        return continuation.Match(test, NULL_STRING);
     }
 
     /// <summary>
@@ -87,13 +87,13 @@ public static class MatchProviderExtensions
     /// <param name="test">Func to test the original value with</param>
     /// <param name="customMessage">Message to include in the result upon failure</param>
     /// <typeparam name="T"></typeparam>
-    public static void Match<T>(
+    public static IMore<T> Match<T>(
         this IToAfterNot<T> continuation,
         Func<T, bool> test,
         string customMessage
     )
     {
-        continuation.Match(test, () => customMessage);
+        return continuation.Match(test, () => customMessage);
     }
 
     /// <summary>
@@ -104,13 +104,13 @@ public static class MatchProviderExtensions
     /// <param name="test">Func to test the original value with</param>
     /// <param name="customMessageGenerator">Generates a custom message to include in the result upon failure</param>
     /// <typeparam name="T"></typeparam>
-    public static void Match<T>(
+    public static IMore<T> Match<T>(
         this IToAfterNot<T> continuation,
         Func<T, bool> test,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(MatchMatcherFor(test, customMessageGenerator));
+        return continuation.AddMatcher(MatchMatcherFor(test, customMessageGenerator));
     }
 
     /// <summary>
@@ -120,12 +120,12 @@ public static class MatchProviderExtensions
     /// <param name="continuation">Continuation to act on</param>
     /// <param name="test">Func to test the original value with</param>
     /// <typeparam name="T"></typeparam>
-    public static void Match<T>(
+    public static IMore<T> Match<T>(
         this INotAfterTo<T> continuation,
         Func<T, bool> test
     )
     {
-        continuation.Match(test, NULL_STRING);
+        return continuation.Match(test, NULL_STRING);
     }
 
     /// <summary>
@@ -136,13 +136,13 @@ public static class MatchProviderExtensions
     /// <param name="test">Func to test the original value with</param>
     /// <param name="customMessage">Message to include in the result upon failure</param>
     /// <typeparam name="T"></typeparam>
-    public static void Match<T>(
+    public static IMore<T> Match<T>(
         this INotAfterTo<T> continuation,
         Func<T, bool> test,
         string customMessage
     )
     {
-        continuation.Match(test, () => customMessage);
+        return continuation.Match(test, () => customMessage);
     }
 
     /// <summary>
@@ -153,13 +153,13 @@ public static class MatchProviderExtensions
     /// <param name="test">Func to test the original value with</param>
     /// <param name="customMessageGenerator">Generates a custom message to include in the result upon failure</param>
     /// <typeparam name="T"></typeparam>
-    public static void Match<T>(
+    public static IMore<T> Match<T>(
         this INotAfterTo<T> continuation,
         Func<T, bool> test,
         Func<string> customMessageGenerator
     )
     {
-        continuation.AddMatcher(MatchMatcherFor(test, customMessageGenerator));
+        return continuation.AddMatcher(MatchMatcherFor(test, customMessageGenerator));
     }
 
     private static Func<T, IMatcherResult> MatchMatcherFor<T>(

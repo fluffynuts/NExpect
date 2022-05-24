@@ -24,13 +24,13 @@ public static class DeepEqualityMatchers
     /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
     /// for customising equality testing for properties of type TProperty</param>
     /// <typeparam name="T">Type of object</typeparam>
-    public static void Equal<T>(
+    public static IMore<T> Equal<T>(
         this IDeep<T> continuation,
         object expected,
         params object[] customEqualityComparers
     )
     {
-        continuation.Equal(expected, MH.NULL_STRING, customEqualityComparers);
+        return continuation.Equal(expected, MH.NULL_STRING, customEqualityComparers);
     }
 
     /// <summary>
@@ -42,14 +42,14 @@ public static class DeepEqualityMatchers
     /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
     /// for customising equality testing for properties of type TProperty</param>
     /// <typeparam name="T">Type of object</typeparam>
-    public static void Equal<T>(
+    public static IMore<T> Equal<T>(
         this IDeep<T> continuation,
         object expected,
         string customMessage,
         params object[] customEqualityComparers
     )
     {
-        continuation.Equal(expected, () => customMessage, customEqualityComparers);
+        return continuation.Equal(expected, () => customMessage, customEqualityComparers);
     }
 
     /// <summary>
@@ -61,14 +61,14 @@ public static class DeepEqualityMatchers
     /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
     /// for customising equality testing for properties of type TProperty</param>
     /// <typeparam name="T">Type of object</typeparam>
-    public static void Equal<T>(
+    public static IMore<T> Equal<T>(
         this IDeep<T> continuation,
         object expected,
         Func<string> customMessageGenerator,
         params object[] customEqualityComparers
     )
     {
-        DoDeepEqualityTesting(
+        return DoDeepEqualityTesting(
             continuation,
             expected,
             customMessageGenerator,
@@ -82,13 +82,13 @@ public static class DeepEqualityMatchers
     /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
     /// for customising equality testing for properties of type TProperty</param>
     /// <typeparam name="T">Type of object</typeparam>
-    public static void To<T>(
+    public static IMore<T> To<T>(
         this IDeepEqual<T> continuation,
         object expected,
         params object[] customEqualityComparers
     )
     {
-        continuation.To(expected, MH.NULL_STRING, customEqualityComparers);
+        return continuation.To(expected, MH.NULL_STRING, customEqualityComparers);
     }
 
     /// <summary>
@@ -100,14 +100,14 @@ public static class DeepEqualityMatchers
     /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
     /// for customising equality testing for properties of type TProperty</param>
     /// <typeparam name="T">Type of object</typeparam>
-    public static void To<T>(
+    public static IMore<T> To<T>(
         this IDeepEqual<T> continuation,
         object expected,
         string customMessage,
         params object[] customEqualityComparers
     )
     {
-        continuation.To(expected, () => customMessage, customEqualityComparers);
+        return continuation.To(expected, () => customMessage, customEqualityComparers);
     }
 
     /// <summary>
@@ -119,28 +119,28 @@ public static class DeepEqualityMatchers
     /// <param name="customEqualityComparers">Objects implementing IEqualityComparer&lt;TProperty&gt;
     /// for customising equality testing for properties of type TProperty</param>
     /// <typeparam name="T">Type of object</typeparam>
-    public static void To<T>(
+    public static IMore<T> To<T>(
         this IDeepEqual<T> continuation,
         object expected,
         Func<string> customMessageGenerator,
         params object[] customEqualityComparers
     )
     {
-        DoDeepEqualityTesting(
+        return DoDeepEqualityTesting(
             continuation,
             expected,
             customMessageGenerator,
             customEqualityComparers);
     }
 
-    private static void DoDeepEqualityTesting<T>(
+    private static IMore<T> DoDeepEqualityTesting<T>(
         this ICanAddMatcher<T> continuation,
         object expected,
         Func<string> customMessageGenerator,
         params object[] customEqualityComparers
     )
     {
-        continuation.AddMatcher(
+        return continuation.AddMatcher(
             actual =>
             {
                 var deepEqualResult = DeepTestHelpers.AreDeepEqual(

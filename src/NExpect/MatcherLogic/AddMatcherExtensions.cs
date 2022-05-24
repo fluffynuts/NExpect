@@ -86,11 +86,9 @@ public static class AddMatcherExtensions
     )
     {
         AddMatcherPrivate(continuation, matcher);
-        var more = continuation.More();
-        continuation.CopyPropertiesTo(more);
-        return more;
+        return continuation.More();
     }
-
+    
 
     /// <summary>
     /// Use to compose expectations into one matcher
