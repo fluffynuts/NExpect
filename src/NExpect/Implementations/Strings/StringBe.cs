@@ -10,7 +10,7 @@ internal class StringBe :
     Be<string>,
     IStringBe
 {
-    public IStringMatched Matched => Next<StringMatched>();
+    IStringMatched IStringBe.Matched => Next<StringMatched>();
 
     public StringBe(Func<string> actualFetcher) : base(actualFetcher)
     {

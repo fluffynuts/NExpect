@@ -72,4 +72,9 @@ public interface IBe<T> : ICanAddMatcher<T>
     /// Provides the .Be.At grammar
     /// </summary>
     IAt<T> At { get; }
+
+    /// <summary>
+    /// Provides the .Matched.By grammar
+    /// </summary>
+    IMatched<T> Matched { get; }
 }

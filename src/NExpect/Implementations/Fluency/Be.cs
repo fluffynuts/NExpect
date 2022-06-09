@@ -1,6 +1,5 @@
 ﻿using System;
 using NExpect.Implementations.Numerics;
-using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable MemberCanBePrivate.Global
@@ -26,6 +25,7 @@ internal class Be<T>
     public IOn<T> On => Next<On<T>>();
     public IIn<T> In => Next<In<T>>();
     public IAt<T> At => Next<At<T>>();
+    public IMatched<T> Matched => Next<Matched<T>>();
 
     public void SetActual(T actual)
     {

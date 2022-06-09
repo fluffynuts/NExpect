@@ -9,5 +9,5 @@ public interface IStringBe: IBe<string>
     /// Starts an expectation to match the Actual string with
     /// a regular expression
     /// </summary>
-    IStringMatched Matched { get; }
+    new IStringMatched Matched { get; }
 }
