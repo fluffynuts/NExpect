@@ -50,4 +50,9 @@ public interface ICollectionBe<T> : ICanAddMatcher<IEnumerable<T>>
     /// Facilitates for asserting the order of a collection
     /// </summary>
     ICollectionOrdered<T> Ordered { get; }
+
+    /// <summary>
+    /// Provides the .Mostly grammar extension
+    /// </summary>
+    ICollectionMostly<T> Mostly { get; }
 }

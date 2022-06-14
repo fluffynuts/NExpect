@@ -22,6 +22,7 @@ internal class CollectionBe<T>
     public ICollectionA<T> A => Next<CollectionA<T>>();
     public ICollectionFor<T> For => Next<CollectionFor<T>>();
     public ICollectionOrdered<T> Ordered => Next<CollectionOrdered<T>>();
+    public ICollectionMostly<T> Mostly => Next<CollectionMostly<T>>();
 
     public CollectionBe(Func<IEnumerable<T>> actualFetcher) : base(actualFetcher)
     {

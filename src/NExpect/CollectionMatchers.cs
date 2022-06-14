@@ -2247,6 +2247,174 @@ public static class CollectionMatchers
         );
     }
 
+    /// <summary>
+    /// Verify that a collection is mostly (> 50%) distinct
+    /// </summary>
+    /// <param name="mostly"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> Distinct<T>(
+        this ICollectionMostly<T> mostly
+    )
+    {
+        return mostly.Distinct<T>(NULL_STRING);
+    }
+
+    /// <summary>
+    /// Verify that a collection is mostly (> 50%) distinct
+    /// </summary>
+    /// <param name="mostly"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> Distinct<T>(
+        this ICollectionMostly<T> mostly,
+        string customMessage
+    )
+    {
+        return mostly.Distinct<T>(() => customMessage);
+    }
+
+    /// <summary>
+    /// Verify that a collection is mostly (> 50%) distinct
+    /// </summary>
+    /// <param name="mostly"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> Distinct<T>(
+        this ICollectionMostly<T> mostly,
+        Func<string> customMessageGenerator
+    )
+    {
+        return mostly.Distinct<T>(0.5M, customMessageGenerator);
+    }
+
+    /// <summary>
+    /// Verify that a collection is mostly distinct by the given minimum ratio
+    /// </summary>
+    /// <param name="mostly"></param>
+    /// <param name="minimumRequiredRatio"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> Distinct<T>(
+        this ICollectionMostly<T> mostly,
+        double minimumRequiredRatio
+    )
+    {
+        return mostly.Distinct(minimumRequiredRatio, NULL_STRING);
+    }
+
+    /// <summary>
+    /// Verify that a collection is mostly distinct by the given minimum ratio
+    /// </summary>
+    /// <param name="mostly"></param>
+    /// <param name="minimumRequiredRatio"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> Distinct<T>(
+        this ICollectionMostly<T> mostly,
+        double minimumRequiredRatio,
+        string customMessage
+    )
+    {
+        return mostly.Distinct(minimumRequiredRatio, () => customMessage);
+    }
+
+    /// <summary>
+    /// Verify that a collection is mostly distinct by the given minimum ratio
+    /// </summary>
+    /// <param name="mostly"></param>
+    /// <param name="minimumRequiredRatio"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> Distinct<T>(
+        this ICollectionMostly<T> mostly,
+        double minimumRequiredRatio,
+        Func<string> customMessageGenerator
+    )
+    {
+        return mostly.Distinct(
+            (decimal) minimumRequiredRatio,
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Verify that a collection is mostly distinct by the given minimum ratio
+    /// </summary>
+    /// <param name="mostly"></param>
+    /// <param name="minimumRequiredRatio"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> Distinct<T>(
+        this ICollectionMostly<T> mostly,
+        decimal minimumRequiredRatio
+    )
+    {
+        return mostly.Distinct(minimumRequiredRatio, NULL_STRING);
+    }
+
+    /// <summary>
+    /// Verify that a collection is mostly distinct by the given minimum ratio
+    /// </summary>
+    /// <param name="mostly"></param>
+    /// <param name="minimumRequiredRatio"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> Distinct<T>(
+        this ICollectionMostly<T> mostly,
+        decimal minimumRequiredRatio,
+        string customMessage
+    )
+    {
+        return mostly.Distinct(minimumRequiredRatio, () => customMessage);
+    }
+
+    /// <summary>
+    /// Verify that a collection is mostly distinct by the given minimum ratio
+    /// </summary>
+    /// <param name="mostly"></param>
+    /// <param name="minimumRequiredRatio"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<IEnumerable<T>> Distinct<T>(
+        this ICollectionMostly<T> mostly,
+        decimal minimumRequiredRatio,
+        Func<string> customMessageGenerator
+    )
+    {
+        return mostly.AddMatcher(actual =>
+        {
+            if (minimumRequiredRatio is < 0 or > 1)
+            {
+                return new EnforcedMatcherResult(
+                    false,
+                    $"Minimum required ratio must be between 0 and 1 (provided value was: ${minimumRequiredRatio}"
+                );
+            }
+
+            var asArray = actual as T[] ?? actual.ToArray();
+            var total = asArray.Length;
+            var distinct = asArray.Distinct().Count();
+            var actualRatio = (decimal) distinct / (decimal) total;
+            var passed = actualRatio >= minimumRequiredRatio;
+            return new MatcherResult(
+                passed,
+                () => $@"Expected {
+                    passed.AsNot()
+                }to find at least {
+                    minimumRequiredRatio * 100
+                }% distinct items in\n{actual.Stringify<IEnumerable<T>>()}",
+                customMessageGenerator
+            );
+        });
+    }
+
     private static Func<IEnumerable<T>, IMatcherResult> GenerateEqualityMatcherFor<T>(
         IEnumerable<T> expected,
         IEqualityComparer<T> comparer,

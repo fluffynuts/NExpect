@@ -22,6 +22,7 @@ internal class ExceptionCollectionPropertyContinuation<T>
     public ICollectionA<T> A => Next<CollectionA<T>>();
     public ICollectionFor<T> For => Next<CollectionFor<T>>();
     public ICollectionOrdered<T> Ordered => Next<CollectionOrdered<T>>();
+    public ICollectionMostly<T> Mostly => Next<CollectionMostly<T>>();
     public IContain<IEnumerable<T>> Containing => Next<CollectionTo<T>>().Contain;
     public ICollectionPropertyContinuationNot<T> Not => Next<CollectionPropertyContinuationNot<T>>();
 
