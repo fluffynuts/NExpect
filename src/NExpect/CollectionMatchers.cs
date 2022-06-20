@@ -469,8 +469,24 @@ public static class CollectionMatchers
         return countMatch.Continuation.AddMatcher(
             collection =>
             {
-                var have = collection?.Where(test).Count() ?? 0;
                 var collectionCount = collection?.Count() ?? 0;
+                if (countMatch.Method == CountMatchMethods.Only &&
+                    collectionCount != countMatch.Compare)
+                {
+                    return new MatcherResult(
+                        false,
+                        FinalMessageFor(
+                            () => $@"Expected {
+                                false.AsNot()
+                            }to find only {
+                                countMatch.Compare
+                            } items in\n{collection.Stringify<IEnumerable<T>>()}",
+                            customMessageGenerator
+                        )
+                    );
+                }
+
+                var have = collection?.Where(test).Count() ?? 0;
                 var compare = countMatch.Method == CountMatchMethods.All
                     ? collectionCount
                     : countMatch.Compare;

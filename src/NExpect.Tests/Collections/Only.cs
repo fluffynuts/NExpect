@@ -108,6 +108,50 @@ namespace NExpect.Tests.Collections
                     .With.Message.Contains(expected)
             );
 
+            Assert.That(() =>
+                {
+                    Expect(collection).To.Contain.Only(1).Items(() => expected);
+                },
+                Throws.Exception.TypeOf<UnmetExpectationException>()
+                    .With.Message.Contains(expected)
+            );
+
+            // Assert
+        }
+
+        [Test]
+        public void ShouldBreakOnCountMisMatch()
+        {
+            // Arrange
+            var items = new[] { 1, 2, 3 };
+            // Act
+            Assert.That(() =>
+            {
+                Expect(items)
+                    .To.Contain.Only(1)
+                    .Matched.By(i => i == 1);
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            Assert.That(() =>
+            {
+                Expect(items)
+                    .Not.To.Contain.Only(1)
+                    .Matched.By(i => i == 1);
+            }, Throws.Nothing);
+            // Assert
+        }
+
+        [Test]
+        public void AnyShouldPassForOneMatch()
+        {
+            // Arrange
+            var items = new[] { 1, 2, 3 };
+            // Act
+            Assert.That(() =>
+            {
+                Expect(items)
+                    .To.Contain.Any
+                    .Matched.By(i => i == 1);
+            }, Throws.Nothing);
             // Assert
         }
 
