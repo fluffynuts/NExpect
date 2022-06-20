@@ -1012,7 +1012,25 @@
             <typeparam name="T">Item type of the array</typeparam>
             <returns>A new array which is the source with the new items appended</returns>
         </member>
+        <member name="M:Imported.PeanutButter.Utils.ExtensionsForIEnumerables.And``1(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Convenience method to create a new array with the provided element(s) appended
+            </summary>
+            <param name="source">Source array to start with</param>
+            <param name="values"></param>
+            <typeparam name="T">Item type of the array</typeparam>
+            <returns>A new array which is the source with the new items appended</returns>
+        </member>
         <member name="M:Imported.PeanutButter.Utils.ExtensionsForIEnumerables.And``1(``0[],``0[])">
+            <summary>
+            Convenience method to create a new array with the provided element(s) appended
+            </summary>
+            <param name="source">Source array to start with</param>
+            <param name="values"></param>
+            <typeparam name="T">Item type of the array</typeparam>
+            <returns>A new array which is the source with the new items appended</returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.ExtensionsForIEnumerables.And``1(``0[],System.Collections.Generic.IEnumerable{``0})">
             <summary>
             Convenience method to create a new array with the provided element(s) appended
             </summary>
@@ -1147,7 +1165,7 @@
             <summary>
             Convenience method to get the first item after skipping N items from a collection
             -> equivalent to collection.Skip(N).First();
-            -> collection.FirtstAfter(2) returns the 3rd element
+            -> collection.FirstAfter(2) returns the 3rd element
             </summary>
             <param name="src">Source collection</param>
             <param name="toSkip">How many items to skip</param>
@@ -1158,7 +1176,7 @@
             <summary>
             Convenience method to get the first item after skipping N items from a collection
             -> equivalent to collection.Skip(N).First();
-            -> collection.FirtstAfter(2) returns the 3rd element
+            -> collection.FirstAfter(2) returns the 3rd element
             -> this variant returns the default value for T if the N is out of bounds
             </summary>
             <param name="src">Source collection</param>
@@ -1168,7 +1186,7 @@
         </member>
         <member name="M:Imported.PeanutButter.Utils.ExtensionsForIEnumerables.FindDuplicates``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
-            Find duplicates within a collectio according to a provided discriminator
+            Find duplicates within a collection according to a provided discriminator
             </summary>
             <param name="src">Collection to operate on</param>
             <typeparam name="TItem">Type of items in the collection</typeparam>
@@ -1176,10 +1194,10 @@
         </member>
         <member name="M:Imported.PeanutButter.Utils.ExtensionsForIEnumerables.FindDuplicates``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
             <summary>
-            Find duplicates within a collectio according to a provided discriminator
+            Find duplicates within a collection according to a provided discriminator
             </summary>
             <param name="src">Collection to operate on</param>
-            <param name="descriminator">Function to determine uniqueness of each item: should
+            <param name="discriminator">Function to determine uniqueness of each item: should
             return whatever identifies a particular item uniquely</param>
             <typeparam name="TItem">Type of items in the collection</typeparam>
             <typeparam name="TKey">Type of key used to discriminate items</typeparam>
