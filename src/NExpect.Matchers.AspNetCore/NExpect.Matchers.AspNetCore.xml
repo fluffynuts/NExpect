@@ -102,6 +102,27 @@
             <param name="form"></param>
             <returns></returns>
         </member>
+        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Http.IHeaderDictionary)">
+            <summary>
+            Treat an IHeaderDictionary like an IDictionary&lt;string, StringValues&gt;
+            </summary>
+            <param name="headers"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Http.HeaderDictionary)">
+            <summary>
+            Treat an IHeaderDictionary like an IDictionary&lt;string, StringValues&gt;
+            </summary>
+            <param name="headers"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Http.IRequestCookieCollection)">
+            <summary>
+            Tread an IRequestCookieCollection like a collection of KeyValuePair&lt;string, string&gt;
+            </summary>
+            <param name="cookies"></param>
+            <returns></returns>
+        </member>
         <member name="T:NExpect.HttpResponseMessageMatchers">
             <summary>
             Provides matchers for HttpResponseMessages

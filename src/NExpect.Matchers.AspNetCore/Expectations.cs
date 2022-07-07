@@ -20,7 +20,7 @@ public static class AspNetCoreExpectations
         IFormFileCollection files
     )
     {
-        return NExpect.Expectations.Expect(
+        return Expectations.Expect(
             files as IEnumerable<IFormFile>
         );
     }
@@ -34,8 +34,44 @@ public static class AspNetCoreExpectations
         IFormCollection form
     )
     {
-        return NExpect.Expectations.Expect(
+        return Expectations.Expect(
             form as IEnumerable<KeyValuePair<string, StringValues>>
         );
+    }
+
+    /// <summary>
+    /// Treat an IHeaderDictionary like an IDictionary&lt;string, StringValues&gt;
+    /// </summary>
+    /// <param name="headers"></param>
+    /// <returns></returns>
+    public static ICollectionExpectation<KeyValuePair<string, StringValues>> Expect(
+        IHeaderDictionary headers
+    )
+    {
+        return Expectations.Expect(headers as IDictionary<string, StringValues>);
+    }
+
+    /// <summary>
+    /// Treat an IHeaderDictionary like an IDictionary&lt;string, StringValues&gt;
+    /// </summary>
+    /// <param name="headers"></param>
+    /// <returns></returns>
+    public static ICollectionExpectation<KeyValuePair<string, StringValues>> Expect(
+        HeaderDictionary headers
+    )
+    {
+        return Expect(headers as IHeaderDictionary);
+    }
+
+    /// <summary>
+    /// Tread an IRequestCookieCollection like a collection of KeyValuePair&lt;string, string&gt;
+    /// </summary>
+    /// <param name="cookies"></param>
+    /// <returns></returns>
+    public static ICollectionExpectation<KeyValuePair<string, string>> Expect(
+        IRequestCookieCollection cookies
+    )
+    {
+        return Expectations.Expect(cookies as IEnumerable<KeyValuePair<string, string>>);
     }
 }

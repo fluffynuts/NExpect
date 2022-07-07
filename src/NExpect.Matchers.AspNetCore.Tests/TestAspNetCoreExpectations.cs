@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
 using NUnit.Framework;
 using NExpect.Exceptions;
+using NExpect.Matchers.AspNet.Tests.Implementations;
 using static NExpect.Expectations;
 using static NExpect.AspNetCoreExpectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
@@ -102,6 +104,55 @@ namespace NExpect.Matchers.AspNet.Tests
                 Expect(form.Files)
                     .To.Be.Empty();
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            // Assert
+        }
+
+        [Test]
+        public void ShouldBeAbleToAssertAgainstHeadersLikeADictionary()
+        {
+            // Arrange
+            var headers = new HeaderDictionary();
+            // Act
+            Assert.That(() =>
+            {
+                Expect(headers)
+                    .To.Be.Empty();
+            }, Throws.Nothing);
+            
+            headers["key"] = "value";
+            Assert.That(() =>
+            {
+                Expect(headers)
+                    .Not.To.Be.Empty();
+                Expect(headers)
+                    .To.Contain.Key("key")
+                    .With.Value("value");
+            }, Throws.Nothing);
+            // Assert
+        }
+
+        [Test]
+        public void ShouldBeAbleToAssertAgainstCookiesLikeADictionary()
+        {
+            // Arrange
+            var cookies = new RequestCookies();
+            var cast = cookies as IRequestCookieCollection;
+            // Act
+            Assert.That(() =>
+            {
+                Expect(cast)
+                    .To.Be.Empty();
+            }, Throws.Nothing);
+            
+            cookies["foo"] = "bar";
+            Assert.That(() =>
+            {
+                Expect(cast)
+                    .Not.To.Be.Empty();
+                Expect(cast)
+                    .To.Contain.Key("foo")
+                    .With.Value("bar");
+            }, Throws.Nothing);
             // Assert
         }
         
