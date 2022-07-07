@@ -1468,6 +1468,15 @@
             <typeparam name="T"></typeparam>
             <returns></returns>
         </member>
+        <member name="M:Imported.PeanutButter.Utils.ExtensionsForIEnumerables.ToHashSet``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Produces an hashset from a collection
+            -> shorthand for new HashSet&lt;T&gt;(collection)
+            </summary>
+            <param name="collection"></param>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
         <member name="T:Imported.PeanutButter.Utils.MetadataExtensions">
             <summary>
             Provides extension methods to set and retrieve metadata on any object.
@@ -2050,12 +2059,36 @@
             <param name="value">String to test</param>
             <returns>True if is null or whitespace; False otherwise</returns>
         </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.IsEmptyOrWhiteSpace(System.String)">
+            <summary>
+            Tests if a string is empty or all whitespace
+            NB: will return false for null
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.IsWhiteSpace(System.String)">
+            <summary>
+            Tests if a string is non-empty, but made entirely of whitespace
+            NB: will return false for null or empty string
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
         <member name="M:Imported.PeanutButter.Utils.StringExtensions.ToBase64(System.String)">
             <summary>
             Returns the base64-encoded representation of a string value
             </summary>
             <param name="value">Input string value</param>
             <returns>The base64-encoded representation of the string, or null if the string is null</returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.StringExtensions.LooksLikeBase64(System.String)">
+            <summary>
+            Returns true if the string is non-empty and contains only base64-encoding
+            characters
+            </summary>
+            <param name="str"></param>
+            <returns></returns>
         </member>
         <member name="M:Imported.PeanutButter.Utils.StringExtensions.ZeroIfEmptyOrNull(System.String)">
             <summary>
@@ -2816,6 +2849,35 @@
             <param name="interfaceType"></param>
             <returns></returns>
         </member>
+        <member name="M:Imported.PeanutButter.Utils.TypeExtensions.AllPublicInstancePropertiesAndMethodsAreVirtualOrAbstractAndNonFinal(System.Type)">
+            <summary>
+            Tests if all public instance properties and methods are virtual or abstract
+            _and_ non-final (ie, can be mimicked with a duck)
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.TypeExtensions.AllPublicInstancePropertiesAndMethodsAreNonFinal(System.Type)">
+            <summary>
+            Tests if all public instance properties and methods are non-final
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.TypeExtensions.AllPublicInstanceMethodsAreNonFinal(System.Type)">
+            <summary>
+            Tests if all public instance methods are non-final
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.TypeExtensions.AllPublicInstancePropertiesAreNonFinal(System.Type)">
+            <summary>
+            Tests if all public instance properties are non-final
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
         <member name="M:Imported.PeanutButter.Utils.TypeExtensions.AllPublicInstancePropertiesAndMethodsAreVirtualOrAbstract(System.Type)">
             <summary>
             Returns true if all public properties and methods are either virtual or abstract\
@@ -2879,6 +2941,13 @@
         <member name="M:Imported.PeanutButter.Utils.TypeExtensions.IsVirtualOrAbstract(System.Reflection.PropertyInfo)">
             <summary>
             returns true if the given property is virtual or abstract
+            </summary>
+            <param name="propertyInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.TypeExtensions.IsFinal(System.Reflection.PropertyInfo)">
+            <summary>
+            returns true if the property is marked as IsFinal
             </summary>
             <param name="propertyInfo"></param>
             <returns></returns>
