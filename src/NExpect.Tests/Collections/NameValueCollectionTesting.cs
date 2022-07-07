@@ -14,7 +14,7 @@ namespace NExpect.Tests.Collections
     public class NameValueCollectionTesting
     {
         [TestFixture]
-        public class Expect_NameValueCollection_To_Contain
+        public class ContainingAssertions
         {
             [TestFixture]
             public class Key
@@ -189,6 +189,28 @@ namespace NExpect.Tests.Collections
                         }
                     }
                 }
+            }
+        }
+
+        [TestFixture]
+        public class Emptiness
+        {
+            [Test]
+            public void ShouldBeAbleToAssertEmptiness()
+            {
+                // Arrange
+                var empty = new NameValueCollection();
+                var notEmpty = new NameValueCollection
+                {
+                    [GetRandomString(1)] = GetRandomString()
+                };
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(empty)
+                        .To.Be.Empty();
+                }, Throws.Nothing);
+                // Assert
             }
         }
     }

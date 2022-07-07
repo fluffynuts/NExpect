@@ -82,6 +82,26 @@
             <param name="method"></param>
             <returns></returns>
         </member>
+        <member name="T:NExpect.AspNetCoreExpectations">
+            <summary>
+            Adds AspNetCore convenience expectations around collection-like
+            types
+            </summary>
+        </member>
+        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Http.IFormFileCollection)">
+            <summary>
+            Treat an IFormFileCollection like a collection of IFormFile
+            </summary>
+            <param name="files"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Http.IFormCollection)">
+            <summary>
+            Treat an IFormCollection like a collection of KeyValuePair&lt;string, StringValues&gt;
+            </summary>
+            <param name="form"></param>
+            <returns></returns>
+        </member>
         <member name="T:NExpect.HttpResponseMessageMatchers">
             <summary>
             Provides matchers for HttpResponseMessages
