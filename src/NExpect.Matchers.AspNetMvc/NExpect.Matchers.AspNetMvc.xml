@@ -589,7 +589,7 @@
             - treats null like empty array
             </summary>
             <param name="bytes">input bytes</param>
-            <returns></returns>
+            <returns>MemoryStream wrapping input bytes</returns>
         </member>
         <member name="T:Imported.PeanutButter.Utils.DeepEqualityTester">
             <summary>
@@ -3154,7 +3154,7 @@
         </member>
         <member name="M:Imported.PeanutButter.Utils.TypeExtensions.Implements``1(``0,System.Type)">
             <summary>
-            returns tru if the provided object implements the expected interface
+            returns true if the provided object implements the expected interface
             </summary>
             <param name="obj"></param>
             <param name="expected"></param>
@@ -3204,6 +3204,14 @@
             type is Nullable&lt;T&gt;
             </summary>
             <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.TypeExtensions.HasAttribute``1(System.Type)">
+            <summary>
+            Tests if a provided type is decorated with the expected attribute [TAttribute]
+            </summary>
+            <param name="type"></param>
+            <typeparam name="TAttribute"></typeparam>
             <returns></returns>
         </member>
         <member name="T:Imported.PeanutButter.Utils.CannotZipNullException">
