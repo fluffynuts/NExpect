@@ -64,7 +64,7 @@ public static class AspNetCoreExpectations
     }
 
     /// <summary>
-    /// Tread an IRequestCookieCollection like a collection of KeyValuePair&lt;string, string&gt;
+    /// Treat an IRequestCookieCollection like a collection of KeyValuePair&lt;string, string&gt;
     /// </summary>
     /// <param name="cookies"></param>
     /// <returns></returns>
@@ -73,5 +73,17 @@ public static class AspNetCoreExpectations
     )
     {
         return Expectations.Expect(cookies as IEnumerable<KeyValuePair<string, string>>);
+    }
+
+    /// <summary>
+    /// Treat an IQueryCollection like a collection of KeyValuePair&lt;string, string&gt;
+    /// </summary>
+    /// <param name="query"></param>
+    /// <returns></returns>
+    public static ICollectionExpectation<KeyValuePair<string, StringValues>> Expect(
+        IQueryCollection query
+    )
+    {
+        return Expectations.Expect(query as IEnumerable<KeyValuePair<string, StringValues>>);
     }
 }

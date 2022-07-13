@@ -4,6 +4,54 @@
         <name>NExpect.Matchers.AspNetCore</name>
     </assembly>
     <members>
+        <member name="T:NExpect.AspNetCoreExpectations">
+            <summary>
+            Adds AspNetCore convenience expectations around collection-like
+            types
+            </summary>
+        </member>
+        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Http.IFormFileCollection)">
+            <summary>
+            Treat an IFormFileCollection like a collection of IFormFile
+            </summary>
+            <param name="files"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Http.IFormCollection)">
+            <summary>
+            Treat an IFormCollection like a collection of KeyValuePair&lt;string, StringValues&gt;
+            </summary>
+            <param name="form"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Http.IHeaderDictionary)">
+            <summary>
+            Treat an IHeaderDictionary like an IDictionary&lt;string, StringValues&gt;
+            </summary>
+            <param name="headers"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Http.HeaderDictionary)">
+            <summary>
+            Treat an IHeaderDictionary like an IDictionary&lt;string, StringValues&gt;
+            </summary>
+            <param name="headers"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Http.IRequestCookieCollection)">
+            <summary>
+            Treat an IRequestCookieCollection like a collection of KeyValuePair&lt;string, string&gt;
+            </summary>
+            <param name="cookies"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Http.IQueryCollection)">
+            <summary>
+            Treat an IQueryCollection like a collection of KeyValuePair&lt;string, string&gt;
+            </summary>
+            <param name="query"></param>
+            <returns></returns>
+        </member>
         <member name="T:NExpect.ControllerMatchers">
             <summary>
             Adds matchers for AspNetCore Controllers and Controller Actions
@@ -80,47 +128,6 @@
             additional supported HttpMethod
             </summary>
             <param name="method"></param>
-            <returns></returns>
-        </member>
-        <member name="T:NExpect.AspNetCoreExpectations">
-            <summary>
-            Adds AspNetCore convenience expectations around collection-like
-            types
-            </summary>
-        </member>
-        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Http.IFormFileCollection)">
-            <summary>
-            Treat an IFormFileCollection like a collection of IFormFile
-            </summary>
-            <param name="files"></param>
-            <returns></returns>
-        </member>
-        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Http.IFormCollection)">
-            <summary>
-            Treat an IFormCollection like a collection of KeyValuePair&lt;string, StringValues&gt;
-            </summary>
-            <param name="form"></param>
-            <returns></returns>
-        </member>
-        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Http.IHeaderDictionary)">
-            <summary>
-            Treat an IHeaderDictionary like an IDictionary&lt;string, StringValues&gt;
-            </summary>
-            <param name="headers"></param>
-            <returns></returns>
-        </member>
-        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Http.HeaderDictionary)">
-            <summary>
-            Treat an IHeaderDictionary like an IDictionary&lt;string, StringValues&gt;
-            </summary>
-            <param name="headers"></param>
-            <returns></returns>
-        </member>
-        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Http.IRequestCookieCollection)">
-            <summary>
-            Tread an IRequestCookieCollection like a collection of KeyValuePair&lt;string, string&gt;
-            </summary>
-            <param name="cookies"></param>
             <returns></returns>
         </member>
         <member name="T:NExpect.HttpResponseMessageMatchers">
