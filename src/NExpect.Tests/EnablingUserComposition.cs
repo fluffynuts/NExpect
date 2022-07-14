@@ -151,7 +151,7 @@ namespace NExpect.Tests
             }
 
             [Test]
-            public void MorePractical_PositiveThenNegativeChain_WhenAllPassws_ShouldNotThrow()
+            public void MorePractical_PositiveThenNegativeChain_WhenAllPasses_ShouldNotThrow()
             {
                 // Arrange
                 var person = new Person()

@@ -52,6 +52,13 @@
             <param name="query"></param>
             <returns></returns>
         </member>
+        <member name="M:NExpect.AspNetCoreExpectations.Expect(Microsoft.AspNetCore.Routing.RouteValueDictionary)">
+            <summary>
+            Treat a RouteValueDictionary like a collection of KeyValuePair&lt;string, object&gt;
+            </summary>
+            <param name="routeValueDictionary"></param>
+            <returns></returns>
+        </member>
         <member name="T:NExpect.ControllerMatchers">
             <summary>
             Adds matchers for AspNetCore Controllers and Controller Actions

@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Primitives;
 using NUnit.Framework;
 using NExpect.Exceptions;
@@ -118,7 +119,7 @@ namespace NExpect.Matchers.AspNet.Tests
                 Expect(headers)
                     .To.Be.Empty();
             }, Throws.Nothing);
-            
+
             headers["key"] = "value";
             Assert.That(() =>
             {
@@ -143,7 +144,7 @@ namespace NExpect.Matchers.AspNet.Tests
                 Expect(cast)
                     .To.Be.Empty();
             }, Throws.Nothing);
-            
+
             cookies["foo"] = "bar";
             Assert.That(() =>
             {
@@ -155,6 +156,41 @@ namespace NExpect.Matchers.AspNet.Tests
             }, Throws.Nothing);
             // Assert
         }
-        
+
+        [Test]
+        public void ShouldBeAbleToTreatRouteDataValuesLikeADictionary()
+        {
+            // Arrange
+            var routeValues = new RouteValueDictionary();
+            var key = GetRandomString(10);
+            var value = GetRandomString(10);
+            routeValues[key] = value;
+            // Act
+            Assert.That(() =>
+            {
+                Expect(routeValues)
+                    .To.Contain.Key(key)
+                    .With.Value(value);
+            }, Throws.Nothing);
+            Assert.That(() =>
+            {
+                Expect(routeValues)
+                    .To.Contain.Key(key + "1")
+                    .With.Value(value);
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            Assert.That(() =>
+            {
+                Expect(routeValues)
+                    .To.Contain.Key(key)
+                    .With.Value(value + "1");
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            Assert.That(() =>
+            {
+                Expect(routeValues)
+                    .Not.To.Contain.Key(key)
+                    .With.Value(value);
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            // Assert
+        }
     }
 }

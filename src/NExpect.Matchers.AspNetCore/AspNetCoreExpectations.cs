@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Primitives;
 using NExpect.Interfaces;
 
@@ -85,5 +86,19 @@ public static class AspNetCoreExpectations
     )
     {
         return Expectations.Expect(query as IEnumerable<KeyValuePair<string, StringValues>>);
+    }
+
+    /// <summary>
+    /// Treat a RouteValueDictionary like a collection of KeyValuePair&lt;string, object&gt;
+    /// </summary>
+    /// <param name="routeValueDictionary"></param>
+    /// <returns></returns>
+    public static ICollectionExpectation<KeyValuePair<string, object>> Expect(
+        RouteValueDictionary routeValueDictionary
+    )
+    {
+        return Expectations.Expect(
+            routeValueDictionary as IDictionary<string, object>
+        );
     }
 }
