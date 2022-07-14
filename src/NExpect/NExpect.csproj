@@ -47,6 +47,7 @@
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\AutoResetter.cs" Link="Imported\AutoResetter.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ByteArrayExtensions.cs" Link="Imported\ByteArrayExtensions.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DeepEqualityTester.cs" Link="Imported\DeepEqualityTester.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DictionaryExtensions.cs" Link="Imported\DictionaryExtensions.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\EnumerableWrapper.cs" Link="Imported\EnumerableWrapper.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ObjectExtensions.cs" Link="Imported\ObjectExtensions.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ExtensionsForIEnumerables.cs" Link="Imported\ExtensionsForIEnumerables.cs"/>

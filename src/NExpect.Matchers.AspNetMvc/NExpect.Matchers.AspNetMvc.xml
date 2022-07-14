@@ -700,6 +700,102 @@
             </summary>
             <param name="comparer"></param>
         </member>
+        <member name="T:Imported.PeanutButter.Utils.DictionaryExtensions">
+            <summary>
+            Provides extensions to convert from non-generic IDictionary to a generic one
+            </summary>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.DictionaryExtensions.ToDictionary``2(System.Collections.IDictionary,System.Func{System.Collections.DictionaryEntry,``0},System.Func{System.Collections.DictionaryEntry,``1})">
+            <summary>
+            Convert the given IDictionary to IDictionary&lt;TKey, TValue&gt; with
+            the provided key and value generator functions
+            </summary>
+            <param name="dict"></param>
+            <param name="keyGenerator"></param>
+            <param name="valueGenerator"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.DictionaryExtensions.ToDictionary``2(System.Collections.IDictionary)">
+            <summary>
+            Converts the given non-generic IDictionary to IDictionary&lt;TKey, TValue&gt;
+            with hard casting of keys and values in the source to the provided
+            types
+            </summary>
+            <param name="dict"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.DictionaryExtensions.FindOrAdd``2(System.Collections.Generic.IDictionary{``0,``1},``0,``1)">
+            <summary>
+            Find an item in or add an item to a dictionary
+            - operation is thread-safe: dictionary is locked during search &amp; add
+            </summary>
+            <param name="dict"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.DictionaryExtensions.FindOrAdd``2(System.Collections.Generic.IDictionary{``0,``1},``0,System.Func{``1})">
+            <summary>
+            Find an item in or add an item to a dictionary
+            - operation is thread-safe: dictionary is locked during search &amp; add
+            </summary>
+            <param name="dict"></param>
+            <param name="key"></param>
+            <param name="generator"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <returns></returns>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.DictionaryExtensions.Clone``2(System.Collections.Generic.IDictionary{``0,``1})">
+            <summary>
+            Clones a given dictionary - new collection, same items
+            </summary>
+            <param name="dict"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.DictionaryExtensions.MergedWith``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1})">
+            <summary>
+            Merge second dictionary into the first, producing a new dictionary output,
+            with the second's values taking precedence over the first's
+            </summary>
+            <param name="first"></param>
+            <param name="second"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.DictionaryExtensions.MergedWith``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1},Imported.PeanutButter.Utils.MergePrecedence)">
+            <summary>
+            Merge second dictionary into the first, producing a new dictionary output,
+            with the provided merge-precedence
+            </summary>
+            <param name="first"></param>
+            <param name="second"></param>
+            <param name="precedence"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="F:Imported.PeanutButter.Utils.MergePrecedence.First">
+            <summary>
+            Prefer the first value seen
+            </summary>
+        </member>
+        <member name="F:Imported.PeanutButter.Utils.MergePrecedence.Last">
+            <summary>
+            Prefer the last value seen
+            </summary>
+        </member>
         <member name="T:Imported.PeanutButter.Utils.IEnumerableWrapper">
             <summary>
             Used to describe a wrapper
