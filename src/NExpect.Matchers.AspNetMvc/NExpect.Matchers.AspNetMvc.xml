@@ -774,26 +774,84 @@
             <typeparam name="TValue"></typeparam>
             <returns></returns>
         </member>
-        <member name="M:Imported.PeanutButter.Utils.DictionaryExtensions.MergedWith``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1},Imported.PeanutButter.Utils.MergePrecedence)">
+        <member name="M:Imported.PeanutButter.Utils.DictionaryExtensions.MergedWith``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1},Imported.PeanutButter.Utils.MergeWithPrecedence)">
             <summary>
             Merge second dictionary into the first, producing a new dictionary output,
             with the provided merge-precedence
             </summary>
             <param name="first"></param>
             <param name="second"></param>
-            <param name="precedence"></param>
+            <param name="withPrecedence"></param>
             <typeparam name="TKey"></typeparam>
             <typeparam name="TValue"></typeparam>
             <returns></returns>
         </member>
-        <member name="F:Imported.PeanutButter.Utils.MergePrecedence.First">
+        <member name="M:Imported.PeanutButter.Utils.DictionaryExtensions.MergeInto``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1})">
+            <summary>
+            Merges the new data into the target, preferring to keep
+            the original values in the target when also specified in
+            the new data
+            </summary>
+            <param name="newData"></param>
+            <param name="target"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.DictionaryExtensions.MergeInto``2(System.Collections.Generic.IDictionary{``0,``1},System.Collections.Generic.IDictionary{``0,``1},Imported.PeanutButter.Utils.MergeIntoPrecedence)">
+            <summary>
+            Merges the new data into the target, with the
+            specified merge preference
+            </summary>
+            <param name="newData"></param>
+            <param name="target"></param>
+            <param name="mergePrecedence"></param>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.DictionaryExtensions.ToDictionary(System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Converts a NameValueCollection to a dictionary
+            </summary>
+            <param name="collection"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Imported.PeanutButter.Utils.DictionaryExtensions.ToNameValueCollection(System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            Converts a NameValueCollection to a dictionary
+            </summary>
+            <param name="dict"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Imported.PeanutButter.Utils.MergeWithPrecedence">
+            <summary>
+            Sets the precedence when merging data with the same keys
+            </summary>
+        </member>
+        <member name="F:Imported.PeanutButter.Utils.MergeWithPrecedence.PreferFirstSeen">
             <summary>
             Prefer the first value seen
             </summary>
         </member>
-        <member name="F:Imported.PeanutButter.Utils.MergePrecedence.Last">
+        <member name="F:Imported.PeanutButter.Utils.MergeWithPrecedence.PreferLastSeen">
             <summary>
             Prefer the last value seen
+            </summary>
+        </member>
+        <member name="T:Imported.PeanutButter.Utils.MergeIntoPrecedence">
+            <summary>
+            Sets the precedence when merging new data into an existing dictionary
+            </summary>
+        </member>
+        <member name="F:Imported.PeanutButter.Utils.MergeIntoPrecedence.PreferTargetData">
+            <summary>
+            Prefer target data over new data, ie
+            discard the new value if already found in the target
+            </summary>
+        </member>
+        <member name="F:Imported.PeanutButter.Utils.MergeIntoPrecedence.PreferNewData">
+            <summary>
+            Prefer to new data over existing target data, ie
+            overwrite the target value if found
             </summary>
         </member>
         <member name="T:Imported.PeanutButter.Utils.IEnumerableWrapper">

@@ -19,7 +19,7 @@ public static class MessageHelpers
     /// takes a static string and the version which takes a Func&lt;string&gt;
     /// </summary>
     public const string NULL_STRING = null;
-        
+
     /// <summary>
     /// Provides easy access to a null custom message generator
     /// </summary>

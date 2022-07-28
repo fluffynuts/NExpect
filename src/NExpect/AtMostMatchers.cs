@@ -171,7 +171,7 @@ public static class AtMostMatchers
     {
         return continuation.Most(expected, NULL_STRING);
     }
-
+    
     /// <summary>
     /// Compares two values
     /// </summary>
@@ -186,7 +186,7 @@ public static class AtMostMatchers
     {
         return continuation.Most(expected, () => customMessage);
     }
-
+    
     /// <summary>
     /// Compares two values
     /// </summary>
@@ -205,7 +205,7 @@ public static class AtMostMatchers
             (a, e) => a <= e,
             customMessageGenerator);
     }
-
+    
     /// <summary>
     /// Compares two values
     /// </summary>
@@ -218,7 +218,7 @@ public static class AtMostMatchers
     {
         return continuation.Most(expected, NULL_STRING);
     }
-
+    
     /// <summary>
     /// Compares two values
     /// </summary>
@@ -233,7 +233,7 @@ public static class AtMostMatchers
     {
         return continuation.Most(expected, () => customMessage);
     }
-
+    
     /// <summary>
     /// Compares two values
     /// </summary>
