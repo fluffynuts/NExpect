@@ -142,7 +142,7 @@ public void CollectionDeepEquality()
     new Person() { Id = 2, Name = "Bob", Alive = false }
   };
   // Assert
-  Expect(input.AsObjects())
+  Expect(input).As.Objects()
     .To.Be.Deep.Equal.To(new[]
       {
         new { Id = 1, Name = "Jane", Alive = true },
@@ -153,7 +153,7 @@ public void CollectionDeepEquality()
 
 Note that, much like the points on "Who's line is it, anyway?", the types don't matter. 
 This is deep equality testing (: However, we did need to "dumb down" the input collection to 
-a collection of objects with the provided `.AsObjects()` extension method so that the test 
+a collection of objects with the provided `.As.Objects` fluent syntax so that the test 
 would compile, otherwise there's a type mismatch at the other end. Still, this is, imo, 
 more convenient than the alternative: item-for-item testing, property-by-property.
 
@@ -168,7 +168,7 @@ public void CollectionDeepEquivalence()
     new Person() { Id = 2, Name = "Bob", Alive = false }
   };
   // Assert
-  Expect(input.AsObjects())
+  Expect(input).As.Objects()
     .To.Be.Deep.Equivalent.To(new[] {
       new { Id = 2, Name = "Bob", Alive = false },
       new { Id = 1, Name = "Jane", Alive = true }
@@ -187,12 +187,12 @@ public void CollectionIntersections()
     new Person() { Id = 2, Name = "Bob", Alive = false }
   };
   // Assert
-  Expect(input.AsObjects())
+  Expect(input).As.Objects()
     .To.Be.Intersection.Equivalent.To(new[] {
       new { Id = 2, Name = "Bob" },
       new { Id = 1, Name = "Jane" }
     });
-  Expect(input.AsObjects())
+  Expect(input).As.Objects()
     .To.Be.Intersection.Equivalent.To(new[] {
       new { Id = 1, Name = "Jane" },
       new { Id = 2, Name = "Bob" }
@@ -230,7 +230,7 @@ public void CollectionIntersections()
     new Person() { Id = 2, Name = "Bob", Alive = false }
   };
   // Assert
-  Expect(input.AsObjects())
+  Expect(input).As.Objects()
     .To.Contain.Exactly(1).Matched.By(
       p =&gt; p.Id == 1 &amp;&amp; p.Name == "Jane"
     );
