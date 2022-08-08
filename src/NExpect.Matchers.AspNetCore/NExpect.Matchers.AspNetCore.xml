@@ -2056,6 +2056,21 @@
             <typeparam name="T3"></typeparam>
             <returns>Enumeration over the collections (Tuple of T1, T2, T3)</returns>
         </member>
+        <member name="M:Imported.PeanutButter.Utils.PyLike.Zip``4(System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``1},System.Collections.Generic.IEnumerable{``2},System.Collections.Generic.IEnumerable{``3})">
+            <summary>
+            "Zips" four collections together so you can enumerate over them. The
+              length of the enumeration is determined by the shortest collection
+            </summary>
+            <param name="first">left collection</param>
+            <param name="second">right collection</param>
+            <param name="third">right collection</param>
+            <param name="fourth">right collection</param>
+            <typeparam name="T1"></typeparam>
+            <typeparam name="T2"></typeparam>
+            <typeparam name="T3"></typeparam>
+            <typeparam name="T4"></typeparam>
+            <returns>Enumeration over the collections (Tuple of T1, T2, T4)</returns>
+        </member>
         <member name="T:Imported.PeanutButter.Utils.StringExtensions">
             <summary>
             Provides utility extensions for strings

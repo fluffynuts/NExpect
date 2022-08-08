@@ -7,7 +7,7 @@
     <Configurations>Debug;Release;BuildForRelease</Configurations>
     <RootNamespace>NExpect</RootNamespace>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    <DocumentationFile>NExpect.Matchers.AspNetMvc.xml</DocumentationFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
