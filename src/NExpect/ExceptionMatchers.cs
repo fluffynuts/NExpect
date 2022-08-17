@@ -90,14 +90,94 @@ public static class ExceptionMatchers
     }
 
     /// <summary>
+    /// Shorthand for Message.Equal.To()
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="expected"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IThrowAndContinuation<T> Message<T>(
+        this IWithAfterThrowContinuation<T> continuation,
+        string expected
+    ) where T : Exception
+    {
+        return continuation.Message(
+            expected,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Shorthand for Message.Equal.To()
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IThrowAndContinuation<T> Message<T>(
+        this IWithAfterThrowContinuation<T> continuation,
+        string expected,
+        string customMessage
+    ) where T : Exception
+    {
+        return continuation.Message(
+            expected,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Shorthand for Message.Equal.To()
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IThrowAndContinuation<T> Message<T>(
+        this IWithAfterThrowContinuation<T> continuation,
+        string expected,
+        Func<string> customMessageGenerator
+    ) where T : Exception
+    {
+        var result = new ThrowAndContinuation<T>();
+        result.SetParent(continuation as IExpectationContext<T>);
+        continuation.AddMatcher(actual =>
+        {
+            if (actual is null)
+            {
+                return new EnforcedMatcherResult(
+                    false,
+                    FinalMessageFor(
+                        () => "Actual exception is null",
+                        customMessageGenerator
+                    )
+                );
+            }
+
+            var passed = actual.Message == expected;
+            return new MatcherResult(
+                passed,
+                FinalMessageFor(
+                    () => $"Expected exception message '{expected}', but received '{actual.Message}'",
+                    customMessageGenerator
+                )
+            );
+        });
+        return result;
+    }
+
+    /// <summary>
     /// Assert that the provided code throws an exception of the given type
     /// </summary>
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="expected">Expected exception type</param>
     /// <returns>Fluency extension</returns>
-    public static IThrowAndContinuation<Exception> Type(
-        this IWithAfterThrowContinuation<Exception> continuation,
-        Type expected)
+    public static IThrowAndContinuation<T> Type<T>(
+        this IWithAfterThrowContinuation<T> continuation,
+        Type expected
+    ) where T : Exception
     {
         return continuation.Type(expected, null as string);
     }
@@ -109,10 +189,11 @@ public static class ExceptionMatchers
     /// <param name="expected">Expected exception type</param>
     /// <param name="customMessage">Custom message to include when this expectation fails</param>
     /// <returns>Fluency extension</returns>
-    public static IThrowAndContinuation<Exception> Type(
-        this IWithAfterThrowContinuation<Exception> continuation,
+    public static IThrowAndContinuation<T> Type<T>(
+        this IWithAfterThrowContinuation<T> continuation,
         Type expected,
-        string customMessage)
+        string customMessage
+    ) where T : Exception
     {
         return continuation.Type(expected, () => customMessage);
     }
@@ -124,13 +205,14 @@ public static class ExceptionMatchers
     /// <param name="expected">Expected exception type</param>
     /// <param name="customMessageGenerator">Generates a custom message to include when this expectation fails</param>
     /// <returns>Fluency extension</returns>
-    public static IThrowAndContinuation<Exception> Type(
-        this IWithAfterThrowContinuation<Exception> continuation,
+    public static IThrowAndContinuation<T> Type<T>(
+        this IWithAfterThrowContinuation<T> continuation,
         Type expected,
-        Func<string> customMessageGenerator)
+        Func<string> customMessageGenerator
+    ) where T : Exception
     {
-        var result = new ThrowAndContinuation<Exception>();
-        result.SetParent(continuation as IExpectationContext<Exception>);
+        var result = new ThrowAndContinuation<T>();
+        result.SetParent(continuation as IExpectationContext<T>);
         continuation.AddMatcher(actual =>
         {
             result.Exception = actual;

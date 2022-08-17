@@ -682,6 +682,15 @@ namespace NExpect.Tests.Exceptions
                             .With.Message.Equal.To(expected);
                     },
                     Throws.Nothing);
+                // alt. syntax - for the lazy! (like me)
+                Assert.That(
+                    () =>
+                    {
+                        Expect(() => throw new AccessViolationException(expected))
+                            .To.Throw<AccessViolationException>()
+                            .With.Message(expected);
+                    },
+                    Throws.Nothing);
 
                 // Assert
             }
