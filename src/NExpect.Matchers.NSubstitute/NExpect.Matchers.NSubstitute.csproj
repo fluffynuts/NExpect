@@ -4,7 +4,7 @@
     <DebugType>portable</DebugType>
     <LangVersion>preview</LangVersion>
     <RootNamespace>NExpect</RootNamespace>
-    <TargetFrameworks>netstandard2.0;net452;net462</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <Configurations>Debug;Release;BuildForRelease</Configurations>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -13,7 +13,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>1.0.276</PackageVersion>
+    <PackageVersion>2.0.0</PackageVersion>
     <Authors>Davyd McColl</Authors>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
