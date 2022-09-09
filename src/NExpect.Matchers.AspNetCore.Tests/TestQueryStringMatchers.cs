@@ -88,12 +88,47 @@ namespace NExpect.Matchers.AspNet.Tests
                     .To.Contain.Key("a")
                     .With.Value("2");
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
-            
+
             Assert.That(() =>
             {
                 Expect(qs)
                     .To.Contain.Key("1")
                     .With.Value("2");
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            // Assert
+        }
+
+        [Test]
+        public void ShouldBeAbleToCompareWithAnotherQueryString()
+        {
+            // Arrange
+            var qs1 = new QueryString().Add("a", "b");
+            var qs2 = new QueryString().Add("a", "b");
+            var qs3 = new QueryString().Add("1", "2");
+            // Act
+            Assert.That(() =>
+            {
+                Expect(qs1)
+                    .To.Equal(qs2);
+                Expect(qs1)
+                    .Not.To.Equal(qs3);
+                Expect(qs1)
+                    .To.Not.Equal(qs3);
+            }, Throws.Nothing);
+            Assert.That(() =>
+            {
+                Expect(qs1)
+                    .To.Equal(qs3);
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            Assert.That(() =>
+            {
+                Expect(qs1)
+                    .Not.To.Equal(qs2);
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            Assert.That(() =>
+            {
+                Expect(qs1)
+                    .To.Not.Equal(qs2);
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
         }

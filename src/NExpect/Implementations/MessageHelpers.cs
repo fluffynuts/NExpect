@@ -233,18 +233,18 @@ public static class MessageHelpers
         return Stringifier.Stringify(o, NULL_REPLACER);
     }
 
-    /// <summary>
-    /// Returns a collection as a comma-separated list
-    /// </summary>
-    /// <param name="collection">Collection to operate on</param>
-    /// <typeparam name="T">Item type of collection</typeparam>
-    /// <returns>Comma-separated list representing the collection</returns>
-    public static string Stringify<T>(this IEnumerable<T> collection)
-    {
-        return collection is null
-            ? NULL_REPLACER
-            : $"[ {string.Join(", ", collection.Select(Quote))} ]";
-    }
+    // /// <summary>
+    // /// Returns a collection as a comma-separated list
+    // /// </summary>
+    // /// <param name="collection">Collection to operate on</param>
+    // /// <typeparam name="T">Item type of collection</typeparam>
+    // /// <returns>Comma-separated list representing the collection</returns>
+    // public static string Stringify<T>(this IEnumerable<T> collection)
+    // {
+    //     return collection is null
+    //         ? NULL_REPLACER
+    //         : $"[ {string.Join(", ", collection.Select(Quote))} ]";
+    // }
 
     /// <summary>
     /// Returns string with up to 10 elements from a collection with ellipsis if required
