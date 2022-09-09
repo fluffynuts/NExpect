@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using NUnit.Framework;
 using NExpect.Exceptions;
 using static NExpect.AspNetCoreExpectations;
@@ -129,6 +130,25 @@ namespace NExpect.Matchers.AspNet.Tests
             {
                 Expect(qs1)
                     .To.Not.Equal(qs2);
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            // Assert
+        }
+
+        [Test]
+        public void ShouldDealWithEmptyQueryString()
+        {
+            // Arrange
+            var qs = new QueryString();
+            // Act
+            Assert.That(() =>
+            {
+                Expect(qs)
+                    .To.Be.Empty();
+            }, Throws.Nothing);
+            Assert.That(() =>
+            {
+                Expect(qs)
+                    .Not.To.Be.Empty();
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
         }

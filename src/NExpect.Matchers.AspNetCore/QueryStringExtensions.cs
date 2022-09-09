@@ -20,7 +20,16 @@ namespace NExpect
             this QueryString queryString
         )
         {
-            return queryString.Value.Substring(1)
+            if (queryString.Value is null)
+            {
+                return new Dictionary<string, string>();
+            }
+
+            var str = queryString.Value;
+            var start = str.StartsWith("?")
+                ? 1
+                : 0;
+            return str.Substring(start)
                 .Split('&')
                 .Select(p =>
                 {
