@@ -13,6 +13,21 @@ namespace NExpect;
 public static class AspNetCoreExpectations
 {
     /// <summary>
+    /// Facilitates treating a QueryString object like
+    /// a dictionary for assertions
+    /// </summary>
+    /// <param name="queryString"></param>
+    /// <returns></returns>
+    public static ICollectionExpectation<KeyValuePair<string, string>> Expect(
+        QueryString queryString
+    )
+    {
+        return Expectations.Expect(
+            queryString.AsDictionary()
+        );
+    }
+
+    /// <summary>
     /// Treat an IFormFileCollection like a collection of IFormFile
     /// </summary>
     /// <param name="files"></param>

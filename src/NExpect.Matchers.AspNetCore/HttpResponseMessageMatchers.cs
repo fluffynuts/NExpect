@@ -8,9 +8,57 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
 using Imported.PeanutButter.Utils;
+// using Microsoft.AspNetCore.Http;
 
 namespace NExpect
 {
+    // TODO: implement cookie matchers for HttpResponse
+    // public static class HttpResponseMatchers
+    // {
+    //     public static IMore<Cookie> Cookie(
+    //         this IHave<HttpResponse> have,
+    //         string name
+    //     )
+    //     {
+    //         return have.Cookie(name, NULL_STRING);
+    //     }
+    //
+    //     public static IMore<Cookie> Cookie(
+    //         this IHave<HttpResponse> have,
+    //         string name,
+    //         string customMessage
+    //     )
+    //     {
+    //         return have.Cookie(name, () => customMessage);
+    //     }
+    //
+    //     public static IMore<Cookie> Cookie(
+    //         this IHave<HttpResponse> have,
+    //         string name,
+    //         Func<string> customMessageGenerator
+    //     )
+    //     {
+    //         Cookie resolvedCookie = null;
+    //         have.AddMatcher(actual =>
+    //         {
+    //             foreach (var cookieHeader in actual.Headers["Set-Cookie"])
+    //             {
+    //                 var parts = cookieHeader.Split(';').Select(p => p.Trim()).ToArray();
+    //                 foreach (var part in parts)
+    //                 {
+    //                     
+    //                 }
+    //             }
+    //         });
+    //
+    //         return new Next<Cookie>(
+    //             () => resolvedCookie,
+    //             have as IExpectationContext
+    //         );
+    //         
+    //     }
+    // }
+
     /// <summary>
     /// Provides matchers for HttpResponseMessages
     /// </summary>
