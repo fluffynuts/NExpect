@@ -129,7 +129,7 @@ public static class AspNetCoreExpectations
     )
     {
         return Expectations.Expect(
-            dict.ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
+            dict?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
         );
     }
 }

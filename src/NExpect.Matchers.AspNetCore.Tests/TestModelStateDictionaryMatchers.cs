@@ -42,6 +42,19 @@ public class TestModelStateDictionaryMatchers
     }
 
     [Test]
+    public void ShouldBeAbleToTestNull()
+    {
+        // Arrange
+        // Act
+        Assert.That(() =>
+        {
+            Expect(null as ModelStateDictionary)
+                .To.Be.Null();
+        }, Throws.Nothing);
+        // Assert
+    }
+
+    [Test]
     public void ShouldBeAbleToFindExistingError()
     {
         // Arrange
