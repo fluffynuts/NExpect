@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -279,6 +280,32 @@ public static class Expectations
     }
 
     /// <summary>
+    /// Start an expectation on an IReadOnlyCollection
+    /// </summary>
+    /// <param name="collection"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static ICollectionExpectation<T> Expect<T>(
+        IReadOnlyCollection<T> collection
+    )
+    {
+        return new CollectionExpectation<T>(collection);
+    }
+
+    /// <summary>
+    /// Start an expectation on a concrete ReadOnlyCollection
+    /// </summary>
+    /// <param name="collection"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static ICollectionExpectation<T> Expect<T>(
+        ReadOnlyCollection<T> collection
+    )
+    {
+        return Expect(collection as IReadOnlyCollection<T>);
+    }
+
+    /// <summary>
     /// Starts an expectation on a concrete Queue&lt;T&gt;
     /// </summary>
     /// <param name="collection">Queue to start with</param>
@@ -400,14 +427,42 @@ public static class Expectations
     }
 
     /// <summary>
-    /// Starts an expectation on a concrete Dictionary
+    /// Starts an expectation on something implementing IDictionary&lt;TKey,TValue&gt;
+    /// </summary>
+    /// <param name="dictionary"></param>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
+    /// <returns></returns>
+    public static ICollectionExpectation<KeyValuePair<TKey, TValue>>
+        Expect<TKey, TValue>(IDictionary<TKey, TValue> dictionary)
+    {
+        return new CollectionExpectation<KeyValuePair<TKey, TValue>>(
+            dictionary
+        );
+    }
+
+    /// <summary>
+    /// Starts an expectation on a concrete ReadOnlyDictionary
     /// </summary>
     /// <param name="dictionary">Dictionary to start with</param>
     /// <typeparam name="TKey">Key type of the dictionary</typeparam>
     /// <typeparam name="TValue">Value type of the dictionary</typeparam>
     /// <returns></returns>
     public static ICollectionExpectation<KeyValuePair<TKey, TValue>>
-        Expect<TKey, TValue>(IDictionary<TKey, TValue> dictionary)
+        Expect<TKey, TValue>(ReadOnlyDictionary<TKey, TValue> dictionary)
+    {
+        return Expect(dictionary as IReadOnlyDictionary<TKey, TValue>);
+    }
+
+    /// <summary>
+    /// Starts an expectation on an IReadOnlyDictionary
+    /// </summary>
+    /// <param name="dictionary">Dictionary to start with</param>
+    /// <typeparam name="TKey">Key type of the dictionary</typeparam>
+    /// <typeparam name="TValue">Value type of the dictionary</typeparam>
+    /// <returns></returns>
+    public static ICollectionExpectation<KeyValuePair<TKey, TValue>>
+        Expect<TKey, TValue>(IReadOnlyDictionary<TKey, TValue> dictionary)
     {
         return new CollectionExpectation<KeyValuePair<TKey, TValue>>(
             dictionary

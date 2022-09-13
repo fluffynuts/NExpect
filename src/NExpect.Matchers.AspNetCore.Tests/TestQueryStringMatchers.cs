@@ -150,6 +150,14 @@ namespace NExpect.Matchers.AspNet.Tests
                 Expect(qs)
                     .Not.To.Be.Empty();
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            Assert.That(() =>
+            {
+                Expect(qs)
+                    .To.Equal(new Dictionary<string, string>()
+                    {
+                        ["a"] = "b"
+                    });
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
         }
     }
