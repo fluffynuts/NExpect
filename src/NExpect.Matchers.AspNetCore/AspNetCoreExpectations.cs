@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Primitives;
 using NExpect.Interfaces;
@@ -126,6 +127,20 @@ public static class AspNetCoreExpectations
     /// <returns></returns>
     public static ICollectionExpectation<KeyValuePair<string, ModelStateEntry>> Expect(
         ModelStateDictionary dict
+    )
+    {
+        return Expectations.Expect(
+            dict?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
+        );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dict"></param>
+    /// <returns></returns>
+    public static ICollectionExpectation<KeyValuePair<object, ValidationStateEntry>> Expect(
+        ValidationStateDictionary dict
     )
     {
         return Expectations.Expect(
