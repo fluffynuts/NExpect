@@ -9,8 +9,8 @@
     <PackageReference Include="NSubstitute" Version="4.3.0" />
     <PackageReference Include="nunit" Version="3.13.3" />
     <PackageReference Include="nunit3testadapter" Version="4.2.1" />
-    <PackageReference Include="PeanutButter.DuckTyping" Version="2.0.66" />
-    <PackageReference Include="PeanutButter.RandomGenerators" Version="2.0.66" />
+    <PackageReference Include="PeanutButter.DuckTyping" Version="3.0.33" />
+    <PackageReference Include="PeanutButter.RandomGenerators" Version="3.0.33" />
     <PackageReference Include="Quackers.TestLogger" Version="1.0.11" />
     <PackageReference Include="system.valuetuple" Version="4.5.0" />
   </ItemGroup>

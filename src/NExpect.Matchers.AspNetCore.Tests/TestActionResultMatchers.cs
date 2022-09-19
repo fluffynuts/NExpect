@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NExpect.Exceptions;
 using NUnit.Framework;
+using PeanutButter.TestUtils.AspNetCore.Builders;
 using PeanutButter.Utils;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
-using static NExpect.AspNetCoreTestHelpers;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace NExpect.Matchers.AspNet.Tests;
 
@@ -70,7 +71,9 @@ public class TestActionResultMatchers
             var viewResult = new ViewResult()
             {
                 ViewName = GetRandomString(),
-                ViewData = CreateViewDataFor(model)
+                ViewData = ViewDataDictionaryBuilder.Create()
+                    .WithModel(model)
+                    .Build()
             };
             var actionResult = viewResult as ActionResult;
 
@@ -109,7 +112,9 @@ public class TestActionResultMatchers
             var viewResult = new ViewResult()
             {
                 ViewName = GetRandomString(),
-                ViewData = CreateViewDataFor(model)
+                ViewData = ViewDataDictionaryBuilder.Create()
+                    .WithModel(model)
+                    .Build()
             };
             var actionResult = viewResult as ActionResult;
 
@@ -140,7 +145,9 @@ public class TestActionResultMatchers
             var viewResult = new ViewResult()
             {
                 ViewName = GetRandomString(),
-                ViewData = CreateViewDataFor(model)
+                ViewData = ViewDataDictionaryBuilder.Create()
+                    .WithModel(model)
+                    .Build()
             };
             var actionResult = viewResult as ActionResult;
 
@@ -174,7 +181,9 @@ public class TestActionResultMatchers
             var hasModel = new ViewResult()
             {
                 ViewName = "has-model",
-                ViewData = CreateViewDataFor(new object())
+                ViewData = ViewDataDictionaryBuilder.Create()
+                    .WithModel(new object())
+                    .Build()
             } as ActionResult;
             // Act
             Assert.That(() =>
@@ -198,7 +207,7 @@ public class TestActionResultMatchers
     public class Model
     {
         public int Id { get; set; }
-        public string? Name { get; set; }
+        public string Name { get; set; }
     }
 
     [TestFixture]
@@ -259,7 +268,9 @@ public class TestActionResultMatchers
             var viewResult = new PartialViewResult()
             {
                 ViewName = GetRandomString(),
-                ViewData = CreateViewDataFor(model)
+                ViewData = ViewDataDictionaryBuilder.Create()
+                    .WithModel(model)
+                    .Build()
             };
             var actionResult = viewResult as ActionResult;
 
@@ -290,7 +301,9 @@ public class TestActionResultMatchers
             var viewResult = new PartialViewResult()
             {
                 ViewName = GetRandomString(),
-                ViewData = CreateViewDataFor(model)
+                ViewData = ViewDataDictionaryBuilder.Create()
+                    .WithModel(model)
+                    .Build()
             };
             var actionResult = viewResult as ActionResult;
 
@@ -321,7 +334,9 @@ public class TestActionResultMatchers
             var viewResult = new PartialViewResult()
             {
                 ViewName = GetRandomString(),
-                ViewData = CreateViewDataFor(model)
+                ViewData = ViewDataDictionaryBuilder.Create()
+                    .WithModel(model)
+                    .Build()
             };
             var actionResult = viewResult as ActionResult;
 
@@ -355,7 +370,9 @@ public class TestActionResultMatchers
             var hasModel = new PartialViewResult()
             {
                 ViewName = "has-model",
-                ViewData = CreateViewDataFor(new object())
+                ViewData = ViewDataDictionaryBuilder.Create()
+                    .WithModel(new object())
+                    .Build()
             } as ActionResult;
             // Act
             Assert.That(() =>
