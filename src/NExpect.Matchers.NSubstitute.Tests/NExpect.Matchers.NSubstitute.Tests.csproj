@@ -13,8 +13,8 @@
         <PackageReference Include="nunit" Version="3.13.3" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
-        <PackageReference Include="PeanutButter.RandomGenerators" Version="3.0.33" />
-        <PackageReference Include="PeanutButter.Utils" Version="3.0.33" />
+        <PackageReference Include="PeanutButter.RandomGenerators" Version="3.0.34" />
+        <PackageReference Include="PeanutButter.Utils" Version="3.0.34" />
         <PackageReference Include="Quackers.TestLogger" Version="1.0.11" />
     </ItemGroup>
 
