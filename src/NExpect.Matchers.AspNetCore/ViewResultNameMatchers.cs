@@ -18,9 +18,9 @@ public static class ViewResultNameMatchers
     /// </summary>
     /// <param name="a"></param>
     /// <returns></returns>
-    public static IMore<ViewResult> View(
-        this IA<ActionResult> a
-    )
+    public static IMore<ViewResult> View<TResult>(
+        this IA<TResult> a
+    ) where TResult: IActionResult
     {
         return a.View(NULL_STRING);
     }
@@ -31,10 +31,10 @@ public static class ViewResultNameMatchers
     /// <param name="a"></param>
     /// <param name="customMessage"></param>
     /// <returns></returns>
-    public static IMore<ViewResult> View(
-        this IA<ActionResult> a,
+    public static IMore<ViewResult> View<TResult>(
+        this IA<TResult> a,
         string customMessage
-    )
+    ) where TResult: IActionResult
     {
         return a.View(() => customMessage);
     }
@@ -45,10 +45,10 @@ public static class ViewResultNameMatchers
     /// <param name="a"></param>
     /// <param name="customMessageGenerator"></param>
     /// <returns></returns>
-    public static IMore<ViewResult> View(
-        this IA<ActionResult> a,
+    public static IMore<ViewResult> View<TResult>(
+        this IA<TResult> a,
         Func<string> customMessageGenerator
-    )
+    ) where TResult: IActionResult
     {
         ViewResult viewResult = null;
         a.AddMatcher(actual =>

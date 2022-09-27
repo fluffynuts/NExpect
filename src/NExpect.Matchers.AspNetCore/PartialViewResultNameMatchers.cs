@@ -17,9 +17,9 @@ public static class PartialViewResultNameMatchers
     /// </summary>
     /// <param name="a"></param>
     /// <returns></returns>
-    public static IMore<PartialViewResult> PartialView(
-        this IA<ActionResult> a
-    )
+    public static IMore<PartialViewResult> PartialView<TResult>(
+        this IA<TResult> a
+    ) where TResult: IActionResult
     {
         PartialViewResult partialViewResult = null;
         a.AddMatcher(actual =>

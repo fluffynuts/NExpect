@@ -23,18 +23,17 @@ public class TestActionResultMatchers
             {
                 ViewName = GetRandomString(10)
             };
-            var actionResult = viewResult as ActionResult;
 
             // Act
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.View()
                     .With.Name(viewResult.ViewName);
             }, Throws.Nothing);
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .Not.To.Be.A.View()
                     .With.Name(viewResult.ViewName);
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
@@ -49,12 +48,11 @@ public class TestActionResultMatchers
             {
                 ViewName = GetRandomString()
             };
-            var actionResult = viewResult as ActionResult;
 
             // Act
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.View()
                     .With.Name(GetAnother(viewResult.ViewName));
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
@@ -75,26 +73,25 @@ public class TestActionResultMatchers
                     .WithModel(model)
                     .Build()
             };
-            var actionResult = viewResult as ActionResult;
 
             // Act
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.View()
                     .With.Name(viewResult.ViewName)
                     .And.Model(o => o.DeepEquals(model));
             }, Throws.Nothing);
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.View()
                     .With.Name(viewResult.ViewName)
                     .And.Model(model);
             }, Throws.Nothing);
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.View()
                     .With.Name(viewResult.ViewName)
                     .And.Model(o => o.DeepEquals(other));
@@ -116,19 +113,18 @@ public class TestActionResultMatchers
                     .WithModel(model)
                     .Build()
             };
-            var actionResult = viewResult as ActionResult;
 
             // Act
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.View()
                     .With.Name(viewResult.ViewName)
                     .And.Model<Model>(o => o.Name == model.Name);
             }, Throws.Nothing);
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.View()
                     .With.Name(viewResult.ViewName)
                     .And.Model<Model>(o => o.Name == other.Name);
@@ -149,19 +145,18 @@ public class TestActionResultMatchers
                     .WithModel(model)
                     .Build()
             };
-            var actionResult = viewResult as ActionResult;
 
             // Act
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.View()
                     .With.Name(viewResult.ViewName)
                     .And.Model(model);
             }, Throws.Nothing);
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.View()
                     .With.Name(viewResult.ViewName)
                     .And.Model(other);
@@ -177,14 +172,14 @@ public class TestActionResultMatchers
             var noModel = new ViewResult()
             {
                 ViewName = "no-model"
-            } as ActionResult;
+            };
             var hasModel = new ViewResult()
             {
                 ViewName = "has-model",
                 ViewData = ViewDataDictionaryBuilder.Create()
                     .WithModel(new object())
                     .Build()
-            } as ActionResult;
+            };
             // Act
             Assert.That(() =>
             {
@@ -221,18 +216,17 @@ public class TestActionResultMatchers
             {
                 ViewName = GetRandomString()
             };
-            var actionResult = viewResult as ActionResult;
 
             // Act
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.PartialView()
                     .With.Name(viewResult.ViewName);
             }, Throws.Nothing);
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .Not.To.Be.A.View()
                     .With.Name(viewResult.ViewName);
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
@@ -247,12 +241,11 @@ public class TestActionResultMatchers
             {
                 ViewName = GetRandomString()
             };
-            var actionResult = viewResult as ActionResult;
 
             // Act
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.PartialView()
                     .With.Name(GetAnother(viewResult.ViewName));
             }, Throws.Exception.InstanceOf<UnmetExpectationException>());
@@ -272,19 +265,18 @@ public class TestActionResultMatchers
                     .WithModel(model)
                     .Build()
             };
-            var actionResult = viewResult as ActionResult;
 
             // Act
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.PartialView()
                     .With.Name(viewResult.ViewName)
                     .And.Model(o => o.DeepEquals(viewResult.ViewData.Model));
             }, Throws.Nothing);
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.PartialView()
                     .With.Name(viewResult.ViewName)
                     .And.Model(o => o.DeepEquals(other));
@@ -305,19 +297,18 @@ public class TestActionResultMatchers
                     .WithModel(model)
                     .Build()
             };
-            var actionResult = viewResult as ActionResult;
 
             // Act
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.PartialView()
                     .With.Name(viewResult.ViewName)
                     .And.Model<Model>(o => o.Name == model.Name);
             }, Throws.Nothing);
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.PartialView()
                     .With.Name(viewResult.ViewName)
                     .And.Model<Model>(o => o.Name == other.Name);
@@ -338,19 +329,18 @@ public class TestActionResultMatchers
                     .WithModel(model)
                     .Build()
             };
-            var actionResult = viewResult as ActionResult;
 
             // Act
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.PartialView()
                     .With.Name(viewResult.ViewName)
                     .And.Model(model);
             }, Throws.Nothing);
             Assert.That(() =>
             {
-                Expect(actionResult)
+                Expect(viewResult)
                     .To.Be.A.PartialView()
                     .With.Name(viewResult.ViewName)
                     .And.Model(other);
@@ -366,14 +356,14 @@ public class TestActionResultMatchers
             var noModel = new PartialViewResult()
             {
                 ViewName = "no-model"
-            } as ActionResult;
+            };
             var hasModel = new PartialViewResult()
             {
                 ViewName = "has-model",
                 ViewData = ViewDataDictionaryBuilder.Create()
                     .WithModel(new object())
                     .Build()
-            } as ActionResult;
+            };
             // Act
             Assert.That(() =>
             {
