@@ -21,7 +21,7 @@ public class TestActionResultMatchers
             // Arrange
             var viewResult = new ViewResult()
             {
-                ViewName = GetRandomString()
+                ViewName = GetRandomString(10)
             };
             var actionResult = viewResult as ActionResult;
 
