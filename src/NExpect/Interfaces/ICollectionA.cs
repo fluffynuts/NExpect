@@ -4,7 +4,7 @@ namespace NExpect.Interfaces
     /// Continuation to provide the ".A" grammar for collections
     /// </summary>
     /// <typeparam name="T">Type of the continuation</typeparam>
-    public interface ICollectionA<T>
+    public interface ICollectionA<T>: ICanAddMatcher<T>
     {
         /// <summary>
         /// Test if the provided actual collection is a superset of another
