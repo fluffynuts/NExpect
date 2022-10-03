@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global

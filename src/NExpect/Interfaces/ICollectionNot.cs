@@ -14,5 +14,4 @@ public interface ICollectionNot<T> : ICanAddMatcher<IEnumerable<T>>
     /// Provides the negated ".To" grammar extension for collections
     /// </summary>
     ICollectionToAfterNot<T> To { get; }
-
 }

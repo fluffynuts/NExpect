@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Collections;

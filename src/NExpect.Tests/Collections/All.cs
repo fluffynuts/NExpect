@@ -94,5 +94,56 @@ namespace NExpect.Tests.Collections
             // Assert
         }
 
+        [TestFixture]
+        public class CollectionItemReferenceEquality
+        {
+            [Test]
+            public void ShouldBeAbleToAssertCollectionItemsAreReferenceEqual()
+            {
+                // Arrange
+                var collection1 = new[] { new object(), new object() };
+                var collection2 = collection1.ToArray();
+                var outOfOrder = new[] { collection1[1], collection1[0] };
+                // Act
+                // this is the use-case: when the collection
+                // is cloned but the items are not
+                Assert.That(() =>
+                {
+                    Expect(collection1)
+                        .To.Be(collection2);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                
+                // positive test
+                Assert.That(() =>
+                {
+                    Expect(collection1)
+                        .Items.To.Be(collection2);
+                }, Throws.Nothing);
+                
+                // negative test
+                Assert.That(() =>
+                {
+                    Expect(collection1)
+                        .Items.Not.To.Be(collection2);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                
+                // negative test
+                Assert.That(() =>
+                {
+                    Expect(collection1)
+                        .Items.To.Not.Be(collection2);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                
+                // equality != equivalence
+                Assert.That(() =>
+                {
+                    Expect(collection1)
+                        .Items.To.Be(outOfOrder);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+
+                // Assert
+            }
+        }
+
     }
 }

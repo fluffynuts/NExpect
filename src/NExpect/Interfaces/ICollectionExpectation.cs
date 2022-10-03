@@ -20,4 +20,9 @@ public interface ICollectionExpectation<T>
     /// item type
     /// </summary>
     ICollectionAs<T> As { get; }
+
+    /// <summary>
+    /// Prepare for an item-wise collection assertion
+    /// </summary>
+    ICollectionItems<T> Items { get; }
 }

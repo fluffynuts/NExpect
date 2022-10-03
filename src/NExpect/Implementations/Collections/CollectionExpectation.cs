@@ -15,6 +15,9 @@ internal class CollectionExpectation<T> :
 
     public ICollectionAs<T> As =>
         ContinuationFactory.Create<IEnumerable<T>, CollectionAs<T>>(() => Actual, this);
+    
+    public ICollectionItems<T> Items
+        => ContinuationFactory.Create<IEnumerable<T>, CollectionItems<T>>(() => Actual, this);
 
     public CollectionExpectation(IEnumerable<T> actual)
         : base(actual)
