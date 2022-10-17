@@ -103,6 +103,12 @@ namespace NExpect.Matchers.AspNet.Tests
                         }, Throws.Nothing);
                         Assert.That(() =>
                         {
+                            // area names should be case-insensitive
+                            Expect(sut)
+                                .To.Have.Area("Api");
+                        }, Throws.Nothing);
+                        Assert.That(() =>
+                        {
                             Expect(sut)
                                 .Not.To.Have.Area("api2");
                         }, Throws.Nothing);

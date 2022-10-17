@@ -320,11 +320,26 @@ namespace NExpect
                     .OfType<AreaAttribute>()
                     .FirstOrDefault();
 
-                var passed = attrib?.RouteValue == areaName;
+                if (attrib is null)
+                {
+                    return new MatcherResult(
+                        false,
+                        FinalMessageFor(
+                            () => $"Expected type {actual} {false.AsNot()} to be decorated with [Area(\"{areaName}\")]",
+                            customMessageGenerator
+                        )
+                    );
+                }
+
+                var passed = areaName.Equals(attrib.RouteValue, StringComparison.OrdinalIgnoreCase);
+                var more = passed
+                    ? $" but found [Area(\"{attrib.RouteValue}\")]"
+                    : " but found exactly that";
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        () => $"Expected type {actual} {passed.AsNot()} to be decorated with [Area(\"{areaName}\")]",
+                        () =>
+                            $"Expected type {actual} {passed.AsNot()} to be decorated with [Area(\"{areaName}\")]{more}",
                         customMessageGenerator
                     )
                 );
