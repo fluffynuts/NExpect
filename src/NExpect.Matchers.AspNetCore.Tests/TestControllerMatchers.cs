@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using NExpect.Exceptions;
 using static NExpect.Expectations;
 using NUnit.Framework;
+using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Matchers.AspNet.Tests
 {
@@ -50,6 +51,81 @@ namespace NExpect.Matchers.AspNet.Tests
                         .And.Not.To.Have.Route("other"))
                     .Not.To.Throw();
                 // Assert
+            }
+
+            [TestFixture]
+            public class Areas
+            {
+                [TestFixture]
+                public class WhenControllerIsNotDecorated
+                {
+                    [Test]
+                    public void ShouldFail()
+                    {
+                        // Arrange
+                        var sut = typeof(UndecoratedController);
+                        var areaName = GetRandomString(1);
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(sut)
+                                .Not.To.Have.Area(areaName);
+                        }, Throws.Nothing);
+
+                        Assert.That(() =>
+                            {
+                                Expect(sut)
+                                    .To.Have.Area(areaName);
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains($"[Area(\"{areaName}\")]")
+                        );
+                        // Assert
+                    }
+
+                    public class UndecoratedController : ControllerBase
+                    {
+                    }
+                }
+
+                [TestFixture]
+                public class WhenControllerIsDecorated
+                {
+                    [Test]
+                    public void ShouldAssertArea()
+                    {
+                        // Arrange
+                        var sut = typeof(DecoratedController);
+                        // Act
+                        Assert.That(() =>
+                        {
+                            Expect(sut)
+                                .To.Have.Area("api");
+                        }, Throws.Nothing);
+                        Assert.That(() =>
+                        {
+                            Expect(sut)
+                                .Not.To.Have.Area("api2");
+                        }, Throws.Nothing);
+                        Assert.That(() =>
+                            {
+                                Expect(sut)
+                                    .To.Have.Area("not-api");
+                            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("decorated with [Area(\"not-api\")]")
+                        );
+                        Assert.That(() =>
+                        {
+                            Expect(sut)
+                                .Not.To.Have.Area("api");
+                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        // Assert
+                    }
+
+                    [Area("api")]
+                    public class DecoratedController : ControllerBase
+                    {
+                    }
+                }
             }
         }
 

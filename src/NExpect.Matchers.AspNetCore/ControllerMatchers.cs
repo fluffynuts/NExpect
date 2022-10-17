@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+using static NExpect.Implementations.MessageHelpers;
 
 namespace NExpect
 {
@@ -25,6 +26,38 @@ namespace NExpect
             string method
         )
         {
+            return have.Method(method, NULL_STRING);
+        }
+
+        /// <summary>
+        /// Asserts that the controller has the named method
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="method"></param>
+        /// <param name="customMessage"></param>
+        /// <returns></returns>
+        public static SupportingExtension Method(
+            this IHave<Type> have,
+            string method,
+            string customMessage
+        )
+        {
+            return have.Method(method, () => customMessage);
+        }
+
+        /// <summary>
+        /// Asserts that the controller has the named method
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="method"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <returns></returns>
+        public static SupportingExtension Method(
+            this IHave<Type> have,
+            string method,
+            Func<string> customMessageGenerator
+        )
+        {
             var result = new SupportingExtension();
             have.AddMatcher(
                 actual =>
@@ -34,7 +67,11 @@ namespace NExpect
                     var passed = actual.GetMethod(method) != null;
                     return new MatcherResult(
                         passed,
-                        () => $"Expected type {actual} to have method {method}");
+                        FinalMessageFor(
+                            () => $"Expected type {actual} to have method {method}",
+                            customMessageGenerator
+                        )
+                    );
                 });
             return result;
         }
@@ -47,7 +84,24 @@ namespace NExpect
         /// <returns></returns>
         public static IMore<Type> Route(
             this IHave<Type> have,
-            string expected)
+            string expected
+        )
+        {
+            return have.Route(expected, () => NULL_STRING);
+        }
+
+        /// <summary>
+        /// Asserts that the controller has the expected base route
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="expected"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <returns></returns>
+        public static IMore<Type> Route(
+            this IHave<Type> have,
+            string expected,
+            Func<string> customMessageGenerator
+        )
         {
             have.AddMatcher(
                 actual =>
@@ -56,7 +110,10 @@ namespace NExpect
                     var passed = attribs.Any(a => a.Template == expected);
                     return new MatcherResult(
                         passed,
-                        () => $"Expected {actual.Name} {passed.AsNot()}to have route '{expected}'"
+                        FinalMessageFor(
+                            () => $"Expected {actual.Name} {passed.AsNot()}to have route '{expected}'",
+                            customMessageGenerator
+                        )
                     );
                 });
             return have.More();
@@ -137,7 +194,7 @@ namespace NExpect
             /// Fluency extension
             /// </summary>
             public SupportingExtension With => this;
-            
+
             /// <summary>
             /// Fluency extension
             /// </summary>
@@ -190,6 +247,88 @@ namespace NExpect
             {
                 return new AndSupportingExtension(Continuation, Member, this);
             }
+        }
+
+        /// <summary>
+        /// Assert that a controller type has been decorated with the applicable [Area] attribute
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="areaName"></param>
+        /// <returns></returns>
+        public static IMore<Type> Area(
+            this IHave<Type> have,
+            string areaName
+        )
+        {
+            return have.Area(
+                areaName,
+                NULL_STRING
+            );
+        }
+
+        /// <summary>
+        /// Assert that a controller type has been decorated with the applicable [Area] attribute
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="areaName"></param>
+        /// <param name="customMessage"></param>
+        /// <returns></returns>
+        public static IMore<Type> Area(
+            this IHave<Type> have,
+            string areaName,
+            string customMessage
+        )
+        {
+            return have.Area(
+                areaName,
+                () => customMessage
+            );
+        }
+
+        /// <summary>
+        /// Assert that a controller type has been decorated with the applicable [Area] attribute
+        /// </summary>
+        /// <param name="have"></param>
+        /// <param name="areaName"></param>
+        /// <param name="customMessageGenerator"></param>
+        /// <returns></returns>
+        public static IMore<Type> Area(
+            this IHave<Type> have,
+            string areaName,
+            Func<string> customMessageGenerator
+        )
+        {
+            return have.AddMatcher(actual =>
+            {
+                if (actual is null)
+                {
+                    return new EnforcedMatcherResult(
+                        false,
+                        "Provided controller type is null"
+                    );
+                }
+
+                if (areaName is null)
+                {
+                    return new EnforcedMatcherResult(
+                        false,
+                        "Provided area name is null"
+                    );
+                }
+
+                var attrib = actual.GetCustomAttributes(inherit: false)
+                    .OfType<AreaAttribute>()
+                    .FirstOrDefault();
+
+                var passed = attrib?.RouteValue == areaName;
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected type {actual} {passed.AsNot()} to be decorated with [Area(\"{areaName}\")]",
+                        customMessageGenerator
+                    )
+                );
+            });
         }
 
         /// <summary>
