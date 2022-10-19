@@ -499,7 +499,7 @@ public static class CollectionMatchers
                                 have,
                                 countMatch.Compare,
                                 collectionCount
-                            ).AsArray()
+                            ).InArray()
                             .And("within")
                             .And($"{collection?.LimitedPrint()}"
                             ),
@@ -661,7 +661,7 @@ public static class CollectionMatchers
                                 have,
                                 countMatch.Compare,
                                 collectionCount
-                            ).AsArray()
+                            ).InArray()
                             .And("within")
                             .And($"{collection?.LimitedPrint()}"),
                         customMessageGenerator));

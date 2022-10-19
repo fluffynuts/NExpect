@@ -1,6 +1,8 @@
 ﻿using NUnit.Framework;
 using static NExpect.Expectations;
 using NExpect;
+using NExpect.Exceptions;
+using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Tests.Core
 {
@@ -34,6 +36,44 @@ namespace NExpect.Tests.Core
             Assert.That(() => Expect(left)
                 .To.Deep.Equal(right), Throws.Nothing);
             // Assert
+        }
+
+        [Test]
+        public void ShouldIgnoreStaticProperties()
+        {
+            // Arrange
+            HasAStaticProp.Id = GetRandomInt();
+            var data = new HasAStaticProp()
+            {
+                Name = GetRandomString()
+            };
+            // Act
+            Assert.That(() =>
+            {
+                Expect(data)
+                    .To.Deep.Equal(
+                        new
+                        {
+                            Name = data.Name,
+                            Id = HasAStaticProp.Id
+                        });
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            Assert.That(() =>
+            {
+                Expect(data)
+                    .To.Deep.Equal(
+                        new
+                        {
+                            Name = data.Name,
+                        });
+            }, Throws.Nothing);
+            // Assert
+        }
+
+        public class HasAStaticProp
+        {
+            public string Name { get; set; }
+            public static int Id { get; set; }
         }
 
         public enum LogLevel
