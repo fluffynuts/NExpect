@@ -9,7 +9,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
-    <PackageVersion>2.0.17</PackageVersion>
+    <PackageVersion>2.0.18</PackageVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
@@ -53,8 +53,8 @@
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ExtensionsForIEnumerables.cs" Link="Imported\ExtensionsForIEnumerables.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\MetadataExtensions.cs" Link="Imported\MetadataExtensions.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\MemberNotFoundException.cs" Link="Imported\MemberNotFoundException.cs"/>
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Platform.cs" Link="Imported\Platform.cs" />
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PathType.cs" Link="Imported\PathType.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Platform.cs" Link="Imported\Platform.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PathType.cs" Link="Imported\PathType.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PropertyOrField.cs" Link="Imported\PropertyOrField.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PyLike.cs" Link="Imported\PyLike.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\StringExtensions.cs" Link="Imported\StringExtensions.cs"/>
