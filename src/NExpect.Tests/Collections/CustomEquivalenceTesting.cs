@@ -131,16 +131,28 @@ namespace NExpect.Tests.Collections
             {
                 if (x == null &&
                     y == null)
+                {
                     return true;
+                }
+
                 if (x == null ||
                     y == null)
+                {
                     return false;
+                }
+
                 if (x.Length == 0 &&
                     y.Length == 0)
+                {
                     return true;
+                }
+
                 if (x.Length == 0 ||
                     y.Length == 0)
+                {
                     return false;
+                }
+
                 return x[0] == y[0];
             }
 

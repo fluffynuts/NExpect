@@ -170,7 +170,10 @@ public static class TruthMatchers
         return actual =>
         {
             if (actual.Equals(expected))
+            {
                 return new MatcherResult(true, () => $"Did not expect {true}");
+            }
+
             return new MatcherResult(
                 false,
                 FinalMessageFor(

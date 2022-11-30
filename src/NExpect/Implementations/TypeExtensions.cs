@@ -26,7 +26,10 @@ internal static class TypeExtensions
     {
         var propInfo = o.GetType().GetPublicInstanceProperty(prop);
         if (propInfo == null)
+        {
             return default(T);
+        }
+
         try
         {
             return (T) propInfo.GetValue(o);

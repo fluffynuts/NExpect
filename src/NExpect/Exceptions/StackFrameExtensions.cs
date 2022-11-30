@@ -17,7 +17,10 @@ internal static class StackFrameExtensions
     {
         var methodInfo = frame.GetMethod();
         if (Equals(methodInfo?.DeclaringType?.GetAssembly(), ThisAssembly))
+        {
             return true;
+        }
+
         var parameters = methodInfo?.GetParameters() ?? new ParameterInfo[0];
         return parameters.Any(
             p => Equals(p.ParameterType.GetAssembly(), ThisAssembly)

@@ -20,7 +20,10 @@ internal static class InstanceOfHelperExtensions
         while (current != null)
         {
             if (IsNegatedPrivate(current))
+            {
                 negated = !negated;
+            }
+
             current = GetParentOf(current);
         }
 

@@ -25,7 +25,9 @@ namespace NExpect.Tests
             finally
             {
                 if (beforeTest != null)
+                {
                     Environment.SetEnvironmentVariable("COLS", beforeTest);
+                }
             }
         }
     }

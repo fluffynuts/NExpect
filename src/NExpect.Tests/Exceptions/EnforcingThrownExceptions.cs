@@ -96,7 +96,10 @@ namespace NExpect.Tests.Exceptions
                             () =>
                             {
                                 if (MakeFalse())
+                                {
                                     return 1;
+                                }
+
                                 throw new Exception(GetRandomString());
                             })
                         .To.Throw();
@@ -1476,7 +1479,10 @@ namespace NExpect.Tests.Exceptions
         {
             var other = obj as SomeNode;
             if (other == null)
+            {
                 return false;
+            }
+
             return Id == other.Id &&
                 Name == other.Name;
         }

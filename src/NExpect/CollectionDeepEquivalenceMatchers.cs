@@ -131,14 +131,20 @@ public static class CollectionDeepEquivalenceMatchers
                             }
                         }
                         if (foundNullMatch)
+                        {
                             continue;
+                        }
+
                         return new DeepTestResult(false, $"no match for {default(T)}");
                     }
 
                     var compareMatch = compare.FirstOrDefault(
                         c => AreDeepEqual(currentMaster, c, customEqualityComparers).AreEqual);
                     if (compareMatch == null)
+                    {
                         return new DeepTestResult(false, $"no match for item {currentMaster.Stringify()}");
+                    }
+
                     master.Remove(currentMaster);
                     compare.Remove(compareMatch);
                 }

@@ -42,7 +42,9 @@ public class UnmetExpectationException : Exception
                     hitThisAssembly = true;
                 }
                 else
+                {
                     acc.Add(cur);
+                }
 
                 return acc;
             });

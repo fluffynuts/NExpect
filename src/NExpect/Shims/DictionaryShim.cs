@@ -48,7 +48,10 @@ public class DictionaryShim : IDictionary<string, string>
     public bool Contains(KeyValuePair<string, string> item)
     {
         if (!ContainsKey(item.Key))
+        {
             return false;
+        }
+
         var existing = _actual[item.Key];
         return existing == item.Value;
     }
@@ -66,7 +69,10 @@ public class DictionaryShim : IDictionary<string, string>
     public bool Remove(KeyValuePair<string, string> item)
     {
         if (!Contains(item))
+        {
             return false;
+        }
+
         _actual.Remove(item.Key);
         return true;
     }
@@ -93,7 +99,10 @@ public class DictionaryShim : IDictionary<string, string>
     public bool Remove(string key)
     {
         if (!ContainsKey(key))
+        {
             return false;
+        }
+
         _actual.Remove(key);
         return true;
     }

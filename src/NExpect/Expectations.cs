@@ -173,7 +173,10 @@ public static class Expectations
         {
             var result = func();
             if (!(result is Task taskResult))
+            {
                 return;
+            }
+
             taskResult.ConfigureAwait(false);
             try
             {

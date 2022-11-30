@@ -163,7 +163,10 @@ namespace NExpect.Tests.Collections
                         var key = GetRandomAlphaString(2);
                         var recased = key.ToUpperInvariant();
                         if (recased == key)
+                        {
                             recased = key.ToLowerInvariant();
+                        }
+
                         var src = new Dictionary<string, int>(comparer)
                         {
                             [key] = GetRandomInt()
@@ -196,7 +199,10 @@ namespace NExpect.Tests.Collections
                         var key = GetRandomAlphaString(2);
                         var recased = key.ToUpperInvariant();
                         if (recased == key)
+                        {
                             recased = key.ToLowerInvariant();
+                        }
+
                         var src = new Dictionary<string, int>(comparer)
                         {
                             [key] = GetRandomInt()
@@ -303,7 +309,9 @@ namespace NExpect.Tests.Collections
                                 };
                                 var recased = key.ToUpperInvariant();
                                 if (recased == key)
+                                {
                                     recased = key.ToLowerInvariant();
+                                }
                                 // Pre-Assert
 
                                 // Act

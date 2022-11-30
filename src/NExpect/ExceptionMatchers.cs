@@ -430,7 +430,10 @@ public static class ExceptionMatchers
             result.Actual = s;
             var nextOffset = s?.IndexOf(search) ?? -1;
             if (nextOffset > -1)
+            {
                 nextOffset += search?.Length ?? 0;
+            }
+
             result.SetMetadata(SEARCH_OFFSET, nextOffset);
 
             var passed = nextOffset > -1;

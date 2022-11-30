@@ -97,7 +97,10 @@ internal static class DeepTestHelpers
                 return match == null;
             }).ToArray();
         if (!invalid.Any())
+        {
             return;
+        }
+
         var names = invalid.Select(t => t.GetType().PrettyName()).JoinWith(",");
         throw new ArgumentException(
             $"Custom equality comparers must implement IEqualityComparer<T>. The following do not: {names}"

@@ -841,7 +841,10 @@ public static class StringMatchers
     )
     {
         if (!fragments.Any())
+        {
             throw new InvalidOperationException(".In.Order(...) requires at least one fragment");
+        }
+
         var first = fragments.First();
         var canAddMatcher = stringIn as ICanAddMatcher<string>;
         fragments.Skip(1)

@@ -2130,8 +2130,11 @@ public static class CollectionMatchers
     )
     {
         if (!(continuation is CountMatchContinuationOfStringCollectionVerb concrete))
+        {
             throw new InvalidOperationException(
                 $".With() for collections of strings only supported where the concrete continuation is of type {typeof(CountMatchContinuationOfStringCollection)}");
+        }
+
         return concrete.Wrapped.Matched.By(
             s => s.EndsWith(search, comparison),
             customMessageGenerator
@@ -2539,26 +2542,37 @@ public static class CollectionMatchers
     {
         if (left == null &&
             right == null)
+        {
             return true;
+        }
+
         if (left == null ||
             right == null)
+        {
             return false;
+        }
+
         return left.Equals(right);
     }
 
     private static void CheckContain<T>(ICanAddMatcher<IEnumerable<T>> contain)
     {
         if (contain == null)
+        {
             throw new ArgumentNullException(
                 nameof(contain),
                 $"Exactly<T>() cannot extend null IContain<IEnumerable<{typeof(T).Name}>>");
+        }
     }
 
     private static void CheckOnly<T>(ICanAddMatcher<IEnumerable<T>> contain, int howMany)
     {
         var itemInCollection = contain.GetActual().Count();
         if (itemInCollection == howMany)
+        {
             return;
+        }
+
         var s = howMany == 1
             ? ""
             : "s";
