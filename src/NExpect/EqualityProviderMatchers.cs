@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using Imported.PeanutButter.Utils;
 using NExpect.Implementations;
 using NExpect.Interfaces;
@@ -966,10 +969,16 @@ public static class EqualityProviderMatchers
             return false;
         }
 
+        var actualType = actual.GetType();
+        var expectedType = expected.GetType();
+
         var result = (actual.Equals(expected) ||
+            CompareDisparateNumericTypes(actual, actualType, expected, expectedType) ||
             CollectionsAreEqual(actual, expected));
         if (!result)
+        {
             return false;
+        }
 
         if (expected is DateTime expectedDateTime &&
             actual is DateTime actualDateTime)
@@ -978,6 +987,27 @@ public static class EqualityProviderMatchers
         }
 
         return true;
+    }
+
+    private static bool CompareDisparateNumericTypes(
+        object actual,
+        Type actualType,
+        object expected,
+        Type expectedType
+    )
+    {
+        if (actualType == expectedType)
+        {
+            // short-circuit: .Equals has already failed on the same types,
+            // so the only possible route left for equality is collection item
+            // comparison
+            return false;
+        }
+
+        // if we have disparate numeric types, compare them in their string form
+        return expectedType.IsNumericType() && 
+            actualType.IsNumericType() && 
+            $"{actual}" == $"{expected}";
     }
 
     private static bool CollectionsAreEqual<T>(
