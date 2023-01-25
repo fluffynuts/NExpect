@@ -10,4 +10,9 @@ public interface IWith<T> : ICanAddMatcher<T>
     /// Provides the .Required dangling grammar type
     /// </summary>
     public IRequired<T> Required { get; }
+
+    /// <summary>
+    /// Provides the .No dangling grammar type
+    /// </summary>
+    public INo<T> No { get; }
 }

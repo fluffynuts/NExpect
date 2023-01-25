@@ -165,11 +165,11 @@ namespace NExpect.Tests.ObjectEquality
                 Assert.That(() =>
                 {
                     var foo = Expect(data)
-                        .To.Have.Property(nameof(data.IsCommented))
-                        .With.Type<bool>()
-                        .And
-                        .With
-                        .Attribute<CommentAttribute>(o => o.Comment == "this is commented!")
+                            .To.Have.Property(nameof(data.IsCommented))
+                            .With.Type<bool>()
+                            .And
+                            .With
+                            .Attribute<CommentAttribute>(o => o.Comment == "this is commented!")
                         ;
                 }, Throws.Nothing);
                 Assert.That(() =>
@@ -362,21 +362,45 @@ namespace NExpect.Tests.ObjectEquality
                 // Arrange
                 var cow = new Cow();
                 // Act
-                Expect(cow)
-                    .To.Have.Method(nameof(cow.Add))
-                    .With.Parameter("a")
-                    .Of.Type(typeof(int));
-                Expect(cow)
-                    .To.Have.Method(nameof(cow.Add))
-                    .With.Parameter("b")
-                    .Of.Type(typeof(int));
-                Expect(cow)
-                    .To.Have.Method(nameof(cow.Add))
-                    .Which.Returns(typeof(int));
-                Expect(cow)
-                    .To.Have.Method(nameof(cow.Echo))
-                    .With.Parameter()
-                    .Of.Type<string>();
+                Assert.That(() =>
+                {
+                    Expect(cow)
+                        .To.Have.Method(nameof(cow.Add))
+                        .With.Parameter("a")
+                        .Of.Type(typeof(int));
+                    Expect(cow)
+                        .To.Have.Method(nameof(cow.Add))
+                        .With.Parameter("b")
+                        .Of.Type(typeof(int));
+                    Expect(cow)
+                        .To.Have.Method(nameof(cow.Add))
+                        .Which.Returns(typeof(int));
+                    Expect(cow)
+                        .To.Have.Method(nameof(cow.Echo))
+                        .With.Parameter()
+                        .Of.Type<string>();
+                }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void ShouldBeAbleToAssertParameterless()
+            {
+                // Arrange
+                var cow = new Cow();
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(cow)
+                        .To.Have.Method(nameof(cow.NotMoo))
+                        .With.No.Parameters();
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(cow)
+                        .To.Have.Method(nameof(cow.Add))
+                        .With.No.Parameters();
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
             }
 

@@ -1139,6 +1139,57 @@ public static class ReflectiveExtensions
     }
 
     /// <summary>
+    /// Asserts that a method has no parameters
+    /// </summary>
+    /// <param name="continuation"></param>
+    public static IMore<MethodInfo> Parameters(
+        this INo<MethodInfo> continuation
+    )
+    {
+        return continuation.Parameters(NULL_STRING);
+    }
+
+    /// <summary>
+    /// Asserts that a method has no parameters
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<MethodInfo> Parameters(
+        this INo<MethodInfo> continuation,
+        string customMessage
+    )
+    {
+        return continuation.Parameters(
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Asserts that a method has no parameters
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<MethodInfo> Parameters(
+        this INo<MethodInfo> continuation,
+        Func<string> customMessageGenerator
+    )
+    {
+        return continuation.AddMatcher(actual =>
+        {
+            var passed = actual.GetParameters().Length == 0;
+            return new MatcherResult(
+                passed,
+                FinalMessageFor(
+                    () => $"Expected {actual.Name} to be parameterless",
+                    customMessageGenerator
+                )
+            );
+        });
+    }
+
+    /// <summary>
     /// Tests the return value on a .Method continuation
     /// </summary>
     /// <param name="continuation"></param>
