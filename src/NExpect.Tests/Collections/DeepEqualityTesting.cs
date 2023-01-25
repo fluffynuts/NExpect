@@ -405,8 +405,8 @@ namespace NExpect.Tests.Collections
                         public void AllowingDateTimeDrift()
                         {
                             // Arrange
-                            var left = new { Date = DateTime.Now }.AsArray();
-                            var right = new { Date = left[0].Date.AddSeconds(1) }.AsArray();
+                            var left = new { Date = DateTime.Now }.InArray();
+                            var right = new { Date = left[0].Date.AddSeconds(1) }.InArray();
 
                             // Pre-assert
                             // Act
@@ -550,8 +550,8 @@ namespace NExpect.Tests.Collections
                 public void AllowingDateTimeDrift()
                 {
                     // Arrange
-                    var left = new { Date = DateTime.Now }.AsArray();
-                    var right = new { Date = left[0].Date.AddSeconds(1) }.AsArray();
+                    var left = new { Date = DateTime.Now }.InArray();
+                    var right = new { Date = left[0].Date.AddSeconds(1) }.InArray();
 
                     // Pre-assert
                     // Act

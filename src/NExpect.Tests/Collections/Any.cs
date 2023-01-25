@@ -16,7 +16,7 @@ namespace NExpect.Tests.Collections
         {
             // Arrange
             var search = GetRandomString();
-            var actual = GetRandomCollection<string>(2, 4).Union(search.AsArray());
+            var actual = GetRandomCollection<string>(2, 4).Union(search.InArray());
 
             // Pre-Assert
 
@@ -59,7 +59,7 @@ namespace NExpect.Tests.Collections
         {
             // Arrange
             var search = GetRandomString();
-            var actual = PyLike.Range(GetRandomInt(2, 4)).Select(i => search);
+            var actual = PyLike.Range(GetRandomInt(2, 4)).Select(_ => search);
 
             // Pre-Assert
 

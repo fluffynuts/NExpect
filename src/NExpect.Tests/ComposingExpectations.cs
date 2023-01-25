@@ -110,7 +110,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                 {
-                    Expect(person.AsArray()).To.Be.Bennies();
+                    Expect(person.InArray()).To.Be.Bennies();
                 }, Throws.Nothing);
                 // Assert
             }
@@ -151,7 +151,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                 {
-                    Expect(person.AsArray()).To.Be.Bennies();
+                    Expect(person.InArray()).To.Be.Bennies();
                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                     .With.Message.Not.Contains("not"));
                 // Assert
@@ -170,7 +170,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                 {
-                    Expect(person.AsArray()).Not.To.Be.Bennies();
+                    Expect(person.InArray()).Not.To.Be.Bennies();
                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains(
                         "not to all be Bennies"
@@ -191,7 +191,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                 {
-                    Expect(person.AsArray()).Not.To.Be.Bennies();
+                    Expect(person.InArray()).Not.To.Be.Bennies();
                 }, Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
             }
@@ -209,7 +209,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                 {
-                    Expect(person.AsArray()).Not.To.Be.Bennies2();
+                    Expect(person.InArray()).Not.To.Be.Bennies2();
                 }, Throws.Nothing);
                 // Assert
             }
@@ -227,7 +227,7 @@ namespace NExpect.Tests
                 // Act
                 Assert.That(() =>
                 {
-                    Expect(person.AsArray()).To.Be.Bennies2();
+                    Expect(person.InArray()).To.Be.Bennies2();
                 }, Throws.Exception.InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains("Bennies2"));
                 // Assert
