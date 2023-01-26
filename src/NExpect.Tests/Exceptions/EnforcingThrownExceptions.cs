@@ -182,6 +182,44 @@ namespace NExpect.Tests.Exceptions
             }
 
             [Test]
+            public void ShouldIncludeStacktraceWhenFailing1()
+            {
+                // Arrange
+                var message = "LOOKFORME could not moo";
+                var seek = "LOOKFORME";
+                
+                // Act
+                Expect(() =>
+                Expect(() => throw new Exception(message))
+                    .Not.To.Throw()
+                ).To.Throw<UnmetExpectationException>()
+                    .With.Message.Containing(message)
+                    .Then("Stacktrace")
+                    .Then(" at ");
+                    
+                // Assert
+            }
+
+            [Test]
+            public void ShouldIncludeStacktraceWhenFailing2()
+            {
+                // Arrange
+                var message = "LOOKFORME could not moo";
+                var seek = "LOOKFORME";
+                
+                // Act
+                Expect(() =>
+                Expect(() => throw new Exception(message))
+                    .To.Throw<InvalidOperationException>()
+                ).To.Throw<UnmetExpectationException>()
+                    .With.Message.Containing(message)
+                    .Then("Stacktrace")
+                    .Then(" at ");
+                    
+                // Assert
+            }
+
+            [Test]
             public void Throw_WithNoGenericType_AllowsMultipleSubStringContainingOnMessage_HappyPath()
             {
                 // Arrange
