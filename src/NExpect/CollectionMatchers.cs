@@ -480,7 +480,8 @@ public static class CollectionMatchers
                                 false.AsNot()
                             }to find only {
                                 countMatch.Compare
-                            } items in\n{collection.Stringify<IEnumerable<T>>()}",
+                            } items in
+{collection.Stringify<IEnumerable<T>>()}",
                             customMessageGenerator
                         )
                     );
@@ -2428,7 +2429,8 @@ public static class CollectionMatchers
                     passed.AsNot()
                 }to find at least {
                     minimumRequiredRatio * 100
-                }% distinct items in\n{actual.Stringify<IEnumerable<T>>()}",
+                }% distinct items in
+{actual.Stringify<IEnumerable<T>>()}",
                 customMessageGenerator
             );
         });

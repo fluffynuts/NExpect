@@ -27,11 +27,15 @@ internal static class GreaterAndLessMatchersCommon
                 if (!kindsMatch)
                 {
                     Assertions.Throw(
-                        @$"Unable to compare dates:\n{
+                        @$"Unable to compare dates:
+{
                             actual.Stringify()
-                        }\nand\n{
+}
+and
+{
                             expected.Stringify()
-                        }\nDates have different kinds, so comparisons are non-deterministic"
+}
+Dates have different kinds, so equality based on absolute date/time could be misleading."
                     );
                 }
 

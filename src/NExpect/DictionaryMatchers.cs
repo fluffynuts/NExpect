@@ -569,7 +569,10 @@ public static class DictionaryMatchers
                 passed,
                 FinalMessageFor(
                     () =>
-                        $@"Expected\n{actual.Stringify()}\n{passed.AsNot()}to deep equal\n{otherValue.Stringify()}",
+                        $@"Expected
+{actual.Stringify()}
+{passed.AsNot()}to deep equal
+{otherValue.Stringify()}",
                     customMessageGenerator
                 )
             );

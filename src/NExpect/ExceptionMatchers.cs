@@ -363,14 +363,18 @@ public static class ExceptionMatchers
                                     ? $"{actualType.Namespace}.{actualType.Name}"
                                     : actualType.Name;
                                 return passed
-                                    ? $@"Expected not to throw an exception of type {expectedName}\n{actual.StackTrace}"
+                                    ? $@"Expected not to throw an exception of type {expectedName}
+Stacktrace:
+{actual.StackTrace}"
                                     : $@"Expected to throw an exception of type {
                                         expectedName
                                     } but {
                                         actualName
                                     } was thrown instead ({
                                         actual.Message
-                                    })\nStacktrace:\n{actual.StackTrace}";
+                                    })
+Stacktrace:
+{actual.StackTrace}";
                             },
                             customMessageGenerator));
                     continuation.Exception = actual as T;
