@@ -136,7 +136,7 @@ namespace NExpect.Matchers.AspNet.Tests
         }
 
         [TestFixture]
-        public class ControllerActions
+        public class RoutingAtActionLevel
         {
             [Test]
             public void ShouldBeAbleToTestRoute()
@@ -236,6 +236,33 @@ namespace NExpect.Matchers.AspNet.Tests
                 ).Not.To.Throw();
                 // Assert
             }
+
+            [Test]
+            public void ShouldImplicitlySupportHttpGetWithNoDecoration()
+            {
+                // Arrange
+                var controller = typeof(TestController);
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(controller)
+                        .To.Have.Method(nameof(TestController.PostOnly))
+                        .Supporting(HttpMethod.Get);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Assert.That(() =>
+                {
+                    Expect(controller)
+                        .To.Have.Method(nameof(TestController.ImplicitGet))
+                        .Supporting(HttpMethod.Get);
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(controller)
+                        .To.Have.Method(nameof(TestController.ImplicitGet))
+                        .Supporting(HttpMethod.Post);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
         }
 
         [Route("test")]
@@ -246,6 +273,17 @@ namespace NExpect.Matchers.AspNet.Tests
             [HttpGet]
             [HttpPost]
             public void DoStuff()
+            {
+            }
+
+            [Route("post-only")]
+            [HttpPost]
+            public void PostOnly()
+            {
+            }
+
+            [Route("implicit-get")]
+            public void ImplicitGet()
             {
             }
         }

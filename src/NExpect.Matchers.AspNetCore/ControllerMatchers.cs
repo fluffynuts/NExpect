@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
+using Imported.PeanutButter.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using NExpect.Implementations;
@@ -179,9 +180,13 @@ namespace NExpect
                             .SelectMany(a => a.HttpMethods)
                             .Distinct()
                             .ToArray();
-                        var passed = supportedMethods
-                                ?.Any(m => m.Equals(method.Method, StringComparison.OrdinalIgnoreCase))
-                            ?? false;
+                        var isImplicitHttp = method == HttpMethod.Get &&
+                            supportedMethods.None();
+                        var passed = isImplicitHttp || (
+                            supportedMethods?.Any(
+                                m => m.Equals(method.Method, StringComparison.OrdinalIgnoreCase)
+                            ) ?? false
+                        );
                         return new MatcherResult(
                             passed,
                             () => $"Expected {controllerType}.{Member} to support HttpMethod {method}"
