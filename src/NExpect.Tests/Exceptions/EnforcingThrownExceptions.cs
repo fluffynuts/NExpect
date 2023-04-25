@@ -186,7 +186,6 @@ namespace NExpect.Tests.Exceptions
             {
                 // Arrange
                 var message = "LOOKFORME could not moo";
-                var seek = "LOOKFORME";
                 
                 // Act
                 Expect(() =>
@@ -205,7 +204,6 @@ namespace NExpect.Tests.Exceptions
             {
                 // Arrange
                 var message = "LOOKFORME could not moo";
-                var seek = "LOOKFORME";
                 
                 // Act
                 Expect(() =>
