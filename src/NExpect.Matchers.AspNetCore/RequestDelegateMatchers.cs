@@ -29,11 +29,12 @@ public static class RequestDelegateMatchers
     {
         return been.AddMatcher(actual =>
         {
-            if (!actual.TryGetMetadata<List<HttpContext>>(
-                    METADATA_KEY_CALL_ARGS,
+            if (
+                !TryGetRequestDelegateCalls(
+                    actual,
                     out var args
                 )
-               )
+            )
             {
                 return InvalidSetup();
             }
@@ -48,35 +49,95 @@ public static class RequestDelegateMatchers
         });
     }
 
-    private static bool TryGetMetadata<TOut>(
+    private static bool TryGetRequestDelegateCalls(
         object host,
-        out TOut result
+        out List<HttpContext> result
     )
     {
-        // TODO: use reflection to get metadata from
+        // HACK ALERT: use reflection to get metadata from
         // the proper source in PeanutButter.Utils (dep of PB.TestUtils.AspNetCore)
-        // as metadata is stored in storage on the type
-        // in the assembly it's found in, so the `TryGetMetadata` from
-        // above will fail as that's our _own_ version of that beast.
+        // as metadata is stored in storage on the MetadataExtensions type
+        // in the assembly it's found in, so a plain `TryGetMetadata` in NExpect
+        // will fail as that's our _own_ version of that beast, brought in via
+        // Imported.PeanutButter.Utils, specifically so that NExpect doesn't have
+        // to ship with all of PB - just the bits it needs - and so NExpect doesn't
+        // have any out-of-tree deps.
         // -> if we can't get the metadata, throw a useful exception
         // encouraging the user to use PB.TestUtils.AspNetCore
-        throw new NotImplementedException();
+
+        if (TryGetMetadataMethodForDelegateCalls is null)
+        {
+            throw new Exception(
+                "Please use the RequestDelegateTestArena from PeanutButter.TestUtils.AspNetCore (3.0.122+) to support testing RequestDelegates"
+            );
+        }
+
+        var args = new object[3];
+        args[0] = host;
+        args[1] = METADATA_KEY_CALL_ARGS;
+        // ReSharper disable once PossibleNullReferenceException
+        var found = (bool) TryGetMetadataMethodForDelegateCalls
+            .Invoke(null, args);
+        result = new List<HttpContext>();
+        if (found)
+        {
+            result = (List<HttpContext>) args[2];
+        }
+
+        return found;
     }
+
+    private static MethodInfo TryGetMetadataMethodForDelegateCalls =>
+        _tryGetMetadataForDelegateCalls ??= GenerateTryGetMetadataForDelegateCalls();
+
+    private static MethodInfo GenerateTryGetMetadataForDelegateCalls()
+    {
+        return TryGetMetadataMethodGeneric?.MakeGenericMethod(
+            typeof(List<HttpContext>)
+        );
+    }
+
+    private static MethodInfo _tryGetMetadataForDelegateCalls;
+
+    private static MethodInfo TryGetMetadataMethodGeneric =>
+        _tryGetMetadataGeneric ??= FindTryGetMetadataGenericMethod();
+
+    private static MethodInfo FindTryGetMetadataGenericMethod()
+    {
+        return MetadataExtensionsType
+            ?.GetMethods()
+            .FirstOrDefault(mi =>
+                mi.IsGenericMethod &&
+                mi.Name == nameof(MetadataExtensions.TryGetMetadata)
+            );
+    }
+
+    private static MethodInfo _tryGetMetadataGeneric;
+
+    private static Type MetadataExtensionsType =>
+        _metadataExtensionsType ??= FindMetadataExtensionsType();
+
+    private static Type FindMetadataExtensionsType()
+    {
+        return PeanutButterAssembly?.GetExportedTypes()
+            .FirstOrDefault(t => t.Name.Equals(
+                nameof(MetadataExtensions),
+                StringComparison.OrdinalIgnoreCase
+            ));
+    }
+
+    private static Type _metadataExtensionsType;
 
     private static Assembly PeanutButterAssembly
         => _peanutButterAssembly ??= FindLoadedPeanutButterAssembly();
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <returns></returns>
-    public static Assembly FindLoadedPeanutButterAssembly()
+    private static Assembly FindLoadedPeanutButterAssembly()
     {
         return AppDomain.CurrentDomain.GetAssemblies()
-                .FirstOrDefault(
-                    a => a.FullName?.StartsWith(
-                        "PeanutButter.Utils,"
-                    ) ?? false
+            .FirstOrDefault(
+                a => a.FullName?.StartsWith(
+                    "PeanutButter.Utils,"
+                ) ?? false
             );
     }
 
@@ -96,8 +157,8 @@ public static class RequestDelegateMatchers
         return been.AddMatcher(actual =>
         {
             if (
-                !actual.TryGetMetadata<List<HttpContext>>(
-                    METADATA_KEY_CALL_ARGS,
+                !TryGetRequestDelegateCalls(
+                    actual,
                     out var args
                 )
             )
@@ -171,8 +232,8 @@ public static class RequestDelegateMatchers
         return with.AddMatcher(actual =>
         {
             if (
-                !actual.TryGetMetadata<List<HttpContext>>(
-                    METADATA_KEY_CALL_ARGS,
+                !TryGetRequestDelegateCalls(
+                    actual,
                     out var args
                 )
             )

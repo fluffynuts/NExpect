@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using NUnit.Framework;
-using NExpect;
+using NExpect.Exceptions;
 using PeanutButter.TestUtils.AspNetCore.Utils;
 using static NExpect.Expectations;
-using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Matchers.AspNet.Tests
 {
@@ -12,27 +11,69 @@ namespace NExpect.Matchers.AspNet.Tests
     public class RequestDelegateMatchersTests
     {
         [Test]
-        public void NAME()
-        {
-            // Arrange
-            var (_, _) = RequestDelegateTestArenaBuilder.BuildDefault();
-            var asm = RequestDelegateMatchers.FindLoadedPeanutButterAssembly();
-            var foo = 1;
-            // Act
-            // Assert
-        }
-
-        [Test]
         public async Task ShouldVerifyDelegateHasBeenCalled()
         {
             // Arrange
             var (ctx, next) = RequestDelegateTestArenaBuilder.BuildDefault();
-            var good = new GoodMiddleware();
+            var middleware = new GoodMiddleware();
             // Act
-            await good.InvokeAsync(ctx, next);
+            await middleware.InvokeAsync(ctx, next);
             // Assert
-            Expect(next)
-                .To.Have.Been.Called();
+            Assert.That(() =>
+            {
+                Expect(next)
+                    .To.Have.Been.Called();
+            }, Throws.Nothing);
+        }
+
+        [Test]
+        public async Task ShouldVerifyWhenDelegateNotCalled()
+        {
+            // Arrange
+            var (ctx, next) = RequestDelegateTestArenaBuilder.BuildDefault();
+            var middleware = new BadMiddleware();
+            // Act
+            await middleware.InvokeAsync(ctx, next);
+            // Assert
+            Assert.That(() =>
+            {
+                Expect(next)
+                    .Not.To.Have.Been.Called();
+            }, Throws.Nothing);
+        }
+
+        [Test]
+        public async Task ShouldVerifyWhenDelegateCalledWithContext()
+        {
+            // Arrange
+            var (ctx, next) = RequestDelegateTestArenaBuilder.BuildDefault();
+            var middleware = new GoodMiddleware();
+            // Act
+            await middleware.InvokeAsync(ctx, next);
+            // Assert
+            Assert.That(() =>
+            {
+                Expect(next)
+                    .To.Have.Been.Called(1).Time()
+                    .With.Context(ctx);
+            }, Throws.Nothing);
+        }
+
+        [Test]
+        public async Task ShouldVerifyWhenDelegateCalledWithoutContext()
+        {
+            // Arrange
+            var (ctx, next) = RequestDelegateTestArenaBuilder.BuildDefault();
+            var middleware = new BadMiddleware();
+            // Act
+            await middleware.InvokeAsync(ctx, next);
+            // Assert
+            Assert.That(() =>
+            {
+                Expect(next)
+                    .To.Have.Been.Called(1).Time()
+                    .With.Context(ctx);
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
         }
 
         public class GoodMiddleware : IMiddleware

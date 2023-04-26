@@ -16,7 +16,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.9" />
-    <PackageReference Include="PeanutButter.RandomGenerators" Version="3.0.121" />
+    <PackageReference Include="PeanutButter.RandomGenerators" Version="3.0.122" />
     <PackageReference Include="Quackers.TestLogger" Version="1.0.11" />
   </ItemGroup>
   
