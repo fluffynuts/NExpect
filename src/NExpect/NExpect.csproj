@@ -9,7 +9,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
-    <PackageVersion>2.0.24</PackageVersion>
+    <PackageVersion>2.0.25</PackageVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
@@ -61,7 +61,6 @@
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\RandomNumber.cs" Link="Imported\RandomNumber.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Stringifier.cs" Link="Imported\Stringifier.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\TypeExtensions.cs" Link="Imported\TypeExtensions.cs"/>
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Types.cs" Link="Imported\Types.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\CannotZipNullException.cs" Link="Imported\CannotZipNullException.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\UnevenZipException.cs" Link="Imported\UnevenZipException.cs"/>
   </ItemGroup>
