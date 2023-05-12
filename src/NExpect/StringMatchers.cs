@@ -9,6 +9,7 @@ using NExpect.MatcherLogic;
 using Imported.PeanutButter.Utils;
 using NExpect.Implementations.Strings;
 using static NExpect.Implementations.MessageHelpers;
+using static NExpect.Assertions;
 
 // ReSharper disable UnusedMethodReturnValue.Global
 // ReSharper disable PossibleMultipleEnumeration
@@ -33,7 +34,10 @@ public static class StringMatchers
         string search
     )
     {
-        return continuation.Contain(search, NULL_STRING);
+        return continuation.Contain(
+            search,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -50,7 +54,54 @@ public static class StringMatchers
         string customMessage
     )
     {
-        return continuation.Contain(search, () => customMessage);
+        return continuation.Contain(
+            search,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Tests if the value under test contains a given string. May be continued
+    /// with ".And"
+    /// </summary>
+    /// <param name="continuation">Continuation to act on</param>
+    /// <param name="search">String value to search for</param>
+    /// <param name="comparison"></param>
+    /// <returns>IStringContainContinuation onto which you can chain .And</returns>
+    public static IStringMore Contain(
+        this ICanAddMatcher<string> continuation,
+        string search,
+        StringComparison comparison
+    )
+    {
+        return continuation.Contain(
+            search,
+            comparison,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Tests if the value under test contains a given string. May be continued
+    /// with ".And"
+    /// </summary>
+    /// <param name="continuation">Continuation to act on</param>
+    /// <param name="search">String value to search for</param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessage">Custom message to include in failure messages</param>
+    /// <returns>IStringContainContinuation onto which you can chain .And</returns>
+    public static IStringMore Contain(
+        this ICanAddMatcher<string> continuation,
+        string search,
+        StringComparison comparison,
+        string customMessage
+    )
+    {
+        return continuation.Contain(
+            search,
+            comparison,
+            () => customMessage
+        );
     }
 
 
@@ -60,23 +111,52 @@ public static class StringMatchers
     /// </summary>
     /// <param name="continuation">Continuation to act on</param>
     /// <param name="search">String value to search for</param>
-    /// <param name="customMessage">Custom message to include in failure messages</param>
+    /// <param name="customMessageGenerator">Custom message to include in failure messages</param>
     /// <returns>IStringContainContinuation onto which you can chain .And</returns>
     public static IStringMore Contain(
         this ICanAddMatcher<string> continuation,
         string search,
-        Func<string> customMessage
+        Func<string> customMessageGenerator
+    )
+    {
+        return continuation.Contain(
+            search,
+            DefaultStringComparison,
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Tests if the value under test contains a given string. May be continued
+    /// with ".And"
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="search"></param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IStringMore Contain(
+        this ICanAddMatcher<string> continuation,
+        string search,
+        StringComparison comparison,
+        Func<string> customMessageGenerator
     )
     {
         var result = new StringContainContinuation(continuation);
-        AddContainsMatcherTo(continuation, search, customMessage, result);
+        AddContainsMatcherTo(
+            continuation,
+            search,
+            comparison,
+            customMessageGenerator,
+            result
+        );
         return result;
     }
 
     /// <summary>
     /// Continue testing a string for another substring
     /// </summary>
-    /// <param name="continuation">Existing continuation fron a Contain()</param>
+    /// <param name="continuation">Existing continuation from a Contain()</param>
     /// <param name="search">string to search for</param>
     /// <returns>IStringContainContinuation onto which you can chain .And</returns>
     public static IStringMore And(
@@ -84,13 +164,36 @@ public static class StringMatchers
         string search
     )
     {
-        return continuation.And(search, NULL_STRING);
+        return continuation.And(
+            search,
+            DefaultStringComparison
+        );
     }
 
     /// <summary>
     /// Continue testing a string for another substring
     /// </summary>
-    /// <param name="continuation">Existing continuation fron a Contain()</param>
+    /// <param name="continuation">Existing continuation from a Contain()</param>
+    /// <param name="comparison"></param>
+    /// <param name="search">string to search for</param>
+    /// <returns>IStringContainContinuation onto which you can chain .And</returns>
+    public static IStringMore And(
+        this IStringContainContinuation continuation,
+        StringComparison comparison,
+        string search
+    )
+    {
+        return continuation.And(
+            search,
+            comparison,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Continue testing a string for another substring
+    /// </summary>
+    /// <param name="continuation">Existing continuation from a Contain()</param>
     /// <param name="search">string to search for</param>
     /// <param name="customMessage">Custom message to include in failure messages</param>
     /// <returns>IStringContainContinuation onto which you can chain .And</returns>
@@ -100,13 +203,39 @@ public static class StringMatchers
         string customMessage
     )
     {
-        return continuation.And(search, () => customMessage);
+        return continuation.And(
+            search,
+            DefaultStringComparison,
+            customMessage
+        );
     }
 
     /// <summary>
     /// Continue testing a string for another substring
     /// </summary>
-    /// <param name="continuation">Existing continuation fron a Contain()</param>
+    /// <param name="continuation">Existing continuation from a Contain()</param>
+    /// <param name="search">string to search for</param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessage">Custom message to include in failure messages</param>
+    /// <returns>IStringContainContinuation onto which you can chain .And</returns>
+    public static IStringMore And(
+        this IStringContainContinuation continuation,
+        string search,
+        StringComparison comparison,
+        string customMessage
+    )
+    {
+        return continuation.And(
+            search,
+            comparison,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Continue testing a string for another substring
+    /// </summary>
+    /// <param name="continuation">Existing continuation from a Contain()</param>
     /// <param name="search">string to search for</param>
     /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
     /// <returns>IStringContainContinuation onto which you can chain .And</returns>
@@ -116,16 +245,47 @@ public static class StringMatchers
         Func<string> customMessageGenerator
     )
     {
+        return continuation.And(
+            search,
+            DefaultStringComparison,
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Continue testing a string for another substring
+    /// </summary>
+    /// <param name="continuation">Existing continuation from a Contain()</param>
+    /// <param name="search">string to search for</param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+    /// <returns>IStringContainContinuation onto which you can chain .And</returns>
+    public static IStringMore And(
+        this IStringContainContinuation continuation,
+        string search,
+        StringComparison comparison,
+        Func<string> customMessageGenerator
+    )
+    {
         var result = new StringContainContinuation(continuation);
-        continuation.SetMetadata(SEARCH_OFFSET, 0); // And will reset the offset -- it's not ordered
-        AddContainsMatcherTo(continuation, search, customMessageGenerator, result);
+        continuation.SetMetadata(
+            SEARCH_OFFSET,
+            0
+        ); // And will reset the offset -- it's not ordered
+        AddContainsMatcherTo(
+            continuation,
+            search,
+            comparison,
+            customMessageGenerator,
+            result
+        );
         return result;
     }
 
     /// <summary>
     /// Continue testing a string for another substring
     /// </summary>
-    /// <param name="continuation">Existing continuation fron a Contain()</param>
+    /// <param name="continuation">Existing continuation from a Contain()</param>
     /// <param name="search">string to search for</param>
     /// <returns>IStringContainContinuation onto which you can chain .And</returns>
     public static IStringMore And(
@@ -133,13 +293,36 @@ public static class StringMatchers
         string search
     )
     {
-        return continuation.And(search, NULL_STRING);
+        return continuation.And(
+            search,
+            DefaultStringComparison
+        );
     }
 
     /// <summary>
     /// Continue testing a string for another substring
     /// </summary>
-    /// <param name="continuation">Existing continuation fron a Contain()</param>
+    /// <param name="continuation">Existing continuation from a Contain()</param>
+    /// <param name="search">string to search for</param>
+    /// <param name="comparison"></param>
+    /// <returns>IStringContainContinuation onto which you can chain .And</returns>
+    public static IStringMore And(
+        this IStringMore continuation,
+        string search,
+        StringComparison comparison
+    )
+    {
+        return continuation.And(
+            search,
+            comparison,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Continue testing a string for another substring
+    /// </summary>
+    /// <param name="continuation">Existing continuation from a Contain()</param>
     /// <param name="search">string to search for</param>
     /// <param name="customMessage">Custom message to include in failure messages</param>
     /// <returns>IStringContainContinuation onto which you can chain .And</returns>
@@ -149,13 +332,39 @@ public static class StringMatchers
         string customMessage
     )
     {
-        return continuation.And(search, () => customMessage);
+        return continuation.And(
+            search,
+            DefaultStringComparison,
+            customMessage
+        );
     }
 
     /// <summary>
     /// Continue testing a string for another substring
     /// </summary>
-    /// <param name="continuation">Existing continuation fron a Contain()</param>
+    /// <param name="continuation">Existing continuation from a Contain()</param>
+    /// <param name="search">string to search for</param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessage">Custom message to include in failure messages</param>
+    /// <returns>IStringContainContinuation onto which you can chain .And</returns>
+    public static IStringMore And(
+        this IStringMore continuation,
+        string search,
+        StringComparison comparison,
+        string customMessage
+    )
+    {
+        return continuation.And(
+            search,
+            comparison,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Continue testing a string for another substring
+    /// </summary>
+    /// <param name="continuation">Existing continuation from a Contain()</param>
     /// <param name="search">string to search for</param>
     /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
     /// <returns>IStringContainContinuation onto which you can chain .And</returns>
@@ -165,9 +374,40 @@ public static class StringMatchers
         Func<string> customMessageGenerator
     )
     {
+        return continuation.And(
+            search,
+            DefaultStringComparison,
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Continue testing a string for another substring
+    /// </summary>
+    /// <param name="continuation">Existing continuation from a Contain()</param>
+    /// <param name="search">string to search for</param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+    /// <returns>IStringContainContinuation onto which you can chain .And</returns>
+    public static IStringMore And(
+        this IStringMore continuation,
+        string search,
+        StringComparison comparison,
+        Func<string> customMessageGenerator
+    )
+    {
         var result = new StringContainContinuation(continuation);
-        continuation.SetMetadata(SEARCH_OFFSET, 0); // And will reset the offset -- it's not ordered
-        AddContainsMatcherTo(continuation, search, customMessageGenerator, result);
+        continuation.SetMetadata(
+            SEARCH_OFFSET,
+            0
+        ); // And will reset the offset -- it's not ordered
+        AddContainsMatcherTo(
+            continuation,
+            search,
+            comparison,
+            customMessageGenerator,
+            result
+        );
         return result;
     }
 
@@ -182,7 +422,30 @@ public static class StringMatchers
         string search
     )
     {
-        return continuation.Then(search, NULL_STRING);
+        return continuation.Then(
+            search,
+            DefaultStringComparison
+        );
+    }
+
+    /// <summary>
+    /// Continue testing a string for another substring from beyond the end of the last match
+    /// </summary>
+    /// <param name="continuation">Continuation to operate on</param>
+    /// <param name="search">String to search for</param>
+    /// <param name="comparison"></param>
+    /// <returns></returns>
+    public static IStringMore Then(
+        this IStringContainContinuation continuation,
+        string search,
+        StringComparison comparison
+    )
+    {
+        return continuation.Then(
+            search,
+            comparison,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -198,7 +461,33 @@ public static class StringMatchers
         string customMessage
     )
     {
-        return continuation.Then(search, () => customMessage);
+        return continuation.Then(
+            search,
+            DefaultStringComparison,
+            customMessage
+        );
+    }
+
+    /// <summary>
+    /// Continue testing a string for another substring from beyond the end of the last match
+    /// </summary>
+    /// <param name="continuation">Continuation to operate on</param>
+    /// <param name="search">String to search for</param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IStringMore Then(
+        this IStringContainContinuation continuation,
+        string search,
+        StringComparison comparison,
+        string customMessage
+    )
+    {
+        return continuation.Then(
+            search,
+            comparison,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -214,8 +503,36 @@ public static class StringMatchers
         Func<string> customMessageGenerator
     )
     {
+        return continuation.Then(
+            search,
+            DefaultStringComparison,
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Continue testing a string for another substring from beyond the end of the last match
+    /// </summary>
+    /// <param name="continuation">Continuation to operate on</param>
+    /// <param name="search">String to search for</param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessageGenerator">Generates a custom message to include in failure messages</param>
+    /// <returns></returns>
+    public static IStringMore Then(
+        this IStringContainContinuation continuation,
+        string search,
+        StringComparison comparison,
+        Func<string> customMessageGenerator
+    )
+    {
         var result = new StringContainContinuation(continuation);
-        AddContainsMatcherTo(continuation, search, customMessageGenerator, result);
+        AddContainsMatcherTo(
+            continuation,
+            search,
+            comparison,
+            customMessageGenerator,
+            result
+        );
         return result;
     }
 
@@ -231,7 +548,31 @@ public static class StringMatchers
         string search
     )
     {
-        return more.Then(search, NULL_STRING);
+        return more.Then(
+            search,
+            DefaultStringComparison
+        );
+    }
+
+    /// <summary>
+    /// Provides the .Then(...) extension on already extended string
+    /// continuations.
+    /// </summary>
+    /// <param name="more">Continuation to operate on</param>
+    /// <param name="search">String to search for</param>
+    /// <param name="comparison"></param>
+    /// <returns></returns>
+    public static IStringMore Then(
+        this IStringMore more,
+        string search,
+        StringComparison comparison
+    )
+    {
+        return more.Then(
+            search,
+            comparison,
+            NULL_STRING
+        );
     }
 
 
@@ -249,7 +590,34 @@ public static class StringMatchers
         string customMessage
     )
     {
-        return more.Then(search, () => customMessage);
+        return more.Then(
+            search,
+            DefaultStringComparison,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Provides the .Then(...) extension on already extended string
+    /// continuations.
+    /// </summary>
+    /// <param name="more">Continuation to operate on</param>
+    /// <param name="search">String to search for</param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessage">Generates a custom message to add to failure messages</param>
+    /// <returns></returns>
+    public static IStringMore Then(
+        this IStringMore more,
+        string search,
+        StringComparison comparison,
+        string customMessage
+    )
+    {
+        return more.Then(
+            search,
+            comparison,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -266,9 +634,38 @@ public static class StringMatchers
         Func<string> customMessageGenerator
     )
     {
+        return more.Then(
+            search,
+            DefaultStringComparison,
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Provides the .Then(...) extension on already extended string
+    /// continuations.
+    /// </summary>
+    /// <param name="more">Continuation to operate on</param>
+    /// <param name="search">String to search for</param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+    /// <returns></returns>
+    public static IStringMore Then(
+        this IStringMore more,
+        string search,
+        StringComparison comparison,
+        Func<string> customMessageGenerator
+    )
+    {
         var canAddMatcher = more as ICanAddMatcher<string>;
         var result = new StringContainContinuation(canAddMatcher);
-        AddContainsMatcherTo(canAddMatcher, search, customMessageGenerator, result);
+        AddContainsMatcherTo(
+            canAddMatcher,
+            search,
+            comparison,
+            customMessageGenerator,
+            result
+        );
         return result;
     }
 
@@ -282,7 +679,29 @@ public static class StringMatchers
         string expected
     )
     {
-        return start.With(expected, NULL_STRING);
+        return start.With(
+            expected,
+            DefaultStringComparison
+        );
+    }
+
+    /// <summary>
+    /// Tests if a string starts with an expected value
+    /// </summary>
+    /// <param name="start">Continuation to operate on</param>
+    /// <param name="comparison"></param>
+    /// <param name="expected">String that is expected at the start of the Actual</param>
+    public static IStringMore With(
+        this IStringStart start,
+        string expected,
+        StringComparison comparison
+    )
+    {
+        return start.With(
+            expected,
+            comparison,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -297,7 +716,32 @@ public static class StringMatchers
         string customMessage
     )
     {
-        return start.With(expected, () => customMessage);
+        return start.With(
+            expected,
+            DefaultStringComparison,
+            customMessage
+        );
+    }
+
+    /// <summary>
+    /// Tests if a string starts with an expected value
+    /// </summary>
+    /// <param name="start">Continuation to operate on</param>
+    /// <param name="expected">String that is expected at the start of the Actual</param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessage">Custom message to add to failure messages</param>
+    public static IStringMore With(
+        this IStringStart start,
+        string expected,
+        StringComparison comparison,
+        string customMessage
+    )
+    {
+        return start.With(
+            expected,
+            comparison,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -312,10 +756,34 @@ public static class StringMatchers
         Func<string> customMessageGenerator
     )
     {
+        return start.With(
+            expected,
+            DefaultStringComparison,
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Tests if a string starts with an expected value
+    /// </summary>
+    /// <param name="start">Continuation to operate on</param>
+    /// <param name="expected">String that is expected at the start of the Actual</param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+    public static IStringMore With(
+        this IStringStart start,
+        string expected,
+        StringComparison comparison,
+        Func<string> customMessageGenerator
+    )
+    {
         start.AddMatcher(
             actual =>
             {
-                var passed = actual?.StartsWith(expected) ?? false;
+                var passed = actual?.StartsWith(
+                    expected,
+                    comparison
+                ) ?? false;
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
@@ -329,7 +797,8 @@ public static class StringMatchers
                         customMessageGenerator
                     )
                 );
-            });
+            }
+        );
         return start.More();
     }
 
@@ -343,7 +812,29 @@ public static class StringMatchers
         string expected
     )
     {
-        return end.With(expected, NULL_STRING);
+        return end.With(
+            expected,
+            DefaultStringComparison
+        );
+    }
+
+    /// <summary>
+    /// Tests if a string ends with an expected value
+    /// </summary>
+    /// <param name="end">Continuation to operate on</param>
+    /// <param name="expected">String that is expected at the end of the Actual</param>
+    /// <param name="comparison"></param>
+    public static IStringMore With(
+        this IStringEnd end,
+        string expected,
+        StringComparison comparison
+    )
+    {
+        return end.With(
+            expected,
+            comparison,
+            NULL_STRING
+        );
     }
 
 
@@ -359,7 +850,32 @@ public static class StringMatchers
         string customMessage
     )
     {
-        return end.With(expected, () => customMessage);
+        return end.With(
+            expected,
+            DefaultStringComparison,
+            customMessage
+        );
+    }
+
+    /// <summary>
+    /// Tests if a string ends with an expected value
+    /// </summary>
+    /// <param name="end">Continuation to operate on</param>
+    /// <param name="expected">String that is expected at the start of the Actual</param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessage">Custom message to add to failure messages</param>
+    public static IStringMore With(
+        this IStringEnd end,
+        string expected,
+        StringComparison comparison,
+        string customMessage
+    )
+    {
+        return end.With(
+            expected,
+            comparison,
+            () => customMessage
+        );
     }
 
 
@@ -375,10 +891,34 @@ public static class StringMatchers
         Func<string> customMessage
     )
     {
+        return end.With(
+            expected,
+            DefaultStringComparison,
+            customMessage
+        );
+    }
+
+    /// <summary>
+    /// Tests if a string ends with an expected value
+    /// </summary>
+    /// <param name="end">Continuation to operate on</param>
+    /// <param name="expected">String that is expected at the start of the Actual</param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessage">Custom message to add to failure messages</param>
+    public static IStringMore With(
+        this IStringEnd end,
+        string expected,
+        StringComparison comparison,
+        Func<string> customMessage
+    )
+    {
         end.AddMatcher(
             actual =>
             {
-                var passed = actual?.EndsWith(expected) ?? false;
+                var passed = actual?.EndsWith(
+                    expected,
+                    comparison
+                ) ?? false;
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
@@ -392,7 +932,8 @@ public static class StringMatchers
                         customMessage
                     )
                 );
-            });
+            }
+        );
         return end.More();
     }
 
@@ -407,7 +948,10 @@ public static class StringMatchers
         Regex regex
     )
     {
-        return matched.By(regex, NULL_STRING);
+        return matched.By(
+            regex,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -421,7 +965,10 @@ public static class StringMatchers
         Regex regex
     )
     {
-        return matched.Match(regex, NULL_STRING);
+        return matched.Match(
+            regex,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -437,7 +984,10 @@ public static class StringMatchers
         string customMessage
     )
     {
-        return matched.Match(regex, () => customMessage);
+        return matched.Match(
+            regex,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -453,7 +1003,11 @@ public static class StringMatchers
         Func<string> customMessageGenerator
     )
     {
-        AddRegexMatcher(matched, regex, customMessageGenerator);
+        AddRegexMatcher(
+            matched,
+            regex,
+            customMessageGenerator
+        );
         return matched.More();
     }
 
@@ -468,7 +1022,10 @@ public static class StringMatchers
         string regex
     )
     {
-        return matched.Match(regex, NULL_STRING);
+        return matched.Match(
+            regex,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -484,7 +1041,10 @@ public static class StringMatchers
         string customMessage
     )
     {
-        return matched.Match(regex, () => customMessage);
+        return matched.Match(
+            regex,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -500,7 +1060,11 @@ public static class StringMatchers
         Func<string> customMessageGenerator
     )
     {
-        AddRegexMatcher(matched, regex, customMessageGenerator);
+        AddRegexMatcher(
+            matched,
+            regex,
+            customMessageGenerator
+        );
         return matched.More();
     }
 
@@ -515,7 +1079,10 @@ public static class StringMatchers
         Regex regex
     )
     {
-        return matcher.Match(regex, NULL_STRING);
+        return matcher.Match(
+            regex,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -531,7 +1098,10 @@ public static class StringMatchers
         string customMessage
     )
     {
-        return matcher.Match(regex, () => customMessage);
+        return matcher.Match(
+            regex,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -547,7 +1117,11 @@ public static class StringMatchers
         Func<string> customMessageGenerator
     )
     {
-        AddRegexMatcher(matcher, regex, customMessageGenerator);
+        AddRegexMatcher(
+            matcher,
+            regex,
+            customMessageGenerator
+        );
         return matcher.More();
     }
 
@@ -562,7 +1136,10 @@ public static class StringMatchers
         string regex
     )
     {
-        return matcher.Match(regex, NULL_STRING);
+        return matcher.Match(
+            regex,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -578,7 +1155,10 @@ public static class StringMatchers
         string customMessage
     )
     {
-        return matcher.Match(regex, () => customMessage);
+        return matcher.Match(
+            regex,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -594,7 +1174,11 @@ public static class StringMatchers
         Func<string> customMessageGenerator
     )
     {
-        AddRegexMatcher(matcher, regex, customMessageGenerator);
+        AddRegexMatcher(
+            matcher,
+            regex,
+            customMessageGenerator
+        );
         return matcher.More();
     }
 
@@ -609,7 +1193,10 @@ public static class StringMatchers
         Regex regex
     )
     {
-        return matcher.Match(regex, NULL_STRING);
+        return matcher.Match(
+            regex,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -625,7 +1212,10 @@ public static class StringMatchers
         string customMessage
     )
     {
-        return matcher.Match(regex, () => customMessage);
+        return matcher.Match(
+            regex,
+            () => customMessage
+        );
     }
 
 
@@ -642,7 +1232,11 @@ public static class StringMatchers
         Func<string> customMessageGenerator
     )
     {
-        AddRegexMatcher(matcher, regex, customMessageGenerator);
+        AddRegexMatcher(
+            matcher,
+            regex,
+            customMessageGenerator
+        );
         return matcher.More();
     }
 
@@ -658,7 +1252,10 @@ public static class StringMatchers
         string regex
     )
     {
-        return matcher.Match(regex, NULL_STRING);
+        return matcher.Match(
+            regex,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -674,7 +1271,10 @@ public static class StringMatchers
         string customMessage
     )
     {
-        return matcher.Match(regex, () => customMessage);
+        return matcher.Match(
+            regex,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -690,7 +1290,11 @@ public static class StringMatchers
         Func<string> customMessageGenerator
     )
     {
-        AddRegexMatcher(matcher, regex, customMessageGenerator);
+        AddRegexMatcher(
+            matcher,
+            regex,
+            customMessageGenerator
+        );
         return matcher.More();
     }
 
@@ -707,7 +1311,10 @@ public static class StringMatchers
         string customMessage
     )
     {
-        return matched.By(regex, () => customMessage);
+        return matched.By(
+            regex,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -723,7 +1330,11 @@ public static class StringMatchers
         Func<string> customMessageGenerator
     )
     {
-        AddRegexMatcher(matched, regex, customMessageGenerator);
+        AddRegexMatcher(
+            matched,
+            regex,
+            customMessageGenerator
+        );
         return matched.More();
     }
 
@@ -733,7 +1344,11 @@ public static class StringMatchers
         Func<string> customMessage
     )
     {
-        AddRegexMatcher(matcher, CompileRegexFor(regex), customMessage);
+        AddRegexMatcher(
+            matcher,
+            CompileRegexFor(regex),
+            customMessage
+        );
     }
 
     private static void AddRegexMatcher(
@@ -759,7 +1374,8 @@ public static class StringMatchers
                         customMessageGenerator
                     )
                 );
-            });
+            }
+        );
     }
 
     /// <summary>
@@ -773,7 +1389,10 @@ public static class StringMatchers
         string regex
     )
     {
-        return matched.By(regex, null);
+        return matched.By(
+            regex,
+            null
+        );
     }
 
     /// <summary>
@@ -789,11 +1408,15 @@ public static class StringMatchers
         string customMessage
     )
     {
-        return matched.By(CompileRegexFor(regex), customMessage);
+        return matched.By(
+            CompileRegexFor(regex),
+            customMessage
+        );
     }
 
     private static Regex CompileRegexFor(
-        string regex)
+        string regex
+    )
     {
         try
         {
@@ -807,7 +1430,8 @@ public static class StringMatchers
                     $"Unable to compile {regex.Stringify()} as a Regex",
                     "Specifically:",
                     e.Message
-                }.JoinWith("\n"));
+                }.JoinWith("\n")
+            );
         }
     }
 
@@ -824,7 +1448,10 @@ public static class StringMatchers
         params string[] fragments
     )
     {
-        return stringIn.Order(new[] {firstFragment}.Concat(fragments), null);
+        return stringIn.Order(
+            new[] { firstFragment }.Concat(fragments),
+            null
+        );
     }
 
     /// <summary>
@@ -849,10 +1476,17 @@ public static class StringMatchers
         var canAddMatcher = stringIn as ICanAddMatcher<string>;
         fragments.Skip(1)
             .Aggregate(
-                canAddMatcher.Contain(first, customMessage),
+                canAddMatcher.Contain(
+                    first,
+                    customMessage
+                ),
                 (
                     acc,
-                    cur) => acc.Then(cur, customMessage)
+                    cur
+                ) => acc.Then(
+                    cur,
+                    customMessage
+                )
             );
         return canAddMatcher.More();
     }
@@ -863,6 +1497,7 @@ public static class StringMatchers
     private static void AddContainsMatcherTo(
         ICanAddMatcher<string> continuation,
         string search,
+        StringComparison comparison,
         Func<string> customMessage,
         StringContainContinuation next
     )
@@ -871,9 +1506,17 @@ public static class StringMatchers
             s =>
             {
                 var priorOffset = continuation.GetMetadata<int>(SEARCH_OFFSET);
-                var nextOffset = GetNextOffsetOf(search, s, priorOffset);
+                var nextOffset = GetNextOffsetOf(
+                    search,
+                    s,
+                    priorOffset,
+                    comparison
+                );
 
-                next.SetMetadata(SEARCH_OFFSET, nextOffset);
+                next.SetMetadata(
+                    SEARCH_OFFSET,
+                    nextOffset
+                );
 
                 var passed = nextOffset > -1;
                 return new MatcherResult(
@@ -896,13 +1539,15 @@ public static class StringMatchers
                         );
                     }
                 );
-            });
+            }
+        );
     }
 
     private static int GetNextOffsetOf(
         string needle,
         string haystack,
-        int priorOffset
+        int priorOffset,
+        StringComparison comparison
     )
     {
         if (priorOffset >= (haystack?.Length ?? 0) - 1)
@@ -915,7 +1560,11 @@ public static class StringMatchers
             priorOffset = 0;
         }
 
-        var nextOffset = haystack?.IndexOf(needle, priorOffset) ?? -1;
+        var nextOffset = haystack?.IndexOf(
+            needle,
+            priorOffset,
+            comparison
+        ) ?? -1;
         if (nextOffset > -1)
         {
             nextOffset += needle?.Length ?? 0;
@@ -934,18 +1583,22 @@ public static class StringMatchers
     public static IStringMore Length(
         this IHave<string> have,
         int expected,
-        Func<string> customMessageGenerator)
+        Func<string> customMessageGenerator
+    )
     {
-        have.AddMatcher(actual =>
-        {
-            var passed = actual != null && actual.Length == expected;
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () => $"Expected {actual.Stringify()} {passed.AsNot()}to have length {expected}",
-                    customMessageGenerator)
-            );
-        });
+        have.AddMatcher(
+            actual =>
+            {
+                var passed = actual != null && actual.Length == expected;
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected {actual.Stringify()} {passed.AsNot()}to have length {expected}",
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
         return have.More();
     }
 
@@ -959,9 +1612,13 @@ public static class StringMatchers
     public static IStringMore Length(
         this IHave<string> have,
         int expected,
-        string customMessage)
+        string customMessage
+    )
     {
-        return have.Length(expected, () => customMessage);
+        return have.Length(
+            expected,
+            () => customMessage
+        );
     }
 
 
@@ -973,9 +1630,13 @@ public static class StringMatchers
     /// <returns>More continuation -- continue with more assertions!</returns>
     public static IStringMore Length(
         this IHave<string> have,
-        int expected)
+        int expected
+    )
     {
-        return have.Length(expected, NULL_STRING);
+        return have.Length(
+            expected,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -984,7 +1645,8 @@ public static class StringMatchers
     /// <param name="be"></param>
     /// <returns></returns>
     public static IStringMore Alphanumeric(
-        this IBe<string> be)
+        this IBe<string> be
+    )
     {
         return be.Alphanumeric(NULL_STRING);
     }
@@ -997,7 +1659,8 @@ public static class StringMatchers
     /// <returns></returns>
     public static IStringMore Alphanumeric(
         this IBe<string> be,
-        string customMessage)
+        string customMessage
+    )
     {
         return be.Alphanumeric(() => customMessage);
     }
@@ -1010,29 +1673,34 @@ public static class StringMatchers
     /// <returns></returns>
     public static IStringMore Alphanumeric(
         this IBe<string> be,
-        Func<string> customMessageGenerator)
+        Func<string> customMessageGenerator
+    )
     {
-        be.AddMatcher(actual =>
-        {
-            var passed = actual != null &&
-                actual.All(c => c.IsNumeric() || c.IsAlpha());
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () => $"Expected {actual.Stringify()} {passed.AsNot()}to be alpha-numeric",
-                    customMessageGenerator)
-            );
-        });
+        be.AddMatcher(
+            actual =>
+            {
+                var passed = actual != null &&
+                    actual.All(c => c.IsNumeric() || c.IsAlpha());
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected {actual.Stringify()} {passed.AsNot()}to be alpha-numeric",
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
         return be.More();
     }
-        
+
     /// <summary>
     /// Asserts that a string is numeric
     /// </summary>
     /// <param name="be"></param>
     /// <returns></returns>
     public static IStringMore Numeric(
-        this IBe<string> be)
+        this IBe<string> be
+    )
     {
         return be.Numeric(NULL_STRING);
     }
@@ -1045,7 +1713,8 @@ public static class StringMatchers
     /// <returns></returns>
     public static IStringMore Numeric(
         this IBe<string> be,
-        string customMessage)
+        string customMessage
+    )
     {
         return be.Numeric(() => customMessage);
     }
@@ -1058,29 +1727,34 @@ public static class StringMatchers
     /// <returns></returns>
     public static IStringMore Numeric(
         this IBe<string> be,
-        Func<string> customMessageGenerator)
+        Func<string> customMessageGenerator
+    )
     {
-        be.AddMatcher(actual =>
-        {
-            var passed = actual != null &&
-                actual.All(c => c.IsNumeric());
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () => $"Expected {actual.Stringify()} {passed.AsNot()}to be numeric",
-                    customMessageGenerator)
-            );
-        });
+        be.AddMatcher(
+            actual =>
+            {
+                var passed = actual != null &&
+                    actual.All(c => c.IsNumeric());
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected {actual.Stringify()} {passed.AsNot()}to be numeric",
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
         return be.More();
     }
-        
+
     /// <summary>
     /// Asserts that a string is alpha
     /// </summary>
     /// <param name="be"></param>
     /// <returns></returns>
     public static IStringMore Alpha(
-        this IBe<string> be)
+        this IBe<string> be
+    )
     {
         return be.Alpha(NULL_STRING);
     }
@@ -1093,7 +1767,8 @@ public static class StringMatchers
     /// <returns></returns>
     public static IStringMore Alpha(
         this IBe<string> be,
-        string customMessage)
+        string customMessage
+    )
     {
         return be.Alpha(() => customMessage);
     }
@@ -1106,19 +1781,23 @@ public static class StringMatchers
     /// <returns></returns>
     public static IStringMore Alpha(
         this IBe<string> be,
-        Func<string> customMessageGenerator)
+        Func<string> customMessageGenerator
+    )
     {
-        be.AddMatcher(actual =>
-        {
-            var passed = actual != null &&
-                actual.All(c => c.IsAlpha());
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () => $"Expected {actual.Stringify()} {passed.AsNot()}to be alpha",
-                    customMessageGenerator)
-            );
-        });
+        be.AddMatcher(
+            actual =>
+            {
+                var passed = actual != null &&
+                    actual.All(c => c.IsAlpha());
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected {actual.Stringify()} {passed.AsNot()}to be alpha",
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
         return be.More();
     }
 }

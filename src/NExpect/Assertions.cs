@@ -14,6 +14,12 @@ namespace NExpect;
 public static class Assertions
 {
     /// <summary>
+    /// The default StringComparison to use for assertions which support
+    /// comparing strings
+    /// </summary>
+    public static StringComparison DefaultStringComparison { get; set; } = StringComparison.InvariantCulture;
+
+    /// <summary>
     /// Register your own factory for generating assertion exceptions.
     /// Threads may override this factory.
     /// </summary>

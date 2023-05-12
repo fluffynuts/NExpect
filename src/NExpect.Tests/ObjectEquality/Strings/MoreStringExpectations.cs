@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NExpect.Exceptions;
 using NUnit.Framework;
@@ -22,14 +23,46 @@ namespace NExpect.Tests.ObjectEquality.Strings
             var actual = $"{start}{middle}{end}";
             // Pre-Assert
             // Act
-            Assert.That(() =>
-            {
-                Expect(actual)
-                    .To.Start.With(start)
-                    .And.To.Contain(middle)
-                    .And.To.End.With(end);
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(actual)
+                        .To.Start.With(start)
+                        .And.To.Contain(middle)
+                        .And.To.End.With(end);
+                },
+                Throws.Nothing
+            );
             // Assert
+        }
+
+        [TestFixture]
+        public class WhenProvidedStringComparison
+        {
+            [Test]
+            public void PositiveAssertion_WhenShouldPass_ShouldNotThrow()
+            {
+                // Arrange
+                var start = GetRandomString(2);
+                var middle = GetRandomString();
+                var end = GetRandomString(2);
+                var afterStart = GetRandomString();
+                var actual = $"{start}{afterStart}{middle}{end}";
+                // Pre-Assert
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(actual)
+                            .To.Start.With(start.ToUpper(), StringComparison.OrdinalIgnoreCase)
+                            .Then(afterStart.ToUpper(), StringComparison.OrdinalIgnoreCase)
+                            .And.To.Contain(middle.ToRandomCase(), StringComparison.OrdinalIgnoreCase)
+                            .And.To.End.With(end.ToRandomCase(), StringComparison.OrdinalIgnoreCase);
+                    },
+                    Throws.Nothing
+                );
+                // Assert
+            }
         }
 
         [Test]
@@ -38,14 +71,17 @@ namespace NExpect.Tests.ObjectEquality.Strings
             // Arrange
             var str = "hello, world!";
             // Act
-            Assert.That(() =>
-            {
-                Expect(str)
-                    .To.Contain("hello")
-                    .And.Not.To.Contain("submarine")
-                    .And.Not.To.Contain("yellow")
-                    .And.To.Contain("world");
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(str)
+                        .To.Contain("hello")
+                        .And.Not.To.Contain("submarine")
+                        .And.Not.To.Contain("yellow")
+                        .And.To.Contain("world");
+                },
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -59,12 +95,15 @@ namespace NExpect.Tests.ObjectEquality.Strings
             var actual = $"{start}{middle}{end}";
             // Pre-Assert
             // Act
-            Assert.That(() =>
-            {
-                Expect(actual)
-                    .To.End.With(end)
-                    .And.To.Start.With(start);
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(actual)
+                        .To.End.With(end)
+                        .And.To.Start.With(start);
+                },
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -78,13 +117,16 @@ namespace NExpect.Tests.ObjectEquality.Strings
             var actual = $"{start}{middle}{end}";
             // Pre-Assert
             // Act
-            Assert.That(() =>
-            {
-                Expect(actual)
-                    .Not.To.Start.With(start)
-                    .And.To.Contain(middle)
-                    .And.To.End.With(end);
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            Assert.That(
+                () =>
+                {
+                    Expect(actual)
+                        .Not.To.Start.With(start)
+                        .And.To.Contain(middle)
+                        .And.To.End.With(end);
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
             // Assert
         }
 
@@ -98,13 +140,16 @@ namespace NExpect.Tests.ObjectEquality.Strings
             var actual = $"{start}{middle}{end}";
             // Pre-Assert
             // Act
-            Assert.That(() =>
-            {
-                Expect(actual)
-                    .To.Start.With(start)
-                    .And.Not.To.Contain(middle)
-                    .And.To.End.With(end);
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            Assert.That(
+                () =>
+                {
+                    Expect(actual)
+                        .To.Start.With(start)
+                        .And.Not.To.Contain(middle)
+                        .And.To.End.With(end);
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
             // Assert
         }
 
@@ -118,13 +163,16 @@ namespace NExpect.Tests.ObjectEquality.Strings
             var actual = $"{start}{middle}{end}";
             // Pre-Assert
             // Act
-            Assert.That(() =>
-            {
-                Expect(actual)
-                    .To.Start.With(start)
-                    .And.To.Contain(middle)
-                    .And.Not.To.End.With(end);
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            Assert.That(
+                () =>
+                {
+                    Expect(actual)
+                        .To.Start.With(start)
+                        .And.To.Contain(middle)
+                        .And.Not.To.End.With(end);
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
             // Assert
         }
 
@@ -138,13 +186,16 @@ namespace NExpect.Tests.ObjectEquality.Strings
             var actual = $"{start}{middle}{end}";
             // Pre-Assert
             // Act
-            Assert.That(() =>
-            {
-                Expect(actual)
-                    .To.Start.With(start)
-                    .And.Contain(middle)
-                    .And.End.With(end);
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(actual)
+                        .To.Start.With(start)
+                        .And.Contain(middle)
+                        .And.End.With(end);
+                },
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -158,13 +209,16 @@ namespace NExpect.Tests.ObjectEquality.Strings
             var actual = $"{start}{middle}{end}";
             // Pre-Assert
             // Act
-            Assert.That(() =>
-            {
-                Expect(actual)
-                    .To.End.With(end)
-                    .And.Contain(middle)
-                    .And.Start.With(start);
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(actual)
+                        .To.End.With(end)
+                        .And.Contain(middle)
+                        .And.Start.With(start);
+                },
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -178,13 +232,16 @@ namespace NExpect.Tests.ObjectEquality.Strings
             var actual = $"{start}{middle}{end}";
             // Pre-Assert
             // Act
-            Assert.That(() =>
-            {
-                Expect(actual)
-                    .To.Start.With(end)
-                    .And.Contain(middle)
-                    .And.End.With(start);
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            Assert.That(
+                () =>
+                {
+                    Expect(actual)
+                        .To.Start.With(end)
+                        .And.Contain(middle)
+                        .And.End.With(start);
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
             // Assert
         }
 
@@ -198,13 +255,16 @@ namespace NExpect.Tests.ObjectEquality.Strings
             var actual = $"{start}{middle}{end}";
             // Pre-Assert
             // Act
-            Assert.That(() =>
-            {
-                Expect(actual)
-                    .To.End.With(start)
-                    .And.Contain(middle)
-                    .And.Start.With(end);
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            Assert.That(
+                () =>
+                {
+                    Expect(actual)
+                        .To.End.With(start)
+                        .And.Contain(middle)
+                        .And.Start.With(end);
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
             // Assert
         }
 
@@ -218,13 +278,16 @@ namespace NExpect.Tests.ObjectEquality.Strings
             var actual = $"{start}{middle}{end}";
             // Pre-Assert
             // Act
-            Assert.That(() =>
-            {
-                Expect(actual)
-                    .To.Start.With(start)
-                    .And.Contain(middle)
-                    .And.Not.End.With(start);
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(actual)
+                        .To.Start.With(start)
+                        .And.Contain(middle)
+                        .And.Not.End.With(start);
+                },
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -238,13 +301,16 @@ namespace NExpect.Tests.ObjectEquality.Strings
             var actual = $"{start}{middle}{end}";
             // Pre-Assert
             // Act
-            Assert.That(() =>
-            {
-                Expect(actual)
-                    .To.Start.With(start)
-                    .And.Contain(middle)
-                    .And.Not.End.With(end);
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            Assert.That(
+                () =>
+                {
+                    Expect(actual)
+                        .To.Start.With(start)
+                        .And.Contain(middle)
+                        .And.Not.End.With(end);
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
             // Assert
         }
 
@@ -258,13 +324,16 @@ namespace NExpect.Tests.ObjectEquality.Strings
             var actual = $"{start}{middle}{end}";
             // Pre-Assert
             // Act
-            Assert.That(() =>
-            {
-                Expect(actual)
-                    .To.Start.With(start)
-                    .And.Contain(middle)
-                    .And.End.With(end);
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(actual)
+                        .To.Start.With(start)
+                        .And.Contain(middle)
+                        .And.End.With(end);
+                },
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -275,13 +344,17 @@ namespace NExpect.Tests.ObjectEquality.Strings
             public void PositiveAssertion_WithPass()
             {
                 // Arrange
-                var s = GetRandomString(5, 10);
+                var s = GetRandomString(
+                    5,
+                    10
+                );
                 var expected = s.Length;
                 // Pre-assert
                 // Act
                 Assert.That(
                     () => Expect(s).To.Have.Length(expected),
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -293,10 +366,12 @@ namespace NExpect.Tests.ObjectEquality.Strings
                 var test = GetRandom<int>(i => i != s.Length);
                 // Pre-assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(s).To.Have.Length(test);
-                    }, Throws.Exception
+                    },
+                    Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
                         .With.Message.EqualTo($"Expected \"{s}\" to have length {test}")
                 );
@@ -311,10 +386,13 @@ namespace NExpect.Tests.ObjectEquality.Strings
                 var test = GetRandom<int>(i => i != s.Length);
                 // Pre-assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(s).Not.To.Have.Length(test);
-                    }, Throws.Nothing);
+                    },
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -326,10 +404,12 @@ namespace NExpect.Tests.ObjectEquality.Strings
                 var test = s.Length;
                 // Pre-assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(s).Not.To.Have.Length(test);
-                    }, Throws.Exception
+                    },
+                    Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
                         .With.Message.EqualTo($"Expected \"{s}\" not to have length {test}")
                 );
@@ -338,7 +418,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
         }
 
         [TestFixture]
-        public class Alphanumeric: MoreStringExpectations
+        public class Alphanumeric : MoreStringExpectations
         {
             [Test]
             public void PositiveAssertion_WithPass()
@@ -346,7 +426,10 @@ namespace NExpect.Tests.ObjectEquality.Strings
                 // Arrange
                 var alphaNumeric = GetRandomAlphaNumericString();
                 var alphaOnly = GetRandomAlphaString();
-                var numericOnly = GetRandomInt(10000, 200000).ToString();
+                var numericOnly = GetRandomInt(
+                    10000,
+                    200000
+                ).ToString();
                 // Pre-assert
                 // Act
                 Assert.That(
@@ -356,7 +439,8 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         Expect(alphaOnly).To.Be.Alphanumeric();
                         Expect(numericOnly).To.Be.Alphanumeric();
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -367,10 +451,12 @@ namespace NExpect.Tests.ObjectEquality.Strings
                 var s = GetRandomNonAlphaNumericString();
                 // Pre-assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(s).To.Be.Alphanumeric();
-                    }, Throws.Exception
+                    },
+                    Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
                         .With.Message.EqualTo($"Expected \"{s}\" to be alpha-numeric")
                 );
@@ -384,10 +470,13 @@ namespace NExpect.Tests.ObjectEquality.Strings
                 var s = GetRandomNonAlphaNumericString();
                 // Pre-assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(s).Not.To.Be.Alphanumeric();
-                    }, Throws.Nothing);
+                    },
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -398,19 +487,21 @@ namespace NExpect.Tests.ObjectEquality.Strings
                 var s = GetRandomAlphaNumericString();
                 // Pre-assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(s).Not.To.Be.Alphanumeric();
-                    }, Throws.Exception
+                    },
+                    Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
                         .With.Message.EqualTo($"Expected \"{s}\" not to be alpha-numeric")
                 );
                 // Assert
             }
         }
-        
+
         [TestFixture]
-        public class Alpha: MoreStringExpectations
+        public class Alpha : MoreStringExpectations
         {
             [Test]
             public void PositiveAssertion_WithPass()
@@ -424,7 +515,8 @@ namespace NExpect.Tests.ObjectEquality.Strings
                     {
                         Expect(alphaOnly).To.Be.Alpha();
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -435,10 +527,12 @@ namespace NExpect.Tests.ObjectEquality.Strings
                 var s = GetRandomNonAlphaNumericString();
                 // Pre-assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(s).To.Be.Alpha();
-                    }, Throws.Exception
+                    },
+                    Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
                         .With.Message.EqualTo($"Expected \"{s}\" to be alpha")
                 );
@@ -452,10 +546,13 @@ namespace NExpect.Tests.ObjectEquality.Strings
                 var s = GetRandomNonAlphaNumericString();
                 // Pre-assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(s).Not.To.Be.Alpha();
-                    }, Throws.Nothing);
+                    },
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -466,10 +563,12 @@ namespace NExpect.Tests.ObjectEquality.Strings
                 var s = GetRandomAlphaString();
                 // Pre-assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(s).Not.To.Be.Alpha();
-                    }, Throws.Exception
+                    },
+                    Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
                         .With.Message.EqualTo($"Expected \"{s}\" not to be alpha")
                 );
@@ -478,13 +577,16 @@ namespace NExpect.Tests.ObjectEquality.Strings
         }
 
         [TestFixture]
-        public class Numeric: MoreStringExpectations
+        public class Numeric : MoreStringExpectations
         {
             [Test]
             public void PositiveAssertion_WithPass()
             {
                 // Arrange
-                var numericOnly = GetRandomInt(10000, 200000).ToString();
+                var numericOnly = GetRandomInt(
+                    10000,
+                    200000
+                ).ToString();
                 // Pre-assert
                 // Act
                 Assert.That(
@@ -492,7 +594,8 @@ namespace NExpect.Tests.ObjectEquality.Strings
                     {
                         Expect(numericOnly).To.Be.Numeric();
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -504,17 +607,21 @@ namespace NExpect.Tests.ObjectEquality.Strings
                 var nonAlpha = GetRandomNonAlphaNumericString();
                 // Pre-assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(alpha).To.Be.Numeric();
-                    }, Throws.Exception
+                    },
+                    Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
                         .With.Message.EqualTo($"Expected \"{alpha}\" to be numeric")
                 );
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(nonAlpha).To.Be.Numeric();
-                    }, Throws.Exception
+                    },
+                    Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
                         .With.Message.EqualTo($"Expected \"{nonAlpha}\" to be numeric")
                 );
@@ -528,10 +635,13 @@ namespace NExpect.Tests.ObjectEquality.Strings
                 var s = GetRandomAlphaString();
                 // Pre-assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(s).Not.To.Be.Numeric();
-                    }, Throws.Nothing);
+                    },
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -539,28 +649,47 @@ namespace NExpect.Tests.ObjectEquality.Strings
             public void NegativeAssertion_WithFail()
             {
                 // Arrange
-                var s = GetRandomInt(1, 10000).ToString();
+                var s = GetRandomInt(
+                    1,
+                    10000
+                ).ToString();
                 // Pre-assert
                 // Act
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
                         Expect(s).Not.To.Be.Numeric();
-                    }, Throws.Exception
+                    },
+                    Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
                         .With.Message.EqualTo($"Expected \"{s}\" not to be numeric")
                 );
                 // Assert
             }
-
         }
 
-        private string GetRandomNonAlphaNumericString(int minChars = 0, int maxChars = 10)
+        private string GetRandomNonAlphaNumericString(
+            int minChars = 0,
+            int maxChars = 10
+        )
         {
-            return Range(0, GetRandomInt(1, 10))
-                .Select(i => 
-                    GetRandom(
-                        c => (c < 'A' || c > 'z') && (!"01234567890".Contains(c)), 
-                        () => (char)GetRandomInt(32, 255)))
+            return Range(
+                    0,
+                    GetRandomInt(
+                        1,
+                        10
+                    )
+                )
+                .Select(
+                    i =>
+                        GetRandom(
+                            c => (c < 'A' || c > 'z') && (!"01234567890".Contains(c)),
+                            () => (char) GetRandomInt(
+                                32,
+                                255
+                            )
+                        )
+                )
                 .JoinWith("");
         }
     }

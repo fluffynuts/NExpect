@@ -23,6 +23,25 @@ namespace NExpect.Tests.Exceptions
             // Assert
         }
 
+        [TestFixture]
+        public class WhenStringComparisonSupplied
+        {
+            [Test]
+            public void ShouldNotThrowWhenMessageContainsOneExpectedFragment()
+            {
+                // Arrange
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(() =>
+                            throw new ArgumentException("foo")
+                        ).To.Throw<ArgumentException>()
+                        .With.Message.Containing("FOO", StringComparison.OrdinalIgnoreCase);
+                }, Throws.Nothing);
+                // Assert
+            }
+        }
+
         [Test]
         public void ShouldNotThrowWhenMessageContainsTwoExpectedFragments()
         {
@@ -47,10 +66,7 @@ namespace NExpect.Tests.Exceptions
             var fieldName = GetRandomString(10);
             Assert.That(() =>
             {
-                Expect(() =>
-                    {
-                        throw new ArgumentException("NO", fieldName);
-                    })
+                Expect(() => throw new ArgumentException("NO", fieldName))
                     .To.Throw<ArgumentException>()
                     .With.Message.Containing(fieldName)
                     .And.Not.Containing("{")

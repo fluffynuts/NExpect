@@ -8,6 +8,7 @@ using NExpect.Helpers;
 using NExpect.Implementations.Exceptions;
 using NExpect.Implementations.Strings;
 using static NExpect.Implementations.MessageHelpers;
+using static NExpect.Assertions;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable UnusedMethodReturnValue.Global
@@ -81,11 +82,13 @@ public static class ExceptionMatchers
                             () => $"Exception thrown:\n{ex.Message}\n{ex.StackTrace}",
                             customMessageGenerator
                         ),
-                        ex);
+                        ex
+                    );
                 }
 
                 return result;
-            });
+            }
+        );
         return continuation;
     }
 
@@ -143,28 +146,30 @@ public static class ExceptionMatchers
     {
         var result = new ThrowAndContinuation<T>();
         result.SetParent(continuation as IExpectationContext<T>);
-        continuation.AddMatcher(actual =>
-        {
-            if (actual is null)
+        continuation.AddMatcher(
+            actual =>
             {
-                return new EnforcedMatcherResult(
-                    false,
+                if (actual is null)
+                {
+                    return new EnforcedMatcherResult(
+                        false,
+                        FinalMessageFor(
+                            () => "Actual exception is null",
+                            customMessageGenerator
+                        )
+                    );
+                }
+
+                var passed = actual.Message == expected;
+                return new MatcherResult(
+                    passed,
                     FinalMessageFor(
-                        () => "Actual exception is null",
+                        () => $"Expected exception message '{expected}', but received '{actual.Message}'",
                         customMessageGenerator
                     )
                 );
             }
-
-            var passed = actual.Message == expected;
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () => $"Expected exception message '{expected}', but received '{actual.Message}'",
-                    customMessageGenerator
-                )
-            );
-        });
+        );
         return result;
     }
 
@@ -179,7 +184,10 @@ public static class ExceptionMatchers
         Type expected
     ) where T : Exception
     {
-        return continuation.Type(expected, null as string);
+        return continuation.Type(
+            expected,
+            null as string
+        );
     }
 
     /// <summary>
@@ -195,7 +203,10 @@ public static class ExceptionMatchers
         string customMessage
     ) where T : Exception
     {
-        return continuation.Type(expected, () => customMessage);
+        return continuation.Type(
+            expected,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -213,17 +224,20 @@ public static class ExceptionMatchers
     {
         var result = new ThrowAndContinuation<T>();
         result.SetParent(continuation as IExpectationContext<T>);
-        continuation.AddMatcher(actual =>
-        {
-            result.Exception = actual;
-            var passed = actual.GetType() == expected;
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () => $"Expected to throw an exception of type {expected} but received {actual}",
-                    customMessageGenerator)
-            );
-        });
+        continuation.AddMatcher(
+            actual =>
+            {
+                result.Exception = actual;
+                var passed = actual.GetType() == expected;
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected to throw an exception of type {expected} but received {actual}",
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
         return result;
     }
 
@@ -248,7 +262,8 @@ public static class ExceptionMatchers
         {
             // TODO: can we kinda-duck this to work on user-generated implementations of IThrowContinuation<T>? And do we care to?
             throw new ArgumentException(
-                "With should operate on a ThrowContinuation<T> or at least something with an Exception property that is an Exception.");
+                "With should operate on a ThrowContinuation<T> or at least something with an Exception property that is an Exception."
+            );
         }
 
         var memoized = FuncFactory.Memoize(() => fetcher(actual));
@@ -257,7 +272,7 @@ public static class ExceptionMatchers
             memoized,
             new WrappingContinuation<T, TValue>(
                 throwContinuation,
-                c => memoized()
+                _ => memoized()
             )
         );
     }
@@ -304,17 +319,19 @@ public static class ExceptionMatchers
         string parameterName
     ) where T : ArgumentException
     {
-        continuation.AddMatcher(actual =>
-        {
-            var passed = actual.ParamName == parameterName;
-            return new MatcherResult(
-                passed,
-                () =>
-                    continuation.IsNegated() // not actually sure how we'd get here if negated & throwing
-                        ? $"Expected ArgumentException with ParameterName other than '{parameterName}', but found exactly that"
-                        : $"Expected ArgumentException with ParameterName '{parameterName}' but found '{actual.ParamName}'"
-            );
-        });
+        continuation.AddMatcher(
+            actual =>
+            {
+                var passed = actual.ParamName == parameterName;
+                return new MatcherResult(
+                    passed,
+                    () =>
+                        continuation.IsNegated() // not actually sure how we'd get here if negated & throwing
+                            ? $"Expected ArgumentException with ParameterName other than '{parameterName}', but found exactly that"
+                            : $"Expected ArgumentException with ParameterName '{parameterName}' but found '{actual.ParamName}'"
+                );
+            }
+        );
         return continuation;
     }
 
@@ -344,7 +361,8 @@ public static class ExceptionMatchers
                         FinalMessageFor(
                             () => $"Expected to throw an exception of type {expectedType.Name} but none was thrown",
                             customMessageGenerator
-                        ));
+                        )
+                    );
                 }
                 catch (Exception actual)
                 {
@@ -376,12 +394,15 @@ Stacktrace:
 Stacktrace:
 {actual.StackTrace}";
                             },
-                            customMessageGenerator));
+                            customMessageGenerator
+                        )
+                    );
                     continuation.Exception = actual as T;
                 }
 
                 return result;
-            });
+            }
+        );
         return continuation;
     }
 
@@ -393,9 +414,13 @@ Stacktrace:
     /// <returns>Another continuation so you can do .And() on it</returns>
     public static IStringPropertyContinuation Containing(
         this IExceptionPropertyContinuation<string> src,
-        string search)
+        string search
+    )
     {
-        return src.Containing(search, NULL_STRING);
+        return src.Containing(
+            search,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -408,9 +433,13 @@ Stacktrace:
     public static IStringPropertyContinuation Containing(
         this IExceptionPropertyContinuation<string> src,
         string search,
-        string customMessage)
+        string customMessage
+    )
     {
-        return src.Containing(search, () => customMessage);
+        return src.Containing(
+            search,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -423,34 +452,40 @@ Stacktrace:
     public static IStringPropertyContinuation Containing(
         this IExceptionPropertyContinuation<string> src,
         string search,
-        Func<string> customMessageGenerator)
+        Func<string> customMessageGenerator
+    )
     {
         var result = ContinuationFactory.Create<string, StringPropertyContinuation>(
             () => null,
             src as IExpectationContext<string>
         );
-        src.AddMatcher(s =>
-        {
-            result.Actual = s;
-            var nextOffset = s?.IndexOf(search) ?? -1;
-            if (nextOffset > -1)
+        src.AddMatcher(
+            s =>
             {
-                nextOffset += search?.Length ?? 0;
-            }
+                result.Actual = s;
+                var nextOffset = s?.IndexOf(search) ?? -1;
+                if (nextOffset > -1)
+                {
+                    nextOffset += search?.Length ?? 0;
+                }
 
-            result.SetMetadata(SEARCH_OFFSET, nextOffset);
+                result.SetMetadata(
+                    SEARCH_OFFSET,
+                    nextOffset
+                );
 
-            var passed = nextOffset > -1;
-            return new MatcherResult(
-                passed,
-                MessageForContainsResult(
+                var passed = nextOffset > -1;
+                return new MatcherResult(
                     passed,
-                    s,
-                    search,
-                    customMessageGenerator
-                )
-            );
-        });
+                    MessageForContainsResult(
+                        passed,
+                        s,
+                        search,
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
         return result;
     }
 
@@ -467,7 +502,10 @@ Stacktrace:
         Func<string, bool> test
     )
     {
-        return src.Matching(test, NULL_STRING);
+        return src.Matching(
+            test,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -480,9 +518,13 @@ Stacktrace:
     public static IStringPropertyContinuation Matching(
         this IExceptionPropertyContinuation<string> src,
         Func<string, bool> test,
-        string customMessage)
+        string customMessage
+    )
     {
-        return src.Matching(test, () => customMessage);
+        return src.Matching(
+            test,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -495,7 +537,8 @@ Stacktrace:
     public static IStringPropertyContinuation Matching(
         this IExceptionPropertyContinuation<string> src,
         Func<string, bool> test,
-        Func<string> customMessageGenerator)
+        Func<string> customMessageGenerator
+    )
     {
         var result = ContinuationFactory.Create<string, StringPropertyContinuation>(
             () => null,
@@ -514,7 +557,8 @@ Stacktrace:
                         customMessageGenerator
                     )
                 );
-            });
+            }
+        );
         return result;
     }
 
@@ -529,7 +573,10 @@ Stacktrace:
         Regex re
     )
     {
-        return src.Matching(re, NULL_STRING);
+        return src.Matching(
+            re,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -545,7 +592,10 @@ Stacktrace:
         string customMessage
     )
     {
-        return src.Matching(re, () => customMessage);
+        return src.Matching(
+            re,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -565,22 +615,26 @@ Stacktrace:
             () => null,
             src as IExpectationContext<string>
         );
-        src.AddMatcher(s =>
-        {
-            result.Actual = s;
-            var passed = re.IsMatch(s);
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () => $"Expected \"{s}\" {passed.AsNot()}to match regex {PrettyPrint(re)}",
-                    customMessageGenerator
-                )
-            );
-        });
+        src.AddMatcher(
+            s =>
+            {
+                result.Actual = s;
+                var passed = re.IsMatch(s);
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected \"{s}\" {passed.AsNot()}to match regex {PrettyPrint(re)}",
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
         return result;
     }
 
-    private static string PrettyPrint(Regex re)
+    private static string PrettyPrint(
+        Regex re
+    )
     {
         return $"\"{re}\" (options: ${re.Options})";
     }
@@ -596,7 +650,10 @@ Stacktrace:
         Func<string, bool> test
     )
     {
-        return src.Matching(test, NULL_STRING);
+        return src.Matching(
+            test,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -609,9 +666,13 @@ Stacktrace:
     public static IStringPropertyContinuation Matching(
         this IStringPropertyContinuation src,
         Func<string, bool> test,
-        string customMessage)
+        string customMessage
+    )
     {
-        return src.Matching(test, () => customMessage);
+        return src.Matching(
+            test,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -624,7 +685,8 @@ Stacktrace:
     public static IStringPropertyContinuation Matching(
         this IStringPropertyContinuation src,
         Func<string, bool> test,
-        Func<string> customMessageGenerator)
+        Func<string> customMessageGenerator
+    )
     {
         var result = ContinuationFactory.Create<string, StringPropertyContinuation>(
             () => null,
@@ -643,7 +705,8 @@ Stacktrace:
                         customMessageGenerator
                     )
                 );
-            });
+            }
+        );
         return result;
     }
 
@@ -658,7 +721,10 @@ Stacktrace:
         string search
     )
     {
-        return continuation.Containing(search, NULL_STRING);
+        return continuation.Containing(
+            search,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -669,7 +735,8 @@ Stacktrace:
     /// <returns></returns>
     public static IStringPropertyContinuation And(
         this IStringPropertyContinuation continuation,
-        string other)
+        string other
+    )
     {
         return continuation.Containing(other);
     }
@@ -685,7 +752,10 @@ Stacktrace:
         string other
     )
     {
-        return continuation.Then(other, null as string);
+        return continuation.Then(
+            other,
+            null as string
+        );
     }
 
     /// <summary>
@@ -698,13 +768,19 @@ Stacktrace:
     public static IStringPropertyContinuation Then(
         this IStringPropertyContinuation continuation,
         string other,
-        string customMessage)
+        string customMessage
+    )
     {
-        return continuation.Then(other, () => customMessage);
+        return continuation.Then(
+            other,
+            () => customMessage
+        );
     }
 
     /// <summary>
-    /// 
+    /// Tests if the string contains the search, using
+    /// default StringComparison (InvariantCulture, if not
+    /// overridden)
     /// </summary>
     /// <param name="continuation"></param>
     /// <param name="other"></param>
@@ -719,12 +795,37 @@ Stacktrace:
         return RunContainFor(
             continuation,
             other,
+            StringComparison.InvariantCulture,
             messageGenerator,
-            other?.GetMetadata<int>(SEARCH_OFFSET) ?? 0);
+            other?.GetMetadata<int>(SEARCH_OFFSET) ?? 0
+        );
     }
 
     /// <summary>
-    /// Used to test exception messages in the negative
+    /// Used to test exception messages in the negative,
+    /// with the provided StringComparison
+    /// </summary>
+    /// <param name="continuation">Continuation containing the exception message</param>
+    /// <param name="search">String to search for</param>
+    /// <param name="comparison"></param>
+    public static IStringPropertyContinuation Containing(
+        this IStringPropertyContinuation continuation,
+        string search,
+        StringComparison comparison
+    )
+    {
+        return continuation.Containing(
+            search,
+            comparison,
+            NULL_STRING
+        );
+    }
+
+
+    /// <summary>
+    /// Used to test exception messages in the negative, using the
+    /// default StringComparison (InvariantCulture, if not
+    /// overridden)
     /// </summary>
     /// <param name="continuation">Continuation containing the exception message</param>
     /// <param name="search">String to search for</param>
@@ -736,7 +837,59 @@ Stacktrace:
         string customMessage
     )
     {
-        return continuation.Containing(search, () => customMessage);
+        return continuation.Containing(
+            search,
+            DefaultStringComparison,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Used to test exception messages in the negative,
+    /// using the provided comparison
+    /// </summary>
+    /// <param name="continuation">Continuation containing the exception message</param>
+    /// <param name="search">String to search for</param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessage">Custom message to add to failure messages</param>
+    /// <returns>Continuation so you can perform more tests on the message</returns>
+    public static IStringPropertyContinuation Containing(
+        this IStringPropertyContinuation continuation,
+        string search,
+        StringComparison comparison,
+        string customMessage
+    )
+    {
+        return continuation.Containing(
+            search,
+            comparison,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Used to test exception messages in the negative,
+    /// using the provided comparison
+    /// </summary>
+    /// <param name="continuation">Continuation containing the exception message</param>
+    /// <param name="search">String to search for</param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+    /// <returns>Continuation so you can perform more tests on the message</returns>
+    public static IStringPropertyContinuation Containing(
+        this IStringPropertyContinuation continuation,
+        string search,
+        StringComparison comparison,
+        Func<string> customMessageGenerator
+    )
+    {
+        return RunContainFor(
+            continuation,
+            search,
+            comparison,
+            customMessageGenerator,
+            -1
+        );
     }
 
     /// <summary>
@@ -752,7 +905,13 @@ Stacktrace:
         Func<string> customMessageGenerator
     )
     {
-        return RunContainFor(continuation, search, customMessageGenerator, 0);
+        return RunContainFor(
+            continuation,
+            search,
+            DefaultStringComparison,
+            customMessageGenerator,
+            -1
+        );
     }
 
     /// <summary>
@@ -767,11 +926,14 @@ Stacktrace:
         string search
     )
     {
-        return continuation.Containing(search, null as string);
+        return continuation.Containing(
+            search,
+            null as string
+        );
     }
 
     /// <summary>
-    /// Searchs for a string within an Exception's string property
+    /// Searches for a string within an Exception's string property
     /// </summary>
     /// <param name="continuation"></param>
     /// <param name="search"></param>
@@ -783,7 +945,10 @@ Stacktrace:
         string customMessage
     )
     {
-        return continuation.Containing(search, () => customMessage);
+        return continuation.Containing(
+            search,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -799,14 +964,22 @@ Stacktrace:
         Func<string> messageGenerator
     )
     {
-        return RunContainFor(continuation, search, messageGenerator, -1);
+        return RunContainFor(
+            continuation,
+            search,
+            DefaultStringComparison,
+            messageGenerator,
+            -1
+        );
     }
 
     private static IStringPropertyContinuation RunContainFor(
         ICanAddMatcher<string> continuation,
         string search,
+        StringComparison comparison,
         Func<string> customMessageGenerator,
-        int offset)
+        int offset
+    )
     {
         var result = ContinuationFactory.Create<string, StringPropertyContinuation>(
             () => null,
@@ -821,11 +994,17 @@ Stacktrace:
                 }
 
                 result.Actual = s;
-                var foundAt = s?.IndexOf(search, StringComparison.InvariantCulture) ?? -1;
+                var foundAt = s?.IndexOf(
+                    search,
+                    comparison
+                ) ?? -1;
                 var passed = offset < 0
                     ? foundAt >= 0
                     : foundAt >= offset;
-                s?.SetMetadata(SEARCH_OFFSET, foundAt + search.Length);
+                s?.SetMetadata(
+                    SEARCH_OFFSET,
+                    foundAt + search.Length
+                );
 
                 return new MatcherResult(
                     passed,
@@ -836,7 +1015,8 @@ Stacktrace:
                         customMessageGenerator
                     )
                 );
-            });
+            }
+        );
         return result;
     }
 
@@ -851,7 +1031,10 @@ Stacktrace:
         string search
     )
     {
-        return continuation.Containing(search, NULL_STRING);
+        return continuation.Containing(
+            search,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -867,7 +1050,10 @@ Stacktrace:
         string customMessage
     )
     {
-        return continuation.Containing(search, () => customMessage);
+        return continuation.Containing(
+            search,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -901,7 +1087,8 @@ Stacktrace:
                         customMessageGenerator
                     )
                 );
-            });
+            }
+        );
         return result;
     }
 
@@ -916,7 +1103,10 @@ Stacktrace:
         Func<string, bool> test
     )
     {
-        return continuation.Matching(test, NULL_STRING);
+        return continuation.Matching(
+            test,
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -932,7 +1122,10 @@ Stacktrace:
         string customMessage
     )
     {
-        return continuation.Matching(test, () => customMessage);
+        return continuation.Matching(
+            test,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -960,7 +1153,8 @@ Stacktrace:
                         customMessageGenerator
                     )
                 );
-            });
+            }
+        );
         return continuation.More();
     }
 
@@ -975,7 +1169,10 @@ Stacktrace:
         string search
     )
     {
-        return continuation.With(search, null as string);
+        return continuation.With(
+            search,
+            null as string
+        );
     }
 
     /// <summary>
@@ -991,7 +1188,10 @@ Stacktrace:
         string customMessage
     )
     {
-        return continuation.With(search, () => customMessage);
+        return continuation.With(
+            search,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -1011,7 +1211,10 @@ Stacktrace:
             actual =>
             {
                 var passed =
-                    actual?.EndsWith(search, StringComparison.InvariantCultureIgnoreCase) ?? false;
+                    actual?.EndsWith(
+                        search,
+                        DefaultStringComparison
+                    ) ?? false;
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
@@ -1019,7 +1222,8 @@ Stacktrace:
                         messageGenerator
                     )
                 );
-            });
+            }
+        );
         return continuation.More();
     }
 
@@ -1034,7 +1238,10 @@ Stacktrace:
         string search
     )
     {
-        return continuation.With(search, null as string);
+        return continuation.With(
+            search,
+            null as string
+        );
     }
 
     /// <summary>
@@ -1050,7 +1257,10 @@ Stacktrace:
         string customMessage
     )
     {
-        return continuation.With(search, () => customMessage);
+        return continuation.With(
+            search,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -1070,7 +1280,10 @@ Stacktrace:
             actual =>
             {
                 var passed =
-                    actual?.StartsWith(search, StringComparison.InvariantCultureIgnoreCase) ?? false;
+                    actual?.StartsWith(
+                        search,
+                        DefaultStringComparison
+                    ) ?? false;
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
@@ -1078,7 +1291,8 @@ Stacktrace:
                         messageGenerator
                     )
                 );
-            });
+            }
+        );
         return continuation.More();
     }
 
