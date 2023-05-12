@@ -38,7 +38,8 @@ namespace NExpect.Tests.Exceptions
                             () =>
                             {
                                 throw new Exception(GetRandomString());
-                            })
+                            }
+                        )
                         .To.Throw();
                 }
             );
@@ -76,10 +77,12 @@ namespace NExpect.Tests.Exceptions
                     Expect(
                             () =>
                             {
-                            })
+                            }
+                        )
                         .To.Throw();
                 },
-                Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
             // Assert
         }
 
@@ -101,7 +104,8 @@ namespace NExpect.Tests.Exceptions
                                 }
 
                                 throw new Exception(GetRandomString());
-                            })
+                            }
+                        )
                         .To.Throw();
                 }
             );
@@ -126,10 +130,12 @@ namespace NExpect.Tests.Exceptions
                             () =>
                             {
                                 return "moo";
-                            })
+                            }
+                        )
                         .To.Throw();
                 },
-                Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
             // Assert
         }
 
@@ -149,10 +155,12 @@ namespace NExpect.Tests.Exceptions
                                 () =>
                                 {
                                     throw new Exception(expected);
-                                })
+                                }
+                            )
                             .To.Throw()
                             .With.Message.Containing(expected);
-                    });
+                    }
+                );
                 // Assert
             }
 
@@ -164,20 +172,26 @@ namespace NExpect.Tests.Exceptions
                 var seek = "LOOKFORME";
                 // Pre-assert
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(() => throw new Exception(message))
-                        .To.Throw<Exception>()
-                        .With.Property(e => e.Message)
-                        .Containing(seek);
-                }, Throws.Nothing);
-                Assert.That(() =>
-                {
-                    Expect(() => throw new Exception(message))
-                        .To.Throw().With.Type(typeof(Exception))
-                        .And.Property(e => e.Message)
-                        .Containing(seek);
-                }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        Expect(() => throw new Exception(message))
+                            .To.Throw<Exception>()
+                            .With.Property(e => e.Message)
+                            .Containing(seek);
+                    },
+                    Throws.Nothing
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(() => throw new Exception(message))
+                            .To.Throw().With.Type(typeof(Exception))
+                            .And.Property(e => e.Message)
+                            .Containing(seek);
+                    },
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -186,16 +200,17 @@ namespace NExpect.Tests.Exceptions
             {
                 // Arrange
                 var message = "LOOKFORME could not moo";
-                
+
                 // Act
-                Expect(() =>
-                Expect(() => throw new Exception(message))
-                    .Not.To.Throw()
-                ).To.Throw<UnmetExpectationException>()
+                Expect(
+                        () =>
+                            Expect(() => throw new Exception(message))
+                                .Not.To.Throw()
+                    ).To.Throw<UnmetExpectationException>()
                     .With.Message.Containing(message)
                     .Then("Stacktrace")
                     .Then(" at ");
-                    
+
                 // Assert
             }
 
@@ -204,16 +219,17 @@ namespace NExpect.Tests.Exceptions
             {
                 // Arrange
                 var message = "LOOKFORME could not moo";
-                
+
                 // Act
-                Expect(() =>
-                Expect(() => throw new Exception(message))
-                    .To.Throw<InvalidOperationException>()
-                ).To.Throw<UnmetExpectationException>()
+                Expect(
+                        () =>
+                            Expect(() => throw new Exception(message))
+                                .To.Throw<InvalidOperationException>()
+                    ).To.Throw<UnmetExpectationException>()
                     .With.Message.Containing(message)
                     .Then("Stacktrace")
                     .Then(" at ");
-                    
+
                 // Assert
             }
 
@@ -233,12 +249,14 @@ namespace NExpect.Tests.Exceptions
                                 () =>
                                 {
                                     throw new Exception(message);
-                                })
+                                }
+                            )
                             .To.Throw()
                             .With.Message.Containing(e1)
                             .And(e2);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -257,12 +275,14 @@ namespace NExpect.Tests.Exceptions
                                 () =>
                                 {
                                     throw new Exception(other);
-                                })
+                                }
+                            )
                             .To.Throw()
                             .With.Message.Containing(expected);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"to contain \"{expected}\""));
+                        .With.Message.Contains($"to contain \"{expected}\"")
+                );
                 // Assert
             }
 
@@ -283,13 +303,15 @@ namespace NExpect.Tests.Exceptions
                                 () =>
                                 {
                                     throw new Exception(message);
-                                })
+                                }
+                            )
                             .To.Throw()
                             .With.Message.Containing(e1)
                             .And(e3);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains(e3));
+                        .With.Message.Contains(e3)
+                );
                 // Assert
             }
 
@@ -310,12 +332,14 @@ namespace NExpect.Tests.Exceptions
                                 () =>
                                 {
                                     throw new Exception(message);
-                                })
+                                }
+                            )
                             .To.Throw()
                             .With.Message.Containing(e1)
                             .And.Not.Containing(e3);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -335,12 +359,14 @@ namespace NExpect.Tests.Exceptions
                                 () =>
                                 {
                                     throw new Exception(message);
-                                })
+                                }
+                            )
                             .To.Throw()
                             .With.Message.Not.Containing(e1)
                             .And(e2);
                     },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
                 // Assert
             }
         }
@@ -363,7 +389,8 @@ namespace NExpect.Tests.Exceptions
                                 () =>
                                 {
                                     throw new Exception(msg);
-                                })
+                                }
+                            )
                             .To.Throw()
                             .With.Message.Matching(s => s == msg);
                     },
@@ -376,7 +403,8 @@ namespace NExpect.Tests.Exceptions
                                 () =>
                                 {
                                     throw new Exception(msg);
-                                })
+                                }
+                            )
                             .To.Throw()
                             .With.Message.Matching(re);
                     },
@@ -401,11 +429,13 @@ namespace NExpect.Tests.Exceptions
                                 () =>
                                 {
                                     throw new Exception(GetAnother(msg));
-                                })
+                                }
+                            )
                             .To.Throw()
                             .With.Message.Matching(s => s == msg);
                     },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
 
                 // Assert
             }
@@ -425,11 +455,13 @@ namespace NExpect.Tests.Exceptions
                                 () =>
                                 {
                                     throw new Exception(GetAnother(msg));
-                                })
+                                }
+                            )
                             .To.Throw()
                             .With.Message.Not.Matching(s => s == msg);
                     },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
 
                 // Assert
             }
@@ -447,14 +479,16 @@ namespace NExpect.Tests.Exceptions
                     Expect(() => throw new InvalidOperationException("moo"))
                         .To.Throw<InvalidOperationException>();
                 },
-                Throws.Nothing);
+                Throws.Nothing
+            );
             Assert.That(
                 () =>
                 {
                     Expect(() => throw new InvalidOperationException("moo"))
                         .To.Throw<InvalidOperationException>("Custom message");
                 },
-                Throws.Nothing);
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -477,13 +511,15 @@ namespace NExpect.Tests.Exceptions
                                 () =>
                                 {
                                     throw new InvalidOperationException(message);
-                                })
+                                }
+                            )
                             .To.Throw<InvalidOperationException>()
                             .With.Message.Containing(e1)
                             .And(e3);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains(e3));
+                        .With.Message.Contains(e3)
+                );
 
                 // Assert
             }
@@ -505,11 +541,13 @@ namespace NExpect.Tests.Exceptions
                                 () =>
                                 {
                                     throw new InvalidOperationException(message);
-                                })
+                                }
+                            )
                             .To.Throw<ArgumentException>(customMessage);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains(customMessage));
+                        .With.Message.Contains(customMessage)
+                );
                 // Assert
             }
 
@@ -530,12 +568,14 @@ namespace NExpect.Tests.Exceptions
                                 () =>
                                 {
                                     throw new ArgumentNullException(message);
-                                })
+                                }
+                            )
                             .To.Throw<ArgumentNullException>()
                             .With.Message.Containing(e1)
                             .And.Not.Containing(e3);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -555,12 +595,14 @@ namespace NExpect.Tests.Exceptions
                                 () =>
                                 {
                                     throw new ArgumentOutOfRangeException(message);
-                                })
+                                }
+                            )
                             .To.Throw<ArgumentOutOfRangeException>()
                             .With.Message.Not.Containing(e1)
                             .And(e2);
                     },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
                 // Assert
             }
 
@@ -599,7 +641,8 @@ namespace NExpect.Tests.Exceptions
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
                         .With.Message.Matches(
                             $"Expected to throw an exception of type (System.|){typeof(NotImplementedException).Name} but {typeof(InvalidOperationException).Name} was thrown instead"
-                        ));
+                        )
+                );
                 // Assert
             }
 
@@ -619,7 +662,8 @@ namespace NExpect.Tests.Exceptions
                             .To.Throw<AccessViolationException>()
                             .With.Message.Containing(expected);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
 
                 // Assert
             }
@@ -641,7 +685,9 @@ namespace NExpect.Tests.Exceptions
                             .To.Throw()
                             .With.Type(typeof(LocalException))
                             .And.Message.Equal.To(message);
-                    }, Throws.Nothing);
+                    },
+                    Throws.Nothing
+                );
                 Assert.That(
                     () =>
                     {
@@ -650,7 +696,9 @@ namespace NExpect.Tests.Exceptions
                             .To.Throw()
                             .With.Type(typeof(LocalException))
                             .And.Property(e => (e as LocalException).MyMessage == message);
-                    }, Throws.Nothing);
+                    },
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -667,7 +715,9 @@ namespace NExpect.Tests.Exceptions
                             .To.Throw()
                             .With.Type(typeof(LocalException))
                             .And.Message.Equal.To(message);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
                 // Assert
             }
 
@@ -680,13 +730,17 @@ namespace NExpect.Tests.Exceptions
                     () =>
                     {
                         var message = GetRandomString();
-                        Expect(() =>
-                            {
-                            })
+                        Expect(
+                                () =>
+                                {
+                                }
+                            )
                             .To.Throw()
                             .With.Type(typeof(LocalException))
                             .And.Message.Equal.To(message);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
                 // Assert
             }
 
@@ -694,7 +748,9 @@ namespace NExpect.Tests.Exceptions
             {
                 public string MyMessage { get; }
 
-                public LocalException(string message) : base(message)
+                public LocalException(
+                    string message
+                ) : base(message)
                 {
                     MyMessage = message;
                 }
@@ -720,7 +776,8 @@ namespace NExpect.Tests.Exceptions
                             .To.Throw<AccessViolationException>()
                             .With.Message.Equal.To(expected);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 // alt. syntax - for the lazy! (like me)
                 Assert.That(
                     () =>
@@ -729,7 +786,8 @@ namespace NExpect.Tests.Exceptions
                             .To.Throw<AccessViolationException>()
                             .With.Message(expected);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
 
                 // Assert
             }
@@ -751,7 +809,8 @@ namespace NExpect.Tests.Exceptions
                             .With.Message.Equal.To(expected);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected\n\"{unexpected}\"\nto equal\n\"{expected}\""));
+                        .With.Message.Contains($"Expected\n\"{unexpected}\"\nto equal\n\"{expected}\"")
+                );
 
                 // Assert
             }
@@ -778,7 +837,8 @@ namespace NExpect.Tests.Exceptions
                             .With.Property(ex => ex.ParamName)
                             .Equal.To(expected);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
 
                 // Assert
             }
@@ -800,7 +860,8 @@ namespace NExpect.Tests.Exceptions
                             .With.Property(ex => ex.ParamName)
                             .Not.Equal.To(GetAnother(expected));
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
 
                 // Assert
             }
@@ -824,7 +885,8 @@ namespace NExpect.Tests.Exceptions
                             .Equal.To(expected);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected\n\"{unexpected}\"\nto equal\n\"{expected}\""));
+                        .With.Message.Contains($"Expected\n\"{unexpected}\"\nto equal\n\"{expected}\"")
+                );
 
                 // Assert
             }
@@ -833,8 +895,14 @@ namespace NExpect.Tests.Exceptions
             public void ShouldNotThrowWhenExtractedPropertyContainsExpectedSubstring()
             {
                 // Arrange
-                var expected = GetRandomString(8, 8);
-                var expectedSubstring = expected.Substring(2, 4);
+                var expected = GetRandomString(
+                    8,
+                    8
+                );
+                var expectedSubstring = expected.Substring(
+                    2,
+                    4
+                );
 
                 // Pre-Assert
 
@@ -847,7 +915,8 @@ namespace NExpect.Tests.Exceptions
                             .With.Property(ex => ex.ParamName)
                             .Containing(expectedSubstring);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
 
                 // Assert
             }
@@ -856,9 +925,18 @@ namespace NExpect.Tests.Exceptions
             public void ShouldNotThrowWhenExtractedPropertyContainsExpectedSubstrings()
             {
                 // Arrange
-                var expected = GetRandomString(10, 20);
-                var expectedSubstring = expected.Substring(2, 4);
-                var next = expected.Substring(6, 4);
+                var expected = GetRandomString(
+                    10,
+                    20
+                );
+                var expectedSubstring = expected.Substring(
+                    2,
+                    4
+                );
+                var next = expected.Substring(
+                    6,
+                    4
+                );
 
                 // Pre-Assert
 
@@ -872,7 +950,8 @@ namespace NExpect.Tests.Exceptions
                             .Containing(expectedSubstring)
                             .Then(next);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
 
                 // Assert
             }
@@ -884,7 +963,10 @@ namespace NExpect.Tests.Exceptions
                 public void HappyPath()
                 {
                     // Arrange
-                    var message = GetRandomString(10, 20);
+                    var message = GetRandomString(
+                        10,
+                        20
+                    );
                     var search = message.Substring(10);
                     // Pre-assert
                     // Act
@@ -895,7 +977,8 @@ namespace NExpect.Tests.Exceptions
                                 .To.Throw<InvalidOperationException>()
                                 .With.Message.Ending.With(search);
                         },
-                        Throws.Nothing);
+                        Throws.Nothing
+                    );
                     // Assert
                 }
 
@@ -903,7 +986,10 @@ namespace NExpect.Tests.Exceptions
                 public void SadPath()
                 {
                     // Arrange
-                    var message = GetRandomString(10, 20);
+                    var message = GetRandomString(
+                        10,
+                        20
+                    );
                     var search = GetAnother(message.Substring(10));
                     // Pre-assert
                     // Act
@@ -917,7 +1003,8 @@ namespace NExpect.Tests.Exceptions
                         Throws.Exception.InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains(
                                 $"\"{message}\" to end with \"{search}\""
-                            ));
+                            )
+                    );
                     // Assert
                 }
 
@@ -925,7 +1012,10 @@ namespace NExpect.Tests.Exceptions
                 public void Negated_HappyPath()
                 {
                     // Arrange
-                    var message = GetRandomString(10, 20);
+                    var message = GetRandomString(
+                        10,
+                        20
+                    );
                     var search = GetAnother(message.Substring(10));
                     // Pre-assert
                     // Act
@@ -936,7 +1026,8 @@ namespace NExpect.Tests.Exceptions
                                 .To.Throw<InvalidOperationException>()
                                 .With.Message.Not.Ending.With(search);
                         },
-                        Throws.Nothing);
+                        Throws.Nothing
+                    );
                     // Assert
                 }
             }
@@ -948,8 +1039,18 @@ namespace NExpect.Tests.Exceptions
                 public void HappyPath()
                 {
                     // Arrange
-                    var message = GetRandomString(10, 20);
-                    var search = message.Substring(0, 5);
+                    var message = GetRandomString(
+                        10,
+                        20
+                    );
+                    var search = message.Substring(
+                        0,
+                        5
+                    );
+                    var next = message.Substring(
+                        5,
+                        5
+                    );
                     // Pre-assert
                     // Act
                     Assert.That(
@@ -957,9 +1058,47 @@ namespace NExpect.Tests.Exceptions
                         {
                             Expect(() => throw new OverflowException(message))
                                 .To.Throw<OverflowException>()
-                                .With.Message.Starting.With(search);
+                                .With.Message.Starting.With(search)
+                                .Then(next);
                         },
-                        Throws.Nothing);
+                        Throws.Nothing
+                    );
+                    // Assert
+                }
+
+                [Test]
+                public void HappyPathWithComparer()
+                {
+                    // Arrange
+                    var message = GetRandomString(
+                        10,
+                        20
+                    );
+                    var search = message.Substring(
+                        0,
+                        5
+                    );
+                    var next = message.Substring(
+                        5,
+                        5
+                    );
+                    // Pre-assert
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(() => throw new OverflowException(message))
+                                .To.Throw<OverflowException>()
+                                .With.Message.Starting.With(
+                                    search.ToUpper(),
+                                    StringComparison.OrdinalIgnoreCase
+                                ).Then(
+                                    next.ToUpper(),
+                                    StringComparison.OrdinalIgnoreCase
+                                );
+                        },
+                        Throws.Nothing
+                    );
                     // Assert
                 }
 
@@ -967,8 +1106,16 @@ namespace NExpect.Tests.Exceptions
                 public void SadPath()
                 {
                     // Arrange
-                    var message = GetRandomString(10, 20);
-                    var search = GetAnother(message.Substring(0, 10));
+                    var message = GetRandomString(
+                        10,
+                        20
+                    );
+                    var search = GetAnother(
+                        message.Substring(
+                            0,
+                            10
+                        )
+                    );
                     // Pre-assert
                     // Act
                     Assert.That(
@@ -981,7 +1128,8 @@ namespace NExpect.Tests.Exceptions
                         Throws.Exception.InstanceOf<UnmetExpectationException>()
                             .With.Message.Contains(
                                 $"\"{message}\" to start with \"{search}\""
-                            ));
+                            )
+                    );
                     // Assert
                 }
 
@@ -989,8 +1137,16 @@ namespace NExpect.Tests.Exceptions
                 public void Negated_HappyPath()
                 {
                     // Arrange
-                    var message = GetRandomString(10, 20);
-                    var search = GetAnother(message.Substring(0, 10));
+                    var message = GetRandomString(
+                        10,
+                        20
+                    );
+                    var search = GetAnother(
+                        message.Substring(
+                            0,
+                            10
+                        )
+                    );
                     // Pre-assert
                     // Act
                     Assert.That(
@@ -1000,7 +1156,8 @@ namespace NExpect.Tests.Exceptions
                                 .To.Throw<InvalidOperationException>()
                                 .With.Message.Not.Starting.With(search);
                         },
-                        Throws.Nothing);
+                        Throws.Nothing
+                    );
                     // Assert
                 }
             }
@@ -1012,7 +1169,10 @@ namespace NExpect.Tests.Exceptions
                 // Arrange
                 var expected = GetRandomString();
                 var unexpected = GetAnother(expected);
-                var unexpectedSubstring = GetRandomString(4, 4);
+                var unexpectedSubstring = GetRandomString(
+                    4,
+                    4
+                );
 
                 // Pre-Assert
 
@@ -1026,7 +1186,8 @@ namespace NExpect.Tests.Exceptions
                             .Containing(unexpectedSubstring);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected \"{unexpected}\" to contain \"{unexpectedSubstring}\""));
+                        .With.Message.Contains($"Expected \"{unexpected}\" to contain \"{unexpectedSubstring}\"")
+                );
 
                 // Assert
             }
@@ -1035,7 +1196,9 @@ namespace NExpect.Tests.Exceptions
             {
                 public IEnumerable<int> Ints { get; }
 
-                public ExceptionWithInts(IEnumerable<int> ints)
+                public ExceptionWithInts(
+                    IEnumerable<int> ints
+                )
                 {
                     Ints = ints;
                 }
@@ -1055,12 +1218,14 @@ namespace NExpect.Tests.Exceptions
                                 () =>
                                 {
                                     throw new ExceptionWithInts(new[] { 1, 2 });
-                                })
+                                }
+                            )
                             .To.Throw<ExceptionWithInts>()
                             .With.CollectionProperty(e => e.Ints)
                             .Equal.To(expected);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -1096,7 +1261,8 @@ namespace NExpect.Tests.Exceptions
                             .With.CollectionProperty(e => e.Nodes)
                             .Deep.Equal.To(test);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
             }
 
             [Test]
@@ -1126,7 +1292,8 @@ namespace NExpect.Tests.Exceptions
                             .With.CollectionProperty(e => e.Nodes)
                             .Equivalent.To(test);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
             }
 
             [Test]
@@ -1157,7 +1324,8 @@ namespace NExpect.Tests.Exceptions
                             .With.CollectionProperty(e => e.Nodes)
                             .Intersection.Equal.To(test);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
             }
         }
 
@@ -1187,7 +1355,8 @@ namespace NExpect.Tests.Exceptions
                                     .With(ex => ex.ParamName)
                                     .Equal.To(expected);
                             },
-                            Throws.Nothing);
+                            Throws.Nothing
+                        );
 
                         // Assert
                     }
@@ -1207,7 +1376,8 @@ namespace NExpect.Tests.Exceptions
                                     .Equal.To("expectedParameter");
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                .With.Message.Not.Contains("Object reference not set to an instance of an object"));
+                                .With.Message.Not.Contains("Object reference not set to an instance of an object")
+                        );
                         // Assert
                     }
 
@@ -1230,7 +1400,8 @@ namespace NExpect.Tests.Exceptions
                                     .Equal.To(expected);
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                .With.Message.Contains($"Expected\n\"{unexpected}\"\nto equal\n\"{expected}\""));
+                                .With.Message.Contains($"Expected\n\"{unexpected}\"\nto equal\n\"{expected}\"")
+                        );
 
                         // Assert
                     }
@@ -1246,7 +1417,8 @@ namespace NExpect.Tests.Exceptions
                 await Task.Run(
                     () =>
                     {
-                    });
+                    }
+                );
                 throw new InvalidOperationException("moo cows");
             }
 
@@ -1255,7 +1427,8 @@ namespace NExpect.Tests.Exceptions
                 await Task.Run(
                     () =>
                     {
-                    });
+                    }
+                );
                 throw new InvalidOperationException("moo cows");
             }
 
@@ -1272,7 +1445,8 @@ namespace NExpect.Tests.Exceptions
                             .To.Throw<InvalidOperationException>()
                             .With.Message.Containing("moo cows");
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
 
                 Assert.That(
                     () =>
@@ -1280,7 +1454,8 @@ namespace NExpect.Tests.Exceptions
                         Expect(ThrowStuffAction)
                             .To.Throw();
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -1296,14 +1471,16 @@ namespace NExpect.Tests.Exceptions
                         Expect(ThrowStuffFunc)
                             .To.Throw<InvalidOperationException>();
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 Assert.That(
                     () =>
                     {
                         Expect(ThrowStuffFunc)
                             .To.Throw();
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 // Assert
             }
         }
@@ -1324,12 +1501,15 @@ namespace NExpect.Tests.Exceptions
                         Expect(
                                 () => throw new ExceptionWithComplex(
                                     GetRandomString(1),
-                                    expected))
+                                    expected
+                                )
+                            )
                             .To.Throw<ExceptionWithComplex>()
                             .With.Property(e => e.Complex)
                             .Intersection.Equal.To(expected);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -1347,12 +1527,15 @@ namespace NExpect.Tests.Exceptions
                         Expect(
                                 () => throw new ExceptionWithComplex(
                                     GetRandomString(1),
-                                    expected))
+                                    expected
+                                )
+                            )
                             .To.Throw<ExceptionWithComplex>()
                             .With.Property(e => e.Complex)
                             .Intersection.Equal.To(unexpected);
                     },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
                 // Assert
             }
 
@@ -1370,12 +1553,15 @@ namespace NExpect.Tests.Exceptions
                         Expect(
                                 () => throw new ExceptionWithComplex(
                                     GetRandomString(1),
-                                    expected))
+                                    expected
+                                )
+                            )
                             .To.Throw<ExceptionWithComplex>()
                             .With.Property(e => e.Complex)
                             .Not.Intersection.Equal.To(unexpected);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -1392,12 +1578,15 @@ namespace NExpect.Tests.Exceptions
                         Expect(
                                 () => throw new ExceptionWithComplex(
                                     GetRandomString(1),
-                                    expected))
+                                    expected
+                                )
+                            )
                             .To.Throw<ExceptionWithComplex>()
                             .With.Property(e => e.Complex)
                             .Deep.Equal.To(expected);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -1415,12 +1604,15 @@ namespace NExpect.Tests.Exceptions
                         Expect(
                                 () => throw new ExceptionWithComplex(
                                     GetRandomString(1),
-                                    expected))
+                                    expected
+                                )
+                            )
                             .To.Throw<ExceptionWithComplex>()
                             .With.Property(e => e.Complex)
                             .Deep.Equal.To(unexpected);
                     },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
                 // Assert
             }
 
@@ -1438,12 +1630,15 @@ namespace NExpect.Tests.Exceptions
                         Expect(
                                 () => throw new ExceptionWithComplex(
                                     GetRandomString(1),
-                                    expected))
+                                    expected
+                                )
+                            )
                             .To.Throw<ExceptionWithComplex>()
                             .With.Property(e => e.Complex)
                             .Not.Deep.Equal.To(unexpected);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -1459,7 +1654,8 @@ namespace NExpect.Tests.Exceptions
 
                 public ExceptionWithComplex(
                     string message,
-                    Complex complex) : base(message)
+                    Complex complex
+                ) : base(message)
                 {
                     Complex = complex;
                 }
@@ -1475,20 +1671,35 @@ namespace NExpect.Tests.Exceptions
                 // Arrange
                 var expected = GetRandomString(4);
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(() => throw new ArgumentException("message here", expected))
-                        .To.Throw<ArgumentException>()
-                        .For(expected)
-                        .With.Message.Containing("message here");
-                }, Throws.Nothing);
-
-                Assert.That(() =>
+                Assert.That(
+                    () =>
                     {
-                        Expect(() => throw new ArgumentException("message", expected))
+                        Expect(
+                                () => throw new ArgumentException(
+                                    "message here",
+                                    expected
+                                )
+                            )
+                            .To.Throw<ArgumentException>()
+                            .For(expected)
+                            .With.Message.Containing("message here");
+                    },
+                    Throws.Nothing
+                );
+
+                Assert.That(
+                    () =>
+                    {
+                        Expect(
+                                () => throw new ArgumentException(
+                                    "message",
+                                    expected
+                                )
+                            )
                             .Not.To.Throw<ArgumentException>()
                             .For(expected);
-                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                 );
                 // Assert
             }
@@ -1499,7 +1710,9 @@ namespace NExpect.Tests.Exceptions
     {
         public SomeNode[] Nodes { get; set; }
 
-        public ExceptionWithNode(params SomeNode[] nodes)
+        public ExceptionWithNode(
+            params SomeNode[] nodes
+        )
             : base($"{nodes[0].Id} / {nodes[0].Name}")
         {
             Nodes = nodes;
@@ -1511,7 +1724,9 @@ namespace NExpect.Tests.Exceptions
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public override bool Equals(object obj)
+        public override bool Equals(
+            object obj
+        )
         {
             var other = obj as SomeNode;
             if (other == null)
@@ -1523,10 +1738,15 @@ namespace NExpect.Tests.Exceptions
                 Name == other.Name;
         }
 
-        protected bool Equals(SomeNode other)
+        protected bool Equals(
+            SomeNode other
+        )
         {
             return Id == other.Id &&
-                String.Equals(Name, other.Name);
+                String.Equals(
+                    Name,
+                    other.Name
+                );
         }
 
         public override int GetHashCode()

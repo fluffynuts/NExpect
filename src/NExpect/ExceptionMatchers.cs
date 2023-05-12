@@ -754,6 +754,26 @@ Stacktrace:
     {
         return continuation.Then(
             other,
+            DefaultStringComparison
+        );
+    }
+
+    /// <summary>
+    /// Continues to search for another string after a previous .Contains()
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="other"></param>
+    /// <param name="comparison"></param>
+    /// <returns></returns>
+    public static IStringPropertyContinuation Then(
+        this IStringPropertyContinuation continuation,
+        string other,
+        StringComparison comparison
+    )
+    {
+        return continuation.Then(
+            other,
+            comparison,
             null as string
         );
     }
@@ -773,6 +793,29 @@ Stacktrace:
     {
         return continuation.Then(
             other,
+            DefaultStringComparison,
+            customMessage
+        );
+    }
+
+    /// <summary>
+    /// Continues to search for another string after a previous .Contains()
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="other"></param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IStringPropertyContinuation Then(
+        this IStringPropertyContinuation continuation,
+        string other,
+        StringComparison comparison,
+        string customMessage
+    )
+    {
+        return continuation.Then(
+            other,
+            comparison,
             () => customMessage
         );
     }
@@ -792,10 +835,34 @@ Stacktrace:
         Func<string> messageGenerator
     )
     {
+        return continuation.Then(
+            other,
+            DefaultStringComparison,
+            messageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Tests if the string contains the search, using
+    /// default StringComparison (InvariantCulture, if not
+    /// overridden)
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="other"></param>
+    /// <param name="comparison"></param>
+    /// <param name="messageGenerator"></param>
+    /// <returns></returns>
+    public static IStringPropertyContinuation Then(
+        this IStringPropertyContinuation continuation,
+        string other,
+        StringComparison comparison,
+        Func<string> messageGenerator
+    )
+    {
         return RunContainFor(
             continuation,
             other,
-            StringComparison.InvariantCulture,
+            comparison,
             messageGenerator,
             other?.GetMetadata<int>(SEARCH_OFFSET) ?? 0
         );
@@ -1240,6 +1307,26 @@ Stacktrace:
     {
         return continuation.With(
             search,
+            DefaultStringComparison
+        );
+    }
+
+    /// <summary>
+    /// Facilitates testing an exception message to start with another substring
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="search"></param>
+    /// <param name="comparison"></param>
+    /// <returns></returns>
+    public static IStringPropertyContinuation With(
+        this IStringPropertyStartingContinuation continuation,
+        string search,
+        StringComparison comparison
+    )
+    {
+        return continuation.With(
+            search,
+            comparison,
             null as string
         );
     }
@@ -1259,6 +1346,29 @@ Stacktrace:
     {
         return continuation.With(
             search,
+            DefaultStringComparison,
+            customMessage
+        );
+    }
+
+    /// <summary>
+    /// Facilitates testing an exception message to start with another substring
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="search"></param>
+    /// <param name="comparison"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IStringPropertyContinuation With(
+        this IStringPropertyStartingContinuation continuation,
+        string search,
+        StringComparison comparison,
+        string customMessage
+    )
+    {
+        return continuation.With(
+            search,
+            comparison,
             () => customMessage
         );
     }
@@ -1276,13 +1386,35 @@ Stacktrace:
         Func<string> messageGenerator
     )
     {
+        return continuation.With(
+            search,
+            DefaultStringComparison,
+            messageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Facilitates testing an exception message to start with another substring
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="search"></param>
+    /// <param name="comparison"></param>
+    /// <param name="messageGenerator"></param>
+    /// <returns></returns>
+    public static IStringPropertyContinuation With(
+        this IStringPropertyStartingContinuation continuation,
+        string search,
+        StringComparison comparison,
+        Func<string> messageGenerator
+    )
+    {
         continuation.AddMatcher(
             actual =>
             {
                 var passed =
                     actual?.StartsWith(
                         search,
-                        DefaultStringComparison
+                        comparison
                     ) ?? false;
                 return new MatcherResult(
                     passed,
