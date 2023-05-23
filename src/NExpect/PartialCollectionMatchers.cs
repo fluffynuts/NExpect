@@ -68,7 +68,8 @@ namespace NExpect
         {
             return continuation.AddMatcher(actual =>
             {
-                var intersection = actual.Intersect(other);
+                var intersection = actual.Intersect(other).ToArray();
+                var missing = other.Except(actual).ToArray();
                 var passed = CountPassStrategies[continuation.Method](
                     intersection.Count(),
                     continuation.ExpectedCount,
@@ -88,9 +89,14 @@ in
 {
     actual.Stringify()
 }
-but found{
+but found matching:{
     (intersection.Any() 
         ? $"\n{intersection.Stringify()}" 
+        : " none")
+}
+and missing:{
+    (missing.Any()
+        ? $"\n{missing.Stringify()}"
         : " none")
 }",
                         customMessageGenerator
