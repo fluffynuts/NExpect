@@ -1,3 +1,4 @@
+using NExpect.Implementations;
 using NUnit.Framework;
 
 namespace NExpect.Tests
@@ -10,5 +11,12 @@ namespace NExpect.Tests
         {
             TestUtils.ForceMessageLineBreaks();
         }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            ExpectationTracker.AssertNoIncompleteExpectations();
+        }
     }
+
 }

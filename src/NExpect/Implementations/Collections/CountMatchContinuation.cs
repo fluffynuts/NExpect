@@ -22,6 +22,7 @@ internal class CountMatchContinuation<T>
         int expectedCount
     )
     {
+        ExpectationTracker.Forget(wrapped);
         _wrapped = wrapped;
         _method = method;
         _expectedCount = expectedCount;
@@ -29,18 +30,28 @@ internal class CountMatchContinuation<T>
     }
 
     public ICountMatchEqual<T> Equal =>
-        new CountMatchEqual<T>(
-            _wrapped,
-            _method,
-            _expectedCount
+        ForgetSelfAndReturn(
+            new CountMatchEqual<T>(
+                _wrapped,
+                _method,
+                _expectedCount
+            )
         );
 
     public ICountMatchMatched<T> Matched =>
-        new CountMatchMatched<T>(
-            _wrapped,
-            _method,
-            _expectedCount
+        ForgetSelfAndReturn(
+            new CountMatchMatched<T>(
+                _wrapped,
+                _method,
+                _expectedCount
+            )
         );
+
+    private TNext ForgetSelfAndReturn<TNext>(TNext next)
+    {
+        ExpectationTracker.Forget(this);
+        return next;
+    }
 
     public ICountMatchDeep<T> Deep =>
         CreateCountMatchDeep();
@@ -53,6 +64,7 @@ internal class CountMatchContinuation<T>
 
     private ICountMatchIntersection<T> CreateCountMatchIntersection()
     {
+        ExpectationTracker.Forget(this);
         var result = new CountMatchIntersection<T>(
             _wrapped,
             _method,
@@ -64,6 +76,7 @@ internal class CountMatchContinuation<T>
 
     private CountMatchDeep<T> CreateCountMatchDeep()
     {
+        ExpectationTracker.Forget(this);
         var result = new CountMatchDeep<T>(
             _wrapped,
             _method,
@@ -75,6 +88,7 @@ internal class CountMatchContinuation<T>
 
     private CountMatchOf<T> CreateCountMatchOf()
     {
+        ExpectationTracker.Forget(this);
         var result = new CountMatchOf<T>(
             _wrapped,
             _method,

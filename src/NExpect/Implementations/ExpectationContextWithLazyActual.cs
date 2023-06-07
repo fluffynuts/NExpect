@@ -36,6 +36,7 @@ public abstract class ExpectationContextWithLazyActual<T>
     protected TContinuation Next<TContinuation>()
         where TContinuation : IExpectationContext<T>
     {
+        ExpectationTracker.Forget(this);
         return ContinuationFactory.Create<T, TContinuation>(ActualFetcher, this);
     }
 
@@ -47,6 +48,7 @@ public abstract class ExpectationContextWithLazyActual<T>
     protected TContinuation NextNegated<TContinuation>()
         where TContinuation : IExpectationContext<T>
     {
+        ExpectationTracker.Forget(this);
         return Next<TContinuation>(Negate);
     }
 

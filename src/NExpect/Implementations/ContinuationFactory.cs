@@ -15,15 +15,17 @@ public static class ContinuationFactory
         Action<T2> afterConstruction = null
     ) where T2 : IExpectationContext<T1>
     {
+        ExpectationTracker.Forget(parent);
         var result = (T2) Activator.CreateInstance(typeof(T2), actualGenerator);
+
         result.TypedParent = parent;
         afterConstruction?.Invoke(result);
-        if (result is IResetNegation && 
+        if (result is IResetNegation &&
             result.IsNegated())
         {
             result.Negate();
         }
-            
+
         parent.CopyAllMetadataTo(result);
 
         return result;

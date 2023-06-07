@@ -199,6 +199,7 @@ public static class AddMatcherExtensions
         object continuation,
         Func<T, IMatcherResult> matcher)
     {
+        ExpectationTracker.Forget(continuation);
         System.Diagnostics.Debug.WriteLine($"Adding matcher for type {typeof(T)}");
         var asContext = continuation as IExpectationContext<T>;
         if (asContext == null)

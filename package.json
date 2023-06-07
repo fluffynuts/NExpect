@@ -9,9 +9,12 @@
         "build": "run-s \"zarro build\"",
         "build-with-msbuild": "cross-env BUILD_EXCLUDE=src/PeanutButter/**/* zarro build",
         "zarro": "cross-env DOTNET_CORE=1 BUILD_EXCLUDE=src/PeanutButter/**/* PACK_INCLUDE_CSPROJ=* PACK_EXCLUDE_CSPROJ=*Tests*,CoreConsumer,src/PeanutButter/**/* TEST_EXCLUDE=src/PeanutButter/**/* zarro",
-        "prerelease": "run-s verify-up-to-date test",
+        "prerelease": "run-s verify-up-to-date test clear-old-packages",
         "verify-up-to-date": "zarro verify-up-to-date",
-        "release": "cross-env BUILD_CONFIGURATION=BuildForRelease run-s \"zarro release\""
+        "release": "cross-env BUILD_CONFIGURATION=BuildForRelease run-s \"zarro release\"",
+        "prerelease-beta": "run-s verify-up-to-date test clear-old-packages",
+        "release-beta": "cross-env PACK_INCREMENT_VERSION=1 VERSION_INCREMENT_STRATEGY=prerelease BUILD_CONFIGURATION=BuildForRelease run-s \"zarro release\"",
+        "clear-old-packages": "rimraf packages"
     },
     "devDependencies": {
         "chalk": "^3.0.0",
@@ -21,6 +24,6 @@
         "npm-run-all": "^4.1.5",
         "simple-git": "^3.16.0",
         "yafs": "^1.23.0",
-        "zarro": "^1.122.0"
+        "zarro": "^1.126.0"
     }
 }

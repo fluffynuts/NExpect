@@ -15,7 +15,8 @@ internal class CountMatchIntersectionEqual<T>
     public CountMatchIntersectionEqual(
         ICanAddMatcher<T> continuation,
         CountMatchMethods method,
-        int compare)
+        int compare
+    )
     {
         Continuation = continuation;
         Method = method;

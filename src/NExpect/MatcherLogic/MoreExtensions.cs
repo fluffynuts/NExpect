@@ -38,9 +38,11 @@ public static class MoreExtensions
         this ICanAddMatcher<string> continuation
     )
     {
-        return ContinuationFactory.Create<string, StringMore>(
+        var result = ContinuationFactory.Create<string, StringMore>(
             continuation.GetActual, 
             continuation as IExpectationContext<string>
         );
+        ExpectationTracker.Forget(result);
+        return result;
     }
 }

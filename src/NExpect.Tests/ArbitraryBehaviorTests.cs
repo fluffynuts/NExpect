@@ -29,6 +29,7 @@ namespace NExpect.Tests
         public void CountMatchContinuation_ShouldHaveActualPropertyExposingOriginalCollection()
         {
             // Arrange
+            using var _ = ExpectationTracker.Suspend();
             var collection = GetRandomCollection<int>(2)
                 .ToArray();
             // Pre-assert
@@ -55,7 +56,8 @@ namespace NExpect.Tests
                         .To.Be.Empty(() => throw new Exception("moo"));
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contain("Unable to evaluate custom message expression"));
+                    .With.Message.Contain("Unable to evaluate custom message expression")
+            );
             // Assert
         }
 
@@ -73,7 +75,8 @@ namespace NExpect.Tests
                         .To.Throw<Exception>()
                         .With.Message.Not.Containing("beef");
                 },
-                Throws.Nothing);
+                Throws.Nothing
+            );
 
             Assert.That(
                 () =>
@@ -83,7 +86,8 @@ namespace NExpect.Tests
                         .With.Message.Not.Containing("cow");
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Match("not\\sto\\scontain\\s\"cow\""));
+                    .With.Message.Match("not\\sto\\scontain\\s\"cow\"")
+            );
 
             Assert.That(
                 () =>
@@ -93,7 +97,8 @@ namespace NExpect.Tests
                         .With.Message.Containing("beef");
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Match("to\\scontain\\s\"beef\""));
+                    .With.Message.Match("to\\scontain\\s\"beef\"")
+            );
             // Assert
         }
 
@@ -103,6 +108,7 @@ namespace NExpect.Tests
             // Arrange
             // Pre-assert
             // Act
+            using var _ = ExpectationTracker.Suspend();
             Assert.That(
                 () =>
                 {
@@ -110,7 +116,8 @@ namespace NExpect.Tests
                         .To.Equals(1);
                 },
                 Throws.Exception.InstanceOf<InvalidOperationException>()
-                    .With.Message.Contain("You probably intend to use .Equal(), not .Equals()"));
+                    .With.Message.Contain("You probably intend to use .Equal(), not .Equals()")
+            );
 
             Assert.That(
                 () =>
@@ -119,7 +126,8 @@ namespace NExpect.Tests
                         .Equals(1);
                 },
                 Throws.Exception.InstanceOf<InvalidOperationException>()
-                    .With.Message.Contain("You probably intend to use .Equal(), not .Equals()"));
+                    .With.Message.Contain("You probably intend to use .Equal(), not .Equals()")
+            );
 
             Assert.That(
                 () =>
@@ -128,7 +136,8 @@ namespace NExpect.Tests
                         .Not.To.Equals(1);
                 },
                 Throws.Exception.InstanceOf<InvalidOperationException>()
-                    .With.Message.Contain("You probably intend to use .Equal(), not .Equals()"));
+                    .With.Message.Contain("You probably intend to use .Equal(), not .Equals()")
+            );
             // Assert
         }
 
@@ -138,6 +147,7 @@ namespace NExpect.Tests
             // Arrange
             // Pre-assert
             // Act
+            using var _ = ExpectationTracker.Suspend();
             Assert.That(
                 () =>
                 {
@@ -145,7 +155,8 @@ namespace NExpect.Tests
                         .GetHashCode();
                 },
                 Throws.Exception.InstanceOf<InvalidOperationException>()
-                    .With.Message.Contain("You probably shouldn't be hashing this"));
+                    .With.Message.Contain("You probably shouldn't be hashing this")
+            );
             Assert.That(
                 () =>
                 {
@@ -153,7 +164,8 @@ namespace NExpect.Tests
                         .To.GetHashCode();
                 },
                 Throws.Exception.InstanceOf<InvalidOperationException>()
-                    .With.Message.Contain("You probably shouldn't be hashing this"));
+                    .With.Message.Contain("You probably shouldn't be hashing this")
+            );
             Assert.That(
                 () =>
                 {
@@ -161,7 +173,8 @@ namespace NExpect.Tests
                         .To.Be.GetHashCode();
                 },
                 Throws.Exception.InstanceOf<InvalidOperationException>()
-                    .With.Message.Contain("You probably shouldn't be hashing this"));
+                    .With.Message.Contain("You probably shouldn't be hashing this")
+            );
             // Assert
         }
 
@@ -179,7 +192,8 @@ namespace NExpect.Tests
                     Expect(left)
                         .To.Be.Equivalent.To(right);
                 },
-                Throws.Nothing);
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -197,7 +211,8 @@ namespace NExpect.Tests
                     Expect(left)
                         .To.Be.Deep.Equivalent.To(right);
                 },
-                Throws.Nothing);
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -215,7 +230,8 @@ namespace NExpect.Tests
                     Expect(left)
                         .Not.To.Be.Deep.Equivalent.To(right);
                 },
-                Throws.Nothing);
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -240,7 +256,8 @@ namespace NExpect.Tests
                     "\n",
                     "but got",
                     "\n",
-                    left);
+                    left
+                );
         }
 
         [Test]
@@ -252,7 +269,8 @@ namespace NExpect.Tests
             var oneString = one.ToString();
             var twoString = two.ToString();
             // Act
-            Assert.That(() =>
+            Assert.That(
+                () =>
                 {
                     Expect(oneString)
                         .Not.To.Be.Null()
@@ -265,15 +283,19 @@ namespace NExpect.Tests
                         .To.Be.Null()
                         .And.Not.To.Equal(oneString);
                 },
-                Throws.Nothing);
-            Assert.That(() =>
+                Throws.Nothing
+            );
+            Assert.That(
+                () =>
                 {
                     Expect(one)
                         .To.Equal(1)
                         .And.To.Equal(1);
                 },
-                Throws.Nothing);
-            Assert.That(() =>
+                Throws.Nothing
+            );
+            Assert.That(
+                () =>
                 {
                     Expect(one)
                         .To.Equal(1)
@@ -294,14 +316,17 @@ namespace NExpect.Tests
                         .And.To.Be.Less.Than.Or.Equal.To(1)
                         .And.To.Equal(1);
                 },
-                Throws.Nothing);
-            Assert.That(() =>
+                Throws.Nothing
+            );
+            Assert.That(
+                () =>
                 {
                     Expect(one)
                         .To.Equal(1)
                         .And.To.Equal(2);
                 },
-                Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
             // Assert
         }
 
@@ -312,10 +337,12 @@ namespace NExpect.Tests
             // UnmetExpectationException can only be instatiated within NExpect; however, a little
             //  reflection can get to the internal Throw method
             var method = typeof(Assertions).GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
-                .FirstOrDefault(mi => mi.Name == "Throw" &&
-                                      mi.GetParameters()
-                                          .Length ==
-                                      1);
+                .FirstOrDefault(
+                    mi => mi.Name == "Throw" &&
+                        mi.GetParameters()
+                            .Length ==
+                        1
+                );
             Expect(method)
                 .Not.To.Be.Null();
             UnmetExpectationException expected = null;
@@ -351,6 +378,7 @@ namespace NExpect.Tests
             var expected = GetRandomInt(2, 7);
             // Pre-assert
             // Act
+            using var _ = ExpectationTracker.Suspend();
             var continuation = Expect(new[] { 1, 2, 3 })
                 .To.Contain.Exactly(expected);
             var result = continuation.GetExpectedCount<int>();
@@ -365,6 +393,7 @@ namespace NExpect.Tests
             // Arrange
             // Pre-assert
             // Act
+            using var _ = ExpectationTracker.Suspend();
             var continuation = Expect(new[] { "a", "b", "c" })
                 .To.Contain.Exactly(123);
             var result = continuation.GetCountMatchMethod();
@@ -379,6 +408,7 @@ namespace NExpect.Tests
             // Arrange
             // Pre-assert
             // Act
+            using var _ = ExpectationTracker.Suspend();
             var continuation = Expect(new[] { "a", "b", "c" })
                 .To.Contain.At.Least(123);
             var result = continuation.GetCountMatchMethod();
@@ -393,6 +423,7 @@ namespace NExpect.Tests
             // Arrange
             // Pre-assert
             // Act
+            using var _ = ExpectationTracker.Suspend();
             var continuation = Expect(new[] { "a", "b", "c" })
                 .To.Contain.At.Most(123);
             var result = continuation.GetCountMatchMethod();
@@ -407,6 +438,7 @@ namespace NExpect.Tests
             // Arrange
             // Pre-assert
             // Act
+            using var _ = ExpectationTracker.Suspend();
             var continuation = Expect(new[] { "a", "b", "c" })
                 .To.Contain.Any;
             var result = continuation.GetCountMatchMethod();
@@ -421,6 +453,7 @@ namespace NExpect.Tests
             // Arrange
             // Pre-assert
             // Act
+            using var _ = ExpectationTracker.Suspend();
             var continuation = Expect(new[] { "a", "b", "c" })
                 .To.Contain.All;
             var result = continuation.GetCountMatchMethod();
@@ -435,6 +468,7 @@ namespace NExpect.Tests
             // Arrange
             // Pre-assert
             // Act
+            using var _ = ExpectationTracker.Suspend();
             var continuation = Expect(new[] { "a" })
                 .To.Contain.Only(1);
             var result = continuation.GetCountMatchMethod();
@@ -480,6 +514,7 @@ namespace NExpect.Tests
             public void CollectionEqual()
             {
                 // Arrange
+                using var _ = ExpectationTracker.Suspend();
                 var collection = GetRandomCollection<int>(1);
                 // Pre-assert
                 // Act
@@ -494,6 +529,7 @@ namespace NExpect.Tests
             public void CollectionDeepEqual()
             {
                 // Arrange
+                using var _ = ExpectationTracker.Suspend();
                 var collection = GetRandomCollection<int>(1);
                 // Pre-assert
                 // Act
@@ -508,6 +544,7 @@ namespace NExpect.Tests
             public void CollectionEquivalent()
             {
                 // Arrange
+                using var _ = ExpectationTracker.Suspend();
                 var collection = GetRandomCollection<int>(1);
                 // Pre-assert
                 // Act
@@ -522,6 +559,7 @@ namespace NExpect.Tests
             public void CollectionDeepEquivalent()
             {
                 // Arrange
+                using var _ = ExpectationTracker.Suspend();
                 var collection = GetRandomCollection<int>(1);
                 // Pre-assert
                 // Act
@@ -536,6 +574,7 @@ namespace NExpect.Tests
             public void CollectionIntersectionEquivalent()
             {
                 // Arrange
+                using var _ = ExpectationTracker.Suspend();
                 var collection = GetRandomCollection<int>(1);
                 // Pre-assert
                 // Act
@@ -550,6 +589,7 @@ namespace NExpect.Tests
             public void CollectionIntersectionEqual()
             {
                 // Arrange
+                using var _ = ExpectationTracker.Suspend();
                 var collection = GetRandomCollection<int>(1);
                 // Pre-assert
                 // Act
@@ -564,6 +604,7 @@ namespace NExpect.Tests
             public void CollectionUnique()
             {
                 // Arrange
+                using var _ = ExpectationTracker.Suspend();
                 var collection = GetRandomCollection<int>(1);
                 // Pre-assert
                 // Act
@@ -578,6 +619,7 @@ namespace NExpect.Tests
             public void CollectionContainAt()
             {
                 // Arrange
+                using var _ = ExpectationTracker.Suspend();
                 var collection = GetRandomCollection<int>(1);
                 // Pre-assert
                 // Act
@@ -592,6 +634,7 @@ namespace NExpect.Tests
             public void Deep()
             {
                 // Arrange
+                using var _ = ExpectationTracker.Suspend();
                 var src = new { };
                 // Pre-assert
                 // Act
@@ -606,6 +649,7 @@ namespace NExpect.Tests
             public void DictionaryKeyWith()
             {
                 // Arrange
+                using var _ = ExpectationTracker.Suspend();
                 var dict = new Dictionary<string, string>
                 {
                     ["key"] = "value"
@@ -624,6 +668,7 @@ namespace NExpect.Tests
             public void BeEqual()
             {
                 // Arrange
+                using var _ = ExpectationTracker.Suspend();
                 var src = GetRandomString();
                 // Pre-assert
                 // Act
@@ -638,6 +683,7 @@ namespace NExpect.Tests
             public void Intersection()
             {
                 // Arrange
+                using var _ = ExpectationTracker.Suspend();
                 var expected = GetRandom<SomeNode>();
                 // Pre-assert
                 // Act
@@ -652,6 +698,7 @@ namespace NExpect.Tests
             public void NotNullOr()
             {
                 // Arrange
+                using var _ = ExpectationTracker.Suspend();
                 var expected = GetRandomString(10);
                 // Pre-assert
                 // Act
@@ -666,6 +713,7 @@ namespace NExpect.Tests
             public void LessContinuation()
             {
                 // Arrange
+                using var _ = ExpectationTracker.Suspend();
                 var expected = GetRandomInt();
                 // Pre-assert
                 // Act
@@ -709,6 +757,7 @@ namespace NExpect.Tests
         public void CountMatchDeepEqual_ShouldExposeOriginalContinuation()
         {
             // Arrange
+            using var _ = ExpectationTracker.Suspend();
             // Pre-assert
             // Act
             var original = Expect(new[] { 1 })
@@ -724,6 +773,7 @@ namespace NExpect.Tests
         public void CountMatchIntersectionEqual_ShouldExposeOriginalContinuation()
         {
             // Arrange
+            using var _ = ExpectationTracker.Suspend();
             // Pre-assert
             // Act
             var original = Expect(new[] { 1 })
@@ -751,7 +801,8 @@ namespace NExpect.Tests
                     Expect(test)
                         .Not.To.Be.Equivalent.To(src);
                 },
-                Throws.Nothing);
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -775,7 +826,8 @@ namespace NExpect.Tests
                                 .And.Have.A.Foo()
                                 .And.An.Ant();
                         },
-                        Throws.Nothing);
+                        Throws.Nothing
+                    );
                     // Assert
                 }
             }
@@ -799,7 +851,8 @@ namespace NExpect.Tests
                             .With.CollectionProperty(e => e.Nodes)
                             .For.Moo();
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
             }
 
             [Test]
@@ -808,35 +861,44 @@ namespace NExpect.Tests
                 // Arrange
                 var ex = new AggregateException("moo", new[] { new Exception("1"), new Exception("2") });
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(() => throw ex)
-                        .To.Throw<AggregateException>()
-                        .With.CollectionProperty(e => e.InnerExceptions)
-                        .Containing.Exactly(1)
-                        .Matched.By(e => e.Message == "1");
-                    Expect(() => throw ex)
-                        .To.Throw<AggregateException>()
-                        .With.CollectionProperty(e => e.InnerExceptions)
-                        .Not.Containing.Any
-                        .Matched.By(e => e.Message == "3");
-                }, Throws.Nothing);
-                Assert.That(() =>
-                {
-                    Expect(() => throw ex)
-                        .To.Throw<AggregateException>()
-                        .With.CollectionProperty(e => e.InnerExceptions)
-                        .Not.Containing.Exactly(1)
-                        .Matched.By(e => e.Message == "1");
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
-                Assert.That(() =>
-                {
-                    Expect(() => throw ex)
-                        .To.Throw<AggregateException>()
-                        .With.CollectionProperty(e => e.InnerExceptions)
-                        .Not.Containing.Any
-                        .Matched.By(e => e.Message == "2");
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Assert.That(
+                    () =>
+                    {
+                        Expect(() => throw ex)
+                            .To.Throw<AggregateException>()
+                            .With.CollectionProperty(e => e.InnerExceptions)
+                            .Containing.Exactly(1)
+                            .Matched.By(e => e.Message == "1");
+                        Expect(() => throw ex)
+                            .To.Throw<AggregateException>()
+                            .With.CollectionProperty(e => e.InnerExceptions)
+                            .Not.Containing.Any
+                            .Matched.By(e => e.Message == "3");
+                    },
+                    Throws.Nothing
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(() => throw ex)
+                            .To.Throw<AggregateException>()
+                            .With.CollectionProperty(e => e.InnerExceptions)
+                            .Not.Containing.Exactly(1)
+                            .Matched.By(e => e.Message == "1");
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(() => throw ex)
+                            .To.Throw<AggregateException>()
+                            .With.CollectionProperty(e => e.InnerExceptions)
+                            .Not.Containing.Any
+                            .Matched.By(e => e.Message == "2");
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
                 // Assert
             }
 
@@ -854,11 +916,13 @@ namespace NExpect.Tests
                     () =>
                     {
                         Expect(
-                                () => throw new ArgumentNullException(message))
+                                () => throw new ArgumentNullException(message)
+                            )
                             .To.Throw<ArgumentNullException>()
                             .With.Message.Containing(e1);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -867,6 +931,7 @@ namespace NExpect.Tests
             public void NotInstanceDoesNotSupport_(string method)
             {
                 // Arrange
+                using var _ = ExpectationTracker.Suspend();
                 // Pre-assert
                 // Act
                 var continuation = Expect(new object())
@@ -914,7 +979,8 @@ namespace NExpect.Tests
     {
         public static void CurrentFilePath(
             this IStringContain contain,
-            [CallerFilePath] string path = null)
+            [CallerFilePath] string path = null
+        )
         {
             contain.AddMatcher(
                 actual =>
@@ -923,8 +989,10 @@ namespace NExpect.Tests
                     var passed = actual.Contains(path);
                     return new MatcherResult(
                         passed,
-                        () => $"Expected {actual} to contain {path}");
-                });
+                        () => $"Expected {actual} to contain {path}"
+                    );
+                }
+            );
         }
 
         public static void Falsey(this IBe<long> be)
@@ -935,8 +1003,10 @@ namespace NExpect.Tests
                     var passed = actual == 0;
                     return new MatcherResult(
                         passed,
-                        () => $"Expected {actual} {passed.AsNot()}to be falsey");
-                });
+                        () => $"Expected {actual} {passed.AsNot()}to be falsey"
+                    );
+                }
+            );
         }
 
         public static void Moo(this ICollectionFor<SomeNode> continuation)
@@ -947,12 +1017,14 @@ namespace NExpect.Tests
                     Expect(actual)
                         .To.Contain.Exactly(1)
                         .Matched.By(n => n.Name == "Moo");
-                });
+                }
+            );
         }
 
         public static void Moo(
             this ITo<string> to,
-            UnmetExpectationException ex)
+            UnmetExpectationException ex
+        )
         {
             to.AddMatcher(actual => throw ex);
         }
@@ -964,7 +1036,8 @@ namespace NExpect.Tests
                 {
                     Expect(actual)
                         .To.Contain(" ");
-                });
+                }
+            );
         }
 
         public static IMore<string> Foo(this IA<string> a)
@@ -974,7 +1047,8 @@ namespace NExpect.Tests
                 {
                     Expect(actual)
                         .To.Contain("foo");
-                });
+                }
+            );
         }
 
         public static IMore<string> Ant(this IAn<string> an)
@@ -984,7 +1058,8 @@ namespace NExpect.Tests
                 {
                     Expect(actual)
                         .To.Contain("ant");
-                });
+                }
+            );
         }
     }
 }

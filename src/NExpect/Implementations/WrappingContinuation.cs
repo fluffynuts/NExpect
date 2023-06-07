@@ -5,16 +5,23 @@ using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations;
 
+internal interface IWrappingContinuation
+{
+    object Wrapped { get; }
+}
+
 internal class WrappingContinuation<TFrom, TTo> : 
     ExpectationBase<TTo>, 
     ICanAddMatcher<TTo>,
-    IExpectationContext<TTo>
+    IExpectationContext<TTo>,
+    IWrappingContinuation
 {
     public IExpectationContext<TTo> TypedParent { get; set; }
     public IExpectationContext Parent => TypedParent;
 
     public TTo Actual => _unwrap(_wrapped);
 
+    public object Wrapped => _wrapped;
     private readonly IHasActual<TFrom> _wrapped;
     private readonly Func<IHasActual<TFrom>, TTo> _unwrap;
 

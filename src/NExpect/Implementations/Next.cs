@@ -49,6 +49,7 @@ public class Next<T>
     public override IMatcherResult RunMatcher(Func<T, IMatcherResult> matcher)
     {
         return MatcherRunner.RunMatcher(
+            this,
             Actual,
             _parent.IsNegated(),
             matcher

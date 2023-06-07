@@ -64,5 +64,11 @@ public class More<T>
     /// <param name="actualFetcher"></param>
     public More(Func<T> actualFetcher) : base(actualFetcher)
     {
+        // it's common for matchers to return IMore<T>
+        // to make fluency easier - that's not a problem,
+        // however, if we had something like
+        // Expect(foo).To.Equal(1).And;
+        // then that's a problem, ofc
+        ExpectationTracker.Forget(this);
     }
 }

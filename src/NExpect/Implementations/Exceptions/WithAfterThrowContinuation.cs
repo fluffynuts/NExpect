@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using NExpect.Helpers;
-using NExpect.Implementations.Collections;
-using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable PossibleMultipleEnumeration
@@ -16,6 +14,7 @@ internal class AndAfterWithAfterThrowContinuation<T>
 {
     public AndAfterWithAfterThrowContinuation(Func<T> actualFetcher) : base(actualFetcher)
     {
+        ExpectationTracker.Forget(this);
     }
 }
 
@@ -76,5 +75,6 @@ internal class WithAfterThrowContinuation<T>
         Func<T> actualFetcher
     ) : base(actualFetcher)
     {
+        ExpectationTracker.Forget(this);
     }
 }

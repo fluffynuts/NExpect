@@ -5,7 +5,7 @@ using NExpect.MatcherLogic;
 
 namespace NExpect.Implementations;
 
-internal abstract class ExpectationBase: CannotBeCompared
+internal abstract class ExpectationBase: SweepableItem
 {
     public bool IsNegated { get; protected set; }
 }
@@ -29,7 +29,7 @@ internal abstract class ExpectationBase<T> : ExpectationBase
         bool resetNegationAfterRun
     )
     {
-        var result = MatcherRunner.RunMatcher(actual, negated, matcher);
+        var result = MatcherRunner.RunMatcher(this, actual, negated, matcher);
         if (resetNegationAfterRun)
         {
             ResetNegation();

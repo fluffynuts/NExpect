@@ -17,6 +17,7 @@ internal class CountMatchDeepEqual<T>
         CountMatchMethods method,
         int compare)
     {
+        ExpectationTracker.Forget(continuation);
         Continuation = continuation;
         Method = method;
         ExpectedCount = compare;

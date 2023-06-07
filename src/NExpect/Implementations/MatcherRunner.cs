@@ -7,12 +7,14 @@ namespace NExpect.Implementations;
 internal static class MatcherRunner
 {
     public static IMatcherResult RunMatcher<T>(
+        SweepableItem owner,
         T actual,
         bool negated,
         Func<T, IMatcherResult> matcher
     )
     {
         IMatcherResult result;
+        ExpectationTracker.Forget(owner);
         try
         {
             result = matcher(actual);

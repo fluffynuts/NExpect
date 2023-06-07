@@ -28,11 +28,12 @@ internal class ThrowContinuation<T>
 
     public override IMatcherResult RunMatcher(Func<T, IMatcherResult> matcher)
     {
-        return MatcherRunner.RunMatcher(Exception, this.IsNegated(), matcher);
+        return MatcherRunner.RunMatcher(this, Exception, this.IsNegated(), matcher);
     }
 
     public ThrowContinuation() : base(() => null)
     {
+        ExpectationTracker.Forget(this);
     }
 }
 
