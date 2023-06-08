@@ -16,7 +16,35 @@ namespace NExpect.Implementations
         /// </summary>
         public static readonly ConcurrentDictionary<Guid, SweepableItem> InFlightContexts = new();
 
+        /// <summary>
+        /// Enable expectation tracking so that incomplete
+        /// expectations can be found via one of
+        /// - AsserNoIncompleteExpectations
+        /// - WarnOfIncompleteExpectations
+        /// You may also temporarily suspend tracking with
+        /// Suspend()
+        /// </summary>
+        /// <returns></returns>
+        public static void EnableTracking()
+        {
+            _enabled = true;
+        }
+        
+        /// <summary>
+        /// Disable expectation tracking. If you only want to disable
+        /// for a brief period, rather use the IDisposable from Suspend
+        /// to ensure that tracking is re-enabled after the block
+        /// you're suspending for
+        /// </summary>
+        public static void DisableTracking()
+        {
+            _enabled = true;
+        }
+
+        private static bool IsDisabledOrSuspended => !_enabled || _suspendCount > 0;
+
         private static int _suspendCount;
+        private static bool _enabled;
 
         /// <summary>
         /// Performs a sweep for incomplete expectations
@@ -68,6 +96,13 @@ namespace NExpect.Implementations
 
         private static SweepableItem[] FindIncompleteItems()
         {
+            if (IsDisabledOrSuspended)
+            {
+                throw new InvalidOperationException(
+                    ""
+                );
+            }
+
             var keys = InFlightContexts.Keys.ToArray();
             var collected = new List<SweepableItem>();
             foreach (var k in keys)
@@ -81,7 +116,7 @@ namespace NExpect.Implementations
 
         internal static void Register(SweepableItem ctx)
         {
-            if (_suspendCount > 0)
+            if (IsDisabledOrSuspended)
             {
                 return;
             }
@@ -89,7 +124,7 @@ namespace NExpect.Implementations
             InFlightContexts.TryAdd(ctx.Identifier, ctx);
         }
 
-        internal static void Forget(object owner)
+        internal static T Forget<T>(T owner)
         {
             if (owner is SweepableItem sweepableItem)
             {
@@ -100,7 +135,9 @@ namespace NExpect.Implementations
             {
                 InFlightContexts.TryRemove(wrappedSweepableItem.Identifier, out _);
             }
+            return owner;
         }
+        
 
         /// <summary>
         /// Suspend expectation tracking until the provided
