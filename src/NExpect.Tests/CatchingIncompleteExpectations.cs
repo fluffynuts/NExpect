@@ -391,6 +391,22 @@ public class CatchingIncompleteExpectations
         // Assert
     }
 
+    [Test]
+    public void ShouldBeAbleToAssertTypeWithoutViolating()
+    {
+        // Arrange
+        var foo = new Service() as object;
+        // Act
+        Expect(foo)
+            .To.Be.An.Instance.Of<Service>();
+        // Assert
+        Assertions.VerifyNoIncompleteAssertions();
+    }
+
+    public class Service
+    {
+    }
+
     private Action RunAndVerify(Action action)
     {
         return () =>

@@ -16,6 +16,7 @@ internal class InstanceContinuation :
     public InstanceContinuation(Func<Type> actualFetcher, IExpectationContext originalParent)
         : base(actualFetcher)
     {
+        Assertions.Forget(originalParent);
         Parent = originalParent;
     }
 
