@@ -12,7 +12,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>2.0.30-2306081646.5a15be2</PackageVersion>
+    <PackageVersion>2.0.30-2306081701.3a525ef</PackageVersion>
     <Authors>Davyd McColl</Authors>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
