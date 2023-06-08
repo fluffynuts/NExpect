@@ -15,7 +15,7 @@ namespace NExpect.Tests
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            ExpectationTracker.AssertNoIncompleteExpectations();
+            Assertions.VerifyNoIncompleteAssertions();
         }
     }
 

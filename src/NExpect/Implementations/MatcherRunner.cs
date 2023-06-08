@@ -14,7 +14,7 @@ internal static class MatcherRunner
     )
     {
         IMatcherResult result;
-        ExpectationTracker.Forget(owner);
+        Assertions.Forget(owner);
         try
         {
             result = matcher(actual);
@@ -38,7 +38,7 @@ internal static class MatcherRunner
     )
     {
         // TODO: make this better, ie, include the exception as an inner
-        Assertions.Throw(
+        NExpect.Assertions.Throw(
             $"Exception whilst running matcher: {matcherException}",
             matcherException);
     }
@@ -57,6 +57,6 @@ internal static class MatcherRunner
             return;
         }
 
-        Assertions.Throw(result.Message, result.LocalException);
+        NExpect.Assertions.Throw(result.Message, result.LocalException);
     }
 }

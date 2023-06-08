@@ -16,13 +16,13 @@ public class CatchingIncompleteExpectations
     [OneTimeSetUp]
     public void OneTimeSetup()
     {
-        ExpectationTracker.EnableTracking();
+        Assertions.EnableTracking();
     }
 
     [OneTimeTearDown]
     public void OneTimeTeardown()
     {
-        ExpectationTracker.DisableTracking();
+        Assertions.DisableTracking();
     }
 
     [Test]
@@ -194,7 +194,7 @@ public class CatchingIncompleteExpectations
             // suppress
         }
 
-        ExpectationTracker.AssertNoIncompleteExpectations();
+        Assertions.VerifyNoIncompleteAssertions();
         // Assert
     }
 
@@ -217,7 +217,7 @@ public class CatchingIncompleteExpectations
             // suppress
         }
 
-        ExpectationTracker.AssertNoIncompleteExpectations();
+        Assertions.VerifyNoIncompleteAssertions();
         // Assert
     }
 
@@ -240,7 +240,7 @@ public class CatchingIncompleteExpectations
         }
 
         // Assert
-        ExpectationTracker.AssertNoIncompleteExpectations();
+        Assertions.VerifyNoIncompleteAssertions();
     }
 
     [Test]
@@ -262,7 +262,7 @@ public class CatchingIncompleteExpectations
         }
 
         // Assert
-        ExpectationTracker.AssertNoIncompleteExpectations();
+        Assertions.VerifyNoIncompleteAssertions();
     }
 
     [Test]
@@ -284,7 +284,7 @@ public class CatchingIncompleteExpectations
         }
 
         // Assert
-        ExpectationTracker.AssertNoIncompleteExpectations();
+        Assertions.VerifyNoIncompleteAssertions();
     }
 
     [Test]
@@ -297,7 +297,7 @@ public class CatchingIncompleteExpectations
             .And.Have.A.Foo()
             .And.An.Ant();
         // Assert
-        ExpectationTracker.AssertNoIncompleteExpectations();
+        Assertions.VerifyNoIncompleteAssertions();
         return Task.CompletedTask;
     }
 
@@ -331,7 +331,7 @@ public class CatchingIncompleteExpectations
             // suppress
         }
         // Assert
-        ExpectationTracker.AssertNoIncompleteExpectations();
+        Assertions.VerifyNoIncompleteAssertions();
     }
 
     [Test]
@@ -343,17 +343,17 @@ public class CatchingIncompleteExpectations
         // Act
         Expect(later)
             .To.Be.Greater.Than(earlier);
-        ExpectationTracker.AssertNoIncompleteExpectations();
+        Assertions.VerifyNoIncompleteAssertions();
         Expect(later)
             .To.Be.Greater.Than.Or.Equal.To(earlier);
-        ExpectationTracker.AssertNoIncompleteExpectations();
+        Assertions.VerifyNoIncompleteAssertions();
         Expect(earlier)
             .To.Be.Less.Than(later);
-        ExpectationTracker.AssertNoIncompleteExpectations();
+        Assertions.VerifyNoIncompleteAssertions();
         Expect(earlier)
             .To.Be.Less.Than.Or.Equal.To(later);
         // Assert
-        ExpectationTracker.AssertNoIncompleteExpectations();
+        Assertions.VerifyNoIncompleteAssertions();
     }
 
     [Test]
@@ -365,17 +365,17 @@ public class CatchingIncompleteExpectations
         // Act
         Expect(later)
             .To.Be.Greater.Than(earlier);
-        ExpectationTracker.AssertNoIncompleteExpectations();
+        Assertions.VerifyNoIncompleteAssertions();
         Expect(later)
             .To.Be.Greater.Than.Or.Equal.To(earlier);
-        ExpectationTracker.AssertNoIncompleteExpectations();
+        Assertions.VerifyNoIncompleteAssertions();
         Expect(earlier)
             .To.Be.Less.Than(later);
-        ExpectationTracker.AssertNoIncompleteExpectations();
+        Assertions.VerifyNoIncompleteAssertions();
         Expect(earlier)
             .To.Be.Less.Than.Or.Equal.To(later);
         // Assert
-        ExpectationTracker.AssertNoIncompleteExpectations();
+        Assertions.VerifyNoIncompleteAssertions();
     }
 
     [Test]
@@ -387,7 +387,7 @@ public class CatchingIncompleteExpectations
         // Act
         Expect(numbers).To.Contain.Exactly(1);
         Expect(1);
-        ExpectationTracker.WarnOfIncompleteExpectations();
+        Assertions.WarnOfIncompleteAssertions();
         // Assert
     }
 
@@ -396,7 +396,7 @@ public class CatchingIncompleteExpectations
         return () =>
         {
             action();
-            ExpectationTracker.AssertNoIncompleteExpectations();
+            Assertions.VerifyNoIncompleteAssertions();
         };
     }
 }

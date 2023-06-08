@@ -14,7 +14,7 @@ internal class AndAfterWithAfterThrowContinuation<T>
 {
     public AndAfterWithAfterThrowContinuation(Func<T> actualFetcher) : base(actualFetcher)
     {
-        ExpectationTracker.Forget(this);
+        Assertions.Forget(this);
     }
 }
 
@@ -75,6 +75,6 @@ internal class WithAfterThrowContinuation<T>
         Func<T> actualFetcher
     ) : base(actualFetcher)
     {
-        ExpectationTracker.Forget(this);
+        Assertions.Forget(this);
     }
 }

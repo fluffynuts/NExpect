@@ -1,7 +1,8 @@
 using System;
 using System.Diagnostics;
+using NExpect.Implementations;
 
-namespace NExpect.Implementations;
+namespace NExpect;
 
 /// <summary>
 /// The base, untyped ExpectationContext, used internally
@@ -19,7 +20,7 @@ public abstract class SweepableItem:
     /// </summary>
     protected SweepableItem()
     {
-        ExpectationTracker.Register(this);
+        Assertions.Track(this);
         StackTrace = new StackTrace();
     }
 }

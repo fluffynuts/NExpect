@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Imported.PeanutButter.Utils;
 using NExpect.Exceptions;
 using NExpect.Implementations;
 using NExpect.Interfaces;
@@ -199,8 +199,8 @@ public static class AddMatcherExtensions
         object continuation,
         Func<T, IMatcherResult> matcher)
     {
-        ExpectationTracker.Forget(continuation);
-        System.Diagnostics.Debug.WriteLine($"Adding matcher for type {typeof(T)}");
+        Assertions.Forget(continuation);
+        Debug.WriteLine($"Adding matcher for type {typeof(T)}");
         var asContext = continuation as IExpectationContext<T>;
         if (asContext == null)
         {

@@ -29,8 +29,8 @@ internal class CountMatchIntersection<T>:
 
     private CountMatchIntersectionEqual<T> CreateCountMatchIntersectionEqual()
     {
-        ExpectationTracker.Forget(this);
-        ExpectationTracker.Forget(Continuation);
+        Assertions.Forget(this);
+        Assertions.Forget(Continuation);
         var result = new CountMatchIntersectionEqual<T>(
             Continuation,
             Method,

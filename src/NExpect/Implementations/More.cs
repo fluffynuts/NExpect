@@ -69,6 +69,6 @@ public class More<T>
         // however, if we had something like
         // Expect(foo).To.Equal(1).And;
         // then that's a problem, ofc
-        ExpectationTracker.Forget(this);
+        Assertions.Forget(this);
     }
 }

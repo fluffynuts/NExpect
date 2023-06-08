@@ -16,7 +16,7 @@ internal class CountMatchOf<T>
         int compare
     )
     {
-        ExpectationTracker.Forget(continuation);
+        Assertions.Forget(continuation);
         Continuation = continuation;
         Method = method;
         Compare = compare;

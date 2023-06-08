@@ -1502,7 +1502,7 @@ public static class StringMatchers
         StringContainContinuation next
     )
     {
-        ExpectationTracker.Forget(next);
+        Assertions.Forget(next);
         continuation.AddMatcher(
             s =>
             {

@@ -33,7 +33,7 @@ internal class ThrowContinuation<T>
 
     public ThrowContinuation() : base(() => null)
     {
-        ExpectationTracker.Forget(this);
+        Assertions.Forget(this);
     }
 }
 

@@ -1052,7 +1052,7 @@ Stacktrace:
             () => null,
             continuation as IExpectationContext<string>
         );
-        ExpectationTracker.Forget(result);
+        Assertions.Forget(result);
         continuation.AddMatcher(
             s =>
             {
@@ -1141,7 +1141,7 @@ Stacktrace:
             () => null,
             continuation as IExpectationContext<string>
         );
-        ExpectationTracker.Forget(result);
+        Assertions.Forget(result);
         continuation.AddMatcher(
             s =>
             {

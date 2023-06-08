@@ -1,5 +1,4 @@
 using NExpect.Implementations;
-using NExpect.Implementations.Collections;
 using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
@@ -42,7 +41,7 @@ public static class MoreExtensions
             continuation.GetActual, 
             continuation as IExpectationContext<string>
         );
-        ExpectationTracker.Forget(result);
+        Assertions.Forget(result);
         return result;
     }
 }

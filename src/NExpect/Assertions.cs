@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Imported.PeanutButter.Utils;
 using NExpect.Exceptions;
+using NExpect.Implementations;
 
 // ReSharper disable UnusedMember.Global
 
@@ -114,7 +117,8 @@ public static class Assertions
     public static IDisposable TemporarilyUseDefaultAssertionsFactoryForThisThread()
     {
         var hadThreadSpecificGenerator = ThreadAssertionGenerators.TryGetValue(
-            Thread.CurrentThread, out var originalGenerator
+            Thread.CurrentThread,
+            out var originalGenerator
         );
         return new AutoResetter(
             () => RegisterAssertionsFactoryForCurrentThread(
@@ -130,7 +134,8 @@ public static class Assertions
                 {
                     RemoveAssertionsFactoryForCurrentThread();
                 }
-            });
+            }
+        );
     }
 
     private static string GenerateMessageFor(Exception exception, string s)
@@ -140,7 +145,7 @@ public static class Assertions
             : $"{s}\n{exception.Message}\n{exception.StackTrace}";
     }
 
-    private static bool _usingCustomAssertions = false;
+    private static bool _usingCustomAssertions;
     private static Func<string, Exception, Exception> _assertionsGenerator;
     private static readonly SemaphoreSlim FlipLock = new(1);
     private static readonly SemaphoreSlim GeneratorLock = new(1);
@@ -168,12 +173,150 @@ public static class Assertions
         throw _assertionsGenerator?.Invoke(message, innerException)
             ?? new UnmetExpectationException(message, innerException);
     }
-}
 
-internal class NullDisposable : IDisposable
-{
-    public void Dispose()
+    private static readonly ConcurrentDictionary<Guid, SweepableItem> InFlightContexts = new();
+
+    /// <summary>
+    /// Enable expectation tracking so that incomplete
+    /// expectations can be found via one of
+    /// - AsserNoIncompleteExpectations
+    /// - WarnOfIncompleteExpectations
+    /// You may also temporarily suspend tracking with
+    /// Suspend()
+    /// </summary>
+    /// <returns></returns>
+    public static void EnableTracking()
     {
-        // intentionally left blank
+        _enabled = true;
+    }
+
+    /// <summary>
+    /// Disable expectation tracking. If you only want to disable
+    /// for a brief period, rather use the IDisposable from Suspend
+    /// to ensure that tracking is re-enabled after the block
+    /// you're suspending for
+    /// </summary>
+    public static void DisableTracking()
+    {
+        _enabled = true;
+    }
+
+    private static bool IsDisabledOrSuspended => !_enabled || _suspendCount > 0;
+
+    private static int _suspendCount;
+    private static bool _enabled;
+
+    /// <summary>
+    /// Performs a sweep for incomplete expectations
+    /// and will throw an IncompleteExpectationException
+    /// if any are found.
+    /// </summary>
+    public static void VerifyNoIncompleteAssertions()
+    {
+        var collected = FindIncompleteItems();
+        if (!collected.Any())
+        {
+            return;
+        }
+
+        throw new IncompleteExpectationException(
+            collected.ToArray()
+        );
+    }
+
+    /// <summary>
+    /// Warns via stderr of incomplete expectations, but
+    /// does not throw anything.
+    /// </summary>
+    public static void WarnOfIncompleteAssertions()
+    {
+        WarnOfIncompleteAssertions(Console.Error.WriteLine);
+    }
+
+    /// <summary>
+    /// Warns via the provided writer of incomplete expectations,
+    /// but does not throw anything
+    /// </summary>
+    /// <param name="writer"></param>
+    public static void WarnOfIncompleteAssertions(
+        Action<string> writer
+    )
+    {
+        var collected = FindIncompleteItems();
+        if (!collected.Any())
+        {
+            return;
+        }
+
+        var message = IncompleteExpectationException.GenerateErrorFor(
+            collected
+        );
+        writer(message);
+    }
+
+    private static SweepableItem[] FindIncompleteItems()
+    {
+        if (IsDisabledOrSuspended)
+        {
+            throw new InvalidOperationException(
+                ""
+            );
+        }
+
+        var keys = InFlightContexts.Keys.ToArray();
+        var collected = new List<SweepableItem>();
+        foreach (var k in keys)
+        {
+            InFlightContexts.TryRemove(k, out var item);
+            collected.Add(item);
+        }
+
+        return collected.ToArray();
+    }
+
+    internal static void Track(SweepableItem ctx)
+    {
+        if (IsDisabledOrSuspended)
+        {
+            return;
+        }
+
+        InFlightContexts.TryAdd(ctx.Identifier, ctx);
+    }
+
+    internal static T Forget<T>(T owner)
+    {
+        if (owner is SweepableItem sweepableItem)
+        {
+            InFlightContexts.TryRemove(sweepableItem.Identifier, out _);
+        }
+
+        if (owner is IWrappingContinuation { Wrapped: SweepableItem wrappedSweepableItem })
+        {
+            InFlightContexts.TryRemove(wrappedSweepableItem.Identifier, out _);
+        }
+
+        return owner;
+    }
+
+
+    /// <summary>
+    /// Suspend expectation tracking until the provided
+    /// suspension object is disposed
+    /// </summary>
+    /// <returns></returns>
+    public static IDisposable SuspendTracking()
+    {
+        return new SuspendIncompleteExpectationTracking();
+    }
+
+    internal static void SetSuspended()
+    {
+        Interlocked.Increment(ref _suspendCount);
+    }
+
+    internal static void ResumeTracking()
+    {
+        Interlocked.Decrement(ref _suspendCount);
     }
 }

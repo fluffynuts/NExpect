@@ -29,7 +29,7 @@ namespace NExpect.Tests
         public void CountMatchContinuation_ShouldHaveActualPropertyExposingOriginalCollection()
         {
             // Arrange
-            using var _ = ExpectationTracker.Suspend();
+            using var _ = Assertions.SuspendTracking();
             var collection = GetRandomCollection<int>(2)
                 .ToArray();
             // Pre-assert
@@ -108,7 +108,7 @@ namespace NExpect.Tests
             // Arrange
             // Pre-assert
             // Act
-            using var _ = ExpectationTracker.Suspend();
+            using var _ = Assertions.SuspendTracking();
             Assert.That(
                 () =>
                 {
@@ -147,7 +147,7 @@ namespace NExpect.Tests
             // Arrange
             // Pre-assert
             // Act
-            using var _ = ExpectationTracker.Suspend();
+            using var _ = Assertions.SuspendTracking();
             Assert.That(
                 () =>
                 {
@@ -378,7 +378,7 @@ namespace NExpect.Tests
             var expected = GetRandomInt(2, 7);
             // Pre-assert
             // Act
-            using var _ = ExpectationTracker.Suspend();
+            using var _ = Assertions.SuspendTracking();
             var continuation = Expect(new[] { 1, 2, 3 })
                 .To.Contain.Exactly(expected);
             var result = continuation.GetExpectedCount<int>();
@@ -393,7 +393,7 @@ namespace NExpect.Tests
             // Arrange
             // Pre-assert
             // Act
-            using var _ = ExpectationTracker.Suspend();
+            using var _ = Assertions.SuspendTracking();
             var continuation = Expect(new[] { "a", "b", "c" })
                 .To.Contain.Exactly(123);
             var result = continuation.GetCountMatchMethod();
@@ -408,7 +408,7 @@ namespace NExpect.Tests
             // Arrange
             // Pre-assert
             // Act
-            using var _ = ExpectationTracker.Suspend();
+            using var _ = Assertions.SuspendTracking();
             var continuation = Expect(new[] { "a", "b", "c" })
                 .To.Contain.At.Least(123);
             var result = continuation.GetCountMatchMethod();
@@ -423,7 +423,7 @@ namespace NExpect.Tests
             // Arrange
             // Pre-assert
             // Act
-            using var _ = ExpectationTracker.Suspend();
+            using var _ = Assertions.SuspendTracking();
             var continuation = Expect(new[] { "a", "b", "c" })
                 .To.Contain.At.Most(123);
             var result = continuation.GetCountMatchMethod();
@@ -438,7 +438,7 @@ namespace NExpect.Tests
             // Arrange
             // Pre-assert
             // Act
-            using var _ = ExpectationTracker.Suspend();
+            using var _ = Assertions.SuspendTracking();
             var continuation = Expect(new[] { "a", "b", "c" })
                 .To.Contain.Any;
             var result = continuation.GetCountMatchMethod();
@@ -453,7 +453,7 @@ namespace NExpect.Tests
             // Arrange
             // Pre-assert
             // Act
-            using var _ = ExpectationTracker.Suspend();
+            using var _ = Assertions.SuspendTracking();
             var continuation = Expect(new[] { "a", "b", "c" })
                 .To.Contain.All;
             var result = continuation.GetCountMatchMethod();
@@ -468,7 +468,7 @@ namespace NExpect.Tests
             // Arrange
             // Pre-assert
             // Act
-            using var _ = ExpectationTracker.Suspend();
+            using var _ = Assertions.SuspendTracking();
             var continuation = Expect(new[] { "a" })
                 .To.Contain.Only(1);
             var result = continuation.GetCountMatchMethod();
@@ -514,7 +514,7 @@ namespace NExpect.Tests
             public void CollectionEqual()
             {
                 // Arrange
-                using var _ = ExpectationTracker.Suspend();
+                using var _ = Assertions.SuspendTracking();
                 var collection = GetRandomCollection<int>(1);
                 // Pre-assert
                 // Act
@@ -529,7 +529,7 @@ namespace NExpect.Tests
             public void CollectionDeepEqual()
             {
                 // Arrange
-                using var _ = ExpectationTracker.Suspend();
+                using var _ = Assertions.SuspendTracking();
                 var collection = GetRandomCollection<int>(1);
                 // Pre-assert
                 // Act
@@ -544,7 +544,7 @@ namespace NExpect.Tests
             public void CollectionEquivalent()
             {
                 // Arrange
-                using var _ = ExpectationTracker.Suspend();
+                using var _ = Assertions.SuspendTracking();
                 var collection = GetRandomCollection<int>(1);
                 // Pre-assert
                 // Act
@@ -559,7 +559,7 @@ namespace NExpect.Tests
             public void CollectionDeepEquivalent()
             {
                 // Arrange
-                using var _ = ExpectationTracker.Suspend();
+                using var _ = Assertions.SuspendTracking();
                 var collection = GetRandomCollection<int>(1);
                 // Pre-assert
                 // Act
@@ -574,7 +574,7 @@ namespace NExpect.Tests
             public void CollectionIntersectionEquivalent()
             {
                 // Arrange
-                using var _ = ExpectationTracker.Suspend();
+                using var _ = Assertions.SuspendTracking();
                 var collection = GetRandomCollection<int>(1);
                 // Pre-assert
                 // Act
@@ -589,7 +589,7 @@ namespace NExpect.Tests
             public void CollectionIntersectionEqual()
             {
                 // Arrange
-                using var _ = ExpectationTracker.Suspend();
+                using var _ = Assertions.SuspendTracking();
                 var collection = GetRandomCollection<int>(1);
                 // Pre-assert
                 // Act
@@ -604,7 +604,7 @@ namespace NExpect.Tests
             public void CollectionUnique()
             {
                 // Arrange
-                using var _ = ExpectationTracker.Suspend();
+                using var _ = Assertions.SuspendTracking();
                 var collection = GetRandomCollection<int>(1);
                 // Pre-assert
                 // Act
@@ -619,7 +619,7 @@ namespace NExpect.Tests
             public void CollectionContainAt()
             {
                 // Arrange
-                using var _ = ExpectationTracker.Suspend();
+                using var _ = Assertions.SuspendTracking();
                 var collection = GetRandomCollection<int>(1);
                 // Pre-assert
                 // Act
@@ -634,7 +634,7 @@ namespace NExpect.Tests
             public void Deep()
             {
                 // Arrange
-                using var _ = ExpectationTracker.Suspend();
+                using var _ = Assertions.SuspendTracking();
                 var src = new { };
                 // Pre-assert
                 // Act
@@ -649,7 +649,7 @@ namespace NExpect.Tests
             public void DictionaryKeyWith()
             {
                 // Arrange
-                using var _ = ExpectationTracker.Suspend();
+                using var _ = Assertions.SuspendTracking();
                 var dict = new Dictionary<string, string>
                 {
                     ["key"] = "value"
@@ -668,7 +668,7 @@ namespace NExpect.Tests
             public void BeEqual()
             {
                 // Arrange
-                using var _ = ExpectationTracker.Suspend();
+                using var _ = Assertions.SuspendTracking();
                 var src = GetRandomString();
                 // Pre-assert
                 // Act
@@ -683,7 +683,7 @@ namespace NExpect.Tests
             public void Intersection()
             {
                 // Arrange
-                using var _ = ExpectationTracker.Suspend();
+                using var _ = Assertions.SuspendTracking();
                 var expected = GetRandom<SomeNode>();
                 // Pre-assert
                 // Act
@@ -698,7 +698,7 @@ namespace NExpect.Tests
             public void NotNullOr()
             {
                 // Arrange
-                using var _ = ExpectationTracker.Suspend();
+                using var _ = Assertions.SuspendTracking();
                 var expected = GetRandomString(10);
                 // Pre-assert
                 // Act
@@ -713,7 +713,7 @@ namespace NExpect.Tests
             public void LessContinuation()
             {
                 // Arrange
-                using var _ = ExpectationTracker.Suspend();
+                using var _ = Assertions.SuspendTracking();
                 var expected = GetRandomInt();
                 // Pre-assert
                 // Act
@@ -757,7 +757,7 @@ namespace NExpect.Tests
         public void CountMatchDeepEqual_ShouldExposeOriginalContinuation()
         {
             // Arrange
-            using var _ = ExpectationTracker.Suspend();
+            using var _ = Assertions.SuspendTracking();
             // Pre-assert
             // Act
             var original = Expect(new[] { 1 })
@@ -773,7 +773,7 @@ namespace NExpect.Tests
         public void CountMatchIntersectionEqual_ShouldExposeOriginalContinuation()
         {
             // Arrange
-            using var _ = ExpectationTracker.Suspend();
+            using var _ = Assertions.SuspendTracking();
             // Pre-assert
             // Act
             var original = Expect(new[] { 1 })
@@ -931,7 +931,7 @@ namespace NExpect.Tests
             public void NotInstanceDoesNotSupport_(string method)
             {
                 // Arrange
-                using var _ = ExpectationTracker.Suspend();
+                using var _ = Assertions.SuspendTracking();
                 // Pre-assert
                 // Act
                 var continuation = Expect(new object())
