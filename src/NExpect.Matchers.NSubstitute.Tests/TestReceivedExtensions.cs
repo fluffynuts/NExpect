@@ -29,7 +29,7 @@ namespace NExpect.Matchers.NSubstitute.Tests
                 // Assert
                 sub.Received().Bar();
                 Expect(sub).To.Have
-                           .Received().Bar();
+                    .Received().Bar();
             }
 
             [Test]
@@ -42,8 +42,8 @@ namespace NExpect.Matchers.NSubstitute.Tests
                 PyLike.Range(0, count).ForEach(_ => sub.Bar());
                 // Assert
                 Expect(sub).To.Have
-                           .Received(count)
-                           .Bar();
+                    .Received(count)
+                    .Bar();
             }
 
             [Test]
@@ -52,11 +52,13 @@ namespace NExpect.Matchers.NSubstitute.Tests
                 // Arrange
                 var sub = Substitute.For<IFoo>();
                 // Act
-                Assert.That(() => Expect(sub).To.Have.Received().Bar(),
-                    Throws.Exception.InstanceOf<ReceivedCallsException>());
+                Assert.That(
+                    () => Expect(sub).To.Have.Received().Bar(),
+                    Throws.Exception.InstanceOf<ReceivedCallsException>()
+                );
                 // Assert
             }
-            
+
             [Test]
             public void WhenHaveReceivedTooFew_ShouldThrow()
             {
@@ -65,11 +67,13 @@ namespace NExpect.Matchers.NSubstitute.Tests
                 var count = GetRandomInt(1, 10);
                 // Act
                 PyLike.Range(0, count).ForEach(_ => sub.Bar());
-                Assert.That(() => Expect(sub).To.Have.Received(count + GetRandomInt(1, 10)).Bar(),
-                    Throws.Exception.InstanceOf<ReceivedCallsException>());
+                Assert.That(
+                    () => Expect(sub).To.Have.Received(count + GetRandomInt(1, 10)).Bar(),
+                    Throws.Exception.InstanceOf<ReceivedCallsException>()
+                );
                 // Assert
             }
-            
+
             [Test]
             public void WhenHaveReceivedTooMany_ShouldThrow()
             {
@@ -78,8 +82,10 @@ namespace NExpect.Matchers.NSubstitute.Tests
                 var count = GetRandomInt(1, 10);
                 // Act
                 PyLike.Range(0, count + GetRandomInt(1, 10)).ForEach(_ => sub.Bar());
-                Assert.That(() => Expect(sub).To.Have.Received(count).Bar(),
-                    Throws.Exception.InstanceOf<ReceivedCallsException>());
+                Assert.That(
+                    () => Expect(sub).To.Have.Received(count).Bar(),
+                    Throws.Exception.InstanceOf<ReceivedCallsException>()
+                );
                 // Assert
             }
         }
@@ -96,7 +102,7 @@ namespace NExpect.Matchers.NSubstitute.Tests
                 // Assert
                 Expect(sub).Not.To.Have.Received().Bar();
             }
-            
+
             [Test]
             public void WhenReceivedSome_ShouldThrow()
             {
@@ -105,9 +111,11 @@ namespace NExpect.Matchers.NSubstitute.Tests
                 // Act
                 sub.Bar();
                 // Assert
-                Assert.That(() =>
-                Expect(sub).Not.To.Have.Received().Bar(),
-                    Throws.Exception.InstanceOf<ReceivedCallsException>());
+                Assert.That(
+                    () =>
+                        Expect(sub).Not.To.Have.Received().Bar(),
+                    Throws.Exception.InstanceOf<ReceivedCallsException>()
+                );
             }
 
             [Test]
@@ -119,10 +127,38 @@ namespace NExpect.Matchers.NSubstitute.Tests
                 sub.Bar();
                 sub.Bar();
                 // Assert
-                Assert.That(() =>
-                    Expect(sub).Not.To.Have.Received(2).Bar(),
-                    Throws.Exception.InstanceOf<NotSupportedException>());
+                Assert.That(
+                    () =>
+                        Expect(sub).Not.To.Have.Received(2).Bar(),
+                    Throws.Exception.InstanceOf<NotSupportedException>()
+                );
             }
+        }
+
+        [Test]
+        public void ShouldNotTriggerIncompleteAssertions()
+        {
+            // Arrange
+            var sut = Substitute.For<IFoo>();
+            // Act
+            sut.Bar();
+            // Assert
+            Expect(sut)
+                .To.Have.Received(1)
+                .Bar();
+            Assertions.VerifyNoIncompleteAssertions();
+        }
+
+        [OneTimeSetUp]
+        public void OneTimeSetup()
+        {
+            Assertions.EnableTracking();
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            Assertions.DisableTracking();
         }
     }
 }

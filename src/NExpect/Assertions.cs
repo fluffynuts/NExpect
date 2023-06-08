@@ -259,7 +259,7 @@ public static class Assertions
         if (IsDisabledOrSuspended)
         {
             throw new InvalidOperationException(
-                ""
+                "Assertion tracking is disabled. Please call Assertions.EnableTracking() if you'd like to track potentially incomplete assertions."
             );
         }
 

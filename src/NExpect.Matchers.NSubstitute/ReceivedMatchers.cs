@@ -21,6 +21,7 @@ namespace NExpect
         /// <typeparam name="T"></typeparam>
         public static T Received<T>(this IHave<T> have) where T : class
         {
+            Assertions.Forget(have);
             var actual = have.GetActual();
             var context = actual.GetMetadata<IExpectationContext>(Expectations.METADATA_KEY);
             return context.IsNegated()
@@ -36,6 +37,7 @@ namespace NExpect
         /// <typeparam name="T"></typeparam>
         public static T Received<T>(this IHave<T> have, int count) where T : class
         {
+            Assertions.Forget(have);
             var actual = have.GetActual();
             var context = actual.GetMetadata<IExpectationContext>(Expectations.METADATA_KEY);
             if (context.IsNegated())
