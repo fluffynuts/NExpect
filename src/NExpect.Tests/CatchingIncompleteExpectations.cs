@@ -403,6 +403,19 @@ public class CatchingIncompleteExpectations
         Assertions.VerifyNoIncompleteAssertions();
     }
 
+    [Test]
+    public void ShouldBeAbleToAssertSingleStringInCollection()
+    {
+        // Arrange
+        var strings = new[] { "a", "b", "c" };
+        // Act
+        Expect(strings)
+            .To.Contain.Exactly(1)
+            .Equal.To("b");
+        // Assert
+        Assertions.VerifyNoIncompleteAssertions();
+    }
+
     public class Service
     {
     }

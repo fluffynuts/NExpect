@@ -174,7 +174,8 @@ public static class Assertions
             ?? new UnmetExpectationException(message, innerException);
     }
 
-    private static readonly ConcurrentDictionary<Guid, SweepableItem> InFlightContexts = new();
+    // ReSharper disable once MemberCanBePrivate.Global
+    internal static readonly ConcurrentDictionary<Guid, SweepableItem> InFlightContexts = new();
 
     /// <summary>
     /// Enable expectation tracking so that incomplete

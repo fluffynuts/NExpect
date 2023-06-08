@@ -385,13 +385,14 @@ public static class CollectionMatchers
         string customMessage
     )
     {
-        if (countMatch == null)
+        if (countMatch is null)
         {
             throw new ArgumentNullException(
                 nameof(countMatch),
                 $"EqualTo<T> cannot extend null ICanAddMatcher<IEnumerable<{typeof(T)}>>");
         }
 
+        Assertions.Forget(countMatch);
         return countMatch.Continuation.AddMatcher(
             collection =>
             {
@@ -466,6 +467,7 @@ public static class CollectionMatchers
         Func<string> customMessageGenerator
     )
     {
+        Assertions.Forget(countMatch);
         return countMatch.Continuation.AddMatcher(
             collection =>
             {
@@ -560,6 +562,7 @@ public static class CollectionMatchers
         Func<string> customMessageGenerator
     )
     {
+        Assertions.Forget(countMatchOf);
         return countMatchOf.Continuation.AddMatcher(
             collection =>
             {
@@ -637,6 +640,7 @@ public static class CollectionMatchers
         Func<string> customMessageGenerator
     )
     {
+        Assertions.Forget(countMatch);
         return countMatch.Continuation.AddMatcher(
             collection =>
             {
