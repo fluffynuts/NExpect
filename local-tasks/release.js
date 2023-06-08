@@ -25,6 +25,20 @@ gulp.task("push", "pushes packages to nuget.org", () => {
   return Promise.all(promises);
 });
 
+gulp.task("test-push", "", () => {
+  const packages = {
+    NExpect: findNupkg("NExpect"),
+    NSubstitute: findNupkg("NExpect.Matchers.NSubstitute"),
+    AspNetCore: findNupkg("NExpect.Matchers.AspNetCore"),
+    Xml: findNupkg("NExpect.Matchers.Xml"),
+    AspNetMvc: findNupkg("NExpect.Matchers.AspNetMvc")
+  };
+  for (const k in packages) {
+    console.log(`${k}: ${packages[k]}`);
+  }
+  return Promise.resolve();
+});
+
 function findNupkg(id) {
   return findPackage(id, "nupkg");
 }
@@ -34,14 +48,22 @@ function findPackage(id, ext) {
     .readdirSync(packageDir)
     .filter(p => p.endsWith(`.${ext}`))
     .filter(p => {
-      var parts = p
-        .split(".")
-        .filter(part => part !== ext && isNaN(parseInt(part)));
-      return parts.join(".") === id;
+      const info = parseNugetPackageFilename(p);
+      return info.id == id;
     })
     .map(p => path.join(packageDir, p))
     .sort()
     .reverse()[0];
+}
+
+const pkgRegex = /^(?<id>[a-zA-Z.]+[a-zA-Z])\.(?<version>[\d.]+[\d]+)-?(?<tag>.*)\.nupkg/;
+function parseNugetPackageFilename(filename) {
+  const matches = filename.match(pkgRegex);
+  return {
+    id: matches.groups.id,
+    version: matches.groups.version,
+    tag: matches.groups.tag
+  };
 }
 
 function pushPackage(package) {

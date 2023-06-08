@@ -14,7 +14,8 @@
         "release": "cross-env BUILD_CONFIGURATION=BuildForRelease run-s \"zarro release\"",
         "prerelease-beta": "run-s verify-up-to-date test clear-old-packages",
         "release-beta": "cross-env PACK_INCREMENT_VERSION=1 VERSION_INCREMENT_STRATEGY=prerelease BUILD_CONFIGURATION=BuildForRelease run-s \"zarro release\"",
-        "clear-old-packages": "rimraf packages"
+        "clear-old-packages": "rimraf packages",
+        "test-push": "run-s \"zarro test-push\""
     },
     "devDependencies": {
         "chalk": "^3.0.0",
