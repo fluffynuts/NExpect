@@ -20,7 +20,7 @@
     <DefineConstants>BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>2.0.30-2306081119.fdddf3b</PackageVersion>
+    <PackageVersion>2.0.30-2306081557.4fa2105</PackageVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
