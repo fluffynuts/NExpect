@@ -650,13 +650,13 @@ public static class CollectionMatchers
                     : countMatch.Compare;
 
                 var idx = 0;
-                var have = collection.Select(
+                var have = collection?.Select(
                         o => new
                         {
                             o,
                             idx = idx++
                         })
-                    .Count(o => test(o.idx, o.o));
+                    .Count(o => test(o.idx, o.o)) ?? 0;
                 var passed = CollectionCountMatchStrategies[countMatch.Method](have, compare);
                 return new MatcherResult(
                     passed,

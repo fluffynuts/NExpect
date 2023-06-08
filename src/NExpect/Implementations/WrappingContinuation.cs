@@ -36,6 +36,7 @@ internal class WrappingContinuation<TFrom, TTo> :
         Func<IHasActual<TFrom>, TTo> unwrap
     )
     {
+        Assertions.Forget(toWrap);
         _wrapped = toWrap;
         _unwrap = unwrap;
     }
