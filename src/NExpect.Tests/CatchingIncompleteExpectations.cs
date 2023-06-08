@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using NExpect;
 using NExpect.Exceptions;
 using NExpect.Implementations;
 using NExpect.Interfaces;
@@ -14,11 +13,23 @@ namespace NExpect.Tests;
 [TestFixture]
 public class CatchingIncompleteExpectations
 {
+    [OneTimeSetUp]
+    public void OneTimeSetup()
+    {
+        ExpectationTracker.EnableTracking();
+    }
+
+    [OneTimeTearDown]
+    public void OneTimeTeardown()
+    {
+        ExpectationTracker.DisableTracking();
+    }
+
     [Test]
     public void ShouldCatchSimpleExpect()
     {
-        // Arrange
-        // Act
+        // // Arrange
+        // // Act
         Assert.That(
             RunAndVerify(
                 () =>
@@ -28,7 +39,7 @@ public class CatchingIncompleteExpectations
             ),
             Throws.Exception.InstanceOf<IncompleteExpectationException>()
         );
-
+        
         Assert.That(
             RunAndVerify(
                 () =>
@@ -319,6 +330,50 @@ public class CatchingIncompleteExpectations
         {
             // suppress
         }
+        // Assert
+        ExpectationTracker.AssertNoIncompleteExpectations();
+    }
+
+    [Test]
+    public void ShouldNotThrowForDateComparisons()
+    {
+        // Arrange
+        var earlier = new DateTime(2020, 1, 1);
+        var later = new DateTime(2021, 1, 1);
+        // Act
+        Expect(later)
+            .To.Be.Greater.Than(earlier);
+        ExpectationTracker.AssertNoIncompleteExpectations();
+        Expect(later)
+            .To.Be.Greater.Than.Or.Equal.To(earlier);
+        ExpectationTracker.AssertNoIncompleteExpectations();
+        Expect(earlier)
+            .To.Be.Less.Than(later);
+        ExpectationTracker.AssertNoIncompleteExpectations();
+        Expect(earlier)
+            .To.Be.Less.Than.Or.Equal.To(later);
+        // Assert
+        ExpectationTracker.AssertNoIncompleteExpectations();
+    }
+
+    [Test]
+    public void ShouldNotThrowForIntComparisons()
+    {
+        // Arrange
+        var earlier = 1;
+        var later = 2;
+        // Act
+        Expect(later)
+            .To.Be.Greater.Than(earlier);
+        ExpectationTracker.AssertNoIncompleteExpectations();
+        Expect(later)
+            .To.Be.Greater.Than.Or.Equal.To(earlier);
+        ExpectationTracker.AssertNoIncompleteExpectations();
+        Expect(earlier)
+            .To.Be.Less.Than(later);
+        ExpectationTracker.AssertNoIncompleteExpectations();
+        Expect(earlier)
+            .To.Be.Less.Than.Or.Equal.To(later);
         // Assert
         ExpectationTracker.AssertNoIncompleteExpectations();
     }

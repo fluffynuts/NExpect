@@ -2,6 +2,7 @@
 using NExpect.Implementations.Numerics;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+using static NExpect.Implementations.ExpectationTracker;
 
 namespace NExpect;
 
@@ -11,9 +12,11 @@ internal static class GreaterAndLessMatchersContinuations
         this IGreaterContinuation<T> continuation
     )
     {
-        return ContinuationFactory.Create<T, GreaterThanContinuation<T>>(
-            continuation.GetActual,
-            continuation as IExpectationContext<T>
+        return Forget(
+            ContinuationFactory.Create<T, GreaterThanContinuation<T>>(
+                continuation.GetActual,
+                continuation as IExpectationContext<T>
+            )
         );
     }
 
@@ -21,9 +24,11 @@ internal static class GreaterAndLessMatchersContinuations
         this IGreaterThanOrEqual<T> continuation
     )
     {
-        return ContinuationFactory.Create<T, GreaterThanContinuation<T>>(
-            continuation.GetActual,
-            continuation as IExpectationContext<T>
+        return Forget(
+            ContinuationFactory.Create<T, GreaterThanContinuation<T>>(
+                continuation.GetActual,
+                continuation as IExpectationContext<T>
+            )
         );
     }
 
@@ -31,9 +36,11 @@ internal static class GreaterAndLessMatchersContinuations
         this ILessContinuation<T> continuation
     )
     {
-        return ContinuationFactory.Create<T, LessThanContinuation<T>>(
-            continuation.GetActual,
-            continuation as IExpectationContext<T>
+        return Forget(
+            ContinuationFactory.Create<T, LessThanContinuation<T>>(
+                continuation.GetActual,
+                continuation as IExpectationContext<T>
+            )
         );
     }
 
@@ -41,10 +48,11 @@ internal static class GreaterAndLessMatchersContinuations
         this ILessThanOrEqual<T> continuation
     )
     {
-        return ContinuationFactory.Create<T, LessThanContinuation<T>>(
-            continuation.GetActual,
-            continuation as IExpectationContext<T>
+        return Forget(
+            ContinuationFactory.Create<T, LessThanContinuation<T>>(
+                continuation.GetActual,
+                continuation as IExpectationContext<T>
+            )
         );
     }
-
 }

@@ -15,7 +15,7 @@ public static class ContinuationFactory
         Action<T2> afterConstruction = null
     ) where T2 : IExpectationContext<T1>
     {
-        ExpectationTracker.Forget(parent);
+        ExpectationTracker.Forget(parent); // parent is being discarded
         var result = (T2) Activator.CreateInstance(typeof(T2), actualGenerator);
 
         result.TypedParent = parent;
