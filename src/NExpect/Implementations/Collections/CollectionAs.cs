@@ -13,7 +13,13 @@ internal class CollectionAs<T>:
     ICollectionAs<T>
 {
     public ICollectionExpectation<object> Objects =>
-        new CollectionExpectation<object>(Actual.Select(o => o as object));
+        CreateNext();
+
+    private CollectionExpectation<object> CreateNext()
+    {
+        Assertions.Forget(this);
+        return new CollectionExpectation<object>(Actual.Select(o => o as object));
+    }
 
     public CollectionAs(Func<IEnumerable<T>> actualFetcher) : base(actualFetcher)
     {

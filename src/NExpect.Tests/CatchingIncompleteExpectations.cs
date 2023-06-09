@@ -448,6 +448,20 @@ public class CatchingIncompleteExpectations
         Assertions.VerifyNoIncompleteAssertions();
     }
 
+    [Test]
+    public void ShouldBeAbleToDoCollectionCasting()
+    {
+        // Arrange
+        var left = new[] { new { id = 1 } };
+        var right = new[] { new { id = 1, name = "bob" } };
+        // Act
+        Expect(left)
+            .As.Objects
+            .To.Intersection.Equal(right);
+        // Assert
+        Assertions.VerifyNoIncompleteAssertions();
+    }
+
     public class Service
     {
     }
