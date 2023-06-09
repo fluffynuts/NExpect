@@ -73,6 +73,7 @@ internal class PropertyWith<T>
         Func<string> customMessageGenerator
     )
     {
+        Assertions.Forget(this);
         return new PropertyMore<T>(
             Have.AddMatcher(actual =>
             {
@@ -127,6 +128,7 @@ internal class PropertyWith<T>
         Func<string> customMessageGenerator
     )
     {
+        Assertions.Forget(this);
         return new PropertyMore<T>(
             Have.AddMatcher(actual =>
                 {

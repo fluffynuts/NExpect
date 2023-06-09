@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using NExpect.Exceptions;
@@ -461,6 +463,60 @@ public class CatchingIncompleteExpectations
         // Assert
         Assertions.VerifyNoIncompleteAssertions();
     }
+
+    [Test]
+    public void ShouldAllowPropertyValidation()
+    {
+        // Arrange
+        var sut = typeof(Person);
+        // Act
+        Expect(sut)
+            .To.Have.Property("Name")
+            .With.Attribute<StringLengthAttribute>(
+                a => a.MaximumLength == 123
+            );
+        Expect(sut)
+            .To.Have.Property("Name")
+            .With.Type<string>();
+        Expect(sut)
+            .To.Have.Property("Name")
+            .With.Attribute<StringLengthAttribute>(
+                a => a.MaximumLength == 123
+            )
+            .With.Type<string>();
+        Expect(sut)
+            .To.Have.Property("Name")
+            .With.Attribute<StringLengthAttribute>(
+                a => a.MaximumLength == 123
+            )
+            .And
+            .To.Have.Property("Name")
+            .With.Type<string>();
+        // Assert
+        Assertions.VerifyNoIncompleteAssertions();
+    }
+
+    [Test]
+    public void ShouldBeAbleToAssertRuntimes()
+    {
+        // Arrange
+        // Act
+        Expect(() => Thread.Sleep(500))
+            .RunTime
+            .To.Be.Greater.Than(TimeSpan.FromMilliseconds(100))
+            .And
+            .To.Be.Less.Than(TimeSpan.FromMilliseconds(1000));
+        // Assert
+        Assertions.VerifyNoIncompleteAssertions();
+    }
+
+    public class Person
+    {
+        [StringLength(123)]
+        [Required(ErrorMessage = "Name is required")]
+        public string Name { get; set; }
+    }
+
 
     public class Service
     {

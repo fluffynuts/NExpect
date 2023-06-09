@@ -14,6 +14,7 @@ internal class ActionExpectation
 
     private IExpectation<TimeSpan> ResolveRuntimeExpectation()
     {
+        Assertions.Forget(this);
         if (!Actual.TryGetMetadata<TimeSpan>(ActionRunner.META_KEY_RUNTIME, out var runTime))
         {
             runTime = ActionRunner.RunSuppressed(Actual);
