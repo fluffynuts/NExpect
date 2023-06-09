@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using NExpect.Exceptions;
@@ -39,7 +41,7 @@ public class CatchingIncompleteExpectations
             ),
             Throws.Exception.InstanceOf<IncompleteExpectationException>()
         );
-        
+
         Assert.That(
             RunAndVerify(
                 () =>
@@ -330,6 +332,7 @@ public class CatchingIncompleteExpectations
         {
             // suppress
         }
+
         // Assert
         Assertions.VerifyNoIncompleteAssertions();
     }
@@ -379,19 +382,6 @@ public class CatchingIncompleteExpectations
     }
 
     [Test]
-    [Explicit("this is a visual test for the error text")]
-    public void EyeballingTheResult()
-    {
-        // Arrange
-        var numbers = new[] { 1, 2, 3 };
-        // Act
-        Expect(numbers).To.Contain.Exactly(1);
-        Expect(1);
-        Assertions.WarnOfIncompleteAssertions();
-        // Assert
-    }
-
-    [Test]
     public void ShouldBeAbleToAssertTypeWithoutViolating()
     {
         // Arrange
@@ -416,6 +406,36 @@ public class CatchingIncompleteExpectations
         Assertions.VerifyNoIncompleteAssertions();
     }
 
+    [Test]
+    public void ShouldBeAbleToAssertOnlyTheKeyInADictionary()
+    {
+        // Arrange
+        var dict = new Dictionary<string, string>()
+        {
+            ["foo"] = "bar"
+        };
+        // Act
+        Expect(dict)
+            .To.Contain.Key("foo");
+        // Assert
+
+        Assertions.VerifyNoIncompleteAssertions();
+    }
+
+    [Test]
+    public void ShouldBeAbleToAssertMessageMatchingOnException()
+    {
+        // Arrange
+        // Act
+        Expect(() => throw new Exception("nope"))
+            .To.Throw<Exception>()
+            .With.Message.Matching(
+                new Regex("nope")
+            );
+        // Assert
+        Assertions.VerifyNoIncompleteAssertions();
+    }
+
     public class Service
     {
     }
@@ -427,6 +447,19 @@ public class CatchingIncompleteExpectations
             action();
             Assertions.VerifyNoIncompleteAssertions();
         };
+    }
+
+    [Test]
+    [Explicit("this is a visual test for the error text")]
+    public void EyeballingTheResult()
+    {
+        // Arrange
+        var numbers = new[] { 1, 2, 3 };
+        // Act
+        Expect(numbers).To.Contain.Exactly(1);
+        Expect(1);
+        Assertions.WarnOfIncompleteAssertions();
+        // Assert
     }
 }
 

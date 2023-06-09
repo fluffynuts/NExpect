@@ -12,7 +12,8 @@ internal class ExceptionPropertyContinuation<TValue> :
     public new IPropertyNot<TValue> Not
         => Next<PropertyNot<TValue>>();
         
-    public ExceptionPropertyContinuation(Func<TValue> actualFetcher): base(actualFetcher)
+    public ExceptionPropertyContinuation(Func<TValue> actualFetcher)
+        : base(actualFetcher)
     {
     }
 }

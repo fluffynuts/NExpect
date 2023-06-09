@@ -22,5 +22,6 @@ internal class StringPropertyContinuation
     public StringPropertyContinuation(Func<string> actualFetcher)
         : base(actualFetcher)
     {
+        Assertions.Forget(this);
     }
 }

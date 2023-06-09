@@ -17,5 +17,6 @@ internal class DictionaryValueContinuation<TValue>
         Func<TValue> actualFetcher
     ) : base(actualFetcher)
     {
+        Assertions.Forget(this);
     }
 }
