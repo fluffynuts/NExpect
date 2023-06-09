@@ -1,6 +1,4 @@
 using System;
-using NExpect.Implementations.Collections;
-using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
@@ -35,16 +33,4 @@ internal class ThrowContinuation<T>
     {
         Assertions.Forget(this);
     }
-}
-
-internal class ThrowAndContinuation<T>
-    : ExpectationContext<T>,
-      IHasActual<T>,
-      IThrowAndContinuation<T> where T : Exception
-{
-    public T Actual => Exception;
-    public T Exception { get; set; }
-
-    public IAndAfterWithAfterThrowContinuation<T> And =>
-        ContinuationFactory.Create<T, AndAfterWithAfterThrowContinuation<T>>(() => Exception, this);
 }

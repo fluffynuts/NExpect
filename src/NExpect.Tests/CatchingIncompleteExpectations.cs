@@ -436,6 +436,18 @@ public class CatchingIncompleteExpectations
         Assertions.VerifyNoIncompleteAssertions();
     }
 
+    [Test]
+    public void ShouldBeAbleToAssertExceptionTypeAlt()
+    {
+        // Arrange
+        // Act
+        Expect(() => throw new ArgumentException("foo"))
+            .To.Throw()
+            .With.Type(typeof(ArgumentException));
+        // Assert
+        Assertions.VerifyNoIncompleteAssertions();
+    }
+
     public class Service
     {
     }
