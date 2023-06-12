@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 // ReSharper disable InheritdocConsiderUsage
 
 namespace NExpect.Interfaces;
@@ -8,6 +6,7 @@ namespace NExpect.Interfaces;
 /// Provides the ".Equal" grammar continuation for collections
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public interface ICollectionEqual<T> : ICanAddMatcher<IEnumerable<T>>
+public interface ICollectionEqual<T> 
+    : ICanAddCollectionMatcher<T>
 {
 }

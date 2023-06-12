@@ -7,6 +7,7 @@ using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
 using static NExpect.Helpers.DeepTestHelpers;
 using static Imported.PeanutButter.Utils.PyLike;
+
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable PossibleMultipleEnumeration
 
@@ -27,13 +28,17 @@ public static class CollectionIntersectionEqualityExtensions
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static IMore<IEnumerable<T>> Equal<T>(
+    public static ICollectionMore<T> Equal<T>(
         this ICollectionIntersection<T> continuation,
         IEnumerable<T> expected,
         params object[] customEqualityComparers
     )
     {
-        return continuation.Equal(expected, NULL_STRING, customEqualityComparers);
+        return continuation.Equal(
+            expected,
+            NULL_STRING,
+            customEqualityComparers
+        );
     }
 
     /// <summary>
@@ -47,14 +52,18 @@ public static class CollectionIntersectionEqualityExtensions
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static IMore<IEnumerable<T>> Equal<T>(
+    public static ICollectionMore<T> Equal<T>(
         this ICollectionIntersection<T> continuation,
         IEnumerable<T> expected,
         string customMessage,
         params object[] customEqualityComparers
     )
     {
-        return continuation.Equal(expected, () => customMessage, customEqualityComparers);
+        return continuation.Equal(
+            expected,
+            () => customMessage,
+            customEqualityComparers
+        );
     }
 
     /// <summary>
@@ -68,7 +77,7 @@ public static class CollectionIntersectionEqualityExtensions
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static IMore<IEnumerable<T>> Equal<T>(
+    public static ICollectionMore<T> Equal<T>(
         this ICollectionIntersection<T> continuation,
         IEnumerable<T> expected,
         Func<string> customMessageGenerator,
@@ -79,7 +88,8 @@ public static class CollectionIntersectionEqualityExtensions
             MakeCollectionIntersectionEqualMatcherFor(
                 expected,
                 customMessageGenerator,
-                customEqualityComparers)
+                customEqualityComparers
+            )
         );
     }
 
@@ -93,7 +103,7 @@ public static class CollectionIntersectionEqualityExtensions
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Type of collection item</typeparam>
-    public static IMore<IEnumerable<T>> To<T>(
+    public static ICollectionMore<T> To<T>(
         this ICollectionIntersectionEqual<T> continuation,
         IEnumerable<T> expected,
         params object[] customEqualityComparers
@@ -113,7 +123,7 @@ public static class CollectionIntersectionEqualityExtensions
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Type of collection item</typeparam>
-    public static IMore<IEnumerable<T>> To<T>(
+    public static ICollectionMore<T> To<T>(
         this ICollectionIntersectionEqual<T> continuation,
         IEnumerable<T> expected,
         string customMessage,
@@ -134,7 +144,7 @@ public static class CollectionIntersectionEqualityExtensions
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Type of collection item</typeparam>
-    public static IMore<IEnumerable<T>> To<T>(
+    public static ICollectionMore<T> To<T>(
         this ICollectionIntersectionEqual<T> continuation,
         IEnumerable<T> expected,
         Func<string> customMessageGenerator,
@@ -145,7 +155,8 @@ public static class CollectionIntersectionEqualityExtensions
             MakeCollectionIntersectionEqualMatcherFor(
                 expected,
                 customMessageGenerator,
-                customEqualityComparers)
+                customEqualityComparers
+            )
         );
     }
 
@@ -161,7 +172,8 @@ public static class CollectionIntersectionEqualityExtensions
             var result = CollectionsAreIntersectionEqual(
                 collection,
                 expected,
-                customEqualityComparers);
+                customEqualityComparers
+            );
             return new MatcherResult(
                 result.AreEqual,
                 FinalMessageFor(
@@ -181,7 +193,8 @@ public static class CollectionIntersectionEqualityExtensions
     private static DeepTestResult CollectionsAreIntersectionEqual<T>(
         IEnumerable<T> collection,
         IEnumerable<T> expected,
-        params object[] customEqualityComparers)
+        params object[] customEqualityComparers
+    )
     {
         return CollectionCompare(
             collection,
@@ -199,9 +212,13 @@ public static class CollectionIntersectionEqualityExtensions
                         var result = AreIntersectionEqual(
                             cur.Item1,
                             cur.Item2,
-                            customEqualityComparers);
-                        return result.AreEqual ? null : result;
-                    })
+                            customEqualityComparers
+                        );
+                        return result.AreEqual
+                            ? null
+                            : result;
+                    }
+                )
         ) ?? DeepTestResult.Pass;
     }
 }

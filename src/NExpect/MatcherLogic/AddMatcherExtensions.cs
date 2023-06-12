@@ -61,6 +61,20 @@ public static class AddMatcherExtensions
     }
 
     /// <summary>
+    /// Most general matcher add - onto ICanAddMatcher&lt;T&gt;
+    /// </summary>
+    /// <param name="continuation">Continuation to add matcher to</param>
+    /// <param name="matcher">Matcher to run</param>
+    /// <typeparam name="T">Type of the object under test</typeparam>
+    public static ICollectionMore<T> AddMatcher<T>(
+        this ICanAddCollectionMatcher<T> continuation,
+        Func<T, IMatcherResult> matcher)
+    {
+        AddMatcherPrivate(continuation, matcher);
+        return continuation.More();
+    }
+
+    /// <summary>
     /// Add a matcher onto an Exception property continuation
     /// </summary>
     /// <param name="continuation">Continuation to add matcher to</param>
@@ -80,8 +94,8 @@ public static class AddMatcherExtensions
     /// <param name="continuation">Continuation to add matcher to</param>
     /// <param name="matcher">Matcher to run</param>
     /// <typeparam name="T">Type of the object under test</typeparam>
-    public static IMore<IEnumerable<T>> AddMatcher<T>(
-        this ICanAddMatcher<IEnumerable<T>> continuation,
+    public static ICollectionMore<T> AddMatcher<T>(
+        this ICanAddCollectionMatcher<T> continuation,
         Func<IEnumerable<T>, IMatcherResult> matcher
     )
     {

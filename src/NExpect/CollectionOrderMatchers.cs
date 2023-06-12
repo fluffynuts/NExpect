@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -41,7 +40,7 @@ public static class CollectionOrderMatchers
     /// <param name="collectionOrdered">Continuation</param>
     /// <typeparam name="T">Collection item type</typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> Ascending<T>(
+    public static ICollectionMore<T> Ascending<T>(
         this ICollectionOrdered<T> collectionOrdered
     )
     {
@@ -60,7 +59,7 @@ public static class CollectionOrderMatchers
     /// implementing IComparer&lt;T&gt;</param>
     /// <typeparam name="T">Collection item type</typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> Ascending<T>(
+    public static ICollectionMore<T> Ascending<T>(
         this ICollectionOrdered<T> collectionOrdered,
         IComparer<T> comparer
     )
@@ -77,7 +76,7 @@ public static class CollectionOrderMatchers
     /// <param name="customMessage">Custom message to include when assertion fails</param>
     /// <typeparam name="T">Collection item type</typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> Ascending<T>(
+    public static ICollectionMore<T> Ascending<T>(
         this ICollectionOrdered<T> collectionOrdered,
         string customMessage)
     {
@@ -98,7 +97,7 @@ public static class CollectionOrderMatchers
     /// <param name="customMessage">Custom message to include when assertion fails</param>
     /// <typeparam name="T">Collection item type</typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> Ascending<T>(
+    public static ICollectionMore<T> Ascending<T>(
         this ICollectionOrdered<T> collectionOrdered,
         IComparer<T> comparer,
         string customMessage
@@ -120,7 +119,7 @@ public static class CollectionOrderMatchers
     /// Generates a custom message to include when assertion fails</param>
     /// <typeparam name="T">Collection item type</typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> Ascending<T>(
+    public static ICollectionMore<T> Ascending<T>(
         this ICollectionOrdered<T> collectionOrdered,
         Func<string> customMessageGenerator
     )
@@ -143,7 +142,7 @@ public static class CollectionOrderMatchers
     /// Generates a custom message to include when assertion fails</param>
     /// <typeparam name="T">Collection item type</typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> Ascending<T>(
+    public static ICollectionMore<T> Ascending<T>(
         this ICollectionOrdered<T> collectionOrdered,
         IComparer<T> comparer,
         Func<string> customMessageGenerator
@@ -171,7 +170,7 @@ public static class CollectionOrderMatchers
     /// <param name="collectionOrdered">Continuation</param>
     /// <typeparam name="T">Collection item type</typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> Descending<T>(
+    public static ICollectionMore<T> Descending<T>(
         this ICollectionOrdered<T> collectionOrdered
     )
     {
@@ -190,7 +189,7 @@ public static class CollectionOrderMatchers
     /// implementing IComparer&lt;T&gt;</param>
     /// <typeparam name="T">Collection item type</typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> Descending<T>(
+    public static ICollectionMore<T> Descending<T>(
         this ICollectionOrdered<T> collectionOrdered,
         IComparer<T> comparer
     )
@@ -207,7 +206,7 @@ public static class CollectionOrderMatchers
     /// <param name="customMessage">Custom message to include when assertion fails</param>
     /// <typeparam name="T">Collection item type</typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> Descending<T>(
+    public static ICollectionMore<T> Descending<T>(
         this ICollectionOrdered<T> collectionOrdered,
         string customMessage)
     {
@@ -228,7 +227,7 @@ public static class CollectionOrderMatchers
     /// <param name="customMessage">Custom message to include when assertion fails</param>
     /// <typeparam name="T">Collection item type</typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> Descending<T>(
+    public static ICollectionMore<T> Descending<T>(
         this ICollectionOrdered<T> collectionOrdered,
         IComparer<T> comparer,
         string customMessage
@@ -250,7 +249,7 @@ public static class CollectionOrderMatchers
     /// Generates a custom message to include when assertion fails</param>
     /// <typeparam name="T">Collection item type</typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> Descending<T>(
+    public static ICollectionMore<T> Descending<T>(
         this ICollectionOrdered<T> collectionOrdered,
         Func<string> customMessageGenerator
     )
@@ -273,7 +272,7 @@ public static class CollectionOrderMatchers
     /// Generates a custom message to include when assertion fails</param>
     /// <typeparam name="T">Collection item type</typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> Descending<T>(
+    public static ICollectionMore<T> Descending<T>(
         this ICollectionOrdered<T> collectionOrdered,
         IComparer<T> comparer,
         Func<string> customMessageGenerator
@@ -299,7 +298,7 @@ public static class CollectionOrderMatchers
     /// <param name="selector"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> By<T>(
+    public static ICollectionMore<T> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
         Expression<Func<T, object>> selector
     )
@@ -319,7 +318,7 @@ public static class CollectionOrderMatchers
     /// <param name="customMessage"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> By<T>(
+    public static ICollectionMore<T> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
         Expression<Func<T, object>> selector,
         string customMessage
@@ -340,7 +339,7 @@ public static class CollectionOrderMatchers
     /// <param name="customMessageGenerator"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> By<T>(
+    public static ICollectionMore<T> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
         Expression<Func<T, object>> selector,
         Func<string> customMessageGenerator
@@ -362,7 +361,7 @@ public static class CollectionOrderMatchers
     /// <param name="direction"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> By<T>(
+    public static ICollectionMore<T> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
         Expression<Func<T, object>> selector,
         Direction direction
@@ -385,7 +384,7 @@ public static class CollectionOrderMatchers
     /// <param name="customMessage"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> By<T>(
+    public static ICollectionMore<T> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
         Expression<Func<T, object>> selector,
         Direction direction,
@@ -426,7 +425,7 @@ public static class CollectionOrderMatchers
     /// <param name="customMessageGenerator"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static IMore<IEnumerable<T>> By<T>(
+    public static ICollectionMore<T> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
         Expression<Func<T, object>> selector,
         Direction direction,

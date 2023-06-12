@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
+
 // ReSharper disable PossibleMultipleEnumeration
 
 namespace NExpect
@@ -22,7 +23,7 @@ namespace NExpect
         /// <param name="queryString"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static IMore<IEnumerable<KeyValuePair<string, string>>> Equal(
+        public static ICollectionMore<KeyValuePair<string, string>> Equal(
             this ICollectionTo<KeyValuePair<string, string>> to,
             QueryString queryString
         )
@@ -39,7 +40,7 @@ namespace NExpect
         /// <param name="customMessage"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static IMore<IEnumerable<KeyValuePair<string, string>>> Equal(
+        public static ICollectionMore<KeyValuePair<string, string>> Equal(
             this ICollectionTo<KeyValuePair<string, string>> to,
             QueryString queryString,
             string customMessage
@@ -57,24 +58,26 @@ namespace NExpect
         /// <param name="customMessageGenerator"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static IMore<IEnumerable<KeyValuePair<string, string>>> Equal(
+        public static ICollectionMore<KeyValuePair<string, string>> Equal(
             this ICollectionTo<KeyValuePair<string, string>> to,
             QueryString queryString,
             Func<string> customMessageGenerator
         )
         {
-            return to.AddMatcher(actual =>
-            {
-                var dict = queryString.AsDictionary();
-                var passed = dict.IsEquivalentTo(actual);
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        () => $"Expected\n{actual.Stringify()}\nto be equivalent to\n{dict.Stringify()}",
-                        customMessageGenerator
-                    )
-                );
-            });
+            return to.AddMatcher(
+                actual =>
+                {
+                    var dict = queryString.AsDictionary();
+                    var passed = dict.IsEquivalentTo(actual);
+                    return new MatcherResult(
+                        passed,
+                        FinalMessageFor(
+                            () => $"Expected\n{actual.Stringify()}\nto be equivalent to\n{dict.Stringify()}",
+                            customMessageGenerator
+                        )
+                    );
+                }
+            );
         }
 
         /// <summary>
@@ -85,7 +88,7 @@ namespace NExpect
         /// <param name="queryString"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static IMore<IEnumerable<KeyValuePair<string, string>>> Equal(
+        public static ICollectionMore<KeyValuePair<string, string>> Equal(
             this ICollectionToAfterNot<KeyValuePair<string, string>> to,
             QueryString queryString
         )
@@ -102,7 +105,7 @@ namespace NExpect
         /// <param name="customMessage"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static IMore<IEnumerable<KeyValuePair<string, string>>> Equal(
+        public static ICollectionMore<KeyValuePair<string, string>> Equal(
             this ICollectionToAfterNot<KeyValuePair<string, string>> to,
             QueryString queryString,
             string customMessage
@@ -120,24 +123,26 @@ namespace NExpect
         /// <param name="customMessageGenerator"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static IMore<IEnumerable<KeyValuePair<string, string>>> Equal(
+        public static ICollectionMore<KeyValuePair<string, string>> Equal(
             this ICollectionToAfterNot<KeyValuePair<string, string>> to,
             QueryString queryString,
             Func<string> customMessageGenerator
         )
         {
-            return to.AddMatcher(actual =>
-            {
-                var dict = queryString.AsDictionary();
-                var passed = dict.IsEquivalentTo(actual);
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        () => $"Expected\n{actual.Stringify()}\nnot to be equivalent to\n{dict.Stringify()}",
-                        customMessageGenerator
-                    )
-                );
-            });
+            return to.AddMatcher(
+                actual =>
+                {
+                    var dict = queryString.AsDictionary();
+                    var passed = dict.IsEquivalentTo(actual);
+                    return new MatcherResult(
+                        passed,
+                        FinalMessageFor(
+                            () => $"Expected\n{actual.Stringify()}\nnot to be equivalent to\n{dict.Stringify()}",
+                            customMessageGenerator
+                        )
+                    );
+                }
+            );
         }
 
         /// <summary>
@@ -148,12 +153,15 @@ namespace NExpect
         /// <param name="queryString"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static IMore<IEnumerable<KeyValuePair<string, string>>> Equal(
+        public static ICollectionMore<KeyValuePair<string, string>> Equal(
             this ICollectionNotAfterTo<KeyValuePair<string, string>> to,
             QueryString queryString
         )
         {
-            return to.Equal(queryString, NULL_STRING);
+            return to.Equal(
+                queryString,
+                NULL_STRING
+            );
         }
 
         /// <summary>
@@ -165,13 +173,16 @@ namespace NExpect
         /// <param name="customMessage"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static IMore<IEnumerable<KeyValuePair<string, string>>> Equal(
+        public static ICollectionMore<KeyValuePair<string, string>> Equal(
             this ICollectionNotAfterTo<KeyValuePair<string, string>> to,
             QueryString queryString,
             string customMessage
         )
         {
-            return to.Equal(queryString, () => customMessage);
+            return to.Equal(
+                queryString,
+                () => customMessage
+            );
         }
 
         /// <summary>
@@ -183,24 +194,26 @@ namespace NExpect
         /// <param name="customMessageGenerator"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static IMore<IEnumerable<KeyValuePair<string, string>>> Equal(
+        public static ICollectionMore<KeyValuePair<string, string>> Equal(
             this ICollectionNotAfterTo<KeyValuePair<string, string>> to,
             QueryString queryString,
             Func<string> customMessageGenerator
         )
         {
-            return to.AddMatcher(actual =>
-            {
-                var dict = queryString.AsDictionary();
-                var passed = dict.IsEquivalentTo(actual);
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        () => $"Expected\n{actual.Stringify()}\nnot to be equivalent to\n{dict.Stringify()}",
-                        customMessageGenerator
-                    )
-                );
-            });
+            return to.AddMatcher(
+                actual =>
+                {
+                    var dict = queryString.AsDictionary();
+                    var passed = dict.IsEquivalentTo(actual);
+                    return new MatcherResult(
+                        passed,
+                        FinalMessageFor(
+                            () => $"Expected\n{actual.Stringify()}\nnot to be equivalent to\n{dict.Stringify()}",
+                            customMessageGenerator
+                        )
+                    );
+                }
+            );
         }
     }
 }

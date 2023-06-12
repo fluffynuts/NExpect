@@ -27,13 +27,17 @@ public static class CollectionIntersectionEquivalenceExtensions
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Original type of collection</typeparam>
-    public static IMore<IEnumerable<T>> To<T>(
+    public static ICollectionMore<T> To<T>(
         this ICollectionIntersectionEquivalent<T> continuation,
         IEnumerable<T> expected,
         params object[] customEqualityComparers
     )
     {
-        return continuation.To(expected, NULL_STRING, customEqualityComparers);
+        return continuation.To(
+            expected,
+            NULL_STRING,
+            customEqualityComparers
+        );
     }
 
     /// <summary>
@@ -47,14 +51,18 @@ public static class CollectionIntersectionEquivalenceExtensions
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Original type of collection</typeparam>
-    public static IMore<IEnumerable<T>> To<T>(
+    public static ICollectionMore<T> To<T>(
         this ICollectionIntersectionEquivalent<T> continuation,
         IEnumerable<T> expected,
         string customMessage,
         params object[] customEqualityComparers
     )
     {
-        return continuation.To(expected, () => customMessage, customEqualityComparers);
+        return continuation.To(
+            expected,
+            () => customMessage,
+            customEqualityComparers
+        );
     }
 
     /// <summary>
@@ -68,7 +76,7 @@ public static class CollectionIntersectionEquivalenceExtensions
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Original type of collection</typeparam>
-    public static IMore<IEnumerable<T>> To<T>(
+    public static ICollectionMore<T> To<T>(
         this ICollectionIntersectionEquivalent<T> continuation,
         IEnumerable<T> expected,
         Func<string> customMessageGenerator,
@@ -83,7 +91,8 @@ public static class CollectionIntersectionEquivalenceExtensions
                 var result = CollectionsAreIntersectionEquivalent(
                     actualArray,
                     expectedArray,
-                    customEqualityComparers);
+                    customEqualityComparers
+                );
                 return new MatcherResult(
                     result.AreEqual,
                     FinalMessageFor(
@@ -97,13 +106,15 @@ public static class CollectionIntersectionEquivalenceExtensions
                         customMessageGenerator
                     )
                 );
-            });
+            }
+        );
     }
 
     private static DeepTestResult CollectionsAreIntersectionEquivalent<T>(
         IEnumerable<T> collection,
         IEnumerable<T> expected,
-        object[] customEqualityMatchers)
+        object[] customEqualityMatchers
+    )
     {
         return CollectionCompare(
             collection,
@@ -118,7 +129,9 @@ public static class CollectionIntersectionEquivalenceExtensions
                             c => AreIntersectionEqual(
                                 currentMaster,
                                 c,
-                                customEqualityMatchers).AreEqual);
+                                customEqualityMatchers
+                            ).AreEqual
+                        );
                     // TODO: add information about mismatch
                     if (compareMatch == null)
                     {
@@ -132,6 +145,7 @@ public static class CollectionIntersectionEquivalenceExtensions
                 }
 
                 return DeepTestResult.Pass;
-            });
+            }
+        );
     }
 }

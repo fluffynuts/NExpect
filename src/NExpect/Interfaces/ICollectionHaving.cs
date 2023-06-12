@@ -1,10 +1,10 @@
 namespace NExpect.Interfaces
 {
     /// <summary>
-    /// Provides the .Mostly grammar extension
+    /// Provides the interface for the .Having continuation
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ICollectionMostly<T> 
+    public interface ICollectionHaving<T> 
         : ICanAddCollectionMatcher<T>
     {
     }

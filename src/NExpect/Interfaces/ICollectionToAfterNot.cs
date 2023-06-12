@@ -8,7 +8,8 @@ namespace NExpect.Interfaces;
 /// Provides the ".To" grammar extension after an existing ".Not"
 /// </summary>
 /// <typeparam name="T">Type of the continuation</typeparam>
-public interface ICollectionToAfterNot<T> : ICanAddMatcher<IEnumerable<T>>
+public interface ICollectionToAfterNot<T> 
+    : ICanAddCollectionMatcher<T>
 {
     /// <summary>
     /// Prepares to test if the collection under test contains (an) expected value(s)

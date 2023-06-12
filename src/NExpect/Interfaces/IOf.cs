@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace NExpect.Interfaces;
 
 /// <summary>

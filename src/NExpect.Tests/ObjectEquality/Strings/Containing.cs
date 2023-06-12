@@ -30,6 +30,14 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         },
                         Throws.Nothing);
 
+                    Assert.That(() =>
+                        {
+                            Expect(actual).To.Contain(search)
+                                .And
+                                .To.Contain("-");
+                        },
+                        Throws.Nothing);
+
                     // Assert
                 }
 

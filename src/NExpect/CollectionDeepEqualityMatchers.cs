@@ -27,7 +27,7 @@ public static class CollectionDeepEqualityMatchers
     /// <param name="continuation">Continuation to operate on</param>
     /// <param name="expected">Collection to match</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static IMore<IEnumerable<T>> Equal<T>(
+    public static ICollectionMore<T> Equal<T>(
         this ICollectionDeep<T> continuation,
         IEnumerable<T> expected
     )
@@ -44,13 +44,16 @@ public static class CollectionDeepEqualityMatchers
     /// <param name="expected">Collection to match</param>
     /// <param name="customMessage">Custom message to add when failing</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static IMore<IEnumerable<T>> Equal<T>(
+    public static ICollectionMore<T> Equal<T>(
         this ICollectionDeep<T> continuation,
         IEnumerable<T> expected,
         string customMessage
     )
     {
-        return continuation.Equal(expected, () => customMessage);
+        return continuation.Equal(
+            expected,
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -62,7 +65,7 @@ public static class CollectionDeepEqualityMatchers
     /// <param name="expected">Collection to match</param>
     /// <param name="customMessageGenerator">Generates a custom message to add when failing</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static IMore<IEnumerable<T>> Equal<T>(
+    public static ICollectionMore<T> Equal<T>(
         this ICollectionDeep<T> continuation,
         IEnumerable<T> expected,
         Func<string> customMessageGenerator
@@ -83,13 +86,17 @@ public static class CollectionDeepEqualityMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static IMore<IEnumerable<T>> To<T>(
+    public static ICollectionMore<T> To<T>(
         this ICollectionDeepEqual<T> continuation,
         IEnumerable<T> expected,
         params object[] customEqualityComparers
     )
     {
-        return continuation.To(expected, NULL_STRING, customEqualityComparers);
+        return continuation.To(
+            expected,
+            NULL_STRING,
+            customEqualityComparers
+        );
     }
 
     /// <summary>
@@ -103,14 +110,18 @@ public static class CollectionDeepEqualityMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static IMore<IEnumerable<T>> To<T>(
+    public static ICollectionMore<T> To<T>(
         this ICollectionDeepEqual<T> continuation,
         IEnumerable<T> expected,
         string customMessage,
         params object[] customEqualityComparers
     )
     {
-        return continuation.To(expected, () => customMessage, customEqualityComparers);
+        return continuation.To(
+            expected,
+            () => customMessage,
+            customEqualityComparers
+        );
     }
 
     /// <summary>
@@ -124,7 +135,7 @@ public static class CollectionDeepEqualityMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static IMore<IEnumerable<T>> To<T>(
+    public static ICollectionMore<T> To<T>(
         this ICollectionDeepEqual<T> continuation,
         IEnumerable<T> expected,
         Func<string> customMessage,
@@ -135,13 +146,16 @@ public static class CollectionDeepEqualityMatchers
             MakeCollectionDeepEqualMatcherFor(
                 expected,
                 customMessage,
-                customEqualityComparers));
+                customEqualityComparers
+            )
+        );
     }
 
     private static Func<IEnumerable<T>, IMatcherResult> MakeCollectionDeepEqualMatcherFor<T>(
         IEnumerable<T> expected,
         Func<string> customMessage,
-        params object[] customEqualityComparers)
+        params object[] customEqualityComparers
+    )
     {
         return collection =>
         {
@@ -208,8 +222,13 @@ public static class CollectionDeepEqualityMatchers
 
                             var result =
                                 AreDeepEqual(
-                                    cur.Item1, cur.Item2, customEqualityComparers);
-                            return result.AreEqual ? null : result;
+                                    cur.Item1,
+                                    cur.Item2,
+                                    customEqualityComparers
+                                );
+                            return result.AreEqual
+                                ? null
+                                : result;
                         }
                     )
         ) ?? DeepTestResult.Pass;

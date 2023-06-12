@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NExpect.Implementations;
 using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
@@ -22,8 +23,26 @@ public static class MoreExtensions
     )
     {
         return ContinuationFactory.Create<T, More<T>>(
-            continuation.GetActual, 
+            continuation.GetActual,
             continuation as IExpectationContext<T>
+        );
+    }
+
+    /// <summary>
+    /// Creates an object with .And on it which you can use to chain on more
+    /// collection-based expectations,
+    /// eg Expect(1).To.Be.SomeCustomMatcher().And.SomeOtherMatcher()
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static ICollectionMore<T> More<T>(
+        this ICanAddCollectionMatcher<T> continuation
+    )
+    {
+        return ContinuationFactory.Create<IEnumerable<T>, CollectionMore<T>>(
+            continuation.GetActual,
+            continuation as IExpectationContext<IEnumerable<T>>
         );
     }
 
@@ -38,7 +57,7 @@ public static class MoreExtensions
     )
     {
         var result = ContinuationFactory.Create<string, StringMore>(
-            continuation.GetActual, 
+            continuation.GetActual,
             continuation as IExpectationContext<string>
         );
         Assertions.Forget(result);

@@ -164,7 +164,7 @@ public static class EqualityProviderMatchers
     /// <param name="be">Continuation to operate on</param>
     /// <param name="expected">Expected value</param>
     /// <typeparam name="T">Type of the object being tested</typeparam>
-    public static IMore<IEnumerable<T>> Be<T>(
+    public static ICollectionMore<T> Be<T>(
         this ICollectionTo<T> be,
         object expected)
     {
@@ -178,7 +178,7 @@ public static class EqualityProviderMatchers
     /// <param name="expected">Expected value</param>
     /// <param name="customMessage"></param>
     /// <typeparam name="T">Type of the object being tested</typeparam>
-    public static IMore<IEnumerable<T>> Be<T>(
+    public static ICollectionMore<T> Be<T>(
         this ICollectionTo<T> be,
         object expected,
         string customMessage)
@@ -193,7 +193,7 @@ public static class EqualityProviderMatchers
     /// <param name="expected">Expected value</param>
     /// <param name="customMessageGenerator"></param>
     /// <typeparam name="T">Type of the object being tested</typeparam>
-    public static IMore<IEnumerable<T>> Be<T>(
+    public static ICollectionMore<T> Be<T>(
         this ICollectionTo<T> be,
         object expected,
         Func<string> customMessageGenerator)
@@ -212,7 +212,7 @@ public static class EqualityProviderMatchers
     /// <param name="be"></param>
     /// <param name="expected"></param>
     /// <typeparam name="T"></typeparam>
-    public static IMore<IEnumerable<T>> Be<T>(
+    public static ICollectionMore<T> Be<T>(
         this ICollectionToAfterNot<T> be,
         object expected
     )
@@ -227,7 +227,7 @@ public static class EqualityProviderMatchers
     /// <param name="expected"></param>
     /// <param name="customMessage"></param>
     /// <typeparam name="T"></typeparam>
-    public static IMore<IEnumerable<T>> Be<T>(
+    public static ICollectionMore<T> Be<T>(
         this ICollectionToAfterNot<T> be,
         object expected,
         string customMessage
@@ -243,7 +243,7 @@ public static class EqualityProviderMatchers
     /// <param name="expected"></param>
     /// <param name="customMessageGenerator"></param>
     /// <typeparam name="T"></typeparam>
-    public static IMore<IEnumerable<T>> Be<T>(
+    public static ICollectionMore<T> Be<T>(
         this ICollectionToAfterNot<T> be,
         object expected,
         Func<string> customMessageGenerator
@@ -263,7 +263,7 @@ public static class EqualityProviderMatchers
     /// <param name="be"></param>
     /// <param name="expected"></param>
     /// <typeparam name="T"></typeparam>
-    public static IMore<IEnumerable<T>> Be<T>(
+    public static ICollectionMore<T> Be<T>(
         this ICollectionNotAfterTo<T> be,
         object expected
     )
@@ -281,7 +281,7 @@ public static class EqualityProviderMatchers
     /// <param name="expected"></param>
     /// <param name="customMessage"></param>
     /// <typeparam name="T"></typeparam>
-    public static IMore<IEnumerable<T>> Be<T>(
+    public static ICollectionMore<T> Be<T>(
         this ICollectionNotAfterTo<T> be,
         object expected,
         string customMessage
@@ -300,7 +300,7 @@ public static class EqualityProviderMatchers
     /// <param name="expected"></param>
     /// <param name="customMessageGenerator"></param>
     /// <typeparam name="T"></typeparam>
-    public static IMore<IEnumerable<T>> Be<T>(
+    public static ICollectionMore<T> Be<T>(
         this ICollectionNotAfterTo<T> be,
         object expected,
         Func<string> customMessageGenerator

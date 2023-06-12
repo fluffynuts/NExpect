@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 // ReSharper disable InheritdocConsiderUsage
 
 namespace NExpect.Interfaces;
@@ -8,7 +6,8 @@ namespace NExpect.Interfaces;
 /// Provides the .Intersection syntax for collection
 /// </summary>
 /// <typeparam name="T">Collection item type</typeparam>
-public interface ICollectionIntersection<T>: ICanAddMatcher<IEnumerable<T>>
+public interface ICollectionIntersection<T>
+    : ICanAddCollectionMatcher<T>
 {
     /// <summary>
     /// Provides the .Equivalent grammar extension

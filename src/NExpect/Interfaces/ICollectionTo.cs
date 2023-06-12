@@ -8,7 +8,7 @@ namespace NExpect.Interfaces;
 /// Provides the ".To" grammar extension
 /// </summary>
 /// <typeparam name="T">Type of the continuation</typeparam>
-public interface ICollectionTo<T> : ICanAddMatcher<IEnumerable<T>>
+public interface ICollectionTo<T> : ICanAddCollectionMatcher<T>
 {
     /// <summary>
     /// Prepares to test if the value under test contains (an) expected value(s)

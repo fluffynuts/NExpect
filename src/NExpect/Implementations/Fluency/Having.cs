@@ -1,5 +1,4 @@
 using System;
-using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Fluency;
@@ -13,3 +12,5 @@ internal class Having<T>
     {
     }
 }
+
+// ReSharper disable once ClassNeverInstantiated.Global

@@ -8,7 +8,9 @@ internal class CountMatchContinuationOfStringCollection
       ICountMatchContinuationOfStringCollection
 {
     public CountMatchContinuationOfStringCollection(
-        ICanAddMatcher<IEnumerable<string>> wrapped, CountMatchMethods method, int expectedCount
+        ICanAddMatcher<IEnumerable<string>> wrapped,
+        CountMatchMethods method,
+        int expectedCount
     ) : base(wrapped, method, expectedCount)
     {
     }

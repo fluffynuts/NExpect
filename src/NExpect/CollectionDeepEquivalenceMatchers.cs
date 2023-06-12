@@ -29,7 +29,7 @@ public static class CollectionDeepEquivalenceMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static IMore<IEnumerable<T>> To<T>(
+    public static ICollectionMore<T> To<T>(
         this ICollectionDeepEquivalent<T> continuation,
         IEnumerable<T> expected,
         params object[] customEqualityComparers
@@ -51,7 +51,7 @@ public static class CollectionDeepEquivalenceMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static IMore<IEnumerable<T>> To<T>(
+    public static ICollectionMore<T> To<T>(
         this ICollectionDeepEquivalent<T> continuation,
         IEnumerable<T> expected,
         string customMessage,
@@ -74,7 +74,7 @@ public static class CollectionDeepEquivalenceMatchers
     /// <param name="customEqualityComparers">Custom implementations of IEqualityComparer&lt;TProperty&gt;
     /// to use when comparing properties of type TProperty</param>
     /// <typeparam name="T">Collection item type</typeparam>
-    public static IMore<IEnumerable<T>> To<T>(
+    public static ICollectionMore<T> To<T>(
         this ICollectionDeepEquivalent<T> continuation,
         IEnumerable<T> expected,
         Func<string> customMessageGenerator,

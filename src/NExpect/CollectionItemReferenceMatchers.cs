@@ -22,7 +22,7 @@ namespace NExpect
         /// <param name="other"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IMore<IEnumerable<T>> Be<T>(
+        public static ICollectionMore<T> Be<T>(
             this ICollectionItemsCanAddMatcher<T> collectionItemsTo,
             IEnumerable<T> other
         )
@@ -42,7 +42,7 @@ namespace NExpect
         /// <param name="customMessage"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IMore<IEnumerable<T>> Be<T>(
+        public static ICollectionMore<T> Be<T>(
             this ICollectionItemsCanAddMatcher<T> collectionItemsTo,
             IEnumerable<T> other,
             string customMessage
@@ -62,7 +62,7 @@ namespace NExpect
         /// <param name="customMessageGenerator"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IMore<IEnumerable<T>> Be<T>(
+        public static ICollectionMore<T> Be<T>(
             this ICollectionItemsCanAddMatcher<T> collectionItemsTo,
             IEnumerable<T> other,
             Func<string> customMessageGenerator

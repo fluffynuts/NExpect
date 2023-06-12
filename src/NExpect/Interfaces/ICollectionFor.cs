@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 // ReSharper disable InheritdocConsiderUsage
 
 namespace NExpect.Interfaces;
@@ -8,6 +6,6 @@ namespace NExpect.Interfaces;
 /// Interface providing the dangling .For
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public interface ICollectionFor<T>: ICanAddMatcher<IEnumerable<T>>
+public interface ICollectionFor<T>: ICanAddCollectionMatcher<T>
 {
 }

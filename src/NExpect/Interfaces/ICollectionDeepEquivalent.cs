@@ -9,6 +9,6 @@ namespace NExpect.Interfaces;
 /// </summary>
 /// <typeparam name="T">Collection item type</typeparam>
 public interface ICollectionDeepEquivalent<T>: 
-    ICanAddMatcher<IEnumerable<T>>
+    ICanAddCollectionMatcher<T>
 {
 }

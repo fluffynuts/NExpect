@@ -8,7 +8,7 @@ namespace NExpect.Interfaces;
 /// Provides the ".Be" grammar continuation for collections
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public interface ICollectionBe<T> : ICanAddMatcher<IEnumerable<T>>
+public interface ICollectionBe<T> : ICanAddCollectionMatcher<T>
 {
     /// <summary>
     /// Prepares to do an out-of-order match with an expected collection
