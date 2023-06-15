@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NExpect.Exceptions;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
@@ -136,6 +137,45 @@ namespace NExpect.Tests.Collections
                         {
                             // Arrange
                             var ints = new[] { 1, 2, 3 };
+                            // Act
+                            Assert.That(
+                                () =>
+                                {
+                                    Expect(ints)
+                                        .To.Contain(1)
+                                        .And
+                                        .To.Contain(3);
+                                },
+                                Throws.Nothing
+                            );
+                            Assert.That(
+                                () =>
+                                {
+                                    Expect(ints)
+                                        .To.Contain(1)
+                                        .And
+                                        .Not.To.Contain(4);
+                                },
+                                Throws.Nothing
+                            );
+                            Assert.That(
+                                () =>
+                                {
+                                    Expect(ints)
+                                        .To.Contain(1)
+                                        .And
+                                        .Not.To.Contain(3);
+                                },
+                                Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            );
+                            // Assert
+                        }
+
+                        [Test]
+                        public void ShouldBeAbleToChainForHashSet()
+                        {
+                            // Arrange
+                            var ints = new HashSet<int>(new[] { 1, 2, 3 });
                             // Act
                             Assert.That(
                                 () =>
