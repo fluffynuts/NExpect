@@ -1,6 +1,5 @@
 using System;
 using NExpect.Implementations.Collections;
-using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -20,6 +19,7 @@ internal class To<T>
     public IDeep<T> Deep => Next<Deep<T>>();
     public IIntersection<T> Intersection => Next<Intersection<T>>();
     public IApproximately<T> Approximately => Next<Approximately<T>>();
+    public IFind<T> Find => Next<Find<T>>();
 
     public To(Func<T> actualFetcher) : base(actualFetcher)
     {

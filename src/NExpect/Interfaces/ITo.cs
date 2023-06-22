@@ -43,4 +43,9 @@ public interface ITo<T> : ICanAddMatcher<T>
     /// Starts an expectation for approximate equality
     /// </summary>
     IApproximately<T> Approximately { get; }
+
+    /// <summary>
+    /// Provides a dangling grammar point for extension (.Find)
+    /// </summary>
+    IFind<T> Find { get; }
 }
