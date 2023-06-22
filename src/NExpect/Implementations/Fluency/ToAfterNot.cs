@@ -1,6 +1,5 @@
 using System;
 using NExpect.Implementations.Collections;
-using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable MemberCanBeProtected.Global
@@ -19,6 +18,8 @@ internal class ToAfterNot<T>
     public IHave<T> Have => Next<Have<T>>();
     public IDeep<T> Deep => Next<Deep<T>>();
     public IIntersection<T> Intersection => Next<Intersection<T>>();
+    public IApproximately<T> Approximately => Next<Approximately<T>>();
+    public IFind<T> Find => Next<Find<T>>();
 
     public ToAfterNot(Func<T> actualFetcher) : base(actualFetcher)
     {

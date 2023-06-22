@@ -30,5 +30,4 @@ internal class TerminatedMore<T> : IMore<T>
     public IOn<T> On => throw Terminated;
     public IIn<T> In => throw Terminated;
     public IThen<T> Then => throw Terminated;
-    public IFind<T> Find => throw Terminated;
 }
