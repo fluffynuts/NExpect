@@ -177,9 +177,7 @@ public static class DifferenceHighlighting
             var c = str[i];
             if (NewLineCharacters.Contains(c))
             {
-                return NewLineCharacters.Contains(str[i - 1])
-                    ? i - 1
-                    : i;
+                return i;
             }
         }
 

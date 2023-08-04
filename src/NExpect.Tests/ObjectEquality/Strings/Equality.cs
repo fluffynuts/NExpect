@@ -110,6 +110,10 @@ line3
                         );
                         Console.WriteLine(result);
                         // Assert
+                        Expect(result)
+                            .To.End.With(@"
+line2
+----^");
                     }
                 }
             }

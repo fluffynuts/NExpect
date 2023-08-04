@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
@@ -115,6 +116,41 @@ line 2 is here
                 Expect(result)
                     .To.Equal(expected);
             }
+        }
+
+        [Test]
+        public void WildIssue()
+        {
+            // Arrange
+            var left = @"{
+    ""AppSettings_dbHost"": ""databases.com"",
+    ""AppSettings_password"": ""beef"",
+    ""AppSettings_schema"": ""le_schema"",
+    ""AppSettings_Server"": ""my-app.databases.com"",
+    ""AppSettings_Subhost"": ""my-app"",
+    ""AppSettings_user"": ""moocakes"",
+    ""ConnectionStrings_Main"": ""SERVER\u003dmy-app.databases.com; DATABASE\u003dle_schema; UID\u003dmoocakes; Password\u003dbeef;""
+}";
+            var right = @"{
+    ""AppSettings_dbHost"": ""databases.com"",
+    ""AppSettings_password"": ""beef"",
+    ""AppSettings_schema"": ""le_schema"",
+    ""AppSettings_Server"": ""my-app.databases.com"",
+    ""AppSettings_Subhost"": ""my-app"",
+    ""AppSettings_user"": ""moocakes"",
+    ""ConnectionStrings_Main"": ""SERVER=my-app.databases.com; DATABASE=le_schema; UID=moocakes; Password=beef;"",
+}";
+            // Act
+            var result = DifferenceHighlighting.HighlightFirstPositionOfDifference(
+                left,
+                right,
+                10
+            );
+            // Assert
+            Expect(result)
+                .To.End.With(@"
+': 'SERVER\u003dmy-ap
+----------^".Replace("'", "\"") /* makes it visually easier to see the arrow line up, rather than "" for quotes inside @-strings */);
         }
     }
 
