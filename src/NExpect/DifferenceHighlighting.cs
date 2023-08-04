@@ -87,8 +87,17 @@ public static class DifferenceHighlighting
         var displayLine = lineWithFirstDiff.Line;
         if (arrowBodyLength > maximumContextCharacters)
         {
-            displayLine = left.Window(idx, maximumContextCharacters);
-            arrowBodyLength = maximumContextCharacters;
+            var window = left.Window(
+                idx,
+                maximumContextCharacters,
+                out var startedAt,
+                out var endedAt
+            );
+            var adjustedIdx = idx - startedAt;
+            var beforeAdjusted = window.Substring(0, adjustedIdx).SplitIntoLines();
+            var afterAdjusted = window.Substring(adjustedIdx).SplitIntoLines();
+            displayLine = $"{beforeAdjusted.Last()}{afterAdjusted.First()}";
+            arrowBodyLength = adjustedIdx;
         }
 
 
@@ -171,7 +180,12 @@ public static class DifferenceHighlighting
         int idx
     )
     {
-        var start = Math.Min(idx, str.Length - 1);
+        var start = Math.Min(idx - 1, str.Length - 1);
+        if (start == -1)
+        {
+            return 0;
+        }
+
         for (var i = start; i > 0; i--)
         {
             var c = str[i];

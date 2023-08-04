@@ -148,9 +148,50 @@ line 2 is here
             );
             // Assert
             Expect(result)
-                .To.End.With(@"
+                .To.End.With(
+                    @"
 ': 'SERVER\u003dmy-ap
-----------^".Replace("'", "\"") /* makes it visually easier to see the arrow line up, rather than "" for quotes inside @-strings */);
+----------^"
+                        .Replace(
+                            "'",
+                            "\""
+                        ) /* makes it visually easier to see the arrow line up, rather than "" for quotes inside @-strings */
+                );
+        }
+
+        [Test]
+        public void WildIssue2()
+        {
+            // Arrange
+            var left = @"{
+    ""AppSettings_dbHost"": ""databases.com"",
+    ""AppSettings_password"": ""beef"",
+    ""AppSettings_schema"": ""le_schema"",
+    ""AppSettings_Server"": ""my-app.databases.com"",
+    ""AppSettings_Subhost"": ""my-app"",
+    ""AppSettings_user"": ""moocakes"",
+    ""ConnectionStrings_Main"": ""SERVER=my-app.databases.com; DATABASE=le_schema; UID=moocakes; Password=beef;""
+}";
+            var right = @"{
+    ""AppSettings_dbHost"": ""databases.com"",
+    ""AppSettings_password"": ""beef"",
+    ""AppSettings_schema"": ""le_schema"",
+    ""AppSettings_Server"": ""my-app.databases.com"",
+    ""AppSettings_Subhost"": ""my-app"",
+    ""AppSettings_user"": ""moocakes"",
+    ""ConnectionStrings_Main"": ""SERVER=my-app.databases.com; DATABASE=le_schema; UID=moocakes; Password=beef;"",
+}";
+            // Act
+            var result = DifferenceHighlighting.HighlightFirstPositionOfDifference(
+                left,
+                right,
+                10
+            );
+            // Assert
+            Expect(result)
+                .To.End.With(@"
+ord=beef;""
+----------^");
         }
     }
 
