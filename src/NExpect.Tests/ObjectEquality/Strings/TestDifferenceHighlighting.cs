@@ -22,7 +22,7 @@ foo to the quux
 -----------^
 ".Trim();
                 // Act
-                var result = DifferenceHighlighting.HighlightFirstPositionOfDifference2(
+                var result = DifferenceHighlighting.HighlightFirstPositionOfDifference(
                     left,
                     right,
                     int.MaxValue
@@ -44,7 +44,7 @@ to the quux
 -------^
 ".Trim();
                 // Act
-                var result = DifferenceHighlighting.HighlightFirstPositionOfDifference2(
+                var result = DifferenceHighlighting.HighlightFirstPositionOfDifference(
                     left,
                     right,
                     7
@@ -74,7 +74,7 @@ ine 3 is_
 ----^
 ".Trim();
                 // Act
-                var result = DifferenceHighlighting.HighlightFirstPositionOfDifference2(
+                var result = DifferenceHighlighting.HighlightFirstPositionOfDifference(
                     left,
                     right,
                     4
@@ -106,7 +106,7 @@ line 3 is here
 -----^
 ".Trim();
                 // Act
-                var result = DifferenceHighlighting.HighlightFirstPositionOfDifference2(
+                var result = DifferenceHighlighting.HighlightFirstPositionOfDifference(
                     left,
                     right,
                     int.MaxValue

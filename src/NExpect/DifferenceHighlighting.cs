@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Imported.PeanutButter.Utils;
+using NExpect.Exceptions;
 
 namespace NExpect;
 
@@ -31,48 +32,26 @@ public static class DifferenceHighlighting
         string right
     )
     {
-        if (left is null || right is null)
-        {
-            return null;
-        }
-
-        var idx = FindIndexOfFirstDifference(left, right);
-
-        var depth = 5;
-        var from = idx - depth;
-        if (from < 0)
-        {
-            from = 0;
-        }
-
-        var len = depth;
-        if (from + len >= left.Length)
-        {
-            len = left.Length - from;
-        }
-
-        len = TruncateToNextNewLineIfTooClose(left, from, len);
-
-        var arrowBodyLength = idx > depth
-            ? depth
-            : idx;
-        if (arrowBodyLength > left.Length)
-        {
-            arrowBodyLength = left.Length;
-        }
-
-        var arrowBody = new String('-', arrowBodyLength);
-
-        return $@"first difference found at character {
-            idx
-        }
-{
-    left.Substring(from, len)
-}
-{
-    arrowBody
-}^";
+        return HighlightFirstPositionOfDifference(
+            left,
+            right,
+            ContextChars
+        );
     }
+
+    private static int ContextChars =>
+        DetermineContextCharsFromEnvironment() ?? 10;
+
+    private static int? DetermineContextCharsFromEnvironment()
+    {
+        var env = Environment.GetEnvironmentVariable(
+            NExpectEnvironment.Variables.STRING_DIFF_CONTEXT
+        );
+        return int.TryParse(env, out var parsed)
+            ? parsed
+            : null;
+    }
+
 
     /// <summary>
     /// 
@@ -82,7 +61,7 @@ public static class DifferenceHighlighting
     /// <param name="maximumContextCharacters"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public static string HighlightFirstPositionOfDifference2(
+    public static string HighlightFirstPositionOfDifference(
         string left,
         string right,
         int maximumContextCharacters

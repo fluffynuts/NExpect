@@ -43,6 +43,15 @@ public static class NExpectEnvironment
         /// word boundaries too.
         /// </summary>
         public const string MAX_LINE_LENGTH = "NEXPECT_MAX_LINE_LENGTH";
+        
+        /// <summary>
+        /// When showing the difference between expected and actual string
+        /// results, allow up to this many characters to the left and the right
+        /// of the point of first difference to be displayed. Differences
+        /// are shown on a per-line basis, so the actual amount of context
+        /// given may depend on the structure of the input text.
+        /// </summary>
+        public const string STRING_DIFF_CONTEXT = "NEXPECT_STRING_DIFF_CONTEXT";
     }
 
     /// <summary>
