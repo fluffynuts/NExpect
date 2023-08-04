@@ -54,7 +54,15 @@ public static class DifferenceHighlighting
 
 
     /// <summary>
-    /// 
+    /// Highlights the first difference between left and right,
+    /// relative to left.
+    /// For example:
+    /// left = "one two three"
+    /// right = "one three two"
+    /// result =
+    ///   first difference found at character 6
+    ///   one two three
+    ///   -----^
     /// </summary>
     /// <param name="left"></param>
     /// <param name="right"></param>
@@ -74,12 +82,12 @@ public static class DifferenceHighlighting
 
         var idx = FindIndexOfFirstDifference(left, right);
 
-        var lineWithFirstDiff = FindLineAround(right, idx);
+        var lineWithFirstDiff = FindLineAround(left, idx);
         var arrowBodyLength = idx - lineWithFirstDiff.Start;
         var displayLine = lineWithFirstDiff.Line;
         if (arrowBodyLength > maximumContextCharacters)
         {
-            displayLine = right.Window(idx, maximumContextCharacters);
+            displayLine = left.Window(idx, maximumContextCharacters);
             arrowBodyLength = maximumContextCharacters;
         }
 
@@ -163,7 +171,8 @@ public static class DifferenceHighlighting
         int idx
     )
     {
-        for (var i = idx; i > 0; i--)
+        var start = Math.Min(idx, str.Length - 1);
+        for (var i = start; i > 0; i--)
         {
             var c = str[i];
             if (NewLineCharacters.Contains(c))
@@ -363,7 +372,7 @@ public static class DifferenceHighlighting
         }
         catch (Exception ex)
         {
-            return $"Exception encountered whilst running difference highlighter: {ex.Message}";
+            return $"Exception encountered whilst running difference highlighter: {ex.Message}\n{ex.StackTrace}";
         }
     }
 }

@@ -14,17 +14,17 @@ namespace NExpect.Tests.ObjectEquality.Strings
             public void SimpleOneLineDifference()
             {
                 // Arrange
-                var left = "foo to the bar";
-                var right = "foo to the quux";
+                var actualString = "foo to the bar";
+                var expectedString = "foo to the quux";
                 var expected = @"
 first difference found at character 11
-foo to the quux
+foo to the bar
 -----------^
 ".Trim();
                 // Act
                 var result = DifferenceHighlighting.HighlightFirstPositionOfDifference(
-                    left,
-                    right,
+                    actualString,
+                    expectedString,
                     int.MaxValue
                 );
                 // Assert
@@ -40,7 +40,7 @@ foo to the quux
                 var right = "foo to the quux";
                 var expected = @"
 first difference found at character 11
-to the quux
+to the bar
 -------^
 ".Trim();
                 // Act
@@ -61,7 +61,7 @@ to the quux
                 var left = string.Join(
                     "\n",
                     "line 1 is here",
-                    "line 2 is here"
+                    "line 2 is_here"
                 );
                 var right = string.Join(
                     "\n",
@@ -70,7 +70,7 @@ to the quux
                 );
                 var expected = @"
 first difference found at character 20
-ine 3 is_
+ine 2 is_
 ----^
 ".Trim();
                 // Act
@@ -102,7 +102,7 @@ ine 3 is_
                 );
                 var expected = @"
 first difference found at character 20
-line 3 is here
+line 2 is here
 -----^
 ".Trim();
                 // Act

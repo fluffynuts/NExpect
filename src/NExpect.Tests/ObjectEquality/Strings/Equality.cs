@@ -55,28 +55,39 @@ namespace NExpect.Tests.ObjectEquality.Strings
                         var input = @"
 {
     ""Foo_Bar"": ""value_bar"",
-    ""Quux_Bar"": ""value_var""
+    ""Quux_Bar"": ""1value_var""
 }
 ";
                         var expected = @"
 {
     ""Foo_Bar"": ""value_bar"",
-    ""Quux_Bar"": ""1value_var""
+    ""Quux_Bar"": ""value_var""
 }
 ";
 
                         // Act
-                        Assert.That(
-                            () =>
-                            {
-                                Expect(input)
-                                    .To.Equal(expected);
-                            },
-                            Throws.Exception.With.Message.Contains(
-                                "ux_Bar\": \"value_var\""
-                            )
-                        );
+                        var threw = false;
+                        try
+                        {
+                            Expect(input)
+                                .To.Equal(expected);
+                        }
+                        catch (UnmetExpectationException e)
+                        {
+                            threw = true;
+                            Expect(e.Message)
+                                .To.Contain("first difference found")
+                                .Then(
+                                    "ux_Bar\": \"1value_var\"",
+                                    () => "should show the error in the actual string, not the expected string"
+                                );
+                        }
+
                         // Assert
+                        Expect(threw)
+                            .To.Be.True(
+                                () => "Should have failed the expectation"
+                            );
                     }
 
                     [Test]
