@@ -3,6 +3,7 @@ using NUnit.Framework;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using PeanutButter.RandomGenerators;
 using static NExpect.Expectations;
+
 // ReSharper disable InconsistentNaming
 
 namespace NExpect.Tests.Collections
@@ -22,11 +23,13 @@ namespace NExpect.Tests.Collections
 
             // Pre-Assert
             // Act
-            Assert.That(() =>
+            Assert.That(
+                () =>
                 {
                     Expect(collection).To.Contain.Only(1).Equal.To(search);
                 },
-                Throws.Nothing);
+                Throws.Nothing
+            );
 
             // Assert
         }
@@ -44,11 +47,13 @@ namespace NExpect.Tests.Collections
 
             // Pre-Assert
             // Act
-            Assert.That(() =>
+            Assert.That(
+                () =>
                 {
                     Expect(collection).To.Contain.Only(2).Equal.To(search);
                 },
-                Throws.Nothing);
+                Throws.Nothing
+            );
 
             // Assert
         }
@@ -65,12 +70,14 @@ namespace NExpect.Tests.Collections
 
             // Pre-Assert
             // Act
-            Assert.That(() =>
+            Assert.That(
+                () =>
                 {
                     Expect(collection).To.Contain.Only(1).Equal.To(search);
                 },
                 Throws.Exception.TypeOf<UnmetExpectationException>()
-                    .With.Message.Contains($"Expected to find only 1 occurrence of \"{search}\" but found 0"));
+                    .With.Message.Contains($"Expected to find only 1 occurrence of \"{search}\" but found 0")
+            );
 
             // Assert
         }
@@ -82,16 +89,20 @@ namespace NExpect.Tests.Collections
             var collection = new string[] { };
             // Pre-Assert
             // Act
-            Assert.That(() =>
+            Assert.That(
+                () =>
                 {
                     Expect(collection).To.Contain.Only(1).Items();
                 },
                 Throws.Exception.TypeOf<UnmetExpectationException>()
-                    .With.Message.Contains("Expected to find only 1 occurrence of any string in collection but found a total of 0")
+                    .With.Message.Contains(
+                        "Expected to find only 1 occurrence of any string in collection but found a total of 0"
+                    )
             );
 
             // Assert
         }
+
         [Test]
         public void OperatingOnCollectionOfStrings_WhenExpecting1Item_AndFinding0_ShouldThrowWithCustomMessage()
         {
@@ -100,7 +111,8 @@ namespace NExpect.Tests.Collections
             var expected = GetRandomString(10);
             // Pre-Assert
             // Act
-            Assert.That(() =>
+            Assert.That(
+                () =>
                 {
                     Expect(collection).To.Contain.Only(1).Items(expected);
                 },
@@ -108,7 +120,8 @@ namespace NExpect.Tests.Collections
                     .With.Message.Contains(expected)
             );
 
-            Assert.That(() =>
+            Assert.That(
+                () =>
                 {
                     Expect(collection).To.Contain.Only(1).Items(() => expected);
                 },
@@ -125,18 +138,24 @@ namespace NExpect.Tests.Collections
             // Arrange
             var items = new[] { 1, 2, 3 };
             // Act
-            Assert.That(() =>
-            {
-                Expect(items)
-                    .To.Contain.Only(1)
-                    .Matched.By(i => i == 1);
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
-            Assert.That(() =>
-            {
-                Expect(items)
-                    .Not.To.Contain.Only(1)
-                    .Matched.By(i => i == 1);
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(items)
+                        .To.Contain.Only(1)
+                        .Matched.By(i => i == 1);
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
+            Assert.That(
+                () =>
+                {
+                    Expect(items)
+                        .Not.To.Contain.Only(1)
+                        .Matched.By(i => i == 1);
+                },
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -146,13 +165,225 @@ namespace NExpect.Tests.Collections
             // Arrange
             var items = new[] { 1, 2, 3 };
             // Act
-            Assert.That(() =>
-            {
-                Expect(items)
-                    .To.Contain.Any
-                    .Matched.By(i => i == 1);
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(items)
+                        .To.Contain.Any
+                        .Matched.By(i => i == 1);
+                },
+                Throws.Nothing
+            );
             // Assert
+        }
+
+        [TestFixture]
+        public class QuickSubstringTestingForStringCollections
+        {
+            [TestFixture]
+            public class PositiveTests
+            {
+                [Test]
+                public void ShouldFindSingleOnlyHit()
+                {
+                    // Arrange
+                    var items = new[] { "foo" };
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(items)
+                                .To.Contain.Only(1)
+                                .Containing("oo");
+                        },
+                        Throws.Nothing
+                    );
+                    // Assert
+                }
+
+                [Test]
+                public void ShouldFindMultipleOnlyHits()
+                {
+                    // Arrange
+                    var items = new[] { "foo", "book" };
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(items)
+                                .To.Contain.Only(2)
+                                .Containing("oo");
+                        },
+                        Throws.Nothing
+                    );
+                    // Assert
+                }
+
+                [Test]
+                public void ShouldFindSingleExactlyHit()
+                {
+                    // Arrange
+                    var items = new[] { "bar", "foo" };
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(items)
+                                .To.Contain.Exactly(1)
+                                .Containing("oo");
+                        },
+                        Throws.Nothing
+                    );
+                    // Assert
+                }
+
+                [Test]
+                public void ShouldFindMultipleExactlyHit()
+                {
+                    // Arrange
+                    var items = new[] { "book", "bar", "foo" };
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(items)
+                                .To.Contain.Exactly(2)
+                                .Containing("oo");
+                        },
+                        Throws.Nothing
+                    );
+                    // Assert
+                }
+
+                [Test]
+                public void ShouldFindMultipleAtLeastHits()
+                {
+                    // Arrange
+                    var items = new[] { "book", "bar", "foo" };
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(items)
+                                .To.Contain.At.Least(2)
+                                .Containing("oo");
+                        },
+                        Throws.Nothing
+                    );
+                    // Assert
+                }
+
+                [Test]
+                public void ShouldFindMultipleAtMostHits()
+                {
+                    // Arrange
+                    var items = new[] { "book", "bar", "foo" };
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(items)
+                                .To.Contain.At.Most(2)
+                                .Containing("oo");
+                        },
+                        Throws.Nothing
+                    );
+                    // Assert
+                }
+            }
+
+            [TestFixture]
+            public class NegativeTests
+            {
+                [Test]
+                public void ShouldFailOnInvalidOnlyHit()
+                {
+                    // Arrange
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(new[] { "foo" })
+                                .To.Contain.Only(1)
+                                .Containing("aa");
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    );
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(new[] { "foo", "aardvark" })
+                                .To.Contain.Only(1)
+                                .Containing("aa");
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    );
+                    // Assert
+                }
+
+                [Test]
+                public void ShouldFailWhenMissingSinglExactHit()
+                {
+                    // Arrange
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(new[] { "bar", "foo", "book" })
+                                .To.Contain.Exactly(1)
+                                .Containing("oo");
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    );
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(new[] { "bar", "faa", })
+                                .To.Contain.Exactly(1)
+                                .Containing("oo");
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    );
+                    // Assert
+                }
+
+                [Test]
+                public void ShouldFailOnMissedAtLeastHits()
+                {
+                    // Arrange
+                    var items = new[] { "book", "bar" };
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(items)
+                                .To.Contain.At.Least(2)
+                                .Containing("oo");
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        
+                    );
+                    // Assert
+                }
+
+                [Test]
+                public void ShouldFailOnTooManyAtMostHits()
+                {
+                    // Arrange
+                    var items = new[] { "book", "bar", "foo" };
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(items)
+                                .To.Contain.At.Most(1)
+                                .Containing("oo");
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    );
+                    // Assert
+                }
+            }
         }
 
         [Test]
@@ -161,8 +392,8 @@ namespace NExpect.Tests.Collections
             // Arrange
             var search = GetRandomString(3);
             var other1 = GetAnother(search);
-            var other2 = GetAnother<string>(new[] {search, other1});
-            var other3 = GetAnother<string>(new[] {search, other1, other2});
+            var other2 = GetAnother<string>(new[] { search, other1 });
+            var other3 = GetAnother<string>(new[] { search, other1, other2 });
             var collection = new[]
             {
                 other1,
@@ -172,12 +403,15 @@ namespace NExpect.Tests.Collections
 
             // Pre-Assert
             // Act
-            Assert.That(() =>
+            Assert.That(
+                () =>
                 {
                     Expect(collection).To.Contain.Only(1).Equal.To(search);
                 },
                 Throws.Exception.TypeOf<UnmetExpectationException>()
-                    .With.Message.Contains($"Expected to find only 1 occurrence of {search} in collection but found a total of 3 items")
+                    .With.Message.Contains(
+                        $"Expected to find only 1 occurrence of {search} in collection but found a total of 3 items"
+                    )
             );
 
             // Assert
@@ -189,8 +423,8 @@ namespace NExpect.Tests.Collections
             // Arrange
             var search = GetRandomString(3);
             var other1 = GetAnother(search);
-            var other2 = GetAnother<string>(new[] {search, other1});
-            var other3 = GetAnother<string>(new[] {search, other1, other2});
+            var other2 = GetAnother<string>(new[] { search, other1 });
+            var other3 = GetAnother<string>(new[] { search, other1, other2 });
             var collection = new[]
             {
                 other1,
@@ -200,12 +434,15 @@ namespace NExpect.Tests.Collections
 
             // Pre-Assert
             // Act
-            Assert.That(() =>
+            Assert.That(
+                () =>
                 {
                     Expect(collection).To.Contain.Only(2).Equal.To(search);
                 },
                 Throws.Exception.TypeOf<UnmetExpectationException>()
-                    .With.Message.Contains($"Expected to find only 2 occurrences of {search} in collection but found a total of 3 items")
+                    .With.Message.Contains(
+                        $"Expected to find only 2 occurrences of {search} in collection but found a total of 3 items"
+                    )
             );
 
             // Assert

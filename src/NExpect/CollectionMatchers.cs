@@ -228,7 +228,8 @@ public static class CollectionMatchers
     }
 
     /// <summary>
-    /// TODO
+    /// Starts the assertion for an exact number of hits in a potentially
+    /// bigger collection of strings
     /// </summary>
     /// <param name="contain"></param>
     /// <param name="howMany"></param>
@@ -242,6 +243,46 @@ public static class CollectionMatchers
         return new CountMatchContinuationOfStringCollection(
             contain,
             CountMatchMethods.Exactly,
+            howMany
+        );
+    }
+
+    /// <summary>
+    /// Starts the assertion for an exact number of hits in a potentially
+    /// bigger collection of strings
+    /// </summary>
+    /// <param name="contain"></param>
+    /// <param name="howMany"></param>
+    /// <returns></returns>
+    public static ICountMatchContinuationOfStringCollection Least(
+        this IContainAt<IEnumerable<string>> contain,
+        int howMany
+    )
+    {
+        CheckContain(contain);
+        return new CountMatchContinuationOfStringCollection(
+            contain,
+            CountMatchMethods.Minimum,
+            howMany
+        );
+    }
+
+    /// <summary>
+    /// Starts the assertion for an exact number of hits in a potentially
+    /// bigger collection of strings
+    /// </summary>
+    /// <param name="contain"></param>
+    /// <param name="howMany"></param>
+    /// <returns></returns>
+    public static ICountMatchContinuationOfStringCollection Most(
+        this IContainAt<IEnumerable<string>> contain,
+        int howMany
+    )
+    {
+        CheckContain(contain);
+        return new CountMatchContinuationOfStringCollection(
+            contain,
+            CountMatchMethods.Maximum,
             howMany
         );
     }
@@ -261,6 +302,26 @@ public static class CollectionMatchers
     {
         CheckContain(contain);
         return new CountMatchContinuation<IEnumerable<T>>(
+            contain,
+            CountMatchMethods.Only,
+            howMany
+        );
+    }
+
+    /// <summary>
+    /// Checks that collection only contains N number of strings.
+    /// Continues with ICountMatchContinuation if it does
+    /// </summary>
+    /// <param name="contain">contain continuation</param>
+    /// <param name="howMany">how many items to match</param>
+    /// <returns>continuation be used: .Equal.To()</returns>
+    public static ICountMatchContinuationOfStringCollection Only(
+        this IContain<IEnumerable<string>> contain,
+        int howMany
+    )
+    {
+        CheckContain(contain);
+        return new CountMatchContinuationOfStringCollection(
             contain,
             CountMatchMethods.Only,
             howMany
