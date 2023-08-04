@@ -10,6 +10,7 @@ namespace NExpect.Tests
         public void OneTimeSetUp()
         {
             TestUtils.ForceMessageLineBreaks();
+            Assertions.EnableTracking();
         }
 
         [OneTimeTearDown]

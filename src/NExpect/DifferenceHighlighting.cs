@@ -74,6 +74,147 @@ public static class DifferenceHighlighting
 }^";
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="left"></param>
+    /// <param name="right"></param>
+    /// <param name="maximumContextCharacters"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public static string HighlightFirstPositionOfDifference2(
+        string left,
+        string right,
+        int maximumContextCharacters
+    )
+    {
+        if (left is null || right is null)
+        {
+            return null;
+        }
+
+        var idx = FindIndexOfFirstDifference(left, right);
+
+        var lineWithFirstDiff = FindLineAround(right, idx);
+        var arrowBodyLength = idx - lineWithFirstDiff.Start;
+        var displayLine = lineWithFirstDiff.Line;
+        if (arrowBodyLength > maximumContextCharacters)
+        {
+            displayLine = right.Window(idx, maximumContextCharacters);
+            arrowBodyLength = maximumContextCharacters;
+        }
+
+
+        var arrowBody = new String('-', arrowBodyLength);
+
+        return $@"first difference found at character {
+            idx
+        }
+{
+    displayLine
+}
+{
+    arrowBody
+}^";
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class LineAroundIndex
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Start { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string Line { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="line"></param>
+        public LineAroundIndex(
+            int start,
+            string line
+        )
+        {
+            Start = start;
+            Line = line;
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="str"></param>
+    /// <param name="idx"></param>
+    /// <returns></returns>
+    public static LineAroundIndex FindLineAround(
+        string str,
+        int idx
+    )
+    {
+        var start = FindFirstNewLineBefore(str, idx);
+        var end = FindFirstNewLineAfter(str, idx);
+        if (start == -1)
+        {
+            start = 0;
+        }
+        else
+        {
+            start++;
+        }
+
+        if (end == -1)
+        {
+            end = str.Length;
+        }
+
+        var length = end - start;
+        return new LineAroundIndex(start, str.Substring(start, length));
+    }
+
+    private static int FindFirstNewLineBefore(
+        string str,
+        int idx
+    )
+    {
+        for (var i = idx; i > 0; i--)
+        {
+            var c = str[i];
+            if (NewLineCharacters.Contains(c))
+            {
+                return NewLineCharacters.Contains(str[i - 1])
+                    ? i - 1
+                    : i;
+            }
+        }
+
+        return -1;
+    }
+
+    private static readonly HashSet<char> NewLineCharacters = new(
+        new[] { '\r', '\n' }
+    );
+
+    private static int FindFirstNewLineAfter(string str, int from)
+    {
+        for (var idx = from; idx < str.Length; idx++)
+        {
+            if (NewLineCharacters.Contains(str[idx]))
+            {
+                return idx;
+            }
+        }
+
+        return -1;
+    }
+
     private static int TruncateToNextNewLineIfTooClose(
         string left,
         int from,
@@ -92,6 +233,7 @@ public static class DifferenceHighlighting
         {
             len = closestLineEnding - from;
         }
+
         return len;
     }
 
@@ -179,12 +321,14 @@ public static class DifferenceHighlighting
                 DifferenceHighlighters[typeof(T)] = highlighters = new List<Func<object, object, string>>();
             }
 
-            highlighters.Add((left, right) =>
-            {
-                var leftCast = Cast<T>(left);
-                var rightCast = Cast<T>(right);
-                return generator(leftCast, rightCast);
-            });
+            highlighters.Add(
+                (left, right) =>
+                {
+                    var leftCast = Cast<T>(left);
+                    var rightCast = Cast<T>(right);
+                    return generator(leftCast, rightCast);
+                }
+            );
         }
     }
 
@@ -192,7 +336,7 @@ public static class DifferenceHighlighting
     {
         try
         {
-            return (T)value;
+            return (T) value;
         }
         catch
         {
@@ -200,7 +344,14 @@ public static class DifferenceHighlighting
         }
     }
 
-    internal static string ProvideMoreInfoFor<T>(
+    /// <summary>
+    /// Attempts to show where two strings are different
+    /// </summary>
+    /// <param name="actual"></param>
+    /// <param name="expected"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static string ProvideMoreInfoFor<T>(
         T actual,
         T expected
     )
@@ -212,7 +363,8 @@ public static class DifferenceHighlighting
                 return null;
             }
 
-            return string.Join(Environment.NewLine,
+            return string.Join(
+                Environment.NewLine,
                 highlighters
                     .Select(h => TryInvoke(h, actual, expected))
                     .Where(line => line is not null)
