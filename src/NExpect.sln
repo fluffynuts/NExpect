@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoreConsumer", "CoreConsume
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreTests", "CoreTests\CoreTests.csproj", "{0F91FB49-F2CF-4775-B86D-13038E4789CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NExpect.Tests.Core", "NExpect.Tests.Core\NExpect.Tests.Core.csproj", "{D2DDE3DD-EE78-4B3A-ADE7-CE7FDAE1CBDB}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NExpect.Matchers.NSubstitute", "NExpect.Matchers.NSubstitute\NExpect.Matchers.NSubstitute.csproj", "{269248F0-4508-43B5-80E5-05DE1BFF4708}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NExpect.Matchers.NSubstitute.Tests", "NExpect.Matchers.NSubstitute.Tests\NExpect.Matchers.NSubstitute.Tests.csproj", "{4EA20383-2153-48DF-B620-F3C9232FCD5A}"
@@ -60,12 +58,6 @@ Global
 		{0F91FB49-F2CF-4775-B86D-13038E4789CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F91FB49-F2CF-4775-B86D-13038E4789CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F91FB49-F2CF-4775-B86D-13038E4789CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D2DDE3DD-EE78-4B3A-ADE7-CE7FDAE1CBDB}.BuildForRelease|Any CPU.ActiveCfg = Debug|Any CPU
-		{D2DDE3DD-EE78-4B3A-ADE7-CE7FDAE1CBDB}.BuildForRelease|Any CPU.Build.0 = Debug|Any CPU
-		{D2DDE3DD-EE78-4B3A-ADE7-CE7FDAE1CBDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D2DDE3DD-EE78-4B3A-ADE7-CE7FDAE1CBDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D2DDE3DD-EE78-4B3A-ADE7-CE7FDAE1CBDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D2DDE3DD-EE78-4B3A-ADE7-CE7FDAE1CBDB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{269248F0-4508-43B5-80E5-05DE1BFF4708}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{269248F0-4508-43B5-80E5-05DE1BFF4708}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{269248F0-4508-43B5-80E5-05DE1BFF4708}.Release|Any CPU.ActiveCfg = Release|Any CPU
