@@ -199,7 +199,8 @@ public static class Assertions
     /// </summary>
     public static void DisableTracking()
     {
-        _enabled = true;
+        _enabled = false;
+        InFlightContexts.Clear();
     }
 
     private static bool IsDisabledOrSuspended => !_enabled || _suspendCount > 0;

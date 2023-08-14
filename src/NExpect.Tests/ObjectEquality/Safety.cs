@@ -9,6 +9,18 @@ namespace NExpect.Tests.ObjectEquality
     [TestFixture]
     public class Safety
     {
+        [OneTimeSetUp]
+        public void OneTimeSetup()
+        {
+            Assertions.DisableTracking();
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTeardown()
+        {
+            Assertions.EnableTracking();
+        }
+
         [Test]
         public void To_Equals_ShouldThrow()
         {
