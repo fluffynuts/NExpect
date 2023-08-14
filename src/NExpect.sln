@@ -27,6 +27,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NExpect.Matchers.AspNetMvc"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NExpect.Matchers.AspNetMvc.Tests", "NExpect.Matchers.AspNetMvc.Tests\NExpect.Matchers.AspNetMvc.Tests.csproj", "{931D882D-9A6F-4F84-81D9-5C1B36F49A85}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".config", ".config", "{F58A4DDD-D02B-4552-ABB8-05FA43E7B45E}"
+	ProjectSection(SolutionItems) = preProject
+		MonoForFramework.targets = MonoForFramework.targets
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		BuildForRelease|Any CPU = BuildForRelease|Any CPU
