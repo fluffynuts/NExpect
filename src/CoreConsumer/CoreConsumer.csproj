@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="microsoft.net.test.sdk" Version="17.2.0" />
+    <PackageReference Include="microsoft.net.test.sdk" Version="17.7.0" />
     <PackageReference Include="NExpect" Version="1.0.154" />
     <PackageReference Include="nunit" Version="3.13.3" />
     <PackageReference Include="nunit3testadapter" Version="4.2.1" />
