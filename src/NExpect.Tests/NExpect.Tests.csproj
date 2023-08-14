@@ -6,12 +6,12 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="microsoft.net.test.sdk" Version="17.7.0" />
-    <PackageReference Include="NSubstitute" Version="4.4.0" />
+    <PackageReference Include="NSubstitute" Version="5.0.0" />
     <PackageReference Include="nunit" Version="3.13.3" />
-    <PackageReference Include="nunit3testadapter" Version="4.3.1" />
-    <PackageReference Include="PeanutButter.DuckTyping" Version="3.0.122" />
-    <PackageReference Include="PeanutButter.RandomGenerators" Version="3.0.122" />
-    <PackageReference Include="Quackers.TestLogger" Version="1.0.11" />
+    <PackageReference Include="nunit3testadapter" Version="4.5.0" />
+    <PackageReference Include="PeanutButter.DuckTyping" Version="3.0.167" />
+    <PackageReference Include="PeanutButter.RandomGenerators" Version="3.0.167" />
+    <PackageReference Include="Quackers.TestLogger" Version="1.0.14" />
     <PackageReference Include="system.valuetuple" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>
