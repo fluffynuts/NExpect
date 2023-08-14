@@ -237,7 +237,7 @@ public static class Expectations
     /// <typeparam name="T">Item type of the array</typeparam>
     /// <returns>ICollectionExpectation&lt;T&gt;</returns>
     public static ICollectionExpectation<T> Expect<T>(
-        T[] array
+        params T[] array
     )
     {
         return new CollectionExpectation<T>(array);

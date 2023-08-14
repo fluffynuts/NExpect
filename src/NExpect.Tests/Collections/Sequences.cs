@@ -100,6 +100,20 @@ namespace NExpect.Tests.Collections
             }
 
             [Test]
+            public void ParamsOverload()
+            {
+                // Arrange
+                
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(1, 2, 3, 4)
+                        .To.Be.Ordered.Ascending();
+                }, Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
             public void ShouldOrderCollectionOfStrings()
             {
                 // Arrange

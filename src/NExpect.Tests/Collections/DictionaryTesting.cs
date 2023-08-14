@@ -27,10 +27,12 @@ namespace NExpect.Tests.Collections
                 // Act
                 Assert.That(
                     () => Expect(dict).To.Be.Null(),
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
                 Assert.That(
                     () => Expect(dict).Not.To.Be.Null(),
-                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
                 // Assert
             }
         }
@@ -59,7 +61,8 @@ namespace NExpect.Tests.Collections
                         foreach (var item in dict)
                             Expect(dict).To.Contain(item);
                     },
-                    Throws.Nothing);
+                    Throws.Nothing
+                );
 
                 // Assert
             }
@@ -78,14 +81,18 @@ namespace NExpect.Tests.Collections
                 // Pre-Assert
 
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(dict).To.Contain(missed);
-                }, Throws.Exception
-                    .InstanceOf<UnmetExpectationException>()
-                    .With.Message.Matches(
-                        (string actual) => actual.Compact()
-                            .Equals($"Expected {dict.Stringify()} to contain {missed.Stringify()}".Compact())));
+                Assert.That(
+                    () =>
+                    {
+                        Expect(dict).To.Contain(missed);
+                    },
+                    Throws.Exception
+                        .InstanceOf<UnmetExpectationException>()
+                        .With.Message.Matches(
+                            (string actual) => actual.Compact()
+                                .Equals($"Expected {dict.Stringify()} to contain {missed.Stringify()}".Compact())
+                        )
+                );
 
                 // Assert
             }
@@ -110,7 +117,8 @@ namespace NExpect.Tests.Collections
                     },
                     Throws.Exception
                         .InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains($"Expected\n{dict.Stringify()}\nnot to contain\n{have.Stringify()}"));
+                        .With.Message.Contains($"Expected\n{dict.Stringify()}\nnot to contain\n{have.Stringify()}")
+                );
                 // Assert
             }
         }
@@ -141,7 +149,8 @@ namespace NExpect.Tests.Collections
                             {
                                 Expect(src).To.Contain.Key(key);
                             },
-                            Throws.Nothing);
+                            Throws.Nothing
+                        );
 
                         // Assert
                     }
@@ -178,7 +187,8 @@ namespace NExpect.Tests.Collections
                             {
                                 Expect(src).To.Contain.Key(recased);
                             },
-                            Throws.Nothing);
+                            Throws.Nothing
+                        );
                         // Assert
                     }
 
@@ -214,7 +224,8 @@ namespace NExpect.Tests.Collections
                             {
                                 Expect(src).To.Contain.Key(recased);
                             },
-                            Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        );
                         // Assert
                     }
 
@@ -238,7 +249,8 @@ namespace NExpect.Tests.Collections
                             Throws.Exception.InstanceOf<UnmetExpectationException>()
                                 .With.Message.Contains(
                                     $"not to contain key\n{key.Stringify()}"
-                                ));
+                                )
+                        );
 
                         // Assert
                     }
@@ -263,7 +275,8 @@ namespace NExpect.Tests.Collections
                             Throws.Exception.InstanceOf<UnmetExpectationException>()
                                 .With.Message.Contains(
                                     $"not to contain key\n{key.Stringify()}"
-                                ));
+                                )
+                        );
 
                         // Assert
                     }
@@ -292,7 +305,8 @@ namespace NExpect.Tests.Collections
                                     {
                                         Expect(src).To.Contain.Key(key).With.Value(value);
                                     },
-                                    Throws.Nothing);
+                                    Throws.Nothing
+                                );
 
                                 // Assert
                             }
@@ -320,7 +334,8 @@ namespace NExpect.Tests.Collections
                                     {
                                         Expect(src).To.Contain.Key(recased).With.Value(value);
                                     },
-                                    Throws.Nothing);
+                                    Throws.Nothing
+                                );
 
                                 // Assert
                             }
@@ -348,8 +363,10 @@ namespace NExpect.Tests.Collections
                                                 Expect(src).To.Contain.Key(testingValue).With.Value(value);
                                             },
                                             Throws.Exception.TypeOf<UnmetExpectationException>()
-                                                .With.Message.Contains($"to contain key\n\"{testingValue}\""));
-                                    });
+                                                .With.Message.Contains($"to contain key\n\"{testingValue}\"")
+                                        );
+                                    }
+                                );
 
                                 // Assert
                             }
@@ -374,7 +391,8 @@ namespace NExpect.Tests.Collections
                                         Expect(src).To.Contain.Key(key).With.Value(testingValue);
                                     },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                        .With.Message.Contains($"Expected\n{testingValue}\nbut got\n{value}"));
+                                        .With.Message.Contains($"Expected\n{testingValue}\nbut got\n{value}")
+                                );
 
                                 // Assert
                             }
@@ -401,7 +419,8 @@ namespace NExpect.Tests.Collections
                                     {
                                         Expect(src).To.Contain.Key(key).With.Value(value);
                                     },
-                                    Throws.Nothing);
+                                    Throws.Nothing
+                                );
 
                                 // Assert
                             }
@@ -426,7 +445,8 @@ namespace NExpect.Tests.Collections
                                         Expect(src).To.Contain.Key(key).With.Value(testingValue);
                                     },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                        .With.Message.Contains($"Expected\n{testingValue}\nbut got\n{value}"));
+                                        .With.Message.Contains($"Expected\n{testingValue}\nbut got\n{value}")
+                                );
 
                                 // Assert
                             }
@@ -454,8 +474,10 @@ namespace NExpect.Tests.Collections
                                                 Expect(src).To.Contain.Key(key).With.Value(testingValue);
                                             },
                                             Throws.Exception.TypeOf<UnmetExpectationException>()
-                                                .With.Message.Contains($"Expected\n{testingValue}\nbut got\n(null)"));
-                                    });
+                                                .With.Message.Contains($"Expected\n{testingValue}\nbut got\n(null)")
+                                        );
+                                    }
+                                );
                                 // Assert
                             }
 
@@ -479,7 +501,8 @@ namespace NExpect.Tests.Collections
                                         Expect(src).To.Contain.Key(key).With.Value(testingValue);
                                     },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                        .With.Message.Contains($"Expected\n(null)\nbut got\n{value}"));
+                                        .With.Message.Contains($"Expected\n(null)\nbut got\n{value}")
+                                );
 
                                 // Assert
                             }
@@ -514,7 +537,8 @@ namespace NExpect.Tests.Collections
                                             .To.Contain.Key(key)
                                             .With.Value(test);
                                     },
-                                    Throws.Nothing);
+                                    Throws.Nothing
+                                );
 
                                 // Assert
                             }
@@ -535,7 +559,9 @@ namespace NExpect.Tests.Collections
                                         Expect(src)
                                             .To.Contain.Key(key)
                                             .With.Value(null);
-                                    }, Throws.Nothing);
+                                    },
+                                    Throws.Nothing
+                                );
                                 // Assert
                             }
 
@@ -546,11 +572,15 @@ namespace NExpect.Tests.Collections
                                 var date1 = DateTime.Now;
                                 var date2 = new DateTime(date1.Ticks, date1.Kind);
                                 var tester = new DeepEqualityTester(
-                                    date1, date2);
+                                    date1,
+                                    date2
+                                );
                                 Expect(date1.Equals(date2))
                                     .To.Be.True("test values don't actually match...");
-                                Expect(date1.Kind).To.Equal(date2.Kind,
-                                    () => "Not really equal if their kinds are different, eh");
+                                Expect(date1.Kind).To.Equal(
+                                    date2.Kind,
+                                    () => "Not really equal if their kinds are different, eh"
+                                );
                                 // Act
                                 var result = tester.AreDeepEqual();
                                 // Assert
@@ -602,7 +632,9 @@ namespace NExpect.Tests.Collections
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
                                         .With.Message
                                         .Contains(
-                                            $"Expected\n{testingValue.Stringify()}\nbut got\n{value.Stringify()}"));
+                                            $"Expected\n{testingValue.Stringify()}\nbut got\n{value.Stringify()}"
+                                        )
+                                );
 
                                 // Assert
                             }
@@ -623,12 +655,15 @@ namespace NExpect.Tests.Collections
                                     [key] = data
                                 };
                                 // Act
-                                Assert.That(() =>
-                                {
-                                    Expect(dictionary)
-                                        .To.Contain.Key(key)
-                                        .With.Value.Deep.Equal.To(copy);
-                                }, Throws.Nothing);
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(dictionary)
+                                            .To.Contain.Key(key)
+                                            .With.Value.Deep.Equal.To(copy);
+                                    },
+                                    Throws.Nothing
+                                );
                                 // Assert
                             }
 
@@ -645,21 +680,26 @@ namespace NExpect.Tests.Collections
                                     [key] = data
                                 };
                                 // Act
-                                Assert.That(() =>
-                                {
-                                    Expect(dictionary)
-                                        .To.Contain.Key(key)
-                                        .With.Value.Deep.Equal.To(other);
-                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains(data.Stringify())
-                                    .And.Message.Contains(other.Stringify()));
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(dictionary)
+                                            .To.Contain.Key(key)
+                                            .With.Value.Deep.Equal.To(other);
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains(data.Stringify())
+                                        .And.Message.Contains(other.Stringify())
+                                );
 
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(dictionary)
                                             .To.Contain.Key(key)
                                             .With.Value.Deep.Equal.To(another);
-                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                                         .With.Message.Contains(data.Stringify())
                                         .And.Message.Contains(another.Stringify())
                                 );
@@ -681,23 +721,27 @@ namespace NExpect.Tests.Collections
                                     [key] = data
                                 };
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(dictionary)
                                             .To.Contain.Key(key)
                                             .With.Value.Deep.Equal.To(other, message1);
-                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                                         .With.Message.Contains(message1)
                                         .And.Message.Contains(data.Stringify())
                                         .And.Message.Contains(other.Stringify())
                                 );
 
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(dictionary)
                                             .To.Contain.Key(key)
                                             .With.Value.Deep.Equal.To(another, () => message2);
-                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                                         .With.Message.Contains(data.Stringify())
                                         .And.Message.Contains(another.Stringify())
                                         .And.Message.Contains(message2)
@@ -721,12 +765,15 @@ namespace NExpect.Tests.Collections
                                     [key] = data
                                 };
                                 // Act
-                                Assert.That(() =>
-                                {
-                                    Expect(dictionary)
-                                        .To.Contain.Key(key)
-                                        .With.Value.Intersection.Equal.To(copy);
-                                }, Throws.Nothing);
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(dictionary)
+                                            .To.Contain.Key(key)
+                                            .With.Value.Intersection.Equal.To(copy);
+                                    },
+                                    Throws.Nothing
+                                );
                                 // Assert
                             }
 
@@ -743,21 +790,26 @@ namespace NExpect.Tests.Collections
                                     [key] = data
                                 };
                                 // Act
-                                Assert.That(() =>
-                                {
-                                    Expect(dictionary)
-                                        .To.Contain.Key(key)
-                                        .With.Value.Intersection.Equal.To(other);
-                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains(data.Stringify())
-                                    .And.Message.Contains(other.Stringify()));
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(dictionary)
+                                            .To.Contain.Key(key)
+                                            .With.Value.Intersection.Equal.To(other);
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains(data.Stringify())
+                                        .And.Message.Contains(other.Stringify())
+                                );
 
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(dictionary)
                                             .To.Contain.Key(key)
                                             .With.Value.Deep.Equal.To(another);
-                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                                         .With.Message.Contains(data.Stringify())
                                         .And.Message.Contains(another.Stringify())
                                 );
@@ -779,23 +831,27 @@ namespace NExpect.Tests.Collections
                                     [key] = data
                                 };
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(dictionary)
                                             .To.Contain.Key(key)
                                             .With.Value.Intersection.Equal.To(other, message1);
-                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                                         .With.Message.Contains(message1)
                                         .And.Message.Contains(data.Stringify())
                                         .And.Message.Contains(other.Stringify())
                                 );
 
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(dictionary)
                                             .To.Contain.Key(key)
                                             .With.Value.Deep.Equal.To(another, () => message2);
-                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                                         .With.Message.Contains(data.Stringify())
                                         .And.Message.Contains(another.Stringify())
                                         .And.Message.Contains(message2)
@@ -826,7 +882,8 @@ namespace NExpect.Tests.Collections
                                     {
                                         Expect(src).To.Contain.Key(key).With.Value(expected);
                                     },
-                                    Throws.Nothing);
+                                    Throws.Nothing
+                                );
 
                                 // Assert
                             }
@@ -874,7 +931,8 @@ namespace NExpect.Tests.Collections
                                     {
                                         Expect(src).To.Contain.Key(key).With.Value(expected);
                                     },
-                                    Throws.Nothing);
+                                    Throws.Nothing
+                                );
 
                                 // Assert
                             }
@@ -922,7 +980,8 @@ namespace NExpect.Tests.Collections
                                     {
                                         Expect(src).To.Contain.Key(key).With.Value(expected);
                                     },
-                                    Throws.Nothing);
+                                    Throws.Nothing
+                                );
 
                                 // Assert
                             }
@@ -970,7 +1029,8 @@ namespace NExpect.Tests.Collections
                                     {
                                         Expect(src).To.Contain.Key(key).With.Value(expected);
                                     },
-                                    Throws.Nothing);
+                                    Throws.Nothing
+                                );
 
                                 // Assert
                             }
@@ -1018,7 +1078,8 @@ namespace NExpect.Tests.Collections
                                     {
                                         Expect(src).To.Contain.Key(key).With.Value(expected);
                                     },
-                                    Throws.Nothing);
+                                    Throws.Nothing
+                                );
 
                                 // Assert
                             }
@@ -1066,7 +1127,8 @@ namespace NExpect.Tests.Collections
                                     {
                                         Expect(src).To.Contain.Key(key).With.Value(expected);
                                     },
-                                    Throws.Nothing);
+                                    Throws.Nothing
+                                );
 
                                 // Assert
                             }
@@ -1114,7 +1176,8 @@ namespace NExpect.Tests.Collections
                                     {
                                         Expect(src).To.Contain.Key(key).With.Value(expected);
                                     },
-                                    Throws.Nothing);
+                                    Throws.Nothing
+                                );
 
                                 // Assert
                             }
@@ -1156,17 +1219,21 @@ namespace NExpect.Tests.Collections
                                 var value = GetRandom<IdentifierAndName>();
                                 dict[key] = value;
                                 // Act
-                                Assert.That(() =>
-                                {
-                                    Expect(dict)
-                                        .To.Contain.Key(key)
-                                        .With.Value.Matched.By(
-                                            o => o.Name == value.Name &&
-                                                o.Id == value.Id
-                                        );
-                                }, Throws.Nothing);
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(dict)
+                                            .To.Contain.Key(key)
+                                            .With.Value.Matched.By(
+                                                o => o.Name == value.Name &&
+                                                    o.Id == value.Id
+                                            );
+                                    },
+                                    Throws.Nothing
+                                );
                                 var customMessage = GetRandomWords();
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(dict)
                                             .To.Contain.Key(key)
@@ -1174,7 +1241,8 @@ namespace NExpect.Tests.Collections
                                                 o => o.Name != value.Name,
                                                 () => customMessage
                                             );
-                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                                         .With.Message.Contains(customMessage)
                                 );
                                 // Assert
@@ -1189,7 +1257,8 @@ namespace NExpect.Tests.Collections
                                 var value = GetRandom<IdentifierAndName>();
                                 dict[key] = value;
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(dict)
                                             .To.Contain.Key(key)
