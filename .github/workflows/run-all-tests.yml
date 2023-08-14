@@ -24,8 +24,5 @@ jobs:
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
         DOTNET_CLI_TELEMETRY_OPTOUT: 1
       run: |
-        mono --version
-        ls -l /usr/lib/mono
-        ls -l /usr/local/lib/mono
         npm ci
         npm test
