@@ -13,7 +13,10 @@ const
 env.associate([ "DRY_RUN" ], [ "push" ]);
 
 gulp.task("release", async done => {
-    runSequence("pack", "push", "commit-release", "tag-and-push", done);
+    runSequence(
+        "verify-up-to-date", "test", "clear-old-packages",
+        "pack", "push", "commit-release", "tag-and-push",
+        done);
 });
 
 gulp.task("push", "pushes packages to nuget.org", () => {

@@ -5,9 +5,8 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <IsPackable>false</IsPackable>
-
     <RootNamespace>NExpect.Matchers.AspNet.Tests</RootNamespace>
-
+    <Configurations>Debug;Release;BuildForRelease</Configurations>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 

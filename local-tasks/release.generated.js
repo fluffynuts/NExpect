@@ -39,7 +39,7 @@ var gulp = requireModule("gulp"), packageDir = require("./config").packageDir, p
 env.associate(["DRY_RUN"], ["push"]);
 gulp.task("release", function (done) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        runSequence("pack", "push", "commit-release", "tag-and-push", done);
+        runSequence("verify-up-to-date", "test", "clear-old-packages", "pack", "push", "commit-release", "tag-and-push", done);
         return [2 /*return*/];
     });
 }); });

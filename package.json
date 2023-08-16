@@ -8,10 +8,8 @@
         "cover": "zarro build-cover-report",
         "build": "zarro @",
         "build-with-msbuild": "cross-env BUILD_EXCLUDE=src/PeanutButter/**/* zarro build",
-        "prerelease": "run-s verify-up-to-date test clear-old-packages",
         "verify-up-to-date": "zarro verify-up-to-date",
         "release": "cross-env BUILD_CONFIGURATION=BuildForRelease zarro release",
-        "prerelease-beta": "run-s verify-up-to-date test clear-old-packages",
         "release-beta": "cross-env PACK_INCREMENT_VERSION=1 VERSION_INCREMENT_STRATEGY=prerelease BUILD_CONFIGURATION=BuildForRelease zarro release",
         "clear-old-packages": "rimraf packages",
         "test-push": "zarro @"

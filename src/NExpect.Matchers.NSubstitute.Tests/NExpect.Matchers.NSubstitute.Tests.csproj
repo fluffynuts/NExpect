@@ -2,9 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
-
         <IsPackable>false</IsPackable>
-
+        <Configurations>Debug;Release;BuildForRelease</Configurations>
         <RootNamespace>NExpect.Matchers.NSubstitute.Tests</RootNamespace>
     </PropertyGroup>
 
