@@ -9,8 +9,8 @@
         "build": "zarro @",
         "build-with-msbuild": "cross-env BUILD_EXCLUDE=src/PeanutButter/**/* zarro build",
         "verify-up-to-date": "zarro verify-up-to-date",
-        "release": "cross-env BUILD_CONFIGURATION=BuildForRelease zarro release",
-        "release-beta": "cross-env PACK_INCREMENT_VERSION=1 VERSION_INCREMENT_STRATEGY=prerelease BUILD_CONFIGURATION=BuildForRelease zarro release",
+        "release": "cross-env BUILD_CONFIGURATION=Release zarro release",
+        "release-beta": "cross-env PACK_INCREMENT_VERSION=1 VERSION_INCREMENT_STRATEGY=prerelease BUILD_CONFIGURATION=Release zarro release",
         "clear-old-packages": "rimraf packages",
         "test-push": "zarro @"
     },
