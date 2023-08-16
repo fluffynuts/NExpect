@@ -13,7 +13,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>2.0.41</PackageVersion>
+    <PackageVersion>2.0.42-2308161429.74c00e2</PackageVersion>
     <Authors>Davyd McColl</Authors>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
@@ -52,7 +52,7 @@
     <ProjectReference Include="..\NExpect\NExpect.csproj"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NSubstitute" Version="5.0.0" />
+    <PackageReference Include="NSubstitute" Version="5.0.0"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="icon.png" Pack="true" PackagePath=""/>

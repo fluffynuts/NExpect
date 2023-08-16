@@ -1,21 +1,20 @@
 {
     "name": "nexpect",
     "scripts": {
-        "pretest": "run-s \"zarro update-git-submodules\"",
-        "test": "run-s quick-test",
-        "quick-test": "run-s \"zarro test-dotnet\"",
-        "pack": "run-s \"zarro pack\"",
-        "cover": "run-s \"zarro build-cover-report\"",
-        "build": "run-s \"zarro build\"",
+        "pretest": "zarro update-git-submodules",
+        "experiment": "zarro experiment-task",
+        "test": "zarro test-dotnet",
+        "pack": "zarro @",
+        "cover": "zarro build-cover-report",
+        "build": "zarro @",
         "build-with-msbuild": "cross-env BUILD_EXCLUDE=src/PeanutButter/**/* zarro build",
-        "zarro": "cross-env DOTNET_CORE=1 BUILD_EXCLUDE=src/PeanutButter/**/* PACK_INCLUDE_CSPROJ=* PACK_EXCLUDE_CSPROJ=*Tests*,CoreConsumer,src/PeanutButter/**/* TEST_EXCLUDE=src/PeanutButter/**/* zarro",
         "prerelease": "run-s verify-up-to-date test clear-old-packages",
         "verify-up-to-date": "zarro verify-up-to-date",
-        "release": "cross-env BUILD_CONFIGURATION=BuildForRelease run-s \"zarro release\"",
+        "release": "cross-env BUILD_CONFIGURATION=BuildForRelease zarro release",
         "prerelease-beta": "run-s verify-up-to-date test clear-old-packages",
-        "release-beta": "cross-env PACK_INCREMENT_VERSION=1 VERSION_INCREMENT_STRATEGY=prerelease BUILD_CONFIGURATION=BuildForRelease run-s \"zarro release\"",
+        "release-beta": "cross-env PACK_INCREMENT_VERSION=1 VERSION_INCREMENT_STRATEGY=prerelease BUILD_CONFIGURATION=BuildForRelease zarro release",
         "clear-old-packages": "rimraf packages",
-        "test-push": "run-s \"zarro test-push\""
+        "test-push": "zarro @"
     },
     "devDependencies": {
         "chalk": "^3.0.0",
@@ -24,7 +23,9 @@
         "del": "^5.1.0",
         "npm-run-all": "^4.1.5",
         "simple-git": "^3.16.0",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.1.6",
         "yafs": "^1.23.0",
-        "zarro": "^1.137.0"
+        "zarro": "^1.144.71"
     }
 }
