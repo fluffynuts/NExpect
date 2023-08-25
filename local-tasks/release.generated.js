@@ -38,9 +38,34 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var gulp = requireModule("gulp"), packageDir = require("./config").packageDir, path = require("path"), fs = require("fs"), runSequence = requireModule("run-sequence"), nugetPush = requireModule("nuget-push"), env = requireModule("env"), spawn = requireModule("spawn");
 env.associate(["DRY_RUN"], ["push"]);
 gulp.task("release", function (done) { return __awaiter(void 0, void 0, void 0, function () {
+    var runTask;
     return __generator(this, function (_a) {
-        runSequence("verify-up-to-date", "test", "clear-old-packages", "pack", "push", "commit-release", "tag-and-push", done);
-        return [2 /*return*/];
+        switch (_a.label) {
+            case 0:
+                runTask = requireModule("run-task").runTask;
+                return [4 /*yield*/, runTask("verify-up-to-date")];
+            case 1:
+                _a.sent();
+                return [4 /*yield*/, runTask("test")];
+            case 2:
+                _a.sent();
+                return [4 /*yield*/, runTask("clear-old-packages")];
+            case 3:
+                _a.sent();
+                return [4 /*yield*/, runTask("pack")];
+            case 4:
+                _a.sent();
+                return [4 /*yield*/, runTask("push")];
+            case 5:
+                _a.sent();
+                return [4 /*yield*/, runTask("commit-release")];
+            case 6:
+                _a.sent();
+                return [4 /*yield*/, runTask("tag-and-push")];
+            case 7:
+                _a.sent();
+                return [2 /*return*/];
+        }
     });
 }); });
 gulp.task("push", "pushes packages to nuget.org", function () {
