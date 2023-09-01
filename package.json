@@ -12,7 +12,10 @@
         "release": "cross-env BUILD_CONFIGURATION=Release zarro release",
         "release-beta": "cross-env PACK_INCREMENT_VERSION=1 VERSION_INCREMENT_STRATEGY=prerelease BUILD_CONFIGURATION=Release zarro release",
         "clear-old-packages": "rimraf packages",
-        "test-push": "zarro @"
+        "test-push": "zarro @",
+        "clean": "zarro @",
+        "nuget-restore": "zarro @",
+        "quick-test-dotnet": "zarro @"
     },
     "devDependencies": {
         "chalk": "^3.0.0",
@@ -24,6 +27,6 @@
         "ts-node": "^10.9.1",
         "typescript": "^5.1.6",
         "yafs": "^1.23.0",
-        "zarro": "^1.144.104"
+        "zarro": "^1.144.138"
     }
 }
