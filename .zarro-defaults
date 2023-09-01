@@ -11,3 +11,5 @@ BUILD_EXCLUDE=src/PeanutButter/**/*
 PACK_INCLUDE_CSPROJ=*
 PACK_EXCLUDE_CSPROJ=*Tests*,CoreConsumer, src/PeanutButter/**/*
 TEST_EXCLUDE=src/PeanutButter/**/*
+DOTNET_TEST_PARALLEL=1
+
