@@ -31,6 +31,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".config", ".config", "{F58A
 	ProjectSection(SolutionItems) = preProject
 		MonoForFramework.targets = MonoForFramework.targets
 		Directory.Build.props = Directory.Build.props
+		..\.gitignore = ..\.gitignore
+		..\.zarro-defaults = ..\.zarro-defaults
+		..\package.json = ..\package.json
 	EndProjectSection
 EndProject
 Global

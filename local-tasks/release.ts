@@ -12,19 +12,20 @@ const
 
 env.associate([ "DRY_RUN" ], [ "push" ]);
 
-gulp.task("release", async done => {
+gulp.task("release", done => {
     const { runTask } = requireModule<RunTask>("run-task");
-    await runTask("verify-up-to-date");
-    await runTask("test");
-    await runTask("clear-old-packages");
-    await runTask("pack")
-    await runTask("push");
-    await runTask("commit-release");
-    await runTask("tag-and-push");
-    // runSequence(
-    //     "verify-up-to-date", "test", "clear-old-packages",
-    //     "pack", "push", "commit-release", "tag-and-push",
-    //     done);
+    // await runTask("verify-up-to-date");
+    // await runTask("test");
+    // await runTask("clear-old-packages");
+    // await runTask("pack")
+    // await runTask("push");
+    // await runTask("commit-release");
+    // await runTask("tag-and-push");
+    const runSequence = requireModule<RunSequence>("run-sequence");
+    runSequence(
+        "verify-up-to-date", "test", "clear-old-packages",
+        "pack", "push", "commit-release", "tag-and-push",
+        done);
 });
 
 gulp.task("push", "pushes packages to nuget.org", () => {

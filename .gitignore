@@ -293,3 +293,4 @@ buildreports
 *.swo
 build-tools
 .vscode
+local-tasks/*.generated.js
