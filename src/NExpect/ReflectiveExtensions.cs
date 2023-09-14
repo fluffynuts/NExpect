@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using Imported.PeanutButter.Utils;
 using NExpect.Implementations;
-using NExpect.Implementations.Fluency;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
@@ -133,52 +132,56 @@ public static class ReflectiveExtensions
         Func<string> customMessageGenerator
     )
     {
-        return have.AddMatcher(actual =>
-        {
-            if (actual is null)
+        return have.AddMatcher(
+            actual =>
             {
-                return Fail("actual is null");
-            }
-
-            var type = actual as Type ?? typeof(T);
-            var matchesName = type.GetMethods(
-                    BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static
-                )
-                .Where(mi => mi.Name == methodName)
-                .ToArray();
-            var allDiscriminatorMatches = matchesName
-                .Where(
-                    mi => mi.Name == methodName && discriminator(mi)
-                ).ToArray();
-            var methodInfo = allDiscriminatorMatches.FirstOrDefault();
-            methodInfo.DeleteMetadata();
-            var passed = methodInfo is not null && allDiscriminatorMatches.Length == 1;
-            return new MatcherResultWithNext<MethodInfo>(
-                passed,
-                () =>
+                if (actual is null)
                 {
-                    var single = matchesName.Length == 1;
-                    var moreInfo = matchesName.Any()
-                        ? $" (there {(single ? "was" : "were")} {matchesName.Length} match{(single ? "" : "es")} by name '{methodName}')"
-                        : "";
-                    if (matchesName.Any() && allDiscriminatorMatches.Length > 1)
-                    {
-                        moreInfo = moreInfo.RegexReplace("\\)$",
-                            " - there were multiple matches for your provided discriminator)");
-                    }
+                    return Fail("actual is null");
+                }
 
-                    return $@"Expected {
-                        type.PrettyName()
-                    } to have a single matching method for name '{
-                        methodName
-                    }' and provided discriminator{
-                        moreInfo
-                    }";
-                },
-                customMessageGenerator,
-                () => methodInfo
-            );
-        });
+                var type = actual as Type ?? typeof(T);
+                var matchesName = type.GetMethods(
+                        BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static
+                    )
+                    .Where(mi => mi.Name == methodName)
+                    .ToArray();
+                var allDiscriminatorMatches = matchesName
+                    .Where(
+                        mi => mi.Name == methodName && discriminator(mi)
+                    ).ToArray();
+                var methodInfo = allDiscriminatorMatches.FirstOrDefault();
+                methodInfo.DeleteMetadata();
+                var passed = methodInfo is not null && allDiscriminatorMatches.Length == 1;
+                return new MatcherResultWithNext<MethodInfo>(
+                    passed,
+                    () =>
+                    {
+                        var single = matchesName.Length == 1;
+                        var moreInfo = matchesName.Any()
+                            ? $" (there {(single ? "was" : "were")} {matchesName.Length} match{(single ? "" : "es")} by name '{methodName}')"
+                            : "";
+                        if (matchesName.Any() && allDiscriminatorMatches.Length > 1)
+                        {
+                            moreInfo = moreInfo.RegexReplace(
+                                "\\)$",
+                                " - there were multiple matches for your provided discriminator)"
+                            );
+                        }
+
+                        return $@"Expected {
+                            type.PrettyName()
+                        } to have a single matching method for name '{
+                            methodName
+                        }' and provided discriminator{
+                            moreInfo
+                        }";
+                    },
+                    customMessageGenerator,
+                    () => methodInfo
+                );
+            }
+        );
 
         IMatcherResultWithNext<MethodInfo> Fail(string message)
         {
@@ -270,7 +273,8 @@ public static class ReflectiveExtensions
     ) where TAttribute : Attribute
     {
         return with.Attribute(
-            matcher, () => customMessage
+            matcher,
+            () => customMessage
         );
     }
 
@@ -289,10 +293,11 @@ public static class ReflectiveExtensions
     ) where TAttribute : Attribute
     {
         matcher ??= _ => true;
-        return with.AddMatcher(actual =>
-            TryMatchAnyParameterAttribute(actual, matcher, customMessageGenerator)
-            ?? TryMatchParameterAttribute(actual, matcher, customMessageGenerator)
-            ?? MatchMethodAttribute(actual, matcher, customMessageGenerator)
+        return with.AddMatcher(
+            actual =>
+                TryMatchAnyParameterAttribute(actual, matcher, customMessageGenerator)
+                ?? TryMatchParameterAttribute(actual, matcher, customMessageGenerator)
+                ?? MatchMethodAttribute(actual, matcher, customMessageGenerator)
         );
     }
 
@@ -497,45 +502,47 @@ public static class ReflectiveExtensions
         Func<string> customMessageGenerator
     )
     {
-        return canAddMatcher.AddMatcher(actual =>
-        {
-            if (string.IsNullOrWhiteSpace(property))
+        return canAddMatcher.AddMatcher(
+            actual =>
             {
-                return Fail(() => "Provided property name is null or whitespace");
-            }
+                if (string.IsNullOrWhiteSpace(property))
+                {
+                    return Fail(() => "Provided property name is null or whitespace");
+                }
 
-            if (actual is null)
-            {
-                return Fail(() => "Actual value is null");
-            }
+                if (actual is null)
+                {
+                    return Fail(() => "Actual value is null");
+                }
 
-            actual.SetMetadata(METADATA_KEY_PROPERTY_NAME, property);
-            var actualType = actual.ResolveToType();
+                actual.SetMetadata(METADATA_KEY_PROPERTY_NAME, property);
+                var actualType = actual.ResolveToType();
 
-            var propInfo = actualType.GetProperty(property, PUBLIC_INSTANCE);
-            if (propInfo is null)
-            {
+                var propInfo = actualType.GetProperty(property, PUBLIC_INSTANCE);
+                if (propInfo is null)
+                {
+                    return new MatcherResult(
+                        false,
+                        () =>
+                            $@"Expected {
+                                actualType.PrettyName()
+                            } {
+                                false.AsNot()
+                            }to have a public property named '{property}'"
+                    );
+                }
+
+
+                actual.SetMetadata(METADATA_KEY_PROPERTY_INFO, propInfo);
                 return new MatcherResult(
-                    false,
-                    () =>
-                        $@"Expected {
-                            actualType.PrettyName()
-                        } {
-                            false.AsNot()
-                        }to have a public property named '{property}'"
+                    true,
+                    FinalMessageFor(
+                        () => $"Expected {actual.Stringify()} {true.AsNot()}to have property '{property}'",
+                        customMessageGenerator
+                    )
                 );
             }
-
-
-            actual.SetMetadata(METADATA_KEY_PROPERTY_INFO, propInfo);
-            return new MatcherResult(
-                true,
-                FinalMessageFor(
-                    () => $"Expected {actual.Stringify()} {true.AsNot()}to have property '{property}'",
-                    customMessageGenerator
-                )
-            );
-        });
+        );
 
         MatcherResult Fail(Func<string> defaultGenerator)
         {
@@ -551,6 +558,7 @@ public static class ReflectiveExtensions
 
     internal const string METADATA_KEY_PROPERTY_NAME = "__PropertyName__";
     internal const string METADATA_KEY_PROPERTY_INFO = "__PropertyInfo__";
+    internal const string METADATA_KEY_EXPECT_OPTIONAL = "__PropertyShouldBeOptional_";
 
     private const string METADATA_KEY_METHOD_INFO = "__MethodInfo__";
 
@@ -659,49 +667,51 @@ public static class ReflectiveExtensions
         Func<string> customMessageGenerator
     )
     {
-        return with.AddMatcher(actual =>
-        {
-            if (!actual.TryGetMetadata<PropertyInfo>(
-                    METADATA_KEY_PROPERTY_INFO,
-                    out var propInfo
-                )
-               )
+        return with.AddMatcher(
+            actual =>
             {
-                actual.TryGetMetadata<string>(METADATA_KEY_PROPERTY_NAME, out var propName);
+                if (!actual.TryGetMetadata<PropertyInfo>(
+                        METADATA_KEY_PROPERTY_INFO,
+                        out var propInfo
+                    )
+                   )
+                {
+                    actual.TryGetMetadata<string>(METADATA_KEY_PROPERTY_NAME, out var propName);
 
+                    return new MatcherResult(
+                        true,
+                        FinalMessageFor(
+                            () => propName is null
+                                ? "actual value was null"
+                                : $"actual missing property {propName}",
+                            customMessageGenerator
+                        )
+                    );
+                }
+
+                var actualValue = propInfo.GetValue(actual);
+
+                var passed =
+                    actualValue is null && expected is null ||
+                    (actualValue?.Equals(expected) ?? false) ||
+                    (actualValue?.DeepEquals(expected) ?? false);
                 return new MatcherResult(
-                    true,
+                    passed,
                     FinalMessageFor(
-                        () => propName is null
-                            ? "actual value was null"
-                            : $"actual missing property {propName}",
+                        () => $@"expected {
+                            passed.AsNot()
+                        }to find value of {
+                            expected.Stringify()
+                        } for property '{
+                            propInfo.Name
+                        }', but found {
+                            actualValue.Stringify()
+                        }",
                         customMessageGenerator
                     )
                 );
             }
-
-            var actualValue = propInfo.GetValue(actual);
-
-            var passed =
-                actualValue is null && expected is null ||
-                (actualValue?.Equals(expected) ?? false) ||
-                (actualValue?.DeepEquals(expected) ?? false);
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () => $@"expected {
-                        passed.AsNot()
-                    }to find value of {
-                        expected.Stringify()
-                    } for property '{
-                        propInfo.Name
-                    }', but found {
-                        actualValue.Stringify()
-                    }",
-                    customMessageGenerator
-                )
-            );
-        });
+        );
     }
 
     /// <summary>
@@ -904,13 +914,15 @@ public static class ReflectiveExtensions
         Func<string> customMessageGenerator
     )
     {
-        return canAddMatcher.AddMatcher(actual =>
-            TryMatchPropertyType(actual, expected, customMessageGenerator)
-            ?? TryMatchAnyParameterType(actual, expected, customMessageGenerator)
-            ?? TryMatchParameterType(actual, expected, customMessageGenerator)
-            ?? throw new NotImplementedException(
-                $"Type matching not implemented for this case"
-            ));
+        return canAddMatcher.AddMatcher(
+            actual =>
+                TryMatchPropertyType(actual, expected, customMessageGenerator)
+                ?? TryMatchAnyParameterType(actual, expected, customMessageGenerator)
+                ?? TryMatchParameterType(actual, expected, customMessageGenerator)
+                ?? throw new NotImplementedException(
+                    $"Type matching not implemented for this case"
+                )
+        );
     }
 
     private static MatcherResult TryMatchAnyParameterType<T>(
@@ -1107,35 +1119,70 @@ public static class ReflectiveExtensions
         Func<string> customMessageGenerator
     )
     {
-        return continuation.AddMatcher(actual =>
-        {
-            var parameters = actual.GetParameters();
-            actual.DeleteMetadata(METADATA_KEY_PROPERTY_INFO);
-            actual.DeleteMetadata(METADATA_KEY_PARAMETER_INFO);
-            actual.DeleteMetadata(METADATA_KEY_PARAMETER_INFOS);
+        return continuation.AddMatcher(
+            actual =>
+            {
+                var parameters = actual.GetParameters();
+                actual.DeleteMetadata(METADATA_KEY_PROPERTY_INFO);
+                actual.DeleteMetadata(METADATA_KEY_PARAMETER_INFO);
+                actual.DeleteMetadata(METADATA_KEY_PARAMETER_INFOS);
 
-            if (parameterName is null)
-            {
-                actual.SetMetadata(METADATA_KEY_PARAMETER_INFOS, parameters);
-            }
-            else
-            {
-                parameters = parameters.Where(pi => pi.Name == parameterName)
-                    .ToArray();
-                actual.SetMetadata(METADATA_KEY_PARAMETER_INFO, parameters.FirstOrDefault());
-            }
+                if (parameterName is null)
+                {
+                    actual.SetMetadata(METADATA_KEY_PARAMETER_INFOS, parameters);
+                }
+                else
+                {
+                    parameters = parameters.Where(
+                        pi => pi.Name == parameterName
+                    ).ToArray();
+                    actual.SetMetadata(METADATA_KEY_PARAMETER_INFO, parameters.FirstOrDefault());
+                }
 
-            var passed = parameters.Length > 0;
-            {
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        () => $"Expected {passed.AsNot()}to find parameters on method {actual.Name}",
-                        customMessageGenerator
-                    )
+                var match = parameters.FirstOrDefault();
+                var passed = match is not null;
+                var optionalSpecified = actual.TryGetMetadata<bool>(
+                    METADATA_KEY_EXPECT_OPTIONAL,
+                    out var isOptional
                 );
+                if (optionalSpecified)
+                {
+                    // clean up for the next caller
+                    actual.DeleteMetadata(METADATA_KEY_EXPECT_OPTIONAL);
+                }
+
+                if (match is null || !optionalSpecified)
+                {
+                    return new MatcherResult(
+                        passed,
+                        FinalMessageFor(
+                            () => string.IsNullOrWhiteSpace(parameterName)
+                                ? $"Expected {passed.AsNot()}to find parameter '{parameterName}' on method {actual.Name}"
+                                : $"Expected {passed.AsNot()}to find parameters on method {actual.Name}",
+                            customMessageGenerator
+                        )
+                    );
+                }
+
+                passed = match.IsOptional == isOptional;
+                var method = $"{actual.DeclaringType?.Name}.{actual.Name}";
+                return isOptional
+                    ? new MatcherResult(
+                        passed,
+                        FinalMessageFor(
+                            () => $"Expected parameter {parameterName} on {method} {passed.AsNot()}to be optional",
+                            customMessageGenerator
+                        )
+                    )
+                    : new MatcherResult(
+                        passed,
+                        FinalMessageFor(
+                            () => $"Expected parameter {parameterName} on {method} {passed.AsNot()}to be required",
+                            customMessageGenerator
+                        )
+                    );
             }
-        });
+        );
     }
 
     /// <summary>
@@ -1176,17 +1223,19 @@ public static class ReflectiveExtensions
         Func<string> customMessageGenerator
     )
     {
-        return continuation.AddMatcher(actual =>
-        {
-            var passed = actual.GetParameters().Length == 0;
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () => $"Expected {actual.Name} to be parameterless",
-                    customMessageGenerator
-                )
-            );
-        });
+        return continuation.AddMatcher(
+            actual =>
+            {
+                var passed = actual.GetParameters().Length == 0;
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected {actual.Name} to be parameterless",
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
     }
 
     /// <summary>
@@ -1233,28 +1282,30 @@ public static class ReflectiveExtensions
         Func<string> customMessageGenerator
     )
     {
-        return continuation.AddMatcher(actual =>
-        {
-            if (actual is null)
+        return continuation.AddMatcher(
+            actual =>
             {
-                throw new InvalidOperationException(
-                    $"Cannot test return type on null MethodInfo"
+                if (actual is null)
+                {
+                    throw new InvalidOperationException(
+                        $"Cannot test return type on null MethodInfo"
+                    );
+                }
+
+                var passed = actual.ReturnType == expected;
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $@"Expected '{
+                            actual.Name
+                        }' {
+                            passed.AsNot()
+                        } to have return value of type {expected} (found: {actual.ReturnType})",
+                        customMessageGenerator
+                    )
                 );
             }
-
-            var passed = actual.ReturnType == expected;
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () => $@"Expected '{
-                        actual.Name
-                    }' {
-                        passed.AsNot()
-                    } to have return value of type {expected} (found: {actual.ReturnType})",
-                    customMessageGenerator
-                )
-            );
-        });
+        );
     }
 
     /// <summary>
@@ -1334,23 +1385,25 @@ public static class ReflectiveExtensions
         Func<string> customMessageGenerator
     ) where TAttribute : Attribute
     {
-        return have.AddMatcher(actual =>
-        {
-            var attributes = actual?.GetCustomAttributes()
-                .OfType<TAttribute>()
-                .ToArray() ?? new TAttribute[0];
-            actual.SetMetadata(METADATA_KEY_TYPE_ATTRIBUTES, attributes);
-            var passed = attributes.Any(attributeMatcher ?? (_ => true));
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () => attributeMatcher is null
-                        ? $"Expected '{actual}' to be decorated with {Attrib<TAttribute>()}"
-                        : $"Expected '{actual}' to be decorated with {Attrib<TAttribute>()} and pass provided matcher",
-                    customMessageGenerator
-                )
-            );
-        });
+        return have.AddMatcher(
+            actual =>
+            {
+                var attributes = actual?.GetCustomAttributes()
+                    .OfType<TAttribute>()
+                    .ToArray() ?? new TAttribute[0];
+                actual.SetMetadata(METADATA_KEY_TYPE_ATTRIBUTES, attributes);
+                var passed = attributes.Any(attributeMatcher ?? (_ => true));
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => attributeMatcher is null
+                            ? $"Expected '{actual}' to be decorated with {Attrib<TAttribute>()}"
+                            : $"Expected '{actual}' to be decorated with {Attrib<TAttribute>()} and pass provided matcher",
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
     }
 
     private static Type ResolveToType(this object obj)

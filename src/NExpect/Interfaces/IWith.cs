@@ -15,4 +15,10 @@ public interface IWith<T> : ICanAddMatcher<T>
     /// Provides the .No dangling grammar type
     /// </summary>
     public INo<T> No { get; }
+
+    /// <summary>
+    /// Indicates that the next bit is optional
+    /// </summary>
+    public IOptional<T> Optional { get; }
+    
 }

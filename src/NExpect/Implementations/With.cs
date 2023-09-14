@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using NExpect.Interfaces;
 
 namespace NExpect.Implementations;
@@ -14,6 +13,9 @@ internal class With<T>
     
     public INo<T> No
         => ContinuationFactory.Create<T, No<T>>(ActualFetcher, this);
+    
+    public IOptional<T> Optional
+        => ContinuationFactory.Create<T, Optional<T>>(ActualFetcher, this);
 
     public With(Func<T> actualFetcher) : base(actualFetcher)
     {
