@@ -17,6 +17,16 @@ internal class Have<T>
     public IDefault<T> Default => Next<Default<T>>();
     public IValid<T> Valid => Next<Valid<T>>();
 
+    public IOptional<T> Optional => ContinuationFactory.Create<T, Optional<T>>(
+        ActualFetcher,
+        this
+    );
+
+    public IRequired<T> Required => ContinuationFactory.Create<T, Required<T>>(
+        ActualFetcher,
+        this
+    );
+
     public Have(Func<T> actualFetcher) : base(actualFetcher)
     {
     }

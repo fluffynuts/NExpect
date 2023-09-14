@@ -508,7 +508,7 @@ namespace NExpect.Tests.ObjectEquality
             public class OptionalAndRequiredParameters
             {
                 [Test]
-                public void ShouldBeAbleToAssertOptionalParameter()
+                public void ShouldBeAbleToAssertOptionalParameterOnType()
                 {
                     // Arrange
                     var type = typeof(Cow);
@@ -540,7 +540,38 @@ namespace NExpect.Tests.ObjectEquality
                 }
 
                 [Test]
-                public void ShouldBeAbleToAssertRequiredParameter()
+                public void ShouldBeAbleToAssertOptionalParameterOnMethodInfo()
+                {
+                    // Arrange
+                    var method = typeof(Cow)
+                        .GetMethod(nameof(Cow.Random));
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(method)
+                                .To.Have.Optional.Parameter("minimum")
+                                .With.Type(typeof(int));
+                        },
+                        Throws.Nothing
+                    );
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(method)
+                                .To.Have.Required.Parameter("minimum")
+                                .With.Type(typeof(int));
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains(
+                                "parameter minimum on Cow.Random to be required"
+                            )
+                        );
+                    // Assert
+                }
+
+                [Test]
+                public void ShouldBeAbleToAssertRequiredParameterOnType()
                 {
                     // Arrange
                     var type = typeof(Cow);
@@ -562,6 +593,36 @@ namespace NExpect.Tests.ObjectEquality
                             Expect(type)
                                 .To.Have.Method("Add")
                                 .With.Optional.Parameter("a")
+                                .With.Type(typeof(int));
+                        },
+                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            .With.Message.Contains("parameter a on Cow.Add to be optional")
+                    );
+                    // Assert
+                }
+
+                [Test]
+                public void ShouldBeAbleToAssertRequiredParameterOnMethodInfo()
+                {
+                    // Arrange
+                    var method = typeof(Cow)
+                        .GetMethod(nameof(Cow.Add));
+                    // Act
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(method)
+                                .To.Have.Required.Parameter("a")
+                                .With.Type(typeof(int));
+                        },
+                        Throws.Nothing
+                    );
+
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(method)
+                                .To.Have.Optional.Parameter("a")
                                 .With.Type(typeof(int));
                         },
                         Throws.Exception.InstanceOf<UnmetExpectationException>()

@@ -36,6 +36,16 @@ public interface IHave<T>: ICanAddMatcher<T>
     /// .Valid grammar continuation extension point
     /// </summary>
     IValid<T> Valid { get; }
+
+    /// <summary>
+    /// .Optional grammar continuation extension point
+    /// </summary>
+    IOptional<T> Optional { get; }
+    
+    /// <summary>
+    /// .Required grammar continuation extension point
+    /// </summary>
+    IRequired<T> Required { get; }
 }
 
 /// <summary>
