@@ -7,7 +7,7 @@
         const
           testZarro = requireModule<TestZarro>("test-zarro");
         await testZarro({
-          package: "beta",
+          packageVersion: "beta",
           tasks: [ "test", "pack" ]
         });
     });
