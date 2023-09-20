@@ -101,17 +101,19 @@ public static class DifferenceHighlighting
         }
 
 
-        var arrowBody = new String('-', arrowBodyLength);
-
+        var leftArrowBody = arrowBodyLength > 1
+            ? new String('-', arrowBodyLength)
+            : "";
+        var rightArrowBody = arrowBodyLength < 2
+            ? "---"
+            : "";
         return $@"first difference found at character {
             idx
         }
 {
     displayLine
 }
-{
-    arrowBody
-}^";
+{leftArrowBody}^{rightArrowBody}";
     }
 
     /// <summary>
@@ -199,7 +201,11 @@ public static class DifferenceHighlighting
     }
 
     private static readonly HashSet<char> NewLineCharacters = new(
-        new[] { '\r', '\n' }
+        new[]
+        {
+            '\r',
+            '\n'
+        }
     );
 
     private static int FindFirstNewLineAfter(string str, int from)
@@ -336,7 +342,7 @@ public static class DifferenceHighlighting
     {
         try
         {
-            return (T) value;
+            return (T)value;
         }
         catch
         {

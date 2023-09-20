@@ -9,6 +9,23 @@ namespace NExpect.Tests.ObjectEquality.Strings
     public class TestDifferenceHighlighting
     {
         [TestFixture]
+        public class WhenDifferenceIsAtOrNearStart
+        {
+            [Test]
+            public void ShouldDoReverseArrowWhenDifferenceAtStart()
+            {
+                // Arrange
+                var left = "aaa";
+                var right = "bbb";
+                // Act
+                var result = DifferenceHighlighting.HighlightFirstPositionOfDifference(left, right, 100);
+                // Assert
+                Expect(result)
+                    .To.Contain("^--");
+            }
+        }
+        
+        [TestFixture]
         public class HighlightFirstPositionOfDifference
         {
             [Test]
