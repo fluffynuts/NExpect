@@ -87,7 +87,12 @@ public static class DifferenceHighlighting
         var displayLine = lineWithFirstDiff.Line;
         if (arrowBodyLength > maximumContextCharacters)
         {
-            var window = left.Window(
+            var requiredChars = idx - left.Length + 1;
+            var rightPad = requiredChars > 0
+                ? new string(' ', requiredChars)
+                : "";
+
+            var window = $"{left}{rightPad}".Window(
                 idx,
                 maximumContextCharacters,
                 out var startedAt,
@@ -243,7 +248,10 @@ public static class DifferenceHighlighting
         return len;
     }
 
-    private static int FindIndexOfFirstDifference(string left, string right)
+    private static int FindIndexOfFirstDifference(
+        string left,
+        string right
+    )
     {
         var charZip = left.ToCharArray().Zip(right.ToCharArray(), (c1, c2) => Tuple.Create(c1, c2));
         var idx = 0;
