@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using NExpect.Exceptions;
 using NExpect.Helpers;
 using NExpect.Implementations;
@@ -2502,7 +2503,7 @@ public static class CollectionMatchers
     )
     {
         return mostly.Distinct(
-            (decimal) minimumRequiredRatio,
+            (decimal)minimumRequiredRatio,
             customMessageGenerator
         );
     }
@@ -2573,7 +2574,7 @@ public static class CollectionMatchers
                 var asArray = actual as T[] ?? actual.ToArray();
                 var total = asArray.Length;
                 var distinct = asArray.Distinct().Count();
-                var actualRatio = (decimal) distinct / (decimal) total;
+                var actualRatio = (decimal)distinct / (decimal)total;
                 var passed = actualRatio >= minimumRequiredRatio;
                 return new MatcherResult(
                     passed,
@@ -2586,6 +2587,151 @@ public static class CollectionMatchers
                     customMessageGenerator
                 );
             }
+        );
+    }
+
+    /// <summary>
+    /// Attempts to match items in the collection against
+    /// the regular provided regular expression
+    /// </summary>
+    /// <param name="matched"></param>
+    /// <param name="regex"></param>
+    /// <returns></returns>
+    public static IMore<IEnumerable<string>> By(
+        this ICountMatchMatched<IEnumerable<string>> matched,
+        string regex
+    )
+    {
+        return matched.By(
+            regex,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Attempts to match items in the collection against
+    /// the regular provided regular expression
+    /// </summary>
+    /// <param name="matched"></param>
+    /// <param name="regex"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<IEnumerable<string>> By(
+        this ICountMatchMatched<IEnumerable<string>> matched,
+        string regex,
+        string customMessage
+    )
+    {
+        return matched.By(
+            regex,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Attempts to match items in the collection against
+    /// the regular provided regular expression
+    /// </summary>
+    /// <param name="matched"></param>
+    /// <param name="regex"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<IEnumerable<string>> By(
+        this ICountMatchMatched<IEnumerable<string>> matched,
+        string regex,
+        Func<string> customMessageGenerator
+    )
+    {
+        if (regex is null)
+        {
+            throw new ArgumentException(
+                "No regex specified",
+                nameof(regex)
+            );
+        }
+        return AddRegexMatcher(
+            matched,
+            new Regex(regex),
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Attempts to match items in the collection against
+    /// the regular provided regular expression
+    /// </summary>
+    /// <param name="matched"></param>
+    /// <param name="regex"></param>
+    /// <returns></returns>
+    public static IMore<IEnumerable<string>> By(
+        this ICountMatchMatched<IEnumerable<string>> matched,
+        Regex regex
+    )
+    {
+        return matched.By(
+            regex,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Attempts to match items in the collection against
+    /// the regular provided regular expression
+    /// </summary>
+    /// <param name="matched"></param>
+    /// <param name="regex"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<IEnumerable<string>> By(
+        this ICountMatchMatched<IEnumerable<string>> matched,
+        Regex regex,
+        string customMessage
+    )
+    {
+        return matched.By(
+            regex,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Attempts to match items in the collection against
+    /// the regular provided regular expression
+    /// </summary>
+    /// <param name="matched"></param>
+    /// <param name="regex"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<IEnumerable<string>> By(
+        this ICountMatchMatched<IEnumerable<string>> matched,
+        Regex regex,
+        Func<string> customMessageGenerator
+    )
+    {
+        if (regex is null)
+        {
+            throw new ArgumentException(
+                "No regex specified",
+                nameof(regex)
+            );
+        }
+
+        return AddRegexMatcher(
+            matched,
+            regex,
+            customMessageGenerator
+        );
+    }
+
+    private static IMore<IEnumerable<string>> AddRegexMatcher(
+        this ICountMatchMatched<IEnumerable<string>> matched,
+        Regex regex,
+        Func<string> customMessageGenerator
+    )
+    {
+        return matched.By(
+            regex.IsMatch,
+            customMessageGenerator
         );
     }
 

@@ -26,7 +26,13 @@ namespace NExpect.Tests.Collections
                         // Arrange
                         var search = GetRandomString(3);
                         var other1 = GetAnother(search);
-                        var other2 = GetAnother<string>(new[] { search, other1 });
+                        var other2 = GetAnother<string>(
+                            new[]
+                            {
+                                search,
+                                other1
+                            }
+                        );
                         var collection = new[]
                         {
                             search,
@@ -56,7 +62,13 @@ namespace NExpect.Tests.Collections
                             // Arrange
                             var search = GetRandomString(3);
                             var other1 = GetAnother(search);
-                            var other2 = GetAnother<string>(new[] { search, other1 });
+                            var other2 = GetAnother<string>(
+                                new[]
+                                {
+                                    search,
+                                    other1
+                                }
+                            );
                             var collection = new[]
                             {
                                 search,
@@ -83,7 +95,13 @@ namespace NExpect.Tests.Collections
                             // Arrange
                             var search = GetRandomString(3);
                             var other1 = GetAnother(search);
-                            var other2 = GetAnother<string>(new[] { search, other1 });
+                            var other2 = GetAnother<string>(
+                                new[]
+                                {
+                                    search,
+                                    other1
+                                }
+                            );
                             var collection = new[]
                             {
                                 search,
@@ -111,7 +129,13 @@ namespace NExpect.Tests.Collections
                             // Arrange
                             var search = GetRandomString(3);
                             var other1 = GetAnother(search);
-                            var other2 = GetAnother<string>(new[] { search, other1 });
+                            var other2 = GetAnother<string>(
+                                new[]
+                                {
+                                    search,
+                                    other1
+                                }
+                            );
                             var collection = new[]
                             {
                                 search,
@@ -136,7 +160,12 @@ namespace NExpect.Tests.Collections
                         public void ShouldBeAbleToChain()
                         {
                             // Arrange
-                            var ints = new[] { 1, 2, 3 };
+                            var ints = new[]
+                            {
+                                1,
+                                2,
+                                3
+                            };
                             // Act
                             Assert.That(
                                 () =>
@@ -175,7 +204,14 @@ namespace NExpect.Tests.Collections
                         public void ShouldBeAbleToChainForHashSet()
                         {
                             // Arrange
-                            var ints = new HashSet<int>(new[] { 1, 2, 3 });
+                            var ints = new HashSet<int>(
+                                new[]
+                                {
+                                    1,
+                                    2,
+                                    3
+                                }
+                            );
                             // Act
                             Assert.That(
                                 () =>
@@ -553,6 +589,96 @@ namespace NExpect.Tests.Collections
                         }
                     }
 
+                    [TestFixture]
+                    public class StringCollectionContainingItemMatchedByRegex
+                    {
+                        [Test]
+                        public void ShouldFindSingleMatch()
+                        {
+                            // Arrange
+                            var data = new[]
+                            {
+                                "foo",
+                                "bar",
+                                "quux"
+                            };
+                            // Act
+                            Assert.That(
+                                () =>
+                                {
+                                    Expect(data)
+                                        .To.Contain.Exactly(1)
+                                        .Matched.By("^foo$");
+                                },
+                                Throws.Nothing
+                            );
+                            // Assert
+                        }
+
+                        [Test]
+                        public void ShouldFailOnNoMatch()
+                        {
+                            // Arrange
+                            var data = new[]
+                            {
+                                "bar",
+                                "quux"
+                            };
+                            // Act
+                            Assert.That(
+                                () =>
+                                {
+                                    Expect(data)
+                                        .To.Contain.Exactly(1)
+                                        .Matched.By("^foo$");
+                                },
+                                Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            );
+                            // Assert
+                        }
+
+                        [Test]
+                        public void ShouldFailOnCountMisMatch()
+                        {
+                            // Arrange
+                            var data = new[]
+                            {
+                                "foobar",
+                                "fooquux",
+                                "barfoo"
+                            };
+                            // Act
+                            Assert.That(
+                                () =>
+                                {
+                                    Expect(data)
+                                        .To.Contain.Exactly(1)
+                                        .Matched.By("foo");
+                                },
+                                Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            );
+                            Assert.That(
+                                () =>
+                                {
+                                    Expect(data)
+                                        .To.Contain.Exactly(1)
+                                        .Matched.By("^foo");
+                                },
+                                Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            );
+                            Assert.That(
+                                () =>
+                                {
+                                    Expect(data)
+                                        .To.Contain.Exactly(1)
+                                        .Matched.By("foo$");
+                                },
+                                Throws.Nothing
+                            );
+                            // Assert
+                        }
+                    }
+
 
                     [Test]
                     public void WhenSeeking2AndDoesContain2_ShouldNotThrow()
@@ -560,7 +686,13 @@ namespace NExpect.Tests.Collections
                         // Arrange
                         var search = GetRandomString(3);
                         var other1 = GetAnother(search);
-                        var other2 = GetAnother<string>(new[] { search, other1 });
+                        var other2 = GetAnother<string>(
+                            new[]
+                            {
+                                search,
+                                other1
+                            }
+                        );
                         var collection = new[]
                         {
                             search,
@@ -588,7 +720,13 @@ namespace NExpect.Tests.Collections
                         // Arrange
                         var search = GetRandomString(3);
                         var other1 = GetAnother(search);
-                        var other2 = GetAnother<string>(new[] { search, other1 });
+                        var other2 = GetAnother<string>(
+                            new[]
+                            {
+                                search,
+                                other1
+                            }
+                        );
                         var customMessage = GetRandomString(2);
                         var collection = new[]
                         {
@@ -619,7 +757,13 @@ namespace NExpect.Tests.Collections
                         // Arrange
                         var search = GetRandomString(3);
                         var other1 = GetAnother(search);
-                        var other2 = GetAnother<string>(new[] { search, other1 });
+                        var other2 = GetAnother<string>(
+                            new[]
+                            {
+                                search,
+                                other1
+                            }
+                        );
                         var collection = new[]
                         {
                             other1,
@@ -647,7 +791,13 @@ namespace NExpect.Tests.Collections
                         // Arrange
                         var search = GetRandomString(3);
                         var other1 = GetAnother(search);
-                        var other2 = GetAnother<string>(new[] { search, other1 });
+                        var other2 = GetAnother<string>(
+                            new[]
+                            {
+                                search,
+                                other1
+                            }
+                        );
                         var collection = new[]
                         {
                             search,
@@ -679,7 +829,13 @@ namespace NExpect.Tests.Collections
                         // Arrange
                         var search = GetRandomString(3);
                         var other1 = GetAnother(search);
-                        var other2 = GetAnother<string>(new[] { search, other1 });
+                        var other2 = GetAnother<string>(
+                            new[]
+                            {
+                                search,
+                                other1
+                            }
+                        );
                         var collection = new[]
                         {
                             other1,
@@ -706,7 +862,13 @@ namespace NExpect.Tests.Collections
                         // Arrange
                         var search = GetRandomString(3);
                         var other1 = GetAnother(search);
-                        var other2 = GetAnother<string>(new[] { search, other1 });
+                        var other2 = GetAnother<string>(
+                            new[]
+                            {
+                                search,
+                                other1
+                            }
+                        );
                         var collection = new[]
                         {
                             search,
@@ -738,7 +900,13 @@ namespace NExpect.Tests.Collections
                         // Arrange
                         var search = GetRandomString(3);
                         var other1 = GetAnother(search);
-                        var other2 = GetAnother<string>(new[] { search, other1 });
+                        var other2 = GetAnother<string>(
+                            new[]
+                            {
+                                search,
+                                other1
+                            }
+                        );
                         var collection = new[]
                         {
                             other1,
