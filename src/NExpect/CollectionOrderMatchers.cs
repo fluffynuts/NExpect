@@ -300,7 +300,7 @@ public static class CollectionOrderMatchers
     /// <returns></returns>
     public static ICollectionMore<T> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
-        Expression<Func<T, object>> selector
+        Func<T, object> selector
     )
     {
         return collectionOrdered.By(
@@ -320,7 +320,7 @@ public static class CollectionOrderMatchers
     /// <returns></returns>
     public static ICollectionMore<T> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
-        Expression<Func<T, object>> selector,
+        Func<T, object> selector,
         string customMessage
     )
     {
@@ -341,7 +341,7 @@ public static class CollectionOrderMatchers
     /// <returns></returns>
     public static ICollectionMore<T> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
-        Expression<Func<T, object>> selector,
+        Func<T, object> selector,
         Func<string> customMessageGenerator
     )
     {
@@ -363,7 +363,7 @@ public static class CollectionOrderMatchers
     /// <returns></returns>
     public static ICollectionMore<T> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
-        Expression<Func<T, object>> selector,
+        Func<T, object> selector,
         Direction direction
     )
     {
@@ -386,7 +386,7 @@ public static class CollectionOrderMatchers
     /// <returns></returns>
     public static ICollectionMore<T> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
-        Expression<Func<T, object>> selector,
+        Func<T, object> selector,
         Direction direction,
         string customMessage
     )
@@ -402,11 +402,11 @@ public static class CollectionOrderMatchers
 
     private class Ordering<T>
     {
-        public Expression<Func<T, object>> Selector { get; }
+        public Func<T, object> Selector { get; }
         public Direction Direction { get; }
 
         public Ordering(
-            Expression<Func<T, object>> selector,
+            Func<T, object> selector,
             Direction direction
         )
         {
@@ -427,7 +427,7 @@ public static class CollectionOrderMatchers
     /// <returns></returns>
     public static ICollectionMore<T> By<T>(
         this ICollectionOrdered<T> collectionOrdered,
-        Expression<Func<T, object>> selector,
+        Func<T, object> selector,
         Direction direction,
         Func<string> customMessageGenerator
     )
@@ -447,17 +447,17 @@ public static class CollectionOrderMatchers
                 new(selector, direction)
             });
 
-            var sel = selector.Compile();
-            return DetermineIfIsInExpectedOrder(actual, new Expression<Func<object, object>>[]
+            return DetermineIfIsInExpectedOrder(
+                actual, new Func<object, object>[]
             {
-                o => sel((T) o)
+                o => selector((T) o)
             }, direction, customMessageGenerator);
         });
     }
 
     private static MatcherResult DetermineIfIsInExpectedOrder<T>(
         IEnumerable<T> actual,
-        Expression<Func<object, object>>[] selectors,
+        Func<object, object>[] selectors,
         Direction direction,
         Func<string> customMessageGenerator
     )
@@ -472,16 +472,14 @@ public static class CollectionOrderMatchers
             );
         }
 
-        var sels = selectors.Select(s => s.Compile())
-            .ToArray();
-        var lastValue = sels.Aggregate(enumerator.Current as object, (acc, cur) => cur(acc));
+        var lastValue = selectors.Aggregate(enumerator.Current as object, (acc, cur) => cur(acc));
         Func<int, bool> outOfOrder = direction == Direction.Ascending
             ? i => i > 0
             : i => i < 0;
         ComparerWrapper comparer = null;
         do
         {
-            var currentValue = sels.Aggregate(enumerator.Current as object, (acc, cur) => cur(acc));
+            var currentValue = selectors.Aggregate(enumerator.Current as object, (acc, cur) => cur(acc));
             var comparisonResult = CompareWithDefaultComparer(lastValue, currentValue, ref comparer);
             if (outOfOrder(comparisonResult))
             {
@@ -504,61 +502,6 @@ public static class CollectionOrderMatchers
                 customMessageGenerator
             )
         );
-    }
-
-    /// <summary>
-    /// Asserts ordering after initial ordering
-    /// </summary>
-    /// <param name="then"></param>
-    /// <param name="selector"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public static IMore<IEnumerable<T>> By<T>(
-        this IThen<IEnumerable<T>> then,
-        Expression<Func<T, object>> selector
-    )
-    {
-        return then.By(
-            selector,
-            NULL_STRING
-        );
-    }
-
-    /// <summary>
-    /// Asserts ordering after initial ordering
-    /// </summary>
-    /// <param name="then"></param>
-    /// <param name="selector"></param>
-    /// <param name="customMessage"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public static IMore<IEnumerable<T>> By<T>(
-        this IThen<IEnumerable<T>> then,
-        Expression<Func<T, object>> selector,
-        string customMessage
-    )
-    {
-        return then.By(
-            selector,
-            () => customMessage
-        );
-    }
-
-    /// <summary>
-    /// Asserts ordering after initial ordering
-    /// </summary>
-    /// <param name="then"></param>
-    /// <param name="selector"></param>
-    /// <param name="customMessageGenerator"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public static IMore<IEnumerable<T>> By<T>(
-        this IThen<IEnumerable<T>> then,
-        Expression<Func<T, object>> selector,
-        Func<string> customMessageGenerator
-    )
-    {
-        throw new NotImplementedException();
     }
 
     private static int CompareWithDefaultComparer(

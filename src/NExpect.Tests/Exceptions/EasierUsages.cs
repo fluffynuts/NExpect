@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using NExpect;
+using NExpect.Exceptions;
 using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 
@@ -50,6 +51,17 @@ public class EasierUsages
                         .For(parameterName);
                 },
                 Throws.Nothing
+            );
+            Assert.That(
+                () =>
+                {
+                    Expect(
+                            () =>
+                                throw new ArgumentException("foo", parameterName)
+                        ).To.Throw<InvalidOperationException>(() => expected);
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    .With.Message.Contains(expected)
             );
             // Assert
         }

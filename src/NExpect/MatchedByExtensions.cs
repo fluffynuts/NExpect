@@ -20,7 +20,7 @@ public static class MatchedByExtensions
     /// <returns></returns>
     public static IMore<T> By<T>(
         this IMatched<T> matched,
-        Expression<Func<T, bool>> matcher
+        Func<T, bool> matcher
     )
     {
         return matched.By(
@@ -39,7 +39,7 @@ public static class MatchedByExtensions
     /// <returns></returns>
     public static IMore<T> By<T>(
         this IMatched<T> matched,
-        Expression<Func<T, bool>> matcher,
+        Func<T, bool> matcher,
         string customMessage
     )
     {
@@ -59,14 +59,13 @@ public static class MatchedByExtensions
     /// <returns></returns>
     public static IMore<T> By<T>(
         this IMatched<T> matched,
-        Expression<Func<T, bool>> matcher,
+        Func<T, bool> matcher,
         Func<string> customMessageGenerator
     )
     {
         return matched.AddMatcher(actual =>
         {
-            var func = matcher.Compile();
-            var passed = func(actual);
+            var passed = matcher(actual);
             return new MatcherResult(
                 passed,
                 FinalMessageFor(
