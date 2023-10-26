@@ -24,7 +24,7 @@ namespace NExpect;
 /// Provides the basic Expect() method. You should import this statically
 /// into your test fixture class file.
 /// </summary>
-public static class Expectations
+public static partial class Expectations
 {
     internal const string METADATA_KEY = "__ExpectationContext__";
     internal const string KEY_COMPARER = "key-comparer";
@@ -412,19 +412,6 @@ public static class Expectations
     /// <returns></returns>
     public static ICollectionExpectation<KeyValuePair<TKey, TValue>>
         Expect<TKey, TValue>(SortedDictionary<TKey, TValue> dictionary)
-    {
-        return new CollectionExpectation<KeyValuePair<TKey, TValue>>(dictionary);
-    }
-
-    /// <summary>
-    /// Starts an expectation on a concrete Dictionary
-    /// </summary>
-    /// <param name="dictionary">Dictionary to start with</param>
-    /// <typeparam name="TKey">Key type of the dictionary</typeparam>
-    /// <typeparam name="TValue">Value type of the dictionary</typeparam>
-    /// <returns></returns>
-    public static ICollectionExpectation<KeyValuePair<TKey, TValue>>
-        Expect<TKey, TValue>(ConcurrentDictionary<TKey, TValue> dictionary)
     {
         return new CollectionExpectation<KeyValuePair<TKey, TValue>>(dictionary);
     }
