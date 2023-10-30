@@ -61,9 +61,9 @@ public static class NExpectEnvironment
     public static class Defaults
     {
         /// <summary>
-        /// The default timeout for tasks that NExpect is waiting on: 5 seconds
+        /// The default timeout for tasks that NExpect is waiting on: 10 seconds
         /// </summary>
-        public const int TASK_TIMEOUT_MS = 5000;
+        public const int TASK_TIMEOUT_MS = 10000;
         /// <summary>
         /// Default max-width for an equality failure message line.
         /// When the message would run over this length, it will be split
