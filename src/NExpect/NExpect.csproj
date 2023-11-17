@@ -63,6 +63,9 @@
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PathType.cs" Link="Imported\PathType.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PropertyOrField.cs" Link="Imported\PropertyOrField.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PyLike.cs" Link="Imported\PyLike.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\StreamExtensions.cs">
+      <Link>Imported\StreamExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\StringExtensions.cs" Link="Imported\StringExtensions.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\RandomNumber.cs" Link="Imported\RandomNumber.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Stringifier.cs" Link="Imported\Stringifier.cs"/>
