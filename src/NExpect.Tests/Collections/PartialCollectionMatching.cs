@@ -98,6 +98,56 @@ public class PartialCollectionMatching
     }
 
     [Test]
+    public void ShouldBeAbleToTestThatLargerRepeatedCollectionItemsAreAllInSmallerCollection()
+    {
+        // Arrange
+        var collection = new[] { 1, 2, 3 };
+        var actual = new[] { 1, 2, 3, 2, 3, 1, 3, 2, 1, 3, 1, 3, 2, 2, 3, 1, 1 };
+        // Act
+        Assert.That(() =>
+        {
+            Expect(collection)
+                .To.Contain.All.Of(actual);
+        }, Throws.Nothing);
+        // Assert
+    }
+
+    [Test]
+    public void ShouldBeAbleToAssertAllOfOnSubSetOfRepeatedCollection()
+    {
+        // Arrange
+        var collection = new[] { 1, 1, 1 };
+        var actual = new[] { 1 };
+        // Act
+        Assert.That(() =>
+        {
+            Expect(collection)
+                .To.Contain.All.Of(actual);
+        }, Throws.Nothing);
+        Assert.That(() =>
+        {
+            Expect(actual)
+                .To.Contain.All.Of(collection);
+        }, Throws.Nothing);
+        // Assert
+    }
+
+    [Test]
+    public void ShouldBeAbleToTestThatLargerRepeatedCollectionItemsAreAllNotInSmallerCollection()
+    {
+        // Arrange
+        var collection = new[] { 4, 5, 6 };
+        var actual = new[] { 1, 2, 3, 2, 3, 1, 3, 2, 1, 3, 1, 3, 2, 2, 3, 1, 1 };
+        // Act
+        Assert.That(() =>
+        {
+            Expect(collection)
+                .To.Contain.None.Of(actual);
+        }, Throws.Nothing);
+        // Assert
+    }
+
+    [Test]
     public void ShouldAssertContainsExactNumberOf()
     {
         // Arrange

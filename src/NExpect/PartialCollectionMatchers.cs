@@ -66,32 +66,40 @@ namespace NExpect
             Func<string> customMessageGenerator
         )
         {
-            return continuation.AddMatcher(actual =>
-            {
-                var intersection = actual.Intersect(other).ToArray();
-                var missing = other.Except(actual).ToArray();
-                var passed = CountPassStrategies[continuation.Method](
-                    intersection.Count(),
-                    continuation.ExpectedCount,
-                    other.Count()
-                );
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        () =>
-                            $@"Expected {passed.AsNot()}to find {
-                                CountMessageFor(continuation.Method, continuation.ExpectedCount)
-                            } of
+            return continuation.AddMatcher(
+                actual =>
+                {
+                    var otherArray = other as IList<T> ?? other.ToArray();
+                    var actualArray = actual as IList<T> ?? actual.ToArray();
+                    var intersection = actualArray.Intersect(otherArray).ToArray();
+                    var missing = otherArray.Except(actualArray).ToArray();
+                    var passed = continuation.Method switch
+                    {
+                        CountMatchMethods.All => !missing.Any(),
+                        _ => CountPassStrategies[continuation.Method](
+                            intersection.Count(),
+                            continuation.ExpectedCount,
+                            otherArray.Count()
+                        )
+                    };
+                    
+                    return new MatcherResult(
+                        passed,
+                        FinalMessageFor(
+                            () =>
+                                $@"Expected {passed.AsNot()}to find {
+                                    CountMessageFor(continuation.Method, continuation.ExpectedCount)
+                                } of
 {
-    other.Stringify()
+    otherArray.Stringify()
 }
 in
 {
-    actual.Stringify()
+    actualArray.Stringify()
 }
 but found matching:{
-    (intersection.Any() 
-        ? $"\n{intersection.Stringify()}" 
+    (intersection.Any()
+        ? $"\n{intersection.Stringify()}"
         : " none")
 }
 and missing:{
@@ -99,10 +107,11 @@ and missing:{
         ? $"\n{missing.Stringify()}"
         : " none")
 }",
-                        customMessageGenerator
-                    )
-                );
-            });
+                            customMessageGenerator
+                        )
+                    );
+                }
+            );
         }
 
         private static string CountMessageFor(
