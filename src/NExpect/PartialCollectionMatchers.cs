@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Imported.PeanutButter.Utils;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -50,6 +51,24 @@ namespace NExpect
                 other,
                 () => customMessage
             );
+        }
+
+        /// <summary>
+        /// Provides quick access to .Of with a params collection
+        /// at the cost of no custom messaging
+        /// </summary>
+        /// <param name="continuation"></param>
+        /// <param name="item"></param>
+        /// <param name="more"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static IMore<IEnumerable<T>> Of<T>(
+            this ICountMatchContinuation<IEnumerable<T>> continuation,
+            T item,
+            params T[] more
+        )
+        {
+            return continuation.Of(more.And(item));
         }
 
         /// <summary>

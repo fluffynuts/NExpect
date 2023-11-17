@@ -98,6 +98,32 @@ public class PartialCollectionMatching
     }
 
     [Test]
+    public void ShouldAssertContainsAllOfViaParams()
+    {
+        // Arrange
+        // Act
+        Assert.That(
+            () =>
+            {
+                Expect(1, 2, 3)
+                    .To.Contain.All.Of(1, 3);
+            },
+            Throws.Nothing
+        );
+
+        Assert.That(
+            () =>
+            {
+                Expect(1, 2, 3)
+                    .To.Contain.All.Of(1, 2, 3, 4);
+            },
+            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                .With.Message.Contains("missing:\n[ 4 ]")
+        );
+        // Assert
+    }
+
+    [Test]
     public void ShouldBeAbleToTestThatLargerRepeatedCollectionItemsAreAllInSmallerCollection()
     {
         // Arrange
