@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using Imported.PeanutButter.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -73,7 +74,8 @@ namespace NExpect
                             customMessageGenerator
                         )
                     );
-                });
+                }
+            );
             return result;
         }
 
@@ -116,7 +118,8 @@ namespace NExpect
                             customMessageGenerator
                         )
                     );
-                });
+                }
+            );
             return have.More();
         }
 
@@ -130,7 +133,8 @@ namespace NExpect
         public static IMore<Type> Route(
             this IHave<Type> have,
             string member,
-            string expected)
+            string expected
+        )
         {
             have.AddMatcher(
                 actual =>
@@ -150,7 +154,8 @@ namespace NExpect
                         passed,
                         () => $"Expected {actual}.{method} {passed.AsNot()}to have route '{expected}'"
                     );
-                });
+                }
+            );
             return have.More();
         }
 
@@ -191,7 +196,8 @@ namespace NExpect
                             passed,
                             () => $"Expected {controllerType}.{Member} to support HttpMethod {method}"
                         );
-                    });
+                    }
+                );
                 return Next();
             }
 
@@ -204,6 +210,85 @@ namespace NExpect
             /// Fluency extension
             /// </summary>
             public SupportingExtension And => this;
+
+            /// <summary>
+            /// Asserts that the method is decorated with the expected attribute
+            /// </summary>
+            /// <typeparam name="TAttribute"></typeparam>
+            /// <returns></returns>
+            public SupportingExtension Attribute<TAttribute>()
+            {
+                return Attribute<TAttribute>(a => true);
+            }
+
+            /// <summary>
+            /// Asserts that the method is decorated with the expected attribute
+            /// </summary>
+            /// <param name="matcher"></param>
+            /// <typeparam name="TAttribute"></typeparam>
+            /// <returns></returns>
+            public SupportingExtension Attribute<TAttribute>(
+                Func<TAttribute, bool> matcher
+            )
+            {
+                Continuation.AddMatcher(
+                    controllerType =>
+                    {
+                        var method = controllerType.GetMethods()
+                            .Where(o => o.Name == Member)
+                            .ToArray();
+
+                        return method.Length switch
+                        {
+                            0 => CreateMissingMethodResult(controllerType),
+                            1 => VerifyAttribute<TAttribute>(controllerType, method[0], matcher),
+                            _ => CreateAmbiguousMethodResult(controllerType, method.Length)
+                        };
+                    }
+                );
+                return this;
+            }
+
+            private MatcherResult CreateAmbiguousMethodResult(
+                Type controllerType,
+                int howMany
+            )
+            {
+                return new EnforcedMatcherResult(
+                    false,
+                    () => $"Expected to find one method named '{Member}' on {controllerType}, but found {howMany}"
+                );
+            }
+
+            private MatcherResult VerifyAttribute<TAttribute>(
+                Type controllerType,
+                MethodInfo methodInfo,
+                Func<TAttribute, bool> matcher
+            )
+            {
+                var passed = methodInfo.GetCustomAttributes(true)
+                    .OfType<TAttribute>()
+                    .Where(matcher)
+                    .Any();
+                return new MatcherResult(
+                    passed,
+                    () => $@"Expected {
+                        controllerType
+                    }.{
+                        Member
+                    } {
+                        passed.AsNot()
+                    }to be decorated with [{typeof(TAttribute).Name.RegexReplace("Attribute$", "")}]"
+                );
+            }
+
+            private MatcherResult CreateMissingMethodResult(Type controllerType)
+            {
+                return new EnforcedMatcherResult(
+                    false,
+                    () => $"Expected {controllerType} to have method '{Member}' but no such-named method was found"
+                );
+            }
 
             /// <summary>
             /// Asserts that the controller action being operated on has the specified route
@@ -236,15 +321,19 @@ namespace NExpect
                                 var colon = count > 0
                                     ? ":"
                                     : "";
-                                return string.Join("\n", new[]
-                                    {
-                                        start,
-                                        $"Have {no}route{s}{colon}"
-                                    }
-                                    .Concat(routes.Select(r => $" - {r}")));
+                                return string.Join(
+                                    "\n",
+                                    new[]
+                                        {
+                                            start,
+                                            $"Have {no}route{s}{colon}"
+                                        }
+                                        .Concat(routes.Select(r => $" - {r}"))
+                                );
                             }
                         );
-                    });
+                    }
+                );
                 return this;
             }
 
@@ -303,52 +392,55 @@ namespace NExpect
             Func<string> customMessageGenerator
         )
         {
-            return have.AddMatcher(actual =>
-            {
-                if (actual is null)
+            return have.AddMatcher(
+                actual =>
                 {
-                    return new EnforcedMatcherResult(
-                        false,
-                        "Provided controller type is null"
-                    );
-                }
+                    if (actual is null)
+                    {
+                        return new EnforcedMatcherResult(
+                            false,
+                            "Provided controller type is null"
+                        );
+                    }
 
-                if (areaName is null)
-                {
-                    return new EnforcedMatcherResult(
-                        false,
-                        "Provided area name is null"
-                    );
-                }
+                    if (areaName is null)
+                    {
+                        return new EnforcedMatcherResult(
+                            false,
+                            "Provided area name is null"
+                        );
+                    }
 
-                var attrib = actual.GetCustomAttributes(inherit: false)
-                    .OfType<AreaAttribute>()
-                    .FirstOrDefault();
+                    var attrib = actual.GetCustomAttributes(inherit: false)
+                        .OfType<AreaAttribute>()
+                        .FirstOrDefault();
 
-                if (attrib is null)
-                {
+                    if (attrib is null)
+                    {
+                        return new MatcherResult(
+                            false,
+                            FinalMessageFor(
+                                () =>
+                                    $"Expected type {actual} {false.AsNot()} to be decorated with [Area(\"{areaName}\")]",
+                                customMessageGenerator
+                            )
+                        );
+                    }
+
+                    var passed = areaName.Equals(attrib.RouteValue, StringComparison.OrdinalIgnoreCase);
+                    var more = passed
+                        ? $" but found [Area(\"{attrib.RouteValue}\")]"
+                        : " but found exactly that";
                     return new MatcherResult(
-                        false,
+                        passed,
                         FinalMessageFor(
-                            () => $"Expected type {actual} {false.AsNot()} to be decorated with [Area(\"{areaName}\")]",
+                            () =>
+                                $"Expected type {actual} {passed.AsNot()} to be decorated with [Area(\"{areaName}\")]{more}",
                             customMessageGenerator
                         )
                     );
                 }
-
-                var passed = areaName.Equals(attrib.RouteValue, StringComparison.OrdinalIgnoreCase);
-                var more = passed
-                    ? $" but found [Area(\"{attrib.RouteValue}\")]"
-                    : " but found exactly that";
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        () =>
-                            $"Expected type {actual} {passed.AsNot()} to be decorated with [Area(\"{areaName}\")]{more}",
-                        customMessageGenerator
-                    )
-                );
-            });
+            );
         }
 
         /// <summary>
@@ -367,7 +459,8 @@ namespace NExpect
             internal AndSupportingExtension(
                 IHave<Type> continuation,
                 string member,
-                SupportingExtension supportingExtension)
+                SupportingExtension supportingExtension
+            )
             {
                 _continuation = continuation;
                 _member = member;

@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using NExpect.Exceptions;
@@ -196,6 +197,29 @@ namespace NExpect.Matchers.AspNet.Tests
                         "support HttpMethod DELETE"
                     ).And.Not.Containing(" not ");
                 // Act
+                // Assert
+            }
+
+            [Test]
+            public void ShouldBeAbleToTestArbitraryMethodAttributes()
+            {
+                // Arrange
+                var type = typeof(TestController);
+                var sut = new TestController();
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(type)
+                        .To.Have.Method(nameof(TestController.PostOnly))
+                        .Supporting(HttpMethod.Post)
+                        .With.Attribute<RouteAttribute>(o => o.Template == "post-only");
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(sut)
+                        .To.Have.Method(nameof(TestController.PostOnly))
+                        .With.Attribute<RouteAttribute>(o => o.Template == "post-only");
+                }, Throws.Nothing);
                 // Assert
             }
 

@@ -23,6 +23,16 @@ namespace NExpect.Tests.ObjectEquality
                 public bool IsCommented { get; set; }
 
                 public bool IsNotCommented { get; set; }
+
+                [Comment("moo-cakes")]
+                public void CommentedMethod()
+                {
+                }
+
+                public int Add(int a, int b)
+                {
+                    return a + b;
+                }
             }
 
             [Test]
@@ -189,6 +199,29 @@ namespace NExpect.Tests.ObjectEquality
             }
 
             [Test]
+            public void ShouldBeAbleToAssertAgainstMethodAttributes()
+            {
+                // Arrange
+                var type = typeof(Data);
+                var sut = GetRandom<Data>();
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(type)
+                        .To.Have.Method(nameof(Data.CommentedMethod))
+                        .With.Attribute<CommentAttribute>(o => o.Comment == "moo-cakes");
+                }, Throws.Nothing);
+                
+                Assert.That(() =>
+                {
+                    Expect(sut)
+                        .To.Have.Method(nameof(Data.CommentedMethod))
+                        .With.Attribute<CommentAttribute>(o => o.Comment == "moo-cakes");
+                }, Throws.Nothing);
+                // Assert
+            }
+            
+            [Test]
             public void ShouldBeAbleToAssertAgainstPropertyAttributes()
             {
                 // Arrange
@@ -197,7 +230,7 @@ namespace NExpect.Tests.ObjectEquality
                 Assert.That(
                     () =>
                     {
-                        var foo = Expect(data)
+                        Expect(data)
                             .To.Have.Property(nameof(data.IsCommented))
                             .With.Attribute<CommentAttribute>();
                     },
@@ -206,13 +239,12 @@ namespace NExpect.Tests.ObjectEquality
                 Assert.That(
                     () =>
                     {
-                        var foo = Expect(data)
+                        Expect(data)
                                 .To.Have.Property(nameof(data.IsCommented))
                                 .With.Type<bool>()
                                 .And
                                 .With
-                                .Attribute<CommentAttribute>(o => o.Comment == "this is commented!")
-                            ;
+                                .Attribute<CommentAttribute>(o => o.Comment == "this is commented!");
                     },
                     Throws.Nothing
                 );
@@ -242,7 +274,7 @@ namespace NExpect.Tests.ObjectEquality
                 Assert.That(
                     () =>
                     {
-                        var foo = Expect(data)
+                        Expect(data)
                             .To.Have.Property(nameof(data.IsCommented))
                             .With.Attribute<RequiredAttribute>();
                     },
