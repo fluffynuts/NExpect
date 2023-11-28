@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
+
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect;
@@ -102,8 +103,12 @@ public static class ViewResultModelMatchers
         Func<string> customMessageGenerator
     )
     {
-        return and.AddMatcher(actual => VerifyModel(actual?.Model, "view", matcher, customMessageGenerator));
+        return and.AddMatcher(
+            actual =>
+                VerifyModel(actual?.Model, "view", matcher, customMessageGenerator)
+        );
     }
+
 
     /// <summary>
     /// Validates the model on the view result continuation using the provided matcher function
@@ -148,13 +153,14 @@ public static class ViewResultModelMatchers
         Func<string> customMessageGenerator
     )
     {
-        return and.AddMatcher(actual =>
-            VerifyModel<object>(
-                actual?.Model,
-                "view",
-                o => VerifyDeepEquality(o, expected),
-                customMessageGenerator
-            )
+        return and.AddMatcher(
+            actual =>
+                VerifyModel<object>(
+                    actual?.Model,
+                    "view",
+                    o => VerifyDeepEquality(o, expected),
+                    customMessageGenerator
+                )
         );
     }
 
@@ -201,7 +207,8 @@ public static class ViewResultModelMatchers
         Func<string> customMessageGenerator
     ) where TModel : class
     {
-        return and.AddMatcher(actual => VerifyModel(
+        return and.AddMatcher(
+            actual => VerifyModel(
                 actual?.Model,
                 "partial view",
                 matcher,
@@ -299,8 +306,308 @@ public static class ViewResultModelMatchers
         Func<string> customMessageGenerator
     )
     {
-        return and.AddMatcher(actual =>
-            VerifyModel<object>(actual?.Model, "view", o => VerifyDeepEquality(o, expected), customMessageGenerator));
+        return and.AddMatcher(
+            actual =>
+                VerifyModel<object>(actual?.Model, "view", o => VerifyDeepEquality(o, expected), customMessageGenerator)
+        );
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="matcher"></param>
+    /// <returns></returns>
+    public static IMore<ViewResult> Model<TModel>(
+        this IWith<ViewResult> and,
+        Func<TModel, bool> matcher
+    ) where TModel : class
+    {
+        return and.Model(matcher, NULL_STRING);
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="matcher"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<ViewResult> Model<TModel>(
+        this IWith<ViewResult> and,
+        Func<TModel, bool> matcher,
+        string customMessage
+    ) where TModel : class
+    {
+        return and.Model(matcher, () => customMessage);
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="matcher"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<ViewResult> Model<TModel>(
+        this IWith<ViewResult> and,
+        Func<TModel, bool> matcher,
+        Func<string> customMessageGenerator
+    ) where TModel : class
+    {
+        return and.AddMatcher(actual => VerifyModel(actual?.Model, "view", matcher, customMessageGenerator));
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="matcher"></param>
+    /// <returns></returns>
+    public static IMore<ViewResult> Model(
+        this IWith<ViewResult> and,
+        Func<object, bool> matcher
+    )
+    {
+        return and.Model(matcher, NULL_STRING);
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="matcher"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<ViewResult> Model(
+        this IWith<ViewResult> and,
+        Func<object, bool> matcher,
+        string customMessage
+    )
+    {
+        return and.Model(matcher, () => customMessage);
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="matcher"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<ViewResult> Model(
+        this IWith<ViewResult> and,
+        Func<object, bool> matcher,
+        Func<string> customMessageGenerator
+    )
+    {
+        return and.AddMatcher(
+            actual =>
+                VerifyModel(actual?.Model, "view", matcher, customMessageGenerator)
+        );
+    }
+
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
+    public static IMore<ViewResult> Model(
+        this IWith<ViewResult> and,
+        object expected
+    )
+    {
+        return and.Model(expected, NULL_STRING);
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<ViewResult> Model(
+        this IWith<ViewResult> and,
+        object expected,
+        string customMessage
+    )
+    {
+        return and.Model(expected, () => customMessage);
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<ViewResult> Model(
+        this IWith<ViewResult> and,
+        object expected,
+        Func<string> customMessageGenerator
+    )
+    {
+        return and.AddMatcher(
+            actual =>
+                VerifyModel<object>(
+                    actual?.Model,
+                    "view",
+                    o => VerifyDeepEquality(o, expected),
+                    customMessageGenerator
+                )
+        );
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="matcher"></param>
+    /// <returns></returns>
+    public static IMore<PartialViewResult> Model<TModel>(
+        this IWith<PartialViewResult> and,
+        Func<TModel, bool> matcher
+    ) where TModel : class
+    {
+        return and.Model(matcher, NULL_STRING);
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="matcher"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<PartialViewResult> Model<TModel>(
+        this IWith<PartialViewResult> and,
+        Func<TModel, bool> matcher,
+        string customMessage
+    ) where TModel : class
+    {
+        return and.Model(matcher, () => customMessage);
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="matcher"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<PartialViewResult> Model<TModel>(
+        this IWith<PartialViewResult> and,
+        Func<TModel, bool> matcher,
+        Func<string> customMessageGenerator
+    ) where TModel : class
+    {
+        return and.AddMatcher(
+            actual => VerifyModel(
+                actual?.Model,
+                "partial view",
+                matcher,
+                customMessageGenerator
+            )
+        );
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="matcher"></param>
+    /// <returns></returns>
+    public static IMore<PartialViewResult> Model(
+        this IWith<PartialViewResult> and,
+        Func<object, bool> matcher
+    )
+    {
+        return and.Model(matcher, NULL_STRING);
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="matcher"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<PartialViewResult> Model(
+        this IWith<PartialViewResult> and,
+        Func<object, bool> matcher,
+        string customMessage
+    )
+    {
+        return and.Model(matcher, () => customMessage);
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="matcher"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<PartialViewResult> Model(
+        this IWith<PartialViewResult> and,
+        Func<object, bool> matcher,
+        Func<string> customMessageGenerator
+    )
+    {
+        return and.AddMatcher(actual => VerifyModel(actual?.Model, "view", matcher, customMessageGenerator));
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
+    public static IMore<PartialViewResult> Model(
+        this IWith<PartialViewResult> and,
+        object expected
+    )
+    {
+        return and.Model(expected, NULL_STRING);
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<PartialViewResult> Model(
+        this IWith<PartialViewResult> and,
+        object expected,
+        string customMessage
+    )
+    {
+        return and.Model(expected, () => customMessage);
+    }
+
+    /// <summary>
+    /// Validates the model on the view result continuation using the provided matcher function
+    /// </summary>
+    /// <param name="and"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<PartialViewResult> Model(
+        this IWith<PartialViewResult> and,
+        object expected,
+        Func<string> customMessageGenerator
+    )
+    {
+        return and.AddMatcher(
+            actual =>
+                VerifyModel<object>(actual?.Model, "view", o => VerifyDeepEquality(o, expected), customMessageGenerator)
+        );
     }
 
     private static bool VerifyDeepEquality(object o, object expected)
@@ -401,22 +708,24 @@ public static class ViewResultModelMatchers
         Func<string> customMessageGenerator
     )
     {
-        return without.AddMatcher(actual =>
-        {
-            if (actual is null)
+        return without.AddMatcher(
+            actual =>
             {
-                return new EnforcedMatcherResult(false, "view result is null");
-            }
+                if (actual is null)
+                {
+                    return new EnforcedMatcherResult(false, "view result is null");
+                }
 
-            var passed = actual.Model is null;
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () => $"Expected {passed.AsNot()}to find a null model on the view result",
-                    customMessageGenerator
-                )
-            );
-        });
+                var passed = actual.Model is null;
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected {passed.AsNot()}to find a null model on the view result",
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
     }
 
     /// <summary>
@@ -456,21 +765,23 @@ public static class ViewResultModelMatchers
         Func<string> customMessageGenerator
     )
     {
-        return without.AddMatcher(actual =>
-        {
-            if (actual is null)
+        return without.AddMatcher(
+            actual =>
             {
-                return new EnforcedMatcherResult(false, "view result is null");
-            }
+                if (actual is null)
+                {
+                    return new EnforcedMatcherResult(false, "view result is null");
+                }
 
-            var passed = actual.Model is null;
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () => $"Expected {passed.AsNot()}to find a null model on the view result",
-                    customMessageGenerator
-                )
-            );
-        });
+                var passed = actual.Model is null;
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected {passed.AsNot()}to find a null model on the view result",
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
     }
 }

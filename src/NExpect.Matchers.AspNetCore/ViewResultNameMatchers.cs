@@ -80,7 +80,29 @@ public static class ViewResultNameMatchers
         string expected
     )
     {
-        return with.AddMatcher(actual =>
+        return AddNameMatcher(with, expected);
+    }
+
+    /// <summary>
+    /// Asserts that the name on the view result is the expected name
+    /// </summary>
+    /// <param name="with"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
+    public static IMore<ViewResult> Name(
+        this IAnd<ViewResult> with,
+        string expected
+    )
+    {
+        return AddNameMatcher(with, expected);
+    }
+
+    private static IMore<ViewResult> AddNameMatcher(
+        ICanAddMatcher<ViewResult> addMatcher,
+        string expected
+    )
+    {
+        return addMatcher.AddMatcher(actual =>
         {
             if (expected is null)
             {

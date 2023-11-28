@@ -86,6 +86,13 @@ public class TestActionResultMatchers
             {
                 Expect(viewResult)
                     .To.Be.A.View()
+                    .With.Model(o => o.DeepEquals(model))
+                    .And.Name(viewResult.ViewName);
+            }, Throws.Nothing);
+            Assert.That(() =>
+            {
+                Expect(viewResult)
+                    .To.Be.A.View()
                     .With.Name(viewResult.ViewName)
                     .And.Model(model);
             }, Throws.Nothing);
