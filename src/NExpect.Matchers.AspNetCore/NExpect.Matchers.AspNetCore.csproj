@@ -20,7 +20,7 @@
     <DefineConstants>BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>2.0.57</PackageVersion>
+    <PackageVersion>2.0.58</PackageVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
@@ -68,7 +68,7 @@
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\UnevenZipException.cs" Link="Imported\UnevenZipException.cs"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
     <PackageReference Include="PeanutButter.TestUtils.AspNetCore" Version="3.0.244"/>
   </ItemGroup>
   <ItemGroup>
