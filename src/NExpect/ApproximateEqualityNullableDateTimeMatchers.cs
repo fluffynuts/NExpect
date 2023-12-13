@@ -19,7 +19,8 @@ public static class ApproximateEqualityNullableDateTimeMatchers
     /// <returns></returns>
     public static IMore<DateTime?> Equal(
         this IApproximately<DateTime?> continuation,
-        DateTime expected)
+        DateTime? expected
+    )
     {
         return continuation.Equal(expected, MessageHelpers.NULL_STRING);
     }
@@ -35,12 +36,15 @@ public static class ApproximateEqualityNullableDateTimeMatchers
     /// <returns></returns>
     public static IMore<DateTime?> Equal(
         this IApproximately<DateTime?> continuation,
-        DateTime expected,
-        TimeSpan allowedDrift)
+        DateTime? expected,
+        TimeSpan allowedDrift
+    )
     {
-        return continuation.Equal(expected,
+        return continuation.Equal(
+            expected,
             allowedDrift,
-            MessageHelpers.NULL_STRING);
+            MessageHelpers.NULL_STRING
+        );
     }
 
     /// <summary>
@@ -54,8 +58,9 @@ public static class ApproximateEqualityNullableDateTimeMatchers
     /// <returns></returns>
     public static IMore<DateTime?> Equal(
         this IApproximately<DateTime?> continuation,
-        DateTime expected,
-        string customMessage)
+        DateTime? expected,
+        string customMessage
+    )
     {
         return continuation.Equal(expected, () => customMessage);
     }
@@ -71,12 +76,15 @@ public static class ApproximateEqualityNullableDateTimeMatchers
     /// <returns></returns>
     public static IMore<DateTime?> Equal(
         this IApproximately<DateTime?> continuation,
-        DateTime expected,
-        Func<string> customMessageGenerator)
+        DateTime? expected,
+        Func<string> customMessageGenerator
+    )
     {
-        return continuation.Equal(expected,
+        return continuation.Equal(
+            expected,
             TimeSpan.FromSeconds(1),
-            customMessageGenerator);
+            customMessageGenerator
+        );
     }
 
     /// <summary>
@@ -92,13 +100,16 @@ public static class ApproximateEqualityNullableDateTimeMatchers
     /// <returns></returns>
     public static IMore<DateTime?> Equal(
         this IApproximately<DateTime?> continuation,
-        DateTime expected,
+        DateTime? expected,
         TimeSpan allowedDrift,
-        string customMessage)
+        string customMessage
+    )
     {
-        return continuation.Equal(expected,
+        return continuation.Equal(
+            expected,
             allowedDrift,
-            () => customMessage);
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -114,29 +125,51 @@ public static class ApproximateEqualityNullableDateTimeMatchers
     /// <returns></returns>
     public static IMore<DateTime?> Equal(
         this IApproximately<DateTime?> continuation,
-        DateTime expected,
+        DateTime? expected,
         TimeSpan allowedDrift,
-        Func<string> customMessageGenerator)
+        Func<string> customMessageGenerator
+    )
     {
-        continuation.AddMatcher(actual =>
-        {
-            var delta = actual == null
-                ? allowedDrift.TotalMilliseconds + 1
-                : Math.Abs((actual.Value - expected)
-                    .TotalMilliseconds);
-            var allowed = Math.Abs(allowedDrift.TotalMilliseconds);
-            var passed = delta <= allowed;
-            return new MatcherResult(passed,
-                () => MessageHelpers.FinalMessageFor(()
-                        => $@"Expected {
-                            actual.Stringify()
-                        } to approximately equal {
-                            expected.Stringify()
-                        } within a timespan of {
-                            allowedDrift.Stringify()
-                        }",
-                    customMessageGenerator));
-        });
+        continuation.AddMatcher(
+            actual =>
+            {
+                bool passed;
+                if (actual is null && expected is null)
+                {
+                    passed = true;
+                }
+                else if (actual is null || expected is null)
+                {
+                    passed = false;
+                }
+                else
+                {
+                    var delta = actual == null
+                        ? allowedDrift.TotalMilliseconds + 1
+                        : Math.Abs(
+                            (actual.Value - expected.Value)
+                            .TotalMilliseconds
+                        );
+                    var allowed = Math.Abs(allowedDrift.TotalMilliseconds);
+                    passed = delta <= allowed;
+                }
+
+                return new MatcherResult(
+                    passed,
+                    () => MessageHelpers.FinalMessageFor(
+                        ()
+                            => $@"Expected {
+                                actual.Stringify()
+                            } to approximately equal {
+                                expected.Stringify()
+                            } within a timespan of {
+                                allowedDrift.Stringify()
+                            }",
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
         return continuation.More();
     }
 }

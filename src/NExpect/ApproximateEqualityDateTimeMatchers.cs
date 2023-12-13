@@ -23,7 +23,7 @@ public static class ApproximateEqualityDateTimeMatchers
     /// <returns></returns>
     public static IMore<DateTime> Equal(
         this IApproximately<DateTime> continuation,
-        DateTime expected)
+        DateTime? expected)
     {
         return continuation.Equal(expected, NULL_STRING);
     }
@@ -39,7 +39,7 @@ public static class ApproximateEqualityDateTimeMatchers
     /// <returns></returns>
     public static IMore<DateTime> Equal(
         this IApproximately<DateTime> continuation,
-        DateTime expected,
+        DateTime? expected,
         TimeSpan allowedDrift)
     {
         return continuation.Equal(expected, allowedDrift, NULL_STRING);
@@ -56,7 +56,7 @@ public static class ApproximateEqualityDateTimeMatchers
     /// <returns></returns>
     public static IMore<DateTime> Equal(
         this IApproximately<DateTime> continuation,
-        DateTime expected,
+        DateTime? expected,
         string customMessage)
     {
         return continuation.Equal(expected, () => customMessage);
@@ -73,7 +73,7 @@ public static class ApproximateEqualityDateTimeMatchers
     /// <returns></returns>
     public static IMore<DateTime> Equal(
         this IApproximately<DateTime> continuation,
-        DateTime expected,
+        DateTime? expected,
         Func<string> customMessageGenerator)
     {
         return continuation.Equal(expected,
@@ -94,7 +94,7 @@ public static class ApproximateEqualityDateTimeMatchers
     /// <returns></returns>
     public static IMore<DateTime> Equal(
         this IApproximately<DateTime> continuation,
-        DateTime expected,
+        DateTime? expected,
         TimeSpan allowedDrift,
         string customMessage)
     {
@@ -116,7 +116,7 @@ public static class ApproximateEqualityDateTimeMatchers
     /// <returns></returns>
     public static IMore<DateTime> Equal(
         this IApproximately<DateTime> continuation,
-        DateTime expected,
+        DateTime? expected,
         TimeSpan allowedDrift,
         Func<string> customMessageGenerator)
     {
@@ -137,13 +137,14 @@ public static class ApproximateEqualityDateTimeMatchers
     /// <returns></returns>
     public static IMore<DateTime> Equal(
         this IApproximately<DateTime> continuation,
-        DateTime expected,
+        DateTime? expected,
         IEqualityComparer<DateTime> comparer,
         Func<string> customMessageGenerator)
     {
         continuation.AddMatcher(actual =>
         {
-            var passed = comparer.Equals(actual, expected);
+            var passed = expected is not null && 
+                comparer.Equals(actual, expected.Value);
 
             return new MatcherResult(passed,
                 () =>

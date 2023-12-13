@@ -175,6 +175,13 @@ namespace NExpect.Tests.ObjectEquality
                             .To.Approximately.Equal(d1.Value);
                     },
                     Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(d2)
+                        .To.Approximately.Equal(d1);
+                    Expect(d2)
+                        .To.Approximately.Equal(d1.Value);
+                }, Throws.Nothing);
                 // Assert
             }
 
