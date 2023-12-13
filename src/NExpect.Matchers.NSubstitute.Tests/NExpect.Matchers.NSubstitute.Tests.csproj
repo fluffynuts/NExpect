@@ -9,12 +9,12 @@
 
     <ItemGroup>
         <PackageReference Include="NSubstitute" Version="5.1.0" />
-        <PackageReference Include="nunit" Version="3.13.3" />
+        <PackageReference Include="nunit" Version="4.0.1" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
-        <PackageReference Include="PeanutButter.RandomGenerators" Version="3.0.180" />
-        <PackageReference Include="PeanutButter.Utils" Version="3.0.180" />
-        <PackageReference Include="Quackers.TestLogger" Version="1.0.19" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+        <PackageReference Include="PeanutButter.RandomGenerators" Version="3.0.244" />
+        <PackageReference Include="PeanutButter.Utils" Version="3.0.244" />
+        <PackageReference Include="Quackers.TestLogger" Version="1.0.24" />
     </ItemGroup>
 
     <ItemGroup>

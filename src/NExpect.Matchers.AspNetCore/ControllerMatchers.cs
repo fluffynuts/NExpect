@@ -238,10 +238,10 @@ namespace NExpect
                             .Where(o => o.Name == Member)
                             .ToArray();
 
-                        return method.Length switch
+                        return method switch
                         {
-                            0 => CreateMissingMethodResult(controllerType),
-                            1 => VerifyAttribute<TAttribute>(controllerType, method[0], matcher),
+                            [] => CreateMissingMethodResult(controllerType),
+                            [var m] => VerifyAttribute<TAttribute>(controllerType, m, matcher),
                             _ => CreateAmbiguousMethodResult(controllerType, method.Length)
                         };
                     }

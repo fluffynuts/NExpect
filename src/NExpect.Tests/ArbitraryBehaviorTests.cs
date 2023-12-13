@@ -867,6 +867,17 @@ namespace NExpect.Tests
                         Expect(() => throw ex)
                             .To.Throw<AggregateException>()
                             .With.CollectionProperty(e => e.InnerExceptions)
+                            .Not.Containing.Exactly(1)
+                            .Matched.By(e => e.Message == "1");
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(() => throw ex)
+                            .To.Throw<AggregateException>()
+                            .With.CollectionProperty(e => e.InnerExceptions)
                             .Containing.Exactly(1)
                             .Matched.By(e => e.Message == "1");
                         Expect(() => throw ex)
@@ -876,17 +887,6 @@ namespace NExpect.Tests
                             .Matched.By(e => e.Message == "3");
                     },
                     Throws.Nothing
-                );
-                Assert.That(
-                    () =>
-                    {
-                        Expect(() => throw ex)
-                            .To.Throw<AggregateException>()
-                            .With.CollectionProperty(e => e.InnerExceptions)
-                            .Not.Containing.Exactly(1)
-                            .Matched.By(e => e.Message == "1");
-                    },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>()
                 );
                 Assert.That(
                     () =>

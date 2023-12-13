@@ -65,8 +65,8 @@
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\UnevenZipException.cs" Link="Imported\UnevenZipException.cs"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.9"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NExpect\NExpect.csproj"/>
