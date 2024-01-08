@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DebugType>portable</DebugType>
-    <LangVersion>preview</LangVersion>
+    <LangVersion>latest</LangVersion>
     <RootNamespace>NExpect</RootNamespace>
     <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-    <Configurations>Debug;Release;BuildForRelease</Configurations>
+    <Configurations>Debug;Release</Configurations>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

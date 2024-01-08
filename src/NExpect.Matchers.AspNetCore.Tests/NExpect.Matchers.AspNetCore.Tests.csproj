@@ -6,7 +6,7 @@
     <Nullable>disable</Nullable>
     <IsPackable>false</IsPackable>
     <RootNamespace>NExpect.Matchers.AspNet.Tests</RootNamespace>
-    <Configurations>Debug;Release;BuildForRelease</Configurations>
+    <Configurations>Debug;Release</Configurations>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 

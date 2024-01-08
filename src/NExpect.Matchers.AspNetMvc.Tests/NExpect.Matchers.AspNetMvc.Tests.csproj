@@ -5,7 +5,7 @@
     <Nullable>disable</Nullable>
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
-    <Configurations>Debug;Release;BuildForRelease</Configurations>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

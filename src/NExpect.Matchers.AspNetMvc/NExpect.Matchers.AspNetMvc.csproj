@@ -2,9 +2,9 @@
   <PropertyGroup>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <DebugType>portable</DebugType>
-    <LangVersion>preview</LangVersion>
+    <LangVersion>latest</LangVersion>
     <TargetFramework>net462</TargetFramework>
-    <Configurations>Debug;Release;BuildForRelease</Configurations>
+    <Configurations>Debug;Release</Configurations>
     <RootNamespace>NExpect</RootNamespace>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
