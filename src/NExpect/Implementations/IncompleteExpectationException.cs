@@ -39,6 +39,9 @@ Search for the following patterns:
         provided value
     - `.Intersection.Equal.To` // asserts 2 items, both intersection
         equal to the provided value (only tests matching properties)
+    - `.With.Property(ex => ...)` after `Expect(func).To.Throw<TException>()`
+       - this is for switching context to testing the property, _NOT_ an
+         assertion against the property
     - or perhaps some other collection matcher
 
 The following list will tell you the type of item which wasn't 

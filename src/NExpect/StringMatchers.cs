@@ -142,6 +142,7 @@ public static class StringMatchers
         Func<string> customMessageGenerator
     )
     {
+        continuation.DeleteMetadata(SEARCH_OFFSET);
         var result = new StringContainContinuation(continuation);
         AddContainsMatcherTo(
             continuation,
@@ -1502,7 +1503,7 @@ public static class StringMatchers
         StringContainContinuation next
     )
     {
-        Assertions.Forget(next);
+        Forget(next);
         continuation.AddMatcher(
             s =>
             {

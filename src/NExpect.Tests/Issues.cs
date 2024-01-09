@@ -17,12 +17,40 @@ namespace NExpect.Tests
             // Pre-Assert
 
             // Act
-            Assert.That(() =>
-            {
-                Expect(new Object().GetType()).To.Equal(typeof(Object));
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(new Object().GetType()).To.Equal(typeof(Object));
+                },
+                Throws.Nothing
+            );
 
             // Assert
+        }
+
+        [TestFixture]
+        public class MultipleChainedStringContains
+        {
+            [Test]
+            public void ShouldNotCarryStartMarkerThroughContains()
+            {
+                // Arrange
+                var data =
+                    "SomeEntity does not have a parameterless constructor or is not a class Type. You must override SomeBuilder.CreateInstance for this type to provide an instance to work with";
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(data)
+                            .To.Contain("SomeBuilder")
+                            .And.To.Contain("SomeEntity")
+                            .And.To.Contain("parameterless constructor")
+                            .And.To.Contain("override SomeBuilder.CreateInstance");
+                    },
+                    Throws.Nothing
+                );
+                // Assert
+            }
         }
 
         [TestFixture]
@@ -97,6 +125,7 @@ namespace NExpect.Tests
                     return $"{nameof(_text)}: {_text}";
                 }
             }
+
             public struct MyStruct2
             {
                 private readonly string _text;
