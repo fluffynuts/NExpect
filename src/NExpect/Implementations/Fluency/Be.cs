@@ -14,6 +14,7 @@ internal class Be<T>
 {
     public INotAfterBe<T> Not => Next<NotAfterBe<T>>();
     public IEqualityContinuation<T> Equal => Next<EqualityContinuation<T>>();
+    public IEquivalenceContinuation<T> Equivalent => Next<EquivalenceContinuation<T>>();
     public IGreaterContinuation<T> Greater => Next<Greater<T>>();
     public ILessContinuation<T> Less => Next<LessContinuation<T>>();
     public IA<T> A => Next<A<T>>();

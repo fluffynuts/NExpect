@@ -19,6 +19,13 @@ public interface IBe<T> : ICanAddMatcher<T>
     IEqualityContinuation<T> Equal { get; }
 
     /// <summary>
+    /// Prepares to check for equivalence, eg in an xml
+    /// document where whitespace wouldn't change the
+    /// overall "meaning" of the document
+    /// </summary>
+    IEquivalenceContinuation<T> Equivalent { get; }
+
+    /// <summary>
     /// Prepares to check for the test value to be greater than the expected value
     /// </summary>
     IGreaterContinuation<T> Greater { get; }

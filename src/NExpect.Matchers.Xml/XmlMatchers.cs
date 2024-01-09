@@ -11,60 +11,61 @@ using static NExpect.Implementations.MessageHelpers;
 
 // ReSharper disable MemberCanBePrivate.Global
 
-namespace NExpect
+namespace NExpect;
+
+/// <summary>
+/// Provides Xml matchers via XDocument and xpath expressions
+/// </summary>
+public static class XmlMatchers
 {
     /// <summary>
-    /// Provides Xml matchers via XDocument and xpath expressions
+    /// Asserts that the provided document has a single element matched by the
+    /// provided xpath
     /// </summary>
-    public static class XmlMatchers
+    /// <param name="have"></param>
+    /// <param name="xpath"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Element(
+        this IHave<XDocument> have,
+        string xpath
+    )
     {
-        /// <summary>
-        /// Asserts that the provided document has a single element matched by the
-        /// provided xpath
-        /// </summary>
-        /// <param name="have"></param>
-        /// <param name="xpath"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Element(
-            this IHave<XDocument> have,
-            string xpath
-        )
-        {
-            return have.Element(xpath, NULL_STRING);
-        }
+        return have.Element(xpath, NULL_STRING);
+    }
 
-        /// <summary>
-        /// Asserts that the provided document has a single element matched by the
-        /// provided xpath
-        /// </summary>
-        /// <param name="have"></param>
-        /// <param name="xpath"></param>
-        /// <param name="customMessage"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Element(
-            this IHave<XDocument> have,
-            string xpath,
-            string customMessage
-        )
-        {
-            return have.Element(xpath, () => customMessage);
-        }
+    /// <summary>
+    /// Asserts that the provided document has a single element matched by the
+    /// provided xpath
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="xpath"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Element(
+        this IHave<XDocument> have,
+        string xpath,
+        string customMessage
+    )
+    {
+        return have.Element(xpath, () => customMessage);
+    }
 
-        /// <summary>
-        /// Asserts that the provided document has a single element matched by the
-        /// provided xpath
-        /// </summary>
-        /// <param name="have"></param>
-        /// <param name="xpath"></param>
-        /// <param name="customMessageGenerator"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Element(
-            this IHave<XDocument> have,
-            string xpath,
-            Func<string> customMessageGenerator
-        )
-        {
-            return have.AddMatcher(actual =>
+    /// <summary>
+    /// Asserts that the provided document has a single element matched by the
+    /// provided xpath
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="xpath"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Element(
+        this IHave<XDocument> have,
+        string xpath,
+        Func<string> customMessageGenerator
+    )
+    {
+        return have.AddMatcher(
+            actual =>
             {
                 if (actual is null)
                 {
@@ -88,64 +89,68 @@ namespace NExpect
                         customMessageGenerator
                     )
                 );
-            });
-        }
+            }
+        );
+    }
 
-        private const string SELECTED_NODE = "__xml_matchers::selected_node__";
-        private const string XPATH_CONTEXT = "__xml_matchers::xpath_context__";
-        private const string SELECTED_ATTRIBUTE = "__xml_matchers::selected_attribute__";
-        private const string EXPECTED_ELEMENT_TEXT = "__xml_matchers::expected_element_text__";
+    private const string SELECTED_NODE = "__xml_matchers::selected_node__";
+    private const string XPATH_CONTEXT = "__xml_matchers::xpath_context__";
+    private const string SELECTED_ATTRIBUTE = "__xml_matchers::selected_attribute__";
+    private const string EXPECTED_ELEMENT_TEXT = "__xml_matchers::expected_element_text__";
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="with"></param>
-        /// <param name="attribute"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Attribute(
-            this IWith<XDocument> with,
-            string attribute
-        )
-        {
-            return with.Attribute(attribute, NULL_STRING);
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="with"></param>
+    /// <param name="attribute"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Attribute(
+        this IWith<XDocument> with,
+        string attribute
+    )
+    {
+        return with.Attribute(attribute, NULL_STRING);
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="with"></param>
-        /// <param name="attribute"></param>
-        /// <param name="customMessage"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Attribute(
-            this IWith<XDocument> with,
-            string attribute,
-            string customMessage
-        )
-        {
-            return with.Attribute(attribute, () => customMessage);
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="with"></param>
+    /// <param name="attribute"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Attribute(
+        this IWith<XDocument> with,
+        string attribute,
+        string customMessage
+    )
+    {
+        return with.Attribute(attribute, () => customMessage);
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="with"></param>
-        /// <param name="attribute"></param>
-        /// <param name="customMessageGenerator"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Attribute(
-            this IWith<XDocument> with,
-            string attribute,
-            Func<string> customMessageGenerator
-        )
-        {
-            return with.AddMatcher(actual =>
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="with"></param>
+    /// <param name="attribute"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Attribute(
+        this IWith<XDocument> with,
+        string attribute,
+        Func<string> customMessageGenerator
+    )
+    {
+        return with.AddMatcher(
+            actual =>
             {
                 if (!actual.TryGetMetadata<XElement>(SELECTED_NODE, out var el) ||
                     !actual.TryGetMetadata<string>(XPATH_CONTEXT, out var xpath))
                 {
-                    return new EnforcedMatcherResult(false,
-                        "no current element context; start with .To.Have.Element()");
+                    return new EnforcedMatcherResult(
+                        false,
+                        "no current element context; start with .To.Have.Element()"
+                    );
                 }
 
                 var attrib = el.Attribute(attribute);
@@ -164,59 +169,62 @@ namespace NExpect
                         customMessageGenerator
                     )
                 );
-            });
-        }
+            }
+        );
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="having"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Value(
-            this IHaving<XDocument> having,
-            string value
-        )
-        {
-            return having.Value(value, NULL_STRING);
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="having"></param>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Value(
+        this IHaving<XDocument> having,
+        string value
+    )
+    {
+        return having.Value(value, NULL_STRING);
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="having"></param>
-        /// <param name="value"></param>
-        /// <param name="customMessage"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Value(
-            this IHaving<XDocument> having,
-            string value,
-            string customMessage
-        )
-        {
-            return having.Value(value, () => customMessage);
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="having"></param>
+    /// <param name="value"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Value(
+        this IHaving<XDocument> having,
+        string value,
+        string customMessage
+    )
+    {
+        return having.Value(value, () => customMessage);
+    }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="having"></param>
-        /// <param name="value"></param>
-        /// <param name="customMessageGenerator"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Value(
-            this IHaving<XDocument> having,
-            string value,
-            Func<string> customMessageGenerator
-        )
-        {
-            return having.AddMatcher(actual =>
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="having"></param>
+    /// <param name="value"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Value(
+        this IHaving<XDocument> having,
+        string value,
+        Func<string> customMessageGenerator
+    )
+    {
+        return having.AddMatcher(
+            actual =>
             {
                 if (!actual.TryGetMetadata<XAttribute>(SELECTED_ATTRIBUTE, out var attrib) ||
                     !actual.TryGetMetadata<string>(XPATH_CONTEXT, out var xpath))
                 {
-                    return new EnforcedMatcherResult(false,
+                    return new EnforcedMatcherResult(
+                        false,
                         "no current attribute context; start with .To.Have.Element().With.Attribute()"
                     );
                 }
@@ -237,59 +245,62 @@ namespace NExpect
                         customMessageGenerator
                     )
                 );
-            });
-        }
+            }
+        );
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="having"></param>
-        /// <param name="matching"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Value(
-            this IHaving<XDocument> having,
-            Regex matching
-        )
-        {
-            return having.Value(matching, NULL_STRING);
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="having"></param>
+    /// <param name="matching"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Value(
+        this IHaving<XDocument> having,
+        Regex matching
+    )
+    {
+        return having.Value(matching, NULL_STRING);
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="having"></param>
-        /// <param name="matching"></param>
-        /// <param name="customMessage"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Value(
-            this IHaving<XDocument> having,
-            Regex matching,
-            string customMessage
-        )
-        {
-            return having.Value(matching, () => customMessage);
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="having"></param>
+    /// <param name="matching"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Value(
+        this IHaving<XDocument> having,
+        Regex matching,
+        string customMessage
+    )
+    {
+        return having.Value(matching, () => customMessage);
+    }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="having"></param>
-        /// <param name="matching"></param>
-        /// <param name="customMessageGenerator"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Value(
-            this IHaving<XDocument> having,
-            Regex matching,
-            Func<string> customMessageGenerator
-        )
-        {
-            return having.AddMatcher(actual =>
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="having"></param>
+    /// <param name="matching"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Value(
+        this IHaving<XDocument> having,
+        Regex matching,
+        Func<string> customMessageGenerator
+    )
+    {
+        return having.AddMatcher(
+            actual =>
             {
                 if (!actual.TryGetMetadata<XAttribute>(SELECTED_ATTRIBUTE, out var attrib) ||
                     !actual.TryGetMetadata<string>(XPATH_CONTEXT, out var xpath))
                 {
-                    return new EnforcedMatcherResult(false,
+                    return new EnforcedMatcherResult(
+                        false,
                         "no current attribute context; start with .To.Have.Element().With.Attribute()"
                     );
                 }
@@ -310,59 +321,62 @@ namespace NExpect
                         customMessageGenerator
                     )
                 );
-            });
-        }
+            }
+        );
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="with"></param>
-        /// <param name="expectedText"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Text(
-            this IWith<XDocument> with,
-            string expectedText
-        )
-        {
-            return with.Text(expectedText, NULL_STRING);
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="with"></param>
+    /// <param name="expectedText"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Text(
+        this IWith<XDocument> with,
+        string expectedText
+    )
+    {
+        return with.Text(expectedText, NULL_STRING);
+    }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="with"></param>
-        /// <param name="expectedText"></param>
-        /// <param name="customMessage"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Text(
-            this IWith<XDocument> with,
-            string expectedText,
-            string customMessage
-        )
-        {
-            return with.Text(expectedText, () => customMessage);
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="with"></param>
+    /// <param name="expectedText"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Text(
+        this IWith<XDocument> with,
+        string expectedText,
+        string customMessage
+    )
+    {
+        return with.Text(expectedText, () => customMessage);
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="with"></param>
-        /// <param name="expectedText"></param>
-        /// <param name="customMessageGenerator"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Text(
-            this IWith<XDocument> with,
-            string expectedText,
-            Func<string> customMessageGenerator
-        )
-        {
-            return with.AddMatcher(actual =>
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="with"></param>
+    /// <param name="expectedText"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Text(
+        this IWith<XDocument> with,
+        string expectedText,
+        Func<string> customMessageGenerator
+    )
+    {
+        return with.AddMatcher(
+            actual =>
             {
                 if (!actual.TryGetMetadata<XElement>(SELECTED_NODE, out var el) ||
                     !actual.TryGetMetadata<string>(XPATH_CONTEXT, out var xpath))
                 {
-                    return new EnforcedMatcherResult(false,
+                    return new EnforcedMatcherResult(
+                        false,
                         "no current attribute context; start with .To.Have.Element()"
                     );
                 }
@@ -388,62 +402,65 @@ namespace NExpect
                         customMessageGenerator
                     )
                 );
-            });
-        }
+            }
+        );
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="with"></param>
-        /// <param name="matcher"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Text(
-            this IWith<XDocument> with,
-            Regex matcher
-        )
-        {
-            return with.Text(matcher, NULL_STRING);
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="with"></param>
+    /// <param name="matcher"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Text(
+        this IWith<XDocument> with,
+        Regex matcher
+    )
+    {
+        return with.Text(matcher, NULL_STRING);
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="with"></param>
-        /// <param name="matcher"></param>
-        /// <param name="customMessage"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Text(
-            this IWith<XDocument> with,
-            Regex matcher,
-            string customMessage
-        )
-        {
-            return with.Text(matcher, () => customMessage);
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="with"></param>
+    /// <param name="matcher"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Text(
+        this IWith<XDocument> with,
+        Regex matcher,
+        string customMessage
+    )
+    {
+        return with.Text(matcher, () => customMessage);
+    }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="with"></param>
-        /// <param name="matcher"></param>
-        /// <param name="customMessageGenerator"></param>
-        /// <returns></returns>
-        public static IMore<XDocument> Text(
-            this IWith<XDocument> with,
-            Regex matcher,
-            Func<string> customMessageGenerator
-        )
-        {
-            return with.AddMatcher(actual =>
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="with"></param>
+    /// <param name="matcher"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> Text(
+        this IWith<XDocument> with,
+        Regex matcher,
+        Func<string> customMessageGenerator
+    )
+    {
+        return with.AddMatcher(
+            actual =>
             {
                 if (!actual.TryGetMetadata<XElement>(SELECTED_NODE, out var el) ||
                     !actual.TryGetMetadata<string>(XPATH_CONTEXT, out var xpath))
                 {
-                    return new EnforcedMatcherResult(false,
+                    return new EnforcedMatcherResult(
+                        false,
                         "no current attribute context; start with .To.Have.Element()"
                     );
                 }
-                
+
                 var text = string.Join(
                     " ",
                     el?.Nodes()
@@ -465,12 +482,91 @@ namespace NExpect
                         customMessageGenerator
                     )
                 );
-            });
-        }
+            }
+        );
+    }
 
-        private static string Dump(XDocument doc)
-        {
-            return $"\nfull document follows:\n{doc}";
-        }
+    private static string Dump(XDocument doc)
+    {
+        return $"\nfull document follows:\n{doc}";
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="equivalent"></param>
+    /// <param name="other"></param>
+    /// <returns></returns>
+    public static IMore<XDocument> To(
+        this IEquivalenceContinuation<XDocument> equivalent,
+        XDocument other
+    )
+    {
+        return equivalent.To(other, NULL_STRING);
+    }
+
+    private static IMore<XDocument> To(
+        this IEquivalenceContinuation<XDocument> equivalent,
+        XDocument other,
+        string customMessage
+    )
+    {
+        return equivalent.To(
+            other,
+            () => customMessage
+        );
+    }
+
+    private static IMore<XDocument> To(
+        this IEquivalenceContinuation<XDocument> equivalent,
+        XDocument other,
+        Func<string> customMessageGenerator
+    )
+    {
+        return equivalent.AddMatcher(
+            actual =>
+            {
+                if (other is null && actual is null)
+                {
+                    return new MatcherResult(
+                        true,
+                        FinalMessageFor(
+                            () =>
+                                $"Expected {true.AsNot()}to find equivalence between the two documents (both are null)",
+                            customMessageGenerator
+                        )
+                    );
+                }
+
+                if (actual is null || other is null)
+                {
+                    return new MatcherResult(
+                        false,
+                        FinalMessageFor(
+                            () =>
+                                $"Expected {false.AsNot()} to find equivalence between two documents, but only one is null",
+                            customMessageGenerator
+                        )
+                    );
+                }
+
+                var expected = other.ToString(SaveOptions.DisableFormatting);
+                var actualString = actual.ToString(SaveOptions.DisableFormatting);
+                var passed = actualString == expected;
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $@"Expected {
+                            actualString
+                        }
+{passed.AsNot()}to be equivalent to\n{
+    expected
+}
+{(passed ? "(but they are equivalent)" : DifferenceHighlighting.ProvideMoreInfoFor(actualString, expected))}",
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
     }
 }
