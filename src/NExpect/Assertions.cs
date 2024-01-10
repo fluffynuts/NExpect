@@ -192,6 +192,33 @@ public static class Assertions
     }
 
     /// <summary>
+    /// Enables tracking for the provided action _only_ and
+    /// verifies that no incomplete assertions happened in
+    /// that action
+    /// </summary>
+    /// <param name="action"></param>
+    public static void EnableTrackingFor(
+        Action action
+    )
+    {
+        lock (TrackingActionLock)
+        {
+            var original = _enabled;
+            try
+            {
+                _enabled = true;
+                action();
+                VerifyNoIncompleteAssertions();
+            }
+            finally
+            {
+                _enabled = original;
+            }
+        }
+    }
+    private static readonly object TrackingActionLock = new();
+
+    /// <summary>
     /// Disable expectation tracking. If you only want to disable
     /// for a brief period, rather use the IDisposable from Suspend
     /// to ensure that tracking is re-enabled after the block
