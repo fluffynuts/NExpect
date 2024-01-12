@@ -7,7 +7,8 @@ namespace NExpect.EqualityComparers;
 /// Compares two decimals to a specified number of decimal places,
 /// truncated
 /// </summary>
-public class DecimalsEqualToDecimalPlacesRounded : IEqualityComparer<decimal>
+public class DecimalsEqualToDecimalPlacesRounded 
+    : IEqualityComparer<decimal>, IEqualityComparer<decimal?>
 {
     private readonly int _decimalPlaces;
 
@@ -48,5 +49,29 @@ public class DecimalsEqualToDecimalPlacesRounded : IEqualityComparer<decimal>
     public int GetHashCode(decimal value)
     {
         return Round(value).GetHashCode();
+    }
+
+    /// <summary>
+    /// Tests equality up to the provided number of decimal places
+    /// </summary>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public bool Equals(decimal? x, decimal? y)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Tests equality up to the provided number of decimal places
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public int GetHashCode(decimal? value)
+    {
+        return value is null
+            ? 0
+            : Round(value.Value).GetHashCode();
     }
 }

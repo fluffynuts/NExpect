@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
-using NExpect;
 using NExpect.EqualityComparers;
 using NExpect.Exceptions;
 using PeanutButter.Utils;
@@ -389,6 +388,72 @@ namespace NExpect.Tests.ObjectEquality
                 {
                     Expect(d1)
                         .To.Approximately.Equal(d2, within: 1);
+                }, Throws.Nothing);
+                
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .To.Approximately.Equal(d2, within: 0.01);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .Not.To.Approximately.Equal(d2, within: 0.01);
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .Not.To.Approximately.Equal(d2, within: 0.1);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                // Assert
+            }
+            [Test]
+            public void ShouldFacilitateTestingNullables()
+            {
+                // Arrange
+                var d1 = 1.10M as decimal?;
+                var d2 = 1.15M as decimal?;
+                
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .To.Approximately.Equal(d2, within: 0.1);
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .To.Approximately.Equal(d2, within: 0.1M);
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .To.Approximately.Equal(d2, within: 0.1f);
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .To.Approximately.Equal(d2, within: 1);
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .To.Approximately.Equal(d2, within: (decimal?)0.1);
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .To.Approximately.Equal(d2, within: (decimal?)0.1M);
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .To.Approximately.Equal(d2, within: (decimal?)0.1f);
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .To.Approximately.Equal(d2, within: (decimal?)1);
                 }, Throws.Nothing);
                 
                 Assert.That(() =>
