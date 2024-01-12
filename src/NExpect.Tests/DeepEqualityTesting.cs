@@ -1,10 +1,11 @@
-﻿using NUnit.Framework;
-using static NExpect.Expectations;
-using NExpect;
+﻿using System;
 using NExpect.Exceptions;
+using NUnit.Framework;
+using PeanutButter.Utils;
+using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 
-namespace NExpect.Tests.Core
+namespace NExpect.Tests
 {
     [TestFixture]
     public class DeepEqualityTesting
@@ -68,6 +69,31 @@ namespace NExpect.Tests.Core
                         });
             }, Throws.Nothing);
             // Assert
+        }
+
+        [Test]
+        [Ignore("TODO: need to figure out a nice api for this without muddling the existing ones")]
+        public void ShouldBeAbleToExcludePropertiesByName()
+        {
+            // Arrange
+            var left = GetRandom<HasManyProps>();
+            var right = left.DeepClone()
+                .With(o => o.Id++)
+                .With(o => o.Created = GetAnother(o.Created));
+            // Act
+            Assert.That(() =>
+            {
+                
+            }, Throws.Nothing);
+            // Assert
+        }
+
+        public class HasManyProps
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public DateTime Created { get; set; }
+            public bool Flag { get; set; }
         }
 
         public class HasAStaticProp

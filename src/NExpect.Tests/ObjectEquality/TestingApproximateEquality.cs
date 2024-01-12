@@ -340,7 +340,7 @@ namespace NExpect.Tests.ObjectEquality
                             .To.Approximately.Equal(d2);
                     },
                     Throws.Exception.InstanceOf<UnmetExpectationException>()
-                        .With.Message.Contains("approxmiately equal"));
+                        .With.Message.Contains("approximately equal"));
                 // Assert
             }
 
@@ -359,6 +359,53 @@ namespace NExpect.Tests.ObjectEquality
                             .To.Approximately.Equal(d2, comparer);
                     },
                     Throws.Nothing);
+                // Assert
+            }
+
+            [Test]
+            public void ShouldFacilitateSpecifyingTheAllowableDrift()
+            {
+                // Arrange
+                var d1 = 1.10M;
+                var d2 = 1.15M;
+                
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .To.Approximately.Equal(d2, within: 0.1);
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .To.Approximately.Equal(d2, within: 0.1M);
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .To.Approximately.Equal(d2, within: 0.1f);
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .To.Approximately.Equal(d2, within: 1);
+                }, Throws.Nothing);
+                
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .To.Approximately.Equal(d2, within: 0.01);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .Not.To.Approximately.Equal(d2, within: 0.01);
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(d1)
+                        .Not.To.Approximately.Equal(d2, within: 0.1);
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
                 // Assert
             }
         }

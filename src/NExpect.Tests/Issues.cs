@@ -162,6 +162,61 @@ public class Issues
             // Assert
         }
     }
+
+    [TestFixture]
+    public class ForgettingOnFailure
+    {
+        [Test]
+        [Ignore("Not sure it's possible to pass this yet")]
+        public void ShouldForgetOnFailure()
+        {
+            /*
+             * Scenario: performing an assertion where the value fed to .Equals(...)
+             * is never arrived at because the provider throws an exception.
+             * Technically, NExpect never sees the call to .Equals(...),
+             * so right now, I'm not sure how to suppress the erroneous report
+             * that an assertion was left incomplete, but it would be nice
+             * if we could.
+             */
+            // Arrange
+            var person = GetRandom<Person>();
+
+            // Act
+            Assert.That(
+                () =>
+                    Assertions.EnableTrackingFor(
+                        () =>
+                        {
+                            Assert.That(
+                                () =>
+                                {
+                                    Expect("123")
+                                        .To.Equal(person.Phone.AsString());
+                                },
+                                Throws.Exception
+                            );
+                        }
+                    ),
+                Throws.Nothing
+            );
+            // Assert
+        }
+
+        public class Person
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public PhoneNumber Phone { get; set; }
+        }
+
+        public class PhoneNumber
+        {
+            public string AsString()
+            {
+                throw new Exception("no");
+            }
+        }
+    }
 }
 
 public static class CustomNonNExpectMatchers
