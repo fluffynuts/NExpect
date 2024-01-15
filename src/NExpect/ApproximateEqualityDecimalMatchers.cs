@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Imported.PeanutButter.Utils;
 using NExpect.EqualityComparers;
 using NExpect.Implementations;
 using NExpect.Interfaces;
@@ -575,7 +576,11 @@ public static class ApproximateEqualityDecimalMatchers
         string customMessage
     )
     {
-        return approx.Equal(expected, comparer, () => customMessage);
+        return approx.Equal(
+            expected,
+            comparer,
+            () => customMessage
+        );
     }
 
 
@@ -708,6 +713,72 @@ public static class ApproximateEqualityDecimalMatchers
             }
         );
         return approx.More();
+    }
+
+    /// <summary>
+    /// Verify that the two values are approximately equal, within
+    /// the provided allowed difference
+    /// </summary>
+    /// <param name="approx"></param>
+    /// <param name="expected"></param>
+    /// <param name="within"></param>
+    /// <returns></returns>
+    public static IMore<decimal> Equal(
+        this IApproximately<decimal> approx,
+        decimal? expected,
+        double within
+    )
+    {
+        return approx.Equal(
+            expected,
+            within,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Verify that the two values are approximately equal, within
+    /// the provided allowed difference
+    /// </summary>
+    /// <param name="approx"></param>
+    /// <param name="expected"></param>
+    /// <param name="within"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<decimal> Equal(
+        this IApproximately<decimal> approx,
+        decimal? expected,
+        double within,
+        string customMessage
+    )
+    {
+        return approx.Equal(expected, within, () => customMessage);
+    }
+
+    /// <summary>
+    /// Verify that the two values are approximately equal, within
+    /// the provided allowed difference
+    /// </summary>
+    /// <param name="approx"></param>
+    /// <param name="expected"></param>
+    /// <param name="within"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<decimal> Equal(
+        this IApproximately<decimal> approx,
+        decimal? expected,
+        double within,
+        Func<string> customMessageGenerator
+    )
+    {
+        return approx.AddMatcher(
+            actual => CreateApproximatelyEqualMatcherResultFor(
+                actual,
+                expected,
+                new MaxNullableDeltaComparer((decimal?)within),
+                customMessageGenerator
+            )
+        );
     }
 
     private static IMatcherResult CreateApproximatelyEqualMatcherResultFor(

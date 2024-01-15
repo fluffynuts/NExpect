@@ -422,6 +422,11 @@ namespace NExpect.Tests.ObjectEquality
                 }, Throws.Nothing);
                 Assert.That(() =>
                 {
+                    Expect(d1.Value)
+                        .To.Approximately.Equal(d2, within: 0.1);
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
                     Expect(d1)
                         .To.Approximately.Equal(d2, within: 0.1M);
                 }, Throws.Nothing);
