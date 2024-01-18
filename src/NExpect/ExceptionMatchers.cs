@@ -691,7 +691,7 @@ Stacktrace:
     /// </summary>
     /// <param name="src">Continuation containing exception message to test</param>
     /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
-    /// <returns>Another continuation so you can do .And()</returns>
+    /// <returns>Another continuation so you can do .And</returns>
     public static IStringPropertyContinuation Matching(
         this IStringPropertyContinuation src,
         Func<string, bool> test
@@ -709,7 +709,7 @@ Stacktrace:
     /// <param name="src">Continuation containing exception message to test</param>
     /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
     /// <param name="customMessage">Custom message to add to failure messages</param>
-    /// <returns>Another continuation so you can do .And()</returns>
+    /// <returns>Another continuation so you can do .And</returns>
     public static IStringPropertyContinuation Matching(
         this IStringPropertyContinuation src,
         Func<string, bool> test,
@@ -728,7 +728,7 @@ Stacktrace:
     /// <param name="src">Continuation containing exception message to test</param>
     /// <param name="test">Custom function to test the message -- return true if the test should pass</param>
     /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
-    /// <returns>Another continuation so you can do .And()</returns>
+    /// <returns>Another continuation so you can do .And</returns>
     public static IStringPropertyContinuation Matching(
         this IStringPropertyContinuation src,
         Func<string, bool> test,
@@ -776,6 +776,8 @@ Stacktrace:
 
     /// <summary>
     /// Continues to search for another string after a previous .Contains()
+    /// with the default string comparison (invariant culture by default,
+    /// but you can override that by setting ExceptionMatchers.DefaultStringComparison
     /// </summary>
     /// <param name="continuation"></param>
     /// <param name="other"></param>
@@ -785,7 +787,82 @@ Stacktrace:
         string other
     )
     {
-        return continuation.Containing(other);
+        return continuation.And(
+            other,
+            DefaultStringComparison
+        );
+    }
+
+    /// <summary>
+    /// Continues to search for another string after a previous .Contains()
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="other"></param>
+    /// <param name="comparison"></param>
+    /// <returns></returns>
+    public static IStringPropertyContinuation And(
+        this IStringPropertyContinuation continuation,
+        string other,
+        StringComparison comparison
+    )
+    {
+        return continuation.Containing(other, comparison);
+    }
+
+    /// <summary>
+    /// Does a case-insensitive Contains on the message
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="seek"></param>
+    /// <returns></returns>
+    public static IStringPropertyContinuation Like(
+        this IStringPropertyContinuation continuation,
+        string seek
+    )
+    {
+        return continuation.Like(
+            seek,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Does a case-insensitive Contains on the message
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="seek"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IStringPropertyContinuation Like(
+        this IStringPropertyContinuation continuation,
+        string seek,
+        string customMessage
+    )
+    {
+        return continuation.Like(
+            seek,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Does a case-insensitive Contains on the message
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="seek"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IStringPropertyContinuation Like(
+        this IStringPropertyContinuation continuation,
+        string seek,
+        Func<string> customMessageGenerator
+    )
+    {
+        return continuation.Containing(
+            seek,
+            StringComparison.OrdinalIgnoreCase,
+            customMessageGenerator
+        );
     }
 
     /// <summary>

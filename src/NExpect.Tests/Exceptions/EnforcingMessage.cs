@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
+using NExpect.Exceptions;
 using NUnit.Framework;
+using PeanutButter.Utils;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using static NExpect.Expectations;
 
@@ -13,13 +16,64 @@ namespace NExpect.Tests.Exceptions
         {
             // Arrange
             // Act
-            Assert.That(() =>
+            Assert.That(
+                () =>
+                {
+                    Expect(
+                            () =>
+                                throw new ArgumentException("foo")
+                        ).To.Throw<ArgumentException>()
+                        .With.Message.Containing("foo");
+                },
+                Throws.Nothing
+            );
+            // Assert
+        }
+
+        [Test]
+        public void ShouldSupportEasyCaseInsensitiveContains_Like()
+        {
+            // Arrange
+            var message = GetRandomWords(5, 10);
+            var words = message.Split(" ");
+            var skip = GetRandomInt(2, 4);
+            var take = GetRandomInt(2, 4);
+            var seek = words.Skip(skip).Take(take).JoinWith(" ").ToRandomCase();
+            while (message.Contains(seek, StringComparison.Ordinal))
             {
-                Expect(() =>
-                        throw new ArgumentException("foo")
-                    ).To.Throw<ArgumentException>()
-                    .With.Message.Containing("foo");
-            }, Throws.Nothing);
+                seek = seek.ToRandomCase();
+            }
+
+            // Act
+            Assert.That(
+                () =>
+                {
+                    Expect(() => throw new Exception(message))
+                        .To.Throw<Exception>()
+                        .With.Message.Containing(seek);
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
+
+            Assert.That(
+                () =>
+                {
+                    Expect(() => throw new Exception(message))
+                        .To.Throw<Exception>()
+                        .With.Message.Like(seek);
+                },
+                Throws.Nothing
+            );
+            var other = GetAnother(seek);
+            Assert.That(
+                () =>
+                {
+                    Expect(() => throw new Exception(message))
+                        .To.Throw<Exception>()
+                        .With.Message.Like(other);
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
             // Assert
         }
 
@@ -31,13 +85,17 @@ namespace NExpect.Tests.Exceptions
             {
                 // Arrange
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(() =>
-                            throw new ArgumentException("foo")
-                        ).To.Throw<ArgumentException>()
-                        .With.Message.Containing("FOO", StringComparison.OrdinalIgnoreCase);
-                }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        Expect(
+                                () =>
+                                    throw new ArgumentException("foo")
+                            ).To.Throw<ArgumentException>()
+                            .With.Message.Containing("FOO", StringComparison.OrdinalIgnoreCase);
+                    },
+                    Throws.Nothing
+                );
                 // Assert
             }
         }
@@ -47,14 +105,18 @@ namespace NExpect.Tests.Exceptions
         {
             // Arrange
             // Act
-            Assert.That(() =>
-            {
-                Expect(() =>
-                        throw new ArgumentException("foo, bar")
-                    ).To.Throw<ArgumentException>()
-                    .With.Message.Containing("foo")
-                    .And.Containing("bar");
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(
+                            () =>
+                                throw new ArgumentException("foo, bar")
+                        ).To.Throw<ArgumentException>()
+                        .With.Message.Containing("foo")
+                        .And.Containing("bar");
+                },
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -64,14 +126,17 @@ namespace NExpect.Tests.Exceptions
             // Arrange
             // Act
             var fieldName = GetRandomString(10);
-            Assert.That(() =>
-            {
-                Expect(() => throw new ArgumentException("NO", fieldName))
-                    .To.Throw<ArgumentException>()
-                    .With.Message.Containing(fieldName)
-                    .And.Not.Containing("{")
-                    .And.Not.Containing("}");
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(() => throw new ArgumentException("NO", fieldName))
+                        .To.Throw<ArgumentException>()
+                        .With.Message.Containing(fieldName)
+                        .And.Not.Containing("{")
+                        .And.Not.Containing("}");
+                },
+                Throws.Nothing
+            );
             // Assert
         }
     }
