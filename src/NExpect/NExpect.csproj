@@ -9,7 +9,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
-    <PackageVersion>2.0.64</PackageVersion>
+    <PackageVersion>2.0.65</PackageVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
@@ -35,9 +35,9 @@
   <PropertyGroup>
     <DefineConstants>BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
   </PropertyGroup>
-    <ItemGroup>
-        <Reference Include="System.Configuration" Condition="'$(TargetFramework)' == 'net462'" />
-    </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Configuration" Condition="'$(TargetFramework)' == 'net462'"/>
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" Condition="'$(TargetFramework)' == 'net462'"/>
@@ -54,9 +54,9 @@
     </Compile>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ByteArrayExtensions.cs" Link="Imported\ByteArrayExtensions.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DeepEqualityTester.cs" Link="Imported\DeepEqualityTester.cs"/>
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingConnectionStringSettingCollection.cs" Link="Imported\Dictionaries\DictionaryWrappingConnectionStringSettingCollection.cs" />
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingNameValueCollection.cs" Link="Dictionaries\Imported\DictionaryWrappingNameValueCollection.cs" />
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingObject.cs" Link="Dictionaries\Imported\DictionaryWrappingObject.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingConnectionStringSettingCollection.cs" Link="Imported\Dictionaries\DictionaryWrappingConnectionStringSettingCollection.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingNameValueCollection.cs" Link="Dictionaries\Imported\DictionaryWrappingNameValueCollection.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingObject.cs" Link="Dictionaries\Imported\DictionaryWrappingObject.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DictionaryExtensions.cs" Link="Imported\DictionaryExtensions.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\EnumerableWrapper.cs" Link="Imported\EnumerableWrapper.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\FlagExtensions.cs">

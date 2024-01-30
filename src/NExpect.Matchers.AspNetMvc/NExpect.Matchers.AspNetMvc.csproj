@@ -1,34 +1,34 @@
 <Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <DebugType>portable</DebugType>
-        <LangVersion>latest</LangVersion>
-        <TargetFramework>net462</TargetFramework>
-        <Configurations>Debug;Release</Configurations>
-        <RootNamespace>NExpect</RootNamespace>
-        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-        <DefineConstants>NETSTANDARD</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup>
-        <DefineConstants>BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
-    </PropertyGroup>
-    <PropertyGroup>
-        <PackageVersion>2.0.64</PackageVersion>
-        <DefaultLanguage>en-US</DefaultLanguage>
-        <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
-        <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
-        <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
-        <PackageIcon>icon.png</PackageIcon>
-        <PackageIconUrl>https://raw.githubusercontent.com/fluffynuts/NExpect/master/src/NExpect/icon.png</PackageIconUrl>
-        <Copyright>Copyright 2019</Copyright>
-        <Authors>Davyd McColl</Authors>
-        <Description>
+  <PropertyGroup>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <DebugType>portable</DebugType>
+    <LangVersion>latest</LangVersion>
+    <TargetFramework>net462</TargetFramework>
+    <Configurations>Debug;Release</Configurations>
+    <RootNamespace>NExpect</RootNamespace>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+    <DefineConstants>NETSTANDARD</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DefineConstants>BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageVersion>2.0.65</PackageVersion>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/fluffynuts/NExpect/master/src/NExpect/icon.png</PackageIconUrl>
+    <Copyright>Copyright 2019</Copyright>
+    <Authors>Davyd McColl</Authors>
+    <Description>
             This library adds ASP.Net core extensions for NExpect so you can test your
             [Route] and [Http*] annotations like so:
             ```
@@ -40,48 +40,48 @@
             .And.Route("second-route");
             ```
         </Description>
-    </PropertyGroup>
-    <ItemGroup>
-        <Reference Include="System.Configuration" />
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="README.md" Pack="true" PackagePath="\"/>
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ArrayExtensions.cs" Link="Imported\ArrayExtensions.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\AutoLocker.cs" Link="Imported\AutoLocker.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ByteArrayExtensions.cs" Link="Imported\ByteArrayExtensions.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DeepEqualityTester.cs" Link="Imported\DeepEqualityTester.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DictionaryExtensions.cs" Link="Imported\DictionaryExtensions.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\EnumerableWrapper.cs" Link="Imported\EnumerableWrapper.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ObjectExtensions.cs" Link="Imported\ObjectExtensions.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ExtensionsForIEnumerables.cs" Link="Imported\ExtensionsForIEnumerables.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\MetadataExtensions.cs" Link="Imported\MetadataExtensions.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\MemberNotFoundException.cs" Link="Imported\MemberNotFoundException.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PropertyOrField.cs" Link="Imported\PropertyOrField.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PyLike.cs" Link="Imported\PyLike.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\StringExtensions.cs" Link="Imported\StringExtensions.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\RandomNumber.cs" Link="Imported\RandomNumber.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Stringifier.cs" Link="Imported\Stringifier.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\TypeExtensions.cs" Link="Imported\TypeExtensions.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\CannotZipNullException.cs" Link="Imported\CannotZipNullException.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\UnevenZipException.cs" Link="Imported\UnevenZipException.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingConnectionStringSettingCollection.cs" Link="Imported\Dictionaries\DictionaryWrappingConnectionStringSettingCollection.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingNameValueCollection.cs" Link="Imported\Dictionaries\DictionaryWrappingNameValueCollection.cs"/>
-        <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingObject.cs" Link="Imported\Dictionaries\DictionaryWrappingObject.cs"/>
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
-        <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0"/>
-    </ItemGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\NExpect\NExpect.csproj"/>
-    </ItemGroup>
-    <ItemGroup>
-        <None Include="icon.png" Pack="true" PackagePath=""/>
-    </ItemGroup>
-    <ItemGroup>
-        <Reference Include="System.Net.Http"/>
-    </ItemGroup>
-    <Import Project="..\MonoForFramework.targets"/>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Configuration"/>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ArrayExtensions.cs" Link="Imported\ArrayExtensions.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\AutoLocker.cs" Link="Imported\AutoLocker.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ByteArrayExtensions.cs" Link="Imported\ByteArrayExtensions.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DeepEqualityTester.cs" Link="Imported\DeepEqualityTester.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DictionaryExtensions.cs" Link="Imported\DictionaryExtensions.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\EnumerableWrapper.cs" Link="Imported\EnumerableWrapper.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ObjectExtensions.cs" Link="Imported\ObjectExtensions.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ExtensionsForIEnumerables.cs" Link="Imported\ExtensionsForIEnumerables.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\MetadataExtensions.cs" Link="Imported\MetadataExtensions.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\MemberNotFoundException.cs" Link="Imported\MemberNotFoundException.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PropertyOrField.cs" Link="Imported\PropertyOrField.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PyLike.cs" Link="Imported\PyLike.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\StringExtensions.cs" Link="Imported\StringExtensions.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\RandomNumber.cs" Link="Imported\RandomNumber.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Stringifier.cs" Link="Imported\Stringifier.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\TypeExtensions.cs" Link="Imported\TypeExtensions.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\CannotZipNullException.cs" Link="Imported\CannotZipNullException.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\UnevenZipException.cs" Link="Imported\UnevenZipException.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingConnectionStringSettingCollection.cs" Link="Imported\Dictionaries\DictionaryWrappingConnectionStringSettingCollection.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingNameValueCollection.cs" Link="Imported\Dictionaries\DictionaryWrappingNameValueCollection.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingObject.cs" Link="Imported\Dictionaries\DictionaryWrappingObject.cs"/>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0"/>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NExpect\NExpect.csproj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icon.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Net.Http"/>
+  </ItemGroup>
+  <Import Project="..\MonoForFramework.targets"/>
 </Project>
