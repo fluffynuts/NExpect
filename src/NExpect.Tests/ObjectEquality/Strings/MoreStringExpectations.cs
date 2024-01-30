@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NExpect.Exceptions;
 using NUnit.Framework;
@@ -13,6 +12,51 @@ namespace NExpect.Tests.ObjectEquality.Strings
     [TestFixture]
     public class MoreStringExpectations
     {
+        [TestFixture]
+        public class Like
+        {
+            [Test]
+            public void ShouldBeEquivalentToContainsCaseInsensitive()
+            {
+                // Arrange
+                var message = "The Quick Brown Fox Tripped Over The Dog's Tail And Wiped Out!";
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(message)
+                            .To.Be.Like("quick brown fox");
+                    },
+                    Throws.Nothing
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(message)
+                            .Not.To.Be.Like("foo to the bar");
+                    },
+                    Throws.Nothing
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(message)
+                            .To.Be.Like("jumped over the lazy dog");
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(message)
+                            .Not.To.Be.Like("jumped over the lazy dog");
+                    },
+                    Throws.Nothing
+                );
+                // Assert
+            }
+        }
+
         [Test]
         public void PositiveAssertion_WhenShouldPass_ShouldNotThrow()
         {
@@ -684,7 +728,7 @@ namespace NExpect.Tests.ObjectEquality.Strings
                     i =>
                         GetRandom(
                             c => (c < 'A' || c > 'z') && (!"01234567890".Contains(c)),
-                            () => (char) GetRandomInt(
+                            () => (char)GetRandomInt(
                                 32,
                                 255
                             )

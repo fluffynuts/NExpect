@@ -1450,7 +1450,10 @@ public static class StringMatchers
     )
     {
         return stringIn.Order(
-            new[] { firstFragment }.Concat(fragments),
+            new[]
+            {
+                firstFragment
+            }.Concat(fragments),
             null
         );
     }
@@ -1801,5 +1804,61 @@ public static class StringMatchers
             }
         );
         return be.More();
+    }
+
+    /// <summary>
+    /// Shorthand for a case-insensitive .Contain(...)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="other"></param>
+    /// <returns></returns>
+    public static IStringMore Like(
+        this IBe<string> be,
+        string other
+    )
+    {
+        return be.Like(
+            other,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Shorthand for a case-insensitive .Contain(...)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="other"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IStringMore Like(
+        this IBe<string> be,
+        string other,
+        string customMessage
+    )
+    {
+        return be.Like(
+            other,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Shorthand for a case-insensitive .Contain(...)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="other"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IStringMore Like(
+        this IBe<string> be,
+        string other,
+        Func<string> customMessageGenerator
+    )
+    {
+        return be.Contain(
+            other,
+            StringComparison.OrdinalIgnoreCase,
+            customMessageGenerator
+        );
     }
 }
