@@ -13,6 +13,74 @@ namespace NExpect.Tests.Collections
     [TestFixture]
     public class NameValueCollectionTesting
     {
+        [Test]
+        public void ShouldBeAbleToAssertEmpty()
+        {
+            // Arrange
+            var collection = new NameValueCollection();
+            // Act
+            Assert.That(
+                () =>
+                {
+                    Expect(collection)
+                        .To.Be.Empty();
+                },
+                Throws.Nothing
+            );
+            collection["a"] = "b";
+            Assert.That(
+                () =>
+                {
+                    Expect(collection)
+                        .Not.To.Be.Empty();
+                },
+                Throws.Nothing
+            );
+            Assert.That(
+                () =>
+                {
+                    Expect(collection)
+                        .To.Be.Empty();
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
+            // Assert
+        }
+
+        [Test]
+        public void ShouldBeAbleToAssertEmptyKeys()
+        {
+            // Arrange
+            var collection = new NameValueCollection();
+            // Act
+            Assert.That(
+                () =>
+                {
+                    Expect(collection.Keys)
+                        .To.Be.Empty();
+                },
+                Throws.Nothing
+            );
+            collection["a"] = "b";
+            Assert.That(
+                () =>
+                {
+                    Expect(collection.Keys)
+                        .Not.To.Be.Empty();
+                },
+                Throws.Nothing
+            );
+            Assert.That(
+                () =>
+                {
+                    Expect(collection.Keys)
+                        .To.Be.Empty();
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
+            // Assert
+        }
+
         [TestFixture]
         public class ContainingAssertions
         {
@@ -32,11 +100,13 @@ namespace NExpect.Tests.Collections
                         // Pre-Assert
 
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(src).To.Contain.Key(key);
                             },
-                            Throws.Nothing);
+                            Throws.Nothing
+                        );
 
                         // Assert
                     }
@@ -53,14 +123,16 @@ namespace NExpect.Tests.Collections
                         // Pre-Assert
 
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(src).Not.To.Contain.Key(key);
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>()
                                 .With.Message.Contains(
                                     $"not to contain key\n{key.Stringify()}"
-                                ));
+                                )
+                        );
 
                         // Assert
                     }
@@ -73,15 +145,21 @@ namespace NExpect.Tests.Collections
                         var key = GetRandomString();
                         // Pre-assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(src).Not.To.Contain.Key(key);
-                        }, Throws.Nothing);
-                        
-                        Assert.That(() =>
-                        {
-                            Expect(src).To.Not.Contain.Key(key);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(src).Not.To.Contain.Key(key);
+                            },
+                            Throws.Nothing
+                        );
+
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(src).To.Not.Contain.Key(key);
+                            },
+                            Throws.Nothing
+                        );
                         // Assert
                     }
 
@@ -97,14 +175,16 @@ namespace NExpect.Tests.Collections
                         // Pre-Assert
 
                         // Act
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(src).To.Not.Contain.Key(key);
                             },
                             Throws.Exception.InstanceOf<UnmetExpectationException>()
                                 .With.Message.Contains(
                                     $"not to contain key\n{key.Stringify()}"
-                                ));
+                                )
+                        );
 
                         // Assert
                     }
@@ -128,11 +208,13 @@ namespace NExpect.Tests.Collections
                                 // Pre-Assert
 
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(src).To.Contain.Key(key).With.Value(value);
                                     },
-                                    Throws.Nothing);
+                                    Throws.Nothing
+                                );
 
                                 // Assert
                             }
@@ -151,12 +233,14 @@ namespace NExpect.Tests.Collections
                                 // Pre-Assert
 
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(src).To.Contain.Key(testingValue).With.Value(value);
                                     },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                        .With.Message.Contains($"to contain key\n\"{testingValue}\""));
+                                        .With.Message.Contains($"to contain key\n\"{testingValue}\"")
+                                );
 
                                 // Assert
                             }
@@ -175,14 +259,16 @@ namespace NExpect.Tests.Collections
                                 // Pre-Assert
 
                                 // Act
-                                Assert.That(() =>
+                                Assert.That(
+                                    () =>
                                     {
                                         Expect(src)
                                             .To.Contain.Key(key)
                                             .With.Value(testingValue);
                                     },
                                     Throws.Exception.TypeOf<UnmetExpectationException>()
-                                        .With.Message.Contains($"Expected\n\"{testingValue}\"\nbut got\n\"{value}\""));
+                                        .With.Message.Contains($"Expected\n\"{testingValue}\"\nbut got\n\"{value}\"")
+                                );
 
                                 // Assert
                             }
@@ -205,11 +291,14 @@ namespace NExpect.Tests.Collections
                     [GetRandomString(1)] = GetRandomString()
                 };
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(empty)
-                        .To.Be.Empty();
-                }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        Expect(empty)
+                            .To.Be.Empty();
+                    },
+                    Throws.Nothing
+                );
                 // Assert
             }
         }

@@ -169,36 +169,40 @@ public static partial class Expectations
     /// <returns>IExpectation&lt;Action&gt;</returns>
     public static IExpectation<Action> Expect<T>(Func<T> func)
     {
-        return new Expectation<Action>(() =>
-        {
-            var result = func();
-            if (!(result is Task taskResult))
+        return new Expectation<Action>(
+            () =>
             {
-                return;
-            }
-
-            taskResult.ConfigureAwait(false);
-            try
-            {
-                var maxWait = NExpectEnvironment.TaskTimeoutMs;
-                var waitCompleted = taskResult.Wait(maxWait);
-                if (!waitCompleted)
+                var result = func();
+                if (!(result is Task taskResult))
                 {
-                    throw new UnmetExpectationException(new[]
+                    return;
+                }
+
+                taskResult.ConfigureAwait(false);
+                try
+                {
+                    var maxWait = NExpectEnvironment.TaskTimeoutMs;
+                    var waitCompleted = taskResult.Wait(maxWait);
+                    if (!waitCompleted)
                     {
-                        $"Waited {maxWait}ms for task to complete.",
-                        "If this is too short, consider adjusing environment ",
-                        $"variable {NExpectEnvironment.Variables.TASK_TIMEOUT_MS} to suit your needs. ",
-                        "If this doesn't help, please log a bug: async/await can",
-                        "be fickle"
-                    }.JoinWith(" "));
+                        throw new UnmetExpectationException(
+                            new[]
+                            {
+                                $"Waited {maxWait}ms for task to complete.",
+                                "If this is too short, consider adjusing environment ",
+                                $"variable {NExpectEnvironment.Variables.TASK_TIMEOUT_MS} to suit your needs. ",
+                                "If this doesn't help, please log a bug: async/await can",
+                                "be fickle"
+                            }.JoinWith(" ")
+                        );
+                    }
+                }
+                catch (AggregateException ex)
+                {
+                    throw ex.InnerExceptions.First();
                 }
             }
-            catch (AggregateException ex)
-            {
-                throw ex.InnerExceptions.First();
-            }
-        });
+        );
     }
 
     /// <summary>
@@ -470,5 +474,16 @@ public static partial class Expectations
         return new CollectionExpectation<KeyValuePair<string, string>>(
             new DictionaryShim(collection)
         );
+    }
+
+    /// <summary>
+    /// Starts an expectation on a KeysCollection
+    /// </summary>
+    /// <param name="keys"></param>
+    /// <returns></returns>
+    public static ICollectionExpectation<string>
+        Expect(NameObjectCollectionBase.KeysCollection keys)
+    {
+        return new CollectionExpectation<string>(keys.Cast<string>());
     }
 }
