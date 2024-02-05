@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using NExpect.Exceptions;
 using NExpect.Helpers;
 using NExpect.Implementations;
 using NExpect.Implementations.Collections;
@@ -471,10 +470,10 @@ public static class CollectionMatchers
             {
                 var asArray = collection.ToArray();
                 var have = countMatch.Method == CountMatchMethods.Any
-                    ? (asArray.Any(o => o.Equals(search))
+                    ? (asArray.Any(o => AreEqual(o, search))
                         ? 1
                         : 0)
-                    : asArray.Count(o => o.Equals(search));
+                    : asArray.Count(o => AreEqual(o, search));
                 var passed = CollectionCountMatchStrategies[countMatch.Method](
                     have,
                     countMatch.Method == CountMatchMethods.All
@@ -498,7 +497,6 @@ public static class CollectionMatchers
             }
         );
     }
-
 
     /// <summary>
     /// Continuation for Matched, allowing testing the artifact with a simple func
@@ -657,7 +655,7 @@ public static class CollectionMatchers
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        () => new string[]
+                        () => new[]
                             {
                                 $"Searching for type {expected}:"
                             }.And(
@@ -1237,7 +1235,7 @@ public static class CollectionMatchers
 
     private class StringifyHackForAnyItem
     {
-        private static readonly Dictionary<Type, string> Inbuilts = new Dictionary<Type, string>()
+        private static readonly Dictionary<Type, string> InbuiltTypeNames = new()
         {
             [typeof(string)] = "string",
             [typeof(int)] = "int",
@@ -1249,6 +1247,7 @@ public static class CollectionMatchers
             [typeof(bool)] = "bool"
         };
 
+        // ReSharper disable once MemberCanBeProtected.Local
         public static string NameOf(Type type)
         {
             if (type == null)
@@ -1256,7 +1255,7 @@ public static class CollectionMatchers
                 return "(null)";
             }
 
-            return Inbuilts.TryGetValue(type, out var name)
+            return InbuiltTypeNames.TryGetValue(type, out var name)
                 ? name
                 : type.Name;
         }
@@ -1264,6 +1263,7 @@ public static class CollectionMatchers
 
     private class StringifyHackForAnyItem<T> : StringifyHackForAnyItem
     {
+        // ReSharper disable once UnusedMember.Local
         public int Id => throw new Exception("force .ToString()");
 
         public override string ToString()
@@ -1437,11 +1437,11 @@ public static class CollectionMatchers
     private static readonly Dictionary<CountMatchMethods, Func<int, int, int, bool>> CountPassStrategies =
         new Dictionary<CountMatchMethods, Func<int, int, int, bool>>
         {
-            [CountMatchMethods.All] = (actual, expected, total) => actual == total,
-            [CountMatchMethods.Any] = (actual, expected, total) => actual > 0,
-            [CountMatchMethods.Exactly] = (actual, expected, total) => actual == expected,
-            [CountMatchMethods.Maximum] = (actual, expected, total) => actual <= expected,
-            [CountMatchMethods.Minimum] = (actual, expected, total) => actual >= expected,
+            [CountMatchMethods.All] = (actual, _, total) => actual == total,
+            [CountMatchMethods.Any] = (actual, _, _) => actual > 0,
+            [CountMatchMethods.Exactly] = (actual, expected, _) => actual == expected,
+            [CountMatchMethods.Maximum] = (actual, expected, _) => actual <= expected,
+            [CountMatchMethods.Minimum] = (actual, expected, _) => actual >= expected,
             [CountMatchMethods.Only] = (actual, expected, total) => actual == expected && actual == total
         };
 
@@ -2574,7 +2574,7 @@ public static class CollectionMatchers
                 var asArray = actual as T[] ?? actual.ToArray();
                 var total = asArray.Length;
                 var distinct = asArray.Distinct().Count();
-                var actualRatio = (decimal)distinct / (decimal)total;
+                var actualRatio = (decimal)distinct / total;
                 var passed = actualRatio >= minimumRequiredRatio;
                 return new MatcherResult(
                     passed,
@@ -2843,14 +2843,14 @@ public static class CollectionMatchers
 
     private static bool AreEqual<T>(T left, T right)
     {
-        if (left == null &&
-            right == null)
+        if (left is null &&
+            right is null)
         {
             return true;
         }
 
-        if (left == null ||
-            right == null)
+        if (left is null ||
+            right is null)
         {
             return false;
         }
@@ -2867,22 +2867,6 @@ public static class CollectionMatchers
                 $"Exactly<T>() cannot extend null IContain<IEnumerable<{typeof(T).Name}>>"
             );
         }
-    }
-
-    private static void CheckOnly<T>(ICanAddMatcher<IEnumerable<T>> contain, int howMany)
-    {
-        var itemInCollection = contain.GetActual().Count();
-        if (itemInCollection == howMany)
-        {
-            return;
-        }
-
-        var s = howMany == 1
-            ? ""
-            : "s";
-        throw new UnmetExpectationException(
-            $"Expected to find only {howMany} item{s} in collection, but found {itemInCollection}"
-        );
     }
 
     private static ICollectionMore<T> CheckDistinct<T>(
@@ -2951,7 +2935,7 @@ public static class CollectionMatchers
         string comparison
     )
     {
-        return (passed, have, want, total) =>
+        return (passed, have, _, _) =>
         {
             var haveWord = have > 0
                 ? have.ToString()
@@ -2968,7 +2952,7 @@ public static class CollectionMatchers
             [CountMatchMethods.Only] = (have, want) => have == want,
             [CountMatchMethods.Minimum] = (have, want) => have >= want,
             [CountMatchMethods.Maximum] = (have, want) => have <= want,
-            [CountMatchMethods.Any] = (have, want) => have > 0,
+            [CountMatchMethods.Any] = (have, _) => have > 0,
             [CountMatchMethods.All] = (have, collectionTotal) => have == collectionTotal
         };
 
@@ -3075,7 +3059,7 @@ public static class CollectionMatchers
         string s,
         object search,
         int want,
-        int have,
+        int _,
         int total
     )
     {
@@ -3088,7 +3072,7 @@ public static class CollectionMatchers
         string comparison,
         int have,
         int want,
-        int total
+        int _
     )
     {
         var s = want == 1
@@ -3101,7 +3085,7 @@ public static class CollectionMatchers
         string comparison,
         int have,
         int want,
-        int total
+        int _
     )
     {
         var s = want == 1

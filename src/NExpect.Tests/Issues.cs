@@ -217,6 +217,26 @@ public class Issues
             }
         }
     }
+
+    [TestFixture]
+    public class NullValuesInCollections
+    {
+        [Test]
+        public void ShouldBeAbleToMatchNullValueInCollection()
+        {
+            // Arrange
+            var items = new[] { "1", null, "2" };
+            
+            // Act
+            Assert.That(() =>
+            {
+                Expect(items)
+                    .To.Contain.Exactly(1)
+                    .Equal.To(null);
+            }, Throws.Nothing);
+            // Assert
+        }
+    }
 }
 
 public static class CustomNonNExpectMatchers
