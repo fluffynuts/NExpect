@@ -190,7 +190,7 @@ public static class DifferenceHighlighting
         var start = Math.Min(idx - 1, str.Length - 1);
         if (start == -1)
         {
-            return 0;
+            return -1;
         }
 
         for (var i = start; i > 0; i--)

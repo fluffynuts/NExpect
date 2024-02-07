@@ -1,6 +1,5 @@
 using System;
 using NUnit.Framework;
-using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Tests.ObjectEquality.Strings;
@@ -28,6 +27,28 @@ public class TestDifferenceHighlighting
     [TestFixture]
     public class HighlightFirstPositionOfDifference
     {
+        [Test]
+        public void SeenInWild()
+        {
+            // Arrange
+            var left = "text/plain";
+            var right = "multipart/form-data";
+            var expected = @"
+first difference found at character 0
+text/plain
+^---
+".Trim();
+            // Act
+            var result = DifferenceHighlighting.HighlightFirstPositionOfDifference(
+                left,
+                right,
+                int.MaxValue
+            );
+            // Assert
+            Expect(result)
+                .To.Equal(expected);
+        }
+
         [Test]
         public void SimpleOneLineDifference()
         {
