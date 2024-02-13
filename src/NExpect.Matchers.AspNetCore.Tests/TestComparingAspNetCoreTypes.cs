@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using NExpect.Exceptions;
 using NSubstitute;
-using NUnit.Framework;
 using PeanutButter.TestUtils.AspNetCore.Builders;
-using static NExpect.Expectations;
 
 namespace NExpect.Matchers.AspNet.Tests
 {

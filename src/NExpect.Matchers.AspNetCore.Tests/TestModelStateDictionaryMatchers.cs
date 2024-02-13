@@ -1,9 +1,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using NUnit.Framework;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using NExpect.Exceptions;
-using static NExpect.AspNetCoreExpectations;
 
 namespace NExpect.Matchers.AspNet.Tests;
 

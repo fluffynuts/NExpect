@@ -1,9 +1,6 @@
-using System;
 using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using NExpect.Exceptions;
-using static NExpect.Expectations;
-using NUnit.Framework;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Matchers.AspNet.Tests

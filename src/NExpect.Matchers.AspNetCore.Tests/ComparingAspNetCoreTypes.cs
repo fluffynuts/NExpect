@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using NExpect.Exceptions;
-using NUnit.Framework;
 
 namespace NExpect.Matchers.AspNet.Tests;
 

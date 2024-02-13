@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using NUnit.Framework;
 using NExpect.Exceptions;
-using PeanutButter.TestUtils.AspNetCore.Fakes;
-using static NExpect.AspNetCoreExpectations;
 using FakeQueryCollection = NExpect.Matchers.AspNet.Tests.Implementations.FakeQueryCollection;
 
 // leave this in: without it, the need to cast as IQueryCollection is dropped

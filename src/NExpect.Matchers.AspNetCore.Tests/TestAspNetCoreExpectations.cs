@@ -1,12 +1,8 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Primitives;
-using NUnit.Framework;
 using NExpect.Exceptions;
 using NExpect.Matchers.AspNet.Tests.Implementations;
-using static NExpect.Expectations;
-using static NExpect.AspNetCoreExpectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using FormCollection = NExpect.Matchers.AspNet.Tests.Implementations.FormCollection;
 using FormFile = NExpect.Matchers.AspNet.Tests.Implementations.FormFile;

@@ -147,4 +147,16 @@ public static class AspNetCoreExpectations
             dict?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
         );
     }
+
+    /// <summary>
+    /// Converts PathString expectations into simple string expectations
+    /// </summary>
+    /// <param name="pathString"></param>
+    /// <returns></returns>
+    public static IStringExpectation Expect(
+        PathString pathString
+    )
+    {
+        return Expectations.Expect($"{pathString}");
+    }
 }

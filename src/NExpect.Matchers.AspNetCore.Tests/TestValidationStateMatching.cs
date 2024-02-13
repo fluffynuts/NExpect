@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using NExpect.Exceptions;
-using NUnit.Framework;
 
 namespace NExpect.Matchers.AspNet.Tests
 {

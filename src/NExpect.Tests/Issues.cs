@@ -4,8 +4,9 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
 using NExpect.Utilities;
-using static NExpect.Expectations;
 using static PeanutButter.RandomGenerators.RandomValueGen;
+// ReSharper disable NotAccessedField.Local
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace NExpect.Tests;
 
@@ -225,15 +226,23 @@ public class Issues
         public void ShouldBeAbleToMatchNullValueInCollection()
         {
             // Arrange
-            var items = new[] { "1", null, "2" };
-            
-            // Act
-            Assert.That(() =>
+            var items = new[]
             {
-                Expect(items)
-                    .To.Contain.Exactly(1)
-                    .Equal.To(null);
-            }, Throws.Nothing);
+                "1",
+                null,
+                "2"
+            };
+
+            // Act
+            Assert.That(
+                () =>
+                {
+                    Expect(items)
+                        .To.Contain.Exactly(1)
+                        .Equal.To(null);
+                },
+                Throws.Nothing
+            );
             // Assert
         }
     }
