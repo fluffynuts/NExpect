@@ -4,6 +4,7 @@ using System.Linq;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
+
 // ReSharper disable MemberCanBePrivate.Global
 
 
@@ -385,6 +386,193 @@ public static class IntsAndEnumsMatchers
         );
     }
 
+    /// <summary>
+    /// Tests if the provided integer value is equal
+    /// to the provided enum value
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="enumValue"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<long?> Equal<T>(
+        this ITo<long?> to,
+        T enumValue
+    ) where T : Enum
+    {
+        return to.Equal(enumValue, NULL_STRING);
+    }
+
+    /// <summary>
+    /// Tests if the provided integer value is equal
+    /// to the provided enum value
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="enumValue"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<long?> Equal<T>(
+        this ITo<long?> to,
+        T enumValue,
+        string customMessage
+    ) where T : Enum
+    {
+        return to.Equal(
+            enumValue,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Tests if the provided integer value is equal
+    /// to the provided enum value
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="enumValue"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<long?> Equal<T>(
+        this ITo<long?> to,
+        T enumValue,
+        Func<string> customMessageGenerator
+    ) where T : Enum
+    {
+        return to.AddMatcher(
+            actual =>
+                VerifyEquality(
+                    enumValue,
+                    actual,
+                    customMessageGenerator,
+                    comparingEnumToInt: false
+                )
+        );
+    }
+
+    /// <summary>
+    /// Tests if the provided integer value is equal
+    /// to the provided enum value
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="enumValue"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<long?> Equal<T>(
+        this IToAfterNot<long?> to,
+        T enumValue
+    ) where T : Enum
+    {
+        return to.Equal(enumValue, NULL_STRING);
+    }
+
+    /// <summary>
+    /// Tests if the provided integer value is equal
+    /// to the provided enum value
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="enumValue"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<long?> Equal<T>(
+        this IToAfterNot<long?> to,
+        T enumValue,
+        string customMessage
+    ) where T : Enum
+    {
+        return to.Equal(
+            enumValue,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Tests if the provided integer value is equal
+    /// to the provided enum value
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="enumValue"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<long?> Equal<T>(
+        this IToAfterNot<long?> to,
+        T enumValue,
+        Func<string> customMessageGenerator
+    ) where T : Enum
+    {
+        return to.AddMatcher(
+            actual => VerifyEquality(
+                enumValue,
+                actual,
+                customMessageGenerator,
+                comparingEnumToInt: false
+            )
+        );
+    }
+
+    /// <summary>
+    /// Tests if the provided integer value is equal
+    /// to the provided enum value
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="enumValue"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<long?> Equal<T>(
+        this INotAfterTo<long?> to,
+        T enumValue
+    ) where T : Enum
+    {
+        return to.Equal(enumValue, NULL_STRING);
+    }
+
+    /// <summary>
+    /// Tests if the provided integer value is equal
+    /// to the provided enum value
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="enumValue"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<long?> Equal<T>(
+        this INotAfterTo<long?> to,
+        T enumValue,
+        string customMessage
+    ) where T : Enum
+    {
+        return to.Equal(
+            enumValue,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Tests if the provided integer value is equal
+    /// to the provided enum value
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="enumValue"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<long?> Equal<T>(
+        this INotAfterTo<long?> to,
+        T enumValue,
+        Func<string> customMessageGenerator
+    ) where T : Enum
+    {
+        return to.AddMatcher(
+            actual => VerifyEquality(
+                enumValue,
+                actual,
+                customMessageGenerator,
+                comparingEnumToInt: false
+            )
+        );
+    }
+
 
     private static IMore<T> ResolveResult<T>(
         this ICanAddMatcher<T> canAddMatcher,
@@ -405,11 +593,20 @@ public static class IntsAndEnumsMatchers
 
     private static IMatcherResult VerifyEquality<T>(
         T enumValue,
-        long intValue,
+        long? nullableIntValue,
         Func<string> customMessageGenerator,
         bool comparingEnumToInt
     ) where T : Enum
     {
+        if (nullableIntValue is null)
+        {
+            return new EnforcedMatcherResult(
+                false,
+                () => "Cannot compare null with an enum value"
+            );
+        }
+
+        var intValue = nullableIntValue.Value;
         var earlyFail = VerifyWithinRange<T>(intValue, customMessageGenerator);
         if (earlyFail is not null)
         {
