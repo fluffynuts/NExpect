@@ -2,7 +2,6 @@ using System;
 using NExpect.Exceptions;
 using NExpect.Tests.Exceptions.B;
 using NUnit.Framework;
-using static NExpect.Expectations;
 
 namespace NExpect.Tests.Exceptions
 {

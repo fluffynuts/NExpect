@@ -2,7 +2,6 @@
 using System.Threading;
 using NExpect.Exceptions;
 using NUnit.Framework;
-using static NExpect.Expectations;
 
 namespace NExpect.Tests.Runtime;
 

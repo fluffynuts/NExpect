@@ -2,7 +2,6 @@
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
-using static NExpect.Expectations;
 using NExpect.Exceptions;
 
 namespace NExpect.Tests

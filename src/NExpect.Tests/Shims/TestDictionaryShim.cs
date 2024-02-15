@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using NUnit.Framework;
-using static PeanutButter.RandomGenerators.RandomValueGen;
 using NExpect.Shims;
 using PeanutButter.Utils;
-using static NExpect.Expectations;
+
 // ReSharper disable UnusedVariable
 // ReSharper disable PossibleMultipleEnumeration
 // ReSharper disable InconsistentNaming

@@ -1,6 +1,5 @@
 using NExpect.Exceptions;
 using NUnit.Framework;
-using static NExpect.Expectations;
 
 // ReSharper disable ExpressionIsAlwaysNull
 

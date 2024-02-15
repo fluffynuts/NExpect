@@ -2,8 +2,6 @@
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
-using static NExpect.Expectations;
-using static PeanutButter.RandomGenerators.RandomValueGen;
 
 // ReSharper disable ExpressionIsAlwaysNull
 

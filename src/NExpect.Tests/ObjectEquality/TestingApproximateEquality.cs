@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using static PeanutButter.RandomGenerators.RandomValueGen;
-using static NExpect.Expectations;
 using NExpect.EqualityComparers;
 using NExpect.Exceptions;
 using PeanutButter.Utils;

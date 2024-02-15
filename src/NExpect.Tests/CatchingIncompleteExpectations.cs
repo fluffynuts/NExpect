@@ -9,8 +9,6 @@ using NExpect.Exceptions;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
-using static NExpect.Expectations;
-using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Tests;
 

@@ -2,7 +2,6 @@
 using NExpect.Interfaces;
 using NUnit.Framework;
 using PeanutButter.Utils;
-using static NExpect.Expectations;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnassignedGetOnlyAutoProperty

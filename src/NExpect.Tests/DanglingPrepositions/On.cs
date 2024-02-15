@@ -1,8 +1,7 @@
 ﻿using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
-using static NExpect.Expectations;
-using NExpect;
+
 namespace NExpect.Tests.DanglingPrepositions;
 
 [TestFixture]

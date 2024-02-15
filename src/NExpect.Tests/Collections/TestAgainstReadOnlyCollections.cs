@@ -1,7 +1,6 @@
 using System.Collections.ObjectModel;
 using NExpect.Exceptions;
 using NUnit.Framework;
-using static NExpect.Expectations;
 
 namespace NExpect.Tests.Collections
 {

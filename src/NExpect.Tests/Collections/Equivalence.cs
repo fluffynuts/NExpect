@@ -3,8 +3,7 @@ using System.Linq;
 using NExpect.Exceptions;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
-using static PeanutButter.RandomGenerators.RandomValueGen;
-using static NExpect.Expectations;
+
 // ReSharper disable InconsistentNaming
 
 namespace NExpect.Tests.Collections

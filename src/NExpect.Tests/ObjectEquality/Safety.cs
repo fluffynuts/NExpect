@@ -1,6 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using static NExpect.Expectations;
+
 // ReSharper disable SuspiciousTypeConversion.Global
 // ReSharper disable ReturnValueOfPureMethodIsNotUsed
 

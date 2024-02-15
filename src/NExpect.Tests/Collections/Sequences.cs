@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq;
 using NUnit.Framework;
-using static PeanutButter.RandomGenerators.RandomValueGen;
-using NExpect;
 using NExpect.Exceptions;
-using NExpect.Implementations;
-using static NExpect.Expectations;
 
 namespace NExpect.Tests.Collections
 {

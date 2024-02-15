@@ -1,12 +1,8 @@
 ﻿using System.Drawing;
-using System.Linq;
 using NExpect.Exceptions;
 using NUnit.Framework;
-using static PeanutButter.RandomGenerators.RandomValueGen;
-using static NExpect.Expectations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
-using PeanutButter.Utils;
 using NExpect.Implementations;
 
 namespace NExpect.Tests.DanglingPrepositions

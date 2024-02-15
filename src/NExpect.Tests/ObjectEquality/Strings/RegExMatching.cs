@@ -1,8 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NExpect.Exceptions;
-using static NExpect.Expectations;
-using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Tests.ObjectEquality.Strings
 {

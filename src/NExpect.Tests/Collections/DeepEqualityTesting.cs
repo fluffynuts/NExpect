@@ -3,8 +3,6 @@ using NUnit.Framework;
 using NExpect.Exceptions;
 using PeanutButter.DuckTyping.Extensions;
 using PeanutButter.Utils;
-using static NExpect.Expectations;
-using static PeanutButter.RandomGenerators.RandomValueGen;
 
 // ReSharper disable MemberHidesStaticFromOuterClass
 // ReSharper disable MemberCanBePrivate.Global

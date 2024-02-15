@@ -4,7 +4,7 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
 using NExpect.Utilities;
-using static PeanutButter.RandomGenerators.RandomValueGen;
+
 // ReSharper disable NotAccessedField.Local
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 

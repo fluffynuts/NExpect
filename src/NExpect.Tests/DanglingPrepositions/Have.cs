@@ -5,7 +5,6 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
-using static NExpect.Expectations;
 
 namespace NExpect.Tests.DanglingPrepositions
 {

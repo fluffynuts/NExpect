@@ -4,8 +4,6 @@ using System.Linq;
 using NExpect.Exceptions;
 using NUnit.Framework;
 using PeanutButter.Utils;
-using static NExpect.Expectations;
-using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Tests.ObjectEquality
 {

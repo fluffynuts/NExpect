@@ -1,4 +1,3 @@
-using NExpect.Implementations;
 using NUnit.Framework;
 
 namespace NExpect.Tests

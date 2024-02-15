@@ -1,12 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using NExpect.Exceptions;
 using NExpect.Implementations;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
 using PeanutButter.Utils;
-using static PeanutButter.RandomGenerators.RandomValueGen;
-using static NExpect.Expectations;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable RedundantAnonymousTypePropertyName

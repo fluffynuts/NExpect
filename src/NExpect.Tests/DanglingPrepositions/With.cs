@@ -3,7 +3,6 @@ using NUnit.Framework;
 using NExpect.Exceptions;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
-using static NExpect.Expectations;
 
 namespace NExpect.Tests.DanglingPrepositions
 {

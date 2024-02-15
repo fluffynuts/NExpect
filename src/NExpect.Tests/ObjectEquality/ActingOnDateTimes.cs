@@ -1,7 +1,6 @@
 using System;
 using NUnit.Framework;
 using NExpect.Exceptions;
-using static NExpect.Expectations;
 
 namespace NExpect.Tests.ObjectEquality
 {

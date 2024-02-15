@@ -1,9 +1,7 @@
 ﻿using System.Collections.Specialized;
 using NUnit.Framework;
-using static PeanutButter.RandomGenerators.RandomValueGen;
 using NExpect.Exceptions;
 using NExpect.Implementations;
-using static NExpect.Expectations;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable ExpressionIsAlwaysNull

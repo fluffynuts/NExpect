@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using NExpect.Exceptions;
-using static NExpect.Expectations;
-using static PeanutButter.RandomGenerators.RandomValueGen;
+
 // ReSharper disable InconsistentNaming
 // ReSharper disable ExpressionIsAlwaysNull
 

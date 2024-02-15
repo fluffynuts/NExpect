@@ -1,6 +1,4 @@
 ﻿using NUnit.Framework;
-using static NExpect.Expectations;
-using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Tests.Collections
 {

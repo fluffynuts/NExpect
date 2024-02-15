@@ -5,8 +5,6 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
 using PeanutButter.Utils;
-using static PeanutButter.RandomGenerators.RandomValueGen;
-using static NExpect.Expectations;
 
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global

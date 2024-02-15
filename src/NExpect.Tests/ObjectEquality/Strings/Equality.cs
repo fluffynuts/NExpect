@@ -2,7 +2,6 @@ using System;
 using NExpect.Exceptions;
 using NUnit.Framework;
 using PeanutButter.RandomGenerators;
-using static NExpect.Expectations;
 
 // ReSharper disable MemberHidesStaticFromOuterClass
 

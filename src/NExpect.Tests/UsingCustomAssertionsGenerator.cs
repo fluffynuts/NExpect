@@ -1,5 +1,4 @@
 ﻿using System;
-using static NExpect.Expectations;
 using NExpect.Exceptions;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;

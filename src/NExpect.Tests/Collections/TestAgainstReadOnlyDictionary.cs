@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using NExpect.Exceptions;
-using static NExpect.Expectations;
 
 namespace NExpect.Tests.Collections;
 

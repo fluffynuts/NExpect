@@ -1,6 +1,5 @@
 using System;
 using NUnit.Framework;
-using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Tests.ObjectEquality.Strings;
 

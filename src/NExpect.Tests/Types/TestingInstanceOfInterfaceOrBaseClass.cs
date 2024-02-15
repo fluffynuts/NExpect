@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using NExpect.Exceptions;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
-using static NExpect.Expectations;
 using PeanutButter.Utils;
-using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Tests.Types
 {

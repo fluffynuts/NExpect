@@ -3,12 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using NExpect.Exceptions;
-using NExpect.Interfaces;
-using NExpect.Tests.Collections;
 using NUnit.Framework;
 using PeanutButter.Utils;
-using static NExpect.Expectations;
-using NExpect;
 
 namespace NExpect.Tests.ObjectEquality
 {

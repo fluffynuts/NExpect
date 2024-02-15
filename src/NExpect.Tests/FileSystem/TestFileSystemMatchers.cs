@@ -2,10 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
-using static PeanutButter.RandomGenerators.RandomValueGen;
 using NExpect.Exceptions;
 using PeanutButter.Utils;
-using static NExpect.Expectations;
 
 namespace NExpect.Tests.FileSystem;
 
