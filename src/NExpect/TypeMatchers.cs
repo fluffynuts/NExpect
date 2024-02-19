@@ -64,40 +64,42 @@ public static class TypeMatchers
         Func<string> customMessageGenerator
     )
     {
-        return have.AddMatcher(actual =>
-        {
-            if (actual is null)
+        return have.AddMatcher(
+            actual =>
             {
-                return new EnforcedMatcherResult(
-                    false,
+                if (actual is null)
+                {
+                    return new EnforcedMatcherResult(
+                        false,
+                        FinalMessageFor(
+                            () => "actual is null",
+                            customMessageGenerator
+                        )
+                    );
+                }
+
+                if (expected is null)
+                {
+                    return new EnforcedMatcherResult(
+                        false,
+                        FinalMessageFor(
+                            () => "expected type is null",
+                            customMessageGenerator
+                        )
+                    );
+                }
+
+                var actualType = actual.GetType();
+                var pass = actualType == expected;
+                return new MatcherResult(
+                    pass,
                     FinalMessageFor(
-                        () => "actual is null",
+                        () => $"Expected {actual} [ {actualType} ] {pass.AsNot()}to have type {expected}",
                         customMessageGenerator
                     )
                 );
             }
-
-            if (expected is null)
-            {
-                return new EnforcedMatcherResult(
-                    false,
-                    FinalMessageFor(
-                        () => "expected type is null",
-                        customMessageGenerator
-                    )
-                );
-            }
-
-            var actualType = actual.GetType();
-            var pass = actualType == expected;
-            return new MatcherResult(
-                pass,
-                FinalMessageFor(
-                    () => $"Expected {actual} [ {actualType} ] {pass.AsNot()}to have type {expected}",
-                    customMessageGenerator
-                )
-            );
-        });
+        );
     }
 
     /// <summary>
@@ -118,7 +120,8 @@ public static class TypeMatchers
     /// <typeparam name="TExpected">Expected Type of the Instance</typeparam>
     public static IMore<TExpected> Of<TExpected>(
         this IInstanceContinuation instance,
-        string customMessage)
+        string customMessage
+    )
     {
         return instance.Of<TExpected>(() => customMessage);
     }
@@ -131,26 +134,29 @@ public static class TypeMatchers
     /// <typeparam name="TExpected">Expected Type of the Instance</typeparam>
     public static IMore<TExpected> Of<TExpected>(
         this IInstanceContinuation instance,
-        Func<string> customMessageGenerator)
+        Func<string> customMessageGenerator
+    )
     {
-        instance.AddMatcher(actual =>
-        {
-            var expected = typeof(TExpected);
-            var passed = expected.IsAssignableFrom(instance.Actual);
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    new[]
-                    {
-                        "Expected",
-                        $"<{actual.FullyQualifiedPrettyName()}>",
-                        $"to {passed.AsNot()}be an instance of",
-                        $"<{expected.FullyQualifiedPrettyName()}>"
-                    },
-                    customMessageGenerator
-                )
-            );
-        });
+        instance.AddMatcher(
+            actual =>
+            {
+                var expected = typeof(TExpected);
+                var passed = expected.IsAssignableFrom(instance.Actual);
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        new[]
+                        {
+                            "Expected",
+                            $"<{actual.FullyQualifiedPrettyName()}>",
+                            $"to {passed.AsNot()}be an instance of",
+                            $"<{expected.FullyQualifiedPrettyName()}>"
+                        },
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
 
         if (instance is InstanceContinuation concrete)
         {
@@ -169,7 +175,8 @@ public static class TypeMatchers
     /// <param name="expected"></param>
     public static IMore<Type> Of(
         this IInstanceContinuation instance,
-        Type expected)
+        Type expected
+    )
     {
         return instance.Of(expected, null as string);
     }
@@ -183,7 +190,8 @@ public static class TypeMatchers
     public static IMore<Type> Of(
         this IInstanceContinuation instance,
         Type expected,
-        string customMessage)
+        string customMessage
+    )
     {
         return instance.Of(expected, () => customMessage);
     }
@@ -197,7 +205,8 @@ public static class TypeMatchers
     public static IMore<Type> Of(
         this IInstanceContinuation instance,
         Type expected,
-        Func<string> customMessageGenerator)
+        Func<string> customMessageGenerator
+    )
     {
         return instance.AddMatcher(
             actual =>
@@ -214,8 +223,10 @@ public static class TypeMatchers
                             $"<{expected.FullyQualifiedPrettyName()}>"
                         },
                         customMessageGenerator
-                    ));
-            });
+                    )
+                );
+            }
+        );
     }
 
     /// <summary>
@@ -495,13 +506,15 @@ public static class TypeMatchers
         return AddImplementsMatcher(
             addTo,
             typeof(TInterface),
-            customMessage);
+            customMessage
+        );
     }
 
     private static IMore<Type> AddImplementsMatcher(
         this ICanAddMatcher<Type> addTo,
         Type shouldImplement,
-        Func<string> customMessage)
+        Func<string> customMessage
+    )
     {
         addTo.AddMatcher(
             actual =>
@@ -517,7 +530,9 @@ public static class TypeMatchers
                                 actual.Stringify(),
                                 "is not an interface."
                             },
-                            customMessage));
+                            customMessage
+                        )
+                    );
                 }
 
                 var passed = interfaces.Contains(shouldImplement);
@@ -534,8 +549,181 @@ public static class TypeMatchers
                         customMessage
                     )
                 );
-            });
+            }
+        );
         return addTo.More();
+    }
+
+    /// <summary>
+    /// Expects that the Actual type implements the interface provided
+    /// as a generic parameter
+    /// </summary>
+    /// <param name="not">Continuation to operate on</param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
+    public static IMore<Type> Inherit(
+        this INotAfterTo<Type> not,
+        Type expected
+    )
+    {
+        return not.Inherit(
+            expected,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Expects that the Actual type implements the interface provided
+    /// as a generic parameter
+    /// </summary>
+    /// <param name="not">Continuation to operate on</param>
+    /// <param name="expected"></param>
+    /// <param name="customMessage">Custom message to add to failure messages</param>
+    /// <returns></returns>
+    public static IMore<Type> Inherit(
+        this INotAfterTo<Type> not,
+        Type expected,
+        string customMessage
+    )
+    {
+        return not.AddInheritsMatcher(
+            expected,
+            () => customMessage
+        );
+    }
+
+
+    /// <summary>
+    /// Expects that the Actual type implements the interface provided
+    /// as a generic parameter
+    /// </summary>
+    /// <param name="not">Continuation to operate on</param>
+    /// <param name="expected"></param>
+    /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+    /// <returns></returns>
+    public static IMore<Type> Inherit(
+        this INotAfterTo<Type> not,
+        Type expected,
+        Func<string> customMessageGenerator
+    )
+    {
+        return not.AddInheritsMatcher(
+            expected,
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Expects that the Actual type implements the interface provided
+    /// as a generic parameter
+    /// </summary>
+    /// <param name="to">Continuation to operate on</param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
+    public static IMore<Type> Inherit(
+        this IToAfterNot<Type> to,
+        Type expected
+    )
+    {
+        return to.Inherit(expected, NULL_STRING);
+    }
+
+    /// <summary>
+    /// Expects that the Actual type implements the interface provided
+    /// as a generic parameter
+    /// </summary>
+    /// <param name="to">Continuation to operate on</param>
+    /// <param name="expected"></param>
+    /// <param name="customMessage">Custom message to add to failure messages</param>
+    /// <returns></returns>
+    public static IMore<Type> Inherit(
+        this IToAfterNot<Type> to,
+        Type expected,
+        string customMessage
+    )
+    {
+        return to.Inherit(
+            expected,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Expects that the Actual type implements the interface provided
+    /// as a generic parameter
+    /// </summary>
+    /// <param name="to">Continuation to operate on</param>
+    /// <param name="expected"></param>
+    /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+    /// <returns></returns>
+    public static IMore<Type> Inherit(
+        this IToAfterNot<Type> to,
+        Type expected,
+        Func<string> customMessageGenerator
+    )
+    {
+        return to.AddInheritsMatcher(
+            expected,
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Expects that the Actual type implements the interface provided
+    /// as a generic parameter
+    /// </summary>
+    /// <param name="to">Continuation to operate on</param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
+    public static IMore<Type> Inherit(
+        this ITo<Type> to,
+        Type expected
+    )
+    {
+        return to.Inherit(
+            expected,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Expects that the Actual type implements the interface provided
+    /// as a generic parameter
+    /// </summary>
+    /// <param name="to">Continuation to operate on</param>
+    /// <param name="expected"></param>
+    /// <param name="customMessage">Custom message to add to failure messages</param>
+    /// <returns></returns>
+    public static IMore<Type> Inherit(
+        this ITo<Type> to,
+        Type expected,
+        string customMessage
+    )
+    {
+        return to.Inherit(
+            expected,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Expects that the Actual type implements the interface provided
+    /// as a generic parameter
+    /// </summary>
+    /// <param name="to">Continuation to operate on</param>
+    /// <param name="expected"></param>
+    /// <param name="customMessageGenerator">Generates a custom message to add to failure messages</param>
+    /// <returns></returns>
+    public static IMore<Type> Inherit(
+        this ITo<Type> to,
+        Type expected,
+        Func<string> customMessageGenerator
+    )
+    {
+        return to.AddInheritsMatcher(
+            expected,
+            customMessageGenerator
+        );
     }
 
     /// <summary>
@@ -565,7 +753,7 @@ public static class TypeMatchers
         string customMessage
     )
     {
-        return not.AddInheritsMatcher<TBase>(() => customMessage);
+        return not.AddInheritsMatcher(typeof(TBase), () => customMessage);
     }
 
 
@@ -582,7 +770,10 @@ public static class TypeMatchers
         Func<string> customMessageGenerator
     )
     {
-        return not.AddInheritsMatcher<TBase>(customMessageGenerator);
+        return not.AddInheritsMatcher(
+            typeof(TBase),
+            customMessageGenerator
+        );
     }
 
     /// <summary>
@@ -612,7 +803,9 @@ public static class TypeMatchers
         string customMessage
     )
     {
-        return to.AddInheritsMatcher<TBase>(() => customMessage);
+        return to.Inherit<TBase>(
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -628,7 +821,10 @@ public static class TypeMatchers
         Func<string> customMessageGenerator
     )
     {
-        return to.AddInheritsMatcher<TBase>(customMessageGenerator);
+        return to.AddInheritsMatcher(
+            typeof(TBase),
+            customMessageGenerator
+        );
     }
 
     /// <summary>
@@ -658,7 +854,7 @@ public static class TypeMatchers
         string customMessage
     )
     {
-        return to.AddInheritsMatcher<TBase>(() => customMessage);
+        return to.Inherit<TBase>(() => customMessage);
     }
 
     /// <summary>
@@ -674,18 +870,22 @@ public static class TypeMatchers
         Func<string> customMessageGenerator
     )
     {
-        return to.AddInheritsMatcher<TBase>(customMessageGenerator);
+        return to.AddInheritsMatcher(
+            typeof(TBase),
+            customMessageGenerator
+        );
     }
 
-    private static IMore<Type> AddInheritsMatcher<TBase>(
+
+    private static IMore<Type> AddInheritsMatcher(
         this ICanAddMatcher<Type> addTo,
+        Type expected,
         Func<string> customMessageGenerator
     )
     {
         addTo.AddMatcher(
             actual =>
             {
-                var expected = typeof(TBase);
                 if (expected.IsInterface())
                 {
                     return new MatcherResult(
@@ -696,7 +896,9 @@ public static class TypeMatchers
                                 actual.Stringify(),
                                 "is not a class."
                             },
-                            customMessageGenerator));
+                            customMessageGenerator
+                        )
+                    );
                 }
 
                 var passed = expected.IsAssignableFrom(actual);
@@ -713,7 +915,8 @@ public static class TypeMatchers
                         customMessageGenerator
                     )
                 );
-            });
+            }
+        );
         return addTo.More();
     }
 
@@ -761,19 +964,21 @@ public static class TypeMatchers
         Func<string> customMessageGenerator
     )
     {
-        return def.AddMatcher(actual =>
-        {
-            var props = actual?.GetType().GetProperties() ?? new PropertyInfo[0];
-            var passed = props.IsEmpty() ||
-                props.Select(
-                    pi => AreEqual(pi.GetValue(actual), pi.PropertyType.DefaultValue())
-                ).All(o => o);
-            return new MatcherResult(
-                passed,
-                () => $"Expected object {passed.AsNot()}to have default values for all properties",
-                customMessageGenerator
-            );
-        });
+        return def.AddMatcher(
+            actual =>
+            {
+                var props = actual?.GetType().GetProperties() ?? new PropertyInfo[0];
+                var passed = props.IsEmpty() ||
+                    props.Select(
+                        pi => AreEqual(pi.GetValue(actual), pi.PropertyType.DefaultValue())
+                    ).All(o => o);
+                return new MatcherResult(
+                    passed,
+                    () => $"Expected object {passed.AsNot()}to have default values for all properties",
+                    customMessageGenerator
+                );
+            }
+        );
     }
 
     /// <summary>
@@ -819,19 +1024,21 @@ public static class TypeMatchers
         Func<string> customMessageGenerator
     )
     {
-        return def.AddMatcher(actual =>
-        {
-            var props = actual?.GetType().GetFields() ?? new FieldInfo[0];
-            var passed = props.IsEmpty() ||
-                props.Select(
-                    fi => AreEqual(fi.GetValue(actual), fi.FieldType.DefaultValue())
-                ).All(o => o);
-            return new MatcherResult(
-                passed,
-                () => $"Expected object {passed.AsNot()}to have default values for all fields",
-                customMessageGenerator
-            );
-        });
+        return def.AddMatcher(
+            actual =>
+            {
+                var props = actual?.GetType().GetFields() ?? new FieldInfo[0];
+                var passed = props.IsEmpty() ||
+                    props.Select(
+                        fi => AreEqual(fi.GetValue(actual), fi.FieldType.DefaultValue())
+                    ).All(o => o);
+                return new MatcherResult(
+                    passed,
+                    () => $"Expected object {passed.AsNot()}to have default values for all fields",
+                    customMessageGenerator
+                );
+            }
+        );
     }
 
     private static bool AreEqual(object left, object right)
@@ -850,7 +1057,7 @@ public static class TypeMatchers
     }
 
     // TODO: figure out a single source of truth: this produces
-    // slightly different results from PB's PrettyName, sprecifically,
+    // slightly different results from PB's PrettyName, specifically,
     // it includes namespacing
     private static string FullyQualifiedPrettyName(this Type type)
     {
@@ -867,8 +1074,8 @@ public static class TypeMatchers
                 return $"{FullyQualifiedPrettyName(underlyingType)}?";
             }
 
-            var typeFyllName = type.FullName ?? string.Empty;
-            var baseName = typeFyllName.Substring(0, typeFyllName.IndexOf("`", StringComparison.Ordinal));
+            var typeFullName = type.FullName ?? string.Empty;
+            var baseName = typeFullName.Substring(0, typeFullName.IndexOf("`", StringComparison.Ordinal));
             var parts = baseName.Split('.');
             return parts.Last() + "<" +
                 string.Join(", ", type.GetGenericArguments().Select(FullyQualifiedPrettyName)) + ">";

@@ -4,15 +4,18 @@ using NExpect.Exceptions;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
 using PeanutButter.Utils;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedTypeParameter
+// ReSharper disable UnusedAutoPropertyAccessor.Local
 
 namespace NExpect.Tests.Types
 {
     [TestFixture]
     public class TestingInstanceOfInterfaceOrBaseClass
     {
-        private interface ITestInterface
-        {
-        }
+        private interface ITestInterface;
 
         public class TestClass : ITestInterface
         {
@@ -20,19 +23,13 @@ namespace NExpect.Tests.Types
             public string Name { get; set; }
         }
 
-        private class DerivedClass : TestClass
-        {
-        }
+        private class DerivedClass : TestClass;
 
         // ReSharper disable once ClassNeverInstantiated.Local
-        private class AnotherTestClass : ITestInterface
-        {
-        }
+        private class AnotherTestClass : ITestInterface;
 
         // ReSharper disable once UnusedTypeParameter
-        private class GenericTestClass<T>
-        {
-        }
+        private class GenericTestClass<T>;
 
         [TestFixture]
         public class To
@@ -40,13 +37,9 @@ namespace NExpect.Tests.Types
             [TestFixture]
             public class Implement
             {
-                public interface IService
-                {
-                }
+                public interface IService;
 
-                public class Implementation : IService
-                {
-                }
+                public class Implementation : IService;
 
                 [TestFixture]
                 public class Errors
@@ -58,11 +51,14 @@ namespace NExpect.Tests.Types
                         var sut = typeof(Implementation);
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Implement<Implementation>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains("is not an interface"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Implement<Implementation>();
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("is not an interface")
+                        );
                         // Assert
                     }
                 }
@@ -77,10 +73,13 @@ namespace NExpect.Tests.Types
                         var sut = typeof(Implementation);
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Implement<IService>();
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Implement<IService>();
+                            },
+                            Throws.Nothing
+                        );
                         // Assert
                     }
 
@@ -92,49 +91,70 @@ namespace NExpect.Tests.Types
                         var customMessage = GetRandomString();
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Implement<IService>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain("not to implement"));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Implement<IService>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(Implementation).PrettyName()));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Implement<IService>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(IService).PrettyName()));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Implement<IService>();
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to implement")
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Implement<IService>();
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Implementation).PrettyName())
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Implement<IService>();
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(IService).PrettyName())
+                        );
 
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Implement<IService>(customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(customMessage));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Implement<IService>(customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain("not to implement"));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Implement<IService>(customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(Implementation).PrettyName()));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Implement<IService>(customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(IService).PrettyName()));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Implement<IService>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(customMessage)
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Implement<IService>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to implement")
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Implement<IService>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Implementation).PrettyName())
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Implement<IService>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(IService).PrettyName())
+                        );
                         // Assert
                     }
 
@@ -146,50 +166,71 @@ namespace NExpect.Tests.Types
                         var customMessage = GetRandomString();
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Implement<IService>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain("not to implement"));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Implement<IService>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(Implementation).PrettyName()));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Implement<IService>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(IService).PrettyName()));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Implement<IService>();
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to implement")
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Implement<IService>();
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Implementation).PrettyName())
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Implement<IService>();
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(IService).PrettyName())
+                        );
 
 
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Implement<IService>(customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(customMessage));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Implement<IService>(customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain("not to implement"));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Implement<IService>(customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(Implementation).PrettyName()));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Implement<IService>(customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(IService).PrettyName()));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Implement<IService>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(customMessage)
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Implement<IService>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to implement")
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Implement<IService>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Implementation).PrettyName())
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Implement<IService>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(IService).PrettyName())
+                        );
                         // Assert
                     }
                 }
@@ -204,10 +245,13 @@ namespace NExpect.Tests.Types
                         var sut = typeof(Implementation);
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Implement(typeof(IService));
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Implement(typeof(IService));
+                            },
+                            Throws.Nothing
+                        );
                         // Assert
                     }
 
@@ -219,49 +263,70 @@ namespace NExpect.Tests.Types
                         var customMessage = GetRandomString();
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Implement(typeof(IService));
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain("not to implement"));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Implement(typeof(IService));
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(Implementation).PrettyName()));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Implement(typeof(IService));
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(IService).PrettyName()));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Implement(typeof(IService));
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to implement")
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Implement(typeof(IService));
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Implementation).PrettyName())
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Implement(typeof(IService));
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(IService).PrettyName())
+                        );
 
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Implement(typeof(IService), customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(customMessage));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Implement(typeof(IService), customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain("not to implement"));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Implement(typeof(IService), customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(Implementation).PrettyName()));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Implement(typeof(IService), customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(IService).PrettyName()));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Implement(typeof(IService), customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(customMessage)
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Implement(typeof(IService), customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to implement")
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Implement(typeof(IService), customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Implementation).PrettyName())
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Implement(typeof(IService), customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(IService).PrettyName())
+                        );
                         // Assert
                     }
 
@@ -273,50 +338,71 @@ namespace NExpect.Tests.Types
                         var customMessage = GetRandomString();
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Implement(typeof(IService));
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain("not to implement"));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Implement(typeof(IService));
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(Implementation).PrettyName()));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Implement(typeof(IService));
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(IService).PrettyName()));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Implement(typeof(IService));
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to implement")
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Implement(typeof(IService));
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Implementation).PrettyName())
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Implement(typeof(IService));
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(IService).PrettyName())
+                        );
 
 
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Implement(typeof(IService), customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(customMessage));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Implement(typeof(IService), customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain("not to implement"));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Implement(typeof(IService), customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(Implementation).PrettyName()));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Implement(typeof(IService), customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(IService).PrettyName()));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Implement(typeof(IService), customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(customMessage)
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Implement(typeof(IService), customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to implement")
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Implement(typeof(IService), customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Implementation).PrettyName())
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Implement(typeof(IService), customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(IService).PrettyName())
+                        );
                         // Assert
                     }
                 }
@@ -325,17 +411,11 @@ namespace NExpect.Tests.Types
             [TestFixture]
             public class Inherit
             {
-                public class Base
-                {
-                }
+                public class Base;
 
-                public class Derived : Base
-                {
-                }
+                public class Derived : Base;
 
-                public interface IService
-                {
-                }
+                public interface IService;
 
                 [TestFixture]
                 public class Errors
@@ -347,11 +427,14 @@ namespace NExpect.Tests.Types
                         var sut = typeof(Derived);
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Inherit<IService>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message.Contains("is not a class"));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Inherit<IService>();
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message.Contains("is not a class")
+                        );
                         // Assert
                     }
                 }
@@ -366,10 +449,22 @@ namespace NExpect.Tests.Types
                         var sut = typeof(Derived);
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Inherit<Base>();
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Inherit<Base>();
+                            },
+                            Throws.Nothing
+                        );
+
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut)
+                                    .To.Inherit(typeof(Base));
+                            },
+                            Throws.Nothing
+                        );
                         // Assert
                     }
 
@@ -381,49 +476,176 @@ namespace NExpect.Tests.Types
                         var customMessage = GetRandomString();
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Inherit<Base>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain("not to inherit"));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Inherit<Base>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(Derived).PrettyName()));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Inherit<Base>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(Base).PrettyName()));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Inherit<Base>();
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to inherit")
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Inherit(typeof(Base));
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to inherit")
+                        );
+                        
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Inherit<Base>();
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Derived).PrettyName())
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Inherit(typeof(Base));
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Derived).PrettyName())
+                        );
+                        
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Inherit<Base>();
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Base).PrettyName())
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Inherit(typeof(Base));
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Base).PrettyName())
+                        );
 
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Inherit<Base>(customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(customMessage));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Inherit<Base>(customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain("not to inherit"));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Inherit<Base>(customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(Derived).PrettyName()));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).Not.To.Inherit<Base>(customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(Base).PrettyName()));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Inherit<Base>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(customMessage)
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Inherit(typeof(Base), customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(customMessage)
+                        );
+                        
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Inherit<Base>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to inherit")
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Inherit(typeof(Base), customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to inherit")
+                        );
+                        
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Inherit<Base>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to inherit")
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Inherit(typeof(Base), customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to inherit")
+                        );
+                        
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Inherit<Base>(() => customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to inherit")
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Inherit(typeof(Base), () => customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to inherit")
+                        );
+                        
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Inherit<Base>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Derived).PrettyName())
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Inherit(typeof(Base), customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Derived).PrettyName())
+                        );
+                        
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Inherit<Base>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Base).PrettyName())
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).Not.To.Inherit(typeof(Base));
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Base).PrettyName())
+                        );
                         // Assert
                     }
 
@@ -435,50 +657,71 @@ namespace NExpect.Tests.Types
                         var customMessage = GetRandomString();
                         // Pre-Assert
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Inherit<Base>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain("not to inherit"));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Inherit<Base>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(Derived).PrettyName()));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Inherit<Base>();
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(Base).PrettyName()));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Inherit<Base>();
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to inherit")
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Inherit<Base>();
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Derived).PrettyName())
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Inherit<Base>();
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Base).PrettyName())
+                        );
 
 
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Inherit<Base>(customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(customMessage));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Inherit<Base>(customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain("not to inherit"));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Inherit<Base>(customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(Derived).PrettyName()));
-                        Assert.That(() =>
-                        {
-                            Expect(sut).To.Not.Inherit<Base>(customMessage);
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                            .With.Message
-                            .Contain(typeof(Base).PrettyName()));
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Inherit<Base>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(customMessage)
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Inherit<Base>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain("not to inherit")
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Inherit<Base>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Derived).PrettyName())
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut).To.Not.Inherit<Base>(customMessage);
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                .With.Message
+                                .Contain(typeof(Base).PrettyName())
+                        );
                         // Assert
                     }
                 }
@@ -487,13 +730,9 @@ namespace NExpect.Tests.Types
             [TestFixture]
             public class InheritGeneric
             {
-                public class MyList<T> : List<T>
-                {
-                }
+                public class MyList<T> : List<T>;
 
-                public class MyIntList : MyList<int>
-                {
-                }
+                public class MyIntList : MyList<int>;
 
                 [Test]
                 public void ShouldPassWithSystemGeneric()
@@ -501,33 +740,26 @@ namespace NExpect.Tests.Types
                     // Arrange
                     var sut = typeof(MyIntList);
                     // Act
-                    Assert.That(() =>
-                    {
-                        Expect(sut).To.Inherit<MyList<int>>();
-                        Expect(sut).To.Inherit<List<int>>();
-                    }, Throws.Nothing);
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(sut).To.Inherit<MyList<int>>();
+                            Expect(sut).To.Inherit<List<int>>();
+                        },
+                        Throws.Nothing
+                    );
                     // Assert
                 }
 
-                public abstract class SomeAbstractParent<T1, T2, T3>
-                {
-                }
+                public abstract class SomeAbstractParent<T1, T2, T3>;
 
-                public class SomeT1
-                {
-                }
+                public class SomeT1;
 
-                public class SomeT2
-                {
-                }
+                public class SomeT2;
 
-                public class SomeT3
-                {
-                }
+                public class SomeT3;
 
-                public class SomeDerivedClass : SomeAbstractParent<SomeT1, SomeT2, SomeT3>
-                {
-                }
+                public class SomeDerivedClass : SomeAbstractParent<SomeT1, SomeT2, SomeT3>;
 
                 [Test]
                 public void ShouldPassWithConvolutedLocalGeneric()
@@ -535,10 +767,13 @@ namespace NExpect.Tests.Types
                     // Arrange
                     var sut = typeof(SomeDerivedClass);
                     // Act
-                    Assert.That(() =>
-                    {
-                        Expect(sut).To.Inherit<SomeAbstractParent<SomeT1, SomeT2, SomeT3>>();
-                    }, Throws.Nothing);
+                    Assert.That(
+                        () =>
+                        {
+                            Expect(sut).To.Inherit<SomeAbstractParent<SomeT1, SomeT2, SomeT3>>();
+                        },
+                        Throws.Nothing
+                    );
                     // Assert
                 }
             }
@@ -563,41 +798,59 @@ namespace NExpect.Tests.Types
                                 var sut = new TestClass();
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
-                                {
-                                    Expect(sut).Not.To.Be.An.Instance.Of<TestClass>();
-                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("to not be an instance of"));
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(sut).Not.To.Be.An.Instance.Of<TestClass>();
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains("to not be an instance of")
+                                );
 
-                                Assert.That(() =>
-                                {
-                                    Expect(sut).Not.To.Be.An.Instance.Of<TestClass>(customMessage);
-                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains(customMessage));
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(sut).Not.To.Be.An.Instance.Of<TestClass>(customMessage);
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains(customMessage)
+                                );
 
-                                Assert.That(() =>
-                                {
-                                    Expect(sut).Not.To.Be.An.Instance.Of<TestClass>(() => customMessage);
-                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("to not be an instance of"));
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(sut).Not.To.Be.An.Instance.Of<TestClass>(() => customMessage);
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains("to not be an instance of")
+                                );
 
-                                Assert.That(() =>
-                                {
-                                    Expect(sut).Not.To.Be.An.Instance.Of(typeof(TestClass));
-                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("to not be an instance of"));
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(sut).Not.To.Be.An.Instance.Of(typeof(TestClass));
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains("to not be an instance of")
+                                );
 
-                                Assert.That(() =>
-                                {
-                                    Expect(sut).Not.To.Be.An.Instance.Of(typeof(TestClass), customMessage);
-                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains(customMessage));
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(sut).Not.To.Be.An.Instance.Of(typeof(TestClass), customMessage);
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains(customMessage)
+                                );
 
-                                Assert.That(() =>
-                                {
-                                    Expect(sut).Not.To.Be.An.Instance.Of(typeof(TestClass), () => customMessage);
-                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains(customMessage));
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(sut).Not.To.Be.An.Instance.Of(typeof(TestClass), () => customMessage);
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains(customMessage)
+                                );
 
 
                                 // Assert
@@ -652,20 +905,26 @@ namespace NExpect.Tests.Types
                                 var sut = new TestClass();
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
-                                {
-                                    Expect(sut).To.Be.An.Instance.Of<TestClass>();
-                                }, Throws.Nothing);
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(sut).To.Be.An.Instance.Of<TestClass>();
+                                    },
+                                    Throws.Nothing
+                                );
 
-                                Assert.That(() =>
-                                {
-                                    Expect(sut).To.Be.An.Instance.Of(typeof(TestClass));
-                                }, Throws.Nothing);
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(sut).To.Be.An.Instance.Of(typeof(TestClass));
+                                    },
+                                    Throws.Nothing
+                                );
                                 // AsserEt
                             }
 
                             [TestFixture]
-                            public class FluentlyTestingOnResolvedInstaceType
+                            public class FluentlyTestingOnResolvedInstanceType
                             {
                                 [Test]
                                 public void ShouldFacilitateFurtherTestingWithBooleanMatcher()
@@ -673,42 +932,56 @@ namespace NExpect.Tests.Types
                                     // Arrange
                                     var sut = GetRandom<TestClass>();
                                     // Act
-                                    Assert.That(() =>
-                                    {
-                                        Expect(sut)
-                                            .To.Be.An.Instance.Of<TestClass>()
-                                            .With(o => o.Id == sut.Id);
-                                    }, Throws.Nothing);
+                                    Assert.That(
+                                        () =>
+                                        {
+                                            Expect(sut)
+                                                .To.Be.An.Instance.Of<TestClass>()
+                                                .With(o => o.Id == sut.Id);
+                                        },
+                                        Throws.Nothing
+                                    );
 
-                                    Assert.That(() =>
-                                    {
-                                        Expect(sut)
-                                            .To.Be.An.Instance.Of<TestClass>()
-                                            .With(o =>
-                                            {
-                                                throw new Exception("oopsie");
+                                    Assert.That(
+                                        () =>
+                                        {
+                                            Expect(sut)
+                                                .To.Be.An.Instance.Of<TestClass>()
+                                                .With(
+                                                    _ =>
+                                                    {
+                                                        throw new Exception("oopsie");
 #pragma warning disable CS0162
-                                                return false;
+                                                        return false;
 #pragma warning restore CS0162
-                                            });
-                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                        .With.Message.Contains("oopsie"));
+                                                    }
+                                                );
+                                        },
+                                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                            .With.Message.Contains("oopsie")
+                                    );
 
-                                    Assert.That(() =>
-                                    {
-                                        Expect(sut)
-                                            .To.Be.An.Instance.Of<TestClass>()
-                                            .With(o => o.Id == sut.Id)
-                                            .And
-                                            .With(o => o.Name == sut.Name);
-                                    }, Throws.Nothing);
+                                    Assert.That(
+                                        () =>
+                                        {
+                                            Expect(sut)
+                                                .To.Be.An.Instance.Of<TestClass>()
+                                                .With(o => o.Id == sut.Id)
+                                                .And
+                                                .With(o => o.Name == sut.Name);
+                                        },
+                                        Throws.Nothing
+                                    );
 
-                                    Assert.That(() =>
-                                    {
-                                        Expect(sut)
-                                            .To.Be.An.Instance.Of<TestClass>()
-                                            .With(o => o.Id == sut.Id + 1);
-                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                    Assert.That(
+                                        () =>
+                                        {
+                                            Expect(sut)
+                                                .To.Be.An.Instance.Of<TestClass>()
+                                                .With(o => o.Id == sut.Id + 1);
+                                        },
+                                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    );
                                     // Assert
                                 }
 
@@ -718,28 +991,37 @@ namespace NExpect.Tests.Types
                                     // Arrange
                                     var sut = GetRandom<TestClass>();
                                     // Act
-                                    Assert.That(() =>
-                                    {
-                                        Expect(sut)
-                                            .To.Be.An.Instance.Of<TestClass>()
-                                            .With(o => Check(o.Id == sut.Id));
-                                    }, Throws.Nothing);
+                                    Assert.That(
+                                        () =>
+                                        {
+                                            Expect(sut)
+                                                .To.Be.An.Instance.Of<TestClass>()
+                                                .With(o => Check(o.Id == sut.Id));
+                                        },
+                                        Throws.Nothing
+                                    );
 
-                                    Assert.That(() =>
-                                    {
-                                        Expect(sut)
-                                            .To.Be.An.Instance.Of<TestClass>()
-                                            .With(o => o.Id == sut.Id)
-                                            .And
-                                            .With(o => o.Name == sut.Name);
-                                    }, Throws.Nothing);
+                                    Assert.That(
+                                        () =>
+                                        {
+                                            Expect(sut)
+                                                .To.Be.An.Instance.Of<TestClass>()
+                                                .With(o => o.Id == sut.Id)
+                                                .And
+                                                .With(o => o.Name == sut.Name);
+                                        },
+                                        Throws.Nothing
+                                    );
 
-                                    Assert.That(() =>
-                                    {
-                                        Expect(sut)
-                                            .To.Be.An.Instance.Of<TestClass>()
-                                            .With(o => o.Id == sut.Id + 1);
-                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                    Assert.That(
+                                        () =>
+                                        {
+                                            Expect(sut)
+                                                .To.Be.An.Instance.Of<TestClass>()
+                                                .With(o => o.Id == sut.Id + 1);
+                                        },
+                                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    );
                                     // Assert
 
                                     IMatcherResult Check(bool result)
@@ -775,11 +1057,14 @@ namespace NExpect.Tests.Types
                                 var sut = new TestClass();
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
-                                {
-                                    Expect(sut)
-                                        .Not.To.Be.An.Instance.Of<AnotherTestClass>();
-                                }, Throws.Nothing);
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(sut)
+                                            .Not.To.Be.An.Instance.Of<AnotherTestClass>();
+                                    },
+                                    Throws.Nothing
+                                );
                                 // Assert
                             }
 
@@ -790,11 +1075,14 @@ namespace NExpect.Tests.Types
                                 var sut = new TestClass();
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
-                                {
-                                    Expect(sut).To.Be.An.Instance.Of<AnotherTestClass>();
-                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message.Contains("to be an instance of"));
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(sut).To.Be.An.Instance.Of<AnotherTestClass>();
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message.Contains("to be an instance of")
+                                );
                                 // Assert
                             }
 
@@ -805,14 +1093,17 @@ namespace NExpect.Tests.Types
                                 var sut = new GenericTestClass<TestClass>();
                                 // Pre-Assert
                                 // Act
-                                Assert.That(() =>
-                                {
-                                    Expect(sut).To.Be.An.Instance.Of<AnotherTestClass>();
-                                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                    .With.Message
-                                    .EqualTo(
-                                        "Expected\n<TestingInstanceOfInterfaceOrBaseClass+GenericTestClass<NExpect.Tests.Types.TestingInstanceOfInterfaceOrBaseClass+TestClass>>\nto be an instance of\n<NExpect.Tests.Types.TestingInstanceOfInterfaceOrBaseClass+AnotherTestClass>"
-                                    ));
+                                Assert.That(
+                                    () =>
+                                    {
+                                        Expect(sut).To.Be.An.Instance.Of<AnotherTestClass>();
+                                    },
+                                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                        .With.Message
+                                        .EqualTo(
+                                            "Expected\n<TestingInstanceOfInterfaceOrBaseClass+GenericTestClass<NExpect.Tests.Types.TestingInstanceOfInterfaceOrBaseClass+TestClass>>\nto be an instance of\n<NExpect.Tests.Types.TestingInstanceOfInterfaceOrBaseClass+AnotherTestClass>"
+                                        )
+                                );
                                 // Assert
                             }
 
@@ -826,10 +1117,13 @@ namespace NExpect.Tests.Types
                                     var obj = new DerivedClass();
                                     // Pre-Assert
                                     // Act
-                                    Assert.That(() =>
-                                    {
-                                        Expect(obj).To.Be.An.Instance.Of<TestClass>();
-                                    }, Throws.Nothing);
+                                    Assert.That(
+                                        () =>
+                                        {
+                                            Expect(obj).To.Be.An.Instance.Of<TestClass>();
+                                        },
+                                        Throws.Nothing
+                                    );
                                     // Assert
                                 }
 
@@ -840,10 +1134,13 @@ namespace NExpect.Tests.Types
                                     var obj = new DerivedClass();
                                     // Pre-Assert
                                     // Act
-                                    Assert.That(() =>
-                                    {
-                                        Expect(obj).Not.To.Be.An.Instance.Of<TestClass>();
-                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                    Assert.That(
+                                        () =>
+                                        {
+                                            Expect(obj).Not.To.Be.An.Instance.Of<TestClass>();
+                                        },
+                                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    );
                                     // Assert
                                 }
                             }
@@ -858,10 +1155,13 @@ namespace NExpect.Tests.Types
                                     var obj = new TestClass();
                                     // Pre-Assert
                                     // Act
-                                    Assert.That(() =>
-                                    {
-                                        Expect(obj).To.Be.An.Instance.Of<ITestInterface>();
-                                    }, Throws.Nothing);
+                                    Assert.That(
+                                        () =>
+                                        {
+                                            Expect(obj).To.Be.An.Instance.Of<ITestInterface>();
+                                        },
+                                        Throws.Nothing
+                                    );
                                     // Assert
                                 }
 
@@ -872,10 +1172,13 @@ namespace NExpect.Tests.Types
                                     var obj = new TestClass();
                                     // Pre-Assert
                                     // Act
-                                    Assert.That(() =>
-                                    {
-                                        Expect(obj).Not.To.Be.An.Instance.Of<ITestInterface>();
-                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                                    Assert.That(
+                                        () =>
+                                        {
+                                            Expect(obj).Not.To.Be.An.Instance.Of<ITestInterface>();
+                                        },
+                                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                    );
                                     // Assert
                                 }
                             }
@@ -890,11 +1193,14 @@ namespace NExpect.Tests.Types
                                     var sut = new TestClass();
                                     // Pre-Assert
                                     // Act
-                                    Assert.That(() =>
-                                    {
-                                        Expect(sut).Not.To.Be.An.Instance.Of<TestClass>("Custom Message");
-                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                        .With.Message.Contains("Custom Message"));
+                                    Assert.That(
+                                        () =>
+                                        {
+                                            Expect(sut).Not.To.Be.An.Instance.Of<TestClass>("Custom Message");
+                                        },
+                                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                            .With.Message.Contains("Custom Message")
+                                    );
                                     // Assert
                                 }
                             }
@@ -909,11 +1215,14 @@ namespace NExpect.Tests.Types
                                     var sut = new List<TestClass>();
                                     // Pre-Assert
                                     // Act
-                                    Assert.That(() =>
-                                    {
-                                        Expect(sut).Not.To.Be.An.Instance.Of<List<TestClass>>();
-                                    }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                                        .With.Message.Contains("to not be an instance of"));
+                                    Assert.That(
+                                        () =>
+                                        {
+                                            Expect(sut).Not.To.Be.An.Instance.Of<List<TestClass>>();
+                                        },
+                                        Throws.Exception.InstanceOf<UnmetExpectationException>()
+                                            .With.Message.Contains("to not be an instance of")
+                                    );
                                     // Assert
                                 }
                             }
