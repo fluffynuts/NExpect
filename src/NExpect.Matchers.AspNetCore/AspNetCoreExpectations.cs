@@ -187,4 +187,17 @@ public static class AspNetCoreExpectations
     {
         return Expect(serviceCollection as IServiceCollection);
     }
+
+    /// <summary>
+    /// Starts a collection matching assertion on a StringValues
+    /// value
+    /// </summary>
+    /// <param name="sv"></param>
+    /// <returns></returns>
+    public static ICollectionExpectation<string> Expect(
+        StringValues sv
+    )
+    {
+        return Expectations.Expect(sv.ToArray());
+    }
 }
