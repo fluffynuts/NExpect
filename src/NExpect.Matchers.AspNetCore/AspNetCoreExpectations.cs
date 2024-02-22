@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using NExpect.Interfaces;
 
@@ -158,5 +159,32 @@ public static class AspNetCoreExpectations
     )
     {
         return Expectations.Expect($"{pathString}");
+    }
+
+    /// <summary>
+    /// Converts IServiceCollection expectations into simple
+    /// collection expectations
+    /// </summary>
+    /// <param name="serviceCollection"></param>
+    /// <returns></returns>
+    public static ICollectionExpectation<ServiceDescriptor> Expect(
+        IServiceCollection serviceCollection
+    )
+    {
+        return Expectations.Expect(
+            serviceCollection.AsEnumerable()
+        );
+    }
+    /// <summary>
+    /// Converts IServiceCollection expectations into simple
+    /// collection expectations
+    /// </summary>
+    /// <param name="serviceCollection"></param>
+    /// <returns></returns>
+    public static ICollectionExpectation<ServiceDescriptor> Expect(
+        ServiceCollection serviceCollection
+    )
+    {
+        return Expect(serviceCollection as IServiceCollection);
     }
 }

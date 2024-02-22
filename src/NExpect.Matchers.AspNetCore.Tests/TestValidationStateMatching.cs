@@ -1,40 +1,48 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using NExpect.Exceptions;
 
-namespace NExpect.Matchers.AspNet.Tests
+namespace NExpect.Matchers.AspNet.Tests;
+
+[TestFixture]
+public class TestValidationStateMatching
 {
-    [TestFixture]
-    public class TestValidationStateMatching
+    [Test]
+    public void ShouldBeAbleToAssertEmpty()
     {
-        [Test]
-        public void ShouldBeAbleToAssertEmpty()
-        {
-            // Arrange
-            var empty = new ValidationStateDictionary();
-            var notEmpty = new ValidationStateDictionary();
-            notEmpty.Add("foo", new ValidationStateEntry());
-            notEmpty["foo"].SuppressValidation = true;
-            // Act
-            Assert.That(() =>
+        // Arrange
+        var empty = new ValidationStateDictionary();
+        var notEmpty = new ValidationStateDictionary();
+        notEmpty.Add("foo", new ValidationStateEntry());
+        notEmpty["foo"].SuppressValidation = true;
+        // Act
+        Assert.That(
+            () =>
             {
-                AspNetCoreExpectations.Expect(empty)
+                Expect(empty)
                     .To.Be.Empty();
-                AspNetCoreExpectations.Expect(notEmpty)
+                Expect(notEmpty)
                     .Not.To.Be.Empty();
-            }, Throws.Nothing);
-        
-            Assert.That(() =>
+            },
+            Throws.Nothing
+        );
+
+        Assert.That(
+            () =>
             {
-                AspNetCoreExpectations.Expect(notEmpty)
+                Expect(notEmpty)
                     .To.Be.Empty();
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
-        
-            Assert.That(() =>
+            },
+            Throws.Exception.InstanceOf<UnmetExpectationException>()
+        );
+
+        Assert.That(
+            () =>
             {
-                AspNetCoreExpectations.Expect(empty)
+                Expect(empty)
                     .Not.To.Be.Empty();
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
-            // Assert
-        }
+            },
+            Throws.Exception.InstanceOf<UnmetExpectationException>()
+        );
+        // Assert
     }
 }
