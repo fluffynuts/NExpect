@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -68,7 +69,13 @@ public static class AspNetCoreExpectations
         IHeaderDictionary headers
     )
     {
-        return Expectations.Expect(headers as IDictionary<string, StringValues>);
+        return Expectations.Expect(
+            headers.ToDictionary(
+                kvp => kvp.Key,
+                kvp => kvp.Value,
+                StringComparer.OrdinalIgnoreCase
+            )
+        );
     }
 
     /// <summary>
@@ -175,6 +182,7 @@ public static class AspNetCoreExpectations
             serviceCollection.AsEnumerable()
         );
     }
+
     /// <summary>
     /// Converts IServiceCollection expectations into simple
     /// collection expectations
