@@ -173,14 +173,42 @@ public class TestHttpResponseMatchers
         public class Issues
         {
             [Test]
-            [Explicit("WIP")]
             public void ShouldHandleCookieNameWithSpace()
             {
                 // Arrange
                 var cookieName = "the cookie";
-                // var res = HttpResponseBuilder.Create()
-                //     .WithCookie
+                var expected = GetRandomWords();
+                var res = HttpResponseBuilder.Create()
+                    .WithCookie(cookieName, expected)
+                    .Build();
                 // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(res)
+                            .To.Have.Cookie(cookieName)
+                            .With.Value(expected);
+                    },
+                    Throws.Nothing
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(res)
+                            .Not.To.Have.Cookie(cookieName)
+                            .With.Value(expected);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(res)
+                            .To.Not.Have.Cookie(cookieName)
+                            .With.Value(expected);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
                 // Assert
             }
 

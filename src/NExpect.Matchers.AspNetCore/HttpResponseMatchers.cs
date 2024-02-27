@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Web;
 using Imported.PeanutButter.Utils;
 using Microsoft.AspNetCore.Http;
 using NExpect.Implementations;
@@ -77,7 +78,7 @@ namespace NExpect
                 return new MatcherResult(
                     passed,
                     MessageHelpers.FinalMessageFor(
-                        () => $"Expected {passed.AsNot()}to find set-cookie for '{name}'",
+                        () => $"Expected {passed.AsNot()}to find set-cookie header for '{name}'",
                         customMessageGenerator
                     )
                 );
@@ -104,8 +105,8 @@ namespace NExpect
                         var value = string.Join("=", subs.Skip(1));
                         if (string.IsNullOrWhiteSpace(acc.Name))
                         {
-                            acc.Name = key;
-                            acc.Value = value;
+                            acc.Name = HttpUtility.UrlDecode(key);
+                            acc.Value = HttpUtility.UrlDecode(value);
                         }
                         else
                         {
