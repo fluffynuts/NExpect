@@ -76,7 +76,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0"/>
-    <PackageReference Include="PeanutButter.TestUtils.AspNetCore" Version="3.0.265"/>
+    <PackageReference Include="PeanutButter.TestUtils.AspNetCore" Version="3.0.272"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NExpect\NExpect.csproj"/>
