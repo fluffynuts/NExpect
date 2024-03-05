@@ -5,7 +5,6 @@ const
     packageDir = require("./config").packageDir,
     path = require("path"),
     fs = require("fs"),
-    runSequence = requireModule<RunSequence>("run-sequence"),
     nugetPush = requireModule<NugetPush>("nuget-push"),
     env = requireModule<Env>("env"),
     spawn = requireModule<Spawn>("spawn");
@@ -13,14 +12,6 @@ const
 env.associate([ "DRY_RUN" ], [ "push" ]);
 
 gulp.task("release", done => {
-    const { runTask } = requireModule<RunTask>("run-task");
-    // await runTask("verify-up-to-date");
-    // await runTask("test");
-    // await runTask("clear-old-packages");
-    // await runTask("pack")
-    // await runTask("push");
-    // await runTask("commit-release");
-    // await runTask("tag-and-push");
     const runSequence = requireModule<RunSequence>("run-sequence");
     runSequence(
         "verify-up-to-date", "test", "clear-old-packages",

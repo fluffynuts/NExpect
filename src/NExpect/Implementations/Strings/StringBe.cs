@@ -11,6 +11,8 @@ internal class StringBe :
     IStringBe
 {
     IStringMatched IStringBe.Matched => Next<StringMatched>();
+    public IStringShorter Shorter => Next<StringShorter>();
+    public IStringLonger Longer => Next<StringLonger>();
 
     public StringBe(Func<string> actualFetcher) : base(actualFetcher)
     {
