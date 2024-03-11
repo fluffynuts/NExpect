@@ -81,6 +81,30 @@ namespace NExpect.Tests.DanglingPrepositions
         }
 
         [Test]
+        public void ShouldHaveGeneralMatchedBy()
+        {
+            // Arrange
+            var dog = new Dog() { Name = "Rex" };
+            // Act
+            Assert.That(() =>
+                {
+                    Expect(dog)
+                        .To.Be.An.Instance.Of<Dog>()
+                        .Matched.By(o => o.Name == "Spot");
+                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
+
+            Assert.That(() =>
+            {
+                Expect(dog)
+                    .To.Be.An.Instance.Of<Dog>()
+                    .Matched.By(o => o.Name == "Rex");
+            }, Throws.Nothing);
+
+            // Assert
+        }
+
+        [Test]
         public void ShouldHaveGenericWithPropertyAvailable()
         {
             // Arrange
@@ -185,22 +209,14 @@ namespace NExpect.Tests.DanglingPrepositions
 
     public abstract class Animal : IAnimal
     {
-        public string Name { get; set; }
+        public string Name { get; init; }
     }
 
-    public interface IAnimal
-    {
-    }
+    public interface IAnimal;
 
-    public class Dog : Animal
-    {
-    }
+    public class Dog : Animal;
 
-    public class Cat : Animal
-    {
-    }
+    public class Cat : Animal;
 
-    public class Frog : Animal
-    {
-    }
+    public class Frog : Animal;
 }

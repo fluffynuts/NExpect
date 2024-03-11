@@ -70,4 +70,10 @@ public interface IMore<T> : ICanAddMatcher<T>
     /// Provides the .Then grammar extension
     /// </summary>
     IThen<T> Then { get; }
+
+    /// <summary>
+    /// Provides the .Matched grammar extension for
+    /// .Matched.By(...)
+    /// </summary>
+    IMatched<T> Matched { get; }
 }
