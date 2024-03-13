@@ -1,4 +1,5 @@
 ﻿using System;
+using NExpect.Exceptions;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -243,6 +244,25 @@ public class Issues
                 },
                 Throws.Nothing
             );
+            // Assert
+        }
+    }
+
+    [TestFixture]
+    public class OnlyActingOdd
+    {
+        [Test]
+        public void ShouldEnforceAbsoluteSizeOfCollection()
+        {
+            // Arrange
+            var numbers = new[] { 1, 2 };
+            // Act
+            Assert.That(() =>
+            {
+                Expect(numbers)
+                    .To.Contain.Only(1)
+                    .Equal.To(1);
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
             // Assert
         }
     }

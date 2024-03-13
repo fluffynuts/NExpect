@@ -468,7 +468,7 @@ public static class CollectionMatchers
         return countMatch.Continuation.AddMatcher(
             collection =>
             {
-                var asArray = collection.ToArray();
+                var asArray = collection as T[] ?? collection.ToArray();
                 var have = countMatch.Method == CountMatchMethods.Any
                     ? (asArray.Any(o => AreEqual(o, search))
                         ? 1
@@ -478,7 +478,8 @@ public static class CollectionMatchers
                     have,
                     countMatch.Method == CountMatchMethods.All
                         ? asArray.Length
-                        : countMatch.ExpectedCount
+                        : countMatch.ExpectedCount,
+                    asArray.Length
                 );
 
                 return new MatcherResult(
@@ -567,7 +568,11 @@ public static class CollectionMatchers
                 var compare = countMatch.Method == CountMatchMethods.All
                     ? collectionCount
                     : countMatch.Compare;
-                var passed = CollectionCountMatchStrategies[countMatch.Method](have, compare);
+                var passed = CollectionCountMatchStrategies[countMatch.Method](
+                    have,
+                    compare,
+                    collectionCount
+                );
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
@@ -651,7 +656,11 @@ public static class CollectionMatchers
                 var compare = countMatchOf.Method == CountMatchMethods.All
                     ? collectionCount
                     : countMatchOf.Compare;
-                var passed = CollectionCountMatchStrategies[countMatchOf.Method](have, compare);
+                var passed = CollectionCountMatchStrategies[countMatchOf.Method](
+                    have,
+                    compare,
+                    collectionCount
+                );
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
@@ -738,7 +747,11 @@ public static class CollectionMatchers
                         }
                     )
                     .Count(o => test(o.idx, o.o)) ?? 0;
-                var passed = CollectionCountMatchStrategies[countMatch.Method](have, compare);
+                var passed = CollectionCountMatchStrategies[countMatch.Method](
+                    have,
+                    compare,
+                    collectionCount
+                );
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
@@ -2649,6 +2662,7 @@ public static class CollectionMatchers
                 nameof(regex)
             );
         }
+
         return AddRegexMatcher(
             matched,
             new Regex(regex),
@@ -2945,15 +2959,16 @@ public static class CollectionMatchers
     }
 
     private static readonly Dictionary<CountMatchMethods,
-        Func<int, int, bool>> CollectionCountMatchStrategies =
+        Func<int, int, int, bool>> CollectionCountMatchStrategies =
         new()
         {
-            [CountMatchMethods.Exactly] = (have, want) => have == want,
-            [CountMatchMethods.Only] = (have, want) => have == want,
-            [CountMatchMethods.Minimum] = (have, want) => have >= want,
-            [CountMatchMethods.Maximum] = (have, want) => have <= want,
-            [CountMatchMethods.Any] = (have, _) => have > 0,
-            [CountMatchMethods.All] = (have, collectionTotal) => have == collectionTotal
+            [CountMatchMethods.Exactly] = (have, want, _) => have == want,
+            [CountMatchMethods.Only] = (have, want, total) => have == want && have == total,
+            [CountMatchMethods.Minimum] = (have, want, _) => have >= want,
+            [CountMatchMethods.Maximum] = (have, want, _) => have <= want,
+            [CountMatchMethods.Any] = (have, _, _) => have > 0,
+            [CountMatchMethods.All] = (have, want, total) => 
+                have == want && have == total // technically, just the first is required, the second is an audit of NExpect logic, tbh
         };
 
     private static Func<bool, object, int, int, int, string> CreateMessageFor(
