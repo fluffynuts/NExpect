@@ -47,11 +47,3 @@ public interface IHave<T>: ICanAddMatcher<T>
     /// </summary>
     IRequired<T> Required { get; }
 }
-
-/// <summary>
-/// Provides the .Valid continuation
-/// </summary>
-/// <typeparam name="T"></typeparam>
-public interface IValid<T> : ICanAddMatcher<T>
-{
-}

@@ -11,6 +11,8 @@ internal class A<T> :
     IHasActual<T>,
     IA<T>
 {
+    public IValid<T> Valid => Next<Valid<T>>();
+
     public A(Func<T> actualFetcher) : base(actualFetcher)
     {
     }
