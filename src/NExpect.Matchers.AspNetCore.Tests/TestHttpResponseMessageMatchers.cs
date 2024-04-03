@@ -68,7 +68,7 @@ public class TestHttpResponseMessageMatchers
             var domain = GetRandomHostname();
             message.Headers.Add(
                 $"Set-Cookie",
-                $"{cookieName}={cookieValue}; Secure; HttpOnly; Max-Age={maxAge}; Domain={domain}"
+                $"{cookieName}={cookieValue}; Secure; HttpOnly; Max-Age={maxAge}; Domain={domain}; Path=/moo"
             );
 
             var nonSecureCookieName = GetAnother(cookieName);
@@ -83,6 +83,7 @@ public class TestHttpResponseMessageMatchers
                 Expect(message)
                     .To.Have.Cookie(cookieName)
                     .With.Value(cookieValue)
+                    .And.With.Path("/moo")
                     .And.To.Be.Secure()
                     .And.To.Have.Domain(domain)
                     .And.To.Have.Max.Age(maxAge)

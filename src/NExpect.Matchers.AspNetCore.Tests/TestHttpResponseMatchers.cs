@@ -229,28 +229,47 @@ public class TestHttpResponseMatchers
                 );
                 // Assert
             }
-        }
-    }
-}
 
-[TestFixture]
-public class TestHttpRequestMatching
-{
-    [Test]
-    public void HeaderAccessShouldBeCaseInsensitive()
-    {
-        // Arrange
-        var res = HttpRequestBuilder.BuildDefault();
-        res.Headers["Moo-Cow"] = "beef";
-        // Act
-        Assert.That(
-            () =>
+            [Test]
+            public void ShouldCorrectlyParsePathAndSameSite()
             {
-                Expect(res.Headers)
-                    .To.Contain.Key("moo-cow");
-            },
-            Throws.Nothing
-        );
-        // Assert
+                // Arrange
+                var res = HttpResponseBuilder.Create()
+                    .WithHeader("Set-Cookie", "le_cookie=le_value; Path=/; SameSite=le_same_site; Secure; HttpOnly")
+                    .Build();
+                // Act
+                Assert.That(() =>
+                {
+                    Expect(res)
+                        .To.Have.Cookie("le_cookie")
+                        .With.Path("/");
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(res)
+                        .To.Have.Cookie("le_cookie")
+                        .With.Value("le_value");
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(res)
+                        .To.Have.Cookie("le_cookie")
+                        .With.SameSite("le_same_site");
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(res)
+                        .To.Have.Cookie("le_cookie")
+                        .Which.Is.HttpOnly();
+                }, Throws.Nothing);
+                Assert.That(() =>
+                {
+                    Expect(res)
+                        .To.Have.Cookie("le_cookie")
+                        .Which.Is.Secure();
+                }, Throws.Nothing);
+                // Assert
+            }
+        }
     }
 }

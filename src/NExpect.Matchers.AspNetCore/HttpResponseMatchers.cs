@@ -93,9 +93,12 @@ namespace NExpect
             string header
         )
         {
-            foreach (var cookiePart in header.Split(',').Select(p => p.Trim()))
+            var headerParts = header.Split(',').Select(p => p.Trim());
+            foreach (var cookiePart in headerParts)
             {
-                var parts = cookiePart.Split(';');
+                var parts = cookiePart
+                    .Split(';')
+                    .Trim();
                 yield return parts.Aggregate(
                     new Cookie(),
                     (acc, cur) =>
@@ -132,8 +135,17 @@ namespace NExpect
                 ["Domain"] = SetCookieDomain,
                 ["Secure"] = SetCookieSecure,
                 ["HttpOnly"] = SetCookieHttpOnly,
-                ["SameSite"] = SetCookieSameSite
+                ["SameSite"] = SetCookieSameSite,
+                ["Path"] = SetCookiePath
             };
+
+        private static void SetCookiePath(
+            Cookie cookie,
+            string value
+        )
+        {
+            cookie.Path = value;
+        }
 
         private static void SetCookieSameSite(
             Cookie cookie,
