@@ -337,24 +337,21 @@ namespace NExpect
         {
             return more.AddMatcher(actual =>
             {
-                var passed = false;
-                var hasMaxAge = actual.TryGetMetadata<int>("MaxAge", out var maxAge);
-                if (hasMaxAge)
-                {
-                    passed = maxAge == expectedAge;
-                }
+                var maxAgeSeconds = MaxAgeSecondsFor(actual);
+                var passed = maxAgeSeconds == expectedAge;
 
                 return new MatcherResult(
                     passed,
-                    () =>
-                        hasMaxAge
-                            ? $"Expected {actual.Name()} {passed.AsNot()}to have Max-Age '{expectedAge}' (found {maxAge})"
-                            : $"Expected {actual.Name()} {passed.AsNot()}to have Max-Age set",
+                    () => $"Expected {actual.Name()} {passed.AsNot()}to have Max-Age '{expectedAge}' (found {maxAgeSeconds})",
                     customMessageGenerator
                 );
             });
         }
 
+        private static int MaxAgeSecondsFor(Cookie cookie)
+        {
+            return (int)Math.Round((cookie.Expires - DateTime.Now).TotalSeconds);
+        }
 
         private static Cookie ParseCookieHeader(
             string header

@@ -1,13 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Web;
-using Imported.PeanutButter.Utils;
 using Microsoft.AspNetCore.Http;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
+using Imported.PeanutButter.TestUtils.AspNetCore;
+using Imported.PeanutButter.Utils;
 
 namespace NExpect
 {
@@ -65,20 +64,16 @@ namespace NExpect
             Cookie resolvedCookie = null;
             have.AddMatcher(actual =>
             {
-                var cookies = actual.Headers.Where(
-                        h => h.Key == "Set-Cookie"
-                    ).Select(h => h.Value
-                        .Select(ParseCookieHeader)
-                        .SelectMany(o => o)
-                    )
-                    .SelectMany(o => o)
-                    .ToArray();
-                resolvedCookie = cookies.FirstOrDefault(c => c.Name.Equals(name));
-                var passed = resolvedCookie != null;
+                var cookies = actual.Headers.ParseCookies();
+                var encodedName = name;
+                resolvedCookie = cookies.FirstOrDefault(c => c.Name.Equals(encodedName));
+                resolvedCookie?.SetMetadata("response", actual);
+
+                var passed = resolvedCookie is not null;
                 return new MatcherResult(
                     passed,
                     MessageHelpers.FinalMessageFor(
-                        () => $"Expected {passed.AsNot()}to find set-cookie header for '{name}'",
+                        () => $"Expected {passed.AsNot()}to find set-cookie header for '{encodedName}'",
                         customMessageGenerator
                     )
                 );
@@ -87,136 +82,6 @@ namespace NExpect
                 () => resolvedCookie,
                 have as IExpectationContext
             );
-        }
-
-        private static IEnumerable<Cookie> ParseCookieHeader(
-            string header
-        )
-        {
-            var headerParts = header.Split(',').Select(p => p.Trim());
-            foreach (var cookiePart in headerParts)
-            {
-                var parts = cookiePart
-                    .Split(';')
-                    .Trim();
-                yield return parts.Aggregate(
-                    new Cookie(),
-                    (acc, cur) =>
-                    {
-                        var subs = cur.Split('=');
-                        var key = subs[0].Trim();
-                        var value = string.Join("=", subs.Skip(1));
-                        if (string.IsNullOrWhiteSpace(acc.Name))
-                        {
-                            acc.Name = HttpUtility.UrlDecode(key);
-                            acc.Value = HttpUtility.UrlDecode(value);
-                        }
-                        else
-                        {
-                            if (CookieMutations.TryGetValue(key, out var modifier))
-                            {
-                                modifier(acc, value);
-                            }
-                        }
-
-                        return acc;
-                    }
-                );
-            }
-        }
-
-        private static readonly Dictionary<string, Action<Cookie, string>>
-            CookieMutations = new Dictionary<string, Action<Cookie, string>>(
-                StringComparer.InvariantCultureIgnoreCase
-            )
-            {
-                ["Expires"] = SetCookieExpiration,
-                ["Max-Age"] = SetCookieMaxAge,
-                ["Domain"] = SetCookieDomain,
-                ["Secure"] = SetCookieSecure,
-                ["HttpOnly"] = SetCookieHttpOnly,
-                ["SameSite"] = SetCookieSameSite,
-                ["Path"] = SetCookiePath
-            };
-
-        private static void SetCookiePath(
-            Cookie cookie,
-            string value
-        )
-        {
-            cookie.Path = value;
-        }
-
-        private static void SetCookieSameSite(
-            Cookie cookie,
-            string value
-        )
-        {
-            // Cookie object doesn't natively support the SameSite property, yet
-            cookie.SetMetadata("SameSite", value);
-        }
-
-        private static void SetCookieHttpOnly(
-            Cookie cookie,
-            string value
-        )
-        {
-            cookie.HttpOnly = true;
-        }
-
-        private static void SetCookieSecure(
-            Cookie cookie,
-            string value
-        )
-        {
-            cookie.Secure = true;
-        }
-
-        private static void SetCookieDomain(
-            Cookie cookie,
-            string value
-        )
-        {
-            cookie.Domain = value;
-        }
-
-        private static void SetCookieMaxAge(
-            Cookie cookie,
-            string value
-        )
-        {
-            if (!int.TryParse(value, out var seconds))
-            {
-                throw new ArgumentException(
-                    $"Unable to parse '{value}' as an integer value"
-                );
-            }
-
-            cookie.Expires = DateTime.Now.AddSeconds(seconds);
-            cookie.Expired = seconds < 1;
-            cookie.SetMetadata("MaxAge", seconds);
-        }
-
-        private static void SetCookieExpiration(
-            Cookie cookie,
-            string value
-        )
-        {
-            if (cookie.TryGetMetadata<int>("MaxAge", out _))
-            {
-                // Max-Age takes precedence over Expires
-                return;
-            }
-
-            if (!DateTime.TryParse(value, out var expires))
-            {
-                throw new ArgumentException(
-                    $"Unable to parse '{value}' as a date-time value"
-                );
-            }
-
-            cookie.Expires = expires;
-            cookie.Expired = expires <= DateTime.Now;
         }
 
         private static string Name(this Cookie cookie)

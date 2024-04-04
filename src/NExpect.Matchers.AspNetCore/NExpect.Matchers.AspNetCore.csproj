@@ -49,6 +49,15 @@
     <Reference Include="System.Configuration" Condition="'$(TargetFramework)' == 'net462'"/>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\CookieNotFoundException.cs">
+      <Link>Imported\CookieNotFoundException.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\HeaderDictionaryExtensions.cs">
+      <Link>Imported\HeaderDictionaryExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\InvalidSameSiteValueException.cs">
+      <Link>Imported\InvalidSameSiteValueException.cs</Link>
+    </Compile>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ArrayExtensions.cs" Link="Imported\ArrayExtensions.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\AutoLocker.cs" Link="Imported\AutoLocker.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ByteArrayExtensions.cs" Link="Imported\ByteArrayExtensions.cs"/>

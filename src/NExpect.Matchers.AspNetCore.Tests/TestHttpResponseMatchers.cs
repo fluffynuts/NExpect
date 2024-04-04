@@ -169,6 +169,64 @@ public class TestHttpResponseMatchers
             // Assert
         }
 
+        // [Test]
+        // public void ShouldBeAbleToAssertCookieNeverExpires()
+        // {
+        //     // Arrange
+        //     var eternalKey = GetRandomString();
+        //     var eternalValue = GetRandomString();
+        //     var expiringKey = GetAnother(eternalKey);
+        //     var expiringValue = GetRandomString();
+        //     var res = HttpResponseBuilder.Create()
+        //         .WithCookie(eternalKey, eternalValue)
+        //         .WithCookie(
+        //             expiringKey,
+        //             expiringValue,
+        //             new CookieOptions()
+        //             {
+        //                 Expires = DateTimeOffset.Now.AddHours(1)
+        //             }
+        //         )
+        //         .Build();
+        //     var ints = new[] { 1, 2, 3 };
+        //         Expect(ints)
+        //             .To.Contain.Only(3).Items()
+        //             .And
+        //             .To.Contain.All
+        //     // Act
+        //     Assert.That(
+        //         () =>
+        //         {
+        //             Expect(res)
+        //                 .To.Have.Cookie(eternalKey)
+        //                 .With.Value(eternalValue)
+        //                 .Which.Does.Not.Expire();
+        //         },
+        //         Throws.Nothing
+        //     );
+        //     Assert.That(
+        //             () =>
+        //             {
+        //                 Expect(res)
+        //                     .To.Have.Cookie(eternalKey)
+        //                     .With.Value(eternalValue)
+        //                     .Which.Expires();
+        //             },
+        //             Throws.Exception.InstanceOf<UnmetExpectationException>()
+        //         );
+        //     Assert.That(
+        //         () =>
+        //         {
+        //             Expect(res)
+        //                 .To.Have.Cookie(expiringKey)
+        //                 .With.Value(expiringValue)
+        //                 .Which.Expires();
+        //         },
+        //         Throws.Nothing
+        //     );
+        //     // Assert
+        // }
+
         [TestFixture]
         public class Issues
         {
@@ -235,39 +293,54 @@ public class TestHttpResponseMatchers
             {
                 // Arrange
                 var res = HttpResponseBuilder.Create()
-                    .WithHeader("Set-Cookie", "le_cookie=le_value; Path=/; SameSite=le_same_site; Secure; HttpOnly")
+                    .WithHeader("Set-Cookie", "le_cookie=le_value; Path=/; SameSite=Lax; Secure; HttpOnly")
                     .Build();
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(res)
-                        .To.Have.Cookie("le_cookie")
-                        .With.Path("/");
-                }, Throws.Nothing);
-                Assert.That(() =>
-                {
-                    Expect(res)
-                        .To.Have.Cookie("le_cookie")
-                        .With.Value("le_value");
-                }, Throws.Nothing);
-                Assert.That(() =>
-                {
-                    Expect(res)
-                        .To.Have.Cookie("le_cookie")
-                        .With.SameSite("le_same_site");
-                }, Throws.Nothing);
-                Assert.That(() =>
-                {
-                    Expect(res)
-                        .To.Have.Cookie("le_cookie")
-                        .Which.Is.HttpOnly();
-                }, Throws.Nothing);
-                Assert.That(() =>
-                {
-                    Expect(res)
-                        .To.Have.Cookie("le_cookie")
-                        .Which.Is.Secure();
-                }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        Expect(res)
+                            .To.Have.Cookie("le_cookie")
+                            .With.Path("/");
+                    },
+                    Throws.Nothing
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(res)
+                            .To.Have.Cookie("le_cookie")
+                            .With.Value("le_value");
+                    },
+                    Throws.Nothing
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(res)
+                            .To.Have.Cookie("le_cookie")
+                            .With.SameSite(SameSiteMode.Lax);
+                    },
+                    Throws.Nothing
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(res)
+                            .To.Have.Cookie("le_cookie")
+                            .Which.Is.HttpOnly();
+                    },
+                    Throws.Nothing
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(res)
+                            .To.Have.Cookie("le_cookie")
+                            .Which.Is.Secure();
+                    },
+                    Throws.Nothing
+                );
                 // Assert
             }
         }

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using Imported.PeanutButter.TestUtils.AspNetCore;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
 using Imported.PeanutButter.Utils;
+using Microsoft.AspNetCore.Http;
 
 // ReSharper disable MemberCanBePrivate.Global
 
@@ -233,7 +235,7 @@ namespace NExpect
         /// <returns></returns>
         public static IMore<Cookie> SameSite(
             this IWith<Cookie> with,
-            string expected
+            SameSiteMode expected
         )
         {
             return with.SameSite(
@@ -251,7 +253,7 @@ namespace NExpect
         /// <returns></returns>
         public static IMore<Cookie> SameSite(
             this IWith<Cookie> with,
-            string expected,
+            SameSiteMode expected,
             string customMessage
         )
         {
@@ -270,31 +272,33 @@ namespace NExpect
         /// <returns></returns>
         public static IMore<Cookie> SameSite(
             this IWith<Cookie> with,
-            string expected,
+            SameSiteMode expected,
             Func<string> customMessageGenerator
         )
         {
             return with.AddMatcher(
                 actual =>
                 {
-                    var hasSameSiteSet = actual.HasMetadata<string>("SameSite");
-                    var passed = hasSameSiteSet; // for now
-                    string sameSite = null;
-                    if (hasSameSiteSet)
+                    if (!actual.TryGetMetadata<HttpResponse>("response", out var owner))
                     {
-                        sameSite = actual.GetMetadata<string>("SameSite");
-                        passed = string.Equals(
-                            sameSite,
-                            expected,
-                            StringComparison.OrdinalIgnoreCase
+                        return new EnforcedMatcherResult(
+                            false,
+                            FinalMessageFor(
+                                () =>
+                                    "Unable to determine SameSite for cookie: start your assertion from the HttpResponse so that headers associated with the cookie can be interrogated.",
+                                customMessageGenerator
+                            )
                         );
                     }
+
+                    var sameSite = owner.Headers.ReadSameSiteForCookie(actual.Name);
+                    var passed = sameSite == expected;
 
                     return new MatcherResult(
                         passed,
                         FinalMessageFor(
                             () =>
-                                $"Expected {passed.AsNot()}to find SameSite '{expected}' (received: '{(hasSameSiteSet ? "no SameSite set" : sameSite)}')",
+                                $"Expected {passed.AsNot()}to find SameSite '{expected}' (received: '{sameSite}')",
                             customMessageGenerator
                         )
                     );
@@ -504,25 +508,22 @@ namespace NExpect
             return more.AddMatcher(
                 actual =>
                 {
-                    var passed = false;
-                    var hasMaxAge = actual.TryGetMetadata<int>("MaxAge", out var maxAge);
-                    if (hasMaxAge)
-                    {
-                        passed = maxAge == expectedAge;
-                    }
-
+                    var maxAgeSeconds = MaxAgeSecondsFor(actual);
+                    var passed = maxAgeSeconds == expectedAge;
                     return new MatcherResult(
                         passed,
                         () =>
-                            hasMaxAge
-                                ? $"Expected {actual.Name()} {passed.AsNot()}to have Max-Age '{expectedAge}' (found {maxAge})"
-                                : $"Expected {actual.Name()} {passed.AsNot()}to have Max-Age set",
+                            $"Expected {actual.Name()} {passed.AsNot()}to have Max-Age '{expectedAge}' (found {maxAgeSeconds})",
                         customMessageGenerator
                     );
                 }
             );
         }
 
+        private static int MaxAgeSecondsFor(Cookie cookie)
+        {
+            return (int)Math.Round((cookie.Expires - DateTime.Now).TotalSeconds);
+        }
 
         private static Cookie ParseCookieHeader(
             string header
