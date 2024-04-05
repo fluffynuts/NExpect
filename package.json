@@ -2,6 +2,7 @@
     "name": "nexpect",
     "scripts": {
         "pretest": "zarro update-git-submodules",
+        "update-pb": "cd src/PeanutButter && git pull --rebase",
         "experiment": "zarro experiment-task",
         "test": "zarro test-dotnet",
         "pack": "zarro @",

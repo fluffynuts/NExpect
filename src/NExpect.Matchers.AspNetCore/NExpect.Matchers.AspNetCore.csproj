@@ -52,7 +52,7 @@
     <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\CookieNotFoundException.cs">
       <Link>Imported\CookieNotFoundException.cs</Link>
     </Compile>
-    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\HeaderDictionaryExtensions.cs">
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\HttpHeaderExtensions.cs">
       <Link>Imported\HeaderDictionaryExtensions.cs</Link>
     </Compile>
     <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\InvalidSameSiteValueException.cs">

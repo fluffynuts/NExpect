@@ -169,63 +169,71 @@ public class TestHttpResponseMatchers
             // Assert
         }
 
-        // [Test]
-        // public void ShouldBeAbleToAssertCookieNeverExpires()
-        // {
-        //     // Arrange
-        //     var eternalKey = GetRandomString();
-        //     var eternalValue = GetRandomString();
-        //     var expiringKey = GetAnother(eternalKey);
-        //     var expiringValue = GetRandomString();
-        //     var res = HttpResponseBuilder.Create()
-        //         .WithCookie(eternalKey, eternalValue)
-        //         .WithCookie(
-        //             expiringKey,
-        //             expiringValue,
-        //             new CookieOptions()
-        //             {
-        //                 Expires = DateTimeOffset.Now.AddHours(1)
-        //             }
-        //         )
-        //         .Build();
-        //     var ints = new[] { 1, 2, 3 };
-        //         Expect(ints)
-        //             .To.Contain.Only(3).Items()
-        //             .And
-        //             .To.Contain.All
-        //     // Act
-        //     Assert.That(
-        //         () =>
-        //         {
-        //             Expect(res)
-        //                 .To.Have.Cookie(eternalKey)
-        //                 .With.Value(eternalValue)
-        //                 .Which.Does.Not.Expire();
-        //         },
-        //         Throws.Nothing
-        //     );
-        //     Assert.That(
-        //             () =>
-        //             {
-        //                 Expect(res)
-        //                     .To.Have.Cookie(eternalKey)
-        //                     .With.Value(eternalValue)
-        //                     .Which.Expires();
-        //             },
-        //             Throws.Exception.InstanceOf<UnmetExpectationException>()
-        //         );
-        //     Assert.That(
-        //         () =>
-        //         {
-        //             Expect(res)
-        //                 .To.Have.Cookie(expiringKey)
-        //                 .With.Value(expiringValue)
-        //                 .Which.Expires();
-        //         },
-        //         Throws.Nothing
-        //     );
-        //     // Assert
-        // }
+        [Test]
+        public void ShouldBeAbleToAssertCookieExpiration()
+        {
+            // Arrange
+            var sessionKey = GetRandomString();
+            var sessionValue = GetRandomString();
+            var expiringKey = GetAnother(sessionKey);
+            var expiringValue = GetRandomString();
+            var expires = DateTimeOffset.Now.AddHours(1);
+            var res = HttpResponseBuilder.Create()
+                .WithCookie(sessionKey, sessionValue)
+                .WithCookie(
+                    expiringKey,
+                    expiringValue,
+                    new CookieOptions()
+                    {
+                        Expires = expires
+                    }
+                )
+                .Build();
+            Expect(res.Headers["Set-Cookie"])
+                .To.Contain.Only(2).Items();
+            // Act
+            Assert.That(
+                () =>
+                {
+                    Expect(res)
+                        .To.Have.Cookie(expiringKey)
+                        .With.Value(expiringValue)
+                        .With.Expiration(expires);
+                },
+                Throws.Nothing
+            );
+            Assert.That(
+                () =>
+                {
+                    Expect(res)
+                        .To.Have.Cookie(sessionKey)
+                        .With.Value(sessionValue)
+                        .For.Session();
+                },
+                Throws.Nothing
+            );
+            Assert.That(
+                    () =>
+                    {
+                        Expect(res)
+                            .To.Have.Cookie(sessionKey)
+                            .With.Value(sessionValue)
+                            .With.Expiration(expires);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
+            Assert.That(
+                () =>
+                {
+                    Expect(res)
+                        .To.Have.Cookie(expiringKey)
+                        .With.Value(expiringValue)
+                        .For.Session();
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
+            // Assert
+        }
 
         [TestFixture]
         public class Issues
