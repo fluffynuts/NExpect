@@ -63,23 +63,25 @@ namespace NExpect
         )
         {
             Cookie resolvedCookie = null;
-            have.AddMatcher(actual =>
-            {
-                var cookies = actual.Headers.Where(
-                        h => h.Key == "Set-Cookie"
-                    ).Select(h => h.Value.Select(ParseCookieHeader))
-                    .SelectMany(o => o)
-                    .ToArray();
-                resolvedCookie = cookies.FirstOrDefault(c => c.Name.Equals(name));
-                var passed = resolvedCookie != null;
-                return new MatcherResult(
-                    passed,
-                    FinalMessageFor(
-                        () => $"Expected {passed.AsNot()}to find set-cookie for '{name}'",
-                        customMessageGenerator
-                    )
-                );
-            });
+            have.AddMatcher(
+                actual =>
+                {
+                    var cookies = actual.Headers.Where(
+                            h => h.Key == "Set-Cookie"
+                        ).Select(h => h.Value.Select(ParseCookieHeader))
+                        .SelectMany(o => o)
+                        .ToArray();
+                    resolvedCookie = cookies.FirstOrDefault(c => c.Name.Equals(name));
+                    var passed = resolvedCookie != null;
+                    return new MatcherResult(
+                        passed,
+                        FinalMessageFor(
+                            () => $"Expected {passed.AsNot()}to find set-cookie for '{name}'",
+                            customMessageGenerator
+                        )
+                    );
+                }
+            );
             return new Next<Cookie>(
                 () => resolvedCookie,
                 have as IExpectationContext
@@ -129,17 +131,19 @@ namespace NExpect
             Func<string> customMessageGenerator
         )
         {
-            return with.AddMatcher(actual =>
-            {
-                var passed = actual is not null && actual.Value.Equals(value);
-                return new MatcherResult(
-                    passed,
-                    () => actual is null
-                        ? $"Expected {passed.AsNot()}to find cookie with value '{value}'"
-                        : $"Expected {passed.AsNot()}to find value '{value}' for cookie '{actual.Name}' (found value: '{actual.Value}')",
-                    customMessageGenerator
-                );
-            });
+            return with.AddMatcher(
+                actual =>
+                {
+                    var passed = actual is not null && actual.Value.Equals(value);
+                    return new MatcherResult(
+                        passed,
+                        () => actual is null
+                            ? $"Expected {passed.AsNot()}to find cookie with value '{value}'"
+                            : $"Expected {passed.AsNot()}to find value '{value}' for cookie '{actual.Name}' (found value: '{actual.Value}')",
+                        customMessageGenerator
+                    );
+                }
+            );
         }
 
         /// <summary>
@@ -179,15 +183,17 @@ namespace NExpect
             Func<string> customMessageGenerator
         )
         {
-            return more.AddMatcher(actual =>
-            {
-                var passed = actual?.Secure ?? false;
-                return new MatcherResult(
-                    passed,
-                    () => $"Expected {actual.Name()} {passed.AsNot()}to be secure",
-                    customMessageGenerator
-                );
-            });
+            return more.AddMatcher(
+                actual =>
+                {
+                    var passed = actual?.Secure ?? false;
+                    return new MatcherResult(
+                        passed,
+                        () => $"Expected {actual.Name()} {passed.AsNot()}to be secure",
+                        customMessageGenerator
+                    );
+                }
+            );
         }
 
         /// <summary>
@@ -227,15 +233,17 @@ namespace NExpect
             Func<string> customMessageGenerator
         )
         {
-            return more.AddMatcher(actual =>
-            {
-                var passed = actual?.HttpOnly ?? false;
-                return new MatcherResult(
-                    passed,
-                    () => $"Expected {actual.Name()} {passed.AsNot()}to be http-only",
-                    customMessageGenerator
-                );
-            });
+            return more.AddMatcher(
+                actual =>
+                {
+                    var passed = actual?.HttpOnly ?? false;
+                    return new MatcherResult(
+                        passed,
+                        () => $"Expected {actual.Name()} {passed.AsNot()}to be http-only",
+                        customMessageGenerator
+                    );
+                }
+            );
         }
 
         /// <summary>
@@ -281,15 +289,28 @@ namespace NExpect
             Func<string> customMessageGenerator
         )
         {
-            return more.AddMatcher(actual =>
-            {
-                var passed = actual?.Domain == expectedDomain;
-                return new MatcherResult(
-                    passed,
-                    () => $"Expected {actual.Name()} to be for domain '{expectedDomain}'",
-                    customMessageGenerator
-                );
-            });
+            return more.AddMatcher(
+                actual =>
+                {
+                    if (actual is null)
+                    {
+                        return new EnforcedMatcherResult(
+                            false,
+                            FinalMessageFor(
+                                () => $"Unable to verify domain on null cookie",
+                                customMessageGenerator
+                            )
+                        );
+                    }
+
+                    var passed = actual.Domain == expectedDomain;
+                    return new MatcherResult(
+                        passed,
+                        () => $"Expected {actual.Name()} {passed.AsNot()}to be for domain '{expectedDomain}' (received: '{actual.Domain}')",
+                        customMessageGenerator
+                    );
+                }
+            );
         }
 
         /// <summary>
@@ -335,17 +356,20 @@ namespace NExpect
             Func<string> customMessageGenerator
         )
         {
-            return more.AddMatcher(actual =>
-            {
-                var maxAgeSeconds = MaxAgeSecondsFor(actual);
-                var passed = maxAgeSeconds == expectedAge;
+            return more.AddMatcher(
+                actual =>
+                {
+                    var maxAgeSeconds = MaxAgeSecondsFor(actual);
+                    var passed = maxAgeSeconds == expectedAge;
 
-                return new MatcherResult(
-                    passed,
-                    () => $"Expected {actual.Name()} {passed.AsNot()}to have Max-Age '{expectedAge}' (found {maxAgeSeconds})",
-                    customMessageGenerator
-                );
-            });
+                    return new MatcherResult(
+                        passed,
+                        () =>
+                            $"Expected {actual.Name()} {passed.AsNot()}to have Max-Age '{expectedAge}' (found {maxAgeSeconds})",
+                        customMessageGenerator
+                    );
+                }
+            );
         }
 
         private static int MaxAgeSecondsFor(Cookie cookie)
