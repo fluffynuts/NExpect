@@ -452,10 +452,21 @@ namespace NExpect
             return more.AddMatcher(
                 actual =>
                 {
-                    var passed = actual?.Domain == expectedDomain;
+                    if (actual is null)
+                    {
+                        return new EnforcedMatcherResult(
+                            false,
+                            FinalMessageFor(
+                                () => $"Unable to verify domain on null cookie",
+                                customMessageGenerator
+                            )
+                        );
+                    }
+
+                    var passed = actual.Domain == expectedDomain;
                     return new MatcherResult(
                         passed,
-                        () => $"Expected {actual.Name()} to be for domain '{expectedDomain}'",
+                        () => $"Expected {actual.Name} {passed.AsNot()}to be for domain '{expectedDomain}' (received: '{actual.Domain}')",
                         customMessageGenerator
                     );
                 }

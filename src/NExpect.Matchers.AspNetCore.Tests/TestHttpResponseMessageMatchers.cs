@@ -22,38 +22,48 @@ public class TestHttpResponseMessageMatchers
                 $"{cookieName}={cookieValue}"
             );
             // Act
-            Assert.That(() =>
-            {
-                Expect(message)
-                    .To.Have.Cookie(cookieName)
-                    .With.Value(cookieValue);
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(message)
+                        .To.Have.Cookie(cookieName)
+                        .With.Value(cookieValue);
+                },
+                Throws.Nothing
+            );
 
             var wrongCookie = GetAnother(cookieName);
-            Assert.That(() =>
+            Assert.That(
+                () =>
                 {
                     Expect(message)
                         .To.Have.Cookie(wrongCookie)
                         .With.Value(cookieValue);
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains(wrongCookie)
                     .And.Message.Contains("Expected to find")
             );
             var wrongValue = GetAnother(cookieValue);
-            Assert.That(() =>
+            Assert.That(
+                () =>
                 {
                     Expect(message)
                         .To.Have.Cookie(cookieName)
                         .With.Value(wrongValue);
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains(cookieValue)
                     .And.Message.Contains(wrongValue)
             );
-            Assert.That(() =>
-            {
-                Expect(message)
-                    .Not.To.Have.Cookie(GetAnother(cookieName));
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(message)
+                        .Not.To.Have.Cookie(GetAnother(cookieName));
+                },
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -78,62 +88,90 @@ public class TestHttpResponseMessageMatchers
             );
 
             // Act
-            Assert.That(() =>
-            {
-                Expect(message)
-                    .To.Have.Cookie(cookieName)
-                    .With.Value(cookieValue)
-                    .And.With.Path("/moo")
-                    .And.To.Be.Secure()
-                    .And.To.Have.Domain(domain)
-                    .And.To.Have.Max.Age(maxAge)
-                    .And.To.Be.HttpOnly();
-            }, Throws.Nothing);
-            Assert.That(() =>
-            {
-                Expect(message)
-                    .To.Have.Cookie(cookieName)
-                    .With.Value(cookieValue)
-                    .And.Is.Secure()
-                    .And.Has.Domain(domain)
-                    .And.Has.Max.Age(maxAge)
-                    .And.Is.HttpOnly();
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(message)
+                        .To.Have.Cookie(cookieName)
+                        .With.Value(cookieValue)
+                        .And.With.Path("/moo")
+                        .And.To.Be.Secure()
+                        .And.To.Have.Domain(domain)
+                        .And.To.Have.Max.Age(maxAge)
+                        .And.To.Be.HttpOnly();
+                },
+                Throws.Nothing
+            );
+            Assert.That(
+                () =>
+                {
+                    Expect(message)
+                        .To.Have.Cookie(cookieName)
+                        .With.Value(cookieValue)
+                        .And.Is.Secure()
+                        .And.Has.Domain(domain)
+                        .And.Has.Max.Age(maxAge)
+                        .And.Is.HttpOnly();
+                },
+                Throws.Nothing
+            );
 
-            Assert.That(() =>
-            {
-                Expect(message)
-                    .To.Have.Cookie(cookieName)
-                    .With.Value(cookieValue)
-                    .And.To.Be.Secure()
-                    .And.To.Have.Domain(domain + ".com")
-                    .And.To.Have.Max.Age(maxAge);
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
-            Assert.That(() =>
-            {
-                Expect(message)
-                    .To.Have.Cookie(cookieName)
-                    .With.Value(cookieValue)
-                    .And.To.Be.Secure()
-                    .And.To.Have.Domain(domain)
-                    .And.To.Have.Max.Age(maxAge + 1);
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
-            Assert.That(() =>
+            Assert.That(
+                () =>
+                {
+                    Expect(message)
+                        .To.Have.Cookie(cookieName)
+                        .With.Value(cookieValue)
+                        .And.To.Be.Secure()
+                        .And.To.Have.Domain(domain + ".com")
+                        .And.To.Have.Max.Age(maxAge);
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
+
+            // nunit's string matchers are annoying - this is easier to assert with NExpect
+            Expect(
+                    () =>
+                    {
+                        Expect(message)
+                            .To.Have.Cookie(cookieName)
+                            .With.Domain($"{domain}.com");
+                    }
+                ).To.Throw<UnmetExpectationException>()
+                .With.Message.Containing($"'{domain}'").Then($"'{domain}.com'");
+
+            Assert.That(
+                () =>
+                {
+                    Expect(message)
+                        .To.Have.Cookie(cookieName)
+                        .With.Value(cookieValue)
+                        .And.To.Be.Secure()
+                        .And.To.Have.Domain(domain)
+                        .And.To.Have.Max.Age(maxAge + 1);
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
+            Assert.That(
+                () =>
                 {
                     Expect(message)
                         .To.Have.Cookie(nonSecureCookieName)
                         .With.Value(cookieValue)
                         .And.To.Be.Secure();
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains("secure")
             );
-            Assert.That(() =>
+            Assert.That(
+                () =>
                 {
                     Expect(message)
                         .To.Have.Cookie(nonSecureCookieName)
                         .With.Value(cookieValue)
                         .And.To.Be.HttpOnly();
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
                     .With.Message.Contains("http-only")
             );
             // Assert
