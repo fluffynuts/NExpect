@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using Imported.PeanutButter.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
@@ -29,6 +31,21 @@ public static class AspNetCoreExpectations
     {
         return Expectations.Expect(
             queryString.AsDictionary()
+        );
+    }
+
+    /// <summary>
+    /// Facilitates treating an ISession object like a dictionary
+    /// for assertions
+    /// </summary>
+    /// <param name="session"></param>
+    /// <returns></returns>
+    public static ICollectionExpectation<KeyValuePair<string, string>> Expect(
+        ISession session
+    )
+    {
+        return Expectations.Expect(
+            session.AsDictionary(s => s.Keys, (s, k) => s.GetString(k))
         );
     }
 

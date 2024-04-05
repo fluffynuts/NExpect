@@ -8,7 +8,7 @@ using FakeQueryCollection = NExpect.Matchers.AspNet.Tests.Implementations.FakeQu
 namespace NExpect.Matchers.AspNet.Tests;
 
 [TestFixture]
-public class TestQueryCollectionMatchers
+public class TestQueryCollectionMatching
 {
     [Test]
     public void ShouldBeAbleToAssertAgainstQueryLikeADictionary()
