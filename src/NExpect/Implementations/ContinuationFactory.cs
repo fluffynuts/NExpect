@@ -9,7 +9,17 @@ namespace NExpect.Implementations;
 /// </summary>
 public static class ContinuationFactory
 {
-    internal static T2 Create<T1, T2>(
+    /// <summary>
+    /// Creates a continuation, for internal use within NExpect
+    /// or perhaps in your own satellite code (:
+    /// </summary>
+    /// <param name="actualGenerator"></param>
+    /// <param name="parent"></param>
+    /// <param name="afterConstruction"></param>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <returns></returns>
+    public static T2 Create<T1, T2>(
         Func<T1> actualGenerator,
         IExpectationContext<T1> parent,
         Action<T2> afterConstruction = null

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Imported.PeanutButter.Utils;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +10,11 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
+using NExpect.Helpers;
+using NExpect.Implementations;
+using NExpect.Implementations.Dictionaries;
 using NExpect.Interfaces;
+using NExpect.MatcherLogic;
 
 namespace NExpect;
 
@@ -31,21 +36,6 @@ public static class AspNetCoreExpectations
     {
         return Expectations.Expect(
             queryString.AsDictionary()
-        );
-    }
-
-    /// <summary>
-    /// Facilitates treating an ISession object like a dictionary
-    /// for assertions
-    /// </summary>
-    /// <param name="session"></param>
-    /// <returns></returns>
-    public static ICollectionExpectation<KeyValuePair<string, string>> Expect(
-        ISession session
-    )
-    {
-        return Expectations.Expect(
-            session.AsDictionary(s => s.Keys, (s, k) => s.GetString(k))
         );
     }
 
@@ -224,5 +214,38 @@ public static class AspNetCoreExpectations
     )
     {
         return Expectations.Expect(sv.ToArray());
+    }
+}
+
+/// <summary>
+/// Provides matching for session items
+/// </summary>
+public static class SessionItemMatchers
+{
+    /// <summary>
+    /// Tests if the provided key is known in the session
+    /// and provides for continuation to test the value
+    /// </summary>
+    /// <param name="contain"></param>
+    /// <param name="key"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IDictionaryValueContinuation<string> Key<T>(
+        this IContain<T> contain,
+        string key
+    ) where T : ISession
+    {
+        Assertions.Forget(contain);
+        var dict = contain.GetActual().AsDictionary(
+            o => o.Keys,
+            (session, k) => session.GetString(k)
+        );
+        var c = contain as IExpectationContext<T>;
+        var isNegated = c.IsNegated();
+        return isNegated
+            ? Expectations.Expect(dict)
+                .Not.To.Contain.Key(key)
+            : Expectations.Expect(dict)
+                .To.Contain.Key(key);
     }
 }

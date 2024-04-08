@@ -17,6 +17,7 @@ using NExpect.Shims;
 // ReSharper disable UnusedMember.Global
 [assembly: InternalsVisibleTo("NExpect.Matchers.NSubstitute")]
 [assembly: InternalsVisibleTo("NExpect.Matchers.Xml")]
+[assembly: InternalsVisibleTo("NExpect.Matchers.AspNetCore")]
 
 namespace NExpect;
 

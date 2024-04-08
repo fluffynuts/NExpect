@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NExpect.Matchers.AspNetCore\NExpect.Matchers.AspNetCore.csproj" />
+    <ProjectReference Include="..\NExpect.Matchers.NSubstitute\NExpect.Matchers.NSubstitute.csproj" />
     <ProjectReference Include="..\NExpect\NExpect.csproj" />
   </ItemGroup>
 
