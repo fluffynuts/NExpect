@@ -6,6 +6,7 @@ using System.Threading;
 using Imported.PeanutButter.Utils;
 using NExpect.Exceptions;
 using NExpect.Implementations;
+// ReSharper disable MemberCanBePrivate.Global
 
 // ReSharper disable UnusedMember.Global
 
@@ -313,7 +314,16 @@ public static class Assertions
         InFlightContexts.TryAdd(ctx.Identifier, ctx);
     }
 
-    internal static T Forget<T>(T owner)
+    /// <summary>
+    /// If you have Assertions tracking enabled and need to
+    /// stop tracking an assertion because you're going to
+    /// deal with termination manually, then you will want
+    /// to Forget(...) the dangling assertion
+    /// </summary>
+    /// <param name="owner"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static T Forget<T>(T owner)
     {
         if (owner is SweepableItem sweepableItem)
         {

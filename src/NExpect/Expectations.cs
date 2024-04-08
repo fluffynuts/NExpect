@@ -26,6 +26,7 @@ namespace NExpect;
 /// </summary>
 public static partial class Expectations
 {
+    // NB: if this ever changes, go update SessionMockingMatchers in NExpect.Matchers.AspNetCore
     internal const string METADATA_KEY = "__ExpectationContext__";
     internal const string KEY_COMPARER = "key-comparer";
 

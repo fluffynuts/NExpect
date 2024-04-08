@@ -44,10 +44,16 @@ public static class AspNetCoreExpectations
         ISession session
     )
     {
-        return Expectations.Expect(
-            session.AsDictionary(s => s.Keys, (s, k) => s.GetString(k))
-        );
+        var dict = session.AsDictionary(s => s.Keys, (s, k) => s.GetString(k));
+        if (session is not null)
+        {
+            dict.SetMetadata(ACTUAL_SESSION_KEY, session);
+        }
+
+        return Expectations.Expect(dict);
     }
+
+    public const string ACTUAL_SESSION_KEY = "__actual_session__";
 
     /// <summary>
     /// Treat an IFormFileCollection like a collection of IFormFile
