@@ -61,6 +61,22 @@ public static class AddMatcherExtensions
     }
 
     /// <summary>
+    /// Adds a matcher for a collection 'have' invocation
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="matcher"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static ICollectionMore<T> AddMatcher<T>(
+        this ICollectionHave<T> continuation,
+        Func<IEnumerable<T>, IMatcherResult> matcher
+    )
+    {
+        AddMatcherPrivate(continuation, matcher);
+        return continuation.More();
+    }
+
+    /// <summary>
     /// Most general matcher add - onto ICanAddMatcher&lt;T&gt;
     /// </summary>
     /// <param name="continuation">Continuation to add matcher to</param>
@@ -118,7 +134,7 @@ public static class AddMatcherExtensions
     )
     {
         return continuation.Compose(expectationsRunner,
-            (a, b) => $"Expectation \"{callingMethod}\" should {(!b).AsNot()}have failed.");
+            (_, b) => $"Expectation \"{callingMethod}\" should {(!b).AsNot()}have failed.");
     }
 
     /// <summary>
@@ -173,7 +189,7 @@ public static class AddMatcherExtensions
     )
     {
         return continuation.Compose(expectationsRunner,
-            (a, b) => $"{callingMethod} should {b.AsNot()}have passed.");
+            (_, b) => $"{callingMethod} should {b.AsNot()}have passed.");
     }
 
     /// <summary>

@@ -144,8 +144,14 @@ public static class AspNetCoreExpectations
         ModelStateDictionary dict
     )
     {
+        var collection = dict?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        if (collection is not null)
+        {
+            collection.SetMetadata("__actual__", dict);
+        }
+
         return Expectations.Expect(
-            dict?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
+            collection
         );
     }
 

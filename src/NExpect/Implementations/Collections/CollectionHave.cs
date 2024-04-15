@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using NExpect.Implementations.Strings;
 using NExpect.Interfaces;
 
 // ReSharper disable ClassNeverInstantiated.Global
@@ -8,10 +7,10 @@ using NExpect.Interfaces;
 
 namespace NExpect.Implementations.Collections;
 
-internal class CollectionHave<T> :
-    ExpectationContextWithLazyActual<IEnumerable<T>>,
-    IHasActual<IEnumerable<T>>,
-    ICollectionHave<T>
+internal class CollectionHave<T>
+    : ExpectationContextWithLazyActual<IEnumerable<T>>,
+      IHasActual<IEnumerable<T>>,
+      ICollectionHave<T>
 {
     public ICollectionUnique<T> Unique => Next<CollectionUnique<T>>();
 
