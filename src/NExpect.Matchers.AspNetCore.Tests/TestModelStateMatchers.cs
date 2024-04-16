@@ -13,6 +13,17 @@ public class TestModelStateMatchers
         public class WhenModelStateHasErrors
         {
             [Test]
+            public void Name()
+            {
+                // Arrange
+                var foo = new[] { 1, 2, 3 };
+                // Act
+                Expect(foo)
+                    .To.Contain.Exactly(2)
+                    .Matched.By(o => o > 1);
+                // Assert
+            }
+            [Test]
             public void ShouldReturnAssertErrorsExist()
             {
                 // Arrange

@@ -49,14 +49,344 @@
     <Reference Include="System.Configuration" Condition="'$(TargetFramework)' == 'net462'"/>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\BuilderFinderExtensions.cs">
+      <Link>Imported\BuilderFinderExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\CannotGetAnotherDifferentRandomValueException.cs">
+      <Link>Imported\CannotGetAnotherDifferentRandomValueException.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\DateRange.cs">
+      <Link>Imported\DateRange.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\EnumerableExtensions.cs">
+      <Link>Imported\EnumerableExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\GenericBuilder.cs">
+      <Link>Imported\GenericBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\GenericBuilderBase.cs">
+      <Link>Imported\GenericBuilderBase.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\GenericBuilderInstanceCreationException.cs">
+      <Link>Imported\GenericBuilderInstanceCreationException.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\GenericBuilderLocator.cs">
+      <Link>Imported\GenericBuilderLocator.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\IGenericBuilder.cs">
+      <Link>Imported\IGenericBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\NaturalData.cs">
+      <Link>Imported\NaturalData.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\NoRandomize.cs">
+      <Link>Imported\NoRandomize.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\RandomizerAttribute.cs">
+      <Link>Imported\RandomizerAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\RandomValueGen.cs">
+      <Link>Imported\RandomValueGen.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\RequireNonZero.cs">
+      <Link>Imported\RequireNonZero.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\RequireNonZeroId.cs">
+      <Link>Imported\RequireNonZeroId.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\RequireUnique.cs">
+      <Link>Imported\RequireUnique.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\RequireUniqueId.cs">
+      <Link>Imported\RequireUniqueId.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\SatelliteAssemblyInitializer.cs">
+      <Link>Imported\SatelliteAssemblyInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\StringArrayExtensionsForMatchingNamespaces.cs">
+      <Link>Imported\StringArrayExtensionsForMatchingNamespaces.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\ThreadSafeRandom.cs">
+      <Link>Imported\ThreadSafeRandom.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\UnableToCreateDynamicBuilderException.cs">
+      <Link>Imported\UnableToCreateDynamicBuilderException.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\UniqueRandomValueGenerator.cs">
+      <Link>Imported\UniqueRandomValueGenerator.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\ActionResultExtensions.cs">
+      <Link>Imported\ActionResultExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\ActionContextBuilder.cs">
+      <Link>Imported\Builders\ActionContextBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\ActionExecutedContextBuilder.cs">
+      <Link>Imported\Builders\ActionExecutedContextBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\ActionExecutingContextBuilder.cs">
+      <Link>Imported\Builders\ActionExecutingContextBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\AuthorizationFilterContextBuilder.cs">
+      <Link>Imported\Builders\AuthorizationFilterContextBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\Builder.cs">
+      <Link>Imported\Builders\Builder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\ControllerActionDescriptorBuilder.cs">
+      <Link>Imported\Builders\ControllerActionDescriptorBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\ControllerBuilder.cs">
+      <Link>Imported\Builders\ControllerBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\ControllerContextBuilder.cs">
+      <Link>Imported\Builders\ControllerContextBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\CustomConstructEntityRequired.cs">
+      <Link>Imported\Builders\CustomConstructEntityRequired.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\FakeCastExtensions.cs">
+      <Link>Imported\Builders\FakeCastExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\FormBuilder.cs">
+      <Link>Imported\Builders\FormBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\FormFileBuilder.cs">
+      <Link>Imported\Builders\FormFileBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\HeaderDictionaryBuilder.cs">
+      <Link>Imported\Builders\HeaderDictionaryBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\HttpContextBuilder.cs">
+      <Link>Imported\Builders\HttpContextBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\HttpRequestBuilder.cs">
+      <Link>Imported\Builders\HttpRequestBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\HttpRequestExtensions.cs">
+      <Link>Imported\Builders\HttpRequestExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\HttpResponseBuilder.cs">
+      <Link>Imported\Builders\HttpResponseBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\MissingConstructorRequirementException.cs">
+      <Link>Imported\Builders\MissingConstructorRequirementException.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\ModelBindingContextBuilder.cs">
+      <Link>Imported\Builders\ModelBindingContextBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\ModelMetadataBuilder.cs">
+      <Link>Imported\Builders\ModelMetadataBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\QueryCollectionBuilder.cs">
+      <Link>Imported\Builders\QueryCollectionBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\RandomizableBuilder.cs">
+      <Link>Imported\Builders\RandomizableBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\RandomValueGen.cs">
+      <Link>Imported\Builders\RandomValueGen.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\RequestCookieCollectionBuilder.cs">
+      <Link>Imported\Builders\RequestCookieCollectionBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\RouteDataBuilder.cs">
+      <Link>Imported\Builders\RouteDataBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\StringMapDerivativeBuilder.cs">
+      <Link>Imported\Builders\StringMapDerivativeBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\TrivialRouter.cs">
+      <Link>Imported\Builders\TrivialRouter.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\ViewDataDictionaryBuilder.cs">
+      <Link>Imported\Builders\ViewDataDictionaryBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\WebSocketBuilder.cs">
+      <Link>Imported\Builders\WebSocketBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Builders\WebSocketManagerBuilder.cs">
+      <Link>Imported\Builders\WebSocketManagerBuilder.cs</Link>
+    </Compile>
     <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\CookieNotFoundException.cs">
       <Link>Imported\CookieNotFoundException.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\CookieUtil.cs">
+      <Link>Imported\Fakes\CookieUtil.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeActionExecutedContext.cs">
+      <Link>Imported\Fakes\FakeActionExecutedContext.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeActionExecutingContext.cs">
+      <Link>Imported\Fakes\FakeActionExecutingContext.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeCompositeMetadataDetailsProvider.cs">
+      <Link>Imported\Fakes\FakeCompositeMetadataDetailsProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeConnectionInfo.cs">
+      <Link>Imported\Fakes\FakeConnectionInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeContentResultExecutor.cs">
+      <Link>Imported\Fakes\FakeContentResultExecutor.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeCookie.cs">
+      <Link>Imported\Fakes\FakeCookie.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeFeatureCollection.cs">
+      <Link>Imported\Fakes\FakeFeatureCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeFormCollection.cs">
+      <Link>Imported\Fakes\FakeFormCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeFormFile.cs">
+      <Link>Imported\Fakes\FakeFormFile.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeFormFileCollection.cs">
+      <Link>Imported\Fakes\FakeFormFileCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeHeaderDictionary.cs">
+      <Link>Imported\Fakes\FakeHeaderDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeHttpContext.cs">
+      <Link>Imported\Fakes\FakeHttpContext.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeHttpRequest.cs">
+      <Link>Imported\Fakes\FakeHttpRequest.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeHttpRequestFeature.cs">
+      <Link>Imported\Fakes\FakeHttpRequestFeature.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeHttpResponse.cs">
+      <Link>Imported\Fakes\FakeHttpResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeHttpResponseFeature.cs">
+      <Link>Imported\Fakes\FakeHttpResponseFeature.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeModelMetadata.cs">
+      <Link>Imported\Fakes\FakeModelMetadata.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeObjectResultExecutor.cs">
+      <Link>Imported\Fakes\FakeObjectResultExecutor.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeQueryCollection.cs">
+      <Link>Imported\Fakes\FakeQueryCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeRequestCookieCollection.cs">
+      <Link>Imported\Fakes\FakeRequestCookieCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeResponseCookies.cs">
+      <Link>Imported\Fakes\FakeResponseCookies.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeResponsePipeWriter.cs">
+      <Link>Imported\Fakes\FakeResponsePipeWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeSession.cs">
+      <Link>Imported\Fakes\FakeSession.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeTempDataDictionaryFactory.cs">
+      <Link>Imported\Fakes\FakeTempDataDictionaryFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeTempDataProvider.cs">
+      <Link>Imported\Fakes\FakeTempDataProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeViewResultExecutor.cs">
+      <Link>Imported\Fakes\FakeViewResultExecutor.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeWebSocket.cs">
+      <Link>Imported\Fakes\FakeWebSocket.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeWebSocketManager.cs">
+      <Link>Imported\Fakes\FakeWebSocketManager.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\ICanBeIndexedBy.cs">
+      <Link>Imported\Fakes\ICanBeIndexedBy.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\IFake.cs">
+      <Link>Imported\Fakes\IFake.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\Internal\BufferSegment.cs">
+      <Link>Imported\Fakes\Internal\BufferSegment.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\Internal\BufferSegmentStack.cs">
+      <Link>Imported\Fakes\Internal\BufferSegmentStack.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\Internal\StreamPipeWriter.cs">
+      <Link>Imported\Fakes\Internal\StreamPipeWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\MinimalServiceProvider.cs">
+      <Link>Imported\Fakes\MinimalServiceProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\NonFunctionalServiceProvider.cs">
+      <Link>Imported\Fakes\NonFunctionalServiceProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\ServiceProviderImplementationRequiredException.cs">
+      <Link>Imported\Fakes\ServiceProviderImplementationRequiredException.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\StringMap.cs">
+      <Link>Imported\Fakes\StringMap.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\StringValueMap.cs">
+      <Link>Imported\Fakes\StringValueMap.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\StringValueMapChangedEventArgs.cs">
+      <Link>Imported\Fakes\StringValueMapChangedEventArgs.cs</Link>
     </Compile>
     <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\HttpHeaderExtensions.cs">
       <Link>Imported\HeaderDictionaryExtensions.cs</Link>
     </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\HttpRequestExtensions.cs">
+      <Link>Imported\HttpRequestExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\HttpResponseExtensions.cs">
+      <Link>Imported\HttpResponseExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\InvalidImplementationException.cs">
+      <Link>Imported\InvalidImplementationException.cs</Link>
+    </Compile>
     <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\InvalidSameSiteValueException.cs">
       <Link>Imported\InvalidSameSiteValueException.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Utils\DefaultMvcOptions.cs">
+      <Link>Imported\Utils\DefaultMvcOptions.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Utils\DefaultObjectModelValidator.cs">
+      <Link>Imported\Utils\DefaultObjectModelValidator.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Utils\FeatureIsObsoleteException.cs">
+      <Link>Imported\Utils\FeatureIsObsoleteException.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Utils\FormDecoder.cs">
+      <Link>Imported\Utils\FormDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Utils\FormFileExtensions.cs">
+      <Link>Imported\Utils\FormFileExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Utils\IFormDecoder.cs">
+      <Link>Imported\Utils\IFormDecoder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Utils\IFormEncoder.cs">
+      <Link>Imported\Utils\IFormEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Utils\MultiPartBodyEncoder.cs">
+      <Link>Imported\Utils\MultiPartBodyEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Utils\NullBodyEncoder.cs">
+      <Link>Imported\Utils\NullBodyEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Utils\OneWayFlag.cs">
+      <Link>Imported\Utils\OneWayFlag.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Utils\RequestDelegateTestArena.cs">
+      <Link>Imported\Utils\RequestDelegateTestArena.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Utils\RequestDelegateTestArenaBuilder.cs">
+      <Link>Imported\Utils\RequestDelegateTestArenaBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Utils\UrlEncodedBodyEncoder.cs">
+      <Link>Imported\Utils\UrlEncodedBodyEncoder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Async.cs">
+      <Link>Imported\Async.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -71,6 +401,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="icon.png" Pack="true" PackagePath=""/>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\PeanutButter\source\TestUtils\PeanutButter.RandomGenerators\PeanutButter.RandomGenerators.csproj">
+      <Link>Imported\PeanutButter.RandomGenerators.csproj</Link>
+    </Content>
   </ItemGroup>
   <Import Project="..\MonoForFramework.targets"/>
 </Project>
