@@ -4,19 +4,21 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using Imported.PeanutButter.TestUtils.AspNetCore;
+using Imported.PeanutButter.Utils;
 using Imported.PeanutButter.Utils.Dictionaries;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
-using Imported.PeanutButter.Utils;
 using static NExpect.Implementations.MessageHelpers;
+
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable ConstantConditionalAccessQualifier
 
 namespace NExpect;
 
 /// <summary>
-/// Provides matchers for action results, eg
+/// Provides matchers for action results, e.g.
 /// redirections
 /// </summary>
 public static class ActionResultMatchers
@@ -32,9 +34,9 @@ public static class ActionResultMatchers
     /// </summary>
     /// <param name="to"></param>
     /// <returns></returns>
-    public static IMore<IActionResult> Redirect(
-        this ITo<IActionResult> to
-    )
+    public static IMore<T> Redirect<T>(
+        this ITo<T> to
+    ) where T : IActionResult
     {
         return to.Redirect(NULL_STRING);
     }
@@ -45,10 +47,10 @@ public static class ActionResultMatchers
     /// <param name="to"></param>
     /// <param name="customMessage"></param>
     /// <returns></returns>
-    public static IMore<IActionResult> Redirect(
-        this ITo<IActionResult> to,
+    public static IMore<T> Redirect<T>(
+        this ITo<T> to,
         string customMessage
-    )
+    ) where T : IActionResult
     {
         return to.Redirect(() => customMessage);
     }
@@ -59,12 +61,109 @@ public static class ActionResultMatchers
     /// <param name="to"></param>
     /// <param name="customMessageGenerator"></param>
     /// <returns></returns>
-    public static IMore<IActionResult> Redirect(
-        this ITo<IActionResult> to,
+    public static IMore<T> Redirect<T>(
+        this ITo<T> to,
         Func<string> customMessageGenerator
-    )
+    ) where T : IActionResult
     {
-        return to.AddMatcher(
+        return VerifyRedirection(
+            to,
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Verify that an action result is not a redirection
+    /// </summary>
+    /// <param name="to"></param>
+    /// <returns></returns>
+    public static IMore<T> Redirect<T>(
+        this IToAfterNot<T> to
+    ) where T : IActionResult
+    {
+        return to.Redirect(NULL_STRING);
+    }
+
+    /// <summary>
+    /// Verify that an action result is not a redirection
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<T> Redirect<T>(
+        this IToAfterNot<T> to,
+        string customMessage
+    ) where T : IActionResult
+    {
+        return to.Redirect(() => customMessage);
+    }
+
+    /// <summary>
+    /// Verify that an action result is not a redirection
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<T> Redirect<T>(
+        this IToAfterNot<T> to,
+        Func<string> customMessageGenerator
+    ) where T : IActionResult
+    {
+        return VerifyRedirection(
+            to,
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Verify that an action result is not a redirection
+    /// </summary>
+    /// <param name="to"></param>
+    /// <returns></returns>
+    public static IMore<T> Redirect<T>(
+        this INotAfterTo<T> to
+    ) where T : IActionResult
+    {
+        return to.Redirect(NULL_STRING);
+    }
+
+    /// <summary>
+    /// Verify that an action result is not a redirection
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<T> Redirect<T>(
+        this INotAfterTo<T> to,
+        string customMessage
+    ) where T : IActionResult
+    {
+        return to.Redirect(() => customMessage);
+    }
+
+    /// <summary>
+    /// Verify that an action result is not a redirection
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<T> Redirect<T>(
+        this INotAfterTo<T> to,
+        Func<string> customMessageGenerator
+    ) where T : IActionResult
+    {
+        return VerifyRedirection(
+            to,
+            customMessageGenerator
+        );
+    }
+
+    private static IMore<T> VerifyRedirection<T>(
+        ICanAddMatcher<T> continuation,
+        Func<string> customMessageGenerator
+    ) where T : IActionResult
+    {
+        return continuation.AddMatcher(
             actual =>
             {
                 var passed =
@@ -219,11 +318,11 @@ public static class ActionResultMatchers
         );
     }
 
-    private static IMatcherResult CreateActionMatcherFor(
-        IActionResult actual,
+    private static IMatcherResult CreateActionMatcherFor<T>(
+        T actual,
         string actionName,
         Func<string> customMessageGenerator
-    )
+    ) where T : IActionResult
     {
         var routeValues =
             actual.GetOrDefault<RouteValueDictionary>(
@@ -264,9 +363,9 @@ public static class ActionResultMatchers
     /// </summary>
     /// <param name="on"></param>
     /// <returns></returns>
-    public static IMore<ActionResult> CurrentController(
-        this IOn<ActionResult> on
-    )
+    public static IMore<T> CurrentController<T>(
+        this IOn<T> on
+    ) where T : IActionResult
     {
         return on.CurrentController(NULL_STRING);
     }
@@ -277,10 +376,10 @@ public static class ActionResultMatchers
     /// <param name="on"></param>
     /// <param name="customMessage"></param>
     /// <returns></returns>
-    public static IMore<ActionResult> CurrentController(
-        this IOn<ActionResult> on,
+    public static IMore<T> CurrentController<T>(
+        this IOn<T> on,
         string customMessage
-    )
+    ) where T : IActionResult
     {
         return on.CurrentController(() => customMessage);
     }
@@ -291,10 +390,10 @@ public static class ActionResultMatchers
     /// <param name="on"></param>
     /// <param name="customMessageGenerator"></param>
     /// <returns></returns>
-    public static IMore<ActionResult> CurrentController(
-        this IOn<ActionResult> on,
+    public static IMore<T> CurrentController<T>(
+        this IOn<T> on,
         Func<string> customMessageGenerator
-    )
+    ) where T : IActionResult
     {
         return on.AddMatcher(
             actual =>
@@ -323,13 +422,49 @@ public static class ActionResultMatchers
     /// </summary>
     /// <param name="on"></param>
     /// <param name="controller"></param>
+    /// <returns></returns>
+    public static IMore<T> Controller<T>(
+        this IOn<T> on,
+        string controller
+    ) where T : IActionResult
+    {
+        return on.Controller(
+            controller,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Verifies that the redirect is to the named controller
+    /// </summary>
+    /// <param name="on"></param>
+    /// <param name="controller"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<T> Controller<T>(
+        this IOn<T> on,
+        string controller,
+        string customMessage
+    ) where T : IActionResult
+    {
+        return on.Controller(
+            controller,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Verifies that the redirect is to the named controller
+    /// </summary>
+    /// <param name="on"></param>
+    /// <param name="controller"></param>
     /// <param name="customMessageGenerator"></param>
     /// <returns></returns>
-    public static IMore<ActionResult> Controller(
-        this IOn<ActionResult> on,
+    public static IMore<T> Controller<T>(
+        this IOn<T> on,
         string controller,
         Func<string> customMessageGenerator
-    )
+    ) where T : IActionResult
     {
         return on.AddMatcher(
             actual =>
@@ -349,10 +484,10 @@ public static class ActionResultMatchers
         );
     }
 
-    private static MatcherResult CantReadRouteValuesOn(
-        ActionResult actionResult,
+    private static MatcherResult CantReadRouteValuesOn<T>(
+        T actionResult,
         out RouteValueDictionary routeValues
-    )
+    ) where T : IActionResult
     {
         if (!actionResult.TryGetMetadata(ROUTE_VALUES_KEY, out routeValues))
         {
@@ -372,10 +507,10 @@ public static class ActionResultMatchers
     /// <param name="in"></param>
     /// <param name="area"></param>
     /// <returns></returns>
-    public static IMore<ActionResult> Area(
-        this IIn<ActionResult> @in,
+    public static IMore<T> Area<T>(
+        this IIn<T> @in,
         string area
-    )
+    ) where T : IActionResult
     {
         return @in.Area(area, NULL_STRING);
     }
@@ -388,11 +523,11 @@ public static class ActionResultMatchers
     /// <param name="area"></param>
     /// <param name="customMessage"></param>
     /// <returns></returns>
-    public static IMore<ActionResult> Area(
-        this IIn<ActionResult> @in,
+    public static IMore<T> Area<T>(
+        this IIn<T> @in,
         string area,
         string customMessage
-    )
+    ) where T : IActionResult
     {
         return @in.Area(area, () => customMessage);
     }
@@ -405,11 +540,11 @@ public static class ActionResultMatchers
     /// <param name="area"></param>
     /// <param name="customMessageGenerator"></param>
     /// <returns></returns>
-    public static IMore<ActionResult> Area(
-        this IIn<ActionResult> @in,
+    public static IMore<T> Area<T>(
+        this IIn<T> @in,
         string area,
         Func<string> customMessageGenerator
-    )
+    ) where T : IActionResult
     {
         return @in.AddMatcher(
             actual =>
@@ -431,12 +566,13 @@ public static class ActionResultMatchers
 
     /// <summary>
     /// Verifies that the redirect is to the root of the application (/)
+    /// i.e. not in an area
     /// </summary>
     /// <param name="in"></param>
     /// <returns></returns>
-    public static IMore<ActionResult> Root(
-        this IIn<ActionResult> @in
-    )
+    public static IMore<T> Root<T>(
+        this IIn<T> @in
+    ) where T : IActionResult
     {
         return @in.Root(NULL_STRING);
     }
@@ -447,10 +583,10 @@ public static class ActionResultMatchers
     /// <param name="in"></param>
     /// <param name="customMessage"></param>
     /// <returns></returns>
-    public static IMore<ActionResult> Root(
-        this IIn<ActionResult> @in,
+    public static IMore<T> Root<T>(
+        this IIn<T> @in,
         string customMessage
-    )
+    ) where T : IActionResult
     {
         return @in.Root(() => customMessage);
     }
@@ -461,10 +597,10 @@ public static class ActionResultMatchers
     /// <param name="in"></param>
     /// <param name="customMessageGenerator"></param>
     /// <returns></returns>
-    public static IMore<ActionResult> Root(
-        this IIn<ActionResult> @in,
+    public static IMore<T> Root<T>(
+        this IIn<T> @in,
         Func<string> customMessageGenerator
-    )
+    ) where T : IActionResult
     {
         return @in.AddMatcher(
             actual =>
@@ -489,13 +625,49 @@ public static class ActionResultMatchers
     /// </summary>
     /// <param name="with"></param>
     /// <param name="parameters"></param>
+    /// <returns></returns>
+    public static IMore<T> Parameters<T>(
+        this IWith<T> with,
+        object parameters
+    ) where T : IActionResult
+    {
+        return with.Parameters(
+            parameters,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Verifies the parameters on the redirecting action result
+    /// </summary>
+    /// <param name="with"></param>
+    /// <param name="parameters"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<T> Parameters<T>(
+        this IWith<T> with,
+        object parameters,
+        string customMessage
+    ) where T : IActionResult
+    {
+        return with.Parameters(
+            parameters,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Verifies the parameters on the redirecting action result
+    /// </summary>
+    /// <param name="with"></param>
+    /// <param name="parameters"></param>
     /// <param name="customMessageGenerator"></param>
     /// <returns></returns>
-    public static IMore<ActionResult> Parameters(
-        this IWith<ActionResult> with,
+    public static IMore<T> Parameters<T>(
+        this IWith<T> with,
         object parameters,
         Func<string> customMessageGenerator
-    )
+    ) where T : IActionResult
     {
         return with.AddMatcher(
             actual =>
@@ -516,31 +688,18 @@ public static class ActionResultMatchers
                 // ReSharper disable once CollectionNeverUpdated.Local
                 var expected = new DictionaryWrappingObject(parameters);
 
-                var mismatches = expected.Keys.Aggregate(
-                    new Dictionary<string, object>(),
-                    (acc, cur) =>
-                    {
-                        var areEqual = expected[cur]?.Equals(routeValues[cur]) ?? false;
-                        if (!areEqual)
-                        {
-                            acc[cur] =
-                                $"expected {expected[cur].Stringify()} but received {routeValues[cur].Stringify()}";
-                        }
-
-                        return acc;
-                    }
-                );
-                var haveAllParameters = mismatches.Count == 0;
+                var mismatched = CompareDictionaries(routeValues, expected);
+                var passed = mismatched.Count == 0;
 
                 return new MatcherResult(
-                    haveAllParameters,
+                    passed,
                     () =>
                     {
-                        var errors = mismatches.Keys.Aggregate(
+                        var errors = mismatched.Keys.Aggregate(
                             new List<string>(),
                             (acc, cur) =>
                             {
-                                acc.Add($"{cur}: {mismatches[cur]}");
+                                acc.Add($"{cur}: {mismatched[cur]}");
                                 return acc;
                             }
                         );
@@ -550,6 +709,47 @@ public static class ActionResultMatchers
                 );
             }
         );
+    }
+
+    private static readonly HashSet<string> ReservedRouteKeys = ["action", "controller", "area"];
+
+    private static Dictionary<string, string> CompareDictionaries(
+        IDictionary<string, object> actual,
+        IDictionary<string, object> expected
+    )
+    {
+        var result = actual.Keys.Aggregate(
+            new Dictionary<string, string>(),
+            (acc, cur) =>
+            {
+                if (ReservedRouteKeys.Contains(cur))
+                {
+                    return acc;
+                }
+
+                if (!expected.TryGetValue(cur, out var found))
+                {
+                    acc[cur] = "unexpected parameter";
+                    return acc;
+                }
+
+                var areEqual = found?.Equals(expected[cur]) ?? false;
+                if (!areEqual)
+                {
+                    acc[cur] =
+                        $"expected {actual[cur].Stringify()} but received {expected[cur].Stringify()}";
+                }
+
+                return acc;
+            }
+        );
+        var missingExpectedParameters = expected.Keys.Where(k => !actual.ContainsKey(k)).ToArray();
+        foreach (var item in missingExpectedParameters)
+        {
+            result[item] = "missing required parameter";
+        }
+
+        return result;
     }
 
     private static MatcherResult GenerateRouteValueMatcherResultFor(
@@ -644,7 +844,7 @@ public static class ActionResultMatchers
         string expected
     ) where T : IActionResult
     {
-        return have.Content<T>(expected, NULL_STRING);
+        return have.Content(expected, NULL_STRING);
     }
 
     /// <summary>
@@ -745,7 +945,41 @@ public static class ActionResultMatchers
         this IBe<T> be
     ) where T : IActionResult
     {
-        return ValidateStatusCode(be, HttpStatusCode.Forbidden);
+        return be.Forbidden(NULL_STRING);
+    }
+
+    /// <summary>
+    /// Verify the status code is 403 on the action result
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Forbidden<T>(
+        this IBe<T> be,
+        string customMessage
+    ) where T : IActionResult
+    {
+        return be.Forbidden(() => customMessage);
+    }
+
+    /// <summary>
+    /// Verify the status code is 403 on the action result
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Forbidden<T>(
+        this IBe<T> be,
+        Func<string> customMessageGenerator
+    ) where T : IActionResult
+    {
+        return ValidateStatusCode(
+            be,
+            HttpStatusCode.Forbidden,
+            customMessageGenerator
+        );
     }
 
     /// <summary>
@@ -756,9 +990,44 @@ public static class ActionResultMatchers
     /// <returns></returns>
     public static IMore<T> Ok<T>(
         this IBe<T> be
+ 
     ) where T : IActionResult
     {
-        return ValidateStatusCode(be, HttpStatusCode.OK);
+        return be.Ok(NULL_STRING);
+    }
+
+    /// <summary>
+    /// Verify the status code is 403 on the action result
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Ok<T>(
+        this IBe<T> be,
+        string customMessage
+    ) where T : IActionResult
+    {
+        return be.Ok(() => customMessage);
+    }
+
+    /// <summary>
+    /// Verify the status code is 403 on the action result
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Ok<T>(
+        this IBe<T> be,
+        Func<string> customMessageGenerator
+    ) where T : IActionResult
+    {
+        return ValidateStatusCode(
+            be,
+            HttpStatusCode.OK,
+            customMessageGenerator
+        );
     }
 
     /// <summary>
@@ -773,12 +1042,53 @@ public static class ActionResultMatchers
         HttpStatusCode expected
     ) where T : IActionResult
     {
-        return ValidateStatusCode(have, expected);
+        return have.StatusCode(
+            expected,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Verify the status code of an action result
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> StatusCode<T>(
+        this IHave<T> have,
+        HttpStatusCode expected,
+        string customMessage
+    ) where T : IActionResult
+    {
+        return have.StatusCode(
+            expected,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Verify the status code of an action result
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> StatusCode<T>(
+        this IHave<T> have,
+        HttpStatusCode expected,
+        Func<string> customMessageGenerator
+    ) where T : IActionResult
+    {
+        return ValidateStatusCode(have, expected, customMessageGenerator);
     }
 
     private static IMore<T> ValidateStatusCode<T>(
         this ICanAddMatcher<T> canAddMatcher,
-        HttpStatusCode expected
+        HttpStatusCode expected,
+        Func<string> customMessageGenerator
     ) where T : IActionResult
     {
         return canAddMatcher.AddMatcher(
@@ -791,20 +1101,38 @@ public static class ActionResultMatchers
                     : $"but found {statusCode}";
                 return new MatcherResult(
                     passed,
-                    () => $"Expected {passed.AsNot()}to find status code {expected}, {more}"
+                    () => $"Expected {passed.AsNot()}to find status code {expected}, {more}",
+                    customMessageGenerator
                 );
             }
         );
     }
 
+    /// <summary>
+    /// Verify that the action result is for a rejected
+    /// request with the expected statusCode
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="expectedCode"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static IMore<T> Rejected<T>(
         this IBe<T> be,
-        HttpStatusCode statusCode
+        HttpStatusCode expectedCode
     ) where T : IActionResult
     {
-        return be.Rejected(statusCode, () => null);
+        return be.Rejected(expectedCode, () => null);
     }
 
+    /// <summary>
+    /// Verify that the action result is for a rejected
+    /// request with the expected statusCode
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="expectedCode"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static IMore<T> Rejected<T>(
         this IBe<T> be,
         HttpStatusCode expectedCode,
@@ -850,13 +1178,101 @@ as precise as possible."
         );
     }
 
+    /// <summary>
+    /// Verify that the action result is for a rejected
+    /// request with the statusCode 201
+    /// </summary>
+    /// <param name="be"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static IMore<T> Created201<T>(
         this IBe<T> be
+    ) where T : IActionResult
+    {
+        return be.Created201(NULL_STRING);
+    }
+
+    /// <summary>
+    /// Verify that the action result is for a rejected
+    /// request with the statusCode 201
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Created201<T>(
+        this IBe<T> be,
+        string customMessage
+    ) where T : IActionResult
+    {
+        return be.Created201(() => customMessage);
+    }
+
+    /// <summary>
+    /// Verify that the action result is for a rejected
+    /// request with the statusCode 201
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Created201<T>(
+        this IBe<T> be,
+        Func<string> customMessageGenerator
     ) where T : IActionResult
     {
         return be.Resolved(HttpStatusCode.Created, () => null);
     }
 
+    /// <summary>
+    /// Verify that the action result is resolved with
+    /// the expected status code
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="expectedCode"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Resolved<T>(
+        this IBe<T> be,
+        HttpStatusCode expectedCode
+    ) where T : IActionResult
+    {
+        return be.Resolved(
+            expectedCode,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Verify that the action result is resolved with
+    /// the expected status code
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="expectedCode"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Resolved<T>(
+        this IBe<T> be,
+        HttpStatusCode expectedCode,
+        string customMessage
+    ) where T : IActionResult
+    {
+        return be.Resolved(
+            expectedCode,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Verify that the action result is resolved with
+    /// the expected status code
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="expectedCode"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static IMore<T> Resolved<T>(
         this IBe<T> be,
         HttpStatusCode expectedCode,
@@ -885,13 +1301,46 @@ as precise as possible."
         );
     }
 
+    /// <summary>
+    /// Verifies that the request has
+    /// a status code of 200 (OK)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static IMore<T> Accepted<T>(
         this IBe<T> be
     ) where T : IActionResult
     {
-        return be.Accepted(null);
+        return be.Accepted(NULL_STRING);
     }
 
+    /// <summary>
+    /// Verifies that the request has
+    /// a status code of 200 (OK)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Accepted<T>(
+        this IBe<T> be,
+        string customMessage
+    ) where T : IActionResult
+    {
+        return be.Accepted(
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Verifies that the request has
+    /// a status code of 200 (OK)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static IMore<T> Accepted<T>(
         this IBe<T> be,
         Func<string> customMessageGenerator
@@ -903,6 +1352,55 @@ as precise as possible."
         );
     }
 
+    /// <summary>
+    /// Verifies that the request has
+    /// the required status code
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="expectedCode"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Accepted<T>(
+        this IBe<T> be,
+        HttpStatusCode expectedCode
+    ) where T : IActionResult
+    {
+        return be.Accepted(
+            expectedCode,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Verifies that the request has
+    /// the required status code
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="expectedCode"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Accepted<T>(
+        this IBe<T> be,
+        HttpStatusCode expectedCode,
+        string customMessage
+    ) where T : IActionResult
+    {
+        return be.Accepted(
+            expectedCode,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Verifies that the request has
+    /// the required status code
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="expectedCode"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static IMore<T> Accepted<T>(
         this IBe<T> be,
         HttpStatusCode expectedCode,
@@ -938,7 +1436,7 @@ as precise as possible."
                     FinalMessageFor(
                         () => $@"Expected request {
                             passed.AsNot()
-                        }to have been accepted with a {
+                        }to have been {verb} with a {
                             (int)expectedCode
                         } {expectedCode}, but found {response.StatusCode}",
                         customMessageGenerator
@@ -948,13 +1446,44 @@ as precise as possible."
         );
     }
 
+    /// <summary>
+    /// Verifies that an action result is for
+    /// a rejected request (http status code >= 400)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static IMore<T> Rejected<T>(
         this IBe<T> be
     ) where T : IActionResult
     {
-        return be.Rejected(null);
+        return be.Rejected(NULL_STRING);
     }
 
+    /// <summary>
+    /// Verifies that an action result is for
+    /// a rejected request (http status code >= 400)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Rejected<T>(
+        this IBe<T> be,
+        string customMessage
+    ) where T : IActionResult
+    {
+        return be.Rejected(() => customMessage);
+    }
+
+    /// <summary>
+    /// Verifies that an action result is for
+    /// a rejected request (http status code >= 400)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static IMore<T> Rejected<T>(
         this IBe<T> be,
         Func<string> customMessageGenerator
@@ -983,13 +1512,47 @@ as precise as possible."
         );
     }
 
+    /// <summary>
+    /// Verifies that the action result is
+    /// for a request which was rejected
+    /// with status code 400 (Bad Request)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static IMore<T> Rejected401<T>(
         this IBe<T> be
     ) where T : IActionResult
     {
-        return be.Rejected401(() => null);
+        return be.Rejected401(NULL_STRING);
     }
 
+    /// <summary>
+    /// Verifies that the action result is
+    /// for a request which was rejected
+    /// with status code 400 (Bad Request)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Rejected401<T>(
+        this IBe<T> be,
+        string customMessage
+    ) where T : IActionResult
+    {
+        return be.Rejected401(() => customMessage);
+    }
+
+    /// <summary>
+    /// Verifies that the action result is
+    /// for a request which was rejected
+    /// with status code 401 (Unauthorized)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static IMore<T> Rejected401<T>(
         this IBe<T> be,
         Func<string> customMessageGenerator
@@ -998,13 +1561,47 @@ as precise as possible."
         return be.Rejected(HttpStatusCode.Unauthorized, customMessageGenerator);
     }
 
+    /// <summary>
+    /// Verifies that the action result is
+    /// for a request which was rejected
+    /// with status code 403 (Forbidden)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static IMore<T> Rejected403<T>(
         this IBe<T> be
     ) where T : IActionResult
     {
-        return be.Rejected403(() => null);
+        return be.Rejected403(NULL_STRING);
     }
 
+    /// <summary>
+    /// Verifies that the action result is
+    /// for a request which was rejected
+    /// with status code 403 (Forbidden)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Rejected403<T>(
+        this IBe<T> be,
+        string customMessage
+    ) where T : IActionResult
+    {
+        return be.Rejected403(() => customMessage);
+    }
+
+    /// <summary>
+    /// Verifies that the action result is
+    /// for a request which was rejected
+    /// with status code 403 (Forbidden)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static IMore<T> Rejected403<T>(
         this IBe<T> be,
         Func<string> customMessageGenerator
@@ -1013,14 +1610,97 @@ as precise as possible."
         return be.Rejected(HttpStatusCode.Forbidden, customMessageGenerator);
     }
 
+    /// <summary>
+    /// Verifies that the action result is
+    /// for a request which was rejected
+    /// with status code 404 (Not Found)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static IMore<T> Rejected404<T>(
         this IBe<T> be
     ) where T : IActionResult
     {
-        return be.Rejected404(() => null);
+        return be.Rejected404(NULL_STRING);
     }
 
+    /// <summary>
+    /// Verifies that the action result is
+    /// for a request which was rejected
+    /// with status code 404 (Not Found)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
     public static IMore<T> Rejected404<T>(
+        this IBe<T> be,
+        string customMessage
+    ) where T : IActionResult
+    {
+        return be.Rejected404(() => customMessage);
+    }
+
+    /// <summary>
+    /// Verifies that the action result is
+    /// for a request which was rejected
+    /// with status code 404 (Not Found)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Rejected404<T>(
+        this IBe<T> be,
+        Func<string> customMessageGenerator
+    ) where T : IActionResult
+    {
+        return be.Rejected(HttpStatusCode.NotFound, customMessageGenerator);
+    }
+
+    /// <summary>
+    /// Verifies that the action result is
+    /// for a request which was rejected
+    /// with status code 404 (Not Found)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> NotFound<T>(
+        this IBe<T> be
+    ) where T : IActionResult
+    {
+        return be.NotFound(NULL_STRING);
+    }
+
+    /// <summary>
+    /// Verifies that the action result is
+    /// for a request which was rejected
+    /// with status code 404 (Not Found)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> NotFound<T>(
+        this IBe<T> be,
+        string customMessage
+    ) where T : IActionResult
+    {
+        return be.NotFound(() => customMessage);
+    }
+
+    /// <summary>
+    /// Verifies that the action result is
+    /// for a request which was rejected
+    /// with status code 404 (Not Found)
+    /// </summary>
+    /// <param name="be"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> NotFound<T>(
         this IBe<T> be,
         Func<string> customMessageGenerator
     ) where T : IActionResult

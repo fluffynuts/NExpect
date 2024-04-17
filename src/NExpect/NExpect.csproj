@@ -29,7 +29,7 @@
     </Description>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
+  <PropertyGroup Condition="'$(TargetFramework)'!='net462'">
     <DefineConstants>NETSTANDARD</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
@@ -49,18 +49,47 @@
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ArrayExtensions.cs" Link="Imported\ArrayExtensions.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\AutoLocker.cs" Link="Imported\AutoLocker.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\AutoResetter.cs" Link="Imported\AutoResetter.cs"/>
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\AutoResetterOfT.cs">
-      <Link>Imported\AutoResetterOfT.cs</Link>
-    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\AutoResetterOfT.cs" Link="Imported\AutoResetterOfT.cs" />
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ByteArrayExtensions.cs" Link="Imported\ByteArrayExtensions.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DeepEqualityTester.cs" Link="Imported\DeepEqualityTester.cs"/>
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingConnectionStringSettingCollection.cs" Link="Imported\Dictionaries\DictionaryWrappingConnectionStringSettingCollection.cs"/>
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingNameValueCollection.cs" Link="Dictionaries\Imported\DictionaryWrappingNameValueCollection.cs"/>
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingObject.cs" Link="Dictionaries\Imported\DictionaryWrappingObject.cs"/>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\CaseWarpingDictionaryWrapper.cs">
+      <Link>Imported\Dictionaries\CaseWarpingDictionaryWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DefaultDictionary.cs">
+      <Link>Imported\Dictionaries\DefaultDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingConnectionStringSettingCollection.cs">
+      <Link>Imported\Dictionaries\DictionaryWrappingConnectionStringSettingCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingNameValueCollection.cs">
+      <Link>Imported\Dictionaries\DictionaryWrappingNameValueCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\DictionaryWrappingObject.cs">
+      <Link>Imported\Dictionaries\DictionaryWrappingObject.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\GenericDictionaryEnumerator.cs">
+      <Link>Imported\Dictionaries\GenericDictionaryEnumerator.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\MergeDictionary.cs">
+      <Link>Imported\Dictionaries\MergeDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\OrderedDictionary.cs">
+      <Link>Imported\Dictionaries\OrderedDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\RedirectingDictionary.cs">
+      <Link>Imported\Dictionaries\RedirectingDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\TransformingDictionary.cs">
+      <Link>Imported\Dictionaries\TransformingDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Dictionaries\ValidatingDictionary.cs">
+      <Link>Imported\Dictionaries\ValidatingDictionary.cs</Link>
+    </Compile>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DictionaryExtensions.cs" Link="Imported\DictionaryExtensions.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\EnumerableWrapper.cs" Link="Imported\EnumerableWrapper.cs"/>
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\FlagExtensions.cs">
-      <Link>Imported\FlagExtensions.cs</Link>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\FlagExtensions.cs" Link="Imported\FlagExtensions.cs" />
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ListExtensions.cs">
+      <Link>Imported\ListExtensions.cs</Link>
     </Compile>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ObjectExtensions.cs" Link="Imported\ObjectExtensions.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ExtensionsForIEnumerables.cs" Link="Imported\ExtensionsForIEnumerables.cs"/>
@@ -70,9 +99,7 @@
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PathType.cs" Link="Imported\PathType.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PropertyOrField.cs" Link="Imported\PropertyOrField.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\PyLike.cs" Link="Imported\PyLike.cs"/>
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\StreamExtensions.cs">
-      <Link>Imported\StreamExtensions.cs</Link>
-    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\StreamExtensions.cs" Link="Imported\StreamExtensions.cs" />
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\StringExtensions.cs" Link="Imported\StringExtensions.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\RandomNumber.cs" Link="Imported\RandomNumber.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Stringifier.cs" Link="Imported\Stringifier.cs"/>

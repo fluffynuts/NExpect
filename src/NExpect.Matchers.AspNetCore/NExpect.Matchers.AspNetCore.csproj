@@ -12,12 +12,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <IsPackable>true</IsPackable>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(TargetFramework)'=='netstandard2.0'">
-    <DefineConstants>NETSTANDARD</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup>
-    <DefineConstants>BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
+    <DefineConstants>$(DefineConstants);NETSTANDARD;BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
     <PackageVersion>2.0.90</PackageVersion>
@@ -262,6 +257,9 @@
     <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeHttpResponseFeature.cs">
       <Link>Imported\Fakes\FakeHttpResponseFeature.cs</Link>
     </Compile>
+    <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeJsonResultExecutor.cs">
+      <Link>Imported\Fakes\FakeJsonResultExecutor.cs</Link>
+    </Compile>
     <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Fakes\FakeModelMetadata.cs">
       <Link>Imported\Fakes\FakeModelMetadata.cs</Link>
     </Compile>
@@ -387,6 +385,24 @@
     </Compile>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Async.cs">
       <Link>Imported\Async.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Builder.cs">
+      <Link>Imported\Builder.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DateTimeExtensions.cs">
+      <Link>DateTimeExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\MIMEType.cs">
+      <Link>MIMEType.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\MimeType.cs">
+      <Link>Imported\MimeType.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Run.Until.cs">
+      <Link>Run.Until.cs</Link>
+    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\UriExtensions.cs">
+      <Link>Imported\UriExtensions.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
