@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Routing;
 using NExpect.Exceptions;
 using PeanutButter.TestUtils.AspNetCore.Builders;
 using PeanutButter.TestUtils.AspNetCore.Fakes;
-using PeanutButter.Utils;
 
 namespace NExpect.Matchers.AspNet.Tests;
 
