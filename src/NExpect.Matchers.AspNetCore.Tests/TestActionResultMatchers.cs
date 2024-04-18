@@ -960,6 +960,24 @@ public class TestActionResultMatchers
                 },
                 Throws.Nothing
             );
+            Assert.That(
+                () =>
+                    Expect(actionResult)
+                        .To.Have.StatusCode(otherCode),
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
+            Assert.That(
+                () =>
+                    Expect(actionResult)
+                        .Not.To.Have.StatusCode(otherCode),
+                Throws.Nothing
+            );
+            Assert.That(
+                () =>
+                    Expect(actionResult)
+                        .To.Not.Have.StatusCode(otherCode),
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -1187,7 +1205,7 @@ public class TestActionResultMatchers
 
                 // Assert
             }
-            
+
             [Test]
             public void ShouldBeAbleToAssertRejected404()
             {
@@ -1261,6 +1279,7 @@ public class TestActionResultMatchers
 
                 // Assert
             }
+
             [Test]
             public void ShouldBeAbleToAssertNotFound()
             {
@@ -1334,7 +1353,6 @@ public class TestActionResultMatchers
 
                 // Assert
             }
-            
         }
     }
 }
