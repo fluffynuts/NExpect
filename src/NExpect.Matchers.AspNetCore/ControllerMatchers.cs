@@ -1,486 +1,522 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using Imported.PeanutButter.Utils;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
+using _HttpMethod_ = Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpMethod;
 
-namespace NExpect
+namespace NExpect;
+
+/// <summary>
+/// Adds matchers for AspNetCore Controllers and Controller Actions
+/// </summary>
+public static class ControllerMatchers
 {
     /// <summary>
-    /// Adds matchers for AspNetCore Controllers and Controller Actions
+    /// Asserts that the controller has the expected base route
     /// </summary>
-    public static class ControllerMatchers
+    /// <param name="have"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
+    public static IMore<MethodInfo> Route(
+        this IHave<MethodInfo> have,
+        string expected
+    )
     {
-        /// <summary>
-        /// Asserts that the controller has the named method
-        /// </summary>
-        /// <param name="have"></param>
-        /// <param name="method"></param>
-        /// <returns></returns>
-        public static SupportingExtension Method(
-            this IHave<Type> have,
-            string method
-        )
-        {
-            return have.Method(method, NULL_STRING);
-        }
+        return have.Route(expected, () => NULL_STRING);
+    }
 
-        /// <summary>
-        /// Asserts that the controller has the named method
-        /// </summary>
-        /// <param name="have"></param>
-        /// <param name="method"></param>
-        /// <param name="customMessage"></param>
-        /// <returns></returns>
-        public static SupportingExtension Method(
-            this IHave<Type> have,
-            string method,
-            string customMessage
-        )
-        {
-            return have.Method(method, () => customMessage);
-        }
+    /// <summary>
+    /// Asserts that the controller has the expected base route
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<MethodInfo> Route(
+        this IHave<MethodInfo> have,
+        string expected,
+        Func<string> customMessageGenerator
+    )
+    {
+        return AddRouteMatcher(
+            have,
+            expected,
+            customMessageGenerator
+        );
+    }
 
-        /// <summary>
-        /// Asserts that the controller has the named method
-        /// </summary>
-        /// <param name="have"></param>
-        /// <param name="method"></param>
-        /// <param name="customMessageGenerator"></param>
-        /// <returns></returns>
-        public static SupportingExtension Method(
-            this IHave<Type> have,
-            string method,
-            Func<string> customMessageGenerator
-        )
-        {
-            var result = new SupportingExtension();
-            have.AddMatcher(
-                actual =>
-                {
-                    result.Member = method;
-                    result.Continuation = have;
-                    var passed = actual.GetMethod(method) != null;
-                    return new MatcherResult(
-                        passed,
-                        FinalMessageFor(
-                            () => $"Expected type {actual} to have method {method}",
-                            customMessageGenerator
-                        )
-                    );
-                }
-            );
-            return result;
-        }
+    /// <summary>
+    /// Quick-n-dirty assertion that a controller's method has the required route
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="member"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
+    public static IMore<MethodInfo> Route(
+        this IHave<MethodInfo> have,
+        string member,
+        string expected
+    )
+    {
+        return have.Route(
+            member,
+            () => expected
+        );
+    }
 
-        /// <summary>
-        /// Asserts that the controller has the expected base route
-        /// </summary>
-        /// <param name="have"></param>
-        /// <param name="expected"></param>
-        /// <returns></returns>
-        public static IMore<Type> Route(
-            this IHave<Type> have,
-            string expected
-        )
-        {
-            return have.Route(expected, () => NULL_STRING);
-        }
+    /// <summary>
+    /// Asserts that the controller has the expected base route
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
+    public static IMore<MethodInfo> Route(
+        this IWith<MethodInfo> have,
+        string expected
+    )
+    {
+        return have.Route(expected, () => NULL_STRING);
+    }
 
-        /// <summary>
-        /// Asserts that the controller has the expected base route
-        /// </summary>
-        /// <param name="have"></param>
-        /// <param name="expected"></param>
-        /// <param name="customMessageGenerator"></param>
-        /// <returns></returns>
-        public static IMore<Type> Route(
-            this IHave<Type> have,
-            string expected,
-            Func<string> customMessageGenerator
-        )
-        {
-            have.AddMatcher(
-                actual =>
-                {
-                    var attribs = actual.GetCustomAttributes(false).OfType<RouteAttribute>();
-                    var passed = attribs.Any(a => a.Template == expected);
-                    return new MatcherResult(
-                        passed,
-                        FinalMessageFor(
-                            () => $"Expected {actual.Name} {passed.AsNot()}to have route '{expected}'",
-                            customMessageGenerator
-                        )
-                    );
-                }
-            );
-            return have.More();
-        }
+    /// <summary>
+    /// Asserts that the controller has the expected base route
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<MethodInfo> Route(
+        this IWith<MethodInfo> have,
+        string expected,
+        Func<string> customMessageGenerator
+    )
+    {
+        return AddRouteMatcher(
+            have,
+            expected,
+            customMessageGenerator
+        );
+    }
 
-        /// <summary>
-        /// Quick-n-dirty assertion that a controller's method has the required route
-        /// </summary>
-        /// <param name="have"></param>
-        /// <param name="member"></param>
-        /// <param name="expected"></param>
-        /// <returns></returns>
-        public static IMore<Type> Route(
-            this IHave<Type> have,
-            string member,
-            string expected
-        )
-        {
-            have.AddMatcher(
-                actual =>
-                {
-                    var method = actual.GetMethod(member);
-                    if (method == null)
-                    {
-                        return new MatcherResult(
-                            false,
-                            () => $"Expected {false.AsNot()}to find method {actual}.{method}"
-                        );
-                    }
+    /// <summary>
+    /// Quick-n-dirty assertion that a controller's method has the required route
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="member"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
+    public static IMore<MethodInfo> Route(
+        this IWith<MethodInfo> have,
+        string member,
+        string expected
+    )
+    {
+        return have.Route(
+            member,
+            () => expected
+        );
+    }
 
-                    var attribs = method.GetCustomAttributes(false).OfType<RouteAttribute>();
-                    var passed = attribs.Any(a => a.Template == expected);
-                    return new MatcherResult(
-                        passed,
-                        () => $"Expected {actual}.{method} {passed.AsNot()}to have route '{expected}'"
-                    );
-                }
-            );
-            return have.More();
-        }
+    /// <summary>
+    /// Asserts that the controller has the expected base route
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
+    public static IMore<MethodInfo> Route(
+        this IAnd<MethodInfo> have,
+        string expected
+    )
+    {
+        return have.Route(expected, () => NULL_STRING);
+    }
 
-        /// <summary>
-        /// Provides fluency for Supporting()
-        /// </summary>
-        public class SupportingExtension
-        {
-            internal string Member { get; set; }
-            internal IHave<Type> Continuation { get; set; }
+    /// <summary>
+    /// Asserts that the controller has the expected base route
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<MethodInfo> Route(
+        this IAnd<MethodInfo> have,
+        string expected,
+        Func<string> customMessageGenerator
+    )
+    {
+        return AddRouteMatcher(
+            have,
+            expected,
+            customMessageGenerator
+        );
+    }
 
-            /// <summary>
-            /// Asserts that the controller method being operated on supports
-            /// the desired HttpMethod
-            /// </summary>
-            /// <param name="method"></param>
-            /// <returns></returns>
-            public AndSupportingExtension Supporting(HttpMethod method)
+    /// <summary>
+    /// Quick-n-dirty assertion that a controller's method has the required route
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="member"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
+    public static IMore<MethodInfo> Route(
+        this IAnd<MethodInfo> have,
+        string member,
+        string expected
+    )
+    {
+        return have.Route(
+            member,
+            () => expected
+        );
+    }
+
+    private static IMore<MethodInfo> AddRouteMatcher(
+        ICanAddMatcher<MethodInfo> continuation,
+        string expected,
+        Func<string> customMessageGenerator
+    )
+    {
+        return continuation.AddMatcher(
+            actual =>
             {
-                Continuation.AddMatcher(
-                    controllerType =>
-                    {
-                        var supportedMethods = controllerType.GetMethod(Member)
-                            ?.GetCustomAttributes(false)
-                            .Select(attrib => attrib as IActionHttpMethodProvider)
-                            .Where(a => a != null)
-                            .SelectMany(a => a.HttpMethods)
-                            .Distinct()
-                            .ToArray();
-                        var isImplicitHttp = method == HttpMethod.Get &&
-                            supportedMethods.None();
-                        var passed = isImplicitHttp || (
-                            supportedMethods?.Any(
-                                m => m.Equals(method.Method, StringComparison.OrdinalIgnoreCase)
-                            ) ?? false
-                        );
-                        return new MatcherResult(
-                            passed,
-                            () => $"Expected {controllerType}.{Member} to support HttpMethod {method}"
-                        );
-                    }
-                );
-                return Next();
-            }
-
-            /// <summary>
-            /// Fluency extension
-            /// </summary>
-            public SupportingExtension With => this;
-
-            /// <summary>
-            /// Fluency extension
-            /// </summary>
-            public SupportingExtension And => this;
-
-            /// <summary>
-            /// Asserts that the method is decorated with the expected attribute
-            /// </summary>
-            /// <typeparam name="TAttribute"></typeparam>
-            /// <returns></returns>
-            public SupportingExtension Attribute<TAttribute>()
-            {
-                return Attribute<TAttribute>(a => true);
-            }
-
-            /// <summary>
-            /// Asserts that the method is decorated with the expected attribute
-            /// </summary>
-            /// <param name="matcher"></param>
-            /// <typeparam name="TAttribute"></typeparam>
-            /// <returns></returns>
-            public SupportingExtension Attribute<TAttribute>(
-                Func<TAttribute, bool> matcher
-            )
-            {
-                Continuation.AddMatcher(
-                    controllerType =>
-                    {
-                        var method = controllerType.GetMethods()
-                            .Where(o => o.Name == Member)
-                            .ToArray();
-
-                        return method switch
-                        {
-                            [] => CreateMissingMethodResult(controllerType),
-                            [var m] => VerifyAttribute<TAttribute>(controllerType, m, matcher),
-                            _ => CreateAmbiguousMethodResult(controllerType, method.Length)
-                        };
-                    }
-                );
-                return this;
-            }
-
-            private MatcherResult CreateAmbiguousMethodResult(
-                Type controllerType,
-                int howMany
-            )
-            {
-                return new EnforcedMatcherResult(
-                    false,
-                    () => $"Expected to find one method named '{Member}' on {controllerType}, but found {howMany}"
-                );
-            }
-
-            private MatcherResult VerifyAttribute<TAttribute>(
-                Type controllerType,
-                MethodInfo methodInfo,
-                Func<TAttribute, bool> matcher
-            )
-            {
-                var passed = methodInfo.GetCustomAttributes(true)
-                    .OfType<TAttribute>()
-                    .Where(matcher)
-                    .Any();
+                var attribs = actual.GetCustomAttributes(false).OfType<RouteAttribute>();
+                var passed = attribs.Any(a => a.Template == expected);
                 return new MatcherResult(
                     passed,
-                    () => $@"Expected {
-                        controllerType
-                    }.{
-                        Member
-                    } {
-                        passed.AsNot()
-                    }to be decorated with [{typeof(TAttribute).Name.RegexReplace("Attribute$", "")}]"
+                    FinalMessageFor(
+                        () => $"Expected {actual.Name} {passed.AsNot()}to have route '{expected}'",
+                        customMessageGenerator
+                    )
                 );
             }
+        );
+    }
 
-            private MatcherResult CreateMissingMethodResult(Type controllerType)
-            {
-                return new EnforcedMatcherResult(
-                    false,
-                    () => $"Expected {controllerType} to have method '{Member}' but no such-named method was found"
-                );
-            }
+    public static IMore<MethodInfo> Supporting(
+        this IMore<MethodInfo> more,
+        HttpMethod expected
+    )
+    {
+        return more.Supporting(expected, NULL_STRING);
+    }
 
-            /// <summary>
-            /// Asserts that the controller action being operated on has the specified route
-            /// </summary>
-            /// <param name="expected"></param>
-            /// <returns></returns>
-            public SupportingExtension Route(string expected)
-            {
-                Continuation.AddMatcher(
-                    controllerType =>
-                    {
-                        var routes = controllerType.GetMethod(Member)
-                            ?.GetCustomAttributes(false)
-                            .OfType<RouteAttribute>()
-                            .Select(a => a.Template)
-                            .ToArray();
-                        var passed = routes?.Contains(expected) ?? false;
-                        return new MatcherResult(
-                            passed,
-                            () =>
-                            {
-                                var start = $"Expected {controllerType}.{Member} to have route '{expected}'";
-                                var count = routes.Count();
-                                var no = count == 0
-                                    ? "no "
-                                    : "";
-                                var s = count == 1
-                                    ? ""
-                                    : "s";
-                                var colon = count > 0
-                                    ? ":"
-                                    : "";
-                                return string.Join(
-                                    "\n",
-                                    new[]
-                                        {
-                                            start,
-                                            $"Have {no}route{s}{colon}"
-                                        }
-                                        .Concat(routes.Select(r => $" - {r}"))
-                                );
-                            }
-                        );
-                    }
-                );
-                return this;
-            }
+    public static IMore<MethodInfo> Supporting(
+        this IMore<MethodInfo> more,
+        HttpMethod expected,
+        string customMessage
+    )
+    {
+        return more.Supporting(
+            expected,
+            () => customMessage
+        );
+    }
 
-            private AndSupportingExtension Next()
-            {
-                return new AndSupportingExtension(Continuation, Member, this);
-            }
-        }
-
-        /// <summary>
-        /// Assert that a controller type has been decorated with the applicable [Area] attribute
-        /// </summary>
-        /// <param name="have"></param>
-        /// <param name="areaName"></param>
-        /// <returns></returns>
-        public static IMore<Type> Area(
-            this IHave<Type> have,
-            string areaName
-        )
+    public static IMore<MethodInfo> Supporting(
+        this IMore<MethodInfo> more,
+        HttpMethod expected,
+        Func<string> customMessageGenerator
+    )
+    {
+        var continuation = more as ICanAddMatcher<MethodInfo>;
+        if (HttpMethodLookup.TryGetValue(expected, out var method))
         {
-            return have.Area(
-                areaName,
-                NULL_STRING
+            throw new InvalidOperationException(
+                $"Unable to translate '{expected}' to type Microsoft.AspNetCore.Server.Kestrel.Core.Internal.HttpMethod"
             );
         }
 
-        /// <summary>
-        /// Assert that a controller type has been decorated with the applicable [Area] attribute
-        /// </summary>
-        /// <param name="have"></param>
-        /// <param name="areaName"></param>
-        /// <param name="customMessage"></param>
-        /// <returns></returns>
-        public static IMore<Type> Area(
-            this IHave<Type> have,
-            string areaName,
-            string customMessage
-        )
+        return continuation.Supporting(
+            method,
+            customMessageGenerator
+        );
+    }
+
+    public static IMore<MethodInfo> Supporting(
+        this IAnd<MethodInfo> more,
+        HttpMethod expected
+    )
+    {
+        return more.Supporting(expected, NULL_STRING);
+    }
+
+    public static IMore<MethodInfo> Supporting(
+        this IAnd<MethodInfo> more,
+        HttpMethod expected,
+        string customMessage
+    )
+    {
+        return more.Supporting(
+            expected,
+            () => customMessage
+        );
+    }
+
+    public static IMore<MethodInfo> Supporting(
+        this IAnd<MethodInfo> more,
+        HttpMethod expected,
+        Func<string> customMessageGenerator
+    )
+    {
+        var continuation = more as ICanAddMatcher<MethodInfo>;
+        if (HttpMethodLookup.TryGetValue(expected, out var method))
         {
-            return have.Area(
-                areaName,
-                () => customMessage
+            throw new InvalidOperationException(
+                $"Unable to translate '{expected}' to type Microsoft.AspNetCore.Server.Kestrel.Core.Internal.HttpMethod"
             );
         }
 
-        /// <summary>
-        /// Assert that a controller type has been decorated with the applicable [Area] attribute
-        /// </summary>
-        /// <param name="have"></param>
-        /// <param name="areaName"></param>
-        /// <param name="customMessageGenerator"></param>
-        /// <returns></returns>
-        public static IMore<Type> Area(
-            this IHave<Type> have,
-            string areaName,
-            Func<string> customMessageGenerator
-        )
+        return continuation.Supporting(
+            method,
+            customMessageGenerator
+        );
+    }
+
+    private static IDictionary<HttpMethod, _HttpMethod_> HttpMethodLookup =
+        new Dictionary<HttpMethod, _HttpMethod_>()
         {
-            return have.AddMatcher(
-                actual =>
+            [HttpMethod.Delete] = _HttpMethod_.Delete,
+            [HttpMethod.Get] = _HttpMethod_.Get,
+            [HttpMethod.Head] = _HttpMethod_.Head,
+            [HttpMethod.Options] = _HttpMethod_.Options,
+            [HttpMethod.Patch] = _HttpMethod_.Patch,
+            [HttpMethod.Post] = _HttpMethod_.Post,
+            [HttpMethod.Put] = _HttpMethod_.Put,
+            [HttpMethod.Trace] = _HttpMethod_.Trace
+        };
+
+    private static IMore<MethodInfo> Supporting(
+        this ICanAddMatcher<MethodInfo> more,
+        _HttpMethod_ expected,
+        Func<string> customMessageGenerator
+    )
+    {
+        return more.AddMatcher(
+            actual =>
+            {
+                var attribs = actual.GetCustomAttributes(inherit: false);
+                var specified = new HashSet<_HttpMethod_>();
+                foreach (var attrib in attribs)
                 {
-                    if (actual is null)
+                    var match = attrib switch
                     {
-                        return new EnforcedMatcherResult(
-                            false,
-                            "Provided controller type is null"
-                        );
+                        HttpGetAttribute => _HttpMethod_.Get,
+                        HttpPutAttribute => _HttpMethod_.Put,
+                        HttpPostAttribute => _HttpMethod_.Post,
+                        HttpPatchAttribute => _HttpMethod_.Patch,
+                        HttpOptionsAttribute => _HttpMethod_.Options,
+                        HttpDeleteAttribute => _HttpMethod_.Delete,
+                        _ => null as _HttpMethod_?
+                    };
+                    if (match is null)
+                    {
+                        continue;
                     }
 
-                    if (areaName is null)
+                    specified.Add(match.Value);
+                }
+
+                var configuredOnAction = specified.IsEmpty()
+                    ? new[]
                     {
-                        return new EnforcedMatcherResult(
-                            false,
-                            "Provided area name is null"
-                        );
-                    }
+                        _HttpMethod_.Get
+                    } // implied when nothing is configured
+                    : specified.ToArray();
+                var passed = configuredOnAction.Contains(expected);
+                return new MatcherResult(
+                    passed,
+                    () =>
+                        $"Expected '{
+                            actual.Name
+                        }' on '{
+                            actual.DeclaringType.PrettyName()
+                        }' {passed.AsNot()}to support method '{expected}', which supports: ({string.Join(",", configuredOnAction)})",
+                    customMessageGenerator
+                );
+            }
+        );
+    }
 
-                    var attrib = actual.GetCustomAttributes(inherit: false)
-                        .OfType<AreaAttribute>()
-                        .FirstOrDefault();
+    public static IMore<MethodInfo> Supporting(
+        this IMore<MethodInfo> more,
+        _HttpMethod_ method
+    )
+    {
+        return more.Supporting(
+            method,
+            NULL_STRING
+        );
+    }
 
-                    if (attrib is null)
-                    {
-                        return new MatcherResult(
-                            false,
-                            FinalMessageFor(
-                                () =>
-                                    $"Expected type {actual} {false.AsNot()} to be decorated with [Area(\"{areaName}\")]",
-                                customMessageGenerator
-                            )
-                        );
-                    }
+    public static IMore<MethodInfo> Supporting(
+        this IMore<MethodInfo> more,
+        _HttpMethod_ method,
+        string customMessage
+    )
+    {
+        return more.Supporting(
+            method,
+            () => customMessage
+        );
+    }
 
-                    var passed = areaName.Equals(attrib.RouteValue, StringComparison.OrdinalIgnoreCase);
-                    var more = passed
-                        ? $" but found [Area(\"{attrib.RouteValue}\")]"
-                        : " but found exactly that";
+    public static IMore<MethodInfo> Supporting(
+        this IMore<MethodInfo> more,
+        _HttpMethod_ method,
+        Func<string> customMessageGenerator
+    )
+    {
+        var continuation = more as ICanAddMatcher<MethodInfo>;
+        return continuation.Supporting(
+            method,
+            customMessageGenerator
+        );
+    }
+
+
+    public static IMore<MethodInfo> Supporting(
+        this IAnd<MethodInfo> more,
+        _HttpMethod_ method
+    )
+    {
+        return more.Supporting(
+            method,
+            NULL_STRING
+        );
+    }
+
+    public static IMore<MethodInfo> Supporting(
+        this IAnd<MethodInfo> more,
+        _HttpMethod_ method,
+        string customMessage
+    )
+    {
+        return more.Supporting(
+            method,
+            () => customMessage
+        );
+    }
+
+    public static IMore<MethodInfo> Supporting(
+        this IAnd<MethodInfo> more,
+        _HttpMethod_ method,
+        Func<string> customMessageGenerator
+    )
+    {
+        var continuation = more as ICanAddMatcher<MethodInfo>;
+        return continuation.Supporting(
+            method,
+            customMessageGenerator
+        );
+    }
+
+
+    /// <summary>
+    /// Assert that a controller type has been decorated with the applicable [Area] attribute
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="areaName"></param>
+    /// <returns></returns>
+    public static IMore<Type> Area(
+        this IHave<Type> have,
+        string areaName
+    )
+    {
+        return have.Area(
+            areaName,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Assert that a controller type has been decorated with the applicable [Area] attribute
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="areaName"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<Type> Area(
+        this IHave<Type> have,
+        string areaName,
+        string customMessage
+    )
+    {
+        return have.Area(
+            areaName,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Assert that a controller type has been decorated with the applicable [Area] attribute
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="areaName"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<Type> Area(
+        this IHave<Type> have,
+        string areaName,
+        Func<string> customMessageGenerator
+    )
+    {
+        return have.AddMatcher(
+            actual =>
+            {
+                if (actual is null)
+                {
+                    return new EnforcedMatcherResult(
+                        false,
+                        "Provided controller type is null"
+                    );
+                }
+
+                if (areaName is null)
+                {
+                    return new EnforcedMatcherResult(
+                        false,
+                        "Provided area name is null"
+                    );
+                }
+
+                var attrib = actual.GetCustomAttributes(inherit: false)
+                    .OfType<AreaAttribute>()
+                    .FirstOrDefault();
+
+                if (attrib is null)
+                {
                     return new MatcherResult(
-                        passed,
+                        false,
                         FinalMessageFor(
                             () =>
-                                $"Expected type {actual} {passed.AsNot()} to be decorated with [Area(\"{areaName}\")]{more}",
+                                $"Expected type {actual} {false.AsNot()} to be decorated with [Area(\"{areaName}\")]",
                             customMessageGenerator
                         )
                     );
                 }
-            );
-        }
 
-        /// <summary>
-        /// Fluency extension
-        /// </summary>
-        public class AndSupportingExtension
-        {
-            private readonly string _member;
-            private readonly IHave<Type> _continuation;
-
-            /// <summary>
-            /// Fluency extension
-            /// </summary>
-            public SupportingExtension With { get; }
-
-            internal AndSupportingExtension(
-                IHave<Type> continuation,
-                string member,
-                SupportingExtension supportingExtension
-            )
-            {
-                _continuation = continuation;
-                _member = member;
-                With = supportingExtension;
+                var passed = areaName.Equals(attrib.RouteValue, StringComparison.OrdinalIgnoreCase);
+                var more = passed
+                    ? $" but found [Area(\"{attrib.RouteValue}\")]"
+                    : " but found exactly that";
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () =>
+                            $"Expected type {actual} {passed.AsNot()} to be decorated with [Area(\"{areaName}\")]{more}",
+                        customMessageGenerator
+                    )
+                );
             }
-
-            /// <summary>
-            /// Asserts that the controller method being operated on has an
-            /// additional supported HttpMethod
-            /// </summary>
-            /// <param name="method"></param>
-            /// <returns></returns>
-            public AndSupportingExtension And(HttpMethod method)
-            {
-                return (new SupportingExtension()
-                {
-                    Member = _member,
-                    Continuation = _continuation
-                }).Supporting(method);
-            }
-        }
+        );
     }
 }

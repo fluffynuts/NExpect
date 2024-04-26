@@ -232,7 +232,7 @@ namespace NExpect.Matchers.AspNet.Tests
                     Expect(typeof(TestController))
                         .To.Have.Method(nameof(TestController.DoStuff))
                         .Supporting(HttpMethod.Get)
-                        .And(HttpMethod.Post)
+                        .And.Supporting(HttpMethod.Post)
                 ).Not.To.Throw();
                 // Act
                 // Assert
