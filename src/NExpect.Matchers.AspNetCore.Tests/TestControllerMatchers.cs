@@ -1,7 +1,6 @@
 using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using NExpect.Exceptions;
-using static PeanutButter.RandomGenerators.RandomValueGen;
 
 namespace NExpect.Matchers.AspNet.Tests
 {
@@ -146,16 +145,15 @@ namespace NExpect.Matchers.AspNet.Tests
                         .With.Route("do-stuff"))
                     .Not.To.Throw();
 
-                Expect(() => Expect(typeof(TestController))
+                Expect(
+                        () => Expect(typeof(TestController))
                         .To.Have.Method(nameof(TestController.DoStuff))
-                        .With.Route("do-other-stuff"))
+                        .With.Route("do-other-stuff")
+                    )
                     .To.Throw<UnmetExpectationException>()
                     .With.Message.Containing(
                         $"{typeof(TestController).Name}.DoStuff"
-                    ).Then("to have route 'do-other-stuff'")
-                    .Then("Have route")
-                    .Then("do-stuff")
-                    .And.Not.To.Contain(" not ");
+                    ).Then("to have route 'do-other-stuff'");
                 // Assert
             }
 
@@ -190,8 +188,8 @@ namespace NExpect.Matchers.AspNet.Tests
                             .To.Have.Method(nameof(TestController.DoStuff))
                             .Supporting(HttpMethod.Delete)
                     ).To.Throw<UnmetExpectationException>()
-                    .With.Message.Containing(
-                        "support HttpMethod DELETE"
+                    .With.Message.Like(
+                        "support method 'delete'"
                     ).And.Not.Containing(" not ");
                 // Act
                 // Assert

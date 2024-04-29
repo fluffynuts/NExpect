@@ -4,14 +4,13 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using Imported.PeanutButter.Utils;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
 using _HttpMethod_ = Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpMethod;
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect;
 
@@ -193,7 +192,7 @@ public static class ControllerMatchers
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        () => $"Expected {actual.Name} {passed.AsNot()}to have route '{expected}'",
+                        () => $"Expected {actual.DeclaringType.PrettyName()}.{actual.Name} {passed.AsNot()}to have route '{expected}'",
                         customMessageGenerator
                     )
                 );
@@ -201,14 +200,34 @@ public static class ControllerMatchers
         );
     }
 
+    /// <summary>
+    /// Verifies that the method is decorated
+    /// with the relevant attribute for determining
+    /// the http verb to use to access the endpoint
+    /// </summary>
+    /// <param name="more"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
     public static IMore<MethodInfo> Supporting(
         this IMore<MethodInfo> more,
         HttpMethod expected
     )
     {
-        return more.Supporting(expected, NULL_STRING);
+        return more.Supporting(
+            expected,
+            NULL_STRING
+        );
     }
 
+    /// <summary>
+    /// Verifies that the method is decorated
+    /// with the relevant attribute for determining
+    /// the http verb to use to access the endpoint
+    /// </summary>
+    /// <param name="more"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
     public static IMore<MethodInfo> Supporting(
         this IMore<MethodInfo> more,
         HttpMethod expected,
@@ -221,6 +240,15 @@ public static class ControllerMatchers
         );
     }
 
+    /// <summary>
+    /// Verifies that the method is decorated
+    /// with the relevant attribute for determining
+    /// the http verb to use to access the endpoint
+    /// </summary>
+    /// <param name="more"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
     public static IMore<MethodInfo> Supporting(
         this IMore<MethodInfo> more,
         HttpMethod expected,
@@ -228,7 +256,7 @@ public static class ControllerMatchers
     )
     {
         var continuation = more as ICanAddMatcher<MethodInfo>;
-        if (HttpMethodLookup.TryGetValue(expected, out var method))
+        if (!HttpMethodLookup.TryGetValue(expected, out var method))
         {
             throw new InvalidOperationException(
                 $"Unable to translate '{expected}' to type Microsoft.AspNetCore.Server.Kestrel.Core.Internal.HttpMethod"
@@ -241,6 +269,14 @@ public static class ControllerMatchers
         );
     }
 
+    /// <summary>
+    /// Verifies that the method is decorated
+    /// with the relevant attribute for determining
+    /// the http verb to use to access the endpoint
+    /// </summary>
+    /// <param name="more"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
     public static IMore<MethodInfo> Supporting(
         this IAnd<MethodInfo> more,
         HttpMethod expected
@@ -249,6 +285,15 @@ public static class ControllerMatchers
         return more.Supporting(expected, NULL_STRING);
     }
 
+    /// <summary>
+    /// Verifies that the method is decorated
+    /// with the relevant attribute for determining
+    /// the http verb to use to access the endpoint
+    /// </summary>
+    /// <param name="more"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
     public static IMore<MethodInfo> Supporting(
         this IAnd<MethodInfo> more,
         HttpMethod expected,
@@ -261,6 +306,15 @@ public static class ControllerMatchers
         );
     }
 
+    /// <summary>
+    /// Verifies that the method is decorated
+    /// with the relevant attribute for determining
+    /// the http verb to use to access the endpoint
+    /// </summary>
+    /// <param name="more"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
     public static IMore<MethodInfo> Supporting(
         this IAnd<MethodInfo> more,
         HttpMethod expected,
@@ -268,7 +322,7 @@ public static class ControllerMatchers
     )
     {
         var continuation = more as ICanAddMatcher<MethodInfo>;
-        if (HttpMethodLookup.TryGetValue(expected, out var method))
+        if (!HttpMethodLookup.TryGetValue(expected, out var method))
         {
             throw new InvalidOperationException(
                 $"Unable to translate '{expected}' to type Microsoft.AspNetCore.Server.Kestrel.Core.Internal.HttpMethod"
@@ -326,10 +380,10 @@ public static class ControllerMatchers
                 }
 
                 var configuredOnAction = specified.IsEmpty()
-                    ? new[]
-                    {
+                    ?
+                    [
                         _HttpMethod_.Get
-                    } // implied when nothing is configured
+                    ] // implied when nothing is configured
                     : specified.ToArray();
                 var passed = configuredOnAction.Contains(expected);
                 return new MatcherResult(
@@ -346,75 +400,127 @@ public static class ControllerMatchers
         );
     }
 
+    /// <summary>
+    /// Verifies that the method is decorated
+    /// with the relevant attribute for determining
+    /// the http verb to use to access the endpoint
+    /// </summary>
+    /// <param name="more"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
     public static IMore<MethodInfo> Supporting(
         this IMore<MethodInfo> more,
-        _HttpMethod_ method
+        _HttpMethod_ expected
     )
     {
         return more.Supporting(
-            method,
+            expected,
             NULL_STRING
         );
     }
 
+    /// <summary>
+    /// Verifies that the method is decorated
+    /// with the relevant attribute for determining
+    /// the http verb to use to access the endpoint
+    /// </summary>
+    /// <param name="more"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
     public static IMore<MethodInfo> Supporting(
         this IMore<MethodInfo> more,
-        _HttpMethod_ method,
+        _HttpMethod_ expected,
         string customMessage
     )
     {
         return more.Supporting(
-            method,
+            expected,
             () => customMessage
         );
     }
 
+    /// <summary>
+    /// Verifies that the method is decorated
+    /// with the relevant attribute for determining
+    /// the http verb to use to access the endpoint
+    /// </summary>
+    /// <param name="more"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
     public static IMore<MethodInfo> Supporting(
         this IMore<MethodInfo> more,
-        _HttpMethod_ method,
+        _HttpMethod_ expected,
         Func<string> customMessageGenerator
     )
     {
         var continuation = more as ICanAddMatcher<MethodInfo>;
         return continuation.Supporting(
-            method,
+            expected,
             customMessageGenerator
         );
     }
 
 
+    /// <summary>
+    /// Verifies that the method is decorated
+    /// with the relevant attribute for determining
+    /// the http verb to use to access the endpoint
+    /// </summary>
+    /// <param name="more"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
     public static IMore<MethodInfo> Supporting(
         this IAnd<MethodInfo> more,
-        _HttpMethod_ method
+        _HttpMethod_ expected
     )
     {
         return more.Supporting(
-            method,
+            expected,
             NULL_STRING
         );
     }
 
+    /// <summary>
+    /// Verifies that the method is decorated
+    /// with the relevant attribute for determining
+    /// the http verb to use to access the endpoint
+    /// </summary>
+    /// <param name="more"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
     public static IMore<MethodInfo> Supporting(
         this IAnd<MethodInfo> more,
-        _HttpMethod_ method,
+        _HttpMethod_ expected,
         string customMessage
     )
     {
         return more.Supporting(
-            method,
+            expected,
             () => customMessage
         );
     }
 
+    /// <summary>
+    /// Verifies that the method is decorated
+    /// with the relevant attribute for determining
+    /// the http verb to use to access the endpoint
+    /// </summary>
+    /// <param name="more"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
     public static IMore<MethodInfo> Supporting(
         this IAnd<MethodInfo> more,
-        _HttpMethod_ method,
+        _HttpMethod_ expected,
         Func<string> customMessageGenerator
     )
     {
         var continuation = more as ICanAddMatcher<MethodInfo>;
         return continuation.Supporting(
-            method,
+            expected,
             customMessageGenerator
         );
     }
@@ -513,6 +619,77 @@ public static class ControllerMatchers
                     FinalMessageFor(
                         () =>
                             $"Expected type {actual} {passed.AsNot()} to be decorated with [Area(\"{areaName}\")]{more}",
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
+    }
+
+    /// <summary>
+    /// Verifies that the controller is decorated
+    /// with a [Route(...)] attribute with the required
+    /// route
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
+    public static IMore<Type> Route(
+        this IHave<Type> have,
+        string expected
+    )
+    {
+        return have.Route(
+            expected,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Verifies that the controller is decorated
+    /// with a [Route(...)] attribute with the required
+    /// route
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<Type> Route(
+        this IHave<Type> have,
+        string expected,
+        string customMessage
+    )
+    {
+        return have.Route(
+            expected,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Verifies that the controller is decorated
+    /// with a [Route(...)] attribute with the required
+    /// route
+    /// </summary>
+    /// <param name="have"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<Type> Route(
+        this IHave<Type> have,
+        string expected,
+        Func<string> customMessageGenerator
+    )
+    {
+        return have.AddMatcher(
+            actual =>
+            {
+                var attribs = actual.GetCustomAttributes(false).OfType<RouteAttribute>();
+                var passed = attribs.Any(a => a.Template == expected);
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected {actual.Name} {passed.AsNot()}to have route '{expected}'",
                         customMessageGenerator
                     )
                 );
