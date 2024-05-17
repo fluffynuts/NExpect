@@ -1,79 +1,78 @@
-﻿using NExpect.Exceptions;
+using NExpect.Exceptions;
 using NUnit.Framework;
 
-namespace NExpect.Tests.ObjectEquality.Strings
+namespace NExpect.Tests.ObjectEquality.Strings;
+
+[TestFixture]
+public class Empty
 {
     [TestFixture]
-    public class Empty
+    public class To
     {
         [TestFixture]
-        public class To
+        public class Be
         {
             [TestFixture]
-            public class Be
+            public class Empty
             {
-                [TestFixture]
-                public class Empty
+                [Test]
+                public void WhenIsEmpty_ShouldNotThrow()
                 {
-                    [Test]
-                    public void WhenIsEmpty_ShouldNotThrow()
-                    {
-                        // Arrange
-                        var input = "";
-                        // Pre-Assert
-                        // Act
-                        Assert.That(() =>
-                            {
-                                Expect(input).To.Be.Empty();
-                            },
-                            Throws.Nothing);
-                        // Assert
-                    }
+                    // Arrange
+                    var input = "";
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(input).To.Be.Empty();
+                        },
+                        Throws.Nothing);
+                    // Assert
+                }
 
-                    [Test]
-                    public void Negated_WhenIsNotEmpty_ShouldNotThrow()
-                    {
-                        // Arrange
-                        var input = "123";
-                        // Pre-Assert
-                        // Act
-                        Assert.That(() =>
-                            {
-                                Expect(input).To.Not.Be.Empty();
-                            },
-                            Throws.Nothing);
-                        // Assert
-                    }
+                [Test]
+                public void Negated_WhenIsNotEmpty_ShouldNotThrow()
+                {
+                    // Arrange
+                    var input = "123";
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(input).To.Not.Be.Empty();
+                        },
+                        Throws.Nothing);
+                    // Assert
+                }
 
-                    [Test]
-                    public void WhenIsNotEmpty_ShouldThrow()
-                    {
-                        // Arrange
-                        var input = "123";
-                        // Pre-Assert
-                        // Act
-                        Assert.That(() =>
-                            {
-                                Expect(input).To.Be.Empty();
-                            },
-                            Throws.InstanceOf<UnmetExpectationException>());
-                        // Assert
-                    }
+                [Test]
+                public void WhenIsNotEmpty_ShouldThrow()
+                {
+                    // Arrange
+                    var input = "123";
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(input).To.Be.Empty();
+                        },
+                        Throws.InstanceOf<UnmetExpectationException>());
+                    // Assert
+                }
 
-                    [Test]
-                    public void Negated_WhenIsEmpty_ShouldThrow()
-                    {
-                        // Arrange
-                        var input = "";
-                        // Pre-Assert
-                        // Act
-                        Assert.That(() =>
-                            {
-                                Expect(input).To.Not.Be.Empty();
-                            },
-                            Throws.InstanceOf<UnmetExpectationException>());
-                        // Assert
-                    }
+                [Test]
+                public void Negated_WhenIsEmpty_ShouldThrow()
+                {
+                    // Arrange
+                    var input = "";
+                    // Pre-Assert
+                    // Act
+                    Assert.That(() =>
+                        {
+                            Expect(input).To.Not.Be.Empty();
+                        },
+                        Throws.InstanceOf<UnmetExpectationException>());
+                    // Assert
                 }
             }
         }

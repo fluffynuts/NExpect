@@ -1,84 +1,83 @@
-﻿using NExpect.Exceptions;
+using NExpect.Exceptions;
 using NExpect.Implementations;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
 using NExpect.Interfaces;
 
-namespace NExpect.Tests.DanglingPrepositions
+namespace NExpect.Tests.DanglingPrepositions;
+
+[TestFixture]
+public class A
 {
-    [TestFixture]
-    public class A
+    [Test]
+    public void ShouldProvideExtensionPoint()
     {
-        [Test]
-        public void ShouldProvideExtensionPoint()
-        {
-            // Arrange
+        // Arrange
 
-            // Pre-Assert
+        // Pre-Assert
 
-            // Act
-            Assert.That(
-                () =>
-                {
-                    Expect(new Frog() as object).To.Be.A.Frog();
-                },
-                Throws.Nothing);
-            Assert.That(
-                () =>
-                {
-                    Expect(new Frog() as object).Not.To.Be.A.Frog();
-                },
-                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("Expected not to get a frog"));
-
-            // Assert
-        }
-    }
-
-    [TestFixture]
-    public class MoreFromAddMatcher
-    {
-        [Test]
-        public void ShouldBeAbleToContinueWithMore()
-        {
-            // Arrange
-            // Act
-            Assert.DoesNotThrow(() =>
+        // Act
+        Assert.That(
+            () =>
             {
-                Expect(new Frog() as object)
-                    .To.Be.A.Frog()
-                    .And.Not.To.Be.A.Dog();
-            });
-            // Assert
-        }
-    }
-
-    public static class ExtensionsForTestingA
-    {
-        public static IMore<object> Frog(this IA<object> continuation)
-        {
-            return continuation.AddMatcher(
-                o =>
-                {
-                    var passed = o is Frog;
-                    return new MatcherResult(
-                        passed,
-                        () => $"Expected {passed.AsNot()}to get a frog"
-                    );
-                });
-        }
-
-        public static IMore<object> Dog(
-            this IA<object> continuation)
-        {
-            return continuation.AddMatcher(o =>
+                Expect(new Frog() as object).To.Be.A.Frog();
+            },
+            Throws.Nothing);
+        Assert.That(
+            () =>
             {
-                var passed = o is Dog;
+                Expect(new Frog() as object).Not.To.Be.A.Frog();
+            },
+            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                .With.Message.Contains("Expected not to get a frog"));
+
+        // Assert
+    }
+}
+
+[TestFixture]
+public class MoreFromAddMatcher
+{
+    [Test]
+    public void ShouldBeAbleToContinueWithMore()
+    {
+        // Arrange
+        // Act
+        Assert.DoesNotThrow(() =>
+        {
+            Expect(new Frog() as object)
+                .To.Be.A.Frog()
+                .And.Not.To.Be.A.Dog();
+        });
+        // Assert
+    }
+}
+
+public static class ExtensionsForTestingA
+{
+    public static IMore<object> Frog(this IA<object> continuation)
+    {
+        return continuation.AddMatcher(
+            o =>
+            {
+                var passed = o is Frog;
                 return new MatcherResult(
                     passed,
-                    () => $"Expected {passed.AsNot()}to get a dog"
+                    () => $"Expected {passed.AsNot()}to get a frog"
                 );
             });
-        }
+    }
+
+    public static IMore<object> Dog(
+        this IA<object> continuation)
+    {
+        return continuation.AddMatcher(o =>
+        {
+            var passed = o is Dog;
+            return new MatcherResult(
+                passed,
+                () => $"Expected {passed.AsNot()}to get a dog"
+            );
+        });
     }
 }

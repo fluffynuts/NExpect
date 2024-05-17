@@ -266,6 +266,23 @@ public class Issues
             // Assert
         }
     }
+
+    [Test]
+    [Ignore("FIXME: when a uint?-targeting Expect is added, it breaks generated tests for more/less and numeric types")]
+    public void ShouldBeAbleToAssertAgainstNullableUint()
+    {
+        // // Arrange
+        // var expected = GetRandomInt(1);
+        // var value = (uint?)expected;
+        // // Act
+        // Assert.That(() =>
+        // {
+        //     Expect(value)
+        //         .To.Equal(expected);
+        // }, Throws.Nothing);
+        // // Assert
+    }
+    
 }
 
 public static class CustomNonNExpectMatchers

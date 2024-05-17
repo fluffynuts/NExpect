@@ -392,11 +392,8 @@
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DateTimeExtensions.cs">
       <Link>DateTimeExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\MIMEType.cs">
-      <Link>MIMEType.cs</Link>
-    </Compile>
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\MimeType.cs">
-      <Link>Imported\MimeType.cs</Link>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\MimeTypes.cs">
+      <Link>Imported\MimeTypes.cs</Link>
     </Compile>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Run.Until.cs">
       <Link>Run.Until.cs</Link>

@@ -43,4 +43,9 @@ public interface IToAfterNot<T> : ICanAddMatcher<T>
     /// Provides a dangling grammar point for extension (.Find)
     /// </summary>
     IFind<T> Find { get; }
+
+    /// <summary>
+    /// Provides a dangling grammar point for extension (.Require)
+    /// </summary>
+    IRequire<T> Require { get; }
 }

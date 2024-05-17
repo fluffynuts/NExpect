@@ -1,77 +1,76 @@
-﻿using System.Linq;
+using System.Linq;
 using NExpect.Exceptions;
 using NUnit.Framework;
 using PeanutButter.Utils;
 
 // ReSharper disable PossibleMultipleEnumeration
 
-namespace NExpect.Tests.Collections
+namespace NExpect.Tests.Collections;
+
+[TestFixture]
+public class Any
 {
-    [TestFixture]
-    public class Any
+    [Test]
+    public void WhenHave1MatchInActual_ShouldNotThrow()
     {
-        [Test]
-        public void WhenHave1MatchInActual_ShouldNotThrow()
-        {
-            // Arrange
-            var search = GetRandomString();
-            var actual = GetRandomCollection<string>(2, 4).Union(search.InArray());
+        // Arrange
+        var search = GetRandomString();
+        var actual = GetRandomCollection<string>(2, 4).Union(search.InArray());
 
-            // Pre-Assert
+        // Pre-Assert
 
-            // Act
-            Assert.That(() =>
-                {
-                    Expect(actual)
-                        .To.Contain.Any
-                        .Equal.To(search);
-                },
-                Throws.Nothing);
+        // Act
+        Assert.That(() =>
+            {
+                Expect(actual)
+                    .To.Contain.Any
+                    .Equal.To(search);
+            },
+            Throws.Nothing);
 
-            // Assert
-        }
+        // Assert
+    }
 
-        [Test]
-        public void WhenHave0MatchInActual_ShouldNotThrow()
-        {
-            // Arrange
-            var search = GetRandomString();
-            var actual = GetRandomCollection<string>(2, 4);
+    [Test]
+    public void WhenHave0MatchInActual_ShouldNotThrow()
+    {
+        // Arrange
+        var search = GetRandomString();
+        var actual = GetRandomCollection<string>(2, 4);
 
-            // Pre-Assert
-            Assert.That(actual, Does.Not.Contain(search), "Should not find search before test");
+        // Pre-Assert
+        Assert.That(actual, Does.Not.Contain(search), "Should not find search before test");
 
-            // Act
-            Assert.That(() =>
-                {
-                    Expect(actual)
-                        .To.Contain.Any
-                        .Equal.To(search);
-                },
-                Throws.Exception.InstanceOf<UnmetExpectationException>());
+        // Act
+        Assert.That(() =>
+            {
+                Expect(actual)
+                    .To.Contain.Any
+                    .Equal.To(search);
+            },
+            Throws.Exception.InstanceOf<UnmetExpectationException>());
 
-            // Assert
-        }
+        // Assert
+    }
 
-        [Test]
-        public void WhenHaveActualAllMatchingSearch_ShouldNotThrow()
-        {
-            // Arrange
-            var search = GetRandomString();
-            var actual = PyLike.Range(GetRandomInt(2, 4)).Select(_ => search);
+    [Test]
+    public void WhenHaveActualAllMatchingSearch_ShouldNotThrow()
+    {
+        // Arrange
+        var search = GetRandomString();
+        var actual = PyLike.Range(GetRandomInt(2, 4)).Select(_ => search);
 
-            // Pre-Assert
+        // Pre-Assert
 
-            // Act
-            Assert.That(() =>
-                {
-                    Expect(actual)
-                        .To.Contain.Any
-                        .Equal.To(search);
-                },
-                Throws.Nothing);
+        // Act
+        Assert.That(() =>
+            {
+                Expect(actual)
+                    .To.Contain.Any
+                    .Equal.To(search);
+            },
+            Throws.Nothing);
 
-            // Assert
-        }
+        // Assert
     }
 }

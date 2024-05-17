@@ -11,5 +11,9 @@ namespace NExpect.Implementations
         public Find(Func<T> actualFetcher) : base(actualFetcher)
         {
         }
+
+        public Find(Func<T> actualFetcher, bool negate) : base(actualFetcher, negate)
+        {
+        }
     }
 }

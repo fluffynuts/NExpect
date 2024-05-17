@@ -1,196 +1,195 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NExpect.Exceptions;
 
-namespace NExpect.Tests.ObjectEquality.Strings
+namespace NExpect.Tests.ObjectEquality.Strings;
+
+[TestFixture]
+public class RegexMatching
 {
     [TestFixture]
-    public class RegexMatching
+    public class WithActualRegex
     {
         [TestFixture]
-        public class WithActualRegex
+        public class To
         {
             [TestFixture]
-            public class To
+            public class Be
             {
                 [TestFixture]
-                public class Be
+                public class Matched
                 {
                     [TestFixture]
-                    public class Matched
+                    public class By
                     {
-                        [TestFixture]
-                        public class By
+                        [Test]
+                        public void PositiveAssertion_WhenShouldPass_ShouldNotThrow()
                         {
-                            [Test]
-                            public void PositiveAssertion_WhenShouldPass_ShouldNotThrow()
-                            {
-                                // Arrange
-                                var input = GetRandomString(2);
-                                var regex = new Regex(input);
-                                Assert.That(regex.IsMatch(input), Is.True);
+                            // Arrange
+                            var input = GetRandomString(2);
+                            var regex = new Regex(input);
+                            Assert.That(regex.IsMatch(input), Is.True);
 
-                                // Pre-Assert
+                            // Pre-Assert
 
-                                // Act
-                                Assert.That(() =>
-                                    {
-                                        Expect(input).To.Be.Matched.By(regex);
-                                    },
-                                    Throws.Nothing);
-                                // shorter variant
-                                Assert.That(() =>
-                                    {
-                                        Expect(input).To.Match(regex);
-                                    },
-                                    Throws.Nothing);
+                            // Act
+                            Assert.That(() =>
+                                {
+                                    Expect(input).To.Be.Matched.By(regex);
+                                },
+                                Throws.Nothing);
+                            // shorter variant
+                            Assert.That(() =>
+                                {
+                                    Expect(input).To.Match(regex);
+                                },
+                                Throws.Nothing);
 
-                                // Assert
-                            }
+                            // Assert
+                        }
 
-                            [Test]
-                            public void NegativeAssertion_WhenShouldPass_ShouldThrow()
-                            {
-                                // Arrange
-                                var input = GetRandomString(2);
-                                var regex = new Regex($"^{input}$");
-                                Assert.That(regex.IsMatch(input), Is.True);
+                        [Test]
+                        public void NegativeAssertion_WhenShouldPass_ShouldThrow()
+                        {
+                            // Arrange
+                            var input = GetRandomString(2);
+                            var regex = new Regex($"^{input}$");
+                            Assert.That(regex.IsMatch(input), Is.True);
 
-                                // Pre-Assert
+                            // Pre-Assert
 
-                                // Act
-                                Assert.That(() =>
-                                    {
-                                        Expect(input).Not.To.Be.Matched.By(regex);
-                                    },
-                                    Throws.Exception.InstanceOf<UnmetExpectationException>());
-                                // shorter variant
-                                Assert.That(() =>
-                                    {
-                                        Expect(input).Not.To.Match(regex);
-                                    },
-                                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Act
+                            Assert.That(() =>
+                                {
+                                    Expect(input).Not.To.Be.Matched.By(regex);
+                                },
+                                Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // shorter variant
+                            Assert.That(() =>
+                                {
+                                    Expect(input).Not.To.Match(regex);
+                                },
+                                Throws.Exception.InstanceOf<UnmetExpectationException>());
 
-                                // Assert
-                            }
+                            // Assert
+                        }
 
-                            [Test]
-                            public void NegativeAssertion_AltSyntax_WhenShouldPass_ShouldThrow()
-                            {
-                                // Arrange
-                                var input = GetRandomString(2);
-                                var regex = new Regex($"^{input}$");
-                                Assert.That(regex.IsMatch(input), Is.True);
+                        [Test]
+                        public void NegativeAssertion_AltSyntax_WhenShouldPass_ShouldThrow()
+                        {
+                            // Arrange
+                            var input = GetRandomString(2);
+                            var regex = new Regex($"^{input}$");
+                            Assert.That(regex.IsMatch(input), Is.True);
 
-                                // Pre-Assert
+                            // Pre-Assert
 
-                                // Act
-                                Assert.That(() =>
-                                    {
-                                        Expect(input).To.Not.Be.Matched.By(regex);
-                                    },
-                                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Act
+                            Assert.That(() =>
+                                {
+                                    Expect(input).To.Not.Be.Matched.By(regex);
+                                },
+                                Throws.Exception.InstanceOf<UnmetExpectationException>());
 
-                                Assert.That(() =>
-                                    {
-                                        Expect(input).To.Not.Match(regex);
-                                    },
-                                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            Assert.That(() =>
+                                {
+                                    Expect(input).To.Not.Match(regex);
+                                },
+                                Throws.Exception.InstanceOf<UnmetExpectationException>());
 
-                                // Assert
-                            }
+                            // Assert
                         }
                     }
                 }
             }
         }
+    }
+    [TestFixture]
+    public class WithStringRegex
+    {
         [TestFixture]
-        public class WithStringRegex
+        public class To
         {
             [TestFixture]
-            public class To
+            public class Be
             {
                 [TestFixture]
-                public class Be
+                public class Matched
                 {
                     [TestFixture]
-                    public class Matched
+                    public class By
                     {
-                        [TestFixture]
-                        public class By
+                        [Test]
+                        public void PositiveAssertion_WhenShouldPass_ShouldNotThrow()
                         {
-                            [Test]
-                            public void PositiveAssertion_WhenShouldPass_ShouldNotThrow()
-                            {
-                                // Arrange
-                                var input = GetRandomString(2);
-                                var regex = $"^{input}$";
+                            // Arrange
+                            var input = GetRandomString(2);
+                            var regex = $"^{input}$";
 
-                                // Pre-Assert
+                            // Pre-Assert
 
-                                // Act
-                                Assert.That(() =>
-                                    {
-                                        Expect(input).To.Be.Matched.By(regex);
-                                    },
-                                    Throws.Nothing);
-                                Assert.That(() =>
-                                    {
-                                        Expect(input).To.Match(regex);
-                                    },
-                                    Throws.Nothing);
+                            // Act
+                            Assert.That(() =>
+                                {
+                                    Expect(input).To.Be.Matched.By(regex);
+                                },
+                                Throws.Nothing);
+                            Assert.That(() =>
+                                {
+                                    Expect(input).To.Match(regex);
+                                },
+                                Throws.Nothing);
 
-                                // Assert
-                            }
+                            // Assert
+                        }
 
-                            [Test]
-                            public void NegativeAssertion_WhenShouldPass_ShouldThrow()
-                            {
-                                // Arrange
-                                var input = GetRandomString(2);
-                                var regex = $"^{input}$";
+                        [Test]
+                        public void NegativeAssertion_WhenShouldPass_ShouldThrow()
+                        {
+                            // Arrange
+                            var input = GetRandomString(2);
+                            var regex = $"^{input}$";
 
-                                // Pre-Assert
+                            // Pre-Assert
 
-                                // Act
-                                Assert.That(() =>
-                                    {
-                                        Expect(input).Not.To.Be.Matched.By(regex);
-                                    },
-                                    Throws.Exception.InstanceOf<UnmetExpectationException>());
-                                Assert.That(() =>
-                                    {
-                                        Expect(input).Not.To.Match(regex);
-                                    },
-                                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Act
+                            Assert.That(() =>
+                                {
+                                    Expect(input).Not.To.Be.Matched.By(regex);
+                                },
+                                Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            Assert.That(() =>
+                                {
+                                    Expect(input).Not.To.Match(regex);
+                                },
+                                Throws.Exception.InstanceOf<UnmetExpectationException>());
 
-                                // Assert
-                            }
+                            // Assert
+                        }
 
-                            [Test]
-                            public void NegativeAssertion_AltSyntax_WhenShouldPass_ShouldThrow()
-                            {
-                                // Arrange
-                                var input = GetRandomString(2);
-                                var regex = $"^{input}$";
+                        [Test]
+                        public void NegativeAssertion_AltSyntax_WhenShouldPass_ShouldThrow()
+                        {
+                            // Arrange
+                            var input = GetRandomString(2);
+                            var regex = $"^{input}$";
 
-                                // Pre-Assert
+                            // Pre-Assert
 
-                                // Act
-                                Assert.That(() =>
-                                    {
-                                        Expect(input).To.Not.Be.Matched.By(regex);
-                                    },
-                                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            // Act
+                            Assert.That(() =>
+                                {
+                                    Expect(input).To.Not.Be.Matched.By(regex);
+                                },
+                                Throws.Exception.InstanceOf<UnmetExpectationException>());
 
-                                Assert.That(() =>
-                                    {
-                                        Expect(input).To.Not.Match(regex);
-                                    },
-                                    Throws.Exception.InstanceOf<UnmetExpectationException>());
+                            Assert.That(() =>
+                                {
+                                    Expect(input).To.Not.Match(regex);
+                                },
+                                Throws.Exception.InstanceOf<UnmetExpectationException>());
 
-                                // Assert
-                            }
+                            // Assert
                         }
                     }
                 }

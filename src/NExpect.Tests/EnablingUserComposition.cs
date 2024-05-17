@@ -1,214 +1,213 @@
-﻿using NExpect.Exceptions;
+using NExpect.Exceptions;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using NUnit.Framework;
 
 // ReSharper disable ExpressionIsAlwaysNull
 
-namespace NExpect.Tests
+namespace NExpect.Tests;
+
+[TestFixture]
+public class EnablingUserComposition
 {
     [TestFixture]
-    public class EnablingUserComposition
+    public class SimpleChain
     {
-        [TestFixture]
-        public class SimpleChain
+        [Test]
+        public void PositiveExpectation_WhenPasses_ShouldNotThrow()
         {
-            [Test]
-            public void PositiveExpectation_WhenPasses_ShouldNotThrow()
+            // Arrange
+            var person = new Person()
             {
-                // Arrange
-                var person = new Person()
-                {
-                    Name = "Sally",
-                    Gender = Genders.Female
-                };
-                // Pre-Assert
+                Name = "Sally",
+                Gender = Genders.Female
+            };
+            // Pre-Assert
 
-                // Act
-                Assert.That(() =>
-                {
-                    Expect(person).To.Be.A.Sally().And.A.Female();
-                }, Throws.Nothing);
-                // Assert
-            }
-
-            [Test]
-            public void PositiveExpectation_WhenFirstPartFails_ShouldThrow()
+            // Act
+            Assert.That(() =>
             {
-                // Arrange
-                var person = new Person()
-                {
-                    Name = "Mary",
-                    Gender = Genders.Female
-                };
-                // Pre-Assert
-
-                // Act
-                Assert.That(() =>
-                {
-                    Expect(person).To.Be.A.Sally().And.A.Female();
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("Sally"));
-                // Assert
-            }
-
-            [Test]
-            public void PositiveExpectation_WhenSecondPartFails_ShouldThrow()
-            {
-                // Arrange
-                var person = new Person()
-                {
-                    Name = "Sally",
-                    Gender = Genders.Unknown
-                };
-                // Pre-Assert
-
-                // Act
-                Assert.That(() =>
-                {
-                    Expect(person).To.Be.A.Sally().And.A.Female();
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("Female"));
-                // Assert
-            }
-
-            [Test]
-            public void NegativeExpectation_WhenFirstPartFails_ShouldThrow()
-            {
-                // Arrange
-                var person = new Person()
-                {
-                    Name = "Sally",
-                    Gender = Genders.Female
-                };
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
-                {
-                    Expect(person).Not.To.Be.A.Sally().And.Not.To.Be.A.Female();
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("Sally"));
-                // Assert
-            }
-
-            [Test]
-            public void NegativeExpectation_WhenSecondPartFails_ShouldThrow()
-            {
-                // Arrange
-                var person = new Person()
-                {
-                    Name = "Mary",
-                    Gender = Genders.Female
-                };
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
-                {
-                    Expect(person).Not.To.Be.A.Sally().And.Not.To.Be.A.Female();
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("Female"));
-                // Assert
-            }
+                Expect(person).To.Be.A.Sally().And.A.Female();
+            }, Throws.Nothing);
+            // Assert
         }
 
-        [TestFixture]
-        public class NullTestShouldAllowUserComposition
+        [Test]
+        public void PositiveExpectation_WhenFirstPartFails_ShouldThrow()
         {
-            [Test]
-            public void Contrived_PositiveChain_WhenAllPasses_ShouldNotThrow()
+            // Arrange
+            var person = new Person()
             {
-                // Arrange
-                var contrived = GetRandomString(2);
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
-                {
-                    Expect(contrived).Not.To.Be.Null().And.To.Equal(contrived);
-                }, Throws.Nothing);
-                // Assert
-            }
+                Name = "Mary",
+                Gender = Genders.Female
+            };
+            // Pre-Assert
 
-            [Test]
-            public void MorePractical_PositiveChain_WhenAllPassws_ShouldNotThrow()
+            // Act
+            Assert.That(() =>
             {
-                // Arrange
-                var person = new Person()
-                {
-                    Name = "Benny",
-                    Gender = Genders.Male
-                };
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
-                {
-                    Expect(person)
-                        .Not.To.Be.Null()
-                        .And.To.Be.A.Benny();
-                }, Throws.Nothing);
-                // Assert
-            }
+                Expect(person).To.Be.A.Sally().And.A.Female();
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                .With.Message.Contains("Sally"));
+            // Assert
+        }
 
-            [Test]
-            public void MorePractical_PositiveThenNegativeChain_WhenAllPasses_ShouldNotThrow()
+        [Test]
+        public void PositiveExpectation_WhenSecondPartFails_ShouldThrow()
+        {
+            // Arrange
+            var person = new Person()
             {
-                // Arrange
-                var person = new Person()
-                {
-                    Name = "Bob",
-                    Gender = Genders.Male
-                };
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
-                {
-                    Expect(person)
-                        .Not.To.Be.Null()
-                        .And.Not.To.Be.A.Benny();
-                }, Throws.Nothing);
-                // Assert
-            }
+                Name = "Sally",
+                Gender = Genders.Unknown
+            };
+            // Pre-Assert
 
-            [Test]
-            public void MorePractical_WhenFirstPartFails_ShouldThrowThere()
+            // Act
+            Assert.That(() =>
             {
-                // Arrange
-                Person person = null;
-                // Pre-Assert
-                // Act
-                Assert.That(() =>
-                {
-                    Expect(person)
-                        .Not.To.Be.Null()
-                        .And.Not.To.Be.A.Sally();
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("Expected not to get null"));
-                // Assert
-            }
+                Expect(person).To.Be.A.Sally().And.A.Female();
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                .With.Message.Contains("Female"));
+            // Assert
+        }
+
+        [Test]
+        public void NegativeExpectation_WhenFirstPartFails_ShouldThrow()
+        {
+            // Arrange
+            var person = new Person()
+            {
+                Name = "Sally",
+                Gender = Genders.Female
+            };
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(person).Not.To.Be.A.Sally().And.Not.To.Be.A.Female();
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                .With.Message.Contains("Sally"));
+            // Assert
+        }
+
+        [Test]
+        public void NegativeExpectation_WhenSecondPartFails_ShouldThrow()
+        {
+            // Arrange
+            var person = new Person()
+            {
+                Name = "Mary",
+                Gender = Genders.Female
+            };
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(person).Not.To.Be.A.Sally().And.Not.To.Be.A.Female();
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                .With.Message.Contains("Female"));
+            // Assert
         }
     }
 
-    internal static class MorePersonMatchers
+    [TestFixture]
+    public class NullTestShouldAllowUserComposition
     {
-        internal static IMore<Person> Sally(
-            this IA<Person> a
-        )
+        [Test]
+        public void Contrived_PositiveChain_WhenAllPasses_ShouldNotThrow()
         {
-            a.Compose(person =>
+            // Arrange
+            var contrived = GetRandomString(2);
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
             {
-                Expect(person.Name).To.Equal("Sally");
-            });
-            return a.More();
+                Expect(contrived).Not.To.Be.Null().And.To.Equal(contrived);
+            }, Throws.Nothing);
+            // Assert
         }
 
-        internal static IMore<Person> Female(
-            this IA<Person> a
-        )
+        [Test]
+        public void MorePractical_PositiveChain_WhenAllPassws_ShouldNotThrow()
         {
-            a.Compose(person =>
+            // Arrange
+            var person = new Person()
             {
-                Expect(person.Gender).To.Equal(Genders.Female);
-            });
-            return a.More();
+                Name = "Benny",
+                Gender = Genders.Male
+            };
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(person)
+                    .Not.To.Be.Null()
+                    .And.To.Be.A.Benny();
+            }, Throws.Nothing);
+            // Assert
         }
+
+        [Test]
+        public void MorePractical_PositiveThenNegativeChain_WhenAllPasses_ShouldNotThrow()
+        {
+            // Arrange
+            var person = new Person()
+            {
+                Name = "Bob",
+                Gender = Genders.Male
+            };
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(person)
+                    .Not.To.Be.Null()
+                    .And.Not.To.Be.A.Benny();
+            }, Throws.Nothing);
+            // Assert
+        }
+
+        [Test]
+        public void MorePractical_WhenFirstPartFails_ShouldThrowThere()
+        {
+            // Arrange
+            Person person = null;
+            // Pre-Assert
+            // Act
+            Assert.That(() =>
+            {
+                Expect(person)
+                    .Not.To.Be.Null()
+                    .And.Not.To.Be.A.Sally();
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                .With.Message.Contains("Expected not to get null"));
+            // Assert
+        }
+    }
+}
+
+internal static class MorePersonMatchers
+{
+    internal static IMore<Person> Sally(
+        this IA<Person> a
+    )
+    {
+        a.Compose(person =>
+        {
+            Expect(person.Name).To.Equal("Sally");
+        });
+        return a.More();
+    }
+
+    internal static IMore<Person> Female(
+        this IA<Person> a
+    )
+    {
+        a.Compose(person =>
+        {
+            Expect(person.Gender).To.Equal(Genders.Female);
+        });
+        return a.More();
     }
 }

@@ -17,9 +17,9 @@ public interface IExpectation<T>
     /// To continuation, ie Expect(value).To...
     /// </summary>
     ITo<T> To { get; }
+
     /// <summary>
     /// Not continuation, ie, Expect(value).Not...
     /// </summary>
     IPropertyNot<T> Not { get; }
-        
 }

@@ -20,6 +20,7 @@ internal class To<T>
     public IIntersection<T> Intersection => Next<Intersection<T>>();
     public IApproximately<T> Approximately => Next<Approximately<T>>();
     public IFind<T> Find => Next<Find<T>>();
+    public IRequire<T> Require => Next<Require<T>>();
 
     public To(Func<T> actualFetcher) : base(actualFetcher)
     {

@@ -1,143 +1,142 @@
-﻿using System;
+using System;
 using NExpect.Exceptions;
 using NUnit.Framework;
 using PeanutButter.Utils;
 
-namespace NExpect.Tests.ObjectEquality.Strings
+namespace NExpect.Tests.ObjectEquality.Strings;
+
+[TestFixture]
+public class OrderedPartialContaining
 {
-    [TestFixture]
-    public class OrderedPartialContaining
+    [Test]
+    public void PositiveAssertion_WhenShouldPass_ShouldNotThrow()
     {
-        [Test]
-        public void PositiveAssertion_WhenShouldPass_ShouldNotThrow()
-        {
-            // Arrange
-            var start = GetRandomString(2);
-            var next = GetAnother(start);
-            var input = $"{start}{next}";
+        // Arrange
+        var start = GetRandomString(2);
+        var next = GetAnother(start);
+        var input = $"{start}{next}";
 
-            // Pre-Assert
+        // Pre-Assert
 
-            // Act
-            Assert.That(() =>
-                {
-                    Expect(input)
-                        .To.Contain(start)
-                        .Then(next);
-                },
-                Throws.Nothing);
-
-            // Assert
-        }
-
-        [Test]
-        public void PositiveAssertion_WhenNextPartIsOutOfOrder_ShouldThrow()
-        {
-            // Arrange
-            var start = GetRandomString(2);
-            var next = GetAnother(start);
-            var input = $"{start}{next}";
-            // Pre-Assert
-
-            // Act
-            Assert.That(() =>
-                {
-                    Expect(input)
-                        .To.Contain(next)
-                        .Then(start);
-                },
-                Throws.Exception.InstanceOf<UnmetExpectationException>());
-
-            // Assert
-        }
-
-        [Test]
-        [Repeat(20)]
-        public void PositiveAssertion_MultipleChains()
-        {
-            // Arrange
-            var strings = GetRandomArray<string>(6, 8);
-            var input = strings.JoinWith("");
-
-            // Pre-Assert
-
-            // Act
-            Assert.That(() =>
-                {
-                    Expect(input)
-                        .To
-                        .Contain(strings[0])
-                        .Then(strings[1])
-                        .Then(strings[3])
-                        .Then(strings[5]);
-                },
-                Throws.Nothing);
-
-            // Assert
-        }
-
-        [Test]
-        public void ThenShouldNotMatchPartialOfAlreadyMatchedPart()
-        {
-            // Arrange
-            var input = "moo said the cat";
-
-            // Pre-Assert
-
-            // Act
-            Assert.That(() =>
+        // Act
+        Assert.That(() =>
             {
                 Expect(input)
-                    .To.Contain("moo")
-                    .Then("o");
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                    .To.Contain(start)
+                    .Then(next);
+            },
+            Throws.Nothing);
 
-            // Assert
-        }
+        // Assert
+    }
 
-        [Test]
-        public void PositiveAssertion_OnExceptionMessage_WhenShouldPass_ShouldNotThrow()
+    [Test]
+    public void PositiveAssertion_WhenNextPartIsOutOfOrder_ShouldThrow()
+    {
+        // Arrange
+        var start = GetRandomString(2);
+        var next = GetAnother(start);
+        var input = $"{start}{next}";
+        // Pre-Assert
+
+        // Act
+        Assert.That(() =>
+            {
+                Expect(input)
+                    .To.Contain(next)
+                    .Then(start);
+            },
+            Throws.Exception.InstanceOf<UnmetExpectationException>());
+
+        // Assert
+    }
+
+    [Test]
+    [Repeat(20)]
+    public void PositiveAssertion_MultipleChains()
+    {
+        // Arrange
+        var strings = GetRandomArray<string>(6, 8);
+        var input = strings.JoinWith("");
+
+        // Pre-Assert
+
+        // Act
+        Assert.That(() =>
+            {
+                Expect(input)
+                    .To
+                    .Contain(strings[0])
+                    .Then(strings[1])
+                    .Then(strings[3])
+                    .Then(strings[5]);
+            },
+            Throws.Nothing);
+
+        // Assert
+    }
+
+    [Test]
+    public void ThenShouldNotMatchPartialOfAlreadyMatchedPart()
+    {
+        // Arrange
+        var input = "moo said the cat";
+
+        // Pre-Assert
+
+        // Act
+        Assert.That(() =>
         {
-            // Arrange
-            var first = GetRandomString(2);
-            var second = GetAnother(first);
+            Expect(input)
+                .To.Contain("moo")
+                .Then("o");
+        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
 
-            // Pre-Assert
+        // Assert
+    }
 
-            // Act
-            Assert.That(() =>
-                {
-                    Expect(() => throw new Exception($"{first}{GetRandomString(15)}{second}"))
-                        .To.Throw<Exception>()
-                        .With.Message.Containing(first)
-                        .Then(second);
-                },
-                Throws.Nothing);
+    [Test]
+    public void PositiveAssertion_OnExceptionMessage_WhenShouldPass_ShouldNotThrow()
+    {
+        // Arrange
+        var first = GetRandomString(2);
+        var second = GetAnother(first);
 
-            // Assert
-        }
+        // Pre-Assert
 
-        [Test]
-        public void PositiveAssertion_OnExceptionMessage_WhenShouldNotPass_ShouldThrow()
-        {
-            // Arrange
-            var first = GetRandomString(2);
-            var second = GetAnother(first);
-            var another = GetAnother<string>(new[] { first, second });
+        // Act
+        Assert.That(() =>
+            {
+                Expect(() => throw new Exception($"{first}{GetRandomString(15)}{second}"))
+                    .To.Throw<Exception>()
+                    .With.Message.Containing(first)
+                    .Then(second);
+            },
+            Throws.Nothing);
 
-            // Pre-Assert
+        // Assert
+    }
 
-            // Act
-            Assert.That(() =>
-                {
-                    Expect(() => throw new Exception($"{first}{GetRandomString(15)}{second}"))
-                        .To.Throw<Exception>()
-                        .With.Message.Containing(first)
-                        .Then(another);
-                },
-                Throws.Exception.InstanceOf<UnmetExpectationException>());
+    [Test]
+    public void PositiveAssertion_OnExceptionMessage_WhenShouldNotPass_ShouldThrow()
+    {
+        // Arrange
+        var first = GetRandomString(2);
+        var second = GetAnother(first);
+        var another = GetAnother<string>(new[] { first, second });
 
-            // Assert
-        }
+        // Pre-Assert
+
+        // Act
+        Assert.That(() =>
+            {
+                Expect(() => throw new Exception($"{first}{GetRandomString(15)}{second}"))
+                    .To.Throw<Exception>()
+                    .With.Message.Containing(first)
+                    .Then(another);
+            },
+            Throws.Exception.InstanceOf<UnmetExpectationException>());
+
+        // Assert
     }
 }

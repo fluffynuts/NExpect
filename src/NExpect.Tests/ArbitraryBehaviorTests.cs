@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Reflection;
 using NExpect.Exceptions;
@@ -18,1046 +18,1045 @@ using PeanutButter.Utils;
 // ReSharper disable ReturnValueOfPureMethodIsNotUsed
 // ReSharper disable SuspiciousTypeConversion.Global
 
-namespace NExpect.Tests
+namespace NExpect.Tests;
+
+[TestFixture]
+public class ArbitraryBehaviorTests
 {
+    [Test]
+    public void CountMatchContinuation_ShouldHaveActualPropertyExposingOriginalCollection()
+    {
+        // Arrange
+        using var _ = Assertions.SuspendTracking();
+        var collection = GetRandomCollection<int>(2)
+            .ToArray();
+        // Pre-assert
+        // Act
+        var result = Expect(collection)
+            .To.Contain.Exactly(1);
+        // Assert
+        Expect(result.GetActual())
+            .To.Be(collection);
+    }
+
+    [Test]
+    public void WhenCustomMessageGeneratorThrows()
+    {
+        // Arrange
+        var collection = GetRandomCollection<int>(2)
+            .ToArray();
+        // Pre-assert
+        // Act
+        Assert.That(
+            () =>
+            {
+                Expect(collection)
+                    .To.Be.Empty(() => throw new Exception("moo"));
+            },
+            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                .With.Message.Contain("Unable to evaluate custom message expression")
+        );
+        // Assert
+    }
+
+    [Test]
+    public void MessageForNotContains()
+    {
+        // Arrange
+        var str = "moo, cow";
+        // Pre-assert
+        // Act
+        Assert.That(
+            () =>
+            {
+                Expect(() => throw new Exception(str))
+                    .To.Throw<Exception>()
+                    .With.Message.Not.Containing("beef");
+            },
+            Throws.Nothing
+        );
+
+        Assert.That(
+            () =>
+            {
+                Expect(() => throw new Exception(str))
+                    .To.Throw<Exception>()
+                    .With.Message.Not.Containing("cow");
+            },
+            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                .With.Message.Match("not\\sto\\scontain\\s\"cow\"")
+        );
+
+        Assert.That(
+            () =>
+            {
+                Expect(() => throw new Exception(str))
+                    .To.Throw<Exception>()
+                    .With.Message.Containing("beef");
+            },
+            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                .With.Message.Match("to\\scontain\\s\"beef\"")
+        );
+        // Assert
+    }
+
+    [Test]
+    public void Inadvertent_Equals_InsteadOfEqual()
+    {
+        // Arrange
+        // Pre-assert
+        // Act
+        using var _ = Assertions.SuspendTracking();
+        Assert.That(
+            () =>
+            {
+                Expect(1)
+                    .To.Equals(1);
+            },
+            Throws.Exception.InstanceOf<InvalidOperationException>()
+                .With.Message.Contain("You probably intend to use .Equal(), not .Equals()")
+        );
+
+        Assert.That(
+            () =>
+            {
+                Expect(1)
+                    .Equals(1);
+            },
+            Throws.Exception.InstanceOf<InvalidOperationException>()
+                .With.Message.Contain("You probably intend to use .Equal(), not .Equals()")
+        );
+
+        Assert.That(
+            () =>
+            {
+                Expect(1)
+                    .Not.To.Equals(1);
+            },
+            Throws.Exception.InstanceOf<InvalidOperationException>()
+                .With.Message.Contain("You probably intend to use .Equal(), not .Equals()")
+        );
+        // Assert
+    }
+
+    [Test]
+    public void ExpectationContextHashingShouldThrow()
+    {
+        // Arrange
+        // Pre-assert
+        // Act
+        using var _ = Assertions.SuspendTracking();
+        Assert.That(
+            () =>
+            {
+                Expect(1)
+                    .GetHashCode();
+            },
+            Throws.Exception.InstanceOf<InvalidOperationException>()
+                .With.Message.Contain("You probably shouldn't be hashing this")
+        );
+        Assert.That(
+            () =>
+            {
+                Expect(1)
+                    .To.GetHashCode();
+            },
+            Throws.Exception.InstanceOf<InvalidOperationException>()
+                .With.Message.Contain("You probably shouldn't be hashing this")
+        );
+        Assert.That(
+            () =>
+            {
+                Expect(1)
+                    .To.Be.GetHashCode();
+            },
+            Throws.Exception.InstanceOf<InvalidOperationException>()
+                .With.Message.Contain("You probably shouldn't be hashing this")
+        );
+        // Assert
+    }
+
+    [Test]
+    public void CollectionsOfNulls()
+    {
+        // Arrange
+        var left = new string[] { null };
+        var right = new string[] { null };
+        // Pre-assert
+        // Act
+        Assert.That(
+            () =>
+            {
+                Expect(left)
+                    .To.Be.Equivalent.To(right);
+            },
+            Throws.Nothing
+        );
+        // Assert
+    }
+
+    [Test]
+    public void CollectionsOfNullsDeep()
+    {
+        // Arrange
+        var left = new string[] { null };
+        var right = new string[] { null };
+        // Pre-assert
+        // Act
+        Assert.That(
+            () =>
+            {
+                Expect(left)
+                    .To.Be.Deep.Equivalent.To(right);
+            },
+            Throws.Nothing
+        );
+        // Assert
+    }
+
+    [Test]
+    public void CollectionsOfNullsDeepWhereOneHasNoNull()
+    {
+        // Arrange
+        var left = new string[] { null };
+        var right = new[] { "cow" };
+        // Pre-assert
+        // Act
+        Assert.That(
+            () =>
+            {
+                Expect(left)
+                    .Not.To.Be.Deep.Equivalent.To(right);
+            },
+            Throws.Nothing
+        );
+        // Assert
+    }
+
+    [Test]
+    public void ContainInOrderContinuationAfterAnd()
+    {
+        // Arrange
+        var left = GetRandomString(72, 128);
+        var right = GetRandomString(72, 128);
+        // Pre-Assert
+        // Act
+        var ex = Assert.Throws<UnmetExpectationException>(
+            () => Expect(left)
+                .To.Equal(right)
+        );
+        // Assert
+        Expect(ex.Message)
+            .To.Start.With("Expected")
+            .And.To.Contain.In.Order(
+                "\n",
+                right,
+                "\n",
+                "but got",
+                "\n",
+                left
+            );
+    }
+
+    [Test]
+    public void AllowingContinuationForManyPreviouslyTerminatingExpectations()
+    {
+        // Arrange
+        var one = 1;
+        var two = 2;
+        var oneString = one.ToString();
+        var twoString = two.ToString();
+        // Act
+        Assert.That(
+            () =>
+            {
+                Expect(oneString)
+                    .Not.To.Be.Null()
+                    .And.To.Not.Be.Null()
+                    .And.To.Be(oneString)
+                    .And.Not.To.Be(twoString)
+                    .And.To.Not.Be(twoString)
+                    .And.To.Equal(oneString);
+                Expect(null as string)
+                    .To.Be.Null()
+                    .And.Not.To.Equal(oneString);
+            },
+            Throws.Nothing
+        );
+        Assert.That(
+            () =>
+            {
+                Expect(one)
+                    .To.Equal(1)
+                    .And.To.Equal(1);
+            },
+            Throws.Nothing
+        );
+        Assert.That(
+            () =>
+            {
+                Expect(one)
+                    .To.Equal(1)
+                    .And.Not.To.Equal(2)
+                    .And.To.Not.Equal(2)
+                    .And.To.Equal(1)
+                    .And.Not.To.Equal(2 as int?)
+                    .And.To.Equal(1 as int?)
+                    .And.To.Not.Equal(2 as int?)
+                    .And.To.Equal(1 as int?)
+                    .And.To.Be.Equal.To(1)
+                    .And.Not.To.Be.Equal.To(2)
+                    .And.To.Not.Be.Equal.To(2)
+                    .And.To.Be.Greater.Than(0)
+                    .And.To.Be.Greater.Than.Or.Equal.To(1)
+                    .And.To.Be.Less.Than(2)
+                    .And.To.Equal(1)
+                    .And.To.Be.Less.Than.Or.Equal.To(1)
+                    .And.To.Equal(1);
+            },
+            Throws.Nothing
+        );
+        Assert.That(
+            () =>
+            {
+                Expect(one)
+                    .To.Equal(1)
+                    .And.To.Equal(2);
+            },
+            Throws.Exception.InstanceOf<UnmetExpectationException>()
+        );
+        // Assert
+    }
+
+    [Test]
+    public void MatcherWhichThrowsUnmetExpectationException_ShouldGetThatExactException()
+    {
+        // Arrange
+        // UnmetExpectationException can only be instatiated within NExpect; however, a little
+        //  reflection can get to the internal Throw method
+        var method = typeof(Assertions).GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
+            .FirstOrDefault(
+                mi => mi.Name == "Throw" &&
+                    mi.GetParameters()
+                        .Length ==
+                    1
+            );
+        Expect(method)
+            .Not.To.Be.Null();
+        UnmetExpectationException expected = null;
+        try
+        {
+            method.Invoke(null, new object[] { GetRandomString(10) });
+        }
+        catch (TargetInvocationException tex)
+        {
+            expected = tex.InnerException as UnmetExpectationException;
+        }
+
+        // Pre-assert
+        // Act
+        try
+        {
+            Expect("moo")
+                .To.Moo(expected);
+        }
+        catch (Exception ex)
+        {
+            Expect(ex)
+                .To.Be(expected);
+        }
+
+        // Assert
+    }
+
+    [Test]
+    public void CustomCodeGettingToExpectedCountOnCountMatcher()
+    {
+        // Arrange
+        var expected = GetRandomInt(2, 7);
+        // Pre-assert
+        // Act
+        using var _ = Assertions.SuspendTracking();
+        var continuation = Expect(new[] { 1, 2, 3 })
+            .To.Contain.Exactly(expected);
+        var result = continuation.GetExpectedCount<int>();
+        // Assert
+        Expect(result)
+            .To.Equal(expected);
+    }
+
+    [Test]
+    public void CustomCodeGettingToCountMatchMethod_Exactly()
+    {
+        // Arrange
+        // Pre-assert
+        // Act
+        using var _ = Assertions.SuspendTracking();
+        var continuation = Expect(new[] { "a", "b", "c" })
+            .To.Contain.Exactly(123);
+        var result = continuation.GetCountMatchMethod();
+        // Assert
+        Expect(result)
+            .To.Equal(CountMatchMethods.Exactly);
+    }
+
+    [Test]
+    public void CustomCodeGettingToCountMatchMethod_AtLeast()
+    {
+        // Arrange
+        // Pre-assert
+        // Act
+        using var _ = Assertions.SuspendTracking();
+        var continuation = Expect(new[] { "a", "b", "c" })
+            .To.Contain.At.Least(123);
+        var result = continuation.GetCountMatchMethod();
+        // Assert
+        Expect(result)
+            .To.Equal(CountMatchMethods.Minimum);
+    }
+
+    [Test]
+    public void CustomCodeGettingToCountMatchMethod_AtMost()
+    {
+        // Arrange
+        // Pre-assert
+        // Act
+        using var _ = Assertions.SuspendTracking();
+        var continuation = Expect(new[] { "a", "b", "c" })
+            .To.Contain.At.Most(123);
+        var result = continuation.GetCountMatchMethod();
+        // Assert
+        Expect(result)
+            .To.Equal(CountMatchMethods.Maximum);
+    }
+
+    [Test]
+    public void CustomCodeGettingToCountMatchMethod_Any()
+    {
+        // Arrange
+        // Pre-assert
+        // Act
+        using var _ = Assertions.SuspendTracking();
+        var continuation = Expect(new[] { "a", "b", "c" })
+            .To.Contain.Any;
+        var result = continuation.GetCountMatchMethod();
+        // Assert
+        Expect(result)
+            .To.Equal(CountMatchMethods.Any);
+    }
+
+    [Test]
+    public void CustomCodeGettingToCountMatchMethod_All()
+    {
+        // Arrange
+        // Pre-assert
+        // Act
+        using var _ = Assertions.SuspendTracking();
+        var continuation = Expect(new[] { "a", "b", "c" })
+            .To.Contain.All;
+        var result = continuation.GetCountMatchMethod();
+        // Assert
+        Expect(result)
+            .To.Equal(CountMatchMethods.All);
+    }
+
+    [Test]
+    public void CustomCodeGettingToCountMatchMethod_Only()
+    {
+        // Arrange
+        // Pre-assert
+        // Act
+        using var _ = Assertions.SuspendTracking();
+        var continuation = Expect(new[] { "a" })
+            .To.Contain.Only(1);
+        var result = continuation.GetCountMatchMethod();
+        // Assert
+        Expect(result)
+            .To.Equal(CountMatchMethods.Only);
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    public void MatcherResultWithNoMessage(bool expected)
+    {
+        // Arrange
+        // Pre-assert
+        // Act
+        var result = new MatcherResult(expected);
+        // Assert
+        Expect(result.Passed)
+            .To.Equal(expected);
+        Expect(result.Message)
+            .To.Be.Empty();
+    }
+
+    [Test]
+    public void TryGetActual_ShouldThrowIf_ICanAddMatcher_HasNoActual()
+    {
+        // Arrange
+        // Pre-assert
+        // Act
+        Expect(() => (new SomeCanAddMatcher()).GetActual())
+            .To.Throw<InvalidOperationException>();
+        // Assert
+    }
+
+    public class SomeCanAddMatcher : ICanAddMatcher<string>
+    {
+    }
+
     [TestFixture]
-    public class ArbitraryBehaviorTests
+    public class ShouldHaveActualProperty
     {
         [Test]
-        public void CountMatchContinuation_ShouldHaveActualPropertyExposingOriginalCollection()
+        public void CollectionEqual()
         {
             // Arrange
             using var _ = Assertions.SuspendTracking();
-            var collection = GetRandomCollection<int>(2)
-                .ToArray();
+            var collection = GetRandomCollection<int>(1);
             // Pre-assert
             // Act
-            var result = Expect(collection)
-                .To.Contain.Exactly(1);
+            var sut = Expect(collection)
+                .To.Be.Equal;
             // Assert
-            Expect(result.GetActual())
+            Expect(sut.GetActual())
                 .To.Be(collection);
         }
 
         [Test]
-        public void WhenCustomMessageGeneratorThrows()
+        public void CollectionDeepEqual()
         {
             // Arrange
-            var collection = GetRandomCollection<int>(2)
-                .ToArray();
-            // Pre-assert
-            // Act
-            Assert.That(
-                () =>
-                {
-                    Expect(collection)
-                        .To.Be.Empty(() => throw new Exception("moo"));
-                },
-                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contain("Unable to evaluate custom message expression")
-            );
-            // Assert
-        }
-
-        [Test]
-        public void MessageForNotContains()
-        {
-            // Arrange
-            var str = "moo, cow";
-            // Pre-assert
-            // Act
-            Assert.That(
-                () =>
-                {
-                    Expect(() => throw new Exception(str))
-                        .To.Throw<Exception>()
-                        .With.Message.Not.Containing("beef");
-                },
-                Throws.Nothing
-            );
-
-            Assert.That(
-                () =>
-                {
-                    Expect(() => throw new Exception(str))
-                        .To.Throw<Exception>()
-                        .With.Message.Not.Containing("cow");
-                },
-                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Match("not\\sto\\scontain\\s\"cow\"")
-            );
-
-            Assert.That(
-                () =>
-                {
-                    Expect(() => throw new Exception(str))
-                        .To.Throw<Exception>()
-                        .With.Message.Containing("beef");
-                },
-                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Match("to\\scontain\\s\"beef\"")
-            );
-            // Assert
-        }
-
-        [Test]
-        public void Inadvertent_Equals_InsteadOfEqual()
-        {
-            // Arrange
-            // Pre-assert
-            // Act
             using var _ = Assertions.SuspendTracking();
-            Assert.That(
-                () =>
-                {
-                    Expect(1)
-                        .To.Equals(1);
-                },
-                Throws.Exception.InstanceOf<InvalidOperationException>()
-                    .With.Message.Contain("You probably intend to use .Equal(), not .Equals()")
-            );
-
-            Assert.That(
-                () =>
-                {
-                    Expect(1)
-                        .Equals(1);
-                },
-                Throws.Exception.InstanceOf<InvalidOperationException>()
-                    .With.Message.Contain("You probably intend to use .Equal(), not .Equals()")
-            );
-
-            Assert.That(
-                () =>
-                {
-                    Expect(1)
-                        .Not.To.Equals(1);
-                },
-                Throws.Exception.InstanceOf<InvalidOperationException>()
-                    .With.Message.Contain("You probably intend to use .Equal(), not .Equals()")
-            );
+            var collection = GetRandomCollection<int>(1);
+            // Pre-assert
+            // Act
+            var sut = Expect(collection)
+                .To.Be.Deep.Equal;
             // Assert
+            Expect(sut.GetActual())
+                .To.Be(collection);
         }
 
         [Test]
-        public void ExpectationContextHashingShouldThrow()
+        public void CollectionEquivalent()
         {
             // Arrange
-            // Pre-assert
-            // Act
             using var _ = Assertions.SuspendTracking();
-            Assert.That(
-                () =>
-                {
-                    Expect(1)
-                        .GetHashCode();
-                },
-                Throws.Exception.InstanceOf<InvalidOperationException>()
-                    .With.Message.Contain("You probably shouldn't be hashing this")
-            );
-            Assert.That(
-                () =>
-                {
-                    Expect(1)
-                        .To.GetHashCode();
-                },
-                Throws.Exception.InstanceOf<InvalidOperationException>()
-                    .With.Message.Contain("You probably shouldn't be hashing this")
-            );
-            Assert.That(
-                () =>
-                {
-                    Expect(1)
-                        .To.Be.GetHashCode();
-                },
-                Throws.Exception.InstanceOf<InvalidOperationException>()
-                    .With.Message.Contain("You probably shouldn't be hashing this")
-            );
-            // Assert
-        }
-
-        [Test]
-        public void CollectionsOfNulls()
-        {
-            // Arrange
-            var left = new string[] { null };
-            var right = new string[] { null };
+            var collection = GetRandomCollection<int>(1);
             // Pre-assert
             // Act
-            Assert.That(
-                () =>
-                {
-                    Expect(left)
-                        .To.Be.Equivalent.To(right);
-                },
-                Throws.Nothing
-            );
+            var sut = Expect(collection)
+                .To.Be.Equivalent;
             // Assert
+            Expect(sut.GetActual())
+                .To.Be(collection);
         }
 
         [Test]
-        public void CollectionsOfNullsDeep()
+        public void CollectionDeepEquivalent()
         {
             // Arrange
-            var left = new string[] { null };
-            var right = new string[] { null };
-            // Pre-assert
-            // Act
-            Assert.That(
-                () =>
-                {
-                    Expect(left)
-                        .To.Be.Deep.Equivalent.To(right);
-                },
-                Throws.Nothing
-            );
-            // Assert
-        }
-
-        [Test]
-        public void CollectionsOfNullsDeepWhereOneHasNoNull()
-        {
-            // Arrange
-            var left = new string[] { null };
-            var right = new[] { "cow" };
-            // Pre-assert
-            // Act
-            Assert.That(
-                () =>
-                {
-                    Expect(left)
-                        .Not.To.Be.Deep.Equivalent.To(right);
-                },
-                Throws.Nothing
-            );
-            // Assert
-        }
-
-        [Test]
-        public void ContainInOrderContinuationAfterAnd()
-        {
-            // Arrange
-            var left = GetRandomString(72, 128);
-            var right = GetRandomString(72, 128);
-            // Pre-Assert
-            // Act
-            var ex = Assert.Throws<UnmetExpectationException>(
-                () => Expect(left)
-                    .To.Equal(right)
-            );
-            // Assert
-            Expect(ex.Message)
-                .To.Start.With("Expected")
-                .And.To.Contain.In.Order(
-                    "\n",
-                    right,
-                    "\n",
-                    "but got",
-                    "\n",
-                    left
-                );
-        }
-
-        [Test]
-        public void AllowingContinuationForManyPreviouslyTerminatingExpectations()
-        {
-            // Arrange
-            var one = 1;
-            var two = 2;
-            var oneString = one.ToString();
-            var twoString = two.ToString();
-            // Act
-            Assert.That(
-                () =>
-                {
-                    Expect(oneString)
-                        .Not.To.Be.Null()
-                        .And.To.Not.Be.Null()
-                        .And.To.Be(oneString)
-                        .And.Not.To.Be(twoString)
-                        .And.To.Not.Be(twoString)
-                        .And.To.Equal(oneString);
-                    Expect(null as string)
-                        .To.Be.Null()
-                        .And.Not.To.Equal(oneString);
-                },
-                Throws.Nothing
-            );
-            Assert.That(
-                () =>
-                {
-                    Expect(one)
-                        .To.Equal(1)
-                        .And.To.Equal(1);
-                },
-                Throws.Nothing
-            );
-            Assert.That(
-                () =>
-                {
-                    Expect(one)
-                        .To.Equal(1)
-                        .And.Not.To.Equal(2)
-                        .And.To.Not.Equal(2)
-                        .And.To.Equal(1)
-                        .And.Not.To.Equal(2 as int?)
-                        .And.To.Equal(1 as int?)
-                        .And.To.Not.Equal(2 as int?)
-                        .And.To.Equal(1 as int?)
-                        .And.To.Be.Equal.To(1)
-                        .And.Not.To.Be.Equal.To(2)
-                        .And.To.Not.Be.Equal.To(2)
-                        .And.To.Be.Greater.Than(0)
-                        .And.To.Be.Greater.Than.Or.Equal.To(1)
-                        .And.To.Be.Less.Than(2)
-                        .And.To.Equal(1)
-                        .And.To.Be.Less.Than.Or.Equal.To(1)
-                        .And.To.Equal(1);
-                },
-                Throws.Nothing
-            );
-            Assert.That(
-                () =>
-                {
-                    Expect(one)
-                        .To.Equal(1)
-                        .And.To.Equal(2);
-                },
-                Throws.Exception.InstanceOf<UnmetExpectationException>()
-            );
-            // Assert
-        }
-
-        [Test]
-        public void MatcherWhichThrowsUnmetExpectationException_ShouldGetThatExactException()
-        {
-            // Arrange
-            // UnmetExpectationException can only be instatiated within NExpect; however, a little
-            //  reflection can get to the internal Throw method
-            var method = typeof(Assertions).GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
-                .FirstOrDefault(
-                    mi => mi.Name == "Throw" &&
-                        mi.GetParameters()
-                            .Length ==
-                        1
-                );
-            Expect(method)
-                .Not.To.Be.Null();
-            UnmetExpectationException expected = null;
-            try
-            {
-                method.Invoke(null, new object[] { GetRandomString(10) });
-            }
-            catch (TargetInvocationException tex)
-            {
-                expected = tex.InnerException as UnmetExpectationException;
-            }
-
-            // Pre-assert
-            // Act
-            try
-            {
-                Expect("moo")
-                    .To.Moo(expected);
-            }
-            catch (Exception ex)
-            {
-                Expect(ex)
-                    .To.Be(expected);
-            }
-
-            // Assert
-        }
-
-        [Test]
-        public void CustomCodeGettingToExpectedCountOnCountMatcher()
-        {
-            // Arrange
-            var expected = GetRandomInt(2, 7);
-            // Pre-assert
-            // Act
             using var _ = Assertions.SuspendTracking();
-            var continuation = Expect(new[] { 1, 2, 3 })
-                .To.Contain.Exactly(expected);
-            var result = continuation.GetExpectedCount<int>();
+            var collection = GetRandomCollection<int>(1);
+            // Pre-assert
+            // Act
+            var sut = Expect(collection)
+                .To.Be.Deep.Equivalent;
             // Assert
-            Expect(result)
+            Expect(sut.GetActual())
+                .To.Be(collection);
+        }
+
+        [Test]
+        public void CollectionIntersectionEquivalent()
+        {
+            // Arrange
+            using var _ = Assertions.SuspendTracking();
+            var collection = GetRandomCollection<int>(1);
+            // Pre-assert
+            // Act
+            var sut = Expect(collection)
+                .To.Be.Intersection.Equivalent;
+            // Assert
+            Expect(sut.GetActual())
+                .To.Be(collection);
+        }
+
+        [Test]
+        public void CollectionIntersectionEqual()
+        {
+            // Arrange
+            using var _ = Assertions.SuspendTracking();
+            var collection = GetRandomCollection<int>(1);
+            // Pre-assert
+            // Act
+            var sut = Expect(collection)
+                .To.Be.Intersection.Equal;
+            // Assert
+            Expect(sut.GetActual())
+                .To.Be(collection);
+        }
+
+        [Test]
+        public void CollectionUnique()
+        {
+            // Arrange
+            using var _ = Assertions.SuspendTracking();
+            var collection = GetRandomCollection<int>(1);
+            // Pre-assert
+            // Act
+            var sut = Expect(collection)
+                .To.Have.Unique;
+            // Assert
+            Expect(sut.GetActual())
+                .To.Be(collection);
+        }
+
+        [Test]
+        public void CollectionContainAt()
+        {
+            // Arrange
+            using var _ = Assertions.SuspendTracking();
+            var collection = GetRandomCollection<int>(1);
+            // Pre-assert
+            // Act
+            var sut = Expect(collection)
+                .To.Contain.At;
+            // Assert
+            Expect(sut.GetActual())
+                .To.Be(collection);
+        }
+
+        [Test]
+        public void Deep()
+        {
+            // Arrange
+            using var _ = Assertions.SuspendTracking();
+            var src = new { };
+            // Pre-assert
+            // Act
+            var sut = Expect(src)
+                .To.Deep;
+            // Assert
+            Expect(sut.GetActual())
+                .To.Be(src);
+        }
+
+        [Test]
+        public void DictionaryKeyWith()
+        {
+            // Arrange
+            using var _ = Assertions.SuspendTracking();
+            var dict = new Dictionary<string, string>
+            {
+                ["key"] = "value"
+            };
+            // Pre-assert
+            // Act
+            var sut = Expect(dict)
+                .To.Contain.Key("key")
+                .With;
+            // Assert
+            Expect(sut.GetActual())
+                .To.Equal("value");
+        }
+
+        [Test]
+        public void BeEqual()
+        {
+            // Arrange
+            using var _ = Assertions.SuspendTracking();
+            var src = GetRandomString();
+            // Pre-assert
+            // Act
+            var sut = Expect(src)
+                .To.Be.Equal;
+            // Assert
+            Expect(sut.GetActual())
+                .To.Be(src);
+        }
+
+        [Test]
+        public void Intersection()
+        {
+            // Arrange
+            using var _ = Assertions.SuspendTracking();
+            var expected = GetRandom<SomeNode>();
+            // Pre-assert
+            // Act
+            var sut = Expect(expected)
+                .To.Intersection;
+            // Assert
+            Expect(sut.GetActual())
                 .To.Equal(expected);
         }
 
         [Test]
-        public void CustomCodeGettingToCountMatchMethod_Exactly()
+        public void NotNullOr()
         {
             // Arrange
+            using var _ = Assertions.SuspendTracking();
+            var expected = GetRandomString(10);
             // Pre-assert
             // Act
-            using var _ = Assertions.SuspendTracking();
-            var continuation = Expect(new[] { "a", "b", "c" })
-                .To.Contain.Exactly(123);
-            var result = continuation.GetCountMatchMethod();
+            var sut = Expect(expected)
+                .Not.To.Be.Null.Or;
             // Assert
-            Expect(result)
-                .To.Equal(CountMatchMethods.Exactly);
+            Expect(sut.GetActual())
+                .To.Be(expected);
         }
 
         [Test]
-        public void CustomCodeGettingToCountMatchMethod_AtLeast()
+        public void LessContinuation()
         {
             // Arrange
-            // Pre-assert
-            // Act
             using var _ = Assertions.SuspendTracking();
-            var continuation = Expect(new[] { "a", "b", "c" })
-                .To.Contain.At.Least(123);
-            var result = continuation.GetCountMatchMethod();
-            // Assert
-            Expect(result)
-                .To.Equal(CountMatchMethods.Minimum);
-        }
-
-        [Test]
-        public void CustomCodeGettingToCountMatchMethod_AtMost()
-        {
-            // Arrange
+            var expected = GetRandomInt();
             // Pre-assert
             // Act
-            using var _ = Assertions.SuspendTracking();
-            var continuation = Expect(new[] { "a", "b", "c" })
-                .To.Contain.At.Most(123);
-            var result = continuation.GetCountMatchMethod();
+            var sut = Expect(expected)
+                .To.Be.Less;
             // Assert
-            Expect(result)
-                .To.Equal(CountMatchMethods.Maximum);
-        }
-
-        [Test]
-        public void CustomCodeGettingToCountMatchMethod_Any()
-        {
-            // Arrange
-            // Pre-assert
-            // Act
-            using var _ = Assertions.SuspendTracking();
-            var continuation = Expect(new[] { "a", "b", "c" })
-                .To.Contain.Any;
-            var result = continuation.GetCountMatchMethod();
-            // Assert
-            Expect(result)
-                .To.Equal(CountMatchMethods.Any);
-        }
-
-        [Test]
-        public void CustomCodeGettingToCountMatchMethod_All()
-        {
-            // Arrange
-            // Pre-assert
-            // Act
-            using var _ = Assertions.SuspendTracking();
-            var continuation = Expect(new[] { "a", "b", "c" })
-                .To.Contain.All;
-            var result = continuation.GetCountMatchMethod();
-            // Assert
-            Expect(result)
-                .To.Equal(CountMatchMethods.All);
-        }
-
-        [Test]
-        public void CustomCodeGettingToCountMatchMethod_Only()
-        {
-            // Arrange
-            // Pre-assert
-            // Act
-            using var _ = Assertions.SuspendTracking();
-            var continuation = Expect(new[] { "a" })
-                .To.Contain.Only(1);
-            var result = continuation.GetCountMatchMethod();
-            // Assert
-            Expect(result)
-                .To.Equal(CountMatchMethods.Only);
-        }
-
-        [TestCase(true)]
-        [TestCase(false)]
-        public void MatcherResultWithNoMessage(bool expected)
-        {
-            // Arrange
-            // Pre-assert
-            // Act
-            var result = new MatcherResult(expected);
-            // Assert
-            Expect(result.Passed)
+            Expect(sut.GetActual())
                 .To.Equal(expected);
-            Expect(result.Message)
-                .To.Be.Empty();
         }
 
         [Test]
-        public void TryGetActual_ShouldThrowIf_ICanAddMatcher_HasNoActual()
+        public void ThrowContinuationOfT()
         {
             // Arrange
+            var expected = new InvalidOperationException(GetRandomString(10));
             // Pre-assert
             // Act
-            Expect(() => (new SomeCanAddMatcher()).GetActual())
+            var sut = Expect(() => throw expected)
                 .To.Throw<InvalidOperationException>();
             // Assert
-        }
-
-        public class SomeCanAddMatcher : ICanAddMatcher<string>
-        {
-        }
-
-        [TestFixture]
-        public class ShouldHaveActualProperty
-        {
-            [Test]
-            public void CollectionEqual()
-            {
-                // Arrange
-                using var _ = Assertions.SuspendTracking();
-                var collection = GetRandomCollection<int>(1);
-                // Pre-assert
-                // Act
-                var sut = Expect(collection)
-                    .To.Be.Equal;
-                // Assert
-                Expect(sut.GetActual())
-                    .To.Be(collection);
-            }
-
-            [Test]
-            public void CollectionDeepEqual()
-            {
-                // Arrange
-                using var _ = Assertions.SuspendTracking();
-                var collection = GetRandomCollection<int>(1);
-                // Pre-assert
-                // Act
-                var sut = Expect(collection)
-                    .To.Be.Deep.Equal;
-                // Assert
-                Expect(sut.GetActual())
-                    .To.Be(collection);
-            }
-
-            [Test]
-            public void CollectionEquivalent()
-            {
-                // Arrange
-                using var _ = Assertions.SuspendTracking();
-                var collection = GetRandomCollection<int>(1);
-                // Pre-assert
-                // Act
-                var sut = Expect(collection)
-                    .To.Be.Equivalent;
-                // Assert
-                Expect(sut.GetActual())
-                    .To.Be(collection);
-            }
-
-            [Test]
-            public void CollectionDeepEquivalent()
-            {
-                // Arrange
-                using var _ = Assertions.SuspendTracking();
-                var collection = GetRandomCollection<int>(1);
-                // Pre-assert
-                // Act
-                var sut = Expect(collection)
-                    .To.Be.Deep.Equivalent;
-                // Assert
-                Expect(sut.GetActual())
-                    .To.Be(collection);
-            }
-
-            [Test]
-            public void CollectionIntersectionEquivalent()
-            {
-                // Arrange
-                using var _ = Assertions.SuspendTracking();
-                var collection = GetRandomCollection<int>(1);
-                // Pre-assert
-                // Act
-                var sut = Expect(collection)
-                    .To.Be.Intersection.Equivalent;
-                // Assert
-                Expect(sut.GetActual())
-                    .To.Be(collection);
-            }
-
-            [Test]
-            public void CollectionIntersectionEqual()
-            {
-                // Arrange
-                using var _ = Assertions.SuspendTracking();
-                var collection = GetRandomCollection<int>(1);
-                // Pre-assert
-                // Act
-                var sut = Expect(collection)
-                    .To.Be.Intersection.Equal;
-                // Assert
-                Expect(sut.GetActual())
-                    .To.Be(collection);
-            }
-
-            [Test]
-            public void CollectionUnique()
-            {
-                // Arrange
-                using var _ = Assertions.SuspendTracking();
-                var collection = GetRandomCollection<int>(1);
-                // Pre-assert
-                // Act
-                var sut = Expect(collection)
-                    .To.Have.Unique;
-                // Assert
-                Expect(sut.GetActual())
-                    .To.Be(collection);
-            }
-
-            [Test]
-            public void CollectionContainAt()
-            {
-                // Arrange
-                using var _ = Assertions.SuspendTracking();
-                var collection = GetRandomCollection<int>(1);
-                // Pre-assert
-                // Act
-                var sut = Expect(collection)
-                    .To.Contain.At;
-                // Assert
-                Expect(sut.GetActual())
-                    .To.Be(collection);
-            }
-
-            [Test]
-            public void Deep()
-            {
-                // Arrange
-                using var _ = Assertions.SuspendTracking();
-                var src = new { };
-                // Pre-assert
-                // Act
-                var sut = Expect(src)
-                    .To.Deep;
-                // Assert
-                Expect(sut.GetActual())
-                    .To.Be(src);
-            }
-
-            [Test]
-            public void DictionaryKeyWith()
-            {
-                // Arrange
-                using var _ = Assertions.SuspendTracking();
-                var dict = new Dictionary<string, string>
-                {
-                    ["key"] = "value"
-                };
-                // Pre-assert
-                // Act
-                var sut = Expect(dict)
-                    .To.Contain.Key("key")
-                    .With;
-                // Assert
-                Expect(sut.GetActual())
-                    .To.Equal("value");
-            }
-
-            [Test]
-            public void BeEqual()
-            {
-                // Arrange
-                using var _ = Assertions.SuspendTracking();
-                var src = GetRandomString();
-                // Pre-assert
-                // Act
-                var sut = Expect(src)
-                    .To.Be.Equal;
-                // Assert
-                Expect(sut.GetActual())
-                    .To.Be(src);
-            }
-
-            [Test]
-            public void Intersection()
-            {
-                // Arrange
-                using var _ = Assertions.SuspendTracking();
-                var expected = GetRandom<SomeNode>();
-                // Pre-assert
-                // Act
-                var sut = Expect(expected)
-                    .To.Intersection;
-                // Assert
-                Expect(sut.GetActual())
-                    .To.Equal(expected);
-            }
-
-            [Test]
-            public void NotNullOr()
-            {
-                // Arrange
-                using var _ = Assertions.SuspendTracking();
-                var expected = GetRandomString(10);
-                // Pre-assert
-                // Act
-                var sut = Expect(expected)
-                    .Not.To.Be.Null.Or;
-                // Assert
-                Expect(sut.GetActual())
-                    .To.Be(expected);
-            }
-
-            [Test]
-            public void LessContinuation()
-            {
-                // Arrange
-                using var _ = Assertions.SuspendTracking();
-                var expected = GetRandomInt();
-                // Pre-assert
-                // Act
-                var sut = Expect(expected)
-                    .To.Be.Less;
-                // Assert
-                Expect(sut.GetActual())
-                    .To.Equal(expected);
-            }
-
-            [Test]
-            public void ThrowContinuationOfT()
-            {
-                // Arrange
-                var expected = new InvalidOperationException(GetRandomString(10));
-                // Pre-assert
-                // Act
-                var sut = Expect(() => throw expected)
-                    .To.Throw<InvalidOperationException>();
-                // Assert
-                Expect(sut.GetActual())
-                    .To.Equal(expected);
-            }
-
-            [Test]
-            public void ThrowContinuation()
-            {
-                // Arrange
-                var expected = new InvalidOperationException(GetRandomString(10));
-                // Pre-assert
-                // Act
-                var sut = Expect(() => throw expected)
-                    .To.Throw();
-                // Assert
-                Expect(sut.GetActual())
-                    .To.Equal(expected);
-            }
+            Expect(sut.GetActual())
+                .To.Equal(expected);
         }
 
         [Test]
-        public void CountMatchDeepEqual_ShouldExposeOriginalContinuation()
+        public void ThrowContinuation()
         {
             // Arrange
-            using var _ = Assertions.SuspendTracking();
+            var expected = new InvalidOperationException(GetRandomString(10));
             // Pre-assert
             // Act
-            var original = Expect(new[] { 1 })
-                .To.Contain;
-            var sut = original.Exactly(1)
-                .Deep.Equal;
+            var sut = Expect(() => throw expected)
+                .To.Throw();
             // Assert
-            Expect(sut.GetPropertyValue("Continuation"))
-                .To.Be(original);
-        }
-
-        [Test]
-        public void CountMatchIntersectionEqual_ShouldExposeOriginalContinuation()
-        {
-            // Arrange
-            using var _ = Assertions.SuspendTracking();
-            // Pre-assert
-            // Act
-            var original = Expect(new[] { 1 })
-                .To.Contain;
-            var sut = original.Exactly(1)
-                .Intersection.Equal;
-            // Assert
-            Expect(sut.GetPropertyValue("Continuation"))
-                .To.Be(original);
-        }
-
-        [Test]
-        public void DeepEquivalenceVsNull()
-        {
-            // Arrange
-            var src = new[] { "hello" };
-            var test = new[] { null as string };
-            // Pre-assert
-            // Act
-            Assert.That(
-                () =>
-                {
-                    Expect(src)
-                        .Not.To.Be.Equivalent.To(test);
-                    Expect(test)
-                        .Not.To.Be.Equivalent.To(src);
-                },
-                Throws.Nothing
-            );
-            // Assert
-        }
-
-        [TestFixture]
-        public class DanglersForUserspaceExtension
-        {
-            [TestFixture]
-            public class AndExtension
-            {
-                [Test]
-                public void ShouldHave_HaveAndAn()
-                {
-                    // Arrange
-                    // Pre-assert
-                    // Act
-                    Assert.That(
-                        () =>
-                        {
-                            Expect("foo the ant")
-                                .To.Have.A.Space()
-                                .And.Have.A.Foo()
-                                .And.An.Ant();
-                        },
-                        Throws.Nothing
-                    );
-                    // Assert
-                }
-            }
-
-            [Test]
-            public void ExceptionPropertyCollectionEquivalenceTesting_Danglers()
-            {
-                // Arrange
-                var expected = new SomeNode()
-                {
-                    Id = 1,
-                    Name = "Moo"
-                };
-                // Pre-assert
-                // Act
-                Assert.That(
-                    () =>
-                    {
-                        Expect(() => throw new ExceptionWithNode(expected))
-                            .To.Throw<ExceptionWithNode>()
-                            .With.CollectionProperty(e => e.Nodes)
-                            .For.Moo();
-                    },
-                    Throws.Nothing
-                );
-            }
-
-            [Test]
-            public void ExceptionCollectionPropertyMatchingLikeOtherCollections()
-            {
-                // Arrange
-                var ex = new AggregateException("moo", new[] { new Exception("1"), new Exception("2") });
-                // Act
-                Assert.That(
-                    () =>
-                    {
-                        Expect(() => throw ex)
-                            .To.Throw<AggregateException>()
-                            .With.CollectionProperty(e => e.InnerExceptions)
-                            .Not.Containing.Exactly(1)
-                            .Matched.By(e => e.Message == "1");
-                    },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>()
-                );
-                Assert.That(
-                    () =>
-                    {
-                        Expect(() => throw ex)
-                            .To.Throw<AggregateException>()
-                            .With.CollectionProperty(e => e.InnerExceptions)
-                            .Containing.Exactly(1)
-                            .Matched.By(e => e.Message == "1");
-                        Expect(() => throw ex)
-                            .To.Throw<AggregateException>()
-                            .With.CollectionProperty(e => e.InnerExceptions)
-                            .Not.Containing.Any
-                            .Matched.By(e => e.Message == "3");
-                    },
-                    Throws.Nothing
-                );
-                Assert.That(
-                    () =>
-                    {
-                        Expect(() => throw ex)
-                            .To.Throw<AggregateException>()
-                            .With.CollectionProperty(e => e.InnerExceptions)
-                            .Not.Containing.Any
-                            .Matched.By(e => e.Message == "2");
-                    },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>()
-                );
-                // Assert
-            }
-
-            [Test]
-            public void InDangler()
-            {
-                // Arrange
-                var e1 = GetRandomString();
-                var e2 = GetRandomString();
-                var message = new[] { e1, e2 }.Randomize()
-                    .JoinWith(" ");
-                // Pre-Assert
-                // Act
-                Assert.That(
-                    () =>
-                    {
-                        Expect(
-                                () => throw new ArgumentNullException(message)
-                            )
-                            .To.Throw<ArgumentNullException>()
-                            .With.Message.Containing(e1);
-                    },
-                    Throws.Nothing
-                );
-                // Assert
-            }
-
-            [TestCase("Negate")]
-            [TestCase("ResetNegation")]
-            public void NotInstanceDoesNotSupport_(string method)
-            {
-                // Arrange
-                using var _ = Assertions.SuspendTracking();
-                // Pre-assert
-                // Act
-                var continuation = Expect(new object())
-                    .Not.To.Be.An.Instance;
-                var mi = continuation.GetType()
-                    .GetMethod(method);
-                Expect(mi)
-                    .Not.To.Be.Null();
-                Expect(() => mi.Invoke(continuation, new object[0]))
-                    .To.Throw();
-                // Assert
-            }
-
-            [Test]
-            public void UnmetExpectationStackTraces_ShouldOmitTraversalThroughNExpect()
-            {
-                // Arrange
-                // Pre-assert
-                // Act
-                UnmetExpectationException captured = null;
-                try
-                {
-                    Expect(1)
-                        .To.Be.Falsey();
-                }
-                catch (UnmetExpectationException ex)
-                {
-                    captured = ex;
-                }
-
-                // Assert
-                Expect(captured)
-                    .Not.To.Be.Null();
-                var lines = captured.StackTrace.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-                Expect(lines)
-                    .To.Contain.Only(1)
-                    .Item();
-                Expect(lines[0])
-                    .To.Contain(nameof(UnmetExpectationStackTraces_ShouldOmitTraversalThroughNExpect));
-            }
+            Expect(sut.GetActual())
+                .To.Equal(expected);
         }
     }
 
-    public static class MatcherThrowingUnmetExpectationException
+    [Test]
+    public void CountMatchDeepEqual_ShouldExposeOriginalContinuation()
     {
-        public static void CurrentFilePath(
-            this IStringContain contain,
-            [CallerFilePath] string path = null
-        )
+        // Arrange
+        using var _ = Assertions.SuspendTracking();
+        // Pre-assert
+        // Act
+        var original = Expect(new[] { 1 })
+            .To.Contain;
+        var sut = original.Exactly(1)
+            .Deep.Equal;
+        // Assert
+        Expect(sut.GetPropertyValue("Continuation"))
+            .To.Be(original);
+    }
+
+    [Test]
+    public void CountMatchIntersectionEqual_ShouldExposeOriginalContinuation()
+    {
+        // Arrange
+        using var _ = Assertions.SuspendTracking();
+        // Pre-assert
+        // Act
+        var original = Expect(new[] { 1 })
+            .To.Contain;
+        var sut = original.Exactly(1)
+            .Intersection.Equal;
+        // Assert
+        Expect(sut.GetPropertyValue("Continuation"))
+            .To.Be(original);
+    }
+
+    [Test]
+    public void DeepEquivalenceVsNull()
+    {
+        // Arrange
+        var src = new[] { "hello" };
+        var test = new[] { null as string };
+        // Pre-assert
+        // Act
+        Assert.That(
+            () =>
+            {
+                Expect(src)
+                    .Not.To.Be.Equivalent.To(test);
+                Expect(test)
+                    .Not.To.Be.Equivalent.To(src);
+            },
+            Throws.Nothing
+        );
+        // Assert
+    }
+
+    [TestFixture]
+    public class DanglersForUserspaceExtension
+    {
+        [TestFixture]
+        public class AndExtension
         {
-            contain.AddMatcher(
-                actual =>
+            [Test]
+            public void ShouldHave_HaveAndAn()
+            {
+                // Arrange
+                // Pre-assert
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect("foo the ant")
+                            .To.Have.A.Space()
+                            .And.Have.A.Foo()
+                            .And.An.Ant();
+                    },
+                    Throws.Nothing
+                );
+                // Assert
+            }
+        }
+
+        [Test]
+        public void ExceptionPropertyCollectionEquivalenceTesting_Danglers()
+        {
+            // Arrange
+            var expected = new SomeNode()
+            {
+                Id = 1,
+                Name = "Moo"
+            };
+            // Pre-assert
+            // Act
+            Assert.That(
+                () =>
                 {
-                    // ReSharper disable once AssignNullToNotNullAttribute
-                    var passed = actual.Contains(path);
-                    return new MatcherResult(
-                        passed,
-                        () => $"Expected {actual} to contain {path}"
-                    );
-                }
+                    Expect(() => throw new ExceptionWithNode(expected))
+                        .To.Throw<ExceptionWithNode>()
+                        .With.CollectionProperty(e => e.Nodes)
+                        .For.Moo();
+                },
+                Throws.Nothing
             );
         }
 
-        public static void Falsey(this IBe<long> be)
+        [Test]
+        public void ExceptionCollectionPropertyMatchingLikeOtherCollections()
         {
-            be.AddMatcher(
-                actual =>
+            // Arrange
+            var ex = new AggregateException("moo", new[] { new Exception("1"), new Exception("2") });
+            // Act
+            Assert.That(
+                () =>
                 {
-                    var passed = actual == 0;
-                    return new MatcherResult(
-                        passed,
-                        () => $"Expected {actual} {passed.AsNot()}to be falsey"
-                    );
-                }
+                    Expect(() => throw ex)
+                        .To.Throw<AggregateException>()
+                        .With.CollectionProperty(e => e.InnerExceptions)
+                        .Not.Containing.Exactly(1)
+                        .Matched.By(e => e.Message == "1");
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
             );
+            Assert.That(
+                () =>
+                {
+                    Expect(() => throw ex)
+                        .To.Throw<AggregateException>()
+                        .With.CollectionProperty(e => e.InnerExceptions)
+                        .Containing.Exactly(1)
+                        .Matched.By(e => e.Message == "1");
+                    Expect(() => throw ex)
+                        .To.Throw<AggregateException>()
+                        .With.CollectionProperty(e => e.InnerExceptions)
+                        .Not.Containing.Any
+                        .Matched.By(e => e.Message == "3");
+                },
+                Throws.Nothing
+            );
+            Assert.That(
+                () =>
+                {
+                    Expect(() => throw ex)
+                        .To.Throw<AggregateException>()
+                        .With.CollectionProperty(e => e.InnerExceptions)
+                        .Not.Containing.Any
+                        .Matched.By(e => e.Message == "2");
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
+            // Assert
         }
 
-        public static void Moo(this ICollectionFor<SomeNode> continuation)
+        [Test]
+        public void InDangler()
         {
-            continuation.Compose(
-                actual =>
+            // Arrange
+            var e1 = GetRandomString();
+            var e2 = GetRandomString();
+            var message = new[] { e1, e2 }.Randomize()
+                .JoinWith(" ");
+            // Pre-Assert
+            // Act
+            Assert.That(
+                () =>
                 {
-                    Expect(actual)
-                        .To.Contain.Exactly(1)
-                        .Matched.By(n => n.Name == "Moo");
-                }
+                    Expect(
+                            () => throw new ArgumentNullException(message)
+                        )
+                        .To.Throw<ArgumentNullException>()
+                        .With.Message.Containing(e1);
+                },
+                Throws.Nothing
             );
+            // Assert
         }
 
-        public static void Moo(
-            this ITo<string> to,
-            UnmetExpectationException ex
-        )
+        [TestCase("Negate")]
+        [TestCase("ResetNegation")]
+        public void NotInstanceDoesNotSupport_(string method)
         {
-            to.AddMatcher(actual => throw ex);
+            // Arrange
+            using var _ = Assertions.SuspendTracking();
+            // Pre-assert
+            // Act
+            var continuation = Expect(new object())
+                .Not.To.Be.An.Instance;
+            var mi = continuation.GetType()
+                .GetMethod(method);
+            Expect(mi)
+                .Not.To.Be.Null();
+            Expect(() => mi.Invoke(continuation, new object[0]))
+                .To.Throw();
+            // Assert
         }
 
-        public static IMore<string> Space(this IA<string> a)
+        [Test]
+        public void UnmetExpectationStackTraces_ShouldOmitTraversalThroughNExpect()
         {
-            return a.Compose(
-                actual =>
-                {
-                    Expect(actual)
-                        .To.Contain(" ");
-                }
-            );
-        }
+            // Arrange
+            // Pre-assert
+            // Act
+            UnmetExpectationException captured = null;
+            try
+            {
+                Expect(1)
+                    .To.Be.Falsey();
+            }
+            catch (UnmetExpectationException ex)
+            {
+                captured = ex;
+            }
 
-        public static IMore<string> Foo(this IA<string> a)
-        {
-            return a.Compose(
-                actual =>
-                {
-                    Expect(actual)
-                        .To.Contain("foo");
-                }
-            );
+            // Assert
+            Expect(captured)
+                .Not.To.Be.Null();
+            var lines = captured.StackTrace.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            Expect(lines)
+                .To.Contain.Only(1)
+                .Item();
+            Expect(lines[0])
+                .To.Contain(nameof(UnmetExpectationStackTraces_ShouldOmitTraversalThroughNExpect));
         }
+    }
+}
 
-        public static IMore<string> Ant(this IAn<string> an)
-        {
-            return an.Compose(
-                actual =>
-                {
-                    Expect(actual)
-                        .To.Contain("ant");
-                }
-            );
-        }
+public static class MatcherThrowingUnmetExpectationException
+{
+    public static void CurrentFilePath(
+        this IStringContain contain,
+        [CallerFilePath] string path = null
+    )
+    {
+        contain.AddMatcher(
+            actual =>
+            {
+                // ReSharper disable once AssignNullToNotNullAttribute
+                var passed = actual.Contains(path);
+                return new MatcherResult(
+                    passed,
+                    () => $"Expected {actual} to contain {path}"
+                );
+            }
+        );
+    }
+
+    public static void Falsey(this IBe<long> be)
+    {
+        be.AddMatcher(
+            actual =>
+            {
+                var passed = actual == 0;
+                return new MatcherResult(
+                    passed,
+                    () => $"Expected {actual} {passed.AsNot()}to be falsey"
+                );
+            }
+        );
+    }
+
+    public static void Moo(this ICollectionFor<SomeNode> continuation)
+    {
+        continuation.Compose(
+            actual =>
+            {
+                Expect(actual)
+                    .To.Contain.Exactly(1)
+                    .Matched.By(n => n.Name == "Moo");
+            }
+        );
+    }
+
+    public static void Moo(
+        this ITo<string> to,
+        UnmetExpectationException ex
+    )
+    {
+        to.AddMatcher(actual => throw ex);
+    }
+
+    public static IMore<string> Space(this IA<string> a)
+    {
+        return a.Compose(
+            actual =>
+            {
+                Expect(actual)
+                    .To.Contain(" ");
+            }
+        );
+    }
+
+    public static IMore<string> Foo(this IA<string> a)
+    {
+        return a.Compose(
+            actual =>
+            {
+                Expect(actual)
+                    .To.Contain("foo");
+            }
+        );
+    }
+
+    public static IMore<string> Ant(this IAn<string> an)
+    {
+        return an.Compose(
+            actual =>
+            {
+                Expect(actual)
+                    .To.Contain("ant");
+            }
+        );
     }
 }
