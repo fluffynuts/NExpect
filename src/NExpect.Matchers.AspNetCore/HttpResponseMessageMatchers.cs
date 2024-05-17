@@ -149,6 +149,56 @@ public static class HttpResponseMessageMatchers
     }
 
     /// <summary>
+    /// Assert that the cookie has expired
+    /// </summary>
+    /// <param name="iis"></param>
+    /// <returns></returns>
+    public static IMore<Cookie> Expired(
+        this IIs<Cookie> iis
+    )
+    {
+        return iis.Expired(NULL_STRING);
+    }
+
+    /// <summary>
+    /// Assert that the cookie has expired
+    /// </summary>
+    /// <param name="iis"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<Cookie> Expired(
+        this IIs<Cookie> iis,
+        string customMessage
+    )
+    {
+        return iis.Expired(() => customMessage);
+    }
+
+    /// <summary>
+    /// Assert that the cookie has expired
+    /// </summary>
+    /// <param name="iis"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<Cookie> Expired(
+        this IIs<Cookie> iis,
+        Func<string> customMessageGenerator
+    )
+    {
+        return iis.AddMatcher(
+            actual =>
+            {
+                var passed = actual.Expires <= DateTime.Now;
+                return new MatcherResult(
+                    passed,
+                    () => $"Expected cookie '{actual.Name}' {passed.AsNot()} to be expired",
+                    customMessageGenerator
+                );
+            }
+        );
+    }
+
+    /// <summary>
     /// Asserts that the cookie has the desired Path
     /// </summary>
     /// <param name="with"></param>

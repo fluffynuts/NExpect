@@ -69,6 +69,50 @@ public class TestHttpResponseMatchers
         }
 
         [Test]
+        public void ShouldBeAbleToAssertCookieIsExpired()
+        {
+            // Arrange
+            var key = GetRandomString();
+            var value = GetRandomString();
+            var hasExpiredCookie = HttpResponseBuilder.Create()
+                .WithCookie(
+                    key,
+                    value,
+                    new CookieOptions()
+                    {
+                        MaxAge = TimeSpan.FromSeconds(-1)
+                    }
+                ).Build();
+
+            var hasValidCookie = HttpResponseBuilder.Create()
+                .WithCookie(
+                    key,
+                    value,
+                    new CookieOptions()
+                    {
+                        MaxAge = TimeSpan.FromSeconds(120)
+                    }
+                ).Build();
+
+            // Act
+            Assert.That(() =>
+            {
+                Expect(hasExpiredCookie)
+                    .To.Have.Cookie(key)
+                    .With.Value(value)
+                    .Which.Is.Expired();
+            }, Throws.Nothing);
+            Assert.That(() =>
+            {
+                Expect(hasValidCookie)
+                    .To.Have.Cookie(key)
+                    .With.Value(value)
+                    .Which.Is.Expired();
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            // Assert
+        }
+
+        [Test]
         public void ShouldTestCookieSecureHttpOnlyDomain()
         {
             // Arrange
@@ -213,15 +257,15 @@ public class TestHttpResponseMatchers
                 Throws.Nothing
             );
             Assert.That(
-                    () =>
-                    {
-                        Expect(res)
-                            .To.Have.Cookie(sessionKey)
-                            .With.Value(sessionValue)
-                            .With.Expiration(expires);
-                    },
-                    Throws.Exception.InstanceOf<UnmetExpectationException>()
-                );
+                () =>
+                {
+                    Expect(res)
+                        .To.Have.Cookie(sessionKey)
+                        .With.Value(sessionValue)
+                        .With.Expiration(expires);
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
             Assert.That(
                 () =>
                 {
