@@ -13,4 +13,10 @@ public interface IWhich<T> : ICanAddMatcher<T>
     /// .Which.Is
     /// </summary>
     public IIs<T> Is { get; }
+
+    /// <summary>
+    /// Provides for the grammar extension point
+    /// .Which.Has
+    /// </summary>
+    public IIs<T> Has { get; }
 }

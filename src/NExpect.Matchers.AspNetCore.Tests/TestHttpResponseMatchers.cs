@@ -113,6 +113,50 @@ public class TestHttpResponseMatchers
         }
 
         [Test]
+        public void ShouldBeAbleToAssertCookieIsExpired_PastTense()
+        {
+            // Arrange
+            var key = GetRandomString();
+            var value = GetRandomString();
+            var hasExpiredCookie = HttpResponseBuilder.Create()
+                .WithCookie(
+                    key,
+                    value,
+                    new CookieOptions()
+                    {
+                        MaxAge = TimeSpan.FromSeconds(-1)
+                    }
+                ).Build();
+
+            var hasValidCookie = HttpResponseBuilder.Create()
+                .WithCookie(
+                    key,
+                    value,
+                    new CookieOptions()
+                    {
+                        MaxAge = TimeSpan.FromSeconds(120)
+                    }
+                ).Build();
+
+            // Act
+            Assert.That(() =>
+            {
+                Expect(hasExpiredCookie)
+                    .To.Have.Cookie(key)
+                    .With.Value(value)
+                    .Which.Has.Expired();
+            }, Throws.Nothing);
+            Assert.That(() =>
+            {
+                Expect(hasValidCookie)
+                    .To.Have.Cookie(key)
+                    .With.Value(value)
+                    .Which.Has.Expired();
+            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            // Assert
+        }
+
+        [Test]
         public void ShouldTestCookieSecureHttpOnlyDomain()
         {
             // Arrange

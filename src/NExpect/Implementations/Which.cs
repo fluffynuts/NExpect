@@ -10,6 +10,7 @@ internal class Which<T>
       IWhich<T>
 {
     public IIs<T> Is => Next<Is<T>>();
+    public IIs<T> Has => Next<Is<T>>();
 
     public Which(Func<T> actualFetcher) : base(actualFetcher)
     {
