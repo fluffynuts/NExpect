@@ -30,7 +30,7 @@ namespace NExpect.Tests
                 () =>
                 {
                     Expect(nearlyRex)
-                        .Without("Type")
+                        .Omitting("Type")
                         .To.Deep.Equal(rex);
                 },
                 Throws.Nothing
@@ -39,7 +39,7 @@ namespace NExpect.Tests
                 () =>
                 {
                     Expect(nearlyRex)
-                        .Without("Type")
+                        .Omitting("Type")
                         .To.Intersection.Equal(rex);
                 },
                 Throws.Nothing
@@ -68,7 +68,7 @@ namespace NExpect.Tests
                 () =>
                 {
                     Expect(nearlyRex)
-                        .Without("Type")
+                        .Omitting("Type")
                         .To.Deep.Equal(rex);
                 },
                 Throws.Nothing
@@ -77,7 +77,7 @@ namespace NExpect.Tests
                 () =>
                 {
                     Expect(nearlyRex)
-                        .Without("Type")
+                        .Omitting("Type")
                         .To.Intersection.Equal(rex);
                 },
                 Throws.Nothing
