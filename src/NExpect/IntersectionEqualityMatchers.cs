@@ -74,7 +74,7 @@ public static class IntersectionEqualityMatchers
             customEqualityComparers
         );
     }
-        
+
     /// <summary>
     /// Performs intersection-equality testing on two objects
     /// </summary>
@@ -145,10 +145,13 @@ public static class IntersectionEqualityMatchers
         return continuation.AddMatcher(
             actual =>
             {
+                var ignoreProperties = actual.FindOrAddPropertyIgnoreListMetadata();
                 var result = DeepTestHelpers.AreIntersectionEqual(
                     actual,
                     expected,
-                    customEqualityComparers);
+                    customEqualityComparers,
+                    ignoreProperties
+                );
                 return new MatcherResult(
                     result.AreEqual,
                     FinalMessageFor(

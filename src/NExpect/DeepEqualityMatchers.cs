@@ -72,8 +72,10 @@ public static class DeepEqualityMatchers
             continuation,
             expected,
             customMessageGenerator,
-            customEqualityComparers);
+            customEqualityComparers
+        );
     }
+
     /// <summary>
     /// Performs deep equality testing on two objects
     /// </summary>
@@ -130,7 +132,8 @@ public static class DeepEqualityMatchers
             continuation,
             expected,
             customMessageGenerator,
-            customEqualityComparers);
+            customEqualityComparers
+        );
     }
 
     private static IMore<T> DoDeepEqualityTesting<T>(
@@ -143,10 +146,13 @@ public static class DeepEqualityMatchers
         return continuation.AddMatcher(
             actual =>
             {
+                var ignoreProperties = actual.FindOrAddPropertyIgnoreListMetadata();
                 var deepEqualResult = DeepTestHelpers.AreDeepEqual(
                     actual,
                     expected,
-                    customEqualityComparers);
+                    customEqualityComparers,
+                    ignoreProperties
+                );
                 return new MatcherResult(
                     deepEqualResult.AreEqual,
                     MH.FinalMessageFor(

@@ -196,6 +196,7 @@ public static class CollectionIntersectionEqualityExtensions
         params object[] customEqualityComparers
     )
     {
+        var ignoreProperties = collection.FindOrAddPropertyIgnoreListMetadata();
         return CollectionCompare(
             collection,
             expected,
@@ -208,11 +209,12 @@ public static class CollectionIntersectionEqualityExtensions
                         {
                             return acc;
                         }
-
+                        
                         var result = AreIntersectionEqual(
                             cur.Item1,
                             cur.Item2,
-                            customEqualityComparers
+                            customEqualityComparers,
+                            ignoreProperties
                         );
                         return result.AreEqual
                             ? null

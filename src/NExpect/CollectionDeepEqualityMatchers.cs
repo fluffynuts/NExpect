@@ -206,6 +206,8 @@ public static class CollectionDeepEqualityMatchers
             );
         }
 
+        var ignoreProperties = collection.FindOrAddPropertyIgnoreListMetadata();
+        
         return CollectionCompare(
             collection,
             expected,
@@ -219,12 +221,13 @@ public static class CollectionDeepEqualityMatchers
                             {
                                 return acc;
                             }
-
+                            
                             var result =
                                 AreDeepEqual(
                                     cur.Item1,
                                     cur.Item2,
-                                    customEqualityComparers
+                                    customEqualityComparers,
+                                    ignoreProperties
                                 );
                             return result.AreEqual
                                 ? null

@@ -121,6 +121,7 @@ public static class CollectionIntersectionEquivalenceExtensions
             expected,
             (master, compare) =>
             {
+                var ignoreProperties = collection.FindOrAddPropertyIgnoreListMetadata();
                 while (master.Any())
                 {
                     var currentMaster = master.First();
@@ -129,7 +130,8 @@ public static class CollectionIntersectionEquivalenceExtensions
                             c => AreIntersectionEqual(
                                 currentMaster,
                                 c,
-                                customEqualityMatchers
+                                customEqualityMatchers,
+                                ignoreProperties
                             ).AreEqual
                         );
                     // TODO: add information about mismatch

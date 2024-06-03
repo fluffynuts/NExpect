@@ -7,6 +7,7 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
 using static NExpect.Helpers.DeepTestHelpers;
+
 // ReSharper disable PossibleMultipleEnumeration
 
 namespace NExpect;
@@ -85,7 +86,10 @@ public static class CollectionDeepEquivalenceMatchers
             collection =>
             {
                 var result = CollectionsAreDeepEquivalent(
-                    collection, expected, customEqualityComparers);
+                    collection,
+                    expected,
+                    customEqualityComparers
+                );
                 return new MatcherResult(
                     result.AreEqual,
                     () => FinalMessageFor(
@@ -97,14 +101,17 @@ public static class CollectionDeepEquivalenceMatchers
                             expected.LimitedPrint()
                         }.Concat(result.Errors).ToArray(),
                         customMessageGenerator
-                    ));
-            });
+                    )
+                );
+            }
+        );
     }
 
     private static DeepTestResult CollectionsAreDeepEquivalent<T>(
         IEnumerable<T> collection,
         IEnumerable<T> expected,
-        object[] customEqualityComparers)
+        object[] customEqualityComparers
+    )
     {
         return CollectionCompare(
             collection,
@@ -130,6 +137,7 @@ public static class CollectionDeepEquivalenceMatchers
                                 break;
                             }
                         }
+
                         if (foundNullMatch)
                         {
                             continue;
@@ -138,8 +146,15 @@ public static class CollectionDeepEquivalenceMatchers
                         return new DeepTestResult(false, $"no match for {default(T)}");
                     }
 
+                    var ignoreProperties = currentMaster.FindOrAddPropertyIgnoreListMetadata();
                     var compareMatch = compare.FirstOrDefault(
-                        c => AreDeepEqual(currentMaster, c, customEqualityComparers).AreEqual);
+                        c => AreDeepEqual(
+                            currentMaster,
+                            c,
+                            customEqualityComparers,
+                            ignoreProperties
+                        ).AreEqual
+                    );
                     if (compareMatch == null)
                     {
                         return new DeepTestResult(false, $"no match for item {currentMaster.Stringify()}");
@@ -150,6 +165,7 @@ public static class CollectionDeepEquivalenceMatchers
                 }
 
                 return DeepTestResult.Pass;
-            });
+            }
+        );
     }
 }

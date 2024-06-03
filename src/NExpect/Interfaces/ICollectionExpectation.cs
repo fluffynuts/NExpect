@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace NExpect.Interfaces;
 
 /// <summary>
@@ -7,9 +9,15 @@ namespace NExpect.Interfaces;
 public interface ICollectionExpectation<T>
 {
     /// <summary>
+    /// Actual value stored in the expectation
+    /// </summary>
+    IEnumerable<T> Actual { get; }
+
+    /// <summary>
     /// Provides the ".To" grammar extension
     /// </summary>
     ICollectionTo<T> To { get; }
+
     /// <summary>
     /// Negates the current expectation
     /// </summary>

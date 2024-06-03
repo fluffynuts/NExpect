@@ -1342,7 +1342,16 @@ public static class CollectionMatchers
             continuation,
             expected,
             customMessageGenerator,
-            (o1, o2) => DeepTestHelpers.AreDeepEqual(o1, o2, customEqualityComparers)
+            (o1, o2) =>
+            {
+                var ignoreProperties = o1.FindOrAddPropertyIgnoreListMetadata();
+                return DeepTestHelpers.AreDeepEqual(
+                    o1,
+                    o2,
+                    customEqualityComparers,
+                    ignoreProperties
+                );
+            }
         );
     }
 
@@ -1366,11 +1375,16 @@ public static class CollectionMatchers
             continuation,
             expected,
             customMessageGenerator,
-            (item1, item2) => DeepTestHelpers.AreIntersectionEqual(
-                item1,
-                item2,
-                customEqualityComparers
-            )
+            (item1, item2) =>
+            {
+                var ignoreProps = item1.FindOrAddPropertyIgnoreListMetadata();
+                return DeepTestHelpers.AreIntersectionEqual(
+                    item1,
+                    item2,
+                    customEqualityComparers,
+                    ignoreProps
+                );
+            }
         );
     }
 
@@ -2967,8 +2981,9 @@ public static class CollectionMatchers
             [CountMatchMethods.Minimum] = (have, want, _) => have >= want,
             [CountMatchMethods.Maximum] = (have, want, _) => have <= want,
             [CountMatchMethods.Any] = (have, _, _) => have > 0,
-            [CountMatchMethods.All] = (have, want, total) => 
-                have == want && have == total // technically, just the first is required, the second is an audit of NExpect logic, tbh
+            [CountMatchMethods.All] = (have, want, total) =>
+                have == want &&
+                have == total // technically, just the first is required, the second is an audit of NExpect logic, tbh
         };
 
     private static Func<bool, object, int, int, int, string> CreateMessageFor(
