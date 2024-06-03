@@ -1,7 +1,7 @@
 const
   gulp = requireModule("gulp-with-help"),
   path = require("path"),
-  findTool = requireModule("testutil-finder").findTool,
+  findTool = requireModule("test-util-finder").findTool,
   exec = requireModule("exec"),
   fs = require("fs"),
   defaultExclusions = "-" + [
