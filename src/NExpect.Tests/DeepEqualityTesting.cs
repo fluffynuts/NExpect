@@ -32,9 +32,59 @@ public class DeepEqualityTesting
             LogLevel = LogLevel.Critical
         };
         // Act
-        Assert.That(() => Expect(left)
-            .To.Deep.Equal(right), Throws.Nothing);
+        Assert.That(
+            () => Expect(left)
+                .To.Deep.Equal(right),
+            Throws.Nothing
+        );
         // Assert
+    }
+
+    [TestFixture]
+    public class ComparingPropertiesOfTheSameTypeWhereOneIsNullable
+    {
+        [Test]
+        public void ShouldPassWhenEqual()
+        {
+            // Arrange
+            var dt = GetRandomDate();
+            var left = new HasADate()
+            {
+                Date = dt
+            };
+            var right = new HasANullableDate()
+            {
+                Date = dt
+            };
+            // Act
+            Assert.That(
+                () =>
+                {
+                    Expect(left)
+                        .To.Deep.Equal(right);
+                },
+                Throws.Nothing
+            );
+            Assert.That(
+                () =>
+                {
+                    Expect(left)
+                        .To.Intersection.Equal(right);
+                },
+                Throws.Nothing
+            );
+            // Assert
+        }
+
+        public class HasADate
+        {
+            public DateTime Date { get; set; }
+        }
+
+        public class HasANullableDate
+        {
+            public DateTime? Date { get; set; }
+        }
     }
 
     [Test]
@@ -47,25 +97,33 @@ public class DeepEqualityTesting
             Name = GetRandomString()
         };
         // Act
-        Assert.That(() =>
-        {
-            Expect(data)
-                .To.Deep.Equal(
-                    new
-                    {
-                        Name = data.Name,
-                        Id = HasAStaticProp.Id
-                    });
-        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
-        Assert.That(() =>
-        {
-            Expect(data)
-                .To.Deep.Equal(
-                    new
-                    {
-                        Name = data.Name,
-                    });
-        }, Throws.Nothing);
+        Assert.That(
+            () =>
+            {
+                Expect(data)
+                    .To.Deep.Equal(
+                        new
+                        {
+                            Name = data.Name,
+                            Id = HasAStaticProp.Id
+                        }
+                    );
+            },
+            Throws.Exception.InstanceOf<UnmetExpectationException>()
+        );
+        Assert.That(
+            () =>
+            {
+                Expect(data)
+                    .To.Deep.Equal(
+                        new
+                        {
+                            Name = data.Name,
+                        }
+                    );
+            },
+            Throws.Nothing
+        );
         // Assert
     }
 
@@ -79,10 +137,12 @@ public class DeepEqualityTesting
             .With(o => o.Id++)
             .With(o => o.Created = GetAnother(o.Created));
         // Act
-        Assert.That(() =>
-        {
-            
-        }, Throws.Nothing);
+        Assert.That(
+            () =>
+            {
+            },
+            Throws.Nothing
+        );
         // Assert
     }
 
