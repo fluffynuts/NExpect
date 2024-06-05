@@ -1,6 +1,8 @@
 using NExpect.Exceptions;
 using NUnit.Framework;
 
+// ReSharper disable RedundantCast
+
 namespace NExpect.Tests;
 
 [TestFixture]
@@ -45,6 +47,89 @@ public class TestIntsAndEnumMatchers
                         .To.Equal(1);
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
+            // Assert
+        }
+
+        [Test]
+        public void ShouldStillBeAbleToEasilyCompareLongs()
+        {
+            // Arrange
+            var value = 1L;
+
+            // Act
+            Assert.That(
+                () =>
+                {
+                    Expect(value)
+                        .To.Equal(1M);
+                    Expect(value)
+                        .To.Equal(1f);
+                    Expect(value)
+                        .To.Equal((double)1);
+                    Expect(value)
+                        .To.Equal((short)1);
+
+                    Expect(value)
+                        .Not.To.Equal(2M);
+                    Expect(value)
+                        .Not.To.Equal(2f);
+                    Expect(value)
+                        .Not.To.Equal((double)2);
+                    Expect(value)
+                        .Not.To.Equal((short)2);
+
+                    Expect(value)
+                        .To.Not.Equal(2M);
+                    Expect(value)
+                        .To.Not.Equal(2f);
+                    Expect(value)
+                        .To.Not.Equal((double)2);
+                    Expect(value)
+                        .To.Not.Equal((short)2);
+                },
+                Throws.Nothing
+            );
+            // Assert
+        }
+
+        [Test]
+        public void ShouldStillBeAbleToEasilyCompareInts()
+        {
+            // Arrange
+            var value = (int)1;
+            // Act
+            Assert.That(
+                () =>
+                {
+                    Expect(value)
+                        .To.Equal(1M);
+                    Expect(value)
+                        .To.Equal(1f);
+                    Expect(value)
+                        .To.Equal((double)1);
+                    Expect(value)
+                        .To.Equal((short)1);
+
+                    Expect(value)
+                        .Not.To.Equal(2M);
+                    Expect(value)
+                        .Not.To.Equal(2f);
+                    Expect(value)
+                        .Not.To.Equal((double)2);
+                    Expect(value)
+                        .Not.To.Equal((short)2);
+
+                    Expect(value)
+                        .To.Not.Equal(2M);
+                    Expect(value)
+                        .To.Not.Equal(2f);
+                    Expect(value)
+                        .To.Not.Equal((double)2);
+                    Expect(value)
+                        .To.Not.Equal((short)2);
+                },
+                Throws.Nothing
             );
             // Assert
         }
