@@ -990,7 +990,6 @@ public static class ActionResultMatchers
     /// <returns></returns>
     public static IMore<T> Ok<T>(
         this IBe<T> be
- 
     ) where T : IActionResult
     {
         return be.Ok(NULL_STRING);
@@ -1142,6 +1141,14 @@ public static class ActionResultMatchers
         return be.AddMatcher(
             actionResult =>
             {
+                if (actionResult is null)
+                {
+                    return new EnforcedMatcherResult(
+                        false,
+                        () => "Cannot enforce returned status code on null action result"
+                    );
+                }
+
                 var response = actionResult?.ResolveResponse();
                 if (response is null)
                 {
