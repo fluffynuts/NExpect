@@ -15,8 +15,8 @@
         <PackageReference Include="nunit" Version="4.0.1" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-        <PackageReference Include="PeanutButter.RandomGenerators" Version="3.0.304" />
-        <PackageReference Include="PeanutButter.TestUtils.AspNetCore" Version="3.0.304" />
+        <PackageReference Include="PeanutButter.RandomGenerators" Version="3.0.305" />
+        <PackageReference Include="PeanutButter.TestUtils.AspNetCore" Version="3.0.305" />
         <PackageReference Include="Quackers.TestLogger" Version="1.0.24" />
     </ItemGroup>
 
