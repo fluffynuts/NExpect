@@ -947,7 +947,7 @@ public class TestActionResultMatchers
                 ViewName = GetRandomString(),
                 ViewData = ViewDataDictionaryBuilder.BuildDefault(),
                 // TODO (dotnet): update when PB is updated
-                ContentType = GetRandomMIMEType()
+                ContentType = GetRandomMimeType()
             };
             var otherCode = GetAnother(expected);
 
