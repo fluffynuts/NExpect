@@ -8,7 +8,7 @@ namespace NExpect.Interfaces;
 /// <summary>
 /// Provides the ".With" grammar extension after .Throw() or .Throw&lt;&gt;
 /// </summary>
-public interface IWithAfterThrowContinuation<T> 
+public interface IWithAfterThrowContinuation<out T> 
     : ICanAddMatcher<T> 
     where T : Exception
 {
@@ -34,4 +34,9 @@ public interface IWithAfterThrowContinuation<T>
     IExceptionCollectionPropertyContinuation<TItem> CollectionProperty<TItem>(
         Func<T, IEnumerable<TItem>> propertyValueFetcher
     );
+    
+    /// <summary>
+    /// Travel down the exception hierarchy looking for something...
+    /// </summary>
+    IInnerExceptionAfterThrowContinuation<T> Inner { get; }
 }

@@ -1600,3 +1600,82 @@ Stacktrace:
         );
     }
 }
+
+/// <summary>
+/// Provides matching for
+/// </summary>
+public static class InnerExceptionMatchers
+{
+    /// <summary>
+    /// Moves the assertion context to an inner exception
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <typeparam name="TException"></typeparam>
+    /// <returns></returns>
+    public static IThrowContinuation<TException> Exception<TException>(
+        this IInnerExceptionAfterThrowContinuation<Exception> continuation
+    ) where TException : Exception
+    {
+        return continuation.Exception<TException>(
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Moves the assertion context to an inner exception
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="TException"></typeparam>
+    /// <returns></returns>
+    public static IThrowContinuation<TException> Exception<TException>(
+        this IInnerExceptionAfterThrowContinuation<Exception> continuation,
+        string customMessage
+    ) where TException : Exception
+    {
+        return continuation.Exception<TException>(() => customMessage);
+    }
+
+    /// <summary>
+    /// Moves the assertion context to an inner exception
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="TException"></typeparam>
+    /// <returns></returns>
+    public static IThrowContinuation<TException> Exception<TException>(
+        this IInnerExceptionAfterThrowContinuation<Exception> continuation,
+        Func<string> customMessageGenerator
+    ) where TException : Exception
+    {
+        var result = new ThrowContinuation<TException>();
+        continuation.AddMatcher(
+            actual =>
+            {
+                if (actual is null)
+                {
+                    return new EnforcedMatcherResult(
+                        false,
+                        $"Cannot test inner exception of null"
+                    );
+                }
+
+                result.Exception = actual.InnerException as TException;
+                var passed = result.Exception is not null;
+                return new MatcherResult(
+                    passed,
+                    () => $"Expected inner exception with type '{
+                        typeof(TException)
+                    }' but found {(
+                        actual.InnerException is null
+                            ? "null"
+                            : $"exception of type: {
+                                actual.InnerException.GetType()
+                            })")}",
+                    customMessageGenerator
+                );
+            }
+        );
+        return result;
+    }
+}

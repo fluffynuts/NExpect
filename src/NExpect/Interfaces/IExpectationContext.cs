@@ -18,7 +18,7 @@ public interface IExpectationContext
 /// An expectation context which has a parent with explicit type
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public interface IExpectationContext<T> : 
+public interface IExpectationContext<out T> : 
     IExpectationContext,
     IExpectationParentContext<T>
 {

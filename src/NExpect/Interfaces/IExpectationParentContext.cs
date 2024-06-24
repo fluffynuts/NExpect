@@ -9,7 +9,7 @@ namespace NExpect.Interfaces;
 /// context
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public interface IExpectationParentContext<T>
+public interface IExpectationParentContext<out T>
 {
     /// <summary>
     /// Negate the current expectation

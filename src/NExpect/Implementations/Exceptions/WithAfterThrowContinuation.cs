@@ -29,8 +29,15 @@ internal class WithAfterThrowContinuation<T>
         ContinuationFactory.Create<string, ExceptionStringPropertyContinuation>(
             () => Actual.Message,
             new WrappingContinuation<Exception, string>(
-                this, c => c.Actual?.Message
+                this,
+                c => c.Actual?.Message
             )
+        );
+
+    public IInnerExceptionAfterThrowContinuation<T> Inner =>
+        ContinuationFactory.Create<T, InnerExceptionAfterThrowContinuation<T>>(
+            () => Actual,
+            this
         );
 
     public IBe<TValue> Property<TValue>(
@@ -51,10 +58,12 @@ internal class WithAfterThrowContinuation<T>
             ExceptionCollectionPropertyContinuation<TItem>>(
             fetcher,
             new WrappingContinuation<Exception, IEnumerable<TItem>>(
-                this, c => fetcher()
+                this,
+                c => fetcher()
             )
         );
     }
+
 
     private ExceptionPropertyContinuation<TContinuationValue> CreateFor<TContinuationValue>(
         Func<T, TContinuationValue> propertyValueFetcher
@@ -66,7 +75,8 @@ internal class WithAfterThrowContinuation<T>
         return ContinuationFactory.Create<TContinuationValue, ExceptionPropertyContinuation<TContinuationValue>>(
             fetcher,
             new WrappingContinuation<Exception, TContinuationValue>(
-                this, c => fetcher()
+                this,
+                c => fetcher()
             )
         );
     }
