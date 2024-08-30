@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using NExpect.EqualityComparers;
 using NUnit.Framework;
 

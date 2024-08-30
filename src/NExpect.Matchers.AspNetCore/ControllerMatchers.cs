@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Imported.PeanutButter.Utils;
 using Microsoft.AspNetCore.Mvc;
 using NExpect.Implementations;
@@ -10,6 +11,7 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
 using _HttpMethod_ = Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpMethod;
+
 // ReSharper disable MemberCanBePrivate.Global
 
 namespace NExpect;
@@ -189,16 +191,66 @@ public static class ControllerMatchers
             {
                 var attribs = actual.GetCustomAttributes(false).OfType<RouteAttribute>();
                 var passed = attribs.Any(a => a.Template == expected);
+                if (!passed)
+                {
+                    return new MatcherResult(
+                        false,
+                        FinalMessageFor(
+                            () =>
+                                $"Expected {actual.DeclaringType.PrettyName()}.{actual.Name} {passed.AsNot()}to have route '{expected}'",
+                            customMessageGenerator
+                        )
+                    );
+                }
+
+                var parametersMatch = FindParametersInRoute.Matches(expected);
+                var mismatched = new List<string>();
+                var methodParameters = actual.GetParameters();
+                foreach (Match m in parametersMatch)
+                {
+                    var parameter = m.Value.Trim(['{', '}']);
+                    var matchedParameter = methodParameters.FirstOrDefault(
+                        pi => pi.Name is not null && pi.Name.Equals(
+                            parameter,
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                    );
+                    if (matchedParameter is null)
+                    {
+                        mismatched.Add($"{parameter} (missing parameter)");
+                    }
+                    else
+                    {
+                        var attrib = matchedParameter.GetCustomAttributes<FromRouteAttribute>()
+                            .FirstOrDefault();
+                        if (attrib is null)
+                        {
+                            mismatched.Add($"{parameter} (should decorate with [FromQuery])");
+                        }
+                    }
+                }
+
+                passed = !mismatched.Any();
+                var s = mismatched.Count == 1 ? "" : "s";
+
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
-                        () => $"Expected {actual.DeclaringType.PrettyName()}.{actual.Name} {passed.AsNot()}to have route '{expected}'",
+                        () => $"""
+                               Parameter{s} in route '{expected}' should have matching method parameter{s} on {actual.DeclaringType}.{actual.Name} decorated with [FromRoute]:
+                               - {mismatched.JoinWith("\n- ")}
+                               """,
                         customMessageGenerator
                     )
                 );
             }
         );
     }
+
+    private static readonly Regex FindParametersInRoute = new(
+        "((?:{[^{}]+})+)",
+        RegexOptions.Compiled
+    );
 
     /// <summary>
     /// Verifies that the method is decorated

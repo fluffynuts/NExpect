@@ -15,8 +15,10 @@ namespace NExpect.Matchers.AspNet.Tests
             {
                 // Arrange
                 // Act
-                Expect(() => Expect(typeof(TestController))
-                        .To.Have.Route("other"))
+                Expect(
+                        () => Expect(typeof(TestController))
+                            .To.Have.Route("other")
+                    )
                     .To.Throw<UnmetExpectationException>()
                     .With.Message.Containing(
                         "TestController to have route 'other'"
@@ -29,8 +31,10 @@ namespace NExpect.Matchers.AspNet.Tests
             {
                 // Arrange
                 // Act
-                Expect(() => Expect(typeof(TestController))
-                        .Not.To.Have.Route("test"))
+                Expect(
+                        () => Expect(typeof(TestController))
+                            .Not.To.Have.Route("test")
+                    )
                     .To.Throw<UnmetExpectationException>()
                     .With.Message.Containing(
                         "TestController not to have route 'test'"
@@ -43,9 +47,11 @@ namespace NExpect.Matchers.AspNet.Tests
             {
                 // Arrange
                 // Act
-                Expect(() => Expect(typeof(TestController))
-                        .To.Have.Route("test")
-                        .And.Not.To.Have.Route("other"))
+                Expect(
+                        () => Expect(typeof(TestController))
+                            .To.Have.Route("test")
+                            .And.Not.To.Have.Route("other")
+                    )
                     .Not.To.Throw();
                 // Assert
             }
@@ -63,17 +69,22 @@ namespace NExpect.Matchers.AspNet.Tests
                         var sut = typeof(UndecoratedController);
                         var areaName = GetRandomString(1);
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut)
-                                .Not.To.Have.Area(areaName);
-                        }, Throws.Nothing);
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut)
+                                    .Not.To.Have.Area(areaName);
+                            },
+                            Throws.Nothing
+                        );
 
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
                             {
                                 Expect(sut)
                                     .To.Have.Area(areaName);
-                            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
                                 .With.Message.Contains($"[Area(\"{areaName}\")]")
                         );
                         // Assert
@@ -93,34 +104,48 @@ namespace NExpect.Matchers.AspNet.Tests
                         // Arrange
                         var sut = typeof(DecoratedController);
                         // Act
-                        Assert.That(() =>
-                        {
-                            Expect(sut)
-                                .To.Have.Area("api");
-                        }, Throws.Nothing);
-                        Assert.That(() =>
-                        {
-                            // area names should be case-insensitive
-                            Expect(sut)
-                                .To.Have.Area("Api");
-                        }, Throws.Nothing);
-                        Assert.That(() =>
-                        {
-                            Expect(sut)
-                                .Not.To.Have.Area("api2");
-                        }, Throws.Nothing);
-                        Assert.That(() =>
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut)
+                                    .To.Have.Area("api");
+                            },
+                            Throws.Nothing
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                // area names should be case-insensitive
+                                Expect(sut)
+                                    .To.Have.Area("Api");
+                            },
+                            Throws.Nothing
+                        );
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut)
+                                    .Not.To.Have.Area("api2");
+                            },
+                            Throws.Nothing
+                        );
+                        Assert.That(
+                            () =>
                             {
                                 Expect(sut)
                                     .To.Have.Area("not-api");
-                            }, Throws.Exception.InstanceOf<UnmetExpectationException>()
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
                                 .With.Message.Contains("decorated with [Area(\"not-api\")]")
                         );
-                        Assert.That(() =>
-                        {
-                            Expect(sut)
-                                .Not.To.Have.Area("api");
-                        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                        Assert.That(
+                            () =>
+                            {
+                                Expect(sut)
+                                    .Not.To.Have.Area("api");
+                            },
+                            Throws.Exception.InstanceOf<UnmetExpectationException>()
+                        );
                         // Assert
                     }
 
@@ -140,15 +165,17 @@ namespace NExpect.Matchers.AspNet.Tests
             {
                 // Arrange
                 // Act
-                Expect(() => Expect(typeof(TestController))
-                        .To.Have.Method(nameof(TestController.DoStuff))
-                        .With.Route("do-stuff"))
+                Expect(
+                        () => Expect(typeof(TestController))
+                            .To.Have.Method(nameof(TestController.DoStuff))
+                            .With.Route("do-stuff")
+                    )
                     .Not.To.Throw();
 
                 Expect(
                         () => Expect(typeof(TestController))
-                        .To.Have.Method(nameof(TestController.DoStuff))
-                        .With.Route("do-other-stuff")
+                            .To.Have.Method(nameof(TestController.DoStuff))
+                            .With.Route("do-other-stuff")
                     )
                     .To.Throw<UnmetExpectationException>()
                     .With.Message.Containing(
@@ -158,19 +185,54 @@ namespace NExpect.Matchers.AspNet.Tests
             }
 
             [Test]
+            public void ShouldVerifyRouteParameters()
+            {
+                // Arrange
+                // Act
+                Expect(
+                    () =>
+                    {
+                        Expect(typeof(TestController))
+                            .To.Have.Method(nameof(TestController.ValidParameters))
+                            .With.Route(TestController.VALID_PARAMETERS_ROUTE);
+                    }
+                ).Not.To.Throw();
+
+                Expect(
+                        () =>
+                        {
+                            Expect(typeof(TestController))
+                                .To.Have.Method(nameof(TestController.InvalidParameters))
+                                .With.Route(TestController.INVALID_PARAMETERS_ROUTE);
+                        }
+                    ).To.Throw<UnmetExpectationException>()
+                    .With.Message.Containing("- foo")
+                    .Then("should decorate")
+                    .Then("[FromQuery]")
+                    .Then("- bar")
+                    .Then("missing parameter");
+                // Assert
+            }
+
+            [Test]
             public void ShouldBeAbleToTestMultipleRoutes()
             {
                 // Arrange
                 // Act
-                Expect(() => Expect(typeof(TestController))
-                        .To.Have.Method(nameof(TestController.DoStuff))
-                        .With.Route("do-stuff")
-                        .And.Route("another-route"))
+                Expect(
+                        () => Expect(typeof(TestController))
+                            .To.Have.Method(nameof(TestController.DoStuff))
+                            .With.Route("do-stuff")
+                            .And.Route("another-route")
+                    )
                     .Not.To.Throw();
-                Expect(() => Expect(typeof(TestController))
-                        .To.Have.Method(nameof(TestController.DoStuff))
-                        .With.Route("do-stuff")
-                        .And.Route("another-route2"))
+                Expect(
+                        () =>
+                            Expect(typeof(TestController))
+                                .To.Have.Method(nameof(TestController.DoStuff))
+                                .With.Route("do-stuff")
+                                .And.Route("another-route2")
+                    )
                     .To.Throw<UnmetExpectationException>();
                 // Assert
             }
@@ -179,14 +241,17 @@ namespace NExpect.Matchers.AspNet.Tests
             public void ShouldBeAbleToTestVerb()
             {
                 // Arrange
-                Expect(() => Expect(typeof(TestController))
-                        .To.Have.Method(nameof(TestController.DoStuff))
-                        .Supporting(HttpMethod.Get))
-                    .Not.To.Throw();
-                Expect(() =>
-                        Expect(typeof(TestController))
+                Expect(
+                        () => Expect(typeof(TestController))
                             .To.Have.Method(nameof(TestController.DoStuff))
-                            .Supporting(HttpMethod.Delete)
+                            .Supporting(HttpMethod.Get)
+                    )
+                    .Not.To.Throw();
+                Expect(
+                        () =>
+                            Expect(typeof(TestController))
+                                .To.Have.Method(nameof(TestController.DoStuff))
+                                .Supporting(HttpMethod.Delete)
                     ).To.Throw<UnmetExpectationException>()
                     .With.Message.Like(
                         "support method 'delete'"
@@ -202,19 +267,25 @@ namespace NExpect.Matchers.AspNet.Tests
                 var type = typeof(TestController);
                 var sut = new TestController();
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(type)
-                        .To.Have.Method(nameof(TestController.PostOnly))
-                        .Supporting(HttpMethod.Post)
-                        .With.Attribute<RouteAttribute>(o => o.Template == "post-only");
-                }, Throws.Nothing);
-                Assert.That(() =>
-                {
-                    Expect(sut)
-                        .To.Have.Method(nameof(TestController.PostOnly))
-                        .With.Attribute<RouteAttribute>(o => o.Template == "post-only");
-                }, Throws.Nothing);
+                Assert.That(
+                    () =>
+                    {
+                        Expect(type)
+                            .To.Have.Method(nameof(TestController.PostOnly))
+                            .Supporting(HttpMethod.Post)
+                            .With.Attribute<RouteAttribute>(o => o.Template == "post-only");
+                    },
+                    Throws.Nothing
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(sut)
+                            .To.Have.Method(nameof(TestController.PostOnly))
+                            .With.Attribute<RouteAttribute>(o => o.Template == "post-only");
+                    },
+                    Throws.Nothing
+                );
                 // Assert
             }
 
@@ -222,15 +293,18 @@ namespace NExpect.Matchers.AspNet.Tests
             public void ShouldBeAbleToTestMultipleVerbs()
             {
                 // Arrange
-                Expect(() => Expect(typeof(TestController))
-                        .To.Have.Method(nameof(TestController.DoStuff))
-                        .Supporting(HttpMethod.Get))
+                Expect(
+                        () => Expect(typeof(TestController))
+                            .To.Have.Method(nameof(TestController.DoStuff))
+                            .Supporting(HttpMethod.Get)
+                    )
                     .Not.To.Throw();
-                Expect(() =>
-                    Expect(typeof(TestController))
-                        .To.Have.Method(nameof(TestController.DoStuff))
-                        .Supporting(HttpMethod.Get)
-                        .And.Supporting(HttpMethod.Post)
+                Expect(
+                    () =>
+                        Expect(typeof(TestController))
+                            .To.Have.Method(nameof(TestController.DoStuff))
+                            .Supporting(HttpMethod.Get)
+                            .And.Supporting(HttpMethod.Post)
                 ).Not.To.Throw();
                 // Act
                 // Assert
@@ -242,16 +316,18 @@ namespace NExpect.Matchers.AspNet.Tests
             {
                 // Arrange
                 // Act
-                Expect(() => Expect(typeof(TestController))
-                    .To.Have.Method(nameof(TestController.DoStuff))
-                    .Supporting(HttpMethod.Get)
-                    .With.Route("do-stuff")
-                ).Not.To.Throw();
-                Expect(() =>
-                    Expect(typeof(TestController))
+                Expect(
+                    () => Expect(typeof(TestController))
                         .To.Have.Method(nameof(TestController.DoStuff))
-                        .With.Route("do-stuff")
                         .Supporting(HttpMethod.Get)
+                        .With.Route("do-stuff")
+                ).Not.To.Throw();
+                Expect(
+                    () =>
+                        Expect(typeof(TestController))
+                            .To.Have.Method(nameof(TestController.DoStuff))
+                            .With.Route("do-stuff")
+                            .Supporting(HttpMethod.Get)
                 ).Not.To.Throw();
                 // Assert
             }
@@ -262,24 +338,33 @@ namespace NExpect.Matchers.AspNet.Tests
                 // Arrange
                 var controller = typeof(TestController);
                 // Act
-                Assert.That(() =>
-                {
-                    Expect(controller)
-                        .To.Have.Method(nameof(TestController.PostOnly))
-                        .Supporting(HttpMethod.Get);
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
-                Assert.That(() =>
-                {
-                    Expect(controller)
-                        .To.Have.Method(nameof(TestController.ImplicitGet))
-                        .Supporting(HttpMethod.Get);
-                }, Throws.Nothing);
-                Assert.That(() =>
-                {
-                    Expect(controller)
-                        .To.Have.Method(nameof(TestController.ImplicitGet))
-                        .Supporting(HttpMethod.Post);
-                }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+                Assert.That(
+                    () =>
+                    {
+                        Expect(controller)
+                            .To.Have.Method(nameof(TestController.PostOnly))
+                            .Supporting(HttpMethod.Get);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(controller)
+                            .To.Have.Method(nameof(TestController.ImplicitGet))
+                            .Supporting(HttpMethod.Get);
+                    },
+                    Throws.Nothing
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(controller)
+                            .To.Have.Method(nameof(TestController.ImplicitGet))
+                            .Supporting(HttpMethod.Post);
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
                 // Assert
             }
         }
@@ -303,6 +388,26 @@ namespace NExpect.Matchers.AspNet.Tests
 
             [Route("implicit-get")]
             public void ImplicitGet()
+            {
+            }
+
+            public const string VALID_PARAMETERS_ROUTE = "valid-parameters/{id}/{name}";
+
+            [Route(VALID_PARAMETERS_ROUTE)]
+            public void ValidParameters(
+                [FromRoute] int id,
+                [FromRoute] string name
+            )
+            {
+            }
+
+            public const string INVALID_PARAMETERS_ROUTE = "invalid-parameters/{foo}/{bar}";
+
+            [Route(INVALID_PARAMETERS_ROUTE)]
+            public void InvalidParameters(
+                int id,
+                [FromQuery] string foo
+            )
             {
             }
         }
