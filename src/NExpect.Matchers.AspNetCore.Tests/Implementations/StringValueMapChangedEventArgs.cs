@@ -3,25 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Primitives;
 
-namespace NExpect.Matchers.AspNet.Tests.Implementations
+namespace NExpect.Matchers.AspNet.Tests.Implementations;
+
+/// <summary>
+/// Raised when a StringValueMap changes
+/// </summary>
+public class StringValueMapChangedEventArgs : EventArgs
 {
     /// <summary>
-    /// Raised when a StringValueMap changes
+    /// The new values in the map (copy of the map)
     /// </summary>
-    public class StringValueMapChangedEventArgs : EventArgs
-    {
-        /// <summary>
-        /// The new values in the map (copy of the map)
-        /// </summary>
-        public Dictionary<string, StringValues> NewValues { get; }
+    public Dictionary<string, StringValues> NewValues { get; }
 
-        /// <inheritdoc />
-        public StringValueMapChangedEventArgs(
-            IDictionary<string, StringValues> newValues
-        )
-        {
-            // create a copy: event handlers shouldn't be able to modify the original
-            NewValues = newValues.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-        }
+    /// <inheritdoc />
+    public StringValueMapChangedEventArgs(
+        IDictionary<string, StringValues> newValues
+    )
+    {
+        // create a copy: event handlers shouldn't be able to modify the original
+        NewValues = newValues.ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
     }
 }

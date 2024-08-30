@@ -1,26 +1,25 @@
 ﻿using PeanutButter.TestUtils.AspNetCore.Builders;
 
-namespace NExpect.Matchers.AspNet.Tests
+namespace NExpect.Matchers.AspNet.Tests;
+
+[TestFixture]
+public class TestHttpRequestMatching
 {
-    [TestFixture]
-    public class TestHttpRequestMatching
+    [Test]
+    public void HeaderAccessShouldBeCaseInsensitive()
     {
-        [Test]
-        public void HeaderAccessShouldBeCaseInsensitive()
-        {
-            // Arrange
-            var res = HttpRequestBuilder.BuildDefault();
-            res.Headers["Moo-Cow"] = "beef";
-            // Act
-            Assert.That(
-                () =>
-                {
-                    Expect(res.Headers)
-                        .To.Contain.Key("moo-cow");
-                },
-                Throws.Nothing
-            );
-            // Assert
-        }
+        // Arrange
+        var res = HttpRequestBuilder.BuildDefault();
+        res.Headers["Moo-Cow"] = "beef";
+        // Act
+        Assert.That(
+            () =>
+            {
+                Expect(res.Headers)
+                    .To.Contain.Key("moo-cow");
+            },
+            Throws.Nothing
+        );
+        // Assert
     }
 }

@@ -3,60 +3,59 @@ using NExpect.Exceptions;
 using NSubstitute;
 using PeanutButter.TestUtils.AspNetCore.Builders;
 
-namespace NExpect.Matchers.AspNet.Tests
+namespace NExpect.Matchers.AspNet.Tests;
+
+[TestFixture]
+public class TestComparingAspNetCoreTypes
 {
-    [TestFixture]
-    public class TestComparingAspNetCoreTypes
+    [Test]
+    public void ShouldBeAbleToPerformDeepEqualityTesting()
     {
-        [Test]
-        public void ShouldBeAbleToPerformDeepEqualityTesting()
+        // Arrange
+        var item1 = new { Path = new PathString("/moo") };
+        var item2 = new { Path = new PathString("/moo") };
+        var item3 = new { Path = new PathString("/cow") };
+        // Act
+        Assert.That(() =>
         {
-            // Arrange
-            var item1 = new { Path = new PathString("/moo") };
-            var item2 = new { Path = new PathString("/moo") };
-            var item3 = new { Path = new PathString("/cow") };
-            // Act
-            Assert.That(() =>
-            {
-                Expect(item1)
-                    .Not.To.Deep.Equal(item3);
-            }, Throws.Nothing);
+            Expect(item1)
+                .Not.To.Deep.Equal(item3);
+        }, Throws.Nothing);
         
-            Assert.That(() =>
-            {
-                Expect(item1)
-                    .Not.To.Deep.Equal(item3);
-            }, Throws.Nothing);
-
-            Assert.That(() =>
-            {
-                Expect(item1)
-                    .To.Deep.Equal(item3);
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
-        
-            Assert.That(() =>
-            {
-                Expect(item1)
-                    .Not.To.Deep.Equal(item2);
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
-            // Assert
-        }
-
-        [Test]
-        public void ShouldNotStackOverflowWhenAttemptingToStringifyHttpContext()
+        Assert.That(() =>
         {
-            // Arrange
-            // duplicates conditions in the wild
-            var accessor = Substitute.For<IHttpContextAccessor>();
-            var ctx = HttpContextBuilder.BuildDefault();
-            accessor.HttpContext.Returns(ctx);
-            // Act
-            Assert.That(() =>
-            {
-                Expect(accessor.HttpContext)
-                    .To.Be.Null();
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
-            // Assert
-        }
+            Expect(item1)
+                .Not.To.Deep.Equal(item3);
+        }, Throws.Nothing);
+
+        Assert.That(() =>
+        {
+            Expect(item1)
+                .To.Deep.Equal(item3);
+        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+        
+        Assert.That(() =>
+        {
+            Expect(item1)
+                .Not.To.Deep.Equal(item2);
+        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+        // Assert
+    }
+
+    [Test]
+    public void ShouldNotStackOverflowWhenAttemptingToStringifyHttpContext()
+    {
+        // Arrange
+        // duplicates conditions in the wild
+        var accessor = Substitute.For<IHttpContextAccessor>();
+        var ctx = HttpContextBuilder.BuildDefault();
+        accessor.HttpContext.Returns(ctx);
+        // Act
+        Assert.That(() =>
+        {
+            Expect(accessor.HttpContext)
+                .To.Be.Null();
+        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+        // Assert
     }
 }

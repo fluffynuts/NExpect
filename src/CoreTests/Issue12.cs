@@ -4,54 +4,53 @@ using static NExpect.Expectations;
 using NExpect;
 using NExpect.Implementations;
 
-namespace CoreTests
+namespace CoreTests;
+
+[TestFixture]
+public class Issue12
 {
-    [TestFixture]
-    public class Issue12
+    [Test]
+    public void ComparingTypes_ShouldNotStall()
     {
-        [Test]
-        public void ComparingTypes_ShouldNotStall()
+        // Arrange
+
+        // Pre-Assert
+
+        // Act
+        Assert.That(() =>
         {
-            // Arrange
+            Expect(new Object().GetType()).To.Equal(typeof(Object));
+        }, Throws.Nothing);
 
-            // Pre-Assert
+        // Assert
+    }
 
-            // Act
-            Assert.That(() =>
-            {
-                Expect(new Object().GetType()).To.Equal(typeof(Object));
-            }, Throws.Nothing);
+    [Test]
+    public void StringifyObject()
+    {
+        // Arrange
 
-            // Assert
-        }
+        // Pre-Assert
 
-        [Test]
-        public void StringifyObject()
-        {
-            // Arrange
+        // Act
+        var result = (new object()).Stringify();
 
-            // Pre-Assert
+        // Assert
+        Console.WriteLine(result);
+        Assert.That(result, Is.Not.Null);
+    }
 
-            // Act
-            var result = (new object()).Stringify();
+    [Test]
+    public void StringifyType()
+    {
+        // Arrange
 
-            // Assert
-            Console.WriteLine(result);
-            Assert.That(result, Is.Not.Null);
-        }
+        // Pre-Assert
 
-        [Test]
-        public void StringifyType()
-        {
-            // Arrange
+        // Act
+        var result = typeof(object).Stringify();
 
-            // Pre-Assert
-
-            // Act
-            var result = typeof(object).Stringify();
-
-            // Assert
-            Assert.That(result, Is.Not.Null);
-        }
+        // Assert
+        Assert.That(result, Is.Not.Null);
     }
 }

@@ -221,23 +221,39 @@ public static class ControllerMatchers
                     }
                     else
                     {
-                        var attrib = matchedParameter.GetCustomAttributes<FromRouteAttribute>()
-                            .FirstOrDefault();
-                        if (attrib is null)
+                        var parameterAttribs = matchedParameter.GetCustomAttributes()
+                            .ToArray();
+                        var fromRouteAttrib = parameterAttribs.OfType<FromRouteAttribute>().FirstOrDefault();
+                        if (fromRouteAttrib is null)
                         {
-                            mismatched.Add($"{parameter} (should decorate with [FromQuery])");
+                            var fromQuery = parameterAttribs.OfType<FromQueryAttribute>().FirstOrDefault();
+                            var fromBody = parameterAttribs.OfType<FromBodyAttribute>().FirstOrDefault();
+                            var fromForm = parameterAttribs.OfType<FromFormAttribute>().FirstOrDefault();
+                            var fromHeader = parameterAttribs.OfType<FromHeaderAttribute>().FirstOrDefault();
+
+                            var decoratedWithOtherSource =
+                                fromQuery is not null ||
+                                fromBody is not null ||
+                                fromForm is not null ||
+                                fromHeader is not null;
+                            if (decoratedWithOtherSource)
+                            {
+                                mismatched.Add($"{parameter} (should decorate with [FromRoute] or leave undecorated)");
+                            }
                         }
                     }
                 }
 
                 passed = !mismatched.Any();
-                var s = mismatched.Count == 1 ? "" : "s";
+                var s = mismatched.Count == 1
+                    ? ""
+                    : "s";
 
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
                         () => $"""
-                               Parameter{s} in route '{expected}' should have matching method parameter{s} on {actual.DeclaringType}.{actual.Name} decorated with [FromRoute]:
+                               Parameter{s} in route '{expected}' should have matching method parameter{s} on {actual.DeclaringType.PrettyName()}.{actual.Name} decorated with [FromRoute]:
                                - {mismatched.JoinWith("\n- ")}
                                """,
                         customMessageGenerator

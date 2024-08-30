@@ -1,47 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NExpect.Implementations
+namespace NExpect.Implementations;
+
+internal class MaxDeltaComparer(decimal within) : IEqualityComparer<decimal>
 {
-    internal class MaxDeltaComparer(decimal within) : IEqualityComparer<decimal>
+    private readonly decimal _within = Math.Abs(within);
+
+    public bool Equals(decimal x, decimal y)
     {
-        private readonly decimal _within = Math.Abs(within);
-
-        public bool Equals(decimal x, decimal y)
-        {
-            return Math.Abs(x - y) < _within;
-        }
-
-        public int GetHashCode(decimal obj)
-        {
-            throw new NotImplementedException();
-        }
+        return Math.Abs(x - y) < _within;
     }
-    
-    internal class MaxNullableDeltaComparer(decimal? within) : IEqualityComparer<decimal?>
+
+    public int GetHashCode(decimal obj)
     {
-        private readonly decimal? _within = within is null
-            ? null
-            : Math.Abs(within.Value);
+        throw new NotImplementedException();
+    }
+}
+    
+internal class MaxNullableDeltaComparer(decimal? within) : IEqualityComparer<decimal?>
+{
+    private readonly decimal? _within = within is null
+        ? null
+        : Math.Abs(within.Value);
 
-        public bool Equals(decimal? x, decimal? y)
+    public bool Equals(decimal? x, decimal? y)
+    {
+        if (x is null && y is null)
         {
-            if (x is null && y is null)
-            {
-                return true;
-            }
-
-            if (x is null || y is null)
-            {
-                return false;
-            }
-
-            return Math.Abs(x.Value - y.Value) < _within;
+            return true;
         }
 
-        public int GetHashCode(decimal? obj)
+        if (x is null || y is null)
         {
-            throw new NotImplementedException();
+            return false;
         }
+
+        return Math.Abs(x.Value - y.Value) < _within;
+    }
+
+    public int GetHashCode(decimal? obj)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using Imported.PeanutButter.Utils;
 
-namespace NExpect.Implementations
+namespace NExpect.Implementations;
+
+/// <summary>
+/// Thrown when an incomplete expectation is caught by
+/// the ExpectationSweeper
+/// </summary>
+public class IncompleteExpectationException
+    : Exception
 {
     /// <summary>
-    /// Thrown when an incomplete expectation is caught by
-    /// the ExpectationSweeper
+    /// The items which were not properly
+    /// terminated.
     /// </summary>
-    public class IncompleteExpectationException
-        : Exception
-    {
-        /// <summary>
-        /// The items which were not properly
-        /// terminated.
-        /// </summary>
-        public SweepableItem[] SweepableItems { get; }
+    public SweepableItem[] SweepableItems { get; }
 
-        private const string ERROR = @"
+    private const string ERROR = @"
 One or more expectations has been left incomplete.
 Search for the following patterns:
 1. Standalone Expect(), eg `Expect(foo == 1);`
@@ -51,45 +51,44 @@ is probably not testing what you would like it to be testing.
 
 ";
 
-        internal IncompleteExpectationException(SweepableItem[] sweepableItems)
-            : base(GenerateErrorFor(sweepableItems))
+    internal IncompleteExpectationException(SweepableItem[] sweepableItems)
+        : base(GenerateErrorFor(sweepableItems))
+    {
+        SweepableItems = sweepableItems;
+    }
+
+    internal static string GenerateErrorFor(SweepableItem[] sweepableItems)
+    {
+        return $"{ERROR}{DumpItems(sweepableItems)}";
+    }
+
+    private static string DumpItems(
+        SweepableItem[] sweepableItems
+    )
+    {
+        var list = new List<string>
         {
-            SweepableItems = sweepableItems;
+            sweepableItems.Length == 1
+                ? "Unterminated item:"
+                : "Unterminated items:"
+        };
+
+        foreach (var item in sweepableItems)
+        {
+            var itemType = item.GetType();
+            list.Add($"- {itemType.PrettyName()}");
+            list.Add(Indent(item.StackTrace.ToString()));
+            list.Add("");
         }
 
-        internal static string GenerateErrorFor(SweepableItem[] sweepableItems)
-        {
-            return $"{ERROR}{DumpItems(sweepableItems)}";
-        }
+        return list.JoinWith("\n");
+    }
 
-        private static string DumpItems(
-            SweepableItem[] sweepableItems
-        )
-        {
-            var list = new List<string>
-            {
-                sweepableItems.Length == 1
-                    ? "Unterminated item:"
-                    : "Unterminated items:"
-            };
-
-            foreach (var item in sweepableItems)
-            {
-                var itemType = item.GetType();
-                list.Add($"- {itemType.PrettyName()}");
-                list.Add(Indent(item.StackTrace.ToString()));
-                list.Add("");
-            }
-
-            return list.JoinWith("\n");
-        }
-
-        private static string Indent(string toString)
-        {
-            var lines = toString.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(l => $"  {l.Trim()}")
-                .ToArray();
-            return string.Join("\n", lines);
-        }
+    private static string Indent(string toString)
+    {
+        var lines = toString.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries)
+            .Select(l => $"  {l.Trim()}")
+            .ToArray();
+        return string.Join("\n", lines);
     }
 }

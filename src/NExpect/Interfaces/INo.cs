@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 
-namespace NExpect.Interfaces
+namespace NExpect.Interfaces;
+
+/// <summary>
+/// Provides the .No dangling grammar type
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public interface INo<T> : ICanAddMatcher<T>
 {
-    /// <summary>
-    /// Provides the .No dangling grammar type
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface INo<T> : ICanAddMatcher<T>
-    {
-    }
 }

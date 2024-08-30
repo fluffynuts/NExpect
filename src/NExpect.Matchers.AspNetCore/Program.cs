@@ -1,9 +1,8 @@
-namespace NExpect
+namespace NExpect;
+
+internal class Program
 {
-    internal class Program
+    public static void Main()
     {
-        public static void Main()
-        {
-        }
     }
 }

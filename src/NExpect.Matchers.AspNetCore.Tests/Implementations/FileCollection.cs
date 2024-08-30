@@ -3,45 +3,44 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 
-namespace NExpect.Matchers.AspNet.Tests.Implementations
+namespace NExpect.Matchers.AspNet.Tests.Implementations;
+
+internal class FileCollection : IFormFileCollection
 {
-    internal class FileCollection : IFormFileCollection
+    private readonly List<IFormFile> _store = new();
+
+    public IEnumerator<IFormFile> GetEnumerator()
     {
-        private readonly List<IFormFile> _store = new();
+        return _store.GetEnumerator();
+    }
 
-        public IEnumerator<IFormFile> GetEnumerator()
-        {
-            return _store.GetEnumerator();
-        }
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+    public int Count => _store.Count;
 
-        public int Count => _store.Count;
+    public IFormFile this[int index] => _store[index];
 
-        public IFormFile this[int index] => _store[index];
+    public IFormFile GetFile(string name)
+    {
+        return _store.FirstOrDefault(
+            o => o.Name == name
+        );
+    }
 
-        public IFormFile GetFile(string name)
-        {
-            return _store.FirstOrDefault(
-                o => o.Name == name
-            );
-        }
+    public IReadOnlyList<IFormFile> GetFiles(string name)
+    {
+        return _store.Where(
+            o => o.Name == name
+        ).ToList();
+    }
 
-        public IReadOnlyList<IFormFile> GetFiles(string name)
-        {
-            return _store.Where(
-                o => o.Name == name
-            ).ToList();
-        }
+    public IFormFile this[string name] => GetFile(name);
 
-        public IFormFile this[string name] => GetFile(name);
-
-        public void Add(IFormFile file)
-        {
-            _store.Add(file);
-        }
+    public void Add(IFormFile file)
+    {
+        _store.Add(file);
     }
 }

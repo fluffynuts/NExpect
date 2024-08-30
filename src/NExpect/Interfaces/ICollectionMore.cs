@@ -1,22 +1,21 @@
 using System.Collections.Generic;
 
-namespace NExpect.Interfaces
+namespace NExpect.Interfaces;
+
+/// <summary>
+/// Provides the .More continuation for collections
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public interface ICollectionMore<T> 
+    : ICanAddCollectionMatcher<T>
 {
     /// <summary>
-    /// Provides the .More continuation for collections
+    /// Provides the .And grammar extension
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface ICollectionMore<T> 
-        : ICanAddCollectionMatcher<T>
-    {
-        /// <summary>
-        /// Provides the .And grammar extension
-        /// </summary>
-        ICollectionAnd<T> And { get; }
+    ICollectionAnd<T> And { get; }
 
-        /// <summary>
-        /// Provides the .Having grammar extension
-        /// </summary>
-        ICollectionHaving<T> Having { get; }
-    }
+    /// <summary>
+    /// Provides the .Having grammar extension
+    /// </summary>
+    ICollectionHaving<T> Having { get; }
 }

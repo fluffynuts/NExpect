@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace NExpect.Matchers.AspNet.Tests.Implementations
+namespace NExpect.Matchers.AspNet.Tests.Implementations;
+
+internal class RequestCookies 
+    : StringMap, IRequestCookieCollection
 {
-    internal class RequestCookies 
-        : StringMap, IRequestCookieCollection
-    {
-    }
 }
