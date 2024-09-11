@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
+using System.Net.Http.Headers;
 using Imported.PeanutButter.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -10,9 +9,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
-using NExpect.Helpers;
 using NExpect.Implementations;
-using NExpect.Implementations.Dictionaries;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 
@@ -156,7 +153,9 @@ public static class AspNetCoreExpectations
     }
 
     /// <summary>
-    /// 
+    /// Provides an assertion starting-point for
+    /// ValidationStateDictionary instances, treated
+    /// like collections
     /// </summary>
     /// <param name="dict"></param>
     /// <returns></returns>
@@ -166,6 +165,38 @@ public static class AspNetCoreExpectations
     {
         return Expectations.Expect(
             dict?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
+        );
+    }
+
+    /// <summary>
+    /// Provides an assertion starting-point for
+    /// HttpRequestHeaders instances, treated
+    /// like collections
+    /// </summary>
+    /// <param name="headers"></param>
+    /// <returns></returns>
+    public static ICollectionExpectation<KeyValuePair<string, string[]>> Expect(
+        HttpRequestHeaders headers
+    )
+    {
+        return Expectations.Expect(
+            headers?.ToDictionary(o => o.Key, o => o.Value?.ToArray() ?? [])
+        );
+    }
+
+    /// <summary>
+    /// Provides an assertion starting-point for
+    /// HttpResponseHeaders instances, treated
+    /// like collections
+    /// </summary>
+    /// <param name="headers"></param>
+    /// <returns></returns>
+    public static ICollectionExpectation<KeyValuePair<string, string[]>> Expect(
+        HttpResponseHeaders headers
+    )
+    {
+        return Expectations.Expect(
+            headers?.ToDictionary(o => o.Key, o => o.Value?.ToArray() ?? [])
         );
     }
 

@@ -18,7 +18,7 @@ public class TestHttpResponseMatchers
             var cookieName = GetRandomString(4);
             var cookieValue = GetRandomString(4);
             var response = HttpResponseBuilder.BuildDefault();
-            response.Headers.Add(
+            response.Headers.Append(
                 "Set-Cookie",
                 $"{cookieName}={cookieValue}"
             );
