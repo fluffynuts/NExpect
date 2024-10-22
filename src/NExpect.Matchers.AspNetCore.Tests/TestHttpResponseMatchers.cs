@@ -95,20 +95,48 @@ public class TestHttpResponseMatchers
                 ).Build();
 
             // Act
-            Assert.That(() =>
-            {
-                Expect(hasExpiredCookie)
-                    .To.Have.Cookie(key)
-                    .With.Value(value)
-                    .Which.Is.Expired();
-            }, Throws.Nothing);
-            Assert.That(() =>
-            {
-                Expect(hasValidCookie)
-                    .To.Have.Cookie(key)
-                    .With.Value(value)
-                    .Which.Is.Expired();
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            Assert.That(
+                () =>
+                {
+                    Expect(hasExpiredCookie)
+                        .To.Have.Cookie(key)
+                        .With.Value(value)
+                        .Which.Is.Expired();
+                },
+                Throws.Nothing
+            );
+            Assert.That(
+                () =>
+                {
+                    Expect(hasValidCookie)
+                        .To.Have.Cookie(key)
+                        .With.Value(value)
+                        .Which.Is.Expired();
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
+            Assert.That(
+                () =>
+                {
+                    Expect(hasValidCookie)
+                        .To.Have.Cookie(key)
+                        .Matched.By(
+                            o => o.Value == value
+                        );
+                },
+                Throws.Nothing
+            );
+            Assert.That(
+                () =>
+                {
+                    Expect(hasValidCookie)
+                        .To.Have.Cookie(key)
+                        .And.Is.Matched.By(
+                            o => o.Value == value
+                        );
+                },
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -139,20 +167,26 @@ public class TestHttpResponseMatchers
                 ).Build();
 
             // Act
-            Assert.That(() =>
-            {
-                Expect(hasExpiredCookie)
-                    .To.Have.Cookie(key)
-                    .With.Value(value)
-                    .Which.Has.Expired();
-            }, Throws.Nothing);
-            Assert.That(() =>
-            {
-                Expect(hasValidCookie)
-                    .To.Have.Cookie(key)
-                    .With.Value(value)
-                    .Which.Has.Expired();
-            }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+            Assert.That(
+                () =>
+                {
+                    Expect(hasExpiredCookie)
+                        .To.Have.Cookie(key)
+                        .With.Value(value)
+                        .Which.Has.Expired();
+                },
+                Throws.Nothing
+            );
+            Assert.That(
+                () =>
+                {
+                    Expect(hasValidCookie)
+                        .To.Have.Cookie(key)
+                        .With.Value(value)
+                        .Which.Has.Expired();
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+            );
             // Assert
         }
 

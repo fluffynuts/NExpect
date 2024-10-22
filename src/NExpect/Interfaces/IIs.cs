@@ -15,4 +15,10 @@ public interface IIs<T>
     /// Provides the .Has.An extension point
     /// </summary>
     IAn<T> An { get; }
+
+    /// <summary>
+    /// Provies the .Is.Matched.By extension point
+    /// </summary>
+    /// <returns></returns>
+    IMatched<T> Matched { get; }
 }
