@@ -2,7 +2,6 @@ using System.Net.Http;
 using System.Web.Mvc;
 using NExpect.Exceptions;
 using NUnit.Framework;
-using static NExpect.Expectations;
 
 namespace NExpect.Matchers.AspNetMvc.Tests;
 

@@ -3,7 +3,6 @@ using NUnit.Framework;
 using static PeanutButter.RandomGenerators.RandomValueGen;
 using NExpect.Exceptions;
 using PeanutButter.Utils;
-using static NExpect.Expectations;
 
 namespace NExpect.Matchers.AspNetMvc.Tests;
 
