@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -154,6 +153,7 @@ public static class CollectionOrderMatchers
                 return TestOrderingOf(
                     actual,
                     comparer,
+                    "ascending",
                     i => i > 0,
                     customMessageGenerator
                 );
@@ -284,6 +284,7 @@ public static class CollectionOrderMatchers
                 return TestOrderingOf(
                     actual,
                     comparer,
+                    "descending",
                     i => i < 0,
                     customMessageGenerator
                 );
@@ -559,6 +560,7 @@ public static class CollectionOrderMatchers
     private static MatcherResult TestOrderingOf<T>(
         IEnumerable<T> actual,
         IComparer<T> comparer,
+        string direction,
         Func<int, bool> failsWhen,
         Func<string> customMessageGenerator
     )
@@ -580,7 +582,7 @@ public static class CollectionOrderMatchers
                 return new MatcherResult(
                     false,
                     FinalMessageFor(
-                        () => $"Expected collection {false.AsNot()}to be ordered ascending",
+                        () => $"Expected collection {false.AsNot()}to be ordered {direction}",
                         customMessageGenerator
                     )
                 );
