@@ -147,7 +147,7 @@ public static class DeepEqualityMatchers
             actual =>
             {
                 var ignoreProperties = actual.FindOrAddPropertyIgnoreListMetadata();
-                var deepEqualResult = DeepTestHelpers.AreDeepEqual(
+                var deepEqualResult = DeepTestHelpers.Compare(
                     actual,
                     expected,
                     customEqualityComparers,

@@ -1345,7 +1345,7 @@ public static class CollectionMatchers
             (o1, o2) =>
             {
                 var ignoreProperties = o1.FindOrAddPropertyIgnoreListMetadata();
-                return DeepTestHelpers.AreDeepEqual(
+                return DeepTestHelpers.Compare(
                     o1,
                     o2,
                     customEqualityComparers,

@@ -61,14 +61,14 @@ internal static class DeepTestHelpers
         );
     }
 
-    internal static DeepTestResult AreDeepEqual(
+    internal static DeepTestResult Compare(
         object item1,
         object item2,
         object[] customEqualityComparers,
         HashSet<string> ignoreProperties
     )
     {
-        return AreDeepEqual(
+        return Compare(
             item1,
             item2,
             customEqualityComparers,
@@ -76,7 +76,7 @@ internal static class DeepTestHelpers
         );
     }
 
-    internal static DeepTestResult AreDeepEqual(
+    internal static DeepTestResult Compare(
         object item1,
         object item2,
         object[] customEqualityComparers,
@@ -148,7 +148,7 @@ internal static class DeepTestHelpers
         {
             return DeepTestResult.Fail(
                 expected == null
-                    ? $"Expected collection is null but actual is not"
+                    ? "Expected collection is null but actual is not"
                     : "Actual collection is null but expected is not"
             );
         }

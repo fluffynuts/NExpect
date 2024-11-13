@@ -93,6 +93,12 @@ public static class CollectionIntersectionEquivalenceExtensions
                     expectedArray,
                     customEqualityComparers
                 );
+                var errors = result.Errors.Any()
+                    ? new[]
+                    {
+                        ""
+                    }.Concat(result.Errors).ToArray()
+                    : result.Errors;
                 return new MatcherResult(
                     result.AreEqual,
                     FinalMessageFor(
@@ -100,9 +106,9 @@ public static class CollectionIntersectionEquivalenceExtensions
                         {
                             "Expected",
                             actualArray.LimitedPrint(),
-                            $"{result.AreEqual.AsNot()} to be intersection equivalent to",
+                            $"\n{result.AreEqual.AsNot()} to be intersection equivalent to\n",
                             expectedArray.LimitedPrint()
-                        }.Concat(result.Errors).ToArray(),
+                        }.Concat(errors).ToArray(),
                         customMessageGenerator
                     )
                 );

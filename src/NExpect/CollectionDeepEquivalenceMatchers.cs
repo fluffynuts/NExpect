@@ -90,6 +90,12 @@ public static class CollectionDeepEquivalenceMatchers
                     expected,
                     customEqualityComparers
                 );
+                var errors = result.Errors.Any()
+                    ? new[]
+                    {
+                        ""
+                    }.Concat(result.Errors).ToArray()
+                    : result.Errors;
                 return new MatcherResult(
                     result.AreEqual,
                     () => FinalMessageFor(
@@ -97,9 +103,9 @@ public static class CollectionDeepEquivalenceMatchers
                         {
                             "Expected",
                             collection.LimitedPrint(),
-                            $"{result.AreEqual.AsNot()} to be deep equivalent to",
+                            $"\n{result.AreEqual.AsNot()}to be deep equivalent to\n",
                             expected.LimitedPrint()
-                        }.Concat(result.Errors).ToArray(),
+                        }.Concat(errors).ToArray(),
                         customMessageGenerator
                     )
                 );
@@ -147,25 +153,53 @@ public static class CollectionDeepEquivalenceMatchers
                     }
 
                     var ignoreProperties = currentMaster.FindOrAddPropertyIgnoreListMetadata();
-                    var compareMatch = compare.FirstOrDefault(
-                        c => AreDeepEqual(
-                            currentMaster,
-                            c,
-                            customEqualityComparers,
-                            ignoreProperties
-                        ).AreEqual
+                    var hasMatch = HasDeepEqualValueInCollection(
+                        compare,
+                        currentMaster,
+                        customEqualityComparers,
+                        ignoreProperties,
+                        out var matched
                     );
-                    if (compareMatch == null)
+                    if (!hasMatch)
                     {
-                        return new DeepTestResult(false, $"no match for item {currentMaster.Stringify()}");
+                        return new DeepTestResult(
+                            false,
+                            $"no match for item {currentMaster.Stringify()}"
+                        );
                     }
 
                     master.Remove(currentMaster);
-                    compare.Remove(compareMatch);
+                    compare.Remove(matched);
                 }
 
                 return DeepTestResult.Pass;
             }
         );
+    }
+
+    private static bool HasDeepEqualValueInCollection<T>(
+        IEnumerable<T> collection,
+        T find,
+        object[] customEqualityComparers,
+        HashSet<string> ignoreProperties,
+        out T matched
+    )
+    {
+        matched = default;
+        foreach (var item in collection)
+        {
+            if (Compare(
+                    find,
+                    item,
+                    customEqualityComparers,
+                    ignoreProperties
+                ).AreEqual)
+            {
+                matched = item;
+                return true;
+            }
+        }
+
+        return false;
     }
 }

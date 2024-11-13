@@ -223,7 +223,7 @@ public static class CollectionDeepEqualityMatchers
                             }
                             
                             var result =
-                                AreDeepEqual(
+                                Compare(
                                     cur.Item1,
                                     cur.Item2,
                                     customEqualityComparers,
