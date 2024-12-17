@@ -29,7 +29,8 @@ internal static class QueryStringExtensions
         var start = str.StartsWith("?")
             ? 1
             : 0;
-        return str.Substring(start)
+        var result = new Dictionary<string, string>();
+        var pairs = str.Substring(start)
             .Split('&')
             .Select(
                 p =>
@@ -40,6 +41,16 @@ internal static class QueryStringExtensions
                         WebUtility.UrlDecode(subs.Skip(1).JoinWith("="))
                     );
                 }
-            ).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+            );
+        foreach (var item in pairs)
+        {
+            if (result.TryGetValue(item.Key, out var existing))
+            {
+                result[item.Key] = $"{existing},{item.Value}";
+                continue;
+            }
+            result[item.Key] = item.Value;
+        }
+        return result;
     }
 }

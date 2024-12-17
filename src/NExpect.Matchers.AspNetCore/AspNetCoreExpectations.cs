@@ -59,8 +59,8 @@ public static class AspNetCoreExpectations
         IFormCollection form
     )
     {
-        return Expectations.Expect(
-            form as IEnumerable<KeyValuePair<string, StringValues>>
+        return Expectations.Expect<KeyValuePair<string, StringValues>>(
+            form
         );
     }
 
