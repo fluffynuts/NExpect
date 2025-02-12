@@ -243,17 +243,18 @@ public static class ExceptionMatchers
     }
 
     /// <summary>
-    /// Allows testing a specific property on the thrown exception
+    /// Provide a function to return a specific property or set of
+    /// properties from the exception for further fluent testing
     /// </summary>
     /// <param name="continuation">Exception-based continuation</param>
-    /// <param name="fetcher">Func to invoke to get the property you'd like to test</param>
+    /// <param name="propertyFetcher">Func to invoke to get the property you'd like to test</param>
     /// <typeparam name="T">Type of the Exception</typeparam>
     /// <typeparam name="TValue">Type of the property you're testing</typeparam>
     /// <returns>Throw continuation, used to continue with testing the property you just selected</returns>
     /// <exception cref="ArgumentException">Thrown if the continuation is not a known ThrowContinuation. Userland implementation of IThrowContinuation is not supported - yet. Make a request if you need it!</exception>
     public static IExceptionPropertyContinuation<TValue> With<T, TValue>(
         this IThrowContinuation<T> continuation,
-        Func<T, TValue> fetcher
+        Func<T, TValue> propertyFetcher
     ) where T : Exception
     {
         var throwContinuation = continuation as ThrowContinuation<T>;
@@ -267,7 +268,7 @@ public static class ExceptionMatchers
             );
         }
 
-        var memoized = FuncFactory.Memoize(() => fetcher(actual));
+        var memoized = FuncFactory.Memoize(() => propertyFetcher(actual));
 
         return ContinuationFactory.Create<TValue, ExceptionPropertyContinuation<TValue>>(
             memoized,
