@@ -18,6 +18,8 @@ jobs:
       with:
         dotnet-version: |
           9.x
+          8.x
+          7.x
 
     - name: 🟢 Setup NodeJS
       uses: actions/setup-node@v3
