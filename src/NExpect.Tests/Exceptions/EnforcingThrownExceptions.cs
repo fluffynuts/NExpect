@@ -219,13 +219,10 @@ public class EnforcingThrownExceptions
 
             // Act
             Expect(
-                    () =>
-                        Expect(() => throw new Exception(message))
-                            .To.Throw<InvalidOperationException>()
-                ).To.Throw<UnmetExpectationException>()
-                .With.Message.Containing(message)
-                .Then("Stacktrace")
-                .Then(" at ");
+                () =>
+                    Expect(() => throw new Exception(message))
+                        .To.Throw<InvalidOperationException>()
+            ).To.Throw<UnmetExpectationException>();
 
             // Assert
         }
@@ -236,7 +233,11 @@ public class EnforcingThrownExceptions
             // Arrange
             var e1 = GetRandomString();
             var e2 = GetRandomString();
-            var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+            var message = new[]
+            {
+                e1,
+                e2
+            }.Randomize().JoinWith(" ");
             // Pre-Assert
             // Act
             Assert.That(
@@ -290,7 +291,11 @@ public class EnforcingThrownExceptions
             var e1 = GetRandomString();
             var e2 = GetRandomString();
             var e3 = GetRandomString();
-            var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+            var message = new[]
+            {
+                e1,
+                e2
+            }.Randomize().JoinWith(" ");
             // Pre-Assert
             // Act
             Assert.That(
@@ -319,7 +324,11 @@ public class EnforcingThrownExceptions
             var e1 = GetRandomString();
             var e2 = GetRandomString();
             var e3 = GetRandomString();
-            var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+            var message = new[]
+            {
+                e1,
+                e2
+            }.Randomize().JoinWith(" ");
             // Pre-Assert
             // Act
             Assert.That(
@@ -346,7 +355,11 @@ public class EnforcingThrownExceptions
             // Arrange
             var e1 = GetRandomString();
             var e2 = GetRandomString();
-            var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+            var message = new[]
+            {
+                e1,
+                e2
+            }.Randomize().JoinWith(" ");
             // Pre-Assert
             // Act
             Assert.That(
@@ -498,7 +511,11 @@ public class EnforcingThrownExceptions
             var e1 = GetRandomString();
             var e2 = GetRandomString();
             var e3 = GetRandomString();
-            var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+            var message = new[]
+            {
+                e1,
+                e2
+            }.Randomize().JoinWith(" ");
             // Pre-Assert
             // Act
             Assert.That(
@@ -527,7 +544,11 @@ public class EnforcingThrownExceptions
             // Arrange
             var e1 = GetRandomString();
             var e2 = GetRandomString();
-            var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+            var message = new[]
+            {
+                e1,
+                e2
+            }.Randomize().JoinWith(" ");
             var customMessage = $"{GetRandomString()} (custom message)";
             // Pre-Assert
             // Act
@@ -543,6 +564,7 @@ public class EnforcingThrownExceptions
                         .To.Throw<ArgumentException>(customMessage);
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    .With.InnerException.InstanceOf<ArgumentException>()
                     .With.Message.Contains(customMessage)
             );
             // Assert
@@ -555,7 +577,11 @@ public class EnforcingThrownExceptions
             var e1 = GetRandomString();
             var e2 = GetRandomString();
             var e3 = GetRandomString();
-            var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+            var message = new[]
+            {
+                e1,
+                e2
+            }.Randomize().JoinWith(" ");
             // Pre-Assert
             // Act
             Assert.That(
@@ -582,7 +608,11 @@ public class EnforcingThrownExceptions
             // Arrange
             var e1 = GetRandomString();
             var e2 = GetRandomString();
-            var message = new[] { e1, e2 }.Randomize().JoinWith(" ");
+            var message = new[]
+            {
+                e1,
+                e2
+            }.Randomize().JoinWith(" ");
             // Pre-Assert
             // Act
             Assert.That(
@@ -636,8 +666,11 @@ public class EnforcingThrownExceptions
                         .To.Throw<NotImplementedException>();
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Matches(
-                        $"Expected to throw an exception of type (System.|){typeof(NotImplementedException).Name} but {typeof(InvalidOperationException).Name} was thrown instead"
+                    .With.InnerException.InstanceOf<ArgumentException>()
+                    .With.Message.Contains(
+                        $"{nameof(NotImplementedException)}"
+                    ).And.Message.Contains(
+                        $"{nameof(InvalidOperationException)}"
                     )
             );
             // Assert
@@ -1205,7 +1238,11 @@ public class EnforcingThrownExceptions
         public void Throw_UsingProperty_ShouldDoCollectionComparisonOnCollections()
         {
             // Arrange
-            var expected = new[] { 1, 2 };
+            var expected = new[]
+            {
+                1,
+                2
+            };
             // Pre-Assert
             // Act
             Assert.That(
@@ -1214,7 +1251,13 @@ public class EnforcingThrownExceptions
                     Expect(
                             () =>
                             {
-                                throw new ExceptionWithInts(new[] { 1, 2 });
+                                throw new ExceptionWithInts(
+                                    new[]
+                                    {
+                                        1,
+                                        2
+                                    }
+                                );
                             }
                         )
                         .To.Throw<ExceptionWithInts>()
@@ -1699,6 +1742,70 @@ public class EnforcingThrownExceptions
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
             );
             // Assert
+        }
+    }
+
+    [TestFixture]
+    public class Matching
+    {
+        [Test]
+        public void ShouldBeAbleToMatchSpecificException()
+        {
+            // Arrange
+            var id = GetRandomInt();
+            var description = GetRandomWords();
+            var message = GetRandomWords();
+            // Act
+            Expect(
+                    () =>
+                    {
+                        throw new MatchingException(id, description, message);
+                    }
+                ).To.Throw<MatchingException>()
+                .Matching(e => e.Id == id && e.Description == description);
+            Assert.That(
+                () =>
+                {
+                    Expect(
+                            () =>
+                            {
+                                throw new Exception("wat");
+                            }
+                        ).Not.To.Throw<MatchingException>()
+                        .Matching(e => e.Id == id && e.Description == description + GetRandomString());
+                },
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    .With.InnerException.InstanceOf<ArgumentException>()
+            );
+            Assert.That(
+                () =>
+                    Expect(
+                            () =>
+                            {
+                                // do nothing, on purpose
+                            }
+                        ).Not.To.Throw<MatchingException>()
+                        .Matching(e => e.Id == id),
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    .With.Message.Contains("none was thrown")
+            );
+            // Assert
+        }
+
+        public class MatchingException : Exception
+        {
+            public int Id { get; }
+            public string Description { get; }
+
+            public MatchingException(
+                int id,
+                string description,
+                string message
+            ) : base(message)
+            {
+                Id = id;
+                Description = description;
+            }
         }
     }
 }

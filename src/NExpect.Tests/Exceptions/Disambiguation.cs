@@ -68,8 +68,7 @@ namespace NExpect.Tests.Exceptions
                         .To.Throw<AnotherException>();
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Not.Contains("B.SomeException")
-                    .And.Message.Not.Contains("B.AnotherException")
+                    .With.InnerException.InstanceOf<ArgumentException>()
             );
             Assert.That(() =>
                 {
@@ -77,8 +76,7 @@ namespace NExpect.Tests.Exceptions
                         .To.Throw<AnotherException>();
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Not.Contains("A.SomeException")
-                    .And.Message.Not.Contains("B.AnotherException")
+                    .With.InnerException.InstanceOf<ArgumentException>()
             );
             // Assert
         }

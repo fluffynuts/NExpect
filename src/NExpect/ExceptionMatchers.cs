@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NExpect.Implementations;
 using NExpect.Interfaces;
@@ -444,7 +445,18 @@ Stacktrace:
                             customMessageGenerator
                         )
                     );
-                    continuation.Exception = actual as T;
+                    continuation.Exception = actual as T
+                        ?? throw new ArgumentException(
+                            FinalMessageFor(
+                                () => $"""
+                                       Whilst testing for exception of type {typeof(T)}, an exception
+                                       of type {actual.GetType()} was thrown.
+                                       """,
+                                customMessageGenerator
+                            )(),
+                            // ReSharper disable once NotResolvedInText
+                            "Exception"
+                        );
                 }
 
                 return result;
@@ -1597,6 +1609,84 @@ Stacktrace:
         return ContinuationFactory.Create<string, StringPropertyContinuation>(
             () => (context as ICanAddMatcher<string>).GetActual(),
             context
+        );
+    }
+
+    /// <summary>
+    /// Allows for completely custom exception matching
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="matcher"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Matching<T>(
+        this IThrowContinuation<T> continuation,
+        Func<T, bool> matcher
+    ) where T : Exception
+    {
+        return continuation.Matching(
+            matcher,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Allows for completely custom exception matching
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="matcher"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Matching<T>(
+        this IThrowContinuation<T> continuation,
+        Func<T, bool> matcher,
+        string customMessage
+    ) where T : Exception
+    {
+        return continuation.Matching(
+            matcher,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Allows for completely custom exception matching
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="matcher"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Matching<T>(
+        this IThrowContinuation<T> continuation,
+        Func<T, bool> matcher,
+        Func<string> customMessageGenerator
+    ) where T : Exception
+    {
+        return continuation.AddMatcher(
+            actual =>
+            {
+                if (actual is null)
+                {
+                    return new MatcherResult(
+                        false,
+                        FinalMessageFor(
+                            () => $"Cannot enforce matching on exception of type {typeof(T)} as none was thrown.",
+                            customMessageGenerator
+                        )
+                    );
+                }
+
+                var passed = matcher(actual);
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected {passed.AsNot()}to match exception with custom logic",
+                        customMessageGenerator
+                    )
+                );
+            }
         );
     }
 }
