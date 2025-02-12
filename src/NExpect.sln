@@ -59,6 +59,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".doc", ".doc", "{A316447F-F
 		..\TODO.md = ..\TODO.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".ci", ".ci", "{7B44409C-4AF6-4B99-8455-E1FF92FB96D2}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\gh-release.yml = ..\.github\workflows\gh-release.yml
+		..\.github\workflows\run-all-tests.yml = ..\.github\workflows\run-all-tests.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
