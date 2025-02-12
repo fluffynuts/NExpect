@@ -26,6 +26,10 @@ jobs:
       with:
         node-version: '16'
         cache: 'npm'
+        
+    - name: 🐒 Setup Mono
+      run: |
+        sudo apt install mono-devel
 
     - name: 🏗️ Build and test 🧪
       env:
