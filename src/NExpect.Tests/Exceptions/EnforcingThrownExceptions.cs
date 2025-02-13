@@ -564,7 +564,6 @@ public class EnforcingThrownExceptions
                         .To.Throw<ArgumentException>(customMessage);
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.InnerException.InstanceOf<ArgumentException>()
                     .With.Message.Contains(customMessage)
             );
             // Assert
@@ -666,7 +665,6 @@ public class EnforcingThrownExceptions
                         .To.Throw<NotImplementedException>();
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.InnerException.InstanceOf<ArgumentException>()
                     .With.Message.Contains(
                         $"{nameof(NotImplementedException)}"
                     ).And.Message.Contains(
@@ -725,7 +723,8 @@ public class EnforcingThrownExceptions
                     Expect(() => throw new LocalException(message))
                         .To.Throw()
                         .With.Type(typeof(LocalException))
-                        .And.Property(e => (e as LocalException).MyMessage == message);
+                        .And.Property(e => (e as LocalException)!.MyMessage)
+                        .Equal.To(message);
                 },
                 Throws.Nothing
             );
@@ -1775,7 +1774,9 @@ public class EnforcingThrownExceptions
                         .Matching(e => e.Id == id && e.Description == description + GetRandomString());
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.InnerException.InstanceOf<ArgumentException>()
+                    .With.Message.Contains(
+                        "Cannot enforce matching"
+                    ).And.Message.Contains("none was thrown")
             );
             Assert.That(
                 () =>

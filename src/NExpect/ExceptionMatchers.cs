@@ -446,18 +446,7 @@ Stacktrace:
                             customMessageGenerator
                         )
                     );
-                    continuation.Exception = actual as T
-                        ?? throw new ArgumentException(
-                            FinalMessageFor(
-                                () => $"""
-                                       Whilst testing for exception of type {typeof(T)}, an exception
-                                       of type {actual.GetType()} was thrown.
-                                       """,
-                                customMessageGenerator
-                            )(),
-                            // ReSharper disable once NotResolvedInText
-                            "Exception"
-                        );
+                    continuation.Exception = actual as T;
                 }
 
                 return result;

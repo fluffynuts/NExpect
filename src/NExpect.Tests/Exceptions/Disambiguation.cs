@@ -20,7 +20,7 @@ namespace NExpect.Tests.Exceptions
     {
         public class SomeException : Exception
         {
-            public SomeException(): base("Some Exception!")
+            public SomeException() : base("Some Exception!")
             {
             }
         }
@@ -42,12 +42,15 @@ namespace NExpect.Tests.Exceptions
         {
             // Arrange
             // Act
-            Assert.That(() =>
+            Assert.That(
+                () =>
                 {
-                    Expect(() =>
-                        {
-                            throw new B.SomeException();
-                        })
+                    Expect(
+                            () =>
+                            {
+                                throw new B.SomeException();
+                            }
+                        )
                         .To.Throw<A.SomeException>();
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
@@ -62,21 +65,31 @@ namespace NExpect.Tests.Exceptions
         {
             // Arrange
             // Act
-            Assert.That(() =>
+            Assert.That(
+                () =>
                 {
                     Expect(() => throw new B.SomeException())
                         .To.Throw<AnotherException>();
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.InnerException.InstanceOf<ArgumentException>()
+                    .With.Message.Contains(
+                        """
+                        Expected to throw an exception of type AnotherException but SomeException was thrown instead (Some Exception!)
+                        """
+                    )
             );
-            Assert.That(() =>
+            Assert.That(
+                () =>
                 {
                     Expect(() => throw new A.SomeException())
                         .To.Throw<AnotherException>();
                 },
                 Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.InnerException.InstanceOf<ArgumentException>()
+                    .With.Message.Contains(
+                        """
+                        Expected to throw an exception of type AnotherException but SomeException was thrown instead (Some Exception!)
+                        """
+                    )
             );
             // Assert
         }
