@@ -550,6 +550,9 @@ public static class CollectionMatchers
                 if (countMatch.Method == CountMatchMethods.Only &&
                     collectionCount != countMatch.Compare)
                 {
+                    var s = countMatch.Compare == 1
+                        ? ""
+                        : "s";
                     return new MatcherResult(
                         false,
                         FinalMessageFor(
@@ -557,7 +560,7 @@ public static class CollectionMatchers
                                 false.AsNot()
                             }to find only {
                                 countMatch.Compare
-                            } items in
+                            } item{s} in
 {collection.Stringify<IEnumerable<T>>()}",
                             customMessageGenerator
                         )
