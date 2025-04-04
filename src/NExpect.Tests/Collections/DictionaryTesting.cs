@@ -33,6 +33,24 @@ public class DictionaryTesting
             );
             // Assert
         }
+
+        [Test]
+        public void ShouldBeAbleToFindIntValueInBoolIntDictionary()
+        {
+            // Arrange
+            var dict = new Dictionary<bool, int>()
+            {
+                [true] = 123
+            };
+            // Act
+            Assert.That(() =>
+            {
+                Expect(dict)
+                    .To.Contain.Key(true)
+                    .With.Value(123);
+            }, Throws.Nothing);
+            // Assert
+        }
     }
 
     [TestFixture]
@@ -201,7 +219,7 @@ public class DictionaryTesting
                 }
 
                 [TestCaseSource(nameof(CaseSensitiveComparers))]
-                public void WhenDictionaryIsCaseSentive_ShouldThrowForIncorrectCasing(StringComparer comparer)
+                public void WhenDictionaryIsCaseSensitive_ShouldThrowForIncorrectCasing(StringComparer comparer)
                 {
                     // Arrange
                     var key = GetRandomAlphaString(2);
@@ -645,8 +663,14 @@ public class DictionaryTesting
                         public void ShouldPassWhenMatched()
                         {
                             // Arrange
-                            var data = new { foo = "bar" };
-                            var copy = new { foo = "bar" };
+                            var data = new
+                            {
+                                foo = "bar"
+                            };
+                            var copy = new
+                            {
+                                foo = "bar"
+                            };
                             var key = GetRandomString(1);
                             var dictionary = new Dictionary<string, object>()
                             {
@@ -669,9 +693,18 @@ public class DictionaryTesting
                         public void ShouldFailWhenUnMatched()
                         {
                             // Arrange
-                            var data = new { foo = "bar" };
-                            var other = new { foo1 = "bar" };
-                            var another = new { foo = "qux" };
+                            var data = new
+                            {
+                                foo = "bar"
+                            };
+                            var other = new
+                            {
+                                foo1 = "bar"
+                            };
+                            var another = new
+                            {
+                                foo = "qux"
+                            };
                             var key = GetRandomString(1);
                             var dictionary = new Dictionary<string, object>()
                             {
@@ -708,9 +741,18 @@ public class DictionaryTesting
                         public void ShouldIncludeCustomMessagesWhenFailing()
                         {
                             // Arrange
-                            var data = new { foo = "bar" };
-                            var other = new { foo1 = "bar" };
-                            var another = new { foo = "qux" };
+                            var data = new
+                            {
+                                foo = "bar"
+                            };
+                            var other = new
+                            {
+                                foo1 = "bar"
+                            };
+                            var another = new
+                            {
+                                foo = "qux"
+                            };
                             var key = GetRandomString(1);
                             var message1 = GetRandomString(10);
                             var message2 = GetRandomString(10);
@@ -755,8 +797,16 @@ public class DictionaryTesting
                         public void ShouldPassWhenMatched()
                         {
                             // Arrange
-                            var data = new { foo = "bar", other = "moo" };
-                            var copy = new { foo = "bar", quuz = "wibble" };
+                            var data = new
+                            {
+                                foo = "bar",
+                                other = "moo"
+                            };
+                            var copy = new
+                            {
+                                foo = "bar",
+                                quuz = "wibble"
+                            };
                             var key = GetRandomString(1);
                             var dictionary = new Dictionary<string, object>()
                             {
@@ -779,9 +829,18 @@ public class DictionaryTesting
                         public void ShouldFailWhenUnMatched()
                         {
                             // Arrange
-                            var data = new { foo = "bar" };
-                            var other = new { foo1 = "bar" };
-                            var another = new { foo = "qux" };
+                            var data = new
+                            {
+                                foo = "bar"
+                            };
+                            var other = new
+                            {
+                                foo1 = "bar"
+                            };
+                            var another = new
+                            {
+                                foo = "qux"
+                            };
                             var key = GetRandomString(1);
                             var dictionary = new Dictionary<string, object>()
                             {
@@ -818,9 +877,18 @@ public class DictionaryTesting
                         public void ShouldIncludeCustomMessagesWhenFailing()
                         {
                             // Arrange
-                            var data = new { foo = "bar" };
-                            var other = new { foo1 = "bar" };
-                            var another = new { foo = "qux" };
+                            var data = new
+                            {
+                                foo = "bar"
+                            };
+                            var other = new
+                            {
+                                foo1 = "bar"
+                            };
+                            var another = new
+                            {
+                                foo = "qux"
+                            };
                             var key = GetRandomString(1);
                             var message1 = GetRandomString(10);
                             var message2 = GetRandomString(10);
@@ -866,12 +934,12 @@ public class DictionaryTesting
                         {
                             // Arrange
                             var key = GetRandomString(2);
-                            var value = (sbyte) GetRandomInt(2);
+                            var value = (sbyte)GetRandomInt(2);
                             var src = new Dictionary<string, sbyte>()
                             {
                                 [key] = value
                             };
-                            var expected = (int) value;
+                            var expected = (int)value;
                             // Pre-Assert
 
                             // Act
@@ -891,12 +959,12 @@ public class DictionaryTesting
                         {
                             // Arrange
                             var key = GetRandomString(2);
-                            var value = (sbyte) GetRandomInt(2);
+                            var value = (sbyte)GetRandomInt(2);
                             var src = new Dictionary<string, sbyte>()
                             {
                                 [key] = value
                             };
-                            var expected = (int) GetAnother(value);
+                            var expected = (int)GetAnother(value);
                             // Pre-Assert
 
                             // Act
@@ -915,12 +983,12 @@ public class DictionaryTesting
                         {
                             // Arrange
                             var key = GetRandomString(2);
-                            var value = (short) GetRandomInt(2);
+                            var value = (short)GetRandomInt(2);
                             var src = new Dictionary<string, short>()
                             {
                                 [key] = value
                             };
-                            var expected = (int) value;
+                            var expected = (int)value;
                             // Pre-Assert
 
                             // Act
@@ -940,12 +1008,12 @@ public class DictionaryTesting
                         {
                             // Arrange
                             var key = GetRandomString(2);
-                            var value = (short) GetRandomInt(2);
+                            var value = (short)GetRandomInt(2);
                             var src = new Dictionary<string, short>()
                             {
                                 [key] = value
                             };
-                            var expected = (int) GetAnother(value);
+                            var expected = (int)GetAnother(value);
                             // Pre-Assert
 
                             // Act
@@ -969,7 +1037,7 @@ public class DictionaryTesting
                             {
                                 [key] = value
                             };
-                            var expected = (long) value;
+                            var expected = (long)value;
                             // Pre-Assert
 
                             // Act
@@ -994,7 +1062,7 @@ public class DictionaryTesting
                             {
                                 [key] = value
                             };
-                            var expected = (long) GetAnother(value);
+                            var expected = (long)GetAnother(value);
                             // Pre-Assert
 
                             // Act
@@ -1013,12 +1081,12 @@ public class DictionaryTesting
                         {
                             // Arrange
                             var key = GetRandomString(2);
-                            var value = (byte) GetRandomInt(2);
+                            var value = (byte)GetRandomInt(2);
                             var src = new Dictionary<string, byte>()
                             {
                                 [key] = value
                             };
-                            var expected = (int) value;
+                            var expected = (int)value;
                             // Pre-Assert
 
                             // Act
@@ -1038,12 +1106,12 @@ public class DictionaryTesting
                         {
                             // Arrange
                             var key = GetRandomString(2);
-                            var value = (byte) GetRandomInt(2);
+                            var value = (byte)GetRandomInt(2);
                             var src = new Dictionary<string, byte>()
                             {
                                 [key] = value
                             };
-                            var expected = (int) GetAnother(value);
+                            var expected = (int)GetAnother(value);
                             // Pre-Assert
 
                             // Act
@@ -1062,12 +1130,12 @@ public class DictionaryTesting
                         {
                             // Arrange
                             var key = GetRandomString(2);
-                            var value = (ushort) GetRandomInt(2);
+                            var value = (ushort)GetRandomInt(2);
                             var src = new Dictionary<string, ushort>()
                             {
                                 [key] = value
                             };
-                            var expected = (int) value;
+                            var expected = (int)value;
                             // Pre-Assert
 
                             // Act
@@ -1087,12 +1155,12 @@ public class DictionaryTesting
                         {
                             // Arrange
                             var key = GetRandomString(2);
-                            var value = (ushort) GetRandomInt(2);
+                            var value = (ushort)GetRandomInt(2);
                             var src = new Dictionary<string, ushort>()
                             {
                                 [key] = value
                             };
-                            var expected = (int) GetAnother(value);
+                            var expected = (int)GetAnother(value);
                             // Pre-Assert
 
                             // Act
@@ -1111,12 +1179,12 @@ public class DictionaryTesting
                         {
                             // Arrange
                             var key = GetRandomString(2);
-                            var value = (uint) GetRandomInt(2);
+                            var value = (uint)GetRandomInt(2);
                             var src = new Dictionary<string, uint>()
                             {
                                 [key] = value
                             };
-                            var expected = (long) value;
+                            var expected = (long)value;
                             // Pre-Assert
 
                             // Act
@@ -1136,12 +1204,12 @@ public class DictionaryTesting
                         {
                             // Arrange
                             var key = GetRandomString(2);
-                            var value = (uint) GetRandomInt(2);
+                            var value = (uint)GetRandomInt(2);
                             var src = new Dictionary<string, uint>()
                             {
                                 [key] = value
                             };
-                            var expected = (long) GetAnother(value);
+                            var expected = (long)GetAnother(value);
                             // Pre-Assert
 
                             // Act
