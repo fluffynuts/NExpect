@@ -383,6 +383,9 @@
     <Compile Include="..\PeanutButter\source\TestUtils\PeanutButter.TestUtils.AspNetCore\Utils\UrlEncodedBodyEncoder.cs">
       <Link>Imported\Utils\UrlEncodedBodyEncoder.cs</Link>
     </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.DuckTyping\Shimming\IsADuckAttribute.cs">
+      <Link>Imported\IsADuckAttribute.cs</Link>
+    </Compile>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\Async.cs">
       <Link>Imported\Async.cs</Link>
     </Compile>

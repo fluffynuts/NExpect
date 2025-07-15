@@ -16,8 +16,10 @@ public class TestControllerMatchers
         {
             // Arrange
             // Act
-            Expect(() => Expect(typeof(TestController))
-                    .To.Have.Route("other"))
+            Expect(
+                    () => Expect(typeof(TestController))
+                        .To.Have.Route("other")
+                )
                 .To.Throw<UnmetExpectationException>()
                 .With.Message.Containing(
                     "TestController to have route 'other'"
@@ -30,8 +32,10 @@ public class TestControllerMatchers
         {
             // Arrange
             // Act
-            Expect(() => Expect(typeof(TestController))
-                    .Not.To.Have.Route("test"))
+            Expect(
+                    () => Expect(typeof(TestController))
+                        .Not.To.Have.Route("test")
+                )
                 .To.Throw<UnmetExpectationException>()
                 .With.Message.Containing(
                     "TestController not to have route 'test'"
@@ -44,9 +48,11 @@ public class TestControllerMatchers
         {
             // Arrange
             // Act
-            Expect(() => Expect(typeof(TestController))
-                    .To.Have.Route("test")
-                    .And.Not.To.Have.Route("other"))
+            Expect(
+                    () => Expect(typeof(TestController))
+                        .To.Have.Route("test")
+                        .And.Not.To.Have.Route("other")
+                )
                 .Not.To.Throw();
             // Assert
         }
@@ -60,14 +66,18 @@ public class TestControllerMatchers
         {
             // Arrange
             // Act
-            Expect(() => Expect(typeof(TestController))
-                    .To.Have.Method(nameof(TestController.DoStuff))
-                    .With.Route("do-stuff"))
+            Expect(
+                    () => Expect(typeof(TestController))
+                        .To.Have.Method(nameof(TestController.DoStuff))
+                        .With.Route("do-stuff")
+                )
                 .Not.To.Throw();
 
-            Expect(() => Expect(typeof(TestController))
-                    .To.Have.Method(nameof(TestController.DoStuff))
-                    .With.Route("do-other-stuff"))
+            Expect(
+                    () => Expect(typeof(TestController))
+                        .To.Have.Method(nameof(TestController.DoStuff))
+                        .With.Route("do-other-stuff")
+                )
                 .To.Throw<UnmetExpectationException>()
                 .With.Message.Containing(
                     $"{typeof(TestController).Name}.DoStuff"
@@ -83,15 +93,19 @@ public class TestControllerMatchers
         {
             // Arrange
             // Act
-            Expect(() => Expect(typeof(TestController))
-                    .To.Have.Method(nameof(TestController.DoStuff))
-                    .With.Route("do-stuff")
-                    .And.Route("another-route"))
+            Expect(
+                    () => Expect(typeof(TestController))
+                        .To.Have.Method(nameof(TestController.DoStuff))
+                        .With.Route("do-stuff")
+                        .And.Route("another-route")
+                )
                 .Not.To.Throw();
-            Expect(() => Expect(typeof(TestController))
-                    .To.Have.Method(nameof(TestController.DoStuff))
-                    .With.Route("do-stuff")
-                    .And.Route("another-route2"))
+            Expect(
+                    () => Expect(typeof(TestController))
+                        .To.Have.Method(nameof(TestController.DoStuff))
+                        .With.Route("do-stuff")
+                        .And.Route("another-route2")
+                )
                 .To.Throw<UnmetExpectationException>();
             // Assert
         }
@@ -100,14 +114,17 @@ public class TestControllerMatchers
         public void ShouldBeAbleToTestVerb()
         {
             // Arrange
-            Expect(() => Expect(typeof(TestController))
-                    .To.Have.Method(nameof(TestController.DoStuff))
-                    .Supporting(HttpMethod.Get))
-                .Not.To.Throw();
-            Expect(() =>
-                    Expect(typeof(TestController))
+            Expect(
+                    () => Expect(typeof(TestController))
                         .To.Have.Method(nameof(TestController.DoStuff))
-                        .Supporting(HttpMethod.Delete)
+                        .Supporting(HttpMethod.Get)
+                )
+                .Not.To.Throw();
+            Expect(
+                    () =>
+                        Expect(typeof(TestController))
+                            .To.Have.Method(nameof(TestController.DoStuff))
+                            .Supporting(HttpMethod.Delete)
                 ).To.Throw<UnmetExpectationException>()
                 .With.Message.Containing(
                     "support HttpMethod DELETE"
@@ -120,15 +137,18 @@ public class TestControllerMatchers
         public void ShouldBeAbleToTestMultipleVerbs()
         {
             // Arrange
-            Expect(() => Expect(typeof(TestController))
-                    .To.Have.Method(nameof(TestController.DoStuff))
-                    .Supporting(HttpMethod.Get))
+            Expect(
+                    () => Expect(typeof(TestController))
+                        .To.Have.Method(nameof(TestController.DoStuff))
+                        .Supporting(HttpMethod.Get)
+                )
                 .Not.To.Throw();
-            Expect(() =>
-                Expect(typeof(TestController))
-                    .To.Have.Method(nameof(TestController.DoStuff))
-                    .Supporting(HttpMethod.Get)
-                    .And(HttpMethod.Post)
+            Expect(
+                () =>
+                    Expect(typeof(TestController))
+                        .To.Have.Method(nameof(TestController.DoStuff))
+                        .Supporting(HttpMethod.Get)
+                        .And(HttpMethod.Post)
             ).Not.To.Throw();
             // Act
             // Assert
@@ -140,16 +160,18 @@ public class TestControllerMatchers
         {
             // Arrange
             // Act
-            Expect(() => Expect(typeof(TestController))
-                .To.Have.Method(nameof(TestController.DoStuff))
-                .Supporting(HttpMethod.Get)
-                .With.Route("do-stuff")
-            ).Not.To.Throw();
-            Expect(() =>
-                Expect(typeof(TestController))
+            Expect(
+                () => Expect(typeof(TestController))
                     .To.Have.Method(nameof(TestController.DoStuff))
-                    .With.Route("do-stuff")
                     .Supporting(HttpMethod.Get)
+                    .With.Route("do-stuff")
+            ).Not.To.Throw();
+            Expect(
+                () =>
+                    Expect(typeof(TestController))
+                        .To.Have.Method(nameof(TestController.DoStuff))
+                        .With.Route("do-stuff")
+                        .Supporting(HttpMethod.Get)
             ).Not.To.Throw();
             // Assert
         }
