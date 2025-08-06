@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NExpect.Helpers;
 using NExpect.Interfaces;
@@ -72,6 +73,7 @@ public static class DeepEqualityMatchers
             continuation,
             expected,
             customMessageGenerator,
+            [],
             customEqualityComparers
         );
     }
@@ -132,7 +134,75 @@ public static class DeepEqualityMatchers
             continuation,
             expected,
             customMessageGenerator,
+            [],
             customEqualityComparers
+        );
+    }
+
+    /// <summary>
+    /// Performs deep equality checking whilst excluding the
+    /// named properties
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="expected"></param>
+    /// <param name="exclude"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Equal<T>(
+        this IDeep<T> continuation,
+        object expected,
+        string[] exclude
+    )
+    {
+        return continuation.Equal(expected, exclude, MH.NULL_STRING);
+    }
+
+    /// <summary>
+    /// Performs deep equality checking whilst excluding the
+    /// named properties
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="expected"></param>
+    /// <param name="exclude"></param>
+    /// <param name="customMessage"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Equal<T>(
+        this IDeep<T> continuation,
+        object expected,
+        string[] exclude,
+        string customMessage
+    )
+    {
+        return continuation.Equal(
+            expected,
+            exclude,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Performs deep equality checking whilst excluding the
+    /// named properties
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="expected"></param>
+    /// <param name="exclude"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Equal<T>(
+        this IDeep<T> continuation,
+        object expected,
+        string[] exclude,
+        Func<string> customMessageGenerator
+    )
+    {
+        return DoDeepEqualityTesting(
+            continuation,
+            expected,
+            customMessageGenerator,
+            exclude
         );
     }
 
@@ -140,13 +210,17 @@ public static class DeepEqualityMatchers
         this ICanAddMatcher<T> continuation,
         object expected,
         Func<string> customMessageGenerator,
+        string[] excludeProperties,
         params object[] customEqualityComparers
     )
     {
         return continuation.AddMatcher(
             actual =>
             {
-                var ignoreProperties = actual.FindOrAddPropertyIgnoreListMetadata();
+                var ignoreProperties = new HashSet<string>(
+                    actual.FindOrAddPropertyIgnoreListMetadata()
+                );
+                ignoreProperties.AddRange(excludeProperties);
                 var deepEqualResult = DeepTestHelpers.Compare(
                     actual,
                     expected,

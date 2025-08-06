@@ -128,7 +128,6 @@ public class DeepEqualityTesting
     }
 
     [Test]
-    [Ignore("TODO: need to figure out a nice api for this without muddling the existing ones")]
     public void ShouldBeAbleToExcludePropertiesByName()
     {
         // Arrange
@@ -140,8 +139,27 @@ public class DeepEqualityTesting
         Assert.That(
             () =>
             {
+                Expect(right)
+                    .To.Deep.Equal(
+                        left,
+                        exclude: [
+                            nameof(left.Id),
+                            nameof(left.Created)
+                        ]);
             },
             Throws.Nothing
+        );
+        Assert.That(
+            () =>
+            {
+                Expect(right)
+                    .To.Deep.Equal(
+                        left,
+                        exclude: [
+                            nameof(left.Created)
+                        ]);
+            },
+            Throws.Exception.InstanceOf<UnmetExpectationException>()
         );
         // Assert
     }

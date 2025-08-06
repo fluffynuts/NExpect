@@ -77,6 +77,14 @@ Expect(person)
   .To.Deep.Equal(new { id = 1, name = "bob" });
 Expect(person)
   .To.Intersection.Equal(new { name = "bob" });
+
+// deep equality testing with excluded props
+Expect(person)
+    .To.Deep.Equal(new { id = 1, name = "sarah" }, exclude: [ "name" ]);  
+// or
+Expect(person)
+    .Omitting("name")
+    .To.Deep.Equal(new { id = 1, name = "sipho" });
 ```
 
 ## Extending
