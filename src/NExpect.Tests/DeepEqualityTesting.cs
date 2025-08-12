@@ -142,10 +142,12 @@ public class DeepEqualityTesting
                 Expect(right)
                     .To.Deep.Equal(
                         left,
-                        exclude: [
+                        exclude:
+                        [
                             nameof(left.Id),
                             nameof(left.Created)
-                        ]);
+                        ]
+                    );
             },
             Throws.Nothing
         );
@@ -155,9 +157,23 @@ public class DeepEqualityTesting
                 Expect(right)
                     .To.Deep.Equal(
                         left,
-                        exclude: [
+                        nameof(left.Id),
+                        nameof(left.Created)
+                    );
+            },
+            Throws.Nothing
+        );
+        Assert.That(
+            () =>
+            {
+                Expect(right)
+                    .To.Deep.Equal(
+                        left,
+                        exclude:
+                        [
                             nameof(left.Created)
-                        ]);
+                        ]
+                    );
             },
             Throws.Exception.InstanceOf<UnmetExpectationException>()
         );
@@ -195,7 +211,11 @@ public class DeepEqualityTesting
         private string Name { get; set; }
         private string _color;
 
-        public HasPrivates(int id, string name, string color)
+        public HasPrivates(
+            int id,
+            string name,
+            string color
+        )
         {
             Id = id;
             Name = name;

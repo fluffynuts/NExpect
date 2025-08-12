@@ -151,7 +151,7 @@ public static class DeepEqualityMatchers
     public static IMore<T> Equal<T>(
         this IDeep<T> continuation,
         object expected,
-        string[] exclude
+        params string[] exclude
     )
     {
         return continuation.Equal(expected, exclude, MH.NULL_STRING);
