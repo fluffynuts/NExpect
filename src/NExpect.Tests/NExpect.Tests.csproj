@@ -11,7 +11,7 @@
     <PackageReference Include="nunit3testadapter" Version="4.5.0" />
     <PackageReference Include="PeanutButter.DuckTyping" Version="3.0.305" />
     <PackageReference Include="PeanutButter.RandomGenerators" Version="3.0.305" />
-    <PackageReference Include="Quackers.TestLogger" Version="1.0.24" />
+    <PackageReference Include="Quackers.TestLogger" Version="1.0.25" />
     <PackageReference Include="system.valuetuple" Version="4.5.0" />
   </ItemGroup>
   <ItemGroup>

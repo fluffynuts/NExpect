@@ -9,6 +9,7 @@
     <PackageReference Include="microsoft.net.test.sdk" Version="17.8.0" />
     <PackageReference Include="nunit" Version="4.0.1" />
     <PackageReference Include="nunit3testadapter" Version="4.5.0" />
+    <PackageReference Include="Quackers.TestLogger" Version="1.0.25" />
   </ItemGroup>
 
   <ItemGroup>

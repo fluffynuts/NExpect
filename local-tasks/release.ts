@@ -6,8 +6,7 @@ const
     path = require("path"),
     fs = require("fs"),
     nugetPush = requireModule<NugetPush>("nuget-push"),
-    env = requireModule<Env>("env"),
-    spawn = requireModule<Spawn>("spawn");
+    env = requireModule<Env>("env");
 
 env.associate([ "DRY_RUN" ], [ "push" ]);
 
