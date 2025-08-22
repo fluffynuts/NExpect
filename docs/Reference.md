@@ -171,7 +171,7 @@ Expect(new {}).Not.To.Be(new {});
 #### Deep equality
 This is most useful when there are multiple assertions which would
 have to be made to prove that two objects are equivalent:
-```
+```csharp
 [TestFixture]
 public class DeepEqualityTesting
 {
@@ -205,22 +205,38 @@ public class DeepEqualityTesting
     }
     
     // incoming types are not important, properties are matched by name and type
-    Expect(left).To.Deep.Equal(right);
+    Expect(left)
+      .To.Deep.Equal(right);
     // since the types don't matter, we can use anonymous types:
-    Expect(left).To.Deep.Equal(new
-    {
-      Id = 1,
-      Name = "bob",
-      Description = "123"
-    });
+    Expect(left)
+      .To.Deep.Equal(
+        new
+        {
+          Id = 1,
+          Name = "bob",
+          Description = "123"
+        });
   }
 }
 ```
 Deep equality testing traverses all the way down through all properties, so
 even complex properties are compared:
 ```csharp
-Expect(new { Child = new { id = 1 } })
-  .To.Deep.Equal(new { Child = new { id = 1 } });
+Expect(
+  new 
+  { 
+    Child = new 
+            { 
+              id = 1 
+            }
+  }).To.Deep.Equal(
+    new
+    {
+      Child = new
+            { 
+              id = 1 
+            } 
+    });
 ```
 
 #### Intersection Equality
