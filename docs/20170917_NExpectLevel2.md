@@ -10,7 +10,8 @@ public void SimpleContains()
     var collection = new[] { "a", "b", "c" };
 
     // Assert
-    Expect(collection).To.Contain("a");
+    Expect(collection)
+      .To.Contain("a");
 }
 ```
 This is what you would expect from any other assertions framework.
@@ -25,7 +26,8 @@ public void MultiContains()
     var collection = new[] { "a", "b", "c", "a" };
 
     // Assert
-    Expect(collection).To.Contain("a");
+    Expect(collection)
+      .To.Contain("a");
 }
 ```
 And yet they are not functionally equivalent from where I stand.
@@ -72,12 +74,17 @@ That's Ok, [NExpect](https://github.com/fluffynuts/NExpect) takes away the care 
     var none = new bool[0];
 
     // Assert
-    Expect(collection).To.Contain.Exactly(3).Items();
-    Expect(lonely).To.Contain.Exactly(1).Item();
+    Expect(collection)
+      .To.Contain.Exactly(3).Items();
+    Expect(lonely)
+      .To.Contain.Exactly(1).Item();
 
-    Expect(none).To.Contain.No().Items();
-    Expect(none).Not.To.Contain.Any().Items();
-    Expect(none).To.Be.Empty();
+    Expect(none)
+      .To.Contain.No().Items();
+    Expect(none)
+      .Not.To.Contain.Any().Items();
+    Expect(none)
+      .To.Be.Empty();
   }
 ```
 
@@ -89,13 +96,17 @@ designed to help you express your intent in your tests, and, as such, there may 
   public void AnyWayYouLikeIt()
   {
     // Assert
-    Expect(1).Not.To.Equal(2);
+    Expect(1)
+      .Not.To.Equal(2);
     // ... is exactly equivalent to
-    Expect(1).To.Not.Equal(2);
+    Expect(1)
+      .To.Not.Equal(2);
 
-    Expect(3).To.Equal(3);
+    Expect(3)
+      .To.Equal(3);
     // ... is exactly equivalent to
-    Expect(3).To.Be.Equal.To(3);
+    Expect(3)
+      .To.Be.Equal.To(3);
   }
 ```
 
@@ -168,7 +179,8 @@ public void CollectionDeepEquivalence()
     new Person() { Id = 2, Name = "Bob", Alive = false }
   };
   // Assert
-  Expect(input).As.Objects()
+  Expect(input)
+    .As.Objects()
     .To.Be.Deep.Equivalent.To(new[] {
       new { Id = 2, Name = "Bob", Alive = false },
       new { Id = 1, Name = "Jane", Alive = true }
@@ -187,12 +199,14 @@ public void CollectionIntersections()
     new Person() { Id = 2, Name = "Bob", Alive = false }
   };
   // Assert
-  Expect(input).As.Objects()
+  Expect(input)
+    .As.Objects()
     .To.Be.Intersection.Equivalent.To(new[] {
       new { Id = 2, Name = "Bob" },
       new { Id = 1, Name = "Jane" }
     });
-  Expect(input).As.Objects()
+  Expect(input)
+    .As.Objects()
     .To.Be.Intersection.Equivalent.To(new[] {
       new { Id = 1, Name = "Jane" },
       new { Id = 2, Name = "Bob" }
@@ -212,8 +226,13 @@ public void CollectionIntersections()
   };
   // Assert
   Expect(input)
-    .To.Contain.Exactly(1).Equal.To(
-      new Person() { Id = 2, Name = "Bob" },
+    .To.Contain.Exactly(1)
+    .Equal.To(
+      new Person() 
+      { 
+        Id = 2,
+        Name = "Bob" 
+      },
       new PersonEqualityComparer()
   );
 }
@@ -231,7 +250,8 @@ public void CollectionIntersections()
   };
   // Assert
   Expect(input).As.Objects()
-    .To.Contain.Exactly(1).Matched.By(
+    .To.Contain.Exactly(1)
+    .Matched.By(
       p =&gt; p.Id == 1 &amp;&amp; p.Name == "Jane"
     );
 }

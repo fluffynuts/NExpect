@@ -71,11 +71,14 @@ expect(result).not.toBeAFrobNozzle();
 
 In NExpect, you can write an extension method `FrobNozzle()`, dangling off of `IA&lt;T&gt;`, and write something like:
 ```csharp
-Expect(result).To.Be.A.FrobNozzle();<br />
+Expect(result)
+  .To.Be.A.FrobNozzle();<br />
 // or, negated<br />
-Expect(result).Not.To.Be.A.FrobNozzle();<br />
+Expect(result)
+  .Not.To.Be.A.FrobNozzle();<br />
 // or, negated alternative<br />
-Expect(result).To.Not.Be.A.FrobNozzle();
+Expect(result)
+  .To.Not.Be.A.FrobNozzle();
 ```
 
 The result is something which is still evolving, but is already quite powerful and useful -- and trivial to extend. I suggest checking out the [demo project](https://github.com/fluffynuts/NExpect.Demo) I made showing the evolution&nbsp;

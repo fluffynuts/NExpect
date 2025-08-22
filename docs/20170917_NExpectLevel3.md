@@ -43,8 +43,10 @@ The above extension enables the following test:
 public void ILikeOddNumbers()
 {
   // Assert
-  Expect(1).To.Be.Odd();
-  Expect(2).Not.To.Be.Odd();
+  Expect(1)
+    .To.Be.Odd();
+  Expect(2)
+    .Not.To.Be.Odd();
 }
 ```
 
@@ -167,8 +169,10 @@ internal static class PersonMatchers
   {
      a.Compose(actual =>
      {
-        Expect(actual.Id).To.Equal(1);
-        Expect(actual.Name).To.Equal("Jane");
+        Expect(actual.Id)
+          .To.Equal(1);
+        Expect(actual.Name)
+          .To.Equal("Jane");
      });
   }
 
@@ -177,10 +181,16 @@ internal static class PersonMatchers
   public void TestJane()
   {
     // Arrange
-    var person = new Person() { Id = 1, Name = "Jane", Alive = true };
+    var person = new Person() 
+    {
+      Id = 1,
+      Name = "Jane",
+      Alive = true
+    };
 
     // Assert
-    Expect(person).To.Be.A.Jane();
+    Expect(person)
+      .To.Be.A.Jane();
   }
 }
 ```

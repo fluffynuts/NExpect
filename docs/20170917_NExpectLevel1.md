@@ -19,10 +19,14 @@ public void SimplePositiveExpectations
   var falseValue = false;
 
   // Assert
-  Expect(obj).To.Be.Null();
-  Expect(intValue).To.Equal(1);
-  Expect(trueValue).To.Be.True();
-  Expect(falseValue).To.Be.False();
+  Expect(obj)
+    .To.Be.Null();
+  Expect(intValue)
+    .To.Equal(1);
+  Expect(trueValue)
+    .To.Be.True();
+  Expect(falseValue)
+    .To.Be.False();
 }
 ```
 So far, nothing too exciting or unexpected there. NExpect also caters for negative expectations:
@@ -37,13 +41,19 @@ public void SimpleNegativeExpectations
   var falseValue = false;
 
   // Assert
-  Expect(obj).Not.To.Be.Null();
-  Expect(intValue).Not.To.Equal(2);
-  Expect(trueValue).Not.To.Be.False();
-  Expect(falseValue).Not.To.Be.True();
+  Expect(obj)
+    .Not.To.Be.Null();
+  Expect(intValue)
+    .Not.To.Equal(2);
+  Expect(trueValue)
+    .Not.To.Be.False();
+  Expect(falseValue)
+    .Not.To.Be.True();
 
-  Expect(intValue).To.Be.Greater.Than(0);
-  Expect(intValue).To.Be.Less.Than(10);
+  Expect(intValue)
+    .To.Be.Greater.Than(0);
+  Expect(intValue)
+    .To.Be.Less.Than(10);
 }
 ```
 (Though, in the above, I'm sure we all agree that the boolean expectations are neater without 
@@ -54,7 +64,8 @@ Expectations carry type forward, so you won't be able to, for example:
 [Test]
 public void ExpectationsCarryType
 {
-  Expect(1).To.Equal("a");  // does not compile!
+  Expect(1)
+    .To.Equal("a");  // does not compile!
 }
 ```
 However, expectations around numeric values perform upcasts in much the same way that you'd expect 
@@ -70,9 +81,12 @@ public void ShouldUpcastAsRequired()
   long d = 4;
 
   // Assert
-  Expect(b).To.Be.Greater.Than(a);
-  Expect(c).To.Be.Greater.Than(b);
-  Expect(d).To.Be.Greater.Than(a);
+  Expect(b)
+    .To.Be.Greater.Than(a);
+  Expect(c)
+    .To.Be.Greater.Than(b);
+  Expect(d)
+    .To.Be.Greater.Than(a);
 }
 ```
 All good and well, but often we need to check that a more complex object has a bunch of expected 
@@ -92,9 +106,12 @@ public void TestingPropertiesOneByOne()
   };
 
   // Assert
-  Expect(person.Id).To.Equal(1);
-  Expect(person.Name).To.Equal("Jane");
-  Expect(person.Alive).To.Be.True();
+  Expect(person.Id)
+    .To.Equal(1);
+  Expect(person.Name)
+    .To.Equal("Jane");
+  Expect(person.Alive)
+    .To.Be.True();
 }
 ```
 But that kind of test, whilst perfectly accurate, comes at a cognitive overhead for the reader. 
@@ -111,10 +128,14 @@ public void TestingPropertiesOneByOne()
   var person = sut.FindById(1);
 
   // Assert
-  Expect(person).Not.To.Be.Null();
-  Expect(person.Id).To.Equal(1);
-  Expect(person.Name).To.Equal("Jane");
-  Expect(person.Alive).To.Be.True();
+  Expect(person)
+    .Not.To.Be.Null();
+  Expect(person.Id)
+    .To.Equal(1);
+  Expect(person.Name)
+    .To.Equal("Jane");
+  Expect(person.Alive)
+    .To.Be.True();
 }
 ```
 
@@ -131,11 +152,13 @@ public void DeepEqualityTesting()
   var person = sut.FindById(1);
 
   // Assert
-  Expect(person).To.Deep.Equal(new {
-    Id = 1,
-    Name = "Jane",
-    Alive = 1
-  });
+  Expect(person)
+    .To.Deep.Equal(
+      new {
+        Id = 1,
+        Name = "Jane",
+        Alive = 1
+      });
  }
 ```
 This exposes our test for what it's really doing: when searching for the person with the Id of 
@@ -168,10 +191,12 @@ public void IntersectionEqualityTesting()
   var person = sut.FindById(1);
 
   // Assert
-  Expect(person).To.Intersection.Equal(new {
-    Id = 1,
-    Name = "Jane"
-  });
+  Expect(person)
+    .To.Intersection.Equal(
+      new {
+        Id = 1,
+        Name = "Jane"
+      });
 }
 ```
 We can also test the type of a returned object:
@@ -186,9 +211,12 @@ public void TypeTesting()
   var person = sut.FindById(1);
 
   // Assert
-  Expect(person).To.Be.An.Instance.Of<Person>();
-  Expect(person).To.Be.An.Instance.Of<IPerson>();
-  Expect(person).To.Be.An.Instance.Of<BaseEntity>();
+  Expect(person)
+    .To.Be.An.Instance.Of<Person>();
+  Expect(person)
+    .To.Be.An.Instance.Of<IPerson>();
+  Expect(person)
+    .To.Be.An.Instance.Of<BaseEntity>();
 }
 ```
 We can test for the exact type (`Person`), implemented interfaces (`IPerson`) and base types (`BaseEntity`).
@@ -201,10 +229,13 @@ public class TestingExceptions
   [Test]
   public void AssertingAgainstThrownExceptions()
   {
-    Expect(() => {}).Not.To.Throw();
-    Expect(() => Chucky()).To.Throw();
+    Expect(() => {})
+      .Not.To.Throw();
+    Expect(() => Chucky())
+      .To.Throw();
     // can drop the lambda though, for brevity:
-    Expect(Chucky).To.Throw();
+    Expect(Chucky)
+      .To.Throw();
     // let's get more specific:
     Expect(Chucky)
       .To.Throw<ArgumentException>();
