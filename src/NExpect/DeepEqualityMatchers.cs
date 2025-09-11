@@ -145,6 +145,24 @@ public static class DeepEqualityMatchers
     /// </summary>
     /// <param name="continuation"></param>
     /// <param name="expected"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static IMore<T> Equal<T>(
+        this IDeep<T> continuation,
+        object expected
+    )
+    {
+        return continuation.Equal(expected, EmptyStringArray);
+    }
+
+    private static readonly string[] EmptyStringArray = [];
+
+    /// <summary>
+    /// Performs deep equality checking whilst excluding the
+    /// named properties
+    /// </summary>
+    /// <param name="continuation"></param>
+    /// <param name="expected"></param>
     /// <param name="exclude"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
