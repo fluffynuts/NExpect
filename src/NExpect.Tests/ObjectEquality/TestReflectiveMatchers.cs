@@ -209,7 +209,7 @@ public class TestReflectiveMatchers
                     .To.Have.Method(nameof(Data.CommentedMethod))
                     .With.Attribute<CommentAttribute>(o => o.Comment == "moo-cakes");
             }, Throws.Nothing);
-            
+
             Assert.That(() =>
             {
                 Expect(sut)
@@ -218,7 +218,7 @@ public class TestReflectiveMatchers
             }, Throws.Nothing);
             // Assert
         }
-        
+
         [Test]
         public void ShouldBeAbleToAssertAgainstPropertyAttributes()
         {
@@ -486,7 +486,8 @@ public class TestReflectiveMatchers
                     Expect(cow)
                         .To.Have.Method(nameof(cow.Add))
                         .With.Parameter("a")
-                        .Of.Type(typeof(int));
+                        .Of.Type(typeof(int))
+                        .With.Attribute<FrobNozzleAttribute>();
                     Expect(cow)
                         .To.Have.Method(nameof(cow.Add))
                         .With.Parameter("b")
@@ -919,6 +920,10 @@ public class TestReflectiveMatchers
         }
     }
 
+    public class FrobNozzleAttribute: Attribute
+        {
+            }
+
     public class Cow
     {
         [Comment("it's what cows do")]
@@ -939,7 +944,7 @@ public class TestReflectiveMatchers
             Console.WriteLine(msg);
         }
 
-        public int Add(int a, int b)
+        public int Add([FrobNozzle]int a, int b)
         {
             return a + b;
         }
