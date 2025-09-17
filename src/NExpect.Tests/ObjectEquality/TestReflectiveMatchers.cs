@@ -27,7 +27,10 @@ public class TestReflectiveMatchers
             {
             }
 
-            public int Add(int a, int b)
+            public int Add(
+                int a,
+                int b
+            )
             {
                 return a + b;
             }
@@ -203,19 +206,25 @@ public class TestReflectiveMatchers
             var type = typeof(Data);
             var sut = GetRandom<Data>();
             // Act
-            Assert.That(() =>
-            {
-                Expect(type)
-                    .To.Have.Method(nameof(Data.CommentedMethod))
-                    .With.Attribute<CommentAttribute>(o => o.Comment == "moo-cakes");
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(type)
+                        .To.Have.Method(nameof(Data.CommentedMethod))
+                        .With.Attribute<CommentAttribute>(o => o.Comment == "moo-cakes");
+                },
+                Throws.Nothing
+            );
 
-            Assert.That(() =>
-            {
-                Expect(sut)
-                    .To.Have.Method(nameof(Data.CommentedMethod))
-                    .With.Attribute<CommentAttribute>(o => o.Comment == "moo-cakes");
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(sut)
+                        .To.Have.Method(nameof(Data.CommentedMethod))
+                        .With.Attribute<CommentAttribute>(o => o.Comment == "moo-cakes");
+                },
+                Throws.Nothing
+            );
             // Assert
         }
 
@@ -238,11 +247,11 @@ public class TestReflectiveMatchers
                 () =>
                 {
                     Expect(data)
-                            .To.Have.Property(nameof(data.IsCommented))
-                            .With.Type<bool>()
-                            .And
-                            .With
-                            .Attribute<CommentAttribute>(o => o.Comment == "this is commented!");
+                        .To.Have.Property(nameof(data.IsCommented))
+                        .With.Type<bool>()
+                        .And
+                        .With
+                        .Attribute<CommentAttribute>(o => o.Comment == "this is commented!");
                 },
                 Throws.Nothing
             );
@@ -502,6 +511,16 @@ public class TestReflectiveMatchers
                 },
                 Throws.Nothing
             );
+            Assert.That(
+                () =>
+                {
+                    Expect(cow)
+                        .To.Have.Method(nameof(cow.Add))
+                        .With.Parameter("foobar")
+                        .Of.Type<string>();
+                },
+                Throws.Exception.With.Message.Contains("foobar")
+            );
             // Assert
         }
 
@@ -566,7 +585,7 @@ public class TestReflectiveMatchers
                         .With.Message.Contains(
                             "parameter minimum on Cow.Random to be required"
                         )
-                    );
+                );
                 // Assert
             }
 
@@ -597,7 +616,7 @@ public class TestReflectiveMatchers
                         .With.Message.Contains(
                             "parameter minimum on Cow.Random to be required"
                         )
-                    );
+                );
                 // Assert
             }
 
@@ -920,9 +939,9 @@ public class TestReflectiveMatchers
         }
     }
 
-    public class FrobNozzleAttribute: Attribute
-        {
-            }
+    public class FrobNozzleAttribute : Attribute
+    {
+    }
 
     public class Cow
     {
@@ -939,18 +958,25 @@ public class TestReflectiveMatchers
         {
         }
 
-        public void NotMoo2(string msg)
+        public void NotMoo2(
+            string msg
+        )
         {
             Console.WriteLine(msg);
         }
 
-        public int Add([FrobNozzle]int a, int b)
+        public int Add(
+            [FrobNozzle] int a,
+            int b
+        )
         {
             return a + b;
         }
 
         [Comment("echos")]
-        public string Echo([NotNull] string toEcho)
+        public string Echo(
+            [NotNull] string toEcho
+        )
         {
             return $"echo: {toEcho}";
         }
@@ -965,7 +991,9 @@ public class TestReflectiveMatchers
         {
         }
 
-        public int Random(int minimum = 0)
+        public int Random(
+            int minimum = 0
+        )
         {
             return GetRandomInt(minimum, minimum + 10);
         }

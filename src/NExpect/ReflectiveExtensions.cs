@@ -1157,8 +1157,8 @@ public static class ReflectiveExtensions
                         passed,
                         FinalMessageFor(
                             () => string.IsNullOrWhiteSpace(parameterName)
-                                ? $"Expected {passed.AsNot()}to find parameter '{parameterName}' on method {actual.Name}"
-                                : $"Expected {passed.AsNot()}to find parameters on method {actual.Name}",
+                                ? $"Expected {passed.AsNot()}to find parameters on method {actual.Name}"
+                                : $"Expected {passed.AsNot()}to find parameter '{parameterName}' on method {actual.Name}",
                             customMessageGenerator
                         )
                     );
