@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using NExpect.Exceptions;
 using PeanutButter.TestUtils.AspNetCore.Builders;
 
 namespace NExpect.Matchers.AspNet.Tests;
@@ -23,6 +24,38 @@ public class TestHttpRequestMatching
             },
             Throws.Nothing
         );
+        // Assert
+    }
+
+    [Test]
+    public void ShouldBeAbleToVerifyCookiesOnTheRequest()
+    {
+        // Arrange
+        var key = GetRandomString();
+        var value = GetRandomString();
+        var req = HttpRequestBuilder.Create()
+            .WithCookie(key, value)
+            .Build();
+        var otherKey = GetAnother(key);
+        var otherValue = GetAnother(value);
+        // Act
+        Expect(() =>
+            Expect(req)
+                .To.Have.Cookie(key)
+                .With.Value(value)
+        ).Not.To.Throw();
+
+        Expect(() =>
+            Expect(req)
+                .To.Have.Cookie(key)
+                .With.Value(otherValue)
+        ).To.Throw<UnmetExpectationException>();
+
+        Expect(() =>
+            Expect(req)
+                .To.Have.Cookie(otherKey)
+                .With.Value(value)
+        ).To.Throw<UnmetExpectationException>();
         // Assert
     }
 
@@ -143,6 +176,7 @@ public class TestHttpRequestMatching
                 // Assert
             }
         }
+
         [TestFixture]
         public class HttpResponseHeadersMatchers
         {
