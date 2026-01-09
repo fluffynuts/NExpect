@@ -88,9 +88,7 @@
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\DictionaryExtensions.cs" Link="Imported\DictionaryExtensions.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\EnumerableWrapper.cs" Link="Imported\EnumerableWrapper.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\FlagExtensions.cs" Link="Imported\FlagExtensions.cs"/>
-    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ListExtensions.cs">
-      <Link>Imported\ListExtensions.cs</Link>
-    </Compile>
+    <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ListExtensions.cs" Link="Imported\ListExtensions.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ObjectExtensions.cs" Link="Imported\ObjectExtensions.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\ExtensionsForIEnumerables.cs" Link="Imported\ExtensionsForIEnumerables.cs"/>
     <Compile Include="..\PeanutButter\source\Utils\PeanutButter.Utils\MetadataExtensions.cs" Link="Imported\MetadataExtensions.cs"/>
