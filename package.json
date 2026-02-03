@@ -17,7 +17,8 @@
         "test-push": "zarro @",
         "test-zarro": "zarro @",
         "clean": "zarro @",
-        "quick-test-dotnet": "zarro @"
+        "quick-test-dotnet": "zarro @",
+        "zarro": "zarro"
     },
     "devDependencies": {
         "chalk": "^3.0.0",
