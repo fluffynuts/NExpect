@@ -158,9 +158,7 @@ public static class ReflectiveExtensions
                     () =>
                     {
                         var single = matchesName.Length == 1;
-                        var moreInfo = matchesName.Any()
-                            ? $" (there {(single ? "was" : "were")} {matchesName.Length} match{(single ? "" : "es")} by name '{methodName}')"
-                            : "";
+                        var moreInfo =  $" (there {(single ? "was" : "were")} {matchesName.Length} match{(single ? "" : "es")} by name '{methodName}')";
                         if (matchesName.Any() && allDiscriminatorMatches.Length > 1)
                         {
                             moreInfo = moreInfo.RegexReplace(
@@ -171,7 +169,7 @@ public static class ReflectiveExtensions
 
                         return $@"Expected {
                             type.PrettyName()
-                        } to have a single matching method for name '{
+                        } to have a single matching PUBLIC method for name '{
                             methodName
                         }' and provided discriminator{
                             moreInfo

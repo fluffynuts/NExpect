@@ -17,8 +17,7 @@ public class TestReflectiveMatchers
         {
             public int id { get; set; }
 
-            [Comment("this is commented!")]
-            public bool IsCommented { get; set; }
+            [Comment("this is commented!")] public bool IsCommented { get; set; }
 
             public bool IsNotCommented { get; set; }
 
@@ -40,10 +39,7 @@ public class TestReflectiveMatchers
         public void ShouldHandleMatchingNameAndValue()
         {
             // Arrange
-            var data = new Data
-            {
-                id = 1
-            };
+            var data = new Data { id = 1 };
             // Act
             Assert.That(
                 () =>
@@ -61,10 +57,7 @@ public class TestReflectiveMatchers
         public void ShouldHandlePropertyNameMismatch()
         {
             // Arrange
-            var badData = new
-            {
-                foo = "bar"
-            };
+            var badData = new { foo = "bar" };
             // Act
             Assert.That(
                 () =>
@@ -94,10 +87,7 @@ public class TestReflectiveMatchers
         public void ShouldHandleValueMismatchOnFoundProperty()
         {
             // Arrange
-            var data = new
-            {
-                id = 1
-            };
+            var data = new { id = 1 };
             // Act
             Assert.That(
                 () =>
@@ -127,10 +117,7 @@ public class TestReflectiveMatchers
         public void ShouldFacilitateTypeTesting()
         {
             // Arrange
-            var data = new Data()
-            {
-                id = 1
-            };
+            var data = new Data() { id = 1 };
             // Act
             Assert.That(
                 () =>
@@ -226,6 +213,49 @@ public class TestReflectiveMatchers
                 Throws.Nothing
             );
             // Assert
+        }
+
+        [TestFixture]
+        public class MethodAttributes
+        {
+            [Test]
+            public void ShouldBeAbleToAssertExistingAttribute()
+            {
+                // Arrange
+                var type = typeof(Foo);
+                // Act
+                Assert.That(
+                    () =>
+                    {
+                        Expect(type)
+                            .To.Have.Method("Bar")
+                            .With.Parameter("str")
+                            .With.Attribute<NotNullAttribute>()
+                            .Of.Type(typeof(string));
+                    },
+                    Throws.Nothing
+                );
+                Assert.That(
+                    () =>
+                    {
+                        Expect(type)
+                            .To.Have.Method("Bar")
+                            .With.Parameter("str")
+                            .With.Attribute<CancelAfterAttribute>()
+                            .Of.Type(typeof(string));
+                    },
+                    Throws.Exception.InstanceOf<UnmetExpectationException>()
+                );
+
+                // Assert
+            }
+
+            class Foo
+            {
+                public void Bar([NotNull] string str)
+                {
+                }
+            }
         }
 
         [Test]
