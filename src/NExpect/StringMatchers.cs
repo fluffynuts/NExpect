@@ -14,7 +14,6 @@ using static NExpect.Assertions;
 // ReSharper disable UnusedMethodReturnValue.Global
 // ReSharper disable PossibleMultipleEnumeration
 // ReSharper disable MemberCanBePrivate.Global
-
 namespace NExpect;
 
 /// <summary>
@@ -103,7 +102,6 @@ public static class StringMatchers
             () => customMessage
         );
     }
-
 
     /// <summary>
     /// Tests if the value under test contains a given string. May be continued
@@ -576,7 +574,6 @@ public static class StringMatchers
         );
     }
 
-
     /// <summary>
     /// Provides the .Then(...) extension on already extended string
     /// continuations.
@@ -838,7 +835,6 @@ public static class StringMatchers
         );
     }
 
-
     /// <summary>
     /// Tests if a string ends with an expected value
     /// </summary>
@@ -878,7 +874,6 @@ public static class StringMatchers
             () => customMessage
         );
     }
-
 
     /// <summary>
     /// Tests if a string ends with an expected value
@@ -1219,7 +1214,6 @@ public static class StringMatchers
         );
     }
 
-
     /// <summary>
     /// Tests whether the Actual string is matched by the given Regex
     /// </summary>
@@ -1240,7 +1234,6 @@ public static class StringMatchers
         );
         return matcher.More();
     }
-
 
     /// <summary>
     /// Tests whether the Actual string is matched by the given Regex
@@ -1450,10 +1443,7 @@ public static class StringMatchers
     )
     {
         return stringIn.Order(
-            new[]
-            {
-                firstFragment
-            }.Concat(fragments),
+            new[] { firstFragment }.Concat(fragments),
             null
         );
     }
@@ -1494,7 +1484,6 @@ public static class StringMatchers
             );
         return canAddMatcher.More();
     }
-
 
     private const string SEARCH_OFFSET = "SearchOffset";
 
@@ -1626,7 +1615,6 @@ public static class StringMatchers
         );
     }
 
-
     /// <summary>
     /// Tests the string's length against the expected value
     /// </summary>
@@ -1685,7 +1673,7 @@ public static class StringMatchers
             actual =>
             {
                 var passed = actual != null &&
-                    actual.All(c => c.IsNumeric() || c.IsAlpha());
+                             actual.All(c => c.IsNumeric() || c.IsAlpha());
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
@@ -1739,7 +1727,7 @@ public static class StringMatchers
             actual =>
             {
                 var passed = actual != null &&
-                    actual.All(c => c.IsNumeric());
+                             actual.All(c => c.IsNumeric());
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
@@ -1793,7 +1781,7 @@ public static class StringMatchers
             actual =>
             {
                 var passed = actual != null &&
-                    actual.All(c => c.IsAlpha());
+                             actual.All(c => c.IsAlpha());
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
@@ -1860,5 +1848,364 @@ public static class StringMatchers
             StringComparison.OrdinalIgnoreCase,
             customMessageGenerator
         );
+    }
+
+    /// <summary>
+    /// Asserts that the actual string contains all of the
+    /// provided sub-strings
+    /// </summary>
+    /// <param name="all"></param>
+    /// <param name="others"></param>
+    /// <returns></returns>
+    public static IStringMore Of(
+        this IStringAll all,
+        params string[] others
+    )
+    {
+        return all.Of(
+            others,
+            StringComparison.Ordinal
+        );
+    }
+
+    /// <summary>
+    /// Asserts that the actual string contains all of the
+    /// provided sub-strings
+    /// </summary>
+    /// <param name="all"></param>
+    /// <param name="others"></param>
+    /// <returns></returns>
+    public static IStringMore Of(
+        this IStringAll all,
+        IEnumerable<string> others
+    )
+    {
+        return all.Of(
+            others,
+            StringComparison.Ordinal
+        );
+    }
+
+    /// <summary>
+    /// Asserts that the actual string contains all of the
+    /// provided sub-strings
+    /// </summary>
+    /// <param name="all"></param>
+    /// <param name="others"></param>
+    /// <param name="stringComparison"></param>
+    /// <returns></returns>
+    public static IStringMore Of(
+        this IStringAll all,
+        IEnumerable<string> others,
+        StringComparison stringComparison
+    )
+    {
+        return all.Of(
+            others,
+            stringComparison,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Asserts that the actual string contains all of the
+    /// provided sub-strings
+    /// </summary>
+    /// <param name="all"></param>
+    /// <param name="others"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IStringMore Of(
+        this IStringAll all,
+        IEnumerable<string> others,
+        string customMessage
+    )
+    {
+        return all.Of(
+            others,
+            StringComparison.Ordinal,
+            customMessage
+        );
+    }
+
+    /// <summary>
+    /// Asserts that the actual string contains all of the
+    /// provided sub-strings
+    /// </summary>
+    /// <param name="all"></param>
+    /// <param name="others"></param>
+    /// <param name="stringComparison"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IStringMore Of(
+        this IStringAll all,
+        IEnumerable<string> others,
+        StringComparison stringComparison,
+        string customMessage
+    )
+    {
+        return all.Of(
+            others,
+            stringComparison,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Asserts that the actual string contains all of the
+    /// provided sub-strings
+    /// </summary>
+    /// <param name="all"></param>
+    /// <param name="others"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IStringMore Of(
+        this IStringAll all,
+        IEnumerable<string> others,
+        Func<string> customMessageGenerator
+    )
+    {
+        return all.Of(
+            others,
+            StringComparison.Ordinal,
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Asserts that the actual string contains all of the
+    /// provided sub-strings
+    /// </summary>
+    /// <param name="all"></param>
+    /// <param name="others"></param>
+    /// <param name="stringComparison"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IStringMore Of(
+        this IStringAll all,
+        IEnumerable<string> others,
+        StringComparison stringComparison,
+        Func<string> customMessageGenerator
+    )
+    {
+        all.AddMatcher(
+            actual =>
+            {
+                var testedAnything = false;
+                var passed = true;
+                var missing = new List<string>();
+                foreach (var substring in others)
+                {
+                    testedAnything = true;
+                    if (actual.IndexOf(substring, stringComparison) < 0)
+                    {
+                        passed = false;
+                        missing.Add(substring);
+                    }
+                }
+
+                if (!testedAnything)
+                {
+                    return new EnforcedMatcherResult(
+                        false,
+                        "Provided substring collection is empty"
+                    );
+                }
+
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected '{
+                            actual
+                        }' {passed.AsNot()}to contain all of:\n{
+                            others.AsTextList()
+                        }\nmissing value{
+                            (missing.Count == 1 ? "" : "s")
+                        }:\n{missing.AsTextList()}",
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
+        return Forget(new StringContainContinuation(all));
+    }
+
+    /// <summary>
+    /// Asserts that the actual string contains none of the
+    /// provided sub-strings
+    /// </summary>
+    /// <param name="none"></param>
+    /// <param name="others"></param>
+    /// <returns></returns>
+    public static IStringMore Of(
+        this IStringNone none,
+        params string[] others
+    )
+    {
+        return none.Of(
+            others,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Asserts that the actual string contains none of the
+    /// provided sub-strings
+    /// </summary>
+    /// <param name="none"></param>
+    /// <param name="others"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IStringMore Of(
+        this IStringNone none,
+        IEnumerable<string> others,
+        string customMessage
+    )
+    {
+        return none.Of(
+            others,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Asserts that the actual string contains none of the
+    /// provided sub-strings
+    /// </summary>
+    /// <param name="none"></param>
+    /// <param name="others"></param>
+    /// <param name="stringComparison"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IStringMore Of(
+        this IStringNone none,
+        IEnumerable<string> others,
+        StringComparison stringComparison,
+        string customMessage
+    )
+    {
+        return none.Of(
+            others,
+            stringComparison,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Asserts that the actual string contains none of the
+    /// provided sub-strings
+    /// </summary>
+    /// <param name="none"></param>
+    /// <param name="others"></param>
+    /// <returns></returns>
+    public static IStringMore Of(
+        this IStringNone none,
+        IEnumerable<string> others
+    )
+    {
+        return none.Of(
+            others,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Asserts that the actual string contains none of the
+    /// provided sub-strings
+    /// </summary>
+    /// <param name="none"></param>
+    /// <param name="others"></param>
+    /// <param name="stringComparison"></param>
+    /// <returns></returns>
+    public static IStringMore Of(
+        this IStringNone none,
+        IEnumerable<string> others,
+        StringComparison stringComparison
+    )
+    {
+        return none.Of(
+            others,
+            stringComparison,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Asserts that the actual string contains none of the
+    /// provided sub-strings
+    /// </summary>
+    /// <param name="none"></param>
+    /// <param name="others"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IStringMore Of(
+        this IStringNone none,
+        IEnumerable<string> others,
+        Func<string> customMessageGenerator
+    )
+    {
+        return none.Of(
+            others,
+            StringComparison.Ordinal,
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Asserts that the actual string contains none of the
+    /// provided sub-strings
+    /// </summary>
+    /// <param name="none"></param>
+    /// <param name="others"></param>
+    /// <param name="stringComparison"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IStringMore Of(
+        this IStringNone none,
+        IEnumerable<string> others,
+        StringComparison stringComparison,
+        Func<string> customMessageGenerator
+    )
+    {
+        none.AddMatcher(
+            actual =>
+            {
+                var testedAnything = false;
+                var passed = true;
+                var errors = new List<string>();
+                foreach (var substring in others)
+                {
+                    testedAnything = true;
+                    if (actual.IndexOf(substring, stringComparison) >= 0)
+                    {
+                        passed = false;
+                        errors.Add(substring);
+                    }
+                }
+
+                if (!testedAnything)
+                {
+                    return new EnforcedMatcherResult(
+                        false,
+                        "Provided substring collection is empty"
+                    );
+                }
+
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => $"Expected '{
+                            actual
+                        }' {passed.AsNot()}to contain none of:\n{
+                            others.AsTextList()
+                        }\nfound value{
+                            (errors.Count == 1 ? "" : "s")
+                        }:\n{errors.AsTextList()}",
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
+        return Forget(new StringContainContinuation(none));
     }
 }
