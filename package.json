@@ -5,7 +5,8 @@
         "update-pb-submodule": "cd src/PeanutButter && git pull --rebase",
         "upgrade-pb-packages": "cross-env UPGRADE_PACKAGES=/^peanutbutter\\..*/ zarro upgrade-packages",
         "experiment": "zarro experiment-task",
-        "test": "zarro test-dotnet",
+        "test": "TEST_EXCLUDE=NExpect.Matchers.AspNetMvc.Tests,src/PeanutButter/**/* zarro test-dotnet",
+        "test-all": "zarro test-dotnet",
         "pack": "zarro @",
         "cover": "zarro build-cover-report",
         "build": "zarro @",
@@ -17,7 +18,7 @@
         "test-push": "zarro @",
         "test-zarro": "zarro @",
         "clean": "zarro @",
-        "quick-test-dotnet": "zarro @",
+        "quick-test-dotnet": "TEST_EXCLUDE=NExpect.Matchers.AspNetMvc.Tests,src/PeanutButter/**/* zarro @",
         "zarro": "zarro"
     },
     "devDependencies": {
