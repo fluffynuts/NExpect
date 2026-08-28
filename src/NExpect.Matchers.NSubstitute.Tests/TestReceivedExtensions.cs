@@ -1,4 +1,4 @@
-using System;
+using NExpect.Exceptions;
 using NSubstitute;
 using NSubstitute.Exceptions;
 using NUnit.Framework;
@@ -11,11 +11,6 @@ namespace NExpect.Matchers.NSubstitute.Tests;
 [TestFixture]
 public class TestReceivedExtensions
 {
-    public interface IFoo
-    {
-        void Bar();
-    }
-
     [TestFixture]
     public class WhenExpectingToReceive
     {
@@ -130,7 +125,8 @@ public class TestReceivedExtensions
             Assert.That(
                 () =>
                     Expect(sub).Not.To.Have.Received(2).Bar(),
-                Throws.Exception.InstanceOf<NotSupportedException>()
+                Throws.Exception.InstanceOf<UnmetExpectationException>()
+                    .With.Message.Contains("Negation of numbered Receive(N) expectations is not supported")
             );
         }
     }
@@ -149,6 +145,83 @@ public class TestReceivedExtensions
         Assertions.VerifyNoIncompleteAssertions();
     }
 
+    [Test]
+    public void ShouldBeAbleToAssertOnlyReceivingOneMethodCall()
+    {
+        // Arrange
+        var zeroCalls = Substitute.For<IFoo>();
+        var oneCall = Substitute.For<IFoo>();
+        var twoCalls = Substitute.For<IFoo>();
+
+        // Act
+        oneCall.Bar();
+        twoCalls.Bar();
+        twoCalls.Quux();
+
+        // Assert
+        Expect(
+            () =>
+            {
+                Expect(zeroCalls)
+                    .To.Have.Received(1)
+                    .Bar();
+            }
+        ).To.Throw<ReceivedCallsException>();
+
+        Expect(
+            () =>
+            {
+                Expect(oneCall)
+                    .To.Have.Only.Received(1)
+                    .Bar();
+            }
+        ).Not.To.Throw();
+
+        Expect(
+            () =>
+            {
+                Expect(twoCalls)
+                    .To.Have.Only.Received(1)
+                    .Bar();
+            }
+        ).To.Throw<UnmetExpectationException>();
+    }
+
+    [TestFixture]
+    public class WhenGivenNotASubstitute
+    {
+        [Test]
+        public void ShouldThrow()
+        {
+            // Arrange
+            var foo = new Foo();
+
+            // Act
+            foo.Bar();
+
+            // Assert
+            Expect(
+                () =>
+                {
+                    Expect(foo)
+                        .To.Have.Received(1)
+                        .Bar();
+                }
+            ).To.Throw<NotASubstituteException>();
+        }
+
+        public class Foo : IFoo
+        {
+            public void Bar()
+            {
+            }
+
+            public void Quux()
+            {
+            }
+        }
+    }
+
     [OneTimeSetUp]
     public void OneTimeSetup()
     {
@@ -159,5 +232,11 @@ public class TestReceivedExtensions
     public void OneTimeTearDown()
     {
         Assertions.DisableTracking();
+    }
+
+    public interface IFoo
+    {
+        void Bar();
+        void Quux();
     }
 }

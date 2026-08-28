@@ -6,8 +6,8 @@ namespace NExpect.Implementations.Fluency;
 
 internal class Have<T>
     : ExpectationContextWithLazyActual<T>,
-      IHasActual<T>,
-      IHave<T>
+        IHasActual<T>,
+        IHave<T>
 {
     public IA<T> A => Next<A<T>>();
     public IAn<T> An => Next<An<T>>();
@@ -15,13 +15,15 @@ internal class Have<T>
     public IMax<T> Max => Next<Max<T>>();
     public IDefault<T> Default => Next<Default<T>>();
     public IValid<T> Valid => Next<Valid<T>>();
-
     public IOptional<T> Optional => ContinuationFactory.Create<T, Optional<T>>(
         ActualFetcher,
         this
     );
-
     public IRequired<T> Required => ContinuationFactory.Create<T, Required<T>>(
+        ActualFetcher,
+        this
+    );
+    public IOnly<T> Only => ContinuationFactory.Create<T, Only<T>>(
         ActualFetcher,
         this
     );

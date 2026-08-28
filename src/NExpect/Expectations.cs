@@ -186,7 +186,7 @@ public static partial class Expectations
                     var waitCompleted = taskResult.Wait(maxWait);
                     if (!waitCompleted)
                     {
-                        throw new UnmetExpectationException(
+                        Assertions.Throw(
                             new[]
                             {
                                 $"Waited {maxWait}ms for task to complete.",

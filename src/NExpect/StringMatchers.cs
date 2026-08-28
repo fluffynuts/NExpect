@@ -1418,7 +1418,7 @@ public static class StringMatchers
         }
         catch (Exception e)
         {
-            throw new UnmetExpectationException(
+            Assertions.Throw(
                 new[]
                 {
                     $"Unable to compile {regex.Stringify()} as a Regex",
@@ -1426,6 +1426,7 @@ public static class StringMatchers
                     e.Message
                 }.JoinWith("\n")
             );
+            return null;
         }
     }
 

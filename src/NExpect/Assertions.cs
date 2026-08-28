@@ -154,15 +154,8 @@ public static class Assertions
         ThreadAssertionGenerators = new();
 
     internal static void Throw(
-        string message
-    )
-    {
-        Throw(message, null);
-    }
-
-    internal static void Throw(
         string message,
-        Exception innerException
+        Exception innerException = null
     )
     {
         if (ThreadAssertionGenerators.TryGetValue(Thread.CurrentThread, out var generator))

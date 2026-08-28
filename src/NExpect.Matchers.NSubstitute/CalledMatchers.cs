@@ -75,9 +75,10 @@ public static class CalledMatchers
             catch (NotASubstituteException)
             {
                 // can't have a matcher result as negation gets in the way
-                throw new UnmetExpectationException(
+                Assertions.Throw(
                     $"{actual} is not a substitute"
                 );
+                return null;
             }
         });
     }

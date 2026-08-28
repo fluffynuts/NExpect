@@ -338,15 +338,14 @@ public class ArbitraryBehaviorTests
             .FirstOrDefault(
                 mi => mi.Name == "Throw" &&
                     mi.GetParameters()
-                        .Length ==
-                    1
+                        .Length == 2
             );
         Expect(method)
             .Not.To.Be.Null();
         UnmetExpectationException expected = null;
         try
         {
-            method.Invoke(null, new object[] { GetRandomString(10) });
+            method.Invoke(null, new object[] { GetRandomString(10), null });
         }
         catch (TargetInvocationException tex)
         {

@@ -46,4 +46,9 @@ public interface IHave<T>: ICanAddMatcher<T>
     /// .Required grammar continuation extension point
     /// </summary>
     IRequired<T> Required { get; }
+    
+    /// <summary>
+    /// .Only grammar continuation extension point
+    /// </summary>
+    IOnly<T> Only { get; }
 }
