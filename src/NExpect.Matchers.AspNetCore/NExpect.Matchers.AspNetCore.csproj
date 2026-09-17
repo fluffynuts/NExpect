@@ -15,7 +15,7 @@
     <DefineConstants>$(DefineConstants);NETSTANDARD;BUILD_PEANUTBUTTER_INTERNAL</DefineConstants>
   </PropertyGroup>
   <PropertyGroup>
-    <PackageVersion>2.0.129</PackageVersion>
+    <PackageVersion>2.0.130</PackageVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <PackageProjectUrl>https://github.com/fluffynuts/NExpect</PackageProjectUrl>
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
@@ -406,14 +406,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.401" PrivateAssets="All" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.12" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.401" PrivateAssets="All"/>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.12"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NExpect\NExpect.csproj"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.13"/>
   </ItemGroup>
   <ItemGroup>
     <None Include="icon.png" Pack="true" PackagePath=""/>
