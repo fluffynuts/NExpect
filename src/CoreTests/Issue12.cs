@@ -17,10 +17,11 @@ public class Issue12
         // Pre-Assert
 
         // Act
-        Assert.That(() =>
+        Expect(() =>
         {
-            Expect(new Object().GetType()).To.Equal(typeof(Object));
-        }, Throws.Nothing);
+            Expect(new Object().GetType())
+                .To.Equal(typeof(Object));
+        }).Not.To.Throw();
 
         // Assert
     }

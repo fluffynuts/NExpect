@@ -4,10 +4,10 @@ using NUnit.Framework;
 using NExpect.Exceptions;
 using NExpect.Implementations;
 using PeanutButter.Utils;
+using PeanutButter.Utils.Dictionaries;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable ExpressionIsAlwaysNull
-
 namespace NExpect.Tests.Collections;
 
 [TestFixture]
@@ -43,12 +43,15 @@ public class DictionaryTesting
                 [true] = 123
             };
             // Act
-            Assert.That(() =>
-            {
-                Expect(dict)
-                    .To.Contain.Key(true)
-                    .With.Value(123);
-            }, Throws.Nothing);
+            Assert.That(
+                () =>
+                {
+                    Expect(dict)
+                        .To.Contain.Key(true)
+                        .With.Value(123);
+                },
+                Throws.Nothing
+            );
             // Assert
         }
     }
@@ -168,6 +171,82 @@ public class DictionaryTesting
                         Throws.Nothing
                     );
 
+                    // Assert
+                }
+
+                [Test]
+                public void ShouldFindKeyWithCaseMismatchWhenDictionaryAllowsIt()
+                {
+                    // Arrange
+                    var key = "the_key";
+                    var value = GetRandomString();
+                    var dict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                    {
+                        [key] = value
+                    };
+                    Expect(dict["THE_KEY"])
+                        .To.Equal(value);
+
+
+                    // Act
+                    Expect(
+                        () =>
+                        {
+                            Expect(dict)
+                                .To.Contain.Key("THE_KEY");
+                        }
+                    ).Not.To.Throw();
+                    // Assert
+                }
+
+                [Test]
+                public void ShouldFindKeyWithCaseMismatchWhenDictionaryAllowsIt2()
+                {
+                    // Arrange
+                    var key = "the_key";
+                    var value = GetRandomString();
+                    var dict = new MergeDictionary<string, string>(
+                        new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+                        {
+                            [key] = value
+                        }
+                    ) as IDictionary<string, string>;
+                    Expect(dict["THE_KEY"])
+                        .To.Equal(value);
+
+
+                    // Act
+                    Expect(
+                        () =>
+                        {
+                            Expect(dict)
+                                .To.Contain.Key("THE_KEY");
+                        }
+                    ).Not.To.Throw();
+                    // Assert
+                }
+
+                [Test]
+                public void ShouldNotFindKeyWIthCaseMismatchWhenDictionaryDoesntAllowIt()
+                {
+                    // Arrange
+                    var key = "the_key";
+                    var value = GetRandomString();
+                    var dict = new MergeDictionary<string, string>(
+                        new Dictionary<string, string>()
+                        {
+                            [key] = value
+                        }
+                    ) as IDictionary<string, string>;
+
+                    // Act
+                    Expect(
+                        () =>
+                        {
+                            Expect(dict)
+                                .To.Contain.Key("THE_KEY");
+                        }
+                    ).To.Throw<UnmetExpectationException>();
                     // Assert
                 }
 
@@ -1292,7 +1371,7 @@ public class DictionaryTesting
                                         .To.Contain.Key(key)
                                         .With.Value.Matched.By(
                                             o => o.Name == value.Name &&
-                                                o.Id == value.Id
+                                                 o.Id == value.Id
                                         );
                                 },
                                 Throws.Nothing

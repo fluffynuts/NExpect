@@ -16,23 +16,21 @@ public class TestXmlMatchers
         var xml = "<root><parent><child></child></parent></root>";
         var doc = XDocument.Parse(xml);
         // Act
-        Assert.That(
+        Expect(
             () =>
             {
                 Expect(doc)
                     .To.Have.Element("//root/parent/child");
-            },
-            Throws.Nothing
-        );
+            }
+        ).Not.To.Throw();
 
-        Assert.That(
+        Expect(
             () =>
             {
                 Expect(doc)
                     .To.Have.Element("//foo/bar");
-            },
-            Throws.Exception.InstanceOf<UnmetExpectationException>()
-        );
+            }
+        ).To.Throw<UnmetExpectationException>();
         // Assert
     }
 
@@ -43,24 +41,22 @@ public class TestXmlMatchers
         var xml = @"<root><parent><child attrib=""value""></child></parent></root>";
         var doc = XDocument.Parse(xml);
         // Act
-        Assert.That(
+        Expect(
             () =>
             {
                 Expect(doc)
                     .To.Have.Element("//root/parent/child")
                     .With.Attribute("attrib");
-            },
-            Throws.Nothing
-        );
-        Assert.That(
+            }
+        ).Not.To.Throw();
+        Expect(
             () =>
             {
                 Expect(doc)
                     .To.Have.Element("//root/parent/child")
                     .With.Attribute("foo");
-            },
-            Throws.Exception.InstanceOf<UnmetExpectationException>()
-        );
+            }
+        ).To.Throw<UnmetExpectationException>();
         // Assert
     }
 
@@ -71,26 +67,24 @@ public class TestXmlMatchers
         var xml = @"<root><parent><child attrib=""value""></child></parent></root>";
         var doc = XDocument.Parse(xml);
         // Act
-        Assert.That(
+        Expect(
             () =>
             {
                 Expect(doc)
                     .To.Have.Element("//root/parent/child")
                     .With.Attribute("attrib")
                     .Having.Value("value");
-            },
-            Throws.Nothing
-        );
-        Assert.That(
+            }
+        ).Not.To.Throw();
+        Expect(
             () =>
             {
                 Expect(doc)
                     .To.Have.Element("//root/parent/child")
                     .With.Attribute("attrib")
                     .Having.Value("moo");
-            },
-            Throws.Exception.InstanceOf<UnmetExpectationException>()
-        );
+            }
+        ).To.Throw<UnmetExpectationException>();
         // Assert
     }
 
@@ -101,24 +95,22 @@ public class TestXmlMatchers
         var xml = @"<root><parent><child attrib=""value"">Some Text</child></parent></root>";
         var doc = XDocument.Parse(xml);
         // Act
-        Assert.That(
+        Expect(
             () =>
             {
                 Expect(doc)
                     .To.Have.Element("//root/parent/child")
                     .With.Text("Some Text");
-            },
-            Throws.Nothing
-        );
-        Assert.That(
+            }
+        ).Not.To.Throw();
+        Expect(
             () =>
             {
                 Expect(doc)
                     .To.Have.Element("//root/parent/child")
                     .With.Text("Some Other Text");
-            },
-            Throws.Exception.InstanceOf<UnmetExpectationException>()
-        );
+            }
+        ).To.Throw<UnmetExpectationException>();
         // Assert
     }
 
@@ -129,24 +121,22 @@ public class TestXmlMatchers
         var xml = @"<root><parent><child attrib=""some text"">Some Text</child></parent></root>";
         var doc = XDocument.Parse(xml);
         // Act
-        Assert.That(
+        Expect(
             () =>
             {
                 Expect(doc)
                     .To.Have.Element("//root/parent/child")
                     .With.Text(new Regex("^Some Text$", RegexOptions.IgnoreCase));
-            },
-            Throws.Nothing
-        );
-        Assert.That(
+            }
+        ).Not.To.Throw();
+        Expect(
             () =>
             {
                 Expect(doc)
                     .To.Have.Element("//root/parent/child")
                     .With.Text("Some Other Text");
-            },
-            Throws.Exception.InstanceOf<UnmetExpectationException>()
-        );
+            }
+        ).To.Throw<UnmetExpectationException>();
         // Assert
     }
 
@@ -157,36 +147,33 @@ public class TestXmlMatchers
         var xml = @"<root><parent><child attrib=""some text"">Some Text</child></parent></root>";
         var doc = XDocument.Parse(xml);
         // Act
-        Assert.That(
+        Expect(
             () =>
             {
                 Expect(doc)
                     .To.Have.Element("//root/parent/child")
                     .With.Attribute("attrib")
                     .Having.Value(new Regex("^Some Text$", RegexOptions.IgnoreCase));
-            },
-            Throws.Nothing
-        );
-        Assert.That(
+            }
+        ).Not.To.Throw();
+        Expect(
             () =>
             {
                 Expect(doc)
                     .To.Have.Element("//root/parent/child")
                     .With.Attribute("attrib")
                     .Having.Value(new Regex("Some", RegexOptions.IgnoreCase));
-            },
-            Throws.Nothing
-        );
-        Assert.That(
+            }
+        ).Not.To.Throw();
+        Expect(
             () =>
             {
                 Expect(doc)
                     .To.Have.Element("//root/parent/child")
                     .With.Attribute("attrib")
                     .Having.Value(new Regex("Some Other Text"));
-            },
-            Throws.Exception.InstanceOf<UnmetExpectationException>()
-        );
+            }
+        ).To.Throw<UnmetExpectationException>();
         // Assert
     }
 
@@ -214,42 +201,36 @@ public class TestXmlMatchers
 
 
         // Act
-        Assert.That(
+        Expect(
             () =>
             {
                 Expect(doc1)
                     .To.Be.Equivalent.To(doc2);
-            },
-            Throws.Nothing
-        );
+            }
+        ).Not.To.Throw();
 
-        Assert.That(
+        Expect(
             () =>
             {
                 Expect(doc1)
                     .To.Be.Equivalent.To(doc3);
-            },
-            Throws.Exception.InstanceOf<UnmetExpectationException>()
-                .With.Message.Contains(
-                    "first difference found at character"
-                )
-        );
+            }
+        ).To.Throw<UnmetExpectationException>();
 
-        Assert.That(() =>
-        {
-            Expect(doc1)
-                .Not.To.Be.Equivalent.To(doc2);
-        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-            .With.Message.Contains("(but they are equivalent)"));
+        Expect(
+            () =>
+            {
+                Expect(doc1)
+                    .Not.To.Be.Equivalent.To(doc2);
+            }).To.Throw<UnmetExpectationException>()
+            .With.Message.Containing("(but they are equivalent)");
 
-        Assert.That(
+        Expect(
             () =>
             {
                 Expect(doc2)
                     .Not.To.Be.Equivalent.To(doc3);
-            },
-            Throws.Nothing
-        );
+            }).Not.To.Throw();
         // Assert
     }
 }

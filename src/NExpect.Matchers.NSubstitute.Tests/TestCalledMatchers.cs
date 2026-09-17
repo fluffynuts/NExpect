@@ -16,11 +16,13 @@ public class TestCalledMatchers
         // Arrange
         var service = Substitute.For<IService>();
         // Act
-        Assert.That(() =>
-        {
-            Expect(service)
-                .Not.To.Have.Been.Called();
-        }, Throws.Nothing);
+        Expect(
+            () =>
+            {
+                Expect(service)
+                    .Not.To.Have.Been.Called();
+            }
+        ).Not.To.Throw();
         // Assert
     }
 
@@ -39,11 +41,13 @@ public class TestCalledMatchers
         }
 
         // Act
-        Assert.That(() =>
-        {
-            Expect(service)
-                .To.Have.Been.Called();
-        }, Throws.Nothing);
+        Expect(
+            () =>
+            {
+                Expect(service)
+                    .To.Have.Been.Called();
+            }
+        ).Not.To.Throw();
         // Assert
     }
 
@@ -54,11 +58,13 @@ public class TestCalledMatchers
         var service = Substitute.For<IService>();
 
         // Act
-        Assert.That(() =>
-        {
-            Expect(service)
-                .To.Have.Been.Called();
-        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+        Expect(
+            () =>
+            {
+                Expect(service)
+                    .To.Have.Been.Called();
+            }
+        ).To.Throw<UnmetExpectationException>();
         // Assert
     }
 
@@ -77,11 +83,13 @@ public class TestCalledMatchers
         }
 
         // Act
-        Assert.That(() =>
-        {
-            Expect(service)
-                .Not.To.Have.Been.Called();
-        }, Throws.Exception.InstanceOf<UnmetExpectationException>());
+        Expect(
+            () =>
+            {
+                Expect(service)
+                    .Not.To.Have.Been.Called();
+            }
+        ).To.Throw<UnmetExpectationException>();
         // Assert
     }
 
@@ -91,12 +99,14 @@ public class TestCalledMatchers
         // Arrange
         var service = new Service();
         // Act
-        Assert.That(() =>
-        {
-            Expect(service)
-                .Not.To.Have.Been.Called();
-        }, Throws.Exception.InstanceOf<UnmetExpectationException>()
-            .With.Message.EndsWith("not a substitute"));
+        Expect(
+                () =>
+                {
+                    Expect(service)
+                        .Not.To.Have.Been.Called();
+                }
+            ).To.Throw<UnmetExpectationException>()
+            .With.Message.Ending.With("not a substitute");
         // Assert
     }
 

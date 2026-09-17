@@ -47,10 +47,9 @@ public class TestReceivedExtensions
             // Arrange
             var sub = Substitute.For<IFoo>();
             // Act
-            Assert.That(
-                () => Expect(sub).To.Have.Received().Bar(),
-                Throws.Exception.InstanceOf<ReceivedCallsException>()
-            );
+            Expect(
+                () => Expect(sub).To.Have.Received().Bar()
+            ).To.Throw<ReceivedCallsException>();
             // Assert
         }
 
@@ -62,10 +61,9 @@ public class TestReceivedExtensions
             var count = GetRandomInt(1, 10);
             // Act
             PyLike.Range(0, count).ForEach(_ => sub.Bar());
-            Assert.That(
-                () => Expect(sub).To.Have.Received(count + GetRandomInt(1, 10)).Bar(),
-                Throws.Exception.InstanceOf<ReceivedCallsException>()
-            );
+            Expect(
+                () => Expect(sub).To.Have.Received(count + GetRandomInt(1, 10)).Bar()
+            ).To.Throw<ReceivedCallsException>();
             // Assert
         }
 
@@ -77,10 +75,9 @@ public class TestReceivedExtensions
             var count = GetRandomInt(1, 10);
             // Act
             PyLike.Range(0, count + GetRandomInt(1, 10)).ForEach(_ => sub.Bar());
-            Assert.That(
-                () => Expect(sub).To.Have.Received(count).Bar(),
-                Throws.Exception.InstanceOf<ReceivedCallsException>()
-            );
+            Expect(
+                () => Expect(sub).To.Have.Received(count).Bar()
+            ).To.Throw<ReceivedCallsException>();
             // Assert
         }
     }
@@ -106,11 +103,9 @@ public class TestReceivedExtensions
             // Act
             sub.Bar();
             // Assert
-            Assert.That(
-                () =>
-                    Expect(sub).Not.To.Have.Received().Bar(),
-                Throws.Exception.InstanceOf<ReceivedCallsException>()
-            );
+            Expect(
+                () => Expect(sub).Not.To.Have.Received().Bar()
+            ).To.Throw<ReceivedCallsException>();
         }
 
         [Test]
@@ -122,12 +117,12 @@ public class TestReceivedExtensions
             sub.Bar();
             sub.Bar();
             // Assert
-            Assert.That(
-                () =>
-                    Expect(sub).Not.To.Have.Received(2).Bar(),
-                Throws.Exception.InstanceOf<UnmetExpectationException>()
-                    .With.Message.Contains("Negation of numbered Receive(N) expectations is not supported")
-            );
+            Expect(
+                    () => Expect(sub).Not.To.Have.Received(2).Bar()
+                ).To.Throw<UnmetExpectationException>()
+                .With.Message.Containing(
+                    "Negation of numbered Receive(N) expectations is not supported"
+                );
         }
     }
 

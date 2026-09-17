@@ -6,9 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="microsoft.net.test.sdk" Version="17.8.0" />
-    <PackageReference Include="nunit" Version="4.0.1" />
-    <PackageReference Include="nunit3testadapter" Version="4.5.0" />
+    <PackageReference Include="microsoft.net.test.sdk" Version="18.10.1" />
+    <PackageReference Include="nunit" Version="4.6.1" />
+    <PackageReference Include="nunit3testadapter" Version="6.3.0" />
     <PackageReference Include="Quackers.TestLogger" Version="1.0.25" />
   </ItemGroup>
 

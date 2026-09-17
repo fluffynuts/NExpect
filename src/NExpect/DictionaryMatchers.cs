@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -13,7 +14,6 @@ using static NExpect.Implementations.MessageHelpers;
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable PossibleMultipleEnumeration
-
 namespace NExpect;
 
 /// <summary>
@@ -67,7 +67,11 @@ public static class DictionaryMatchers
         Func<string> customMessageGenerator
     )
     {
-        AddKeyMatcher(continuation, key, customMessageGenerator);
+        AddKeyMatcher(
+            continuation,
+            key,
+            customMessageGenerator
+        );
 
         return CreateValueContinuationFor<TKey, TValue, TValue>(
             continuation,
@@ -121,7 +125,11 @@ public static class DictionaryMatchers
         Func<string> customMessageGenerator
     )
     {
-        AddKeyMatcher(continuation, key, customMessageGenerator);
+        AddKeyMatcher(
+            continuation,
+            key,
+            customMessageGenerator
+        );
 
         return CreateValueContinuationFor<TKey, sbyte, long>(
             continuation,
@@ -175,7 +183,11 @@ public static class DictionaryMatchers
         Func<string> customMessageGenerator
     )
     {
-        AddKeyMatcher(continuation, key, customMessageGenerator);
+        AddKeyMatcher(
+            continuation,
+            key,
+            customMessageGenerator
+        );
 
         return CreateValueContinuationFor<TKey, short, long>(
             continuation,
@@ -229,7 +241,11 @@ public static class DictionaryMatchers
         Func<string> customMessageGenerator
     )
     {
-        AddKeyMatcher(continuation, key, customMessageGenerator);
+        AddKeyMatcher(
+            continuation,
+            key,
+            customMessageGenerator
+        );
         return CreateValueContinuationFor<TKey, int, long>(
             continuation,
             key
@@ -282,7 +298,11 @@ public static class DictionaryMatchers
         Func<string> customMessageGenerator
     )
     {
-        AddKeyMatcher(continuation, key, customMessageGenerator);
+        AddKeyMatcher(
+            continuation,
+            key,
+            customMessageGenerator
+        );
 
         return CreateValueContinuationFor<TKey, byte, long>(
             continuation,
@@ -336,7 +356,11 @@ public static class DictionaryMatchers
         Func<string> customMessageGenerator
     )
     {
-        AddKeyMatcher(continuation, key, customMessageGenerator);
+        AddKeyMatcher(
+            continuation,
+            key,
+            customMessageGenerator
+        );
 
         return CreateValueContinuationFor<TKey, ushort, long>(
             continuation,
@@ -390,7 +414,11 @@ public static class DictionaryMatchers
         Func<string> customMessageGenerator
     )
     {
-        AddKeyMatcher(continuation, key, customMessageGenerator);
+        AddKeyMatcher(
+            continuation,
+            key,
+            customMessageGenerator
+        );
 
         return CreateValueContinuationFor<TKey, uint, long>(
             continuation,
@@ -444,7 +472,11 @@ public static class DictionaryMatchers
         Func<string> customMessageGenerator
     )
     {
-        AddKeyMatcher(continuation, key, customMessageGenerator);
+        AddKeyMatcher(
+            continuation,
+            key,
+            customMessageGenerator
+        );
         return CreateValueContinuationFor<TKey, float, double>(
             continuation,
             key
@@ -513,7 +545,8 @@ public static class DictionaryMatchers
     {
         return continuation.To(
             otherValue,
-            NULL_STRING);
+            NULL_STRING
+        );
     }
 
     /// <summary>
@@ -532,7 +565,8 @@ public static class DictionaryMatchers
     {
         return continuation.To(
             otherValue,
-            () => customMessage);
+            () => customMessage
+        );
     }
 
     /// <summary>
@@ -549,34 +583,37 @@ public static class DictionaryMatchers
         object otherValue,
         Func<string> customMessageGenerator)
     {
-        continuation.AddMatcher(actual =>
-        {
-            var isDeep = continuation.GetMetadata(
-                DictionaryValueEqual<T>.DICTIONARY_VALUE_DEEP_EQUALITY_TESTING,
-                true
-            );
-            var tester = new DeepEqualityTester(
-                actual,
-                otherValue);
-
-            if (!isDeep)
+        continuation.AddMatcher(
+            actual =>
             {
-                tester.OnlyTestIntersectingProperties = true;
-            }
+                var isDeep = continuation.GetMetadata(
+                    DictionaryValueEqual<T>.DICTIONARY_VALUE_DEEP_EQUALITY_TESTING,
+                    true
+                );
+                var tester = new DeepEqualityTester(
+                    actual,
+                    otherValue
+                );
 
-            var passed = tester.AreDeepEqual();
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () =>
-                        $@"Expected
+                if (!isDeep)
+                {
+                    tester.OnlyTestIntersectingProperties = true;
+                }
+
+                var passed = tester.AreDeepEqual();
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () =>
+                            $@"Expected
 {actual.Stringify()}
 {passed.AsNot()}to deep equal
 {otherValue.Stringify()}",
-                    customMessageGenerator
-                )
-            );
-        });
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
         return continuation.More();
     }
 
@@ -586,26 +623,32 @@ public static class DictionaryMatchers
         Func<string> customMessage)
     {
         continuation.SetMetadata(CONTINUATION_KEY, key);
-        return continuation.AddMatcher(collection =>
-        {
-            var passed = collection != null &&
-                TryFindValueForKey(collection, key, out var _);
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () => new[]
-                    {
-                        "Expected",
-                        collection.LimitedPrint(),
-                        $"{passed.AsNot()}to contain key",
-                        key?.Stringify()
-                    },
-                    customMessage
-                )
-            );
-        });
+        return continuation.AddMatcher(
+            collection =>
+            {
+                var passed = collection != null &&
+                             TryFindValueForKey(
+                                 collection,
+                                 key,
+                                 out var _
+                             );
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => new[]
+                        {
+                            "Expected",
+                            collection.LimitedPrint(),
+                            $"{passed.AsNot()}to contain key",
+                            key?.Stringify()
+                        },
+                        customMessage
+                    )
+                );
+            }
+        );
     }
-        
+
     private const string CONTINUATION_KEY = "__NEXPECT_CONTINUATION_KEY__";
 
     private static bool TryFindValueForKey<TKey, TValue>(
@@ -614,6 +657,11 @@ public static class DictionaryMatchers
         out TValue value
     )
     {
+        if (collection is IDictionary<TKey, TValue> dict)
+        {
+            return dict.TryGetValue(key, out value);
+        }
+
         if (key is string stringKey &&
             typeof(TKey) == typeof(string))
         {
@@ -639,7 +687,6 @@ public static class DictionaryMatchers
                 : default;
             return hasMatch;
         }
-
     }
 
     private static IDictionaryValueContinuation<TTo> CreateValueContinuationFor<TKey, TFrom, TTo>(
@@ -649,13 +696,21 @@ public static class DictionaryMatchers
     {
         try
         {
-            var fetcher = FuncFactory.Memoize<TTo>(() =>
-            {
-                var specificMethod = GenericUpcast.MakeGenericMethod(typeof(TTo));
-                var continuationValue =
-                    (TTo) (specificMethod.Invoke(null, new object[] { GetValueForKey(continuation, key) }));
-                return continuationValue;
-            });
+            var fetcher = FuncFactory.Memoize<TTo>(
+                () =>
+                {
+                    var specificMethod = GenericUpcast.MakeGenericMethod(typeof(TTo));
+                    var continuationValue =
+                        (TTo)(specificMethod.Invoke(
+                            null,
+                            new object[]
+                            {
+                                GetValueForKey(continuation, key)
+                            }
+                        ));
+                    return continuationValue;
+                }
+            );
 
             var result = ContinuationFactory.Create<TTo, DictionaryValueContinuation<TTo>>(
                 fetcher,
@@ -694,7 +749,11 @@ public static class DictionaryMatchers
         TKey key)
     {
         var collection = continuation.GetActual();
-        return TryFindValueForKey(collection, key, out var result)
+        return TryFindValueForKey(
+            collection,
+            key,
+            out var result
+        )
             ? result
             : throw new KeyNotFoundException($"{key}");
     }
@@ -745,27 +804,30 @@ public static class DictionaryMatchers
         Func<string> customMessageGenerator
     )
     {
-        return matched.AddMatcher(actual =>
-        {
-            var passed = matcher(actual);
-            return new MatcherResult(
-                passed,
-                FinalMessageFor(
-                    () =>
-                    {
-                        if (matched.TryGetMetadata<string>(CONTINUATION_KEY, out var key))
+        return matched.AddMatcher(
+            actual =>
+            {
+                var passed = matcher(actual);
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () =>
                         {
-                            // TODO: 
-                            return $"Mismatch for value keyed by: {key.Stringify()}\nreceived value was:\n{actual.Stringify()}";
-                        }
-                        else
-                        {
-                            return $"Expected {passed.AsNot()}to find match for value, but none was found";
-                        }
-                    },
-                    customMessageGenerator
-                )
-            );
-        });
+                            if (matched.TryGetMetadata<string>(CONTINUATION_KEY, out var key))
+                            {
+                                // TODO: 
+                                return
+                                    $"Mismatch for value keyed by: {key.Stringify()}\nreceived value was:\n{actual.Stringify()}";
+                            }
+                            else
+                            {
+                                return $"Expected {passed.AsNot()}to find match for value, but none was found";
+                            }
+                        },
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
     }
 }

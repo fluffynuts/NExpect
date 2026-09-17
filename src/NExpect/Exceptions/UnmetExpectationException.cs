@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Imported.PeanutButter.Utils;
 using StackTrace = System.Diagnostics.StackTrace;
 using StackFrame = System.Diagnostics.StackFrame;
 
@@ -26,7 +27,7 @@ public class UnmetExpectationException : Exception
             return stackTrace.ToString();
         }
 
-        var reverseFrames = stackTrace.GetFrames()?.Reverse() ?? new StackFrame[0];
+        var reverseFrames = stackTrace.GetFrames()?.Reversed() ?? Array.Empty<StackFrame>();
         var hitThisAssembly = false;
         var interestingFrames = reverseFrames.Aggregate(
             new List<StackFrame>(),

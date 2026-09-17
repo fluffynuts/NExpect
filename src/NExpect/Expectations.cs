@@ -400,13 +400,13 @@ public static partial class Expectations
     /// <typeparam name="TKey">Key type of the dictionary</typeparam>
     /// <typeparam name="TValue">Value type of the dictionary</typeparam>
     /// <returns></returns>
-    public static ICollectionExpectation<KeyValuePair<TKey, TValue>>
-        Expect<TKey, TValue>(Dictionary<TKey, TValue> dictionary)
+    public static ICollectionExpectation<KeyValuePair<TKey, TValue>> Expect<TKey, TValue>(
+        Dictionary<TKey, TValue> dictionary
+    )
     {
         dictionary?.SetMetadata(KEY_COMPARER, dictionary.Comparer);
         return new CollectionExpectation<KeyValuePair<TKey, TValue>>(dictionary);
     }
-
 
     /// <summary>
     /// Starts an expectation on a concrete Dictionary
