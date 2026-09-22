@@ -238,7 +238,7 @@ public class ArbitraryBehaviorTests
     {
         // Arrange
         var left = GetRandomString(72, 128);
-        var right = GetRandomString(72, 128);
+        var right = GetAnother(left, () => GetRandomString(72, 128));
         // Pre-Assert
         // Act
         var ex = Assert.Throws<UnmetExpectationException>(
@@ -249,11 +249,8 @@ public class ArbitraryBehaviorTests
         Expect(ex.Message)
             .To.Start.With("Expected")
             .And.To.Contain.In.Order(
-                "\n",
                 right,
-                "\n",
                 "but got",
-                "\n",
                 left
             );
     }

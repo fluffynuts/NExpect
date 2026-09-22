@@ -6,12 +6,23 @@ using PeanutButter.Utils;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable UnassignedGetOnlyAutoProperty
 // ReSharper disable MemberCanBePrivate.Global
-
 namespace NExpect.Tests.Exceptions;
 
 [TestFixture]
 public class UserSpaceImplementations
 {
+    [OneTimeSetUp]
+    public void Setup()
+    {
+        Assertions.DisableTracking();
+    }
+
+    [OneTimeTearDown]
+    public void Teardown()
+    {
+        Assertions.EnableTracking();
+    }
+
     [Test]
     public void ShouldPullExceptionPropertyWhenExists()
     {
@@ -23,7 +34,8 @@ public class UserSpaceImplementations
         var result = subject.With(e => e.ParamName);
         // Assert
         var actual = result.GetPropertyValue("Actual");
-        Expect(actual).To.Equal("moo");
+        Expect(actual)
+            .To.Equal("moo");
     }
 
     [Test]
@@ -34,11 +46,14 @@ public class UserSpaceImplementations
         var subject = new MyContinuationWithoutExceptionProperty<ArgumentNullException>(ex);
         // Pre-assert
         // Act
-        Assert.That(() =>
-        {
-            subject.With(e => e.ParamName);
-        }, Throws.Exception.InstanceOf<ArgumentException>()
-            .With.Message.Contain("something with an Exception property"));
+        Assert.That(
+            () =>
+            {
+                subject.With(e => e.ParamName);
+            },
+            Throws.Exception.InstanceOf<ArgumentException>()
+                .With.Message.Contain("something with an Exception property")
+        );
         // Assert
     }
 
@@ -50,11 +65,14 @@ public class UserSpaceImplementations
         var subject = new MyContinuationWithBrokenExceptionProperty<ArgumentNullException>(ex);
         // Pre-assert
         // Act
-        Assert.That(() =>
-        {
-            subject.With(e => e.ParamName);
-        }, Throws.Exception.InstanceOf<ArgumentException>()
-            .With.Message.Contain("something with an Exception property"));
+        Assert.That(
+            () =>
+            {
+                subject.With(e => e.ParamName);
+            },
+            Throws.Exception.InstanceOf<ArgumentException>()
+                .With.Message.Contain("something with an Exception property")
+        );
         // Assert
     }
 

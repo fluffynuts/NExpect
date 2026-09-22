@@ -20,7 +20,7 @@ public static class Assertions
     /// The default StringComparison to use for assertions which support
     /// comparing strings
     /// </summary>
-    public static StringComparison DefaultStringComparison { get; set; } = StringComparison.InvariantCulture;
+    public static StringComparison DefaultStringComparison { get; set; } = StringComparison.Ordinal;
 
     /// <summary>
     /// Register your own factory for generating assertion exceptions.

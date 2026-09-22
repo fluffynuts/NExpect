@@ -2300,6 +2300,7 @@ public static class CollectionMatchers
                 $".With() for collections of strings only supported where the concrete continuation is of type {typeof(CountMatchContinuationOfStringCollection)}"
             );
         }
+        Assertions.Forget(continuation);
 
         return concrete.Wrapped.Matched.By(
             s => s.EndsWith(search, comparison),
@@ -2427,6 +2428,7 @@ public static class CollectionMatchers
                 }"
             );
         }
+        Assertions.Forget(continuation);
 
         return concrete.Wrapped.Matched.By(
             s => s.StartsWith(search, comparison),

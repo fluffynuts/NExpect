@@ -411,7 +411,8 @@ public class Exactly
                         Assert.That(
                             () =>
                             {
-                                Expect(collection).To.Contain.Exactly(1)
+                                Expect(collection)
+                                    .To.Contain.Exactly(1)
                                     .Ending.With("moo");
                             },
                             Throws.Nothing

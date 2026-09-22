@@ -10,7 +10,6 @@ using NExpect.MatcherLogic;
 using static NExpect.Implementations.MessageHelpers;
 
 // ReSharper disable MemberCanBePrivate.Global
-
 namespace NExpect;
 
 /// <summary>
@@ -635,11 +634,20 @@ public static class EqualityProviderMatchers
                     passed,
                     FinalMessageFor(
                         () => passed
-                            ? new[] { "Expected not to get null" }
-                            : new[] { "Expected null but got", Quote(actual) },
-                        customMessageGenerator)
+                            ? new[]
+                            {
+                                "Expected not to get null"
+                            }
+                            : new[]
+                            {
+                                "Expected null but got",
+                                Quote(actual)
+                            },
+                        customMessageGenerator
+                    )
                 );
-            });
+            }
+        );
         return continuation.More();
     }
 
@@ -700,7 +708,7 @@ public static class EqualityProviderMatchers
             actual =>
             {
                 var passed = (actual == null && expected == null) ||
-                    (actual?.Equals(expected) ?? false);
+                             (actual?.Equals(expected) ?? false);
                 return new MatcherResult(
                     passed,
                     FinalMessageFor(
@@ -712,8 +720,10 @@ public static class EqualityProviderMatchers
                             Quote(expected)
                         },
                         customMessageGenerator
-                    ));
-            });
+                    )
+                );
+            }
+        );
     }
 
     /// <summary>
@@ -745,11 +755,20 @@ public static class EqualityProviderMatchers
                     passed,
                     FinalMessageFor(
                         () => passed
-                            ? new[] { "Expected not to be empty" }
-                            : new[] { "Expected empty string but got", Quote(actual) },
-                        customMessageGenerator)
+                            ? new[]
+                            {
+                                "Expected not to be empty"
+                            }
+                            : new[]
+                            {
+                                "Expected empty string but got",
+                                Quote(actual)
+                            },
+                        customMessageGenerator
+                    )
                 );
-            });
+            }
+        );
     }
 
     /// <summary>
@@ -806,7 +825,8 @@ public static class EqualityProviderMatchers
                         customMessageGenerator
                     )
                 );
-            });
+            }
+        );
     }
 
     /// <summary>
@@ -854,21 +874,30 @@ public static class EqualityProviderMatchers
                         customMessageGenerator
                     )
                 );
-            });
+            }
+        );
     }
 
     private static Func<T, IMatcherResult> CreateRefEqualMatcherFor<T>(
         object other,
         Func<string> customMessageGenerator)
     {
-        return actual => RefCompare(actual, other, customMessageGenerator);
+        return actual => RefCompare(
+            actual,
+            other,
+            customMessageGenerator
+        );
     }
 
     private static Func<IEnumerable<T>, IMatcherResult> CreateCollectionRefEqualMatcherFor<T>(
         object other,
         Func<string> customMessageGenerator)
     {
-        return actual => RefCompare(actual, other, customMessageGenerator);
+        return actual => RefCompare(
+            actual,
+            other,
+            customMessageGenerator
+        );
     }
 
     private static IMatcherResult RefCompare(object actual,
@@ -893,7 +922,11 @@ public static class EqualityProviderMatchers
         return actual =>
         {
             var nullableActual = actual as T?;
-            return CompareForEquality(nullableActual, expected, customMessage);
+            return CompareForEquality(
+                nullableActual,
+                expected,
+                customMessage
+            );
         };
     }
 
@@ -905,7 +938,8 @@ public static class EqualityProviderMatchers
         return actual => CompareForEquality(
             actual,
             expected,
-            customMessageGenerator);
+            customMessageGenerator
+        );
     }
 
     private static IMatcherResult CompareForEquality<T>(
@@ -925,7 +959,8 @@ public static class EqualityProviderMatchers
                         Quote(expected),
                         "but got exactly that"
                     },
-                    customMessageGenerator)
+                    customMessageGenerator
+                )
             );
         }
 
@@ -933,13 +968,15 @@ public static class EqualityProviderMatchers
             actual,
             expected
         );
-        var message = new List<string>(new[]
-        {
-            "Expected",
-            Quote(expected),
-            "but got",
-            Quote(actual)
-        });
+        var message = new List<string>(
+            new[]
+            {
+                "Expected",
+                Quote(expected),
+                "but got",
+                Quote(actual)
+            }
+        );
         if (!string.IsNullOrWhiteSpace(extraMessage))
         {
             message.Add(extraMessage);
@@ -950,7 +987,8 @@ public static class EqualityProviderMatchers
             FinalMessageFor(
                 () => message.ToArray(),
                 customMessageGenerator
-            ));
+            )
+        );
     }
 
     private static bool ValuesAreEqual<T>(
@@ -973,8 +1011,13 @@ public static class EqualityProviderMatchers
         var expectedType = expected.GetType();
 
         var result = (actual.Equals(expected) ||
-            CompareDisparateNumericTypes(actual, actualType, expected, expectedType) ||
-            CollectionsAreEqual(actual, expected));
+                      CompareDisparateNumericTypes(
+                          actual,
+                          actualType,
+                          expected,
+                          expectedType
+                      ) ||
+                      CollectionsAreEqual(actual, expected));
         if (!result)
         {
             return false;
@@ -1005,9 +1048,9 @@ public static class EqualityProviderMatchers
         }
 
         // if we have disparate numeric types, compare them in their string form
-        return expectedType.IsNumericType() && 
-            actualType.IsNumericType() && 
-            $"{actual}" == $"{expected}";
+        return expectedType.IsNumericType() &&
+               actualType.IsNumericType() &&
+               $"{actual}" == $"{expected}";
     }
 
     private static bool CollectionsAreEqual<T>(
@@ -1035,7 +1078,8 @@ public static class EqualityProviderMatchers
         {
             if (!ValuesAreEqual(
                     actualEnumerator.Current,
-                    expectedEnumerator.Current))
+                    expectedEnumerator.Current
+                ))
             {
                 return false;
             }

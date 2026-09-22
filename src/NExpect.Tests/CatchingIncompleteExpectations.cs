@@ -15,18 +15,6 @@ namespace NExpect.Tests;
 [TestFixture]
 public class CatchingIncompleteExpectations
 {
-    [OneTimeSetUp]
-    public void OneTimeSetup()
-    {
-        Assertions.EnableTracking();
-    }
-
-    [OneTimeTearDown]
-    public void OneTimeTeardown()
-    {
-        Assertions.DisableTracking();
-    }
-
     [Test]
     public void ShouldCatchSimpleExpect()
     {

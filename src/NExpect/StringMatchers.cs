@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using NExpect.Exceptions;
 using NExpect.Implementations;
 using NExpect.Interfaces;
 using NExpect.MatcherLogic;
@@ -1444,7 +1443,10 @@ public static class StringMatchers
     )
     {
         return stringIn.Order(
-            new[] { firstFragment }.Concat(fragments),
+            new[]
+            {
+                firstFragment
+            }.Concat(fragments),
             null
         );
     }
@@ -2209,4 +2211,435 @@ public static class StringMatchers
         );
         return Forget(new StringContainContinuation(none));
     }
+
+    /// <summary>
+    /// Tests whether the actual string is equal to
+    /// the expected string via StringComparer.Ordinal
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
+    public static IMore<string> Equal(
+        this ITo<string> to,
+        string expected
+    )
+    {
+        return to.Equal(
+            expected,
+            DefaultStringComparison
+        );
+    }
+
+    /// <summary>
+    /// Tests whether the actual string is equal to
+    /// the expected string via StringComparer.Ordinal
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessage"></param>
+    public static IMore<string> Equal(
+        this ITo<string> to,
+        string expected,
+        string customMessage
+    )
+    {
+        return to.Equal(
+            expected,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Tests whether the actual string is equal to
+    /// the expected string via StringComparer.Ordinal
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="expected"></param>
+    /// <param name="customMessageGenerator"></param>
+    public static IMore<string> Equal(
+        this ITo<string> to,
+        string expected,
+        Func<string> customMessageGenerator
+    )
+    {
+        return to.Equal(
+            expected,
+            DefaultStringComparison,
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Tests whether the actual string is equal to
+    /// the expected string via the provided StringComparer
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="expected"></param>
+    /// <param name="stringComparison"></param>
+    /// <returns></returns>
+    public static IMore<string> Equal(
+        this ITo<string> to,
+        string expected,
+        StringComparison stringComparison
+    )
+    {
+        return to.Equal(
+            expected,
+            stringComparison,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Tests whether the actual string is equal to
+    /// the expected string via the provided StringComparer
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="expected"></param>
+    /// <param name="stringComparison"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<string> Equal(
+        this ITo<string> to,
+        string expected,
+        StringComparison stringComparison,
+        string customMessage
+    )
+    {
+        return to.Equal(
+            expected,
+            stringComparison,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Tests whether the actual string is equal to
+    /// the expected string via the provided StringComparer
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="expected"></param>
+    /// <param name="stringComparison"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<string> Equal(
+        this ITo<string> to,
+        string expected,
+        StringComparison stringComparison,
+        Func<string> customMessageGenerator
+    )
+    {
+        return AddStringMatcher(
+            to,
+            expected,
+            stringComparison,
+            customMessageGenerator
+        );
+    }
+
+    private static IMore<string> AddStringMatcher(
+        ICanAddMatcher<string> canAddMatcher,
+        string expected,
+        StringComparison stringComparison,
+        Func<string> customMessageGenerator
+    )
+    {
+        return canAddMatcher.AddMatcher(
+            actual =>
+            {
+                var passed = StringsAreEqual(
+                    actual,
+                    expected,
+                    stringComparison
+                );
+                return new MatcherResult(
+                    passed,
+                    FinalMessageFor(
+                        () => GenerateFailMessage(
+                            passed,
+                            customMessageGenerator,
+                            actual,
+                            expected,
+                            stringComparison
+                        ),
+                        customMessageGenerator
+                    )
+                );
+            }
+        );
+    }
+
+    private static bool StringsAreEqual(
+        string actual,
+        string expected,
+        StringComparison stringComparison
+    )
+    {
+        if (actual is null && expected is null)
+        {
+            return true;
+        }
+
+        if (actual is null || expected is null)
+        {
+            return false;
+        }
+
+        return actual.Equals(expected, stringComparison);
+    }
+
+    /// <summary>
+    /// Verifies that the actual string does not
+    /// equal the expected string
+    /// </summary>
+    /// <param name="not"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
+    public static IMore<string> Equal(
+        this INotAfterTo<string> not,
+        string expected
+    )
+    {
+        return not.Equal(
+            expected,
+            DefaultStringComparison
+        );
+    }
+
+    /// <summary>
+    /// Verifies that the actual string does not
+    /// equal the expected string
+    /// </summary>
+    /// <param name="not"></param>
+    /// <param name="expected"></param>
+    /// <param name="stringComparer"></param>
+    /// <returns></returns>
+    public static IMore<string> Equal(
+        this INotAfterTo<string> not,
+        string expected,
+        StringComparison stringComparer
+    )
+    {
+        return not.Equal(
+            expected,
+            stringComparer,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Verifies that the actual string does not
+    /// equal the expected string
+    /// </summary>
+    /// <param name="not"></param>
+    /// <param name="expected"></param>
+    /// <param name="comparer"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<string> Equal(
+        this INotAfterTo<string> not,
+        string expected,
+        StringComparison comparer,
+        string customMessage
+    )
+    {
+        return not.Equal(
+            expected,
+            comparer,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Verifies that the actual string does not
+    /// equal the expected string
+    /// </summary>
+    /// <param name="not"></param>
+    /// <param name="expected"></param>
+    /// <param name="comparer"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<string> Equal(
+        this INotAfterTo<string> not,
+        string expected,
+        StringComparison comparer,
+        Func<string> customMessageGenerator
+    )
+    {
+        return AddStringMatcher(
+            not,
+            expected,
+            comparer,
+            customMessageGenerator
+        );
+    }
+
+    /// <summary>
+    /// Verifies that the actual string does not
+    /// equal the expected string
+    /// </summary>
+    /// <param name="to"></param>
+    /// <param name="expected"></param>
+    /// <returns></returns>
+    public static IMore<string> Equal(
+        this IToAfterNot<string> to,
+        string expected
+    )
+    {
+        return to.Equal(
+            expected,
+            DefaultStringComparison
+        );
+    }
+
+    /// <summary>
+    /// Verifies that the actual string does not
+    /// equal the expected string
+    /// </summary>
+    /// <param name="not"></param>
+    /// <param name="expected"></param>
+    /// <param name="stringComparer"></param>
+    /// <returns></returns>
+    public static IMore<string> Equal(
+        this IToAfterNot<string> not,
+        string expected,
+        StringComparison stringComparer
+    )
+    {
+        return not.Equal(
+            expected,
+            stringComparer,
+            NULL_STRING
+        );
+    }
+
+    /// <summary>
+    /// Verifies that the actual string does not
+    /// equal the expected string
+    /// </summary>
+    /// <param name="not"></param>
+    /// <param name="expected"></param>
+    /// <param name="comparer"></param>
+    /// <param name="customMessage"></param>
+    /// <returns></returns>
+    public static IMore<string> Equal(
+        this IToAfterNot<string> not,
+        string expected,
+        StringComparison comparer,
+        string customMessage
+    )
+    {
+        return not.Equal(
+            expected,
+            comparer,
+            () => customMessage
+        );
+    }
+
+    /// <summary>
+    /// Verifies that the actual string does not
+    /// equal the expected string
+    /// </summary>
+    /// <param name="not"></param>
+    /// <param name="expected"></param>
+    /// <param name="comparer"></param>
+    /// <param name="customMessageGenerator"></param>
+    /// <returns></returns>
+    public static IMore<string> Equal(
+        this IToAfterNot<string> not,
+        string expected,
+        StringComparison comparer,
+        Func<string> customMessageGenerator
+    )
+    {
+        return AddStringMatcher(
+            not,
+            expected,
+            comparer,
+            customMessageGenerator
+        );
+    }
+
+    private static string GenerateFailMessage
+    (
+        bool passed,
+        Func<string> customMessageGenerator,
+        string actual,
+        string expected,
+        StringComparison stringComparer
+    )
+    {
+        if (passed)
+        {
+            return GenerateMatchingStringsMessageForNegation(
+                customMessageGenerator,
+                expected,
+                stringComparer
+            );
+        }
+
+        var more = StringComparerDescriptions
+                .TryGetValue(
+                    stringComparer,
+                    out
+                    var
+                        moreInfo
+                )
+                ? moreInfo
+                : "unknown"
+            ;
+        var diffInfo = DifferenceHighlighting
+            .ProvideMoreInfoFor(
+                actual,
+                expected
+            );
+        var expectedStr = expected is null
+            ? "(null)"
+            : $"\"{expected}\"";
+        var actualStr = actual is null
+            ? "(null)"
+            : $"\"{actual}\"";
+        var baseMessage =
+            $"Expected\n{
+                expectedStr
+            }\nbut got\n{
+                actualStr
+            } (via comparison method: {
+                more
+            })";
+        return string.IsNullOrWhiteSpace(diffInfo)
+            ? baseMessage
+            : $"{baseMessage}\n{diffInfo}";
+    }
+
+    private static string GenerateMatchingStringsMessageForNegation(Func<string> customMessageGenerator,
+        string expected,
+        StringComparison stringComparer)
+    {
+        var more = StringComparerDescriptions.TryGetValue(stringComparer, out var moreInfo)
+            ? moreInfo
+            : "unknown comparison method";
+        return FinalMessageFor(
+            () =>
+            [
+                "Did not expect",
+                Quote
+                (
+                    expected
+                ),
+                $"but got exactly that, via comparison: {more}"
+            ],
+            customMessageGenerator
+        )();
+    }
+
+    private static readonly Dictionary<StringComparison, string> StringComparerDescriptions = new()
+    {
+        [StringComparison.CurrentCulture] = "case-sensitive, current culture",
+        [StringComparison.CurrentCultureIgnoreCase] = "case-insensitive, current culture",
+        [StringComparison.InvariantCulture] = "case-sensitive, invariant culture",
+        [StringComparison.InvariantCultureIgnoreCase] = "case-insensitive, invariant culture",
+        [StringComparison.Ordinal] = "case-sensitive, byte-wise",
+        [StringComparison.OrdinalIgnoreCase] = "case-insensitive, byte-wise"
+    };
 }
