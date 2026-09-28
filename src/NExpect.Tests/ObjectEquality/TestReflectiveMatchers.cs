@@ -16,9 +16,7 @@ public class TestReflectiveMatchers
         public class Data
         {
             public int id { get; set; }
-
             [Comment("this is commented!")] public bool IsCommented { get; set; }
-
             public bool IsNotCommented { get; set; }
 
             [Comment("moo-cakes")]
@@ -39,7 +37,10 @@ public class TestReflectiveMatchers
         public void ShouldHandleMatchingNameAndValue()
         {
             // Arrange
-            var data = new Data { id = 1 };
+            var data = new Data
+            {
+                id = 1
+            };
             // Act
             Assert.That(
                 () =>
@@ -57,7 +58,10 @@ public class TestReflectiveMatchers
         public void ShouldHandlePropertyNameMismatch()
         {
             // Arrange
-            var badData = new { foo = "bar" };
+            var badData = new
+            {
+                foo = "bar"
+            };
             // Act
             Assert.That(
                 () =>
@@ -87,7 +91,10 @@ public class TestReflectiveMatchers
         public void ShouldHandleValueMismatchOnFoundProperty()
         {
             // Arrange
-            var data = new { id = 1 };
+            var data = new
+            {
+                id = 1
+            };
             // Act
             Assert.That(
                 () =>
@@ -117,7 +124,10 @@ public class TestReflectiveMatchers
         public void ShouldFacilitateTypeTesting()
         {
             // Arrange
-            var data = new Data() { id = 1 };
+            var data = new Data()
+            {
+                id = 1
+            };
             // Act
             Assert.That(
                 () =>
@@ -932,6 +942,61 @@ public class TestReflectiveMatchers
 
         public class HasNoAttribute
         {
+        }
+    }
+
+    [TestFixture]
+    public class Attributes
+    {
+        [Test]
+        public void ShouldBeAbleToTestTypeIsDecorated()
+        {
+            // Arrange
+            var sut = typeof(AttributesTestType);
+
+            // Act
+            Expect(sut)
+                .To.Have.Attribute<SomeAttribute>(
+                    a => a.Id == 1
+                );
+
+            // Assert
+        }
+
+        [Test]
+        public void ShouldBeAbleToTestMethodIsDecorated()
+        {
+            // Arrange
+            var sut = typeof(AttributesTestType);
+
+            // Act
+            Expect(sut)
+                .To.Have.Method(
+                    nameof(AttributesTestType.DoSomething)
+                ).With.Attribute<SomeAttribute>(
+                    a => a.Id == 2
+                );
+
+            // Assert
+        }
+
+        [Some(1)]
+        public class AttributesTestType
+        {
+            [Some(2)]
+            public void DoSomething()
+            {
+            }
+        }
+
+        public class SomeAttribute : Attribute
+        {
+            public int Id { get; }
+
+            public SomeAttribute(int id = 0)
+            {
+                Id = id;
+            }
         }
     }
 
