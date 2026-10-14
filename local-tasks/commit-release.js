@@ -1,10 +1,10 @@
-const 
+const
   gulp = requireModule("gulp-with-help"),
   chalk = require("chalk"),
   logger = requireModule("log"),
   editXml = require("gulp-edit-xml"),
-  Git = require("simple-git"),
-  git = new Git(),
+  { simpleGit } = require("simple-git"),
+  git = simpleGit(),
   env = requireModule("env"),
   containingFolder = "src/NExpect";
 
