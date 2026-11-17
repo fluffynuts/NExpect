@@ -6,6 +6,7 @@ using NExpect.Interfaces;
 using NExpect.MatcherLogic;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using HtmlAgilityPack;
 using NExpect.Implementations;
 using NExpect.Tests.Exceptions;
 using NUnit.Framework;
@@ -17,7 +18,6 @@ using PeanutButter.Utils;
 // ReSharper disable PossibleNullReferenceException
 // ReSharper disable ReturnValueOfPureMethodIsNotUsed
 // ReSharper disable SuspiciousTypeConversion.Global
-
 namespace NExpect.Tests;
 
 [TestFixture]
@@ -180,8 +180,14 @@ public class ArbitraryBehaviorTests
     public void CollectionsOfNulls()
     {
         // Arrange
-        var left = new string[] { null };
-        var right = new string[] { null };
+        var left = new string[]
+        {
+            null
+        };
+        var right = new string[]
+        {
+            null
+        };
         // Pre-assert
         // Act
         Assert.That(
@@ -199,8 +205,14 @@ public class ArbitraryBehaviorTests
     public void CollectionsOfNullsDeep()
     {
         // Arrange
-        var left = new string[] { null };
-        var right = new string[] { null };
+        var left = new string[]
+        {
+            null
+        };
+        var right = new string[]
+        {
+            null
+        };
         // Pre-assert
         // Act
         Assert.That(
@@ -218,8 +230,14 @@ public class ArbitraryBehaviorTests
     public void CollectionsOfNullsDeepWhereOneHasNoNull()
     {
         // Arrange
-        var left = new string[] { null };
-        var right = new[] { "cow" };
+        var left = new string[]
+        {
+            null
+        };
+        var right = new[]
+        {
+            "cow"
+        };
         // Pre-assert
         // Act
         Assert.That(
@@ -326,6 +344,76 @@ public class ArbitraryBehaviorTests
     }
 
     [Test]
+    public void ShouldHandleCyclicStructureWhenTestingForNotNull()
+    {
+        // Arrange
+        var parent = new Node("parent");
+        for (var i = 0; i < 1000; i++)
+        {
+            var child = new Node($"child-{i}");
+            parent.AddChild(child);
+        }
+
+        parent.FixSiblings();
+
+        // Act
+        Expect(
+            () =>
+            {
+                Expect(parent)
+                    .To.Be.Null();
+            }
+        ).To.Throw<UnmetExpectationException>();
+
+        // Assert
+    }
+
+    [Test]
+    public void ShouldThrowUnmetExpectation_WhenHtmlNodeWithManySiblingsIsExpectedToBeNull()
+    {
+        // Arrange
+        var document = new HtmlDocument();
+        document.LoadHtml(
+            "<div>" + string.Concat(Enumerable.Repeat("<span>a</span>", 3000)) + "<p>x</p></div>"
+        );
+        var node = document.DocumentNode.SelectSingleNode("//p");
+
+        // Act
+        // Assert
+        Expect(
+            () => Expect(node)
+                .To.Be.Null()
+        ).To.Throw<UnmetExpectationException>();
+    }
+
+    public class Node
+    {
+        public string Name { get; set; }
+        public Node Parent { get; set; }
+        public Node[] Children { get; private set; } = [];
+        public Node[] Siblings { get; protected set; } = [];
+
+        public Node(string name)
+        {
+            Name = name;
+        }
+
+        public void AddChild(Node child)
+        {
+            Children = Children.And(child);
+            child.Parent = this;
+        }
+
+        public void FixSiblings()
+        {
+            foreach (var c in Children)
+            {
+                c.Siblings = Children.Except([c]).ToArray();
+            }
+        }
+    }
+
+    [Test]
     public void MatcherWhichThrowsUnmetExpectationException_ShouldGetThatExactException()
     {
         // Arrange
@@ -334,15 +422,22 @@ public class ArbitraryBehaviorTests
         var method = typeof(Assertions).GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
             .FirstOrDefault(
                 mi => mi.Name == "Throw" &&
-                    mi.GetParameters()
-                        .Length == 2
+                      mi.GetParameters()
+                          .Length == 2
             );
         Expect(method)
             .Not.To.Be.Null();
         UnmetExpectationException expected = null;
         try
         {
-            method.Invoke(null, new object[] { GetRandomString(10), null });
+            method.Invoke(
+                null,
+                new object[]
+                {
+                    GetRandomString(10),
+                    null
+                }
+            );
         }
         catch (TargetInvocationException tex)
         {
@@ -373,7 +468,14 @@ public class ArbitraryBehaviorTests
         // Pre-assert
         // Act
         using var _ = Assertions.SuspendTracking();
-        var continuation = Expect(new[] { 1, 2, 3 })
+        var continuation = Expect(
+                new[]
+                {
+                    1,
+                    2,
+                    3
+                }
+            )
             .To.Contain.Exactly(expected);
         var result = continuation.GetExpectedCount<int>();
         // Assert
@@ -388,7 +490,14 @@ public class ArbitraryBehaviorTests
         // Pre-assert
         // Act
         using var _ = Assertions.SuspendTracking();
-        var continuation = Expect(new[] { "a", "b", "c" })
+        var continuation = Expect(
+                new[]
+                {
+                    "a",
+                    "b",
+                    "c"
+                }
+            )
             .To.Contain.Exactly(123);
         var result = continuation.GetCountMatchMethod();
         // Assert
@@ -403,7 +512,14 @@ public class ArbitraryBehaviorTests
         // Pre-assert
         // Act
         using var _ = Assertions.SuspendTracking();
-        var continuation = Expect(new[] { "a", "b", "c" })
+        var continuation = Expect(
+                new[]
+                {
+                    "a",
+                    "b",
+                    "c"
+                }
+            )
             .To.Contain.At.Least(123);
         var result = continuation.GetCountMatchMethod();
         // Assert
@@ -418,7 +534,14 @@ public class ArbitraryBehaviorTests
         // Pre-assert
         // Act
         using var _ = Assertions.SuspendTracking();
-        var continuation = Expect(new[] { "a", "b", "c" })
+        var continuation = Expect(
+                new[]
+                {
+                    "a",
+                    "b",
+                    "c"
+                }
+            )
             .To.Contain.At.Most(123);
         var result = continuation.GetCountMatchMethod();
         // Assert
@@ -433,7 +556,14 @@ public class ArbitraryBehaviorTests
         // Pre-assert
         // Act
         using var _ = Assertions.SuspendTracking();
-        var continuation = Expect(new[] { "a", "b", "c" })
+        var continuation = Expect(
+                new[]
+                {
+                    "a",
+                    "b",
+                    "c"
+                }
+            )
             .To.Contain.Any;
         var result = continuation.GetCountMatchMethod();
         // Assert
@@ -448,7 +578,14 @@ public class ArbitraryBehaviorTests
         // Pre-assert
         // Act
         using var _ = Assertions.SuspendTracking();
-        var continuation = Expect(new[] { "a", "b", "c" })
+        var continuation = Expect(
+                new[]
+                {
+                    "a",
+                    "b",
+                    "c"
+                }
+            )
             .To.Contain.All;
         var result = continuation.GetCountMatchMethod();
         // Assert
@@ -463,7 +600,12 @@ public class ArbitraryBehaviorTests
         // Pre-assert
         // Act
         using var _ = Assertions.SuspendTracking();
-        var continuation = Expect(new[] { "a" })
+        var continuation = Expect(
+                new[]
+                {
+                    "a"
+                }
+            )
             .To.Contain.Only(1);
         var result = continuation.GetCountMatchMethod();
         // Assert
@@ -629,7 +771,9 @@ public class ArbitraryBehaviorTests
         {
             // Arrange
             using var _ = Assertions.SuspendTracking();
-            var src = new { };
+            var src = new
+            {
+            };
             // Pre-assert
             // Act
             var sut = Expect(src)
@@ -754,7 +898,12 @@ public class ArbitraryBehaviorTests
         using var _ = Assertions.SuspendTracking();
         // Pre-assert
         // Act
-        var original = Expect(new[] { 1 })
+        var original = Expect(
+                new[]
+                {
+                    1
+                }
+            )
             .To.Contain;
         var sut = original.Exactly(1)
             .Deep.Equal;
@@ -770,7 +919,12 @@ public class ArbitraryBehaviorTests
         using var _ = Assertions.SuspendTracking();
         // Pre-assert
         // Act
-        var original = Expect(new[] { 1 })
+        var original = Expect(
+                new[]
+                {
+                    1
+                }
+            )
             .To.Contain;
         var sut = original.Exactly(1)
             .Intersection.Equal;
@@ -783,8 +937,14 @@ public class ArbitraryBehaviorTests
     public void DeepEquivalenceVsNull()
     {
         // Arrange
-        var src = new[] { "hello" };
-        var test = new[] { null as string };
+        var src = new[]
+        {
+            "hello"
+        };
+        var test = new[]
+        {
+            null as string
+        };
         // Pre-assert
         // Act
         Assert.That(
@@ -853,7 +1013,14 @@ public class ArbitraryBehaviorTests
         public void ExceptionCollectionPropertyMatchingLikeOtherCollections()
         {
             // Arrange
-            var ex = new AggregateException("moo", new[] { new Exception("1"), new Exception("2") });
+            var ex = new AggregateException(
+                "moo",
+                new[]
+                {
+                    new Exception("1"),
+                    new Exception("2")
+                }
+            );
             // Act
             Assert.That(
                 () =>
@@ -902,7 +1069,11 @@ public class ArbitraryBehaviorTests
             // Arrange
             var e1 = GetRandomString();
             var e2 = GetRandomString();
-            var message = new[] { e1, e2 }.Randomize()
+            var message = new[]
+                {
+                    e1,
+                    e2
+                }.Randomize()
                 .JoinWith(" ");
             // Pre-Assert
             // Act
@@ -959,7 +1130,14 @@ public class ArbitraryBehaviorTests
             // Assert
             Expect(captured)
                 .Not.To.Be.Null();
-            var lines = captured.StackTrace.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            var lines = captured.StackTrace.Split(
+                new[]
+                {
+                    "\r",
+                    "\n"
+                },
+                StringSplitOptions.RemoveEmptyEntries
+            );
             Expect(lines)
                 .To.Contain.Only(1)
                 .Item();
