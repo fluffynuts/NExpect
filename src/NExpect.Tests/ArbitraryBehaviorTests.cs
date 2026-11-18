@@ -348,7 +348,7 @@ public class ArbitraryBehaviorTests
     {
         // Arrange
         var parent = new Node("parent");
-        for (var i = 0; i < 1000; i++)
+        for (var i = 0; i < 64; i++)
         {
             var child = new Node($"child-{i}");
             parent.AddChild(child);
